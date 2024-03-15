@@ -1,10 +1,8 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "version": "1.0.4",
-  "packages": [
-    "packages/*"
-  ],
-  "npmClient": "npm",
+  "packages": ["packages/*"],
+  "npmClient": "yarn",
   "command": {
     "publish": {
       "conventionalCommits": true,
