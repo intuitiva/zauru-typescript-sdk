@@ -21,6 +21,8 @@
     "@remix-run/node": "^2.8.1",
     "axios": "^1.6.7",
     "moment": "^2.30.1",
-    "moment-timezone": "^0.5.45"
+    "moment-timezone": "^0.5.45",
+    "@zauru-sdk/config": "^1.0.0",
+    "@zauru-sdk/utils": "^1.0.0"
   }
 }
