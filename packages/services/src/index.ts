@@ -8,3 +8,4 @@ export * from "./zauru/httpOauth.server.js";
 export * from "./zauru/httpZauru.server.js";
 
 export * from "./zauru/zauru-agencies.server.js";
+export * from "./zauru/zauru-profiles.server.js";
