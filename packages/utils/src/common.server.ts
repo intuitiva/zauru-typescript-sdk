@@ -1,7 +1,7 @@
 import { Session, redirect } from "@remix-run/node";
 import { commitSession, getSession } from "@zauru-sdk/services";
-import { CONSOLE_LOG_COLORS } from "./common";
 import { AxiosRequestHeaders } from "axios";
+import chalk from "chalk";
 import httpZauru, {
   AxiosUtilsResponse,
   handlePossibleAxiosErrors,
@@ -170,12 +170,14 @@ async function getGraphQLToken(
     if (!token || tokenHasExpired) {
       tokenHasExpired
         ? console.log(
-            `${CONSOLE_LOG_COLORS.FgYellow}%s${CONSOLE_LOG_COLORS.Reset}`,
-            `=============== ⚠️ EL TOKEN GRAPHQL ESTÁ EXPIRADO ⚠️ ====================`
+            chalk.yellow(
+              `=============== ⚠️ EL TOKEN GRAPHQL ESTÁ EXPIRADO ⚠️ ====================`
+            )
           )
         : console.log(
-            `${CONSOLE_LOG_COLORS.FgYellow}%s${CONSOLE_LOG_COLORS.Reset}`,
-            `=============== ⚠️ NO HAY UN TOKEN GRAPHQL GUARDADO ⚠️ ====================`
+            chalk.yellow(
+              `=============== ⚠️ NO HAY UN TOKEN GRAPHQL GUARDADO ⚠️ ====================`
+            )
           );
 
       const responseToken = await httpZauru.get<GraphQLToken>(
@@ -189,15 +191,17 @@ async function getGraphQLToken(
         session.set("graphqlToken", responseToken.data);
         await commitSession(session);
         console.log(
-          `${CONSOLE_LOG_COLORS.FgGreen}%s${CONSOLE_LOG_COLORS.Reset}`,
-          `=============== ✅ TOKEN GRAPHQL GUARDADO EN SESION Y DEVUELTO ✅ ====================`
+          chalk.green(
+            `=============== ✅ TOKEN GRAPHQL GUARDADO EN SESION Y DEVUELTO ✅ ====================`
+          )
         );
         return responseToken.data;
       }
 
       console.log(
-        `${CONSOLE_LOG_COLORS.FgRed}%s${CONSOLE_LOG_COLORS.Reset}`,
-        `=============== ❗ NO HAY INFORMACIÓN OBTENIDA DEL REQUEST A ZAURU - GET_TOKEN ❗ ====================`
+        chalk.red(
+          `=============== ❗ NO HAY INFORMACIÓN OBTENIDA DEL REQUEST A ZAURU - GET_TOKEN ❗ ====================`
+        )
       );
       throw new Error(
         "No viene información en la solicitud de getGraphQLToken a Zauru"
@@ -219,8 +223,9 @@ export const getGraphQLAPIHeaders = async (session: Session) => {
 
   if (error) {
     console.log(
-      `${CONSOLE_LOG_COLORS.FgRed}%s${CONSOLE_LOG_COLORS.Reset}`,
-      `=============== ❗ OCURRIÓ UN ERROR DEL REQUEST A ZAURU - GET_TOKEN ❗ ==================== ${userMsg}`
+      chalk.red(
+        `=============== ❗ OCURRIÓ UN ERROR DEL REQUEST A ZAURU - GET_TOKEN ❗ ==================== ${userMsg}`
+      )
     );
     return {
       Authorization: `Bearer token_no_existe`,

@@ -1,6 +1,6 @@
 import axios from "axios";
+import chalk from "chalk";
 import { config } from "@zauru-sdk/config";
-import { CONSOLE_LOG_COLORS } from "@zauru-sdk/utils";
 
 const axiosInstance = axios.create({
   baseURL: `${config.graphqlAPIBaseURL}`,
@@ -11,18 +11,14 @@ axiosInstance.interceptors.request.use(
     // Do something before request is sent
     console.log("---------------- EJECUTANDO REQUEST GRAPHQL ----------------");
     //console.time(`${request.baseURL}${request.url}`);
-    console.log(
-      `${CONSOLE_LOG_COLORS.FgGreen}%s${CONSOLE_LOG_COLORS.Reset}`,
-      `${request.baseURL}${request.url}`
-    );
+    console.log(chalk.green(`${request.baseURL}${request.url}`));
     request.timeout = 120000;
 
     return request;
   },
   function (error) {
     console.log(
-      `${CONSOLE_LOG_COLORS.FgRed}%s${CONSOLE_LOG_COLORS.Reset}`,
-      "---------------- ERROR CON REQUEST GRAPHQL ----------------"
+      chalk.red("---------------- ERROR CON REQUEST GRAPHQL ----------------")
     );
     console.log(`${error}`);
     // Do something with request error
@@ -39,8 +35,7 @@ axiosInstance.interceptors.response.use(
   },
   function (error) {
     console.log(
-      `${CONSOLE_LOG_COLORS.FgRed}%s${CONSOLE_LOG_COLORS.Reset}`,
-      "---------------- ERROR CON REQUEST GRAPHQL ----------------"
+      chalk.red("---------------- ERROR CON REQUEST GRAPHQL ----------------")
     );
     console.log(`${error}`);
     // Do something with response error
@@ -50,10 +45,7 @@ axiosInstance.interceptors.response.use(
           response?.config?.baseURL
         }${response?.config?.url} - ${JSON.stringify(response?.data)}`
       : error;
-    console.log(
-      `${CONSOLE_LOG_COLORS.FgRed}%s${CONSOLE_LOG_COLORS.Reset}`,
-      `${msgError}`
-    );
+    console.log(chalk.red(`${msgError}`));
     throw new Error(msgError);
   }
 );
