@@ -2,9 +2,8 @@
   "name": "@zauru-sdk/graphql",
   "version": "1.0.0",
   "description": "Configuración centralizada para aplicaciones Zauru SDK",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "private": false,
+  "main": "index.js",
+  "types": "index.d.ts",
   "publishConfig": {
     "access": "public"
   },
@@ -17,7 +16,6 @@
   "devDependencies": {
     "typescript": "^5.1.6"
   },
-  "dependencies": {},
   "engines": {
     "node": ">=18.0.0"
   }

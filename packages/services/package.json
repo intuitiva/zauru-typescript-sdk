@@ -2,9 +2,8 @@
   "name": "@zauru-sdk/services",
   "version": "1.0.0",
   "description": "Configuración centralizada para aplicaciones Zauru SDK",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "private": false,
+  "main": "index.js",
+  "types": "index.d.ts",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -20,7 +19,7 @@
   },
   "dependencies": {
     "@remix-run/node": "^2.8.1",
-    "@zauru-sdk/config": "^1.0.0",
+    "@zauru-sdk/config": "workspace:^",
     "axios": "^1.6.7",
     "chalk": "5.3.0"
   },

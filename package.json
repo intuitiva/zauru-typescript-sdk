@@ -2,10 +2,10 @@
   "name": "zauru-sdk",
   "private": true,
   "workspaces": [
-   "./packages/*"
- ],
-  "dependencies": {},
+    "packages/*"
+  ],
   "devDependencies": {
     "lerna": "^8.1.2"
-  }
+  },
+  "packageManager": "yarn@4.1.1"
 }
