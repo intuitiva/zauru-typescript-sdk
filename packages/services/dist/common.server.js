@@ -1,8 +1,8 @@
 import { redirect } from "@remix-run/node";
-import { commitSession, getSession } from "@zauru-sdk/services";
+import { commitSession, getSession } from "./sessions/sessions.server.js";
 import chalk from "chalk";
-import httpZauru, { handlePossibleAxiosErrors, } from "@zauru-sdk/services";
-import { getAgencyInfo, getEmployeeInfo, getOauthUserInfo, getProfileInformation, } from "@zauru-sdk/services";
+import httpZauru, { handlePossibleAxiosErrors, } from "./zauru/httpZauru.server.js";
+import { getAgencyInfo, getEmployeeInfo, getOauthUserInfo, getProfileInformation, } from "./zauru/zauru-profiles.server.js";
 /**
  * loginWebApp
  * @param session

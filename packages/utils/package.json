@@ -21,6 +21,7 @@
     "@remix-run/node": "^2.8.1",
     "@zauru-sdk/config": "workspace:^",
     "@zauru-sdk/services": "workspace:^",
+    "@zauru-sdk/graphql": "workspace:^",
     "axios": "^1.6.7",
     "chalk": "5.3.0",
     "moment": "^2.30.1",

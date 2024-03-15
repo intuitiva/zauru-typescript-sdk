@@ -28,7 +28,7 @@ export function createUpstashSessionStorage({ cookie }) {
                 headers,
             });
             try {
-                const { result } = await response.json();
+                const { result } = (await response.json());
                 return JSON.parse(result).data;
             }
             catch (error) {

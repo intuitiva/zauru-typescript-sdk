@@ -1,6 +1,6 @@
 import type { Session } from "@remix-run/node";
 import type { AgencyGraphQL } from "@zauru-sdk/graphql";
-import type { AxiosUtilsResponse } from "./httpZauru.server";
+import type { AxiosUtilsResponse } from "./httpZauru.server.js";
 /**
  * getAgencies
  * @param headers

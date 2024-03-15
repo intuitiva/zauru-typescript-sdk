@@ -1,7 +1,7 @@
 import { Session } from "@remix-run/node";
 import { AxiosRequestHeaders } from "axios";
-import { AxiosUtilsResponse } from "@zauru-sdk/services";
-import { Agency, OauthProfile, ProfileResponse } from "@zauru-sdk/services";
+import { AxiosUtilsResponse } from "./zauru/httpZauru.server.js";
+import { Agency, OauthProfile, ProfileResponse } from "./zauru/zauru-profiles.server.js";
 import { EmployeeGraphQL } from "@zauru-sdk/graphql";
 /**
  * loginWebApp

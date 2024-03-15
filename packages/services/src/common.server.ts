@@ -1,11 +1,11 @@
 import { Session, redirect } from "@remix-run/node";
-import { commitSession, getSession } from "@zauru-sdk/services";
+import { commitSession, getSession } from "./sessions/sessions.server.js";
 import { AxiosRequestHeaders } from "axios";
 import chalk from "chalk";
 import httpZauru, {
   AxiosUtilsResponse,
   handlePossibleAxiosErrors,
-} from "@zauru-sdk/services";
+} from "./zauru/httpZauru.server.js";
 import {
   Agency,
   OauthProfile,
@@ -14,7 +14,7 @@ import {
   getEmployeeInfo,
   getOauthUserInfo,
   getProfileInformation,
-} from "@zauru-sdk/services";
+} from "./zauru/zauru-profiles.server.js";
 import { EmployeeGraphQL } from "@zauru-sdk/graphql";
 
 /**

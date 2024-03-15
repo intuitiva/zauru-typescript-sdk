@@ -1,4 +1,4 @@
-import { SelectFieldOption } from "./common";
+import { SelectFieldOption } from "./common.js";
 
 export const guatemalaCountryInfo = [
   { value: 0, label: "GUATEMALA,GUATEMALA" },
