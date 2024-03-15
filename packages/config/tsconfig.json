@@ -12,6 +12,7 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "outDir": "./dist",
+    "rootDir": "./src",
     "declaration": true,
     "declarationDir": "./dist",
     "paths": {

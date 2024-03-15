@@ -1,7 +1,8 @@
-import queries from "@zauru-sdk/graphql";
-import { getGraphQLAPIHeaders } from "@zauru-sdk/utils";
-import { handlePossibleAxiosErrors } from "./httpZauru.server";
-import httpGraphQLAPI from "./httpGraphQL.server";
+import { handlePossibleAxiosErrors } from "./httpZauru.server.js";
+import httpGraphQLAPI from "./httpGraphQL.server.js";
+import { getGraphQLAPIHeaders } from "~/common.server.js";
+import graphql from "@zauru-sdk/graphql";
+const { default: queries } = graphql;
 /**
  * getAgencies
  * @param headers
