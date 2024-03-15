@@ -1,5 +1,5 @@
 import { createCookie } from "@remix-run/node";
-import { createUpstashSessionStorage } from "./upstash.server";
+import { createUpstashSessionStorage } from "./upstash.server.js";
 
 const sessionCookie = createCookie("_rj_session", {
   secrets: ["r3m1xr0ck1"],
