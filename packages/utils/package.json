@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/utils",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Configuración centralizada para aplicaciones Zauru SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,9 +19,9 @@
   },
   "dependencies": {
     "@remix-run/node": "^2.8.1",
-    "@zauru-sdk/config": "^1.0.3",
-    "@zauru-sdk/graphql": "^1.0.3",
-    "@zauru-sdk/services": "^1.0.3",
+    "@zauru-sdk/config": "^1.0.4",
+    "@zauru-sdk/graphql": "^1.0.4",
+    "@zauru-sdk/services": "^1.0.4",
     "axios": "^1.6.7",
     "chalk": "5.3.0",
     "moment": "^2.30.1",
