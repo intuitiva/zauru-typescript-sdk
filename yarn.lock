@@ -860,7 +860,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/graphql@npm:^1.0.7, @zauru-sdk/graphql@workspace:packages/graphql":
+"@zauru-sdk/graphql@npm:^1.0.9, @zauru-sdk/graphql@workspace:packages/graphql":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/graphql@workspace:packages/graphql"
   dependencies:
@@ -868,14 +868,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/services@npm:^1.0.8, @zauru-sdk/services@workspace:packages/services":
+"@zauru-sdk/services@npm:^1.0.9, @zauru-sdk/services@workspace:packages/services":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/services@workspace:packages/services"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
     "@zauru-sdk/common": "npm:^1.0.8"
     "@zauru-sdk/config": "npm:^1.0.4"
-    "@zauru-sdk/graphql": "npm:^1.0.7"
+    "@zauru-sdk/graphql": "npm:^1.0.9"
     "@zauru-sdk/types": "npm:^1.0.8"
     axios: "npm:^1.6.7"
     chalk: "npm:5.3.0"
@@ -898,8 +898,8 @@ __metadata:
     "@remix-run/node": "npm:^2.8.1"
     "@zauru-sdk/common": "npm:^1.0.8"
     "@zauru-sdk/config": "npm:^1.0.4"
-    "@zauru-sdk/graphql": "npm:^1.0.7"
-    "@zauru-sdk/services": "npm:^1.0.8"
+    "@zauru-sdk/graphql": "npm:^1.0.9"
+    "@zauru-sdk/services": "npm:^1.0.9"
     "@zauru-sdk/types": "npm:^1.0.8"
     typescript: "npm:^5.1.6"
   languageName: unknown
