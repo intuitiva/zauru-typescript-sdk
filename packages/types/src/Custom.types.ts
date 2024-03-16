@@ -497,3 +497,197 @@ export type BitacoraPOMassive = {
   modificadoPor: string;
   fechaCreacion: string;
 };
+
+//Modelo con el cuál responde el backend
+export type ConsolidatedHistory = {
+  creadoPor: string;
+  fechaCreacion: string;
+  grupos: ConsolidateGroup[];
+  pdfLink: string;
+};
+
+export type ConsolidateGroup = {
+  purchaseOrderIds: number[];
+  payeeId: number;
+  finalizado: boolean;
+  msgError: string;
+  consolidatedId: number;
+  payeeName: string;
+};
+
+export type CostoSemanalSpecialItem = {
+  specialItemId: number;
+  lunMar: number;
+  mieJue: number;
+  vieSabDom: number;
+};
+
+export type PurchaseOrderCosto = {
+  id: number;
+  finalizado?: boolean;
+  msgResultado?: string;
+  fecha: string;
+  purchase_order_details: {
+    id: number;
+    item_id: number;
+    unit_cost: number;
+  }[];
+};
+
+export type CostoSemanal = {
+  item: number;
+  lunMar: number;
+  mieJue: number;
+  vieSabDom: number;
+};
+
+export type BitacoraCostosItems = {
+  costos: CostoSemanal[];
+  costosEspeciales: CostoSemanalSpecialItem[];
+  costosActualizados: PurchaseOrderCosto[];
+  costosEspecialesActualizados: PurchaseOrderCosto[];
+  fechas: {
+    lunes: string;
+    martes: string;
+    miercoles: string;
+    jueves: string;
+    viernes: string;
+    sabado: string;
+    domingo: string;
+  };
+  accion: string;
+  modificadoPor: string;
+  fechaCreacion: string;
+};
+
+//Modelo con el cuál responde el backend
+export type DischargeHistory = {
+  creadoPor: string;
+  fechaCreacion: string;
+  grupos: DischargeGroup[];
+  pdfLink: string;
+  initialIdNumber: string;
+};
+
+export type DischargeGroup = {
+  purchaseOrders: { id: number; due: string }[];
+  discharge_id: number;
+  finalizado: boolean;
+  msgError: string;
+  description: string;
+  payee_id: number;
+  id_number: string;
+};
+
+export type TransformedObject = {
+  form_submission_values_attributes: {
+    [key: string]: {
+      form_field_id: string;
+      value: string;
+      groups_path: string;
+    };
+  };
+  form_id: number;
+  document_id: string;
+  document_type: string;
+  reference: string;
+  zid: number;
+  id_number?: string;
+};
+
+export const UNIDADES_DE_MEDIDA = [
+  { label: "Frasco", value: "frasco", stocks_only_integer: false },
+  { label: "Bolsa", value: "bolsa", stocks_only_integer: false },
+  { label: "Paquete", value: "paquete", stocks_only_integer: false },
+  { label: "Caja", value: "caja", stocks_only_integer: false },
+  { label: "Unidades", value: "unidades", stocks_only_integer: true },
+];
+
+export type SearchItemParams = {
+  start: string;
+  length: string;
+  search: { value: string; regex: "false" | "true" };
+};
+
+export type HTMLItemListSchema = {
+  zid: string;
+  cod: string;
+  act: string;
+  name: string;
+  stck: string;
+  sell: string;
+  purch: string;
+  cat: string;
+  cat_note: string;
+  vat: string;
+  warr: string;
+  ra: string;
+  DT_RowId: string;
+};
+
+export type ResponseItemList = {
+  draw: number;
+  recordsTotal: number;
+  recordsFiltered: number;
+  data: Array<HTMLItemListSchema>;
+};
+
+export type ItemDataTable = {
+  zid: number;
+  itemId: number;
+  name: string;
+  stck: string | null;
+  act: string | null;
+  sell: string | null;
+  purch: string | null;
+  vat: string | null;
+  cat: string;
+  warr: string;
+  cat_note: string;
+  DT_RowId: number;
+};
+
+//Modelo con el cuál responde el backend
+export type Template = {
+  hoja: string;
+  nombre: string;
+  version: number;
+  etiqueta: string;
+  creadoPor: string;
+  fechaCreacion: string;
+  marginTop: number;
+  marginLeft: number;
+  verticalGap: number;
+  horizontalGap: number;
+  templateBorder: number;
+  pageBorder: number;
+  barCodeHeight: number;
+};
+
+export type HistoryTemplate = Template & {
+  id_plantilla: number;
+};
+
+//Modelo con el cuál responde el backend
+export type TipoMuestra = {
+  creadoPor: string;
+  fechaCreacion: string;
+  nombre: string;
+  agency_id: string;
+  description: string;
+};
+
+export type RejectionWebAppTableObject = {
+  webapp_table: {
+    [key: string]: string;
+  };
+  rejection_select: { value: string; label: string }[];
+  rejection_list: string[];
+};
+
+export type ReceptionType = { Codigo: string; Nombre: string };
+
+export type RowDataType = {
+  id: any;
+  [key: string]: any;
+};
