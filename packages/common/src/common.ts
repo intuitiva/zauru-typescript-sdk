@@ -1,7 +1,7 @@
 import moment from "moment";
 import "moment-timezone";
 import "moment/locale/es";
-import type { PayeeGraphQL } from "@zauru-sdk/types";
+import type { PayeeGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
 
 export type SelectFieldOption = {
   label: any;
@@ -616,3 +616,19 @@ export const sortByProperty = (array: any[], property: string) => {
     return 0;
   });
 };
+
+/**
+ * Handle web app table actions and return a response with a consistent format.
+ * @param action A function that returns a Promise of type T.
+ * @returns A Promise of AxiosUtilsResponse<T>.
+ */
+export async function handlePossibleAxiosErrors<T>(
+  action: () => Promise<T>
+): Promise<AxiosUtilsResponse<T>> {
+  try {
+    const result = await action();
+    return { error: false, data: result } as AxiosUtilsResponse<T>;
+  } catch (error) {
+    return { error: true, userMsg: error?.toString() } as AxiosUtilsResponse<T>;
+  }
+}

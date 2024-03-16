@@ -1,13 +1,14 @@
 import type { Session } from "@remix-run/node";
-import type { AxiosUtilsResponse } from "./httpZauru.server.js";
-import httpZauru, { handlePossibleAxiosErrors } from "./httpZauru.server.js";
+import httpZauru from "./httpZauru.server.js";
 import httpOauth from "./httpOauth.server.js";
 import {
   AgencyGraphQL,
   EmployeeGraphQL,
   OauthProfile,
   ProfileResponse,
+  AxiosUtilsResponse,
 } from "@zauru-sdk/types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { config } from "@zauru-sdk/config";
 
 /**
