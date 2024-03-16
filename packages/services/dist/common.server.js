@@ -1,8 +1,10 @@
 import { redirect } from "@remix-run/node";
 import { commitSession, getSession } from "./sessions/sessions.server.js";
 import chalk from "chalk";
-import httpZauru, { handlePossibleAxiosErrors, } from "./zauru/httpZauru.server.js";
+import httpZauru from "./zauru/httpZauru.server.js";
 import { getAgencyInfo, getEmployeeInfo, getOauthUserInfo, getProfileInformation, } from "./zauru/zauru-profiles.server.js";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { getVariables } from "./zauru/zauru-variables.server.js";
 /**
  * loginWebApp
  * @param session
@@ -176,4 +178,45 @@ export function generateDistinctCode(prefix) {
     const uuid = generarUUID();
     const codigoProducto = `${prefix}-${uuid}`;
     return codigoProducto;
+}
+/**
+ *
+ * @param headers
+ * @param session
+ * @param names
+ * @returns
+ */
+export async function getVariablesByName(headers, session, names) {
+    //variables
+    let variables = [];
+    //consulto si ya están guardadas en la sesión
+    const tempVars = session.get("variables");
+    if (Array.isArray(tempVars) && tempVars.length) {
+        //si ya están guardadas, uso esas
+        variables = tempVars;
+    }
+    else {
+        //si no están en la sesión, las obtengo de zauru y luego las guardo en la sesión
+        //Obtengo mis variables, para tener los tags solicitados
+        const response = await getVariables(headers);
+        if (response.error) {
+            throw new Error(`${response.userMsg} - ${response.msg}`);
+        }
+        session.set("variables", response.data);
+        await commitSession(session);
+        variables = response.data ?? [];
+    }
+    const filtrados = variables.filter((value) => names.includes(value.name));
+    const returnObject = {};
+    filtrados.forEach((variable) => {
+        returnObject[`${variable.name}`] = variable.value;
+    });
+    //Pregunto si todas las variables fueron encontradas o no
+    if (!names.every((variable) => Object.keys(returnObject).includes(variable))) {
+        const noEncontradas = names
+            .filter((variable) => !Object.keys(returnObject).includes(variable))
+            .join(",");
+        throw new Error(`No se encontraron las variables: ${noEncontradas} pruebe cerrar e iniciar sesión nuevamente para continuar.`);
+    }
+    return returnObject;
 }

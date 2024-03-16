@@ -1,20 +1,6 @@
 import axios from "axios";
 import chalk from "chalk";
 import { config } from "@zauru-sdk/config";
-/**
- * Handle web app table actions and return a response with a consistent format.
- * @param action A function that returns a Promise of type T.
- * @returns A Promise of AxiosUtilsResponse<T>.
- */
-export async function handlePossibleAxiosErrors(action) {
-    try {
-        const result = await action();
-        return { error: false, data: result };
-    }
-    catch (error) {
-        return { error: true, userMsg: error?.toString() };
-    }
-}
 const axiosInstance = axios.create({
     baseURL: `${config.zauruBaseURL}`,
 });

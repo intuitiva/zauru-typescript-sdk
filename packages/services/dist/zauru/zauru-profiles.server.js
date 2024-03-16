@@ -1,5 +1,6 @@
-import httpZauru, { handlePossibleAxiosErrors } from "./httpZauru.server.js";
+import httpZauru from "./httpZauru.server.js";
 import httpOauth from "./httpOauth.server.js";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { config } from "@zauru-sdk/config";
 /**
  * getOauthUserInfo

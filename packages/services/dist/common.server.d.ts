@@ -1,7 +1,6 @@
 import { Session } from "@remix-run/node";
 import { AxiosRequestHeaders } from "axios";
-import { AxiosUtilsResponse } from "./zauru/httpZauru.server.js";
-import { EmployeeGraphQL, OauthProfile, ProfileResponse, AgencyGraphQL } from "@zauru-sdk/types";
+import { EmployeeGraphQL, OauthProfile, ProfileResponse, AgencyGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
 /**
  * loginWebApp
  * @param session
@@ -16,14 +15,6 @@ export declare const loginWebApp: (session: Session, codeValue: string, cookie: 
     userProfile: ProfileResponse;
     agencyProfile: AgencyGraphQL;
 }>>;
-export type GraphQLToken = {
-    status: number;
-    message: string;
-    token: string;
-    expires: string;
-    expiresMsg: string;
-    graphqlUrl: string;
-};
 /**
  * Obtiene los headers que se usan en todos los endpoints de zauru
  * @param cookie
@@ -52,3 +43,13 @@ export type SessionMessage = {
 export declare const saveSessionMessage: (session: Session, info: SessionMessage) => Promise<void>;
 export declare const deleteSessionMessage: (session: Session, id: string) => Promise<boolean>;
 export declare function generateDistinctCode(prefix: string): string;
+/**
+ *
+ * @param headers
+ * @param session
+ * @param names
+ * @returns
+ */
+export declare function getVariablesByName(headers: any, session: Session, names: Array<string>): Promise<{
+    [key: string]: string;
+}>;

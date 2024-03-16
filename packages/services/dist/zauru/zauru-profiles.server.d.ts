@@ -1,6 +1,5 @@
 import type { Session } from "@remix-run/node";
-import type { AxiosUtilsResponse } from "./httpZauru.server.js";
-import { AgencyGraphQL, EmployeeGraphQL, OauthProfile, ProfileResponse } from "@zauru-sdk/types";
+import { AgencyGraphQL, EmployeeGraphQL, OauthProfile, ProfileResponse, AxiosUtilsResponse } from "@zauru-sdk/types";
 /**
  * getOauthUserInfo
  * @param codeValue

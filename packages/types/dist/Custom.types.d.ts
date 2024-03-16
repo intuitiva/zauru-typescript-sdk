@@ -370,3 +370,17 @@ export type WebAppTableCreateBody = {
     rows_structure: string[];
     rows_type: string[];
 };
+export type GraphQLToken = {
+    status: number;
+    message: string;
+    token: string;
+    expires: string;
+    expiresMsg: string;
+    graphqlUrl: string;
+};
+export type AxiosUtilsResponse<T> = {
+    error?: boolean;
+    msg?: string;
+    userMsg?: string;
+    data?: T;
+};
