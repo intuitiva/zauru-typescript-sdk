@@ -1,4 +1,4 @@
-export const getLast100Receptions = `
+export const getLast100ReceptionsStringQuery = `
 query getLast100Receptions($agencyId: Int) @cached {
   purchase_orders(limit: 100, order_by: {created_at: desc}, where: {voided: {_eq: false}, agency_id: {_eq: $agencyId}}) {
     id
@@ -28,8 +28,7 @@ query getLast100Receptions($agencyId: Int) @cached {
   }
 }
 `;
-
-export const getPurchaseOrderByIdNumber = `
+export const getPurchaseOrderByIdNumberStringQuery = `
 query getPurchaseOrderByIdNumber($id_number: String) @cached {
   purchase_orders(where: {id_number: {_eq: $id_number}}) {
     id
@@ -73,10 +72,7 @@ query getPurchaseOrderByIdNumber($id_number: String) @cached {
   }
 }
 `;
-
-export const getPurchaseOrder = (
-  config: { withLotStocks: boolean } = { withLotStocks: false }
-) => `
+export const getPurchaseOrderStringQuery = (config = { withLotStocks: false }) => `
 query getPurchaseOrder($id: Int) @cached {
   purchase_orders(where: {id: {_eq: $id}}) {
     id
@@ -115,17 +111,15 @@ query getPurchaseOrder($id: Int) @cached {
       id
       name
       description
-      ${
-        config.withLotStocks
-          ? `lot_stocks {
+      ${config.withLotStocks
+    ? `lot_stocks {
               id
               available
               incoming
               outgoing
               agency_id
             }`
-          : ""
-      }
+    : ""}
     }
     receptions {
         id
@@ -148,8 +142,7 @@ query getPurchaseOrder($id: Int) @cached {
   }
 }
 `;
-
-export const getShipmentsByToAgencyLast100 = `
+export const getShipmentsByToAgencyLast100StringQuery = `
 query getShipmentsByToAgencyLast100(
     $agency_to_id: Int
   ){
@@ -180,8 +173,7 @@ query getShipmentsByToAgencyLast100(
     }
   }
 `;
-
-export const getLotsByName = `
+export const getLotsByNameStringQuery = `
 query getLots($name: String, $entity_id: Int){
     lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: $entity_id}, name: {_eq: $name}}) {
         id
@@ -190,8 +182,7 @@ query getLots($name: String, $entity_id: Int){
     }
 }
 `;
-
-export const getLotStocksByAgencyId = `
+export const getLotStocksByAgencyIdStringQuery = `
 query getLotStocksByAgencyId($agency_id: Int){
   lot_stocks (
     order_by: { id: desc },
@@ -208,24 +199,13 @@ query getLotStocksByAgencyId($agency_id: Int){
   }
 }
 `;
-
-export const getPurchaseOrdersBetweenDates = (
-  config: {
-    agencyFilter?: boolean;
-    payeeCategoryFilter?: boolean;
-    itemIdFilter?: boolean;
-    consolidateIdFilter?: boolean;
-    lotItemIdExclusion?: number;
-    poDetailTagId?: number;
-    withLotStocks?: boolean;
-  } = {
+export const getPurchaseOrdersBetweenDatesStringQuery = (config = {
     agencyFilter: false,
     payeeCategoryFilter: false,
     itemIdFilter: false,
     consolidateIdFilter: false,
     withLotStocks: false,
-  }
-) => `
+}) => `
 query getPurchaseOrdersBetweenDates(
     $agencyId: Int,
     $startDate: timestamp,
@@ -238,26 +218,18 @@ query getPurchaseOrdersBetweenDates(
     order_by: {id: desc}, 
     where: {
       ${config.agencyFilter ? "agency_id: {_eq: $agencyId}," : ""} 
-      ${
-        config.payeeCategoryFilter
-          ? "payee: {payee_category: {id: {_eq: $payeeCategoryId}}}},"
-          : ""
-      }
-      ${
-        config.itemIdFilter
-          ? "purchase_order_details: {item_id: {_eq: 10}},"
-          : ""
-      }
-      ${
-        config.lotItemIdExclusion
-          ? "lots: {item_id: {_neq: $lotItemIdExclusion}},"
-          : ""
-      }
-      ${
-        config.poDetailTagId
-          ? "purchase_order_details: {tag_id: {_eq: $poDetailTagId}},"
-          : ""
-      }
+      ${config.payeeCategoryFilter
+    ? "payee: {payee_category: {id: {_eq: $payeeCategoryId}}}},"
+    : ""}
+      ${config.itemIdFilter
+    ? "purchase_order_details: {item_id: {_eq: 10}},"
+    : ""}
+      ${config.lotItemIdExclusion
+    ? "lots: {item_id: {_neq: $lotItemIdExclusion}},"
+    : ""}
+      ${config.poDetailTagId
+    ? "purchase_order_details: {tag_id: {_eq: $poDetailTagId}},"
+    : ""}
       ${config.consolidateIdFilter ? "consolidate_id: {_is_null: true}," : ""}
       created_at: {_gte: $startDate, _lte: $endDate}
     }
@@ -283,17 +255,15 @@ query getPurchaseOrdersBetweenDates(
       id
       name
       description
-      ${
-        config.withLotStocks
-          ? `lot_stocks {
+      ${config.withLotStocks
+    ? `lot_stocks {
               id
               available
               incoming
               outgoing
               agency_id
             }`
-          : ""
-      }
+    : ""}
     }
     shipment_purchase_orders {
       shipment {
@@ -312,8 +282,7 @@ query getPurchaseOrdersBetweenDates(
   }
 }
 `;
-
-export const getPayees = `
+export const getPayeesStringQuery = `
 query getPayees {
     payees {
         id
@@ -325,8 +294,7 @@ query getPayees {
     }
 }
 `;
-
-export const getProviders = `
+export const getProvidersStringQuery = `
 query getProviders {
     payees (where: {vendor: {_eq: true}}) {
         id
@@ -337,8 +305,7 @@ query getProviders {
     }
 }
 `;
-
-export const getAgencies = `
+export const getAgenciesStringQuery = `
 query getAgencies {
   agencies {
     id
@@ -346,16 +313,14 @@ query getAgencies {
   }
 }
 `;
-
-export const getWebAppRow = `
+export const getWebAppRowStringQuery = `
 query getWebAppRow($id: Int){
   webapp_rows(where: {id: {_eq: $id}}) {
     data
   }
 }
 `;
-
-export const getWebAppRowsByWebAppTableId = `
+export const getWebAppRowsByWebAppTableIdStringQuery = `
 query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
   webapp_rows (where: {webapp_table_id: {_eq: $webapp_table_id }}) {
     id
@@ -364,8 +329,7 @@ query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
   }
 }
 `;
-
-export const getPayeeCategoryById = `
+export const getPayeeCategoryByIdStringQuery = `
 query getPayeeCategoryById ($id: Int) {
   payee_categories (where: {id: {_eq: $id }}) {
       payees (order_by: { id: desc }) { 
@@ -381,8 +345,7 @@ query getPayeeCategoryById ($id: Int) {
   }
 }
 `;
-
-export const getPayeeCategoriesByNotesMatch = (match: string) => `
+export const getPayeeCategoriesByNotesMatchStringQuery = (match) => `
 query getPayeeCategoriesByNotesMatch {
   payee_categories(where: {notes: {_ilike: "%${match}%" }}) {
     id
@@ -410,8 +373,7 @@ query getPayeeCategoriesByNotesMatch {
   }
 }
 `;
-
-export const getPayeeCategories = `
+export const getPayeeCategoriesStringQuery = `
 query getPayeeCategories {
   payee_categories {
     id
@@ -422,8 +384,7 @@ query getPayeeCategories {
   }
 }
 `;
-
-export const getProviderCategories = `
+export const getProviderCategoriesStringQuery = `
 query getProviderCategories {
   payee_categories (where: {vendor: {_eq: true}}) {
     id
@@ -434,8 +395,7 @@ query getProviderCategories {
   }
 }
 `;
-
-export const getClientCategories = `
+export const getClientCategoriesStringQuery = `
 query getClientCategories {
   payee_categories (where: {vendor: {_eq: false}}) {
     id
@@ -446,8 +406,7 @@ query getClientCategories {
   }
 }
 `;
-
-export const getPayeeById = `
+export const getPayeeByIdStringQuery = `
 query getPayeeById ($id: Int) {
   payees (where: {id: {_eq: $id }}) {
     id
@@ -461,8 +420,7 @@ query getPayeeById ($id: Int) {
   }
 }
 `;
-
-export const getSuperCategoryById = `
+export const getSuperCategoryByIdStringQuery = `
 query getSuperCategoryById ($id: Int) {
   item_super_categories (where: {id: {_eq: $id }}) {
     item_categories {
@@ -474,8 +432,7 @@ query getSuperCategoryById ($id: Int) {
   }
 }
 `;
-
-export const getItemCategoryById = `
+export const getItemCategoryByIdStringQuery = `
 query getItemCategoryById ($id: Int) {
   item_categories (where: {id: {_eq: $id }}) {
         id
@@ -485,8 +442,7 @@ query getItemCategoryById ($id: Int) {
   }
 }
 `;
-
-export const getItemsByCategory = `
+export const getItemsByCategoryStringQuery = `
 query getItemsByCategory ($id: Int) {
   item_categories (where: {id: {_eq: $id }}) {
         items (where: {active: {_eq: true }}) {
@@ -499,8 +455,7 @@ query getItemsByCategory ($id: Int) {
   }
 }
 `;
-
-export const getItems = `
+export const getItemsStringQuery = `
 query getItems {
   items (where: {active: {_eq: true }}) {
         id,
@@ -508,8 +463,7 @@ query getItems {
     }
 }
 `;
-
-export const getItemsBySuperCategory = `
+export const getItemsBySuperCategoryStringQuery = `
 query getItemsBySuperCategory ($id: Int, $agency_id: Int) {
   item_super_categories (where: {id: {_eq: $id }}, order_by: {id: desc}) {
       item_categories {
@@ -533,8 +487,7 @@ query getItemsBySuperCategory ($id: Int, $agency_id: Int) {
   }
 }
 `;
-
-export const getConsolidatesBetweenDates = `
+export const getConsolidatesBetweenDatesStringQuery = `
 query getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {
   consolidates (order_by: {id: desc}, where: {created_at: {_gte: $startDate, _lte: $endDate}}) {
       id
@@ -548,8 +501,7 @@ query getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {
   }
 }
 `;
-
-export const getEmployeeProfile = `
+export const getEmployeeProfileStringQuery = `
 query getEmployeeProfile ($id: Int) {
   employees(where: {id: {_eq: $id}}) {
     agency_id
@@ -561,8 +513,7 @@ query getEmployeeProfile ($id: Int) {
   }
 }
 `;
-
-export const getEmployeesByAgencyId = `
+export const getEmployeesByAgencyIdStringQuery = `
 query getEmployeesByAgencyId ($id: Int) {
   employees(where: {agency_id: {_eq: $id}}) {
     name
@@ -571,8 +522,7 @@ query getEmployeesByAgencyId ($id: Int) {
   }
 }
 `;
-
-export const getBundlesByItemCategoryId = `
+export const getBundlesByItemCategoryIdStringQuery = `
 query getBundlesByItemCategoryId ($id: Int) {
   bundles(where: {active: {_eq: true}, item_category_id: {_eq: $id}}) {
     id
@@ -590,16 +540,14 @@ query getBundlesByItemCategoryId ($id: Int) {
   }
 }
 `;
-
-export const getBundleByName = `
+export const getBundleByNameStringQuery = `
 query getBundleByName ($name: String) {
   bundles (where: {name: {_eq: $name }}) {
     id
   }
 }
 `;
-
-export const getItemByName = `
+export const getItemByNameStringQuery = `
 query getItemByName ($name: String) {
   items (where: {active: {_eq: true }, name: {_eq: $name }}) {
       id
@@ -610,13 +558,10 @@ query getItemByName ($name: String) {
   }
 }
 `;
-
-export const getShipments = (wheres: string[] = []) => {
-  const additionalWheres = wheres.join(",");
-  return `query getShipments {
-      shipments (${
-        additionalWheres.length > 0 ? `where: {${additionalWheres}},` : ""
-      } order_by: {id: desc}) {
+export const getShipmentsStringQuery = (wheres = []) => {
+    const additionalWheres = wheres.join(",");
+    return `query getShipments {
+      shipments (${additionalWheres.length > 0 ? `where: {${additionalWheres}},` : ""} order_by: {id: desc}) {
         id
         id_number
         reference
@@ -635,8 +580,7 @@ export const getShipments = (wheres: string[] = []) => {
     }
   `;
 };
-
-export const getFormByName = `
+export const getFormByNameStringQuery = `
 query getFormByName ($name: String) {
   settings_forms (
       where: {name: {_eq: $name }},
@@ -668,8 +612,7 @@ query getFormByName ($name: String) {
   }
 }
 `;
-
-export const getForms = `
+export const getFormsStringQuery = `
 query getForms {
   settings_forms (
       order_by: {zid: desc, version: desc}
@@ -700,8 +643,7 @@ query getForms {
   }
 }
 `;
-
-export const getFormsByDocumentType = (filters: { formZid?: number } = {}) => `
+export const getFormsByDocumentTypeStringQuery = (filters = {}) => `
 query getFormsByDocumentType ($document_type: String) {
   settings_forms (
       where: {
@@ -742,20 +684,15 @@ query getFormsByDocumentType ($document_type: String) {
   }
 }
 `;
-
-export const getMyCaseFormSubmissions = (
-  filters: { formZid?: number; caseId?: number } = {}
-) => `
+export const getMyCaseFormSubmissionsStringQuery = (filters = {}) => `
 query getMyCaseFormSubmissions ($responsible_id: Int) {
   submission_cases (
     limit: 500,
     where: {
       settings_form_submission: {
-          ${
-            filters?.formZid
-              ? `settings_form: {zid: {_eq: ${filters?.formZid}}},`
-              : ""
-          }
+          ${filters?.formZid
+    ? `settings_form: {zid: {_eq: ${filters?.formZid}}},`
+    : ""}
         voided: {_eq: false}
       },
       case: {
@@ -818,8 +755,7 @@ query getMyCaseFormSubmissions ($responsible_id: Int) {
   }
 }
 `;
-
-export const getFormSubmissionById = `
+export const getFormSubmissionByIdStringQuery = `
 query getFormSubmissionById ($formId: bigint) {
   settings_form_submissions (where: {id: { _eq: $formId }}) {
       id
@@ -853,59 +789,36 @@ query getFormSubmissionById ($formId: bigint) {
   }
 }
 `;
-
-export const getInvoiceFormSubmissionsByAgencyId = (filters?: {
-  seller_id?: number | string;
-  payee_id_number_search?: string;
-  some_field_value?: string;
-  item_ids?: number[];
-  bundle_ids?: number[];
-  startDate?: string;
-  endDate?: string;
-}) => {
-  return `
+export const getInvoiceFormSubmissionsByAgencyIdStringQuery = (filters) => {
+    return `
 query getInvoiceFormSubmissionsByAgencyId (
   $agency_id: Int
   ) {
   submission_invoices(
     where: {
       settings_form_submission: {
-        ${
-          filters?.some_field_value
-            ? `settings_form_submission_values: {
+        ${filters?.some_field_value
+        ? `settings_form_submission_values: {
                   value: { _eq: "${filters?.some_field_value}" }
                 },`
-            : ""
-        }
+        : ""}
         voided: {_eq: false}
       },
-      ${
-        filters?.startDate?.length && filters?.endDate?.length
-          ? `created_at: { _gte: "${filters?.startDate}", _lte: "${filters?.endDate}" },`
-          : ""
-      }
+      ${filters?.startDate?.length && filters?.endDate?.length
+        ? `created_at: { _gte: "${filters?.startDate}", _lte: "${filters?.endDate}" },`
+        : ""}
       invoice: {
         agency_id: {_eq: $agency_id},
         ${filters?.seller_id ? `seller_id: {_eq: ${filters?.seller_id} },` : ""}
-        ${
-          filters?.payee_id_number_search
-            ? `payee: { id_number: { _ilike: "%${filters?.payee_id_number_search}%"} },`
-            : ""
-        }
-        ${
-          filters?.item_ids?.length
-            ? `invoice_details: {item_id: {_in: [${filters?.item_ids?.join(
-                ","
-              )}]}}`
-            : ""
-        }
-        ${
-          filters?.bundle_ids?.length
-            ? `invoice_details: {bundle_id: {_in: [${filters?.bundle_ids?.join(
-                ","
-              )}]}}`
-            : ""
-        }
+        ${filters?.payee_id_number_search
+        ? `payee: { id_number: { _ilike: "%${filters?.payee_id_number_search}%"} },`
+        : ""}
+        ${filters?.item_ids?.length
+        ? `invoice_details: {item_id: {_in: [${filters?.item_ids?.join(",")}]}}`
+        : ""}
+        ${filters?.bundle_ids?.length
+        ? `invoice_details: {bundle_id: {_in: [${filters?.bundle_ids?.join(",")}]}}`
+        : ""}
         voided: {_eq: false}
       }
     },
@@ -964,19 +877,14 @@ query getInvoiceFormSubmissionsByAgencyId (
   }
 `;
 };
-
-export const getLastInvoiceFormSubmission = (
-  filters: { formZid?: number } = {}
-) => `
+export const getLastInvoiceFormSubmissionStringQuery = (filters = {}) => `
 query getLastInvoiceFormSubmission {
   submission_invoices(
       where: {
         settings_form_submission: {
-          ${
-            filters?.formZid
-              ? `settings_form: {zid: {_eq: ${filters?.formZid}}},`
-              : ""
-          }
+          ${filters?.formZid
+    ? `settings_form: {zid: {_eq: ${filters?.formZid}}},`
+    : ""}
           voided: {_eq: false}
         }
       },
@@ -990,20 +898,15 @@ query getLastInvoiceFormSubmission {
   }
 }
 `;
-
-export const getInvoiceFormSubmissionsByInvoiceId = (
-  filters: { formZid?: number } = {}
-) => `
+export const getInvoiceFormSubmissionsByInvoiceIdStringQuery = (filters = {}) => `
 query getInvoiceFormSubmissionsByInvoiceId ($invoice_id: bigint) {
   submission_invoices(
       where: {
         invoice_id: {_eq: $invoice_id},
         settings_form_submission: {
-          ${
-            filters?.formZid
-              ? `settings_form: {zid: {_eq: ${filters?.formZid}}},`
-              : ""
-          }
+          ${filters?.formZid
+    ? `settings_form: {zid: {_eq: ${filters?.formZid}}},`
+    : ""}
           voided: {_eq: false}
         }
       },
@@ -1048,8 +951,7 @@ query getInvoiceFormSubmissionsByInvoiceId ($invoice_id: bigint) {
   }
 }
 `;
-
-export const getCurrencies = `
+export const getCurrenciesStringQuery = `
 query getCurrencies {
   currencies {
     id
@@ -1061,24 +963,15 @@ query getCurrencies {
   }
 }
 `;
-
-export const getSuggestedPrices = (
-  config: {
-    notNullPriceList: boolean;
-    withItems: boolean;
-    withItemCategories: boolean;
-  } = {
+export const getSuggestedPricesStringQuery = (config = {
     notNullPriceList: false,
     withItems: false,
     withItemCategories: false,
-  }
-) => `
+}) => `
 query getSuggestedPrices {
-  suggested_prices ${
-    config?.notNullPriceList
-      ? "(where: {price_list_id: {_is_null: false}})"
-      : ""
-  } {
+  suggested_prices ${config?.notNullPriceList
+    ? "(where: {price_list_id: {_is_null: false}})"
+    : ""} {
     id
     current
     currency_id
@@ -1093,17 +986,15 @@ query getSuggestedPrices {
         id
       }
     }
-    ${
-      config?.withItems
-        ? `item {
+    ${config?.withItems
+    ? `item {
             id
             name
             stocks_only_integer
             code
             product_type
-            ${
-              config?.withItemCategories
-                ? `
+            ${config?.withItemCategories
+        ? `
                 item_category {
                     id
                     name
@@ -1111,15 +1002,13 @@ query getSuggestedPrices {
                     items_count
                 }
               `
-                : ""
-            }
+        : ""}
         }`
-        : ""
-    }
+    : ""}
   }
 }
 `;
-export const getPaymentTerms = `
+export const getPaymentTermsStringQuery = `
 query getPaymentTerms {
   payment_terms {
     active
@@ -1129,8 +1018,7 @@ query getPaymentTerms {
   }
 }
 `;
-
-export const getPaymentTermById = `
+export const getPaymentTermByIdStringQuery = `
 query getPaymentTermById ($id: Int) {
   payment_terms (where: {id: {_eq: $id }}) {
     active
@@ -1145,8 +1033,7 @@ query getPaymentTermById ($id: Int) {
   }
 }
 `;
-
-export const getInvoicesByAgencyId = `
+export const getInvoicesByAgencyIdStringQuery = `
 query getInvoicesByAgencyId($id: Int) {
   invoices(limit: 1000, where: {agency_id: {_eq: $id}, voided: {_eq: false}}, order_by: {id: desc}) {
     id
@@ -1193,14 +1080,11 @@ query getInvoicesByAgencyId($id: Int) {
   }
 }
 `;
-
-export const getCasesByResponsibleId = (wheres: string[] = []) => {
-  const additionalWheres = wheres.join(",");
-  return `
+export const getCasesByResponsibleIdStringQuery = (wheres = []) => {
+    const additionalWheres = wheres.join(",");
+    return `
     query getCasesByResponsibleId($responsible_id: Int) {
-      cases(where: {responsible_id: {_eq: $responsible_id}${
-        additionalWheres.length > 0 ? "," : ""
-      }${additionalWheres}}, order_by: {id: desc}) {
+      cases(where: {responsible_id: {_eq: $responsible_id}${additionalWheres.length > 0 ? "," : ""}${additionalWheres}}, order_by: {id: desc}) {
         id
         id_number
         serial_id

@@ -1,0 +1,23 @@
+{
+  "name": "@zauru-sdk/types",
+  "version": "1.0.4",
+  "description": "Estructuras de Zauru, tipado de modelos y modelos personalizados.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oscar Cuéllar",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "gitHead": "a80d6336cbfdb73447743c8e2c4a4721f2eea857"
+}

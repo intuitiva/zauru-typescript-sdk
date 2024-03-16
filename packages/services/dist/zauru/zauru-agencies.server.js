@@ -1,8 +1,7 @@
 import { handlePossibleAxiosErrors } from "./httpZauru.server.js";
 import httpGraphQLAPI from "./httpGraphQL.server.js";
 import { getGraphQLAPIHeaders } from "~/common.server.js";
-import graphql from "@zauru-sdk/graphql";
-const { default: queries } = graphql;
+import { getAgenciesStringQuery } from "@zauru-sdk/graphql";
 /**
  * getAgencies
  * @param headers
@@ -12,7 +11,7 @@ export async function getAgencies(session) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post(``, {
-            query: queries.getAgencies,
+            query: getAgenciesStringQuery,
         }, {
             headers,
         });

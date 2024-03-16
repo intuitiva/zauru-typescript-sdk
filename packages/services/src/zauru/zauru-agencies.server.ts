@@ -4,9 +4,7 @@ import type { AxiosUtilsResponse } from "./httpZauru.server.js";
 import { handlePossibleAxiosErrors } from "./httpZauru.server.js";
 import httpGraphQLAPI from "./httpGraphQL.server.js";
 import { getGraphQLAPIHeaders } from "~/common.server.js";
-import graphql from "@zauru-sdk/graphql";
-
-const { default: queries } = graphql;
+import { getAgenciesStringQuery } from "@zauru-sdk/graphql";
 
 /**
  * getAgencies
@@ -23,7 +21,7 @@ export async function getAgencies(
     }>(
       ``,
       {
-        query: queries.getAgencies,
+        query: getAgenciesStringQuery,
       },
       {
         headers,

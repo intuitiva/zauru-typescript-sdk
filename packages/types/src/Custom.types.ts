@@ -1,8 +1,12 @@
 import {
   EmployeeGraphQL,
   ItemGraphQL,
+  LotGraphQL,
+  LotStockGraphQL,
+  MembershipGraphQL,
   MovementGraphQL,
   PriceListGraphQL,
+  ProfileGraphQL,
   PurchaseOrderDetailsGraphQL,
   PurchaseOrderGraphQL,
   ShipmentGraphQL,
@@ -114,18 +118,6 @@ export type LoteWithPurchaseFormatedSchema =
     editable: boolean;
   };
 
-type StockSchema = {
-  id: number;
-  lot_id: number;
-  entity_id: number;
-  agency_id: number;
-  available: string;
-  incoming: string;
-  outgoing: string;
-  created_at: string;
-  updated_at: string;
-};
-
 //Modelo para el detalle del lote
 export type LoteDescription = {
   id: number;
@@ -144,10 +136,10 @@ export type LoteDescription = {
   item_id: number;
   expires: string;
   id_number: number | null;
-  stock_actual: StockSchema;
+  stock_actual: LotStockGraphQL;
   stocks: {
     //available, outgoing, incoming
-    [key: string]: StockSchema | string;
+    [key: string]: LotStockGraphQL | string;
   };
 };
 
@@ -176,12 +168,7 @@ export type LoteSchema = {
     item_id: number;
     expires: string;
     id_number: number | null;
-    item: {
-      id: number;
-      zid: number;
-      code: string;
-      name: string;
-    };
+    item: ItemGraphQL;
   };
 };
 
@@ -199,62 +186,6 @@ export type LoteProcesadoSchema = {
   rechazo: string;
 };
 
-type LotAssociated = {
-  id: number;
-  active: boolean;
-  name: string;
-  description: string;
-  entity_id: number;
-  created_at: string;
-  updated_at: string;
-  item_id: number;
-  expires: string | null;
-  id_number: string | null;
-};
-
-type ItemAssociatedByLot = {
-  id: number;
-  zid: number;
-  active: boolean;
-  stockable: boolean;
-  sellable: boolean;
-  manufacturable: boolean;
-  purchasable: boolean;
-  code: string;
-  ean13: string;
-  name: string;
-  item_category_id: number | null;
-  measurement_unit: string;
-  weight: number;
-  volume: number | null;
-  description: string;
-  reorder_point: number | null;
-  economic_order_quantity: number | null;
-  months_warranty: number | null;
-  entity_id: number;
-  updater_id: number;
-  created_at: string;
-  updated_at: string;
-  pays_vat: boolean;
-  tariff_rate: number;
-  product_type: number;
-  payee_id: number | null;
-  average_cost: number | null;
-  fifo_cost: number | null;
-  lifo_cost: number | null;
-  extra_tax_1: number;
-  extra_tax_2: number;
-  quotable: boolean;
-  ecommerce: boolean;
-  msrp: number | null;
-  tax1_use_msrp: boolean;
-  tax2_use_msrp: boolean;
-  vendor_code: string;
-  stocks_only_integer: boolean;
-  brand_id: number | null;
-  color: string;
-};
-
 export type PoBasketType = {
   [key: string]: {
     lot_id: string;
@@ -264,8 +195,8 @@ export type PoBasketType = {
 };
 
 export type ItemAssociatedLots = {
-  lots: LotAssociated[];
-  item: ItemAssociatedByLot;
+  lots: LotGraphQL[];
+  item: ItemGraphQL;
   recepciones_basket_item_id: number;
   poBasket: PoBasketType;
 };
@@ -287,147 +218,9 @@ export type CreatePriceListBody = Partial<PriceListGraphQL> & {
   payee_category_ids: string[];
 };
 
-interface Logo {
-  url: null | string;
-  thumb: {
-    url: null | string;
-  };
-  standard: {
-    url: null | string;
-  };
-  header: {
-    url: null | string;
-  };
-}
-
-interface Entity {
-  id: number;
-  name: string;
-  tin: string;
-  country: string;
-  currency_id: number;
-  entity_type_id: number;
-  industry: string;
-  web: string;
-  notes: string;
-  vat: number;
-  vat_included: boolean;
-  logo: Logo;
-  logo_2: Logo;
-  created_at: string;
-  updated_at: string;
-  distributor: number;
-  costing_method: string;
-  address: string;
-  state: string;
-  city: string;
-  income_tax: number;
-  report_logo: Logo;
-  distributor_contract_id: number | null;
-  producer_contract_id: number | null;
-  legal_representative_name: string | null;
-  legal_representative_identification: string | null;
-  legal_representative_birthday: string | null;
-  legal_representative_gender: boolean;
-  legal_representative_marital_status: string | null;
-  legal_representative_occupation: string | null;
-  legal_representative_nationality: string | null;
-  exporter_code: string | null;
-}
-export type Membership = {
-  id: number;
-  active: boolean;
-  current: boolean;
-  reference: string;
-  starts: string;
-  expires: string;
-  eternal: boolean;
-  entity_id: number;
-  notes: string;
-  created_at: string;
-  updated_at: string;
-  licenses_count: number;
-  entity: Entity;
-};
-
-type Profile = {
-  id: number;
-  email: string;
-  active: boolean;
-  admin: boolean;
-  name: string;
-  address: null | string;
-  mobile_phone: string;
-  birthday: null | string;
-  gender: boolean;
-  notes: null | string;
-  time_zone: string;
-  language: string;
-  selected_entity_id: number;
-  created_at: string;
-  updated_at: string;
-  authentication_token: string;
-  provider: string;
-  provider_token: string;
-};
-
 export type ProfileResponse = {
-  profile: Profile;
-  memberships: Membership[];
-};
-
-export type OauthProfile = {
-  id: number;
-  uid: number;
-  username: string;
-  name: string;
-  time_zone: string;
-  mobile_phone: string;
-  admin: boolean;
-  selected_entity: number;
-  selected_entity_name: string;
-  selected_entity_logo: string;
-  selected_entity_role: number;
-  employee_id: number;
-  crm_admin: boolean;
-  crm_supervisor: boolean;
-  crm_user: boolean;
-  currency_id: number;
-  currency_name: string;
-  currency_prefix: string;
-  api_key: string;
-  scope: string;
-  email: string;
-};
-
-export type Agency = {
-  id: number;
-  zid: number;
-  active: boolean;
-  ean13: string;
-  name: string;
-  employee_id: number | null;
-  updater_id: number;
-  entity_id: number;
-  virtual: boolean;
-  virtual_type: string | null;
-  warehouse: boolean;
-  point_of_sale: boolean;
-  workshop: boolean;
-  factory: boolean;
-  contact: string;
-  city: string;
-  address_line_1: string;
-  address_line_2: string;
-  phone: string;
-  notes: string;
-  created_at: string;
-  updated_at: string;
-  price_list_id: number | null;
-  quote: boolean;
-  ecommerce: boolean;
-  external_storage_service_name: string;
-  agency_category_id: number | null;
+  profile: ProfileGraphQL;
+  memberships: MembershipGraphQL[];
 };
 
 export type PurchasesListResponseSchema<T> = {
@@ -636,29 +429,4 @@ export type WebAppTableCreateBody = {
   name: string;
   rows_structure: string[];
   rows_type: string[];
-};
-
-export type WebAppTableStructure = {
-  id: number;
-  zid: number;
-  entity_id: number;
-  name: string;
-  structure: { [key: string]: string };
-  creator_id: number;
-  updater_id: number;
-  created_at: string;
-  updated_at: string;
-};
-
-export type VariableSchema = {
-  id: number;
-  name: string;
-  value: string;
-  kind: string;
-  user_id: number | null;
-  entity_id: number | null;
-  description: string;
-  creator: string;
-  created_at: string;
-  updated_at: string;
 };
