@@ -1,69 +1,13 @@
 import "moment-timezone";
 import "moment/locale/es";
-import type { PayeeGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
-export type SelectFieldOption = {
-    label: any;
-    value: any;
-};
+import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption } from "@zauru-sdk/types";
 export declare const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[];
-export type GenericStepResponse = {
-    msg: string;
-    step: string;
-};
-export type BasketSchema = {
-    total: number;
-    id: number;
-    color: string;
-};
 /**
  * Obtener el objeto de canastas en base al string de canastas
  * @param basketsString
  * @returns
  */
 export declare const getBasketsSchema: (basketsString: string) => BasketSchema[];
-export type DataTablesFilterBody = {
-    start: number;
-    length: number;
-    tag?: string;
-    agency?: string;
-    agency_from?: string;
-    search?: {
-        value: string;
-        regex: boolean;
-    };
-    order: {
-        [key: string]: {
-            column: string;
-            dir: string;
-        };
-    };
-    Desde?: string;
-    Hasta?: string;
-    vendor?: string;
-    vendor_category?: string;
-    item?: string;
-};
-export type BasicIdNameSchema = {
-    id: number;
-    name: string;
-};
-export type ObjectKeyString<T> = {
-    [key: string]: T;
-};
-export type GeneratePDFBody = {
-    s_date: string;
-    e_date: string;
-    print_template: number | string;
-};
-export type GeneratedPDFResult = {
-    status: number;
-    zid: number;
-};
-export type PDFResult = {
-    status: number;
-    percentage: number;
-    message: string;
-};
 export declare function generateClientUUID(): string;
 /**
  * extractValueBetweenTags
@@ -137,7 +81,7 @@ export declare const getPayeeFormated: (payee: PayeeGraphQL) => string;
 export declare const getPayeeInfoOptions: (payees: PayeeGraphQL[]) => (SelectFieldOption & {
     id: number;
 })[];
-export declare const parsedBaculoFormValue: (value: any) => any;
+export declare const parsedBaculoFormValue: (value: any) => string | undefined;
 export declare function extractIdFromForm(s: string): number | null;
 /**
  * Formatea una fecha de tipo YYYY-MM-DD a 2023-08-07T20:56:00.540245

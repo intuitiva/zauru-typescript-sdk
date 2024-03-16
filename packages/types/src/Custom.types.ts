@@ -330,6 +330,7 @@ export type CreateNewPurchaseOrderBody = Omit<
   ExtendedPurchaseOrderBody;
 
 export type SelectFieldOption = { value: any; label: string };
+
 export type DataTablesFilterBody = {
   start: number;
   length: number;

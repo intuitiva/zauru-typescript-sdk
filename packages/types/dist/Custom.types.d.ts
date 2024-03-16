@@ -384,3 +384,31 @@ export type AxiosUtilsResponse<T> = {
     userMsg?: string;
     data?: T;
 };
+export type MonthsType = {
+    ene: number;
+    feb: number;
+    mar: number;
+    abr: number;
+    may: number;
+    jun: number;
+    jul: number;
+    ago: number;
+    sep: number;
+    oct: number;
+    nov: number;
+    dic: number;
+};
+export declare const MONTHS: {
+    ene: number;
+    feb: number;
+    mar: number;
+    abr: number;
+    may: number;
+    jun: number;
+    jul: number;
+    ago: number;
+    sep: number;
+    oct: number;
+    nov: number;
+    dic: number;
+};

@@ -1,4 +1,4 @@
-import { SelectFieldOption } from "./common.js";
+import { SelectFieldOption } from "@zauru-sdk/types";
 
 export const guatemalaCountryInfo = [
   { value: 0, label: "GUATEMALA,GUATEMALA" },

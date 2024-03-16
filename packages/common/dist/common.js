@@ -1,6 +1,7 @@
 import moment from "moment";
 import "moment-timezone";
 import "moment/locale/es";
+import { MONTHS } from "@zauru-sdk/types";
 export const DESTINOS_MUESTRA_OPTIONS = [
     { label: "Microbiología", value: "microbiologa" },
     { label: "Residuos de plaguicidas", value: "residuos_de_plaguicidas" },
@@ -376,20 +377,6 @@ export function convertToFormData(obj) {
     appendFormData(obj);
     return formData;
 }
-const MONTHS = {
-    ene: 0,
-    feb: 1,
-    mar: 2,
-    abr: 3,
-    may: 4,
-    jun: 5,
-    jul: 6,
-    ago: 7,
-    sep: 8,
-    oct: 9,
-    nov: 10,
-    dic: 11,
-};
 export const ZAURU_REGEX = {
     porcentaje: /^\d{1,2}(\.\d{1,2})?$/,
 };
