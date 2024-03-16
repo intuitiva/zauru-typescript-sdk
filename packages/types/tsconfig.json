@@ -1,0 +1,22 @@
+{
+  "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "lib": ["ES2022"],
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "target": "ES2022",
+    "strict": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "declarationDir": "./dist",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  }
+}
