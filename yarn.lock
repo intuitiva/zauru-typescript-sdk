@@ -839,12 +839,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zauru-sdk/common@npm:^1.0.6, @zauru-sdk/common@workspace:packages/common":
+"@zauru-sdk/common@npm:^1.0.7, @zauru-sdk/common@workspace:packages/common":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/common@workspace:packages/common"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
-    "@zauru-sdk/types": "npm:^1.0.6"
+    "@zauru-sdk/types": "npm:^1.0.7"
     moment: "npm:^2.30.1"
     moment-timezone: "npm:^0.5.45"
     typescript: "npm:^5.1.6"
@@ -860,7 +860,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/graphql@npm:^1.0.5, @zauru-sdk/graphql@workspace:packages/graphql":
+"@zauru-sdk/graphql@npm:^1.0.7, @zauru-sdk/graphql@workspace:packages/graphql":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/graphql@workspace:packages/graphql"
   dependencies:
@@ -868,22 +868,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/services@npm:^1.0.6, @zauru-sdk/services@workspace:packages/services":
+"@zauru-sdk/services@npm:^1.0.7, @zauru-sdk/services@workspace:packages/services":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/services@workspace:packages/services"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
-    "@zauru-sdk/common": "npm:^1.0.6"
+    "@zauru-sdk/common": "npm:^1.0.7"
     "@zauru-sdk/config": "npm:^1.0.4"
-    "@zauru-sdk/graphql": "npm:^1.0.5"
-    "@zauru-sdk/types": "npm:^1.0.6"
+    "@zauru-sdk/graphql": "npm:^1.0.7"
+    "@zauru-sdk/types": "npm:^1.0.7"
     axios: "npm:^1.6.7"
     chalk: "npm:5.3.0"
     typescript: "npm:^5.1.6"
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/types@npm:^1.0.6, @zauru-sdk/types@workspace:packages/types":
+"@zauru-sdk/types@npm:^1.0.7, @zauru-sdk/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/types@workspace:packages/types"
   dependencies:
@@ -896,11 +896,11 @@ __metadata:
   resolution: "@zauru-sdk/utils@workspace:packages/utils"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
-    "@zauru-sdk/common": "npm:^1.0.6"
+    "@zauru-sdk/common": "npm:^1.0.7"
     "@zauru-sdk/config": "npm:^1.0.4"
-    "@zauru-sdk/graphql": "npm:^1.0.5"
-    "@zauru-sdk/services": "npm:^1.0.6"
-    "@zauru-sdk/types": "npm:^1.0.6"
+    "@zauru-sdk/graphql": "npm:^1.0.7"
+    "@zauru-sdk/services": "npm:^1.0.7"
+    "@zauru-sdk/types": "npm:^1.0.7"
     typescript: "npm:^5.1.6"
   languageName: unknown
   linkType: soft
