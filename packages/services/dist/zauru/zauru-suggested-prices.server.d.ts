@@ -15,6 +15,7 @@ export declare function getSuggestedPrices(session: Session, config: {
     notNullPriceList?: boolean;
     withItems?: boolean;
     withItemCategories?: boolean;
+    onlyCurrent?: boolean;
 }): Promise<AxiosUtilsResponse<SuggestedPriceGraphQL[]>>;
 /**
  * createSuggestedPrice

@@ -1069,16 +1069,26 @@ export const getSuggestedPricesStringQuery = (
     notNullPriceList: boolean;
     withItems: boolean;
     withItemCategories: boolean;
+    onlyCurrent: boolean;
   } = {
     notNullPriceList: false,
     withItems: false,
     withItemCategories: false,
+    onlyCurrent: false,
   }
 ) => `
 query getSuggestedPrices {
   suggested_prices ${
-    config?.notNullPriceList
-      ? "(where: {price_list_id: {_is_null: false}})"
+    config?.notNullPriceList || config?.onlyCurrent
+      ? `(
+        where: {${[
+          config?.onlyCurrent ? "current: { _eq: true }" : "",
+          config?.notNullPriceList ? "price_list_id: { _is_null: false }" : "",
+        ]
+          .filter(Boolean)
+          .join(", ")}
+        }
+      )`
       : ""
   } {
     id
@@ -1121,6 +1131,7 @@ query getSuggestedPrices {
   }
 }
 `;
+
 export const getPaymentTermsStringQuery = `
 query getPaymentTerms {
   payment_terms {

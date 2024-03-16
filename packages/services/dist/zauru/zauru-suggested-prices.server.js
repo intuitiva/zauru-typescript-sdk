@@ -23,13 +23,14 @@ export const getSuggestedPricesExportJSON = async (headers) => {
  */
 export async function getSuggestedPrices(session, config) {
     return handlePossibleAxiosErrors(async () => {
-        const { notNullPriceList = false, withItems = false, withItemCategories = false, } = config;
+        const { notNullPriceList = false, withItems = false, withItemCategories = false, onlyCurrent = false, } = config;
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
             query: getSuggestedPricesStringQuery({
                 notNullPriceList,
                 withItems,
                 withItemCategories,
+                onlyCurrent,
             }),
         }, { headers });
         if (response.data.errors) {

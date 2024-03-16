@@ -68,6 +68,7 @@ export declare const getSuggestedPricesStringQuery: (config?: {
     notNullPriceList: boolean;
     withItems: boolean;
     withItemCategories: boolean;
+    onlyCurrent: boolean;
 }) => string;
 export declare const getPaymentTermsStringQuery = "\nquery getPaymentTerms {\n  payment_terms {\n    active\n    id\n    memo\n    name\n  }\n}\n";
 export declare const getPaymentTermByIdStringQuery = "\nquery getPaymentTermById ($id: Int) {\n  payment_terms (where: {id: {_eq: $id }}) {\n    active\n    id\n    memo\n    name\n    account_from_id\n    account_to_id\n    allowed_payment_terms {\n      payee_category_id\n    }\n  }\n}\n";

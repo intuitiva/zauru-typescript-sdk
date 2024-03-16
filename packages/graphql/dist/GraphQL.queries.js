@@ -967,10 +967,19 @@ export const getSuggestedPricesStringQuery = (config = {
     notNullPriceList: false,
     withItems: false,
     withItemCategories: false,
+    onlyCurrent: false,
 }) => `
 query getSuggestedPrices {
-  suggested_prices ${config?.notNullPriceList
-    ? "(where: {price_list_id: {_is_null: false}})"
+  suggested_prices ${config?.notNullPriceList || config?.onlyCurrent
+    ? `(
+        where: {${[
+        config?.onlyCurrent ? "current: { _eq: true }" : "",
+        config?.notNullPriceList ? "price_list_id: { _is_null: false }" : "",
+    ]
+        .filter(Boolean)
+        .join(", ")}
+        }
+      )`
     : ""} {
     id
     current
