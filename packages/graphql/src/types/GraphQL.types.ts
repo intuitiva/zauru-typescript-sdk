@@ -253,6 +253,7 @@ export type ItemCategoryGraphQL = {
   items_count: number;
   item_super_category_id: number;
   color: string;
+  stocks_only_integer: boolean;
 };
 
 export type ItemSuperCategoryGraphQL = {

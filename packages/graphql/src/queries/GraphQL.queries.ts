@@ -1,4 +1,4 @@
-const getLast100Receptions = `
+export const getLast100Receptions = `
 query getLast100Receptions($agencyId: Int) @cached {
   purchase_orders(limit: 100, order_by: {created_at: desc}, where: {voided: {_eq: false}, agency_id: {_eq: $agencyId}}) {
     id
@@ -29,7 +29,7 @@ query getLast100Receptions($agencyId: Int) @cached {
 }
 `;
 
-const getPurchaseOrderByIdNumber = `
+export const getPurchaseOrderByIdNumber = `
 query getPurchaseOrderByIdNumber($id_number: String) @cached {
   purchase_orders(where: {id_number: {_eq: $id_number}}) {
     id
@@ -74,7 +74,7 @@ query getPurchaseOrderByIdNumber($id_number: String) @cached {
 }
 `;
 
-const getPurchaseOrder = (
+export const getPurchaseOrder = (
   config: { withLotStocks: boolean } = { withLotStocks: false }
 ) => `
 query getPurchaseOrder($id: Int) @cached {
@@ -149,7 +149,7 @@ query getPurchaseOrder($id: Int) @cached {
 }
 `;
 
-const getShipmentsByToAgencyLast100 = `
+export const getShipmentsByToAgencyLast100 = `
 query getShipmentsByToAgencyLast100(
     $agency_to_id: Int
   ){
@@ -181,7 +181,7 @@ query getShipmentsByToAgencyLast100(
   }
 `;
 
-const getLotsByName = `
+export const getLotsByName = `
 query getLots($name: String, $entity_id: Int){
     lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: $entity_id}, name: {_eq: $name}}) {
         id
@@ -191,7 +191,7 @@ query getLots($name: String, $entity_id: Int){
 }
 `;
 
-const getLotStocksByAgencyId = `
+export const getLotStocksByAgencyId = `
 query getLotStocksByAgencyId($agency_id: Int){
   lot_stocks (
     order_by: { id: desc },
@@ -209,7 +209,7 @@ query getLotStocksByAgencyId($agency_id: Int){
 }
 `;
 
-const getPurchaseOrdersBetweenDates = (
+export const getPurchaseOrdersBetweenDates = (
   config: {
     agencyFilter?: boolean;
     payeeCategoryFilter?: boolean;
@@ -313,7 +313,7 @@ query getPurchaseOrdersBetweenDates(
 }
 `;
 
-const getPayees = `
+export const getPayees = `
 query getPayees {
     payees {
         id
@@ -326,7 +326,7 @@ query getPayees {
 }
 `;
 
-const getProviders = `
+export const getProviders = `
 query getProviders {
     payees (where: {vendor: {_eq: true}}) {
         id
@@ -338,7 +338,7 @@ query getProviders {
 }
 `;
 
-const getAgencies = `
+export const getAgencies = `
 query getAgencies {
   agencies {
     id
@@ -347,7 +347,7 @@ query getAgencies {
 }
 `;
 
-const getWebAppRow = `
+export const getWebAppRow = `
 query getWebAppRow($id: Int){
   webapp_rows(where: {id: {_eq: $id}}) {
     data
@@ -355,7 +355,7 @@ query getWebAppRow($id: Int){
 }
 `;
 
-const getWebAppRowsByWebAppTableId = `
+export const getWebAppRowsByWebAppTableId = `
 query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
   webapp_rows (where: {webapp_table_id: {_eq: $webapp_table_id }}) {
     id
@@ -365,7 +365,7 @@ query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
 }
 `;
 
-const getPayeeCategoryById = `
+export const getPayeeCategoryById = `
 query getPayeeCategoryById ($id: Int) {
   payee_categories (where: {id: {_eq: $id }}) {
       payees (order_by: { id: desc }) { 
@@ -382,7 +382,7 @@ query getPayeeCategoryById ($id: Int) {
 }
 `;
 
-const getPayeeCategoriesByNotesMatch = (match: string) => `
+export const getPayeeCategoriesByNotesMatch = (match: string) => `
 query getPayeeCategoriesByNotesMatch {
   payee_categories(where: {notes: {_ilike: "%${match}%" }}) {
     id
@@ -411,7 +411,7 @@ query getPayeeCategoriesByNotesMatch {
 }
 `;
 
-const getPayeeCategories = `
+export const getPayeeCategories = `
 query getPayeeCategories {
   payee_categories {
     id
@@ -423,7 +423,7 @@ query getPayeeCategories {
 }
 `;
 
-const getProviderCategories = `
+export const getProviderCategories = `
 query getProviderCategories {
   payee_categories (where: {vendor: {_eq: true}}) {
     id
@@ -435,7 +435,7 @@ query getProviderCategories {
 }
 `;
 
-const getClientCategories = `
+export const getClientCategories = `
 query getClientCategories {
   payee_categories (where: {vendor: {_eq: false}}) {
     id
@@ -447,7 +447,7 @@ query getClientCategories {
 }
 `;
 
-const getPayeeById = `
+export const getPayeeById = `
 query getPayeeById ($id: Int) {
   payees (where: {id: {_eq: $id }}) {
     id
@@ -462,7 +462,7 @@ query getPayeeById ($id: Int) {
 }
 `;
 
-const getSuperCategoryById = `
+export const getSuperCategoryById = `
 query getSuperCategoryById ($id: Int) {
   item_super_categories (where: {id: {_eq: $id }}) {
     item_categories {
@@ -475,7 +475,7 @@ query getSuperCategoryById ($id: Int) {
 }
 `;
 
-const getItemCategoryById = `
+export const getItemCategoryById = `
 query getItemCategoryById ($id: Int) {
   item_categories (where: {id: {_eq: $id }}) {
         id
@@ -486,7 +486,7 @@ query getItemCategoryById ($id: Int) {
 }
 `;
 
-const getItemsByCategory = `
+export const getItemsByCategory = `
 query getItemsByCategory ($id: Int) {
   item_categories (where: {id: {_eq: $id }}) {
         items (where: {active: {_eq: true }}) {
@@ -500,7 +500,7 @@ query getItemsByCategory ($id: Int) {
 }
 `;
 
-const getItems = `
+export const getItems = `
 query getItems {
   items (where: {active: {_eq: true }}) {
         id,
@@ -509,7 +509,7 @@ query getItems {
 }
 `;
 
-const getItemsBySuperCategory = `
+export const getItemsBySuperCategory = `
 query getItemsBySuperCategory ($id: Int, $agency_id: Int) {
   item_super_categories (where: {id: {_eq: $id }}, order_by: {id: desc}) {
       item_categories {
@@ -534,7 +534,7 @@ query getItemsBySuperCategory ($id: Int, $agency_id: Int) {
 }
 `;
 
-const getConsolidatesBetweenDates = `
+export const getConsolidatesBetweenDates = `
 query getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {
   consolidates (order_by: {id: desc}, where: {created_at: {_gte: $startDate, _lte: $endDate}}) {
       id
@@ -549,7 +549,7 @@ query getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {
 }
 `;
 
-const getEmployeeProfile = `
+export const getEmployeeProfile = `
 query getEmployeeProfile ($id: Int) {
   employees(where: {id: {_eq: $id}}) {
     agency_id
@@ -562,7 +562,7 @@ query getEmployeeProfile ($id: Int) {
 }
 `;
 
-const getEmployeesByAgencyId = `
+export const getEmployeesByAgencyId = `
 query getEmployeesByAgencyId ($id: Int) {
   employees(where: {agency_id: {_eq: $id}}) {
     name
@@ -572,7 +572,7 @@ query getEmployeesByAgencyId ($id: Int) {
 }
 `;
 
-const getBundlesByItemCategoryId = `
+export const getBundlesByItemCategoryId = `
 query getBundlesByItemCategoryId ($id: Int) {
   bundles(where: {active: {_eq: true}, item_category_id: {_eq: $id}}) {
     id
@@ -591,7 +591,7 @@ query getBundlesByItemCategoryId ($id: Int) {
 }
 `;
 
-const getBundleByName = `
+export const getBundleByName = `
 query getBundleByName ($name: String) {
   bundles (where: {name: {_eq: $name }}) {
     id
@@ -599,7 +599,7 @@ query getBundleByName ($name: String) {
 }
 `;
 
-const getItemByName = `
+export const getItemByName = `
 query getItemByName ($name: String) {
   items (where: {active: {_eq: true }, name: {_eq: $name }}) {
       id
@@ -611,7 +611,7 @@ query getItemByName ($name: String) {
 }
 `;
 
-const getShipments = (wheres: string[] = []) => {
+export const getShipments = (wheres: string[] = []) => {
   const additionalWheres = wheres.join(",");
   return `query getShipments {
       shipments (${
@@ -636,7 +636,7 @@ const getShipments = (wheres: string[] = []) => {
   `;
 };
 
-const getFormByName = `
+export const getFormByName = `
 query getFormByName ($name: String) {
   settings_forms (
       where: {name: {_eq: $name }},
@@ -669,7 +669,7 @@ query getFormByName ($name: String) {
 }
 `;
 
-const getForms = `
+export const getForms = `
 query getForms {
   settings_forms (
       order_by: {zid: desc, version: desc}
@@ -701,7 +701,7 @@ query getForms {
 }
 `;
 
-const getFormsByDocumentType = (filters: { formZid?: number } = {}) => `
+export const getFormsByDocumentType = (filters: { formZid?: number } = {}) => `
 query getFormsByDocumentType ($document_type: String) {
   settings_forms (
       where: {
@@ -743,7 +743,7 @@ query getFormsByDocumentType ($document_type: String) {
 }
 `;
 
-const getMyCaseFormSubmissions = (
+export const getMyCaseFormSubmissions = (
   filters: { formZid?: number; caseId?: number } = {}
 ) => `
 query getMyCaseFormSubmissions ($responsible_id: Int) {
@@ -819,7 +819,7 @@ query getMyCaseFormSubmissions ($responsible_id: Int) {
 }
 `;
 
-const getFormSubmissionById = `
+export const getFormSubmissionById = `
 query getFormSubmissionById ($formId: bigint) {
   settings_form_submissions (where: {id: { _eq: $formId }}) {
       id
@@ -854,7 +854,7 @@ query getFormSubmissionById ($formId: bigint) {
 }
 `;
 
-const getInvoiceFormSubmissionsByAgencyId = (filters?: {
+export const getInvoiceFormSubmissionsByAgencyId = (filters?: {
   seller_id?: number | string;
   payee_id_number_search?: string;
   some_field_value?: string;
@@ -965,7 +965,9 @@ query getInvoiceFormSubmissionsByAgencyId (
 `;
 };
 
-const getLastInvoiceFormSubmission = (filters: { formZid?: number } = {}) => `
+export const getLastInvoiceFormSubmission = (
+  filters: { formZid?: number } = {}
+) => `
 query getLastInvoiceFormSubmission {
   submission_invoices(
       where: {
@@ -989,7 +991,7 @@ query getLastInvoiceFormSubmission {
 }
 `;
 
-const getInvoiceFormSubmissionsByInvoiceId = (
+export const getInvoiceFormSubmissionsByInvoiceId = (
   filters: { formZid?: number } = {}
 ) => `
 query getInvoiceFormSubmissionsByInvoiceId ($invoice_id: bigint) {
@@ -1047,7 +1049,7 @@ query getInvoiceFormSubmissionsByInvoiceId ($invoice_id: bigint) {
 }
 `;
 
-const getCurrencies = `
+export const getCurrencies = `
 query getCurrencies {
   currencies {
     id
@@ -1060,7 +1062,7 @@ query getCurrencies {
 }
 `;
 
-const getSuggestedPrices = (
+export const getSuggestedPrices = (
   config: {
     notNullPriceList: boolean;
     withItems: boolean;
@@ -1117,7 +1119,7 @@ query getSuggestedPrices {
   }
 }
 `;
-const getPaymentTerms = `
+export const getPaymentTerms = `
 query getPaymentTerms {
   payment_terms {
     active
@@ -1128,7 +1130,7 @@ query getPaymentTerms {
 }
 `;
 
-const getPaymentTermById = `
+export const getPaymentTermById = `
 query getPaymentTermById ($id: Int) {
   payment_terms (where: {id: {_eq: $id }}) {
     active
@@ -1144,7 +1146,7 @@ query getPaymentTermById ($id: Int) {
 }
 `;
 
-const getInvoicesByAgencyId = `
+export const getInvoicesByAgencyId = `
 query getInvoicesByAgencyId($id: Int) {
   invoices(limit: 1000, where: {agency_id: {_eq: $id}, voided: {_eq: false}}, order_by: {id: desc}) {
     id
@@ -1192,7 +1194,7 @@ query getInvoicesByAgencyId($id: Int) {
 }
 `;
 
-const getCasesByResponsibleId = (wheres: string[] = []) => {
+export const getCasesByResponsibleId = (wheres: string[] = []) => {
   const additionalWheres = wheres.join(",");
   return `
     query getCasesByResponsibleId($responsible_id: Int) {
