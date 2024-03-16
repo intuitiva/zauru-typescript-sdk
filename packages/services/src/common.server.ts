@@ -7,15 +7,17 @@ import httpZauru, {
   handlePossibleAxiosErrors,
 } from "./zauru/httpZauru.server.js";
 import {
-  Agency,
-  OauthProfile,
-  ProfileResponse,
   getAgencyInfo,
   getEmployeeInfo,
   getOauthUserInfo,
   getProfileInformation,
 } from "./zauru/zauru-profiles.server.js";
-import { EmployeeGraphQL } from "@zauru-sdk/graphql";
+import {
+  EmployeeGraphQL,
+  OauthProfile,
+  ProfileResponse,
+  AgencyGraphQL,
+} from "@zauru-sdk/types";
 
 /**
  * loginWebApp
@@ -34,7 +36,7 @@ export const loginWebApp = async (
     oauthProfile: OauthProfile;
     employeeProfile: EmployeeGraphQL;
     userProfile: ProfileResponse;
-    agencyProfile: Agency;
+    agencyProfile: AgencyGraphQL;
   }>
 > => {
   return handlePossibleAxiosErrors(async () => {
@@ -100,7 +102,7 @@ export const loginWebApp = async (
       oauthProfile: userInfo as OauthProfile,
       employeeProfile: empInfo as EmployeeGraphQL,
       userProfile: profileInfo as ProfileResponse,
-      agencyProfile: agencyInfoResponse.data as Agency,
+      agencyProfile: agencyInfoResponse.data as AgencyGraphQL,
     };
   });
 };

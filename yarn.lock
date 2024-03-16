@@ -863,8 +863,17 @@ __metadata:
     "@remix-run/node": "npm:^2.8.1"
     "@zauru-sdk/config": "npm:^1.0.4"
     "@zauru-sdk/graphql": "npm:^1.0.4"
+    "@zauru-sdk/types": "npm:^1.0.4"
     axios: "npm:^1.6.7"
     chalk: "npm:5.3.0"
+    typescript: "npm:^5.1.6"
+  languageName: unknown
+  linkType: soft
+
+"@zauru-sdk/types@npm:^1.0.4, @zauru-sdk/types@workspace:packages/types":
+  version: 0.0.0-use.local
+  resolution: "@zauru-sdk/types@workspace:packages/types"
+  dependencies:
     typescript: "npm:^5.1.6"
   languageName: unknown
   linkType: soft
@@ -877,6 +886,7 @@ __metadata:
     "@zauru-sdk/config": "npm:^1.0.4"
     "@zauru-sdk/graphql": "npm:^1.0.4"
     "@zauru-sdk/services": "npm:^1.0.4"
+    "@zauru-sdk/types": "npm:^1.0.4"
     axios: "npm:^1.6.7"
     chalk: "npm:5.3.0"
     moment: "npm:^2.30.1"

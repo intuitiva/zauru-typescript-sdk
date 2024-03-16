@@ -1,7 +1,7 @@
 import moment from "moment";
 import "moment-timezone";
 import "moment/locale/es";
-import type { PayeeGraphQL } from "@zauru-sdk/graphql";
+import type { PayeeGraphQL } from "@zauru-sdk/types";
 
 export type SelectFieldOption = {
   label: any;

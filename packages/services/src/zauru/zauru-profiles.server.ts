@@ -7,7 +7,7 @@ import {
   EmployeeGraphQL,
   OauthProfile,
   ProfileResponse,
-} from "@zauru-sdk/graphql";
+} from "@zauru-sdk/types";
 import { config } from "@zauru-sdk/config";
 
 /**
