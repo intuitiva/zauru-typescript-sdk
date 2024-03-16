@@ -1,2 +1,1 @@
-export * from "./common.js";
-export * from "./gtZones.js";
+export * from "./zauru/automatic-number.utils.js";

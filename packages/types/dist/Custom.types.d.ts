@@ -412,3 +412,21 @@ export declare const MONTHS: {
     nov: number;
     dic: number;
 };
+export type POHistoryMassive = {
+    id: number;
+    finalizada?: boolean;
+    originalOtherCharges: number;
+    originalDiscount: number;
+};
+export type BitacoraPOMassive = {
+    accion: string;
+    discount?: number | string;
+    other_charges?: number | string;
+    payeeCategoryId?: number | string;
+    itemId?: number | string;
+    fechaDesde?: string;
+    fechaHasta?: string;
+    purchaseOrders: POHistoryMassive[];
+    modificadoPor: string;
+    fechaCreacion: string;
+};
