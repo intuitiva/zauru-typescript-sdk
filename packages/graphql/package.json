@@ -1,7 +1,7 @@
 {
   "name": "@zauru-sdk/graphql",
   "version": "1.0.5",
-  "description": "Configuración centralizada para aplicaciones Zauru SDK",
+  "description": "Queries de uso común para las aplicación de Zauru.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "publishConfig": {

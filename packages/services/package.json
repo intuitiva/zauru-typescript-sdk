@@ -1,7 +1,7 @@
 {
   "name": "@zauru-sdk/services",
   "version": "1.0.6",
-  "description": "Configuración centralizada para aplicaciones Zauru SDK",
+  "description": "Servicios de consulta a Zauru",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",

@@ -1,12 +1,14 @@
 import moment from "moment";
 import "moment-timezone";
 import "moment/locale/es";
-import type { PayeeGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
-
-export type SelectFieldOption = {
-  label: any;
-  value: any;
-};
+import type {
+  PayeeGraphQL,
+  AxiosUtilsResponse,
+  BasketSchema,
+  SelectFieldOption,
+  MonthsType,
+} from "@zauru-sdk/types";
+import { MONTHS } from "@zauru-sdk/types";
 
 export const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[] = [
   { label: "Microbiología", value: "microbiologa" },
@@ -14,14 +16,6 @@ export const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[] = [
 ];
 
 moment.locale("es");
-
-export type GenericStepResponse = { msg: string; step: string };
-
-export type BasketSchema = {
-  total: number;
-  id: number;
-  color: string;
-};
 
 /**
  * Obtener el objeto de canastas en base al string de canastas
@@ -42,48 +36,6 @@ export const getBasketsSchema = (basketsString: string): BasketSchema[] => {
   });
 
   return baskets;
-};
-
-export type DataTablesFilterBody = {
-  start: number;
-  length: number;
-  tag?: string;
-  agency?: string;
-  agency_from?: string;
-  search?: {
-    value: string;
-    regex: boolean;
-  };
-  order: { [key: string]: { column: string; dir: string } };
-  Desde?: string;
-  Hasta?: string;
-  vendor?: string;
-  vendor_category?: string;
-  item?: string;
-};
-
-//Modelo formateado para interactuar en la aplicación
-export type BasicIdNameSchema = {
-  id: number;
-  name: string;
-};
-
-export type ObjectKeyString<T> = {
-  [key: string]: T;
-};
-
-export type GeneratePDFBody = {
-  s_date: string;
-  e_date: string;
-  print_template: number | string;
-};
-
-export type GeneratedPDFResult = { status: number; zid: number };
-
-export type PDFResult = {
-  status: number;
-  percentage: number;
-  message: string;
 };
 
 export function generateClientUUID() {
@@ -164,7 +116,7 @@ export const getNewDateByFormat = (date: string): Date => {
 
   const new_date = new Date(
     parseInt(date_parts[4]),
-    MONTHS[date_parts[2] as keyof monthsType],
+    MONTHS[date_parts[2] as keyof MonthsType],
     parseInt(date_parts[0])
   );
   return new_date;
@@ -514,36 +466,6 @@ export function convertToFormData(obj: any) {
   appendFormData(obj);
   return formData;
 }
-
-type monthsType = {
-  ene: number;
-  feb: number;
-  mar: number;
-  abr: number;
-  may: number;
-  jun: number;
-  jul: number;
-  ago: number;
-  sep: number;
-  oct: number;
-  nov: number;
-  dic: number;
-};
-
-const MONTHS = {
-  ene: 0,
-  feb: 1,
-  mar: 2,
-  abr: 3,
-  may: 4,
-  jun: 5,
-  jul: 6,
-  ago: 7,
-  sep: 8,
-  oct: 9,
-  nov: 10,
-  dic: 11,
-};
 
 export const ZAURU_REGEX = {
   porcentaje: /^\d{1,2}(\.\d{1,2})?$/,
