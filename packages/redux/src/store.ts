@@ -102,7 +102,7 @@ export const cleanLocalStorage = () => {
         if (state.hasOwnProperty(reducerName)) {
           const key = reducerName as keyof RootState;
           const reducerState = state[key];
-          const whitelistKey = whitelist[key];
+          const whitelistKey = whitelist[key as any];
 
           if (whitelistKey && whitelistKey.length > 0) {
             newState[key] = newState[key] ? { ...newState[key] } : ({} as any);
@@ -142,7 +142,7 @@ export const store = configureStore({
     automaticNumbers: automaticNumberReducer,
     tables: tableReducer,
     formValidation: formValidationReducer,
-  },
+  } as any,
   preloadedState,
   middleware: (getDefaultMiddleware) =>
     new Tuple(persistanceLocalStorageMiddleware),

@@ -121,5 +121,5 @@ export const store = configureStore({
         formValidation: formValidationReducer,
     },
     preloadedState,
-    middleware: () => new Tuple(persistanceLocalStorageMiddleware),
+    middleware: (getDefaultMiddleware) => new Tuple(persistanceLocalStorageMiddleware),
 });
