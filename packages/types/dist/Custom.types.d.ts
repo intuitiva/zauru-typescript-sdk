@@ -610,3 +610,11 @@ export type RowDataType = {
     id: any;
     [key: string]: any;
 };
+export type QueueFormReceptionWebAppTable = {
+    creadoPor: string;
+    fechaCreacion: string;
+    formSubmited: any;
+    estado: string;
+    agency_id: number;
+    description: string;
+};

@@ -1,0 +1,178 @@
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import type {
+  AgencyGraphQL,
+  BitacoraPOMassive,
+  BundleGraphQL,
+  CaseGraphQL,
+  CurrencyGraphQL,
+  EmployeeGraphQL,
+  FormGraphQL,
+  FormSubmissionGraphQL,
+  InvoiceGraphQL,
+  ItemCategoryGraphQL,
+  ItemGraphQL,
+  LotStockGraphQL,
+  MotivoRechazo,
+  PayeeCategoryGraphQL,
+  PayeeGraphQL,
+  PaymentTermGraphQL,
+  ReceptionType,
+  ShipmentGraphQL,
+  SuggestedPriceGraphQL,
+  Template,
+  TipoMuestra,
+  WebAppRowGraphQL,
+} from "@zauru-sdk/types";
+
+export type ONLINE_CATALOGS_NAMES =
+  | "invoiceFormSubmissionsByInvoiceId"
+  | "invoiceFormSubmissionsByAgencyId";
+
+export type CATALOGS_NAMES =
+  | "agencies"
+  | "suggestedPrices"
+  | "providers"
+  | "providerCategories"
+  | "receptionTypes"
+  | "tiposDeMuestra"
+  | "motivosRechazo"
+  | "bitacoraRechazoMasivo"
+  | "items"
+  | "itemsByReception"
+  | "itemsByLab"
+  | "itemServicesByLab"
+  | "itemCategoriesForLab"
+  | "payees"
+  | "payeesForLab"
+  | "payeeCategoriesLabPrices"
+  | "clientCategories"
+  | "bundlesRecipForLab"
+  | "currencies"
+  | "paymentTerms"
+  | "employeesByLab"
+  | "employeesByCurrentAgency"
+  | "invoicesByLab"
+  | "invoiceForms"
+  | "caseForms"
+  | "invoiceFormSubmissions"
+  | "myCases"
+  | "myCaseFormSubmissions"
+  | "shipmentsToMyAgency"
+  | "myAgencyLotStocks"
+  | "shipments"
+  | "bookings"
+  | "templates"
+  | "bundlesForLab";
+
+type LoadingState<T> = {
+  data: T;
+  loading: boolean;
+  reFetch: boolean;
+};
+
+type CatalogState = {
+  agencies: LoadingState<AgencyGraphQL[]>;
+  suggestedPrices: LoadingState<SuggestedPriceGraphQL[]>;
+  providers: LoadingState<PayeeGraphQL[]>;
+  providerCategories: LoadingState<PayeeCategoryGraphQL[]>;
+  payees: LoadingState<PayeeGraphQL[]>;
+  payeesForLab: LoadingState<PayeeGraphQL[]>;
+  payeeCategoriesLabPrices: LoadingState<PayeeCategoryGraphQL[]>;
+  clientCategories: LoadingState<PayeeCategoryGraphQL[]>;
+  receptionTypes: LoadingState<WebAppRowGraphQL<ReceptionType>[]>;
+  tiposDeMuestra: LoadingState<WebAppRowGraphQL<TipoMuestra>[]>;
+  templates: LoadingState<WebAppRowGraphQL<Template>[]>;
+  shipments: LoadingState<ShipmentGraphQL[]>;
+  bookings: LoadingState<ShipmentGraphQL[]>;
+  motivosRechazo: LoadingState<WebAppRowGraphQL<MotivoRechazo>[]>;
+  bitacoraRechazoMasivo: LoadingState<WebAppRowGraphQL<BitacoraPOMassive>[]>;
+  items: LoadingState<ItemGraphQL[]>;
+  itemsByReception: LoadingState<ItemGraphQL[]>;
+  itemsByLab: LoadingState<ItemGraphQL[]>;
+  itemServicesByLab: LoadingState<ItemGraphQL[]>;
+  itemCategoriesForLab: LoadingState<ItemCategoryGraphQL[]>;
+  bundlesRecipForLab: LoadingState<BundleGraphQL[]>;
+  bundlesForLab: LoadingState<BundleGraphQL[]>;
+  currencies: LoadingState<CurrencyGraphQL[]>;
+  paymentTerms: LoadingState<PaymentTermGraphQL[]>;
+  employeesByLab: LoadingState<EmployeeGraphQL[]>;
+  employeesByCurrentAgency: LoadingState<EmployeeGraphQL[]>;
+  invoicesByLab: LoadingState<InvoiceGraphQL[]>;
+  invoiceForms: LoadingState<FormGraphQL[]>;
+  caseForms: LoadingState<FormGraphQL[]>;
+  invoiceFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;
+  myCases: LoadingState<CaseGraphQL[]>;
+  myCaseFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;
+  myAgencyLotStocks: LoadingState<LotStockGraphQL[]>;
+  shipmentsToMyAgency: LoadingState<ShipmentGraphQL[]>;
+};
+
+const createLoadingState = <T>(initialData: T): LoadingState<T> => ({
+  data: initialData,
+  loading: false,
+  reFetch: false,
+});
+
+const initialState: CatalogState = {
+  agencies: createLoadingState([]),
+  suggestedPrices: createLoadingState([]),
+  providers: createLoadingState([]),
+  providerCategories: createLoadingState([]),
+  receptionTypes: createLoadingState([]),
+  tiposDeMuestra: createLoadingState([]),
+  templates: createLoadingState([]),
+  shipments: createLoadingState([]),
+  bookings: createLoadingState([]),
+  motivosRechazo: createLoadingState([]),
+  bitacoraRechazoMasivo: createLoadingState([]),
+  items: createLoadingState([]),
+  itemsByReception: createLoadingState([]),
+  payees: createLoadingState([]),
+  payeesForLab: createLoadingState([]),
+  itemCategoriesForLab: createLoadingState([]),
+  payeeCategoriesLabPrices: createLoadingState([]),
+  clientCategories: createLoadingState([]),
+  itemsByLab: createLoadingState([]),
+  itemServicesByLab: createLoadingState([]),
+  bundlesRecipForLab: createLoadingState([]),
+  bundlesForLab: createLoadingState([]),
+  currencies: createLoadingState([]),
+  paymentTerms: createLoadingState([]),
+  employeesByLab: createLoadingState([]),
+  employeesByCurrentAgency: createLoadingState([]),
+  invoicesByLab: createLoadingState([]),
+  invoiceForms: createLoadingState([]),
+  caseForms: createLoadingState([]),
+  invoiceFormSubmissions: createLoadingState([]),
+  myCases: createLoadingState([]),
+  myCaseFormSubmissions: createLoadingState([]),
+  myAgencyLotStocks: createLoadingState([]),
+  shipmentsToMyAgency: createLoadingState([]),
+};
+
+const catalogsSlice = createSlice({
+  name: "catalogs",
+  initialState,
+  reducers: {
+    catalogsSetReFetch: (state, action: PayloadAction<CATALOGS_NAMES>) => {
+      state[action.payload].reFetch = true;
+    },
+    catalogsFetchStart: (state, action: PayloadAction<CATALOGS_NAMES>) => {
+      state[action.payload].loading = true;
+    },
+    catalogsFetchSuccess: (
+      state,
+      action: PayloadAction<{ name: CATALOGS_NAMES; data: any[] }>
+    ) => {
+      state[action.payload.name].data = action.payload.data;
+      state[action.payload.name].loading = false;
+      state[action.payload.name].reFetch = false;
+    },
+  },
+});
+
+export const { catalogsFetchStart, catalogsFetchSuccess, catalogsSetReFetch } =
+  catalogsSlice.actions;
+
+export default catalogsSlice.reducer;
