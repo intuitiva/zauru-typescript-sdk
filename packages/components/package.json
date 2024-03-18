@@ -1,0 +1,30 @@
+{
+  "name": "@zauru-sdk/components",
+  "version": "1.0.10",
+  "description": "Estructura de Redux propuesta para el desarrollo de webapps en Zauru.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oscar Cuéllar",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.2.1",
+    "@zauru-sdk/graphql": "^1.0.9",
+    "@zauru-sdk/services": "^1.0.10",
+    "@zauru-sdk/types": "^1.0.10",
+    "@zauru-sdk/utils": "^1.0.10"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
