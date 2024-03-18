@@ -1,7 +1,7 @@
 {
   "name": "@zauru-sdk/components",
   "version": "1.0.10",
-  "description": "Estructura de Redux propuesta para el desarrollo de webapps en Zauru.",
+  "description": "Componentes reutilizables en las WebApps de Zauru.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
