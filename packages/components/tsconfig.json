@@ -5,6 +5,10 @@
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
     "target": "ES2022",
     "strict": true,
     "allowJs": true,
@@ -16,7 +20,7 @@
     "declaration": true,
     "declarationDir": "./dist",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./app/*"]
     }
   }
 }
