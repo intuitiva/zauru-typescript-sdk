@@ -12,7 +12,7 @@ export const ESTADOS_COLA_RECEPCIONES = {
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable[]>.
  */
-export async function getQueueFormReceptionHistories(headers, session) {
+export const getQueueFormReceptionHistories = (headers, session) => {
     return handlePossibleAxiosErrors(async () => {
         const { queue_form_recepcion_submited_web_app_table_id } = await getVariablesByName(headers, session, [
             "queue_form_recepcion_submited_web_app_table_id",
@@ -24,7 +24,7 @@ export async function getQueueFormReceptionHistories(headers, session) {
         const history = response?.data ?? [];
         return history;
     });
-}
+};
 /**
  * Create a template in the web app table.
  * @param headers Request headers.
@@ -32,7 +32,7 @@ export async function getQueueFormReceptionHistories(headers, session) {
  * @param body QueueFormReceptionWebAppTable data to be created.
  * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable>.
  */
-export async function createQueueFormReceptionHistory(headers, session, body) {
+export const createQueueFormReceptionHistory = (headers, session, body) => {
     return handlePossibleAxiosErrors(async () => {
         const { queue_form_recepcion_submited_web_app_table_id } = await getVariablesByName(headers, session, [
             "queue_form_recepcion_submited_web_app_table_id",
@@ -40,14 +40,14 @@ export async function createQueueFormReceptionHistory(headers, session, body) {
         const response = await createWebAppTableRegister(headers, queue_form_recepcion_submited_web_app_table_id, body);
         return response;
     });
-}
+};
 /**
  * Put updateQueueFormReception from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable[]>.
  */
-export async function updateQueueFormReceptionHistory(headers, session, body, id_registro) {
+export const updateQueueFormReceptionHistory = (headers, session, body, id_registro) => {
     return handlePossibleAxiosErrors(async () => {
         const { queue_form_recepcion_submited_web_app_table_id } = await getVariablesByName(headers, session, [
             "queue_form_recepcion_submited_web_app_table_id",
@@ -55,14 +55,14 @@ export async function updateQueueFormReceptionHistory(headers, session, body, id
         const response = await updateWebAppTableRegister(headers, queue_form_recepcion_submited_web_app_table_id, id_registro, { ...body });
         return response;
     });
-}
+};
 /**
  * Delete QueueFormReceptionHistory from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable[]>.
  */
-export async function deleteQueueFormReceptionHistory(headers, session, id) {
+export const deleteQueueFormReceptionHistory = (headers, session, id) => {
     return handlePossibleAxiosErrors(async () => {
         const { queue_form_recepcion_submited_web_app_table_id } = await getVariablesByName(headers, session, [
             "queue_form_recepcion_submited_web_app_table_id",
@@ -70,4 +70,4 @@ export async function deleteQueueFormReceptionHistory(headers, session, id) {
         const response = await deleteWebAppTableRegister(headers, queue_form_recepcion_submited_web_app_table_id, Number(id));
         return response;
     });
-}
+};

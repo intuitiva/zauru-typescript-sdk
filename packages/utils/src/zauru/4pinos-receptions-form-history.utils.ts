@@ -27,12 +27,12 @@ export const ESTADOS_COLA_RECEPCIONES = {
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable[]>.
  */
-export async function getQueueFormReceptionHistories(
+export const getQueueFormReceptionHistories = (
   headers: any,
   session: Session
 ): Promise<
   AxiosUtilsResponse<WebAppRowGraphQL<QueueFormReceptionWebAppTable>[]>
-> {
+> => {
   return handlePossibleAxiosErrors(async () => {
     const { queue_form_recepcion_submited_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -55,7 +55,7 @@ export async function getQueueFormReceptionHistories(
 
     return history;
   });
-}
+};
 
 /**
  * Create a template in the web app table.
@@ -64,11 +64,11 @@ export async function getQueueFormReceptionHistories(
  * @param body QueueFormReceptionWebAppTable data to be created.
  * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable>.
  */
-export async function createQueueFormReceptionHistory(
+export const createQueueFormReceptionHistory = (
   headers: any,
   session: Session,
   body: QueueFormReceptionWebAppTable
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { queue_form_recepcion_submited_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -82,7 +82,7 @@ export async function createQueueFormReceptionHistory(
       );
     return response;
   });
-}
+};
 
 /**
  * Put updateQueueFormReception from the web app table.
@@ -90,12 +90,12 @@ export async function createQueueFormReceptionHistory(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable[]>.
  */
-export async function updateQueueFormReceptionHistory(
+export const updateQueueFormReceptionHistory = (
   headers: any,
   session: Session,
   body: Partial<QueueFormReceptionWebAppTable>,
   id_registro: string | number
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { queue_form_recepcion_submited_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -112,7 +112,7 @@ export async function updateQueueFormReceptionHistory(
 
     return response;
   });
-}
+};
 
 /**
  * Delete QueueFormReceptionHistory from the web app table.
@@ -120,11 +120,11 @@ export async function updateQueueFormReceptionHistory(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable[]>.
  */
-export async function deleteQueueFormReceptionHistory(
+export const deleteQueueFormReceptionHistory = (
   headers: any,
   session: Session,
   id: string
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { queue_form_recepcion_submited_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -139,4 +139,4 @@ export async function deleteQueueFormReceptionHistory(
 
     return response;
   });
-}
+};
