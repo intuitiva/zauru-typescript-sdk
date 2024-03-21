@@ -3,7 +3,7 @@ import { ExitSvg } from "@zauru-sdk/icons";
 import { createRoot } from "react-dom/client";
 import { AnimatePresence, motion } from "framer-motion";
 
-type AlertType = "success" | "error" | "info" | "warning";
+export type AlertType = "success" | "error" | "info" | "warning";
 
 export type AlertProps = {
   type: AlertType;

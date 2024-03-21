@@ -1,7 +1,11 @@
 import { useFetcher } from "@remix-run/react";
-import { setSessionValue, useAppDispatch, useAppSelector } from "@zauru-sdk/redux";
+import {
+  setSessionValue,
+  useAppDispatch,
+  useAppSelector,
+} from "@zauru-sdk/redux";
 import { useEffect, useState } from "react";
-import { showAlert } from "src";
+import { AlertType, showAlert } from "src";
 
 export type SERVER_CONFIG_TYPES =
   | "sessionAttribute"
@@ -17,7 +21,7 @@ export const useGetSessionAttribute = (
   name: string,
   type: SERVER_CONFIG_TYPES
 ): string => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<any>();
   const dispatch = useAppDispatch();
   const sessionData = useAppSelector((state) => state.session[name]);
   const [data, setData] = useState<string>(sessionData);

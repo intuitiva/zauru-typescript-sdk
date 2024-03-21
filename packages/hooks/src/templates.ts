@@ -22,7 +22,7 @@ const useGetTemplateObject = <T>(
   TEMPLATE_NAME: TEMPLATE_NAMES,
   config: ConfigProps = { online: false }
 ): ProfileType<T> => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<any>();
   const dispatch = useAppDispatch();
   const objectData = useAppSelector((state) => state.templates[TEMPLATE_NAME]);
   const [data, setData] = useState<ProfileType<T>>({

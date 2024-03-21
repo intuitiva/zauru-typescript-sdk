@@ -1,6 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { showAlert } from "src";
+import { AlertType, showAlert } from "src";
 import type {
   AgencyGraphQL,
   BitacoraPOMassive,
@@ -45,7 +45,14 @@ const useApiCatalog = <T>(
   CATALOG_NAME: CATALOGS_NAMES | ONLINE_CATALOGS_NAMES,
   otherParams?: { [key: string]: string }
 ): CatalogType<T> => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<
+    | {
+        title: string;
+        description: string;
+        type: AlertType;
+      }
+    | { [key: string]: T[] }
+  >();
   const [data, setData] = useState<CatalogType<T>>({
     data: [],
     loading: true,
@@ -54,9 +61,9 @@ const useApiCatalog = <T>(
   useEffect(() => {
     if (fetcher.data?.title) {
       showAlert({
-        description: fetcher.data?.description,
-        title: fetcher.data?.title,
-        type: fetcher.data?.type,
+        description: fetcher.data?.description?.toString(),
+        title: fetcher.data?.title?.toString(),
+        type: fetcher.data?.type?.toString() as AlertType,
       });
     }
   }, [fetcher.data]);
@@ -101,7 +108,14 @@ const useGetReduxCatalog = <T>(
   CATALOG_NAME: CATALOGS_NAMES,
   { online = false, wheres = [], otherParams }: ReduxParamsConfig = {}
 ): CatalogType<T> => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<
+    | {
+        title: string;
+        description: string;
+        type: AlertType;
+      }
+    | { [key: string]: T[] }
+  >();
   const dispatch = useAppDispatch();
   const catalogData = useAppSelector((state) => state.catalogs[CATALOG_NAME]);
   const [data, setData] = useState<CatalogType<T>>({
@@ -110,11 +124,11 @@ const useGetReduxCatalog = <T>(
   });
 
   useEffect(() => {
-    if (fetcher.data?.title) {
+    if (fetcher.data?.description) {
       showAlert({
-        description: fetcher.data?.description,
-        title: fetcher.data?.title,
-        type: fetcher.data?.type,
+        description: fetcher.data?.description?.toString(),
+        title: fetcher.data?.title?.toString(),
+        type: fetcher.data?.type?.toString() as AlertType,
       });
     }
   }, [fetcher.data]);

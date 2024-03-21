@@ -11,9 +11,9 @@ const useApiCatalog = (CATALOG_NAME, otherParams) => {
     useEffect(() => {
         if (fetcher.data?.title) {
             showAlert({
-                description: fetcher.data?.description,
-                title: fetcher.data?.title,
-                type: fetcher.data?.type,
+                description: fetcher.data?.description?.toString(),
+                title: fetcher.data?.title?.toString(),
+                type: fetcher.data?.type?.toString(),
             });
         }
     }, [fetcher.data]);
@@ -56,11 +56,11 @@ const useGetReduxCatalog = (CATALOG_NAME, { online = false, wheres = [], otherPa
         loading: catalogData.loading,
     });
     useEffect(() => {
-        if (fetcher.data?.title) {
+        if (fetcher.data?.description) {
             showAlert({
-                description: fetcher.data?.description,
-                title: fetcher.data?.title,
-                type: fetcher.data?.type,
+                description: fetcher.data?.description?.toString(),
+                title: fetcher.data?.title?.toString(),
+                type: fetcher.data?.type?.toString(),
             });
         }
     }, [fetcher.data]);

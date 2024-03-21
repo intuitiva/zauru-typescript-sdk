@@ -1,6 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { showAlert } from "src";
+import { AlertType, showAlert } from "src";
 import type {
   AgencyGraphQL,
   EmployeeGraphQL,
@@ -21,7 +21,14 @@ type ProfileType<T> = {
 };
 
 const useGetProfile = <T>(PROFILE_NAME: PROFILE_NAMES): ProfileType<T> => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<
+    | {
+        title: string;
+        description: string;
+        type: AlertType;
+      }
+    | { [key: string]: T[] }
+  >();
   const dispatch = useAppDispatch();
   const profileData = useAppSelector((state) => state.profiles[PROFILE_NAME]);
   const [data, setData] = useState<ProfileType<T>>({
@@ -34,9 +41,9 @@ const useGetProfile = <T>(PROFILE_NAME: PROFILE_NAMES): ProfileType<T> => {
   useEffect(() => {
     if (fetcher.data?.title) {
       showAlert({
-        description: fetcher.data?.description,
-        title: fetcher.data?.title,
-        type: fetcher.data?.type,
+        description: fetcher.data?.description?.toString(),
+        title: fetcher.data?.title?.toString(),
+        type: fetcher.data?.type?.toString() as AlertType,
       });
     }
   }, [fetcher.data]);

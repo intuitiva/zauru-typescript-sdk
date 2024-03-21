@@ -1,4 +1,4 @@
-type AlertType = "success" | "error" | "info" | "warning";
+export type AlertType = "success" | "error" | "info" | "warning";
 export type AlertProps = {
     type: AlertType;
     title: string;
@@ -6,4 +6,3 @@ export type AlertProps = {
     onClose?: () => void;
 };
 export declare const showAlert: (alertProps: AlertProps) => void;
-export {};

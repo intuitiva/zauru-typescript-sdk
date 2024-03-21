@@ -20,7 +20,7 @@ import {
   GenericDynamicTableColumn,
 } from "@zauru-sdk/types";
 import { useEffect, useMemo, useState } from "react";
-import { showAlert } from "src";
+import { AlertType, showAlert } from "src";
 import {
   getBasketsSchema,
   reduceAdd,
@@ -38,7 +38,14 @@ const useGetReceptionObject = <T>(
   RECEPTION_NAME: RECEPTION_NAMES,
   { online = false, wheres = [] }: ReduxParamsConfig = {}
 ): ReturnType<T> => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<
+    | {
+        title: string;
+        description: string;
+        type: AlertType;
+      }
+    | { [key: string]: T[] }
+  >();
   const dispatch = useAppDispatch();
   const objectData = useAppSelector(
     (state) => state.receptions[RECEPTION_NAME]
@@ -58,9 +65,9 @@ const useGetReceptionObject = <T>(
   useEffect(() => {
     if (fetcher.data?.title) {
       showAlert({
-        description: fetcher.data?.description,
-        title: fetcher.data?.title,
-        type: fetcher.data?.type,
+        description: fetcher.data?.description?.toString(),
+        title: fetcher.data?.title?.toString(),
+        type: fetcher.data?.type?.toString() as AlertType,
       });
     }
   }, [fetcher.data]);

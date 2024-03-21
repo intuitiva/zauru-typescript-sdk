@@ -17,7 +17,7 @@ type ProfileType<T> = {
 export const useGetAutomaticNumber = <T>(
   AUTOMATIC_NUMBER_NAME: AUTOMATIC_NUMBER_NAMES
 ): ProfileType<T> => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<any>();
   const dispatch = useAppDispatch();
   const objectData = useAppSelector(
     (state) => state.automaticNumbers[AUTOMATIC_NUMBER_NAME]

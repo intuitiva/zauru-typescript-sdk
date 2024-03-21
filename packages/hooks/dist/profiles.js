@@ -15,9 +15,9 @@ const useGetProfile = (PROFILE_NAME) => {
     useEffect(() => {
         if (fetcher.data?.title) {
             showAlert({
-                description: fetcher.data?.description,
-                title: fetcher.data?.title,
-                type: fetcher.data?.type,
+                description: fetcher.data?.description?.toString(),
+                title: fetcher.data?.title?.toString(),
+                type: fetcher.data?.type?.toString(),
             });
         }
     }, [fetcher.data]);
