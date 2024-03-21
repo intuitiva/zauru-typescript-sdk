@@ -1,3 +1,4 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Tuple, configureStore } from "@reduxjs/toolkit";
 import catalogsReducer from "./slices/catalogs.slice.js";
 import profilesReducer from "./slices/profile.slice.js";
@@ -123,3 +124,5 @@ export const store = configureStore({
     preloadedState,
     middleware: (getDefaultMiddleware) => new Tuple(persistanceLocalStorageMiddleware),
 });
+export const useAppSelector = useSelector;
+export const useAppDispatch = useDispatch;

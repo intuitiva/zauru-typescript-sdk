@@ -1,3 +1,5 @@
+import type { TypedUseSelectorHook } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { MiddlewareAPI } from "@reduxjs/toolkit";
 import { Tuple, configureStore } from "@reduxjs/toolkit";
 import catalogsReducer from "./slices/catalogs.slice.js";
@@ -150,3 +152,11 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppDispatch: () => AppDispatch = useDispatch;
+
+export type ReduxParamsConfig = {
+  online?: boolean;
+  wheres?: string[];
+  otherParams?: { [key: string]: string };
+};

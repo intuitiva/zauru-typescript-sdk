@@ -1,7 +1,7 @@
 {
-  "name": "@zauru-sdk/components",
-  "version": "1.0.12",
-  "description": "Componentes reutilizables en las WebApps de Zauru.",
+  "name": "@zauru-sdk/hooks",
+  "version": "1.0.0",
+  "description": "Hooks reutilizables dentro de las webapps de Zauru.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -24,26 +24,20 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "react-data-table-component": "^7.4.7",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.2.1",
     "@remix-run/react": "^2.8.1",
     "@zauru-sdk/common": "^1.0.10",
     "@zauru-sdk/graphql": "^1.0.9",
     "@zauru-sdk/icons": "^1.0.0",
+    "@zauru-sdk/redux": "^1.0.11",
     "@zauru-sdk/services": "^1.0.10",
     "@zauru-sdk/types": "^1.0.10",
     "@zauru-sdk/utils": "^1.0.10",
-    "framer-motion": "^11.0.8",
-    "jsonwebtoken": "9.0.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-is": "^18.2.0",
-    "react-select": "^5.8.0",
-    "styled-components": "^5.3.5"
+    "react-dom": "^18.2.0"
   },
   "engines": {
     "node": ">=18.0.0"

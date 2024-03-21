@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import { ExitSvg } from "@zauru-sdk/icons";
 import { createRoot } from "react-dom/client";
-import { ExitSvg } from "../Icons/Icons";
 import { AnimatePresence, motion } from "framer-motion";
 
 type AlertType = "success" | "error" | "info" | "warning";

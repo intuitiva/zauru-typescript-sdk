@@ -1,17 +1,14 @@
-import type { NavBarStateProps } from "../NavBar/NavBar.types";
 import {
   greenColorIcon,
   progressBarLightTextColor,
   progressBarSpinnerFillColor,
-} from "./StylesConstants";
+} from "src";
 
-export const applicationDropDownIconColor = "text-slate-500";
-
-export const MenuAlt4Svg = (props: NavBarStateProps) => (
+export const MenuAlt4Svg = (open = false) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={`transition duration-100 ease h-8 w-8 ${
-      props.NavBarOpen ? "transform rotate-90" : ""
+      open ? "transform rotate-90" : ""
     }`}
     viewBox="0 0 20 20"
     fill="white"

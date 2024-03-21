@@ -687,11 +687,6 @@ export type RejectionWebAppTableObject = {
 
 export type ReceptionType = { Codigo: string; Nombre: string };
 
-export type RowDataType = {
-  id: any;
-  [key: string]: any;
-};
-
 //Modelo con el cuál responde el backend
 export type QueueFormReceptionWebAppTable = {
   creadoPor: string;
@@ -700,4 +695,26 @@ export type QueueFormReceptionWebAppTable = {
   estado: string;
   agency_id: number;
   description: string;
+};
+
+export type RowDataType = {
+  id: any;
+  [key: string]: any;
+};
+
+export type GenericDynamicTableColumn = {
+  name: string;
+  label: string;
+  type: "checkbox" | "textField" | "selectField" | "label";
+  integer?: boolean;
+  options?: SelectFieldOption[];
+  loadingOptions?: boolean;
+  textFieldType?: "number";
+  width?: number;
+  disabled?: boolean;
+  onChange?: (
+    row: RowDataType,
+    value: any,
+    setTableValue: (columnName: string, newValue: any) => void
+  ) => void;
 };

@@ -6,7 +6,7 @@ import type {
   TableStyles,
 } from "react-data-table-component";
 import DataTable, { createTheme } from "react-data-table-component";
-import { SearchSVG } from "../Icons/Icons";
+import { SearchSVG } from "@zauru-sdk/icons";
 import { ExpandableRowsComponent } from "react-data-table-component/dist/DataTable/types";
 
 const customStyles: TableStyles = {

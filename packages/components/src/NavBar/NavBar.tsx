@@ -4,7 +4,7 @@ import {
   LogoutDropDownSvgIcon,
   MenuAlt4Svg,
   OpcionButtonSvgIcon,
-} from "../Icons/Icons";
+} from "@zauru-sdk/icons";
 import { COLORS } from "./NavBar.utils";
 import type {
   ColorInterface,
@@ -202,7 +202,7 @@ export const NavBar = ({
             type="button"
             onClick={() => setNavBarOpen(!NavBarOpen)}
           >
-            <MenuAlt4Svg NavBarOpen={NavBarOpen} setNavBarOpen={undefined} />
+            <MenuAlt4Svg open={NavBarOpen} setNavBarOpen={undefined} />
           </button>
         </div>
         {/* Menú para dispositivos móviles */}
