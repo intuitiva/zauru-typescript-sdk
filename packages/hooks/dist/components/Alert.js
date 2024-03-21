@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useRef, useEffect } from "react";
+import { ExitSvg } from "@zauru-sdk/icons";
 import { createRoot } from "react-dom/client";
-import { ExitSvg } from "../Icons/Icons";
 import { AnimatePresence, motion } from "framer-motion";
 const Alert = ({ type, title, description, onClose }) => {
     const [, setLifetime] = useState(4000);

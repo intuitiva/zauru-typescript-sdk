@@ -2,7 +2,7 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
 import { useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import DataTable, { createTheme } from "react-data-table-component";
-import { SearchSVG } from "../Icons/Icons";
+import { SearchSVG } from "@zauru-sdk/icons";
 const customStyles = {
     headCells: {
         style: {

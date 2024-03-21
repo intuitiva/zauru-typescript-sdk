@@ -202,7 +202,7 @@ export const NavBar = ({
             type="button"
             onClick={() => setNavBarOpen(!NavBarOpen)}
           >
-            <MenuAlt4Svg open={NavBarOpen} setNavBarOpen={undefined} />
+            <MenuAlt4Svg open={NavBarOpen} />
           </button>
         </div>
         {/* Menú para dispositivos móviles */}

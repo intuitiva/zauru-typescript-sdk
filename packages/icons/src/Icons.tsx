@@ -1,14 +1,15 @@
 import {
+  applicationDropDownIconColor,
   greenColorIcon,
   progressBarLightTextColor,
   progressBarSpinnerFillColor,
 } from "src";
 
-export const MenuAlt4Svg = (open = false) => (
+export const MenuAlt4Svg = (props: { open: boolean } = { open: false }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={`transition duration-100 ease h-8 w-8 ${
-      open ? "transform rotate-90" : ""
+      props.open ? "transform rotate-90" : ""
     }`}
     viewBox="0 0 20 20"
     fill="white"

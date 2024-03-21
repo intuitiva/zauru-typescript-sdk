@@ -1,10 +1,4 @@
-import { type ItemAssociatedLots } from "~/services/zauru/zauru-lotes.server";
-import type { RejectionWebAppTableObject } from "~/utils/zauru/webapp-tables.utils";
-import type { GenericDynamicTableColumn } from "~/components/DynamicTable/GenericDynamicTable";
-import type { PayeeGraphQL, PurchaseOrderGraphQL, WebAppRowGraphQL } from "~/graphql/queries";
-import type { ItemCategorySchema } from "~/services/zauru/zauru-items.server";
-import type { NewPurchaseOrderResponse, PurchaseOrderGeneralInfo } from "~/services/zauru/zauru-purchase-orders.server";
-import type { QueueFormReceptionWebAppTable } from "~/utils/zauru/4pinos-reception-form-history.utils";
+import { ItemAssociatedLots, ItemGraphQL, NewPurchaseOrderResponse, PayeeGraphQL, PurchaseOrderGeneralInfo, PurchaseOrderGraphQL, QueueFormReceptionWebAppTable, RejectionWebAppTableObject, WebAppRowGraphQL, GenericDynamicTableColumn } from "@zauru-sdk/types";
 type ConfigProps = {
     online?: boolean;
     wheres?: string[];
@@ -71,13 +65,13 @@ export declare const getPesadasByForm: (formInput: FormInput) => {
     tempPesadas: PesadaBody[];
     totales: {
         id: string;
-        baskets: any;
-        totalWeight: any;
+        baskets: string;
+        totalWeight: string;
         discount: string;
-        netWeight: any;
+        netWeight: string;
         weightByBasket: string;
-        lbDiscounted: any;
-        probableUtilization: any;
+        lbDiscounted: string;
+        probableUtilization: string;
     };
     headers: GenericDynamicTableColumn[];
 };
@@ -104,5 +98,5 @@ export declare const getBasketDetailsByForm: (formInput: FormInput) => {
     headers: GenericDynamicTableColumn[];
 };
 export declare const useGetProviderNameByPurchaseOrder: (payees: PayeeGraphQL[], purchaseOrder: PurchaseOrderGraphQL) => string | null;
-export declare const useGetItemNameByPurchaseOrder: (items: ItemCategorySchema[], purchaseOrder: PurchaseOrderGraphQL) => string | null;
+export declare const useGetItemNameByPurchaseOrder: (items: ItemGraphQL[], purchaseOrder: PurchaseOrderGraphQL) => string | null;
 export {};

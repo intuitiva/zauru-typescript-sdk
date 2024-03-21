@@ -1,6 +1,4 @@
-import type { NavBarStateProps } from "../NavBar/NavBar.types";
-export declare const applicationDropDownIconColor = "text-slate-500";
-export declare const MenuAlt4Svg: (props: NavBarStateProps) => import("react/jsx-runtime").JSX.Element;
+export declare const MenuAlt4Svg: (open?: boolean) => import("react/jsx-runtime").JSX.Element;
 export declare const ExitSvg: () => import("react/jsx-runtime").JSX.Element;
 export declare const EyeSvg: () => import("react/jsx-runtime").JSX.Element;
 export declare const PencilSvg: () => import("react/jsx-runtime").JSX.Element;

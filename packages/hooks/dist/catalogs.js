@@ -1,8 +1,7 @@
 import { useFetcher } from "@remix-run/react";
-import { useAppDispatch, useAppSelector } from "./store";
 import { useEffect, useState } from "react";
-import { showAlert } from "~/components/Alerts/Alert";
-import { catalogsFetchStart, catalogsFetchSuccess, } from "~/redux/slices/catalogs.slice";
+import { showAlert } from "src";
+import { catalogsFetchStart, catalogsFetchSuccess, useAppDispatch, useAppSelector, } from "@zauru-sdk/redux";
 const useApiCatalog = (CATALOG_NAME, otherParams) => {
     const fetcher = useFetcher();
     const [data, setData] = useState({

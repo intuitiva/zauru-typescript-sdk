@@ -1,8 +1,7 @@
 import { useFetcher } from "@remix-run/react";
-import { useAppDispatch, useAppSelector } from "./store";
+import { templateFetchStart, templateFetchSuccess, useAppDispatch, useAppSelector, } from "@zauru-sdk/redux";
 import { useEffect, useState } from "react";
-import { showAlert } from "~/components/Alerts/Alert";
-import { templateFetchStart, templateFetchSuccess, } from "~/redux/slices/templates.slice";
+import { showAlert } from "src";
 const useGetTemplateObject = (TEMPLATE_NAME, config = { online: false }) => {
     const fetcher = useFetcher();
     const dispatch = useAppDispatch();

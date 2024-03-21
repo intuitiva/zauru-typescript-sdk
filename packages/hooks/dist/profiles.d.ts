@@ -1,8 +1,7 @@
-import type { Agency, OauthProfile, ProfileResponse } from "~/services/zauru/zauru-profiles.server";
-import type { EmployeeGraphQL } from "~/graphql/queries";
+import type { AgencyGraphQL, EmployeeGraphQL, OauthProfile, ProfileResponse } from "@zauru-sdk/types";
 export declare const useGetAgencyProfile: () => {
     loading: boolean;
-    data: Agency;
+    data: AgencyGraphQL;
 };
 export declare const useGetUserProfile: () => {
     loading: boolean;

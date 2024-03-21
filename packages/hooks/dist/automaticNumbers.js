@@ -1,6 +1,7 @@
 import { useFetcher } from "@remix-run/react";
+import { automaticNumberFetchStart, automaticNumberFetchSuccess, useAppDispatch, useAppSelector, } from "@zauru-sdk/redux";
 import { useEffect, useState } from "react";
-import { showAlert } from "~/components/Alerts/Alert";
+import { showAlert } from "src";
 export const useGetAutomaticNumber = (AUTOMATIC_NUMBER_NAME) => {
     const fetcher = useFetcher();
     const dispatch = useAppDispatch();
