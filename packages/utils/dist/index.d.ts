@@ -1,3 +1,4 @@
+export * from "./zauru/4pinos-receptions-form-history.utils.js";
 export * from "./zauru/automatic-number.utils.js";
 export * from "./zauru/bitacora-edicion-masiva.utils.js";
 export * from "./zauru/bundles.utils.js";
