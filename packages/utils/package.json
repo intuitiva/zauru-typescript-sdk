@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/utils",
-  "version": "1.0.13",
+  "version": "1.0.15",
   "description": "Utilidades, parseo de request y demás para desarrollo de webapps de Zauru",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,7 +22,7 @@
     "@zauru-sdk/common": "^1.0.13",
     "@zauru-sdk/config": "^1.0.4",
     "@zauru-sdk/graphql": "^1.0.9",
-    "@zauru-sdk/services": "^1.0.13",
+    "@zauru-sdk/services": "^1.0.15",
     "@zauru-sdk/types": "^1.0.13"
   },
   "engines": {
