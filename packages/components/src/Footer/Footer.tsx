@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-//import ConnectionState from "../ConnectionState";
 import { LoadingInputSkeleton } from "src";
+import ConnectionState from "src/ConnectionState/ConnectionState";
 
 type FooterProps = {
   href: string;
@@ -50,11 +50,11 @@ export const Footer = ({
           {`Creado en `} <a href={href}>Zauru</a>{" "}
           {`con ❤️ ${new Date().getFullYear()} v.3.2`}
         </p>
-        {/* {showConnection && (
+        {showConnection && (
           <div className="ml-5">
             <ConnectionState />
           </div>
-        )} */}
+        )}
       </div>
     </footer>
   );

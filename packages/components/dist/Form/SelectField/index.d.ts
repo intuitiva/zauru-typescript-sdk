@@ -1,0 +1,27 @@
+import { SelectFieldOption } from "@zauru-sdk/types";
+import type { SingleValue, InputActionMeta } from "react-select";
+type Props = {
+    id?: string;
+    formName?: string;
+    name?: string;
+    title?: string;
+    defaultValue?: SingleValue<SelectFieldOption>;
+    defaultValueMulti?: SingleValue<SelectFieldOption>[];
+    helpText?: string;
+    options: Array<SelectFieldOption>;
+    onChange?: (value: SingleValue<SelectFieldOption>) => void;
+    onChangeMulti?: (value: Array<SingleValue<SelectFieldOption>>) => void;
+    onInputChange?: (newValue: string, actionMeta: InputActionMeta) => void;
+    isClearable?: boolean;
+    error?: string | undefined;
+    disabled?: boolean;
+    menuIsOpen?: boolean;
+    readOnly?: boolean;
+    isMulti?: boolean;
+    loading?: boolean;
+    hint?: string;
+    className?: string;
+};
+export declare const SelectFieldWithoutValidation: (props: Props) => import("react/jsx-runtime").JSX.Element;
+export declare const SelectField: (props: Props) => import("react/jsx-runtime").JSX.Element;
+export {};

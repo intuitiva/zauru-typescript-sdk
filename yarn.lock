@@ -1268,6 +1268,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jsonwebtoken@npm:^9.0.2":
+  version: 9.0.6
+  resolution: "@types/jsonwebtoken@npm:9.0.6"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/9c29e3896e5fb6056e54d87514643e59e0cfb966ae25171a107776270195bba955f0373e98c8ed6450c145b18984f5df9cf0fcac360f382cec3c7c4d3510b202
+  languageName: node
+  linkType: hard
+
 "@types/minimatch@npm:^3.0.3":
   version: 3.0.5
   resolution: "@types/minimatch@npm:3.0.5"
@@ -1279,6 +1288,15 @@ __metadata:
   version: 1.2.5
   resolution: "@types/minimist@npm:1.2.5"
   checksum: 10c0/3f791258d8e99a1d7d0ca2bda1ca6ea5a94e5e7b8fc6cde84dd79b0552da6fb68ade750f0e17718f6587783c24254bbca0357648dd59dc3812c150305cabdc46
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:*":
+  version: 20.11.30
+  resolution: "@types/node@npm:20.11.30"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10c0/867cfaf969c6d8850d8d7304e7ab739898a50ecb1395b61ff2335644f5f48d7a46fbc4a14cee967aed65ec134b61a746edae70d1f32f11321ccf29165e3bc4e6
   languageName: node
   linkType: hard
 
@@ -1404,12 +1422,12 @@ __metadata:
   dependencies:
     "@reduxjs/toolkit": "npm:^2.2.1"
     "@remix-run/react": "npm:^2.8.1"
+    "@types/jsonwebtoken": "npm:^9.0.2"
     "@types/react": "npm:^18.2.20"
     "@types/react-dom": "npm:^18.2.7"
     "@zauru-sdk/common": "npm:^1.0.13"
-    "@zauru-sdk/graphql": "npm:^1.0.9"
+    "@zauru-sdk/hooks": "npm:^1.0.13"
     "@zauru-sdk/icons": "npm:^1.0.13"
-    "@zauru-sdk/services": "npm:^1.0.13"
     "@zauru-sdk/types": "npm:^1.0.13"
     "@zauru-sdk/utils": "npm:^1.0.13"
     eslint: "npm:^8.38.0"
@@ -1420,7 +1438,7 @@ __metadata:
     eslint-plugin-react: "npm:^7.33.2"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     framer-motion: "npm:^11.0.8"
-    jsonwebtoken: "npm:9.0.2"
+    jsonwebtoken: "npm:^9.0.2"
     react: "npm:^18.2.0"
     react-data-table-component: "npm:^7.4.7"
     react-dom: "npm:^18.2.0"
@@ -1449,7 +1467,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/hooks@workspace:packages/hooks":
+"@zauru-sdk/hooks@npm:^1.0.13, @zauru-sdk/hooks@workspace:packages/hooks":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/hooks@workspace:packages/hooks"
   dependencies:
@@ -5128,7 +5146,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonwebtoken@npm:9.0.2":
+"jsonwebtoken@npm:^9.0.2":
   version: 9.0.2
   resolution: "jsonwebtoken@npm:9.0.2"
   dependencies:

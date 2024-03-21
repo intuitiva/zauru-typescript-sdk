@@ -1,0 +1,25 @@
+import React from "react";
+type Props = {
+    id?: string;
+    name?: string;
+    formName?: string;
+    title?: string;
+    defaultValue?: string | number;
+    hidden?: boolean;
+    type?: React.HTMLInputTypeAttribute;
+    helpText?: string;
+    hint?: string;
+    onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement>) => void;
+    onKeyDown?: (event: React.KeyboardEvent) => void;
+    disabled?: boolean;
+    readOnly?: boolean;
+    error?: string;
+    min?: string | number;
+    integer?: boolean;
+    stopChangeEvents?: boolean;
+    style?: React.CSSProperties;
+    className?: string;
+};
+export declare const TextFieldWithoutValidation: (props: Props) => import("react/jsx-runtime").JSX.Element;
+export declare const TextField: (props: Props) => import("react/jsx-runtime").JSX.Element;
+export {};

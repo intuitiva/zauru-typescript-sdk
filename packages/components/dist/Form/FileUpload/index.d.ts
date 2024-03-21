@@ -1,0 +1,21 @@
+import React from "react";
+type Props = {
+    id?: string;
+    name: string;
+    formName?: string;
+    title?: string;
+    helpText?: string;
+    hint?: string;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    disabled?: boolean;
+    readOnly?: boolean;
+    error?: string | undefined;
+    fileTypes?: string[];
+    showAvailableTypes?: boolean;
+    className?: string;
+    defaultValue?: string | File;
+    download?: boolean;
+};
+export declare const FileUploadFieldWithoutValidation: (props: Props) => import("react/jsx-runtime").JSX.Element;
+export declare const FileUploadField: (props: Props) => import("react/jsx-runtime").JSX.Element;
+export {};

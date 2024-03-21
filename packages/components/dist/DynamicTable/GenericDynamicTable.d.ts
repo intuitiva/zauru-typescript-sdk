@@ -1,0 +1,21 @@
+import React from "react";
+import { GenericDynamicTableColumn, RowDataType, SelectFieldOption } from "@zauru-sdk/types";
+type Props = {
+    name?: string;
+    className?: string;
+    columns: GenericDynamicTableColumn[];
+    onChange?: (tableState?: any[]) => void;
+    defaultValue?: RowDataType[];
+    footerRow?: RowDataType;
+    thCSSProperties?: React.CSSProperties;
+    thElementsClassName?: string;
+    editable?: boolean;
+    searcheables?: SelectFieldOption[];
+    loading?: boolean;
+    paginated?: boolean;
+    defaultItemsPerPage?: number;
+    itemsPerPageOptions?: number[];
+    withoutBg?: boolean;
+};
+export declare const GenericDynamicTable: (props: Props) => import("react/jsx-runtime").JSX.Element;
+export {};
