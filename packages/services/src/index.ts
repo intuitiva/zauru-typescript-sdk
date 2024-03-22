@@ -10,7 +10,7 @@ export * from "./zauru/httpZauru.server.js";
 export * from "./zauru/zauru-agencies.server.js";
 export * from "./zauru/zauru-automatic-numbers.server.js";
 export * from "./zauru/zauru-bookings.server.js";
-export * from "./zauru/zauru-bundles.service.js";
+export * from "./zauru/zauru-bundles.server.js";
 export * from "./zauru/zauru-cases.server.js";
 export * from "./zauru/zauru-currencies.server.js";
 export * from "./zauru/zauru-consolidated.server.js";
