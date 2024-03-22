@@ -1,6 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useIsOnline } from "@zauru-sdk/hooks";
-const ConnectionState = () => {
+export const ConnectionState = () => {
     const isOnline = useIsOnline();
     // Definir estilos
     const styles = {
@@ -19,4 +19,3 @@ const ConnectionState = () => {
     // Renderizar el estado de conexión
     return (_jsx("div", { style: styles.container, children: _jsx("p", { style: styles.text, children: isOnline ? "ONLINE ✅🌐" : "OFFLINE ❌🌐" }) }));
 };
-export default ConnectionState;

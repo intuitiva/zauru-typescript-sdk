@@ -15,7 +15,7 @@ import {
   SelectFieldOption,
 } from "@zauru-sdk/types";
 import { LineSeparator, StaticAlert, SubContainer } from "./../../index";
-import { GenericDynamicTable } from "src/DynamicTable/GenericDynamicTable";
+import { GenericDynamicTable } from "../../DynamicTable/GenericDynamicTable";
 import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/common";
 
 type Props = {

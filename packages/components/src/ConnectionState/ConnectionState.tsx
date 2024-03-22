@@ -1,6 +1,6 @@
 import { useIsOnline } from "@zauru-sdk/hooks";
 
-const ConnectionState = () => {
+export const ConnectionState = () => {
   const isOnline = useIsOnline();
 
   // Definir estilos
@@ -25,5 +25,3 @@ const ConnectionState = () => {
     </div>
   );
 };
-
-export default ConnectionState;

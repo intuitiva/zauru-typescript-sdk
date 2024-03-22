@@ -1,2 +1,1 @@
-declare const ConnectionState: () => import("react/jsx-runtime").JSX.Element;
-export default ConnectionState;
+export declare const ConnectionState: () => import("react/jsx-runtime").JSX.Element;
