@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/components",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "Componentes reutilizables en las WebApps de Zauru.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,8 +33,8 @@
     "@reduxjs/toolkit": "^2.2.1",
     "@remix-run/react": "^2.8.1",
     "@zauru-sdk/common": "^1.0.13",
-    "@zauru-sdk/hooks": "^1.0.18",
-    "@zauru-sdk/icons": "^1.0.13",
+    "@zauru-sdk/hooks": "^1.0.19",
+    "@zauru-sdk/icons": "^1.0.19",
     "@zauru-sdk/types": "^1.0.13",
     "@zauru-sdk/utils": "^1.0.18",
     "framer-motion": "^11.0.8",
