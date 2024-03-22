@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState, type ReactNode } from "react";
-import { TextFieldWithoutValidation } from "src";
-import { SelectFieldWithoutValidation } from "src";
+import { TextFieldWithoutValidation } from "./../index";
+import { SelectFieldWithoutValidation } from "./../index";
 import type { SingleValue } from "react-select";
 import { useAppSelector } from "@zauru-sdk/redux";
 import { SelectFieldOption } from "@zauru-sdk/types";

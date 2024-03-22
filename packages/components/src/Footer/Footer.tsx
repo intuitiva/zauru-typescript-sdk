@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LoadingInputSkeleton } from "src";
+import { LoadingInputSkeleton } from "./../index";
 import ConnectionState from "src/ConnectionState/ConnectionState";
 
 type FooterProps = {

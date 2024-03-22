@@ -3,7 +3,7 @@ import {
   greenColorIcon,
   progressBarLightTextColor,
   progressBarSpinnerFillColor,
-} from "src";
+} from "./index";
 
 export const MenuAlt4Svg = (props: { open: boolean } = { open: false }) => (
   <svg

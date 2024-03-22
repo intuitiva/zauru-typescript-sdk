@@ -7,7 +7,7 @@ import {
   useAppSelector,
 } from "@zauru-sdk/redux";
 import { useEffect, useState } from "react";
-import { showAlert } from "src";
+import { showAlert } from "./index";
 
 type ProfileType<T> = {
   data: T;

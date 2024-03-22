@@ -1,7 +1,7 @@
 import { useFetcher } from "@remix-run/react";
 import { setSessionValue, useAppDispatch, useAppSelector, } from "@zauru-sdk/redux";
 import { useEffect, useState } from "react";
-import { showAlert } from "src";
+import { showAlert } from "./index";
 /**
  *
  * @param attribute

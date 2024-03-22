@@ -4,7 +4,7 @@ import { SelectFieldOption } from "@zauru-sdk/types";
 import { useEffect, useState } from "react";
 import type { SingleValue, InputActionMeta } from "react-select";
 import Select, { components } from "react-select";
-import { LoadingInputSkeleton } from "src";
+import { LoadingInputSkeleton } from "./../../index";
 
 type Props = {
   id?: string;

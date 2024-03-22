@@ -11,7 +11,7 @@ import {
 } from "@zauru-sdk/types";
 import { useAppSelector } from "@zauru-sdk/redux";
 import { generateClientUUID } from "@zauru-sdk/common";
-import { LoadingInputSkeleton, WithTooltip } from "src";
+import { LoadingInputSkeleton, WithTooltip } from "./../index";
 import { TrashSvg } from "@zauru-sdk/icons";
 
 type Props = {

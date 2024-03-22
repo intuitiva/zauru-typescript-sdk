@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from "react";
-import { LoadingInputSkeleton } from "src";
+import { LoadingInputSkeleton } from "./../index";
 export const StepWizardComponent = ({ steps, showStepName = false, loading = false, }) => {
     const [currentStep, setCurrentStep] = useState(0);
     if (loading) {

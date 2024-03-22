@@ -8,7 +8,7 @@ import { SelectField } from "../SelectField";
 import { FileUploadField } from "../FileUpload";
 import { FormDatePicker } from "../DatePicker";
 import { FormTimePicker } from "../TimePicker";
-import { LineSeparator, StaticAlert, SubContainer } from "src";
+import { LineSeparator, StaticAlert, SubContainer } from "./../../index";
 import { GenericDynamicTable } from "src/DynamicTable/GenericDynamicTable";
 import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/common";
 export function DynamicBaculoForm(props) {

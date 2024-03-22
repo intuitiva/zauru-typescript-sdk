@@ -1,6 +1,6 @@
 import type { FetcherWithComponents } from "@remix-run/react";
 import { useEffect } from "react";
-import { showAlert } from "src";
+import { showAlert } from "./index";
 
 export const useValidateNotifications = (source: {
   fetcher?: FetcherWithComponents<any>;

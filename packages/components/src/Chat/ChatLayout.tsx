@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { TextField } from "../Form";
 import { Form } from "@remix-run/react";
 import { FormDocumentType } from "@zauru-sdk/types";
-import { LoadingInputSkeleton } from "src";
+import { LoadingInputSkeleton } from "./../index";
 import {
   AttachmentIconSVG,
   SendMessageIcon,
