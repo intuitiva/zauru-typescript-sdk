@@ -1426,10 +1426,10 @@ __metadata:
     "@types/react": "npm:^18.2.20"
     "@types/react-dom": "npm:^18.2.7"
     "@zauru-sdk/common": "npm:^1.0.13"
-    "@zauru-sdk/hooks": "npm:^1.0.19"
+    "@zauru-sdk/hooks": "npm:^1.0.20"
     "@zauru-sdk/icons": "npm:^1.0.19"
     "@zauru-sdk/types": "npm:^1.0.13"
-    "@zauru-sdk/utils": "npm:^1.0.18"
+    "@zauru-sdk/utils": "npm:^1.0.20"
     eslint: "npm:^8.38.0"
     eslint-config-prettier: "npm:^9.0.0"
     eslint-import-resolver-typescript: "npm:^3.6.1"
@@ -1467,7 +1467,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/hooks@npm:^1.0.19, @zauru-sdk/hooks@workspace:packages/hooks":
+"@zauru-sdk/hooks@npm:^1.0.20, @zauru-sdk/hooks@workspace:packages/hooks":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/hooks@workspace:packages/hooks"
   dependencies:
@@ -1477,10 +1477,10 @@ __metadata:
     "@zauru-sdk/common": "npm:^1.0.13"
     "@zauru-sdk/graphql": "npm:^1.0.9"
     "@zauru-sdk/icons": "npm:^1.0.19"
-    "@zauru-sdk/redux": "npm:^1.0.18"
-    "@zauru-sdk/services": "npm:^1.0.18"
+    "@zauru-sdk/redux": "npm:^1.0.20"
+    "@zauru-sdk/services": "npm:^1.0.20"
     "@zauru-sdk/types": "npm:^1.0.13"
-    "@zauru-sdk/utils": "npm:^1.0.18"
+    "@zauru-sdk/utils": "npm:^1.0.20"
     eslint: "npm:^8.38.0"
     eslint-config-prettier: "npm:^9.0.0"
     eslint-import-resolver-typescript: "npm:^3.6.1"
@@ -1514,7 +1514,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/redux@npm:^1.0.18, @zauru-sdk/redux@workspace:packages/redux":
+"@zauru-sdk/redux@npm:^1.0.20, @zauru-sdk/redux@workspace:packages/redux":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/redux@workspace:packages/redux"
   dependencies:
@@ -1522,9 +1522,9 @@ __metadata:
     "@types/react": "npm:^18.2.20"
     "@types/react-dom": "npm:^18.2.7"
     "@zauru-sdk/graphql": "npm:^1.0.9"
-    "@zauru-sdk/services": "npm:^1.0.18"
+    "@zauru-sdk/services": "npm:^1.0.20"
     "@zauru-sdk/types": "npm:^1.0.13"
-    "@zauru-sdk/utils": "npm:^1.0.18"
+    "@zauru-sdk/utils": "npm:^1.0.20"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-redux: "npm:^9.1.0"
@@ -1533,7 +1533,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/services@npm:^1.0.18, @zauru-sdk/services@workspace:packages/services":
+"@zauru-sdk/services@npm:^1.0.20, @zauru-sdk/services@workspace:packages/services":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/services@workspace:packages/services"
   dependencies:
@@ -1556,7 +1556,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/utils@npm:^1.0.18, @zauru-sdk/utils@workspace:packages/utils":
+"@zauru-sdk/utils@npm:^1.0.20, @zauru-sdk/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/utils@workspace:packages/utils"
   dependencies:
@@ -1564,7 +1564,7 @@ __metadata:
     "@zauru-sdk/common": "npm:^1.0.13"
     "@zauru-sdk/config": "npm:^1.0.4"
     "@zauru-sdk/graphql": "npm:^1.0.9"
-    "@zauru-sdk/services": "npm:^1.0.18"
+    "@zauru-sdk/services": "npm:^1.0.20"
     "@zauru-sdk/types": "npm:^1.0.13"
     typescript: "npm:^5.1.6"
   languageName: unknown
