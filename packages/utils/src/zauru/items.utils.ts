@@ -11,7 +11,6 @@ import {
   getItemsBySuperCategoryId,
   getVariablesByName,
 } from "@zauru-sdk/services";
-import httpZauru from "@zauru-sdk/services/dist/zauru/httpZauru.server.js";
 import {
   AxiosUtilsResponse,
   ItemGraphQL,
@@ -118,53 +117,6 @@ export const getItemServicesByLabCategory = async (
     return response?.data ?? [];
   });
 };
-
-/**
- *
- * @param headers
- * @returns
- */
-export const getItemsDataTable = async (
-  headers: any,
-  search: SearchItemParams
-): Promise<AxiosUtilsResponse<ItemDataTable[]>> => {
-  return handlePossibleAxiosErrors(async () => {
-    const response = await httpZauru.post<ResponseItemList>(
-      `/settings/items/datatables.json`,
-      search,
-      { headers }
-    );
-
-    const items: ItemDataTable[] =
-      response.data?.data?.map((x) => formatHTMLItemList(x)) ?? [];
-
-    return items;
-  });
-};
-
-//============================ FORMATEADO DE ITEMS
-function extractIdFromURL(input: string): number {
-  const regex = /\/items\/(\d+)/;
-  const match = input.match(regex);
-  return match ? parseInt(match[1], 10) : -1;
-}
-
-function formatHTMLItemList(item: HTMLItemListSchema): ItemDataTable {
-  return {
-    zid: parseInt(extractValueBetweenTags(item.zid, "a"), 10),
-    itemId: extractIdFromURL(item.cod),
-    name: extractValueBetweenTags(item.name, "a"),
-    stck: extractValueBetweenTags(item.stck, "i") || null,
-    act: extractValueBetweenTags(item.act, "i") || null,
-    sell: extractValueBetweenTags(item.sell, "i") || null,
-    purch: extractValueBetweenTags(item.purch, "i") || null,
-    vat: extractValueBetweenTags(item.vat, "i") || null,
-    cat: item.cat,
-    warr: item.warr,
-    cat_note: item.cat_note,
-    DT_RowId: parseInt(item.DT_RowId.replace("settings-item-", ""), 10),
-  };
-}
 
 /**
  * getLabItemCategories
