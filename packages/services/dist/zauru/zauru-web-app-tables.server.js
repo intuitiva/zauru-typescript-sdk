@@ -1,5 +1,5 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { getGraphQLAPIHeaders } from "~/common.server.js";
+import { getGraphQLAPIHeaders, getVariablesByName } from "~/common.server.js";
 import httpGraphQLAPI from "./httpGraphQL.server.js";
 import { getWebAppRowStringQuery, getWebAppRowsByWebAppTableIdStringQuery, } from "@zauru-sdk/graphql";
 import httpZauru from "./httpZauru.server.js";
@@ -118,3 +118,37 @@ export async function createWebAppTable(headers, body) {
         };
     }
 }
+/**
+ * getWebappTable
+ * @param headers
+ * @param session
+ * @returns
+ */
+export const getRejectionWebAppTable = async (headers, session) => {
+    return handlePossibleAxiosErrors(async () => {
+        const { recepciones_rejections_webapp_table_id, recepciones_rejection_types_webapp_table_id, } = await getVariablesByName(headers, session, [
+            "recepciones_rejections_webapp_table_id",
+            "recepciones_rejection_types_webapp_table_id",
+        ]);
+        const webappTableResponse = await httpZauru.get(`/apps/webapp_tables/${recepciones_rejections_webapp_table_id}.json`, { headers });
+        const webappTableRejectionsResponse = await httpZauru.get(`/apps/webapp_tables/${recepciones_rejection_types_webapp_table_id}/webapp_rows.json`, { headers });
+        const rejections_select = [];
+        const rejections_complete = webappTableRejectionsResponse.data;
+        const keyName = Object.keys(rejections_complete[0].data)[0]; //get the first value
+        const rejections_list = [];
+        rejections_complete.forEach((val) => {
+            rejections_list.push(val.data[keyName]);
+        });
+        rejections_complete.forEach((rc) => {
+            rejections_select.push({
+                value: rc.data[keyName],
+                label: rc.data[keyName],
+            });
+        });
+        return {
+            webapp_table: webappTableResponse.data.structure,
+            rejection_list: rejections_list,
+            rejection_select: rejections_select,
+        };
+    });
+};

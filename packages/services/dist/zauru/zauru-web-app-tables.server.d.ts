@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, WebAppRowGraphQL, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, RejectionWebAppTableObject, WebAppRowGraphQL, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 /**
  * getWebAppRow
  * @param headers
@@ -46,3 +46,10 @@ export declare function updateWebAppTableRegister<T>(headers: any, id_web_app_ta
  * @returns
  */
 export declare function createWebAppTable(headers: any, body: WebAppTableCreateBody): Promise<AxiosUtilsResponse<WebAppTableGraphQL>>;
+/**
+ * getWebappTable
+ * @param headers
+ * @param session
+ * @returns
+ */
+export declare const getRejectionWebAppTable: (headers: any, session: Session) => Promise<AxiosUtilsResponse<RejectionWebAppTableObject>>;

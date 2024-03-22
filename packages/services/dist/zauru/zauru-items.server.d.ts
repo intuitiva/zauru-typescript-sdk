@@ -1,5 +1,11 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, ItemCategoryGraphQL, ItemGraphQL, ItemSuperCategoryGraphQL } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, ItemCategoryGraphQL, ItemDataTable, ItemGraphQL, ItemSuperCategoryGraphQL, SearchItemParams } from "@zauru-sdk/types";
+/**
+ *
+ * @param headers
+ * @returns
+ */
+export declare const getItemsDataTable: (headers: any, search: SearchItemParams) => Promise<AxiosUtilsResponse<ItemDataTable[]>>;
 /**
  * getItems
  */

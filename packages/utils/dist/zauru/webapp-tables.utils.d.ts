@@ -1,12 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, RejectionWebAppTableObject, WebAppRowGraphQL, ReceptionType } from "@zauru-sdk/types";
-/**
- * getWebappTable
- * @param headers
- * @param session
- * @returns
- */
-export declare const getRejectionWebAppTable: (headers: any, session: Session) => Promise<AxiosUtilsResponse<RejectionWebAppTableObject>>;
+import { AxiosUtilsResponse, WebAppRowGraphQL, ReceptionType } from "@zauru-sdk/types";
 /**
  * Get template history entries from the web app table.
  * @param headers Request headers.
