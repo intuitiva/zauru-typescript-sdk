@@ -172,10 +172,10 @@ function formatHTMLItemList(item: HTMLItemListSchema): ItemDataTable {
  * @param headers
  * @returns
  */
-export async function getLabItemCategories(
+export const getLabItemCategories = (
   headers: any,
   session: Session
-): Promise<AxiosUtilsResponse<ItemCategoryGraphQL[]>> {
+): Promise<AxiosUtilsResponse<ItemCategoryGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { lab_super_category_item_id } = await getVariablesByName(
       headers,
@@ -194,7 +194,7 @@ export async function getLabItemCategories(
 
     return response.data;
   });
-}
+};
 
 /**
  * createNewLaboratoryClient
@@ -203,11 +203,11 @@ export async function getLabItemCategories(
  * @param body
  * @returns
  */
-export async function createNewLaboratoryItemCategory(
+export const createNewLaboratoryItemCategory = (
   session: Session,
   headers: any,
   body: Partial<ItemCategoryGraphQL>
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const { lab_super_category_item_id } = await getVariablesByName(
       headers,
@@ -231,7 +231,7 @@ export async function createNewLaboratoryItemCategory(
 
     return true;
   });
-}
+};
 
 /**
  * createNewLaboratoryItem
@@ -240,10 +240,10 @@ export async function createNewLaboratoryItemCategory(
  * @param body
  * @returns
  */
-export async function createNewLaboratoryItem(
+export const createNewLaboratoryItem = (
   headers: any,
   body: Partial<ItemGraphQL>
-): Promise<AxiosUtilsResponse<ItemGraphQL>> {
+): Promise<AxiosUtilsResponse<ItemGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
       active: true,
@@ -266,4 +266,4 @@ export async function createNewLaboratoryItem(
 
     return createResponse.data;
   });
-}
+};

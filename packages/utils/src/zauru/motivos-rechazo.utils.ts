@@ -12,11 +12,11 @@ import {
   WebAppTableUpdateResponse,
 } from "@zauru-sdk/types";
 
-export function formatearMotivoDeRechazo(
+export const formatearMotivoDeRechazo = (
   entity: WebAppRowGraphQL<MotivoRechazo>
-): BasicIdNameSchema {
+): BasicIdNameSchema => {
   return { id: entity.id, name: entity.data.Nombre } as BasicIdNameSchema;
-}
+};
 
 /**
  * Post saveBitacoraPOMassive from the web app table.
@@ -24,11 +24,11 @@ export function formatearMotivoDeRechazo(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
  */
-export async function saveRechazoCanastas(
+export const saveRechazoCanastas = (
   headers: any,
   session: Session,
   body: any
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { recepciones_rejections_webapp_table_id } = await getVariablesByName(
       headers,
@@ -44,4 +44,4 @@ export async function saveRechazoCanastas(
 
     return response;
   });
-}
+};

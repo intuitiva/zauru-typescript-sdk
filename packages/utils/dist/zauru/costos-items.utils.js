@@ -1,7 +1,7 @@
 import { handlePossibleAxiosErrors, localDateToUSDate, } from "@zauru-sdk/common";
 import moment from "moment";
 import { createSpecialItem, updateSpecialItem } from "./specialItem.utils.js";
-import { createWebAppTableRegister, getPurchasesList, getVariablesByName, getWebAppTableRegisters, updateWebAppTableRegister } from "@zauru-sdk/services";
+import { createWebAppTableRegister, getPurchasesList, getVariablesByName, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/services";
 import { updatePurchaseItemPrice } from "./purchase-orders.utils.js";
 /**
  *
@@ -121,7 +121,7 @@ const logTotal = (total) => {
  * @param body
  * @returns
  */
-export async function updateOneItemPrice(headers, session, body) {
+export const updateOneItemPrice = (headers, session, body) => {
     return handlePossibleAxiosErrors(async () => {
         //PASO 1
         //Obtengo todas las órdenes de compra dentro del rango de fechas
@@ -219,7 +219,7 @@ export async function updateOneItemPrice(headers, session, body) {
         }
         return response.data;
     });
-}
+};
 /**
  * changePricesInit
  * @param headers
@@ -228,7 +228,7 @@ export async function updateOneItemPrice(headers, session, body) {
  * @param body
  * @returns
  */
-export async function changePricesInit(headers, session, specialItems, body) {
+export const changePricesInit = (headers, session, specialItems, body) => {
     return handlePossibleAxiosErrors(async () => {
         //PASO 1
         //Obtengo todas las órdenes de compra dentro del rango de fechas
@@ -303,7 +303,7 @@ export async function changePricesInit(headers, session, specialItems, body) {
         }
         return response.data;
     });
-}
+};
 /**
  * changePrice
  * @param headers
@@ -311,7 +311,7 @@ export async function changePricesInit(headers, session, specialItems, body) {
  * @param body
  * @returns
  */
-export async function changePrice(headers, costo) {
+export const changePrice = async (headers, costo) => {
     const x = costo;
     const msgActualizando = `==============================> ACTUALIZANDO ÓRDEN DE COMPRA: ID: ${x.id} PRICE: ${x.purchase_order_details
         .map((x) => x.unit_cost)
@@ -346,7 +346,7 @@ export async function changePrice(headers, costo) {
         costo.finalizado = true;
     }
     return costo;
-}
+};
 /**
  * changePrices
  * @param headers
@@ -354,7 +354,7 @@ export async function changePrice(headers, costo) {
  * @param body
  * @returns
  */
-export async function changePrices(headers, session, bitacora, id_bitacora) {
+export const changePrices = (headers, session, bitacora, id_bitacora) => {
     return handlePossibleAxiosErrors(async () => {
         const costosWithPurchaseIds = bitacora.costosActualizados;
         const costosEspecialesWithPurchaseIds = bitacora.costosEspecialesActualizados;
@@ -438,7 +438,7 @@ export async function changePrices(headers, session, bitacora, id_bitacora) {
         }
         return response.data;
     });
-}
+};
 /**
  * corregirCostos
  * @param headers
@@ -446,7 +446,7 @@ export async function changePrices(headers, session, bitacora, id_bitacora) {
  * @param costos
  * @returns
  */
-export async function corregirCostos(headers, session, costos, costosEspeciales) {
+export const corregirCostos = (headers, session, costos, costosEspeciales) => {
     return handlePossibleAxiosErrors(async () => {
         //PASO 1
         //Hago una copia
@@ -549,14 +549,14 @@ export async function corregirCostos(headers, session, costos, costosEspeciales)
         }
         return response.data;
     });
-}
+};
 /**
  * Get saveBitacoraCostos from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>.
  */
-export async function saveBitacoraCostos(headers, session, body) {
+export const saveBitacoraCostos = (headers, session, body) => {
     return handlePossibleAxiosErrors(async () => {
         const { bitacora_costos_verduras_web_app_table_id } = await getVariablesByName(headers, session, [
             "bitacora_costos_verduras_web_app_table_id",
@@ -564,14 +564,14 @@ export async function saveBitacoraCostos(headers, session, body) {
         const response = await createWebAppTableRegister(headers, bitacora_costos_verduras_web_app_table_id, { ...body, modificadoPor: session.get("name") });
         return response;
     });
-}
+};
 /**
  * Put updateBitacoraCostos from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>.
  */
-export async function updateBitacoraCostos(headers, session, body, id_registro) {
+export const updateBitacoraCostos = (headers, session, body, id_registro) => {
     return handlePossibleAxiosErrors(async () => {
         const { bitacora_costos_verduras_web_app_table_id } = await getVariablesByName(headers, session, [
             "bitacora_costos_verduras_web_app_table_id",
@@ -579,14 +579,14 @@ export async function updateBitacoraCostos(headers, session, body, id_registro) 
         const response = await updateWebAppTableRegister(headers, bitacora_costos_verduras_web_app_table_id, id_registro, { ...body, modificadoPor: session.get("name") });
         return response;
     });
-}
+};
 /**
  * Get getCostosBitacora from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>.
  */
-export async function getCostosBitacora(headers, session) {
+export const getCostosBitacora = (headers, session) => {
     return handlePossibleAxiosErrors(async () => {
         const { bitacora_costos_verduras_web_app_table_id } = await getVariablesByName(headers, session, [
             "bitacora_costos_verduras_web_app_table_id",
@@ -598,4 +598,4 @@ export async function getCostosBitacora(headers, session) {
         const bitacora = response.data ?? [];
         return bitacora;
     });
-}
+};

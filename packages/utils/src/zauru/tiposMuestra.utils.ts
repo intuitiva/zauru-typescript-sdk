@@ -20,10 +20,10 @@ import {
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<TipoMuestra>[]>>.
  */
-export async function getTipoMuestras(
+export const getTipoMuestras = (
   headers: any,
   session: Session
-): Promise<AxiosUtilsResponse<WebAppRowGraphQL<TipoMuestra>[]>> {
+): Promise<AxiosUtilsResponse<WebAppRowGraphQL<TipoMuestra>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { tipo_muestra_web_app_table_id } = await getVariablesByName(
       headers,
@@ -46,7 +46,7 @@ export async function getTipoMuestras(
 
     return tipoMuestras;
   });
-}
+};
 
 /**
  * Create a tipoMuestra in the web app table.
@@ -55,11 +55,11 @@ export async function getTipoMuestras(
  * @param body TipoMuestra data to be created.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export async function createTipoMuestra(
+export const createTipoMuestra = (
   headers: any,
   session: Session,
   body: TipoMuestra
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { tipo_muestra_web_app_table_id } = await getVariablesByName(
       headers,
@@ -73,7 +73,7 @@ export async function createTipoMuestra(
     );
     return response;
   });
-}
+};
 
 /**
  * Delete a tipoMuestra from the web app table.
@@ -82,11 +82,11 @@ export async function createTipoMuestra(
  * @param id ID of the tipoMuestra to be deleted.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export async function deleteTipoMuestra(
+export const deleteTipoMuestra = (
   headers: any,
   session: Session,
   id: string
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { tipo_muestra_web_app_table_id } = await getVariablesByName(
       headers,
@@ -101,7 +101,7 @@ export async function deleteTipoMuestra(
     );
     return response;
   });
-}
+};
 
 /**
  * Update a tipoMuestra in the web app table.
@@ -111,12 +111,12 @@ export async function deleteTipoMuestra(
  * @param body Updated tipoMuestra data.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export async function updateTipoMuestra(
+export const updateTipoMuestra = (
   headers: any,
   session: Session,
   id: string,
   body: Partial<TipoMuestra>
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { tipo_muestra_web_app_table_id } = await getVariablesByName(
       headers,
@@ -133,4 +133,4 @@ export async function updateTipoMuestra(
 
     return response;
   });
-}
+};

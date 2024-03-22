@@ -19,10 +19,10 @@ import {
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<ConsolidatedHistory[]>.
  */
-export async function getConsolidatedHistories(
+export const getConsolidatedHistories = (
   headers: any,
   session: Session
-): Promise<AxiosUtilsResponse<WebAppRowGraphQL<ConsolidatedHistory>[]>> {
+): Promise<AxiosUtilsResponse<WebAppRowGraphQL<ConsolidatedHistory>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { purchase_order_consolidates_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -44,7 +44,7 @@ export async function getConsolidatedHistories(
 
     return history;
   });
-}
+};
 
 /**
  * Create a template in the web app table.
@@ -53,11 +53,11 @@ export async function getConsolidatedHistories(
  * @param body ConsolidatedHistory data to be created.
  * @returns A Promise of AxiosUtilsResponse<ConsolidatedHistory>.
  */
-export async function createConsolidatedHistory(
+export const createConsolidatedHistory = (
   headers: any,
   session: Session,
   body: ConsolidatedHistory
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { purchase_order_consolidates_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -70,7 +70,7 @@ export async function createConsolidatedHistory(
     );
     return response;
   });
-}
+};
 
 /**
  * Put updateConsolidatedHistory from the web app table.
@@ -78,12 +78,12 @@ export async function createConsolidatedHistory(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<ConsolidatedHistory[]>.
  */
-export async function updateConsolidatedHistory(
+export const updateConsolidatedHistory = (
   headers: any,
   session: Session,
   body: ConsolidatedHistory,
   id_registro: string | number
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { purchase_order_consolidates_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -99,4 +99,4 @@ export async function updateConsolidatedHistory(
 
     return response;
   });
-}
+};

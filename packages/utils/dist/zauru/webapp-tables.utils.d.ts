@@ -13,4 +13,4 @@ export declare const getRejectionWebAppTable: (headers: any, session: Session) =
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<ReceptionType[]>.
  */
-export declare function getReceptionTypes(headers: any, session: Session): Promise<AxiosUtilsResponse<WebAppRowGraphQL<ReceptionType>[]>>;
+export declare const getReceptionTypes: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<ReceptionType>[]>>;

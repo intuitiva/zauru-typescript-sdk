@@ -8,7 +8,7 @@ export declare const TEXT_PAYEE_CATEGORY_NAME_FOR_PRICE = "CAT-LABORATORIO: ";
  * @param headers
  * @returns
  */
-export declare function getClientesLaboratorio(session: Session): Promise<AxiosUtilsResponse<PayeeGraphQL[]>>;
+export declare const getClientesLaboratorio: (session: Session) => Promise<AxiosUtilsResponse<PayeeGraphQL[]>>;
 /**
  * createNewLaboratoryClient
  * @param session
@@ -16,7 +16,7 @@ export declare function getClientesLaboratorio(session: Session): Promise<AxiosU
  * @param body
  * @returns
  */
-export declare function createNewLaboratoryClient(headers: any, body: Partial<PayeeGraphQL>): Promise<AxiosUtilsResponse<boolean>>;
+export declare const createNewLaboratoryClient: (headers: any, body: Partial<PayeeGraphQL>) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * createNewLaboratoryClientCategoryPrice
  * @param session
@@ -24,7 +24,7 @@ export declare function createNewLaboratoryClient(headers: any, body: Partial<Pa
  * @param body
  * @returns
  */
-export declare function updateLaboratoryClientCategoryPrice(headers: any, body: Partial<PayeeCategoryGraphQL>): Promise<AxiosUtilsResponse<boolean>>;
+export declare const updateLaboratoryClientCategoryPrice: (headers: any, body: Partial<PayeeCategoryGraphQL>) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * createNewLaboratoryClientCategoryPrice
  * @param session
@@ -32,11 +32,11 @@ export declare function updateLaboratoryClientCategoryPrice(headers: any, body: 
  * @param body
  * @returns
  */
-export declare function createNewLaboratoryClientCategoryPrice(headers: any, session: Session, body: Partial<PayeeCategoryGraphQL>): Promise<AxiosUtilsResponse<boolean>>;
+export declare const createNewLaboratoryClientCategoryPrice: (headers: any, session: Session, body: Partial<PayeeCategoryGraphQL>) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * deleteLaboratoryClientCategoryPrice
  * @param headers
  * @param body
  * @returns
  */
-export declare function deleteLaboratoryClientCategoryPrice(headers: any, body: Partial<PayeeCategoryGraphQL>): Promise<AxiosUtilsResponse<boolean>>;
+export declare const deleteLaboratoryClientCategoryPrice: (headers: any, body: Partial<PayeeCategoryGraphQL>) => Promise<AxiosUtilsResponse<boolean>>;

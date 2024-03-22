@@ -6,7 +6,7 @@ import { AxiosUtilsResponse, SpecialItem, WebAppRowGraphQL, WebAppTableUpdateRes
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<SpecialItem>[]>>.
  */
-export declare function getSpecialItems(headers: any, session: Session): Promise<AxiosUtilsResponse<WebAppRowGraphQL<SpecialItem>[]>>;
+export declare const getSpecialItems: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<SpecialItem>[]>>;
 /**
  * Create a specialItem in the web app table.
  * @param headers Request headers.
@@ -14,7 +14,7 @@ export declare function getSpecialItems(headers: any, session: Session): Promise
  * @param body SpecialItem data to be created.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export declare function createSpecialItem(headers: any, session: Session, body: SpecialItem): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const createSpecialItem: (headers: any, session: Session, body: SpecialItem) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 /**
  * Delete a specialItem from the web app table.
  * @param headers Request headers.
@@ -22,7 +22,7 @@ export declare function createSpecialItem(headers: any, session: Session, body: 
  * @param id ID of the specialItem to be deleted.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export declare function deleteSpecialItem(headers: any, session: Session, id: string): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const deleteSpecialItem: (headers: any, session: Session, id: string) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 /**
  * Update a specialItem in the web app table.
  * @param headers Request headers.
@@ -31,4 +31,4 @@ export declare function deleteSpecialItem(headers: any, session: Session, id: st
  * @param body Updated specialItem data.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export declare function updateSpecialItem(headers: any, session: Session, id: string, body: Partial<SpecialItem>): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const updateSpecialItem: (headers: any, session: Session, id: string, body: Partial<SpecialItem>) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;

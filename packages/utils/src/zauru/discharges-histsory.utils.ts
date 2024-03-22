@@ -19,10 +19,10 @@ import {
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<DischargeHistory[]>.
  */
-export async function getDischargeHistories(
+export const getDischargeHistories = (
   headers: any,
   session: Session
-): Promise<AxiosUtilsResponse<WebAppRowGraphQL<DischargeHistory>[]>> {
+): Promise<AxiosUtilsResponse<WebAppRowGraphQL<DischargeHistory>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { discharge_history_web_app_table_id } = await getVariablesByName(
       headers,
@@ -45,7 +45,7 @@ export async function getDischargeHistories(
 
     return history;
   });
-}
+};
 
 /**
  * Create a template in the web app table.
@@ -54,11 +54,11 @@ export async function getDischargeHistories(
  * @param body DischargeHistory data to be created.
  * @returns A Promise of AxiosUtilsResponse<DischargeHistory>.
  */
-export async function createDischargeHistory(
+export const createDischargeHistory = (
   headers: any,
   session: Session,
   body: DischargeHistory
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { discharge_history_web_app_table_id } = await getVariablesByName(
       headers,
@@ -72,7 +72,7 @@ export async function createDischargeHistory(
     );
     return response;
   });
-}
+};
 
 /**
  * Put updateDischargeHistory from the web app table.
@@ -80,12 +80,12 @@ export async function createDischargeHistory(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<DischargeHistory[]>.
  */
-export async function updateDischargeHistory(
+export const updateDischargeHistory = (
   headers: any,
   session: Session,
   body: DischargeHistory,
   id_registro: string | number
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { discharge_history_web_app_table_id } = await getVariablesByName(
       headers,
@@ -102,4 +102,4 @@ export async function updateDischargeHistory(
 
     return response;
   });
-}
+};

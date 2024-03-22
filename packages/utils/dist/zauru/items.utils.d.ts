@@ -33,7 +33,7 @@ export declare const getItemsDataTable: (headers: any, search: SearchItemParams)
  * @param headers
  * @returns
  */
-export declare function getLabItemCategories(headers: any, session: Session): Promise<AxiosUtilsResponse<ItemCategoryGraphQL[]>>;
+export declare const getLabItemCategories: (headers: any, session: Session) => Promise<AxiosUtilsResponse<ItemCategoryGraphQL[]>>;
 /**
  * createNewLaboratoryClient
  * @param session
@@ -41,7 +41,7 @@ export declare function getLabItemCategories(headers: any, session: Session): Pr
  * @param body
  * @returns
  */
-export declare function createNewLaboratoryItemCategory(session: Session, headers: any, body: Partial<ItemCategoryGraphQL>): Promise<AxiosUtilsResponse<boolean>>;
+export declare const createNewLaboratoryItemCategory: (session: Session, headers: any, body: Partial<ItemCategoryGraphQL>) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * createNewLaboratoryItem
  * @param session
@@ -49,4 +49,4 @@ export declare function createNewLaboratoryItemCategory(session: Session, header
  * @param body
  * @returns
  */
-export declare function createNewLaboratoryItem(headers: any, body: Partial<ItemGraphQL>): Promise<AxiosUtilsResponse<ItemGraphQL>>;
+export declare const createNewLaboratoryItem: (headers: any, body: Partial<ItemGraphQL>) => Promise<AxiosUtilsResponse<ItemGraphQL>>;

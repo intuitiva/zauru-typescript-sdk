@@ -6,7 +6,7 @@ import { AxiosUtilsResponse, WebAppRowGraphQL, ConsolidatedHistory, WebAppTableU
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<ConsolidatedHistory[]>.
  */
-export declare function getConsolidatedHistories(headers: any, session: Session): Promise<AxiosUtilsResponse<WebAppRowGraphQL<ConsolidatedHistory>[]>>;
+export declare const getConsolidatedHistories: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<ConsolidatedHistory>[]>>;
 /**
  * Create a template in the web app table.
  * @param headers Request headers.
@@ -14,11 +14,11 @@ export declare function getConsolidatedHistories(headers: any, session: Session)
  * @param body ConsolidatedHistory data to be created.
  * @returns A Promise of AxiosUtilsResponse<ConsolidatedHistory>.
  */
-export declare function createConsolidatedHistory(headers: any, session: Session, body: ConsolidatedHistory): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const createConsolidatedHistory: (headers: any, session: Session, body: ConsolidatedHistory) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 /**
  * Put updateConsolidatedHistory from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<ConsolidatedHistory[]>.
  */
-export declare function updateConsolidatedHistory(headers: any, session: Session, body: ConsolidatedHistory, id_registro: string | number): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const updateConsolidatedHistory: (headers: any, session: Session, body: ConsolidatedHistory, id_registro: string | number) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;

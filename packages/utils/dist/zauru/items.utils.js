@@ -92,7 +92,7 @@ function formatHTMLItemList(item) {
  * @param headers
  * @returns
  */
-export async function getLabItemCategories(headers, session) {
+export const getLabItemCategories = (headers, session) => {
     return handlePossibleAxiosErrors(async () => {
         const { lab_super_category_item_id } = await getVariablesByName(headers, session, ["lab_super_category_item_id"]);
         const response = await getItemCategoriesBySuperCategoryId(session, lab_super_category_item_id);
@@ -101,7 +101,7 @@ export async function getLabItemCategories(headers, session) {
         }
         return response.data;
     });
-}
+};
 /**
  * createNewLaboratoryClient
  * @param session
@@ -109,7 +109,7 @@ export async function getLabItemCategories(headers, session) {
  * @param body
  * @returns
  */
-export async function createNewLaboratoryItemCategory(session, headers, body) {
+export const createNewLaboratoryItemCategory = (session, headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         const { lab_super_category_item_id } = await getVariablesByName(headers, session, ["lab_super_category_item_id"]);
         const sendBody = {
@@ -123,7 +123,7 @@ export async function createNewLaboratoryItemCategory(session, headers, body) {
         }
         return true;
     });
-}
+};
 /**
  * createNewLaboratoryItem
  * @param session
@@ -131,7 +131,7 @@ export async function createNewLaboratoryItemCategory(session, headers, body) {
  * @param body
  * @returns
  */
-export async function createNewLaboratoryItem(headers, body) {
+export const createNewLaboratoryItem = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = {
             active: true,
@@ -149,4 +149,4 @@ export async function createNewLaboratoryItem(headers, body) {
         }
         return createResponse.data;
     });
-}
+};

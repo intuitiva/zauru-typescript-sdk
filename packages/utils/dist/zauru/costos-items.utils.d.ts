@@ -25,12 +25,12 @@ export declare const obtenerSemanaAnterior: () => {
  * @param body
  * @returns
  */
-export declare function updateOneItemPrice(headers: any, session: Session, body: {
+export declare const updateOneItemPrice: (headers: any, session: Session, body: {
     fechaInicio: string;
     fechaFin: string;
     item: number;
     price: number;
-}): Promise<AxiosUtilsResponse<any>>;
+}) => Promise<AxiosUtilsResponse<any>>;
 /**
  * changePricesInit
  * @param headers
@@ -39,7 +39,7 @@ export declare function updateOneItemPrice(headers: any, session: Session, body:
  * @param body
  * @returns
  */
-export declare function changePricesInit(headers: any, session: Session, specialItems: WebAppRowGraphQL<SpecialItem>[], body: BitacoraCostosItems): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const changePricesInit: (headers: any, session: Session, specialItems: WebAppRowGraphQL<SpecialItem>[], body: BitacoraCostosItems) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 /**
  * changePrice
  * @param headers
@@ -47,7 +47,7 @@ export declare function changePricesInit(headers: any, session: Session, special
  * @param body
  * @returns
  */
-export declare function changePrice(headers: any, costo: PurchaseOrderCosto): Promise<PurchaseOrderCosto>;
+export declare const changePrice: (headers: any, costo: PurchaseOrderCosto) => Promise<PurchaseOrderCosto>;
 /**
  * changePrices
  * @param headers
@@ -55,7 +55,7 @@ export declare function changePrice(headers: any, costo: PurchaseOrderCosto): Pr
  * @param body
  * @returns
  */
-export declare function changePrices(headers: any, session: Session, bitacora: BitacoraCostosItems, id_bitacora: string): Promise<AxiosUtilsResponse<any>>;
+export declare const changePrices: (headers: any, session: Session, bitacora: BitacoraCostosItems, id_bitacora: string) => Promise<AxiosUtilsResponse<any>>;
 /**
  * corregirCostos
  * @param headers
@@ -63,25 +63,25 @@ export declare function changePrices(headers: any, session: Session, bitacora: B
  * @param costos
  * @returns
  */
-export declare function corregirCostos(headers: any, session: Session, costos: PurchaseOrderCosto[], costosEspeciales: PurchaseOrderCosto[]): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const corregirCostos: (headers: any, session: Session, costos: PurchaseOrderCosto[], costosEspeciales: PurchaseOrderCosto[]) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 /**
  * Get saveBitacoraCostos from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>.
  */
-export declare function saveBitacoraCostos(headers: any, session: Session, body: BitacoraCostosItems): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const saveBitacoraCostos: (headers: any, session: Session, body: BitacoraCostosItems) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 /**
  * Put updateBitacoraCostos from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>.
  */
-export declare function updateBitacoraCostos(headers: any, session: Session, body: BitacoraCostosItems, id_registro: string | number): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const updateBitacoraCostos: (headers: any, session: Session, body: BitacoraCostosItems, id_registro: string | number) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 /**
  * Get getCostosBitacora from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>.
  */
-export declare function getCostosBitacora(headers: any, session: Session): Promise<AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>>;
+export declare const getCostosBitacora: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>>;

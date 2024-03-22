@@ -16,7 +16,13 @@ import {
 } from "@zauru-sdk/types";
 import moment from "moment";
 import { createSpecialItem, updateSpecialItem } from "./specialItem.utils.js";
-import { createWebAppTableRegister, getPurchasesList, getVariablesByName, getWebAppTableRegisters, updateWebAppTableRegister } from "@zauru-sdk/services";
+import {
+  createWebAppTableRegister,
+  getPurchasesList,
+  getVariablesByName,
+  getWebAppTableRegisters,
+  updateWebAppTableRegister,
+} from "@zauru-sdk/services";
 import { updatePurchaseItemPrice } from "./purchase-orders.utils.js";
 
 /**
@@ -203,7 +209,7 @@ const logTotal = (total: number) => {
  * @param body
  * @returns
  */
-export async function updateOneItemPrice(
+export const updateOneItemPrice = (
   headers: any,
   session: Session,
   body: {
@@ -212,7 +218,7 @@ export async function updateOneItemPrice(
     item: number;
     price: number;
   }
-): Promise<AxiosUtilsResponse<any>> {
+): Promise<AxiosUtilsResponse<any>> => {
   return handlePossibleAxiosErrors(async () => {
     //PASO 1
     //Obtengo todas las órdenes de compra dentro del rango de fechas
@@ -336,7 +342,7 @@ export async function updateOneItemPrice(
 
     return response.data;
   });
-}
+};
 
 /**
  * changePricesInit
@@ -346,12 +352,12 @@ export async function updateOneItemPrice(
  * @param body
  * @returns
  */
-export async function changePricesInit(
+export const changePricesInit = (
   headers: any,
   session: Session,
   specialItems: WebAppRowGraphQL<SpecialItem>[],
   body: BitacoraCostosItems
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     //PASO 1
     //Obtengo todas las órdenes de compra dentro del rango de fechas
@@ -452,7 +458,7 @@ export async function changePricesInit(
 
     return response.data;
   });
-}
+};
 
 /**
  * changePrice
@@ -461,10 +467,10 @@ export async function changePricesInit(
  * @param body
  * @returns
  */
-export async function changePrice(
+export const changePrice = async (
   headers: any,
   costo: PurchaseOrderCosto
-): Promise<PurchaseOrderCosto> {
+): Promise<PurchaseOrderCosto> => {
   const x = costo;
 
   const msgActualizando = `==============================> ACTUALIZANDO ÓRDEN DE COMPRA: ID: ${
@@ -504,7 +510,7 @@ export async function changePrice(
     costo.finalizado = true;
   }
   return costo;
-}
+};
 
 /**
  * changePrices
@@ -513,12 +519,12 @@ export async function changePrice(
  * @param body
  * @returns
  */
-export async function changePrices(
+export const changePrices = (
   headers: any,
   session: Session,
   bitacora: BitacoraCostosItems,
   id_bitacora: string
-): Promise<AxiosUtilsResponse<any>> {
+): Promise<AxiosUtilsResponse<any>> => {
   return handlePossibleAxiosErrors(async () => {
     const costosWithPurchaseIds = bitacora.costosActualizados;
     const costosEspecialesWithPurchaseIds =
@@ -630,7 +636,7 @@ export async function changePrices(
 
     return response.data;
   });
-}
+};
 
 /**
  * corregirCostos
@@ -639,12 +645,12 @@ export async function changePrices(
  * @param costos
  * @returns
  */
-export async function corregirCostos(
+export const corregirCostos = (
   headers: any,
   session: Session,
   costos: PurchaseOrderCosto[],
   costosEspeciales: PurchaseOrderCosto[]
-) {
+) => {
   return handlePossibleAxiosErrors(async () => {
     //PASO 1
     //Hago una copia
@@ -773,7 +779,7 @@ export async function corregirCostos(
 
     return response.data;
   });
-}
+};
 
 /**
  * Get saveBitacoraCostos from the web app table.
@@ -781,11 +787,11 @@ export async function corregirCostos(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>.
  */
-export async function saveBitacoraCostos(
+export const saveBitacoraCostos = (
   headers: any,
   session: Session,
   body: BitacoraCostosItems
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { bitacora_costos_verduras_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -800,7 +806,7 @@ export async function saveBitacoraCostos(
 
     return response;
   });
-}
+};
 
 /**
  * Put updateBitacoraCostos from the web app table.
@@ -808,12 +814,12 @@ export async function saveBitacoraCostos(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>.
  */
-export async function updateBitacoraCostos(
+export const updateBitacoraCostos = (
   headers: any,
   session: Session,
   body: BitacoraCostosItems,
   id_registro: string | number
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { bitacora_costos_verduras_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -829,7 +835,7 @@ export async function updateBitacoraCostos(
 
     return response;
   });
-}
+};
 
 /**
  * Get getCostosBitacora from the web app table.
@@ -837,10 +843,10 @@ export async function updateBitacoraCostos(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>.
  */
-export async function getCostosBitacora(
+export const getCostosBitacora = (
   headers: any,
   session: Session
-): Promise<AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>> {
+): Promise<AxiosUtilsResponse<WebAppRowGraphQL<BitacoraCostosItems>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { bitacora_costos_verduras_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -862,4 +868,4 @@ export async function getCostosBitacora(
 
     return bitacora;
   });
-}
+};

@@ -21,10 +21,10 @@ import {
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<TemplateWebAppTable[]>.
  */
-export async function getTemplates(
+export const getTemplates = (
   headers: any,
   session: Session
-): Promise<AxiosUtilsResponse<WebAppRowGraphQL<Template>[]>> {
+): Promise<AxiosUtilsResponse<WebAppRowGraphQL<Template>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { templates_web_app_table_id } = await getVariablesByName(
       headers,
@@ -47,7 +47,7 @@ export async function getTemplates(
 
     return templateRegisters;
   });
-}
+};
 
 /**
  * Create a template in the web app table.
@@ -56,11 +56,11 @@ export async function getTemplates(
  * @param body Template data to be created.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export async function createTemplate(
+export const createTemplate = (
   headers: any,
   session: Session,
   body: Template
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { templates_web_app_table_id } = await getVariablesByName(
       headers,
@@ -74,7 +74,7 @@ export async function createTemplate(
     );
     return response;
   });
-}
+};
 
 /**
  * Delete a template from the web app table.
@@ -83,11 +83,11 @@ export async function createTemplate(
  * @param id ID of the template to be deleted.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export async function deleteTemplate(
+export const deleteTemplate = (
   headers: any,
   session: Session,
   id: string
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { templates_web_app_table_id } = await getVariablesByName(
       headers,
@@ -102,7 +102,7 @@ export async function deleteTemplate(
     );
     return response;
   });
-}
+};
 
 /**
  * Update a template in the web app table.
@@ -112,12 +112,12 @@ export async function deleteTemplate(
  * @param body Updated template data.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export async function updateTemplate(
+export const updateTemplate = (
   headers: any,
   session: Session,
   id: string,
   body: Partial<Template>
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { templates_web_app_table_id } = await getVariablesByName(
       headers,
@@ -134,7 +134,7 @@ export async function updateTemplate(
 
     return response;
   });
-}
+};
 
 /**
  * Create a template history entry in the web app table.
@@ -143,11 +143,11 @@ export async function updateTemplate(
  * @param body Template history data to be created.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export async function createTemplateHistory(
+export const createTemplateHistory = (
   headers: any,
   session: Session,
   body: Partial<HistoryTemplate>
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { history_templates_web_app_table_id } = await getVariablesByName(
       headers,
@@ -163,7 +163,7 @@ export async function createTemplateHistory(
 
     return response;
   });
-}
+};
 
 /**
  * Get template history entries from the web app table.
@@ -171,10 +171,10 @@ export async function createTemplateHistory(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<TemplateHistoryWebAppTable[]>.
  */
-export async function getTemplatesHistory(
+export const getTemplatesHistory = (
   headers: any,
   session: Session
-): Promise<AxiosUtilsResponse<WebAppRowGraphQL<HistoryTemplate>[]>> {
+): Promise<AxiosUtilsResponse<WebAppRowGraphQL<HistoryTemplate>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { history_templates_web_app_table_id } = await getVariablesByName(
       headers,
@@ -196,4 +196,4 @@ export async function getTemplatesHistory(
 
     return templateRegisters;
   });
-}
+};

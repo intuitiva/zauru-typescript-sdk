@@ -1,8 +1,18 @@
 import type { Session } from "@remix-run/node";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { createWebAppTableRegister, deleteWebAppTableRegister, getVariablesByName, getWebAppTableRegisters, updateWebAppTableRegister } from "@zauru-sdk/services";
-import { AxiosUtilsResponse, SpecialItem, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
-
+import {
+  createWebAppTableRegister,
+  deleteWebAppTableRegister,
+  getVariablesByName,
+  getWebAppTableRegisters,
+  updateWebAppTableRegister,
+} from "@zauru-sdk/services";
+import {
+  AxiosUtilsResponse,
+  SpecialItem,
+  WebAppRowGraphQL,
+  WebAppTableUpdateResponse,
+} from "@zauru-sdk/types";
 
 /**
  * Get specialItems from the web app table.
@@ -10,10 +20,10 @@ import { AxiosUtilsResponse, SpecialItem, WebAppRowGraphQL, WebAppTableUpdateRes
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<SpecialItem>[]>>.
  */
-export async function getSpecialItems(
+export const getSpecialItems = (
   headers: any,
   session: Session
-): Promise<AxiosUtilsResponse<WebAppRowGraphQL<SpecialItem>[]>> {
+): Promise<AxiosUtilsResponse<WebAppRowGraphQL<SpecialItem>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { special_product_web_app_table_id } = await getVariablesByName(
       headers,
@@ -36,7 +46,7 @@ export async function getSpecialItems(
 
     return specialItems;
   });
-}
+};
 
 /**
  * Create a specialItem in the web app table.
@@ -45,11 +55,11 @@ export async function getSpecialItems(
  * @param body SpecialItem data to be created.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export async function createSpecialItem(
+export const createSpecialItem = (
   headers: any,
   session: Session,
   body: SpecialItem
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { special_product_web_app_table_id } = await getVariablesByName(
       headers,
@@ -63,7 +73,7 @@ export async function createSpecialItem(
     );
     return response;
   });
-}
+};
 
 /**
  * Delete a specialItem from the web app table.
@@ -72,11 +82,11 @@ export async function createSpecialItem(
  * @param id ID of the specialItem to be deleted.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export async function deleteSpecialItem(
+export const deleteSpecialItem = (
   headers: any,
   session: Session,
   id: string
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { special_product_web_app_table_id } = await getVariablesByName(
       headers,
@@ -91,7 +101,7 @@ export async function deleteSpecialItem(
     );
     return response;
   });
-}
+};
 
 /**
  * Update a specialItem in the web app table.
@@ -101,12 +111,12 @@ export async function deleteSpecialItem(
  * @param body Updated specialItem data.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export async function updateSpecialItem(
+export const updateSpecialItem = (
   headers: any,
   session: Session,
   id: string,
   body: Partial<SpecialItem>
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { special_product_web_app_table_id } = await getVariablesByName(
       headers,
@@ -123,4 +133,4 @@ export async function updateSpecialItem(
 
     return response;
   });
-}
+};

@@ -6,7 +6,7 @@ import { createWebAppTableRegister, getVariablesByName, getWebAppTableRegisters,
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<DischargeHistory[]>.
  */
-export async function getDischargeHistories(headers, session) {
+export const getDischargeHistories = (headers, session) => {
     return handlePossibleAxiosErrors(async () => {
         const { discharge_history_web_app_table_id } = await getVariablesByName(headers, session, ["discharge_history_web_app_table_id"]);
         const response = await getWebAppTableRegisters(session, discharge_history_web_app_table_id);
@@ -16,7 +16,7 @@ export async function getDischargeHistories(headers, session) {
         const history = response?.data ?? [];
         return history;
     });
-}
+};
 /**
  * Create a template in the web app table.
  * @param headers Request headers.
@@ -24,23 +24,23 @@ export async function getDischargeHistories(headers, session) {
  * @param body DischargeHistory data to be created.
  * @returns A Promise of AxiosUtilsResponse<DischargeHistory>.
  */
-export async function createDischargeHistory(headers, session, body) {
+export const createDischargeHistory = (headers, session, body) => {
     return handlePossibleAxiosErrors(async () => {
         const { discharge_history_web_app_table_id } = await getVariablesByName(headers, session, ["discharge_history_web_app_table_id"]);
         const response = await createWebAppTableRegister(headers, discharge_history_web_app_table_id, body);
         return response;
     });
-}
+};
 /**
  * Put updateDischargeHistory from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<DischargeHistory[]>.
  */
-export async function updateDischargeHistory(headers, session, body, id_registro) {
+export const updateDischargeHistory = (headers, session, body, id_registro) => {
     return handlePossibleAxiosErrors(async () => {
         const { discharge_history_web_app_table_id } = await getVariablesByName(headers, session, ["discharge_history_web_app_table_id"]);
         const response = await updateWebAppTableRegister(headers, discharge_history_web_app_table_id, id_registro, { ...body });
         return response;
     });
-}
+};

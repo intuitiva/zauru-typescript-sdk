@@ -6,7 +6,7 @@ import { WebAppRowGraphQL, TipoMuestra, AxiosUtilsResponse, WebAppTableUpdateRes
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<TipoMuestra>[]>>.
  */
-export declare function getTipoMuestras(headers: any, session: Session): Promise<AxiosUtilsResponse<WebAppRowGraphQL<TipoMuestra>[]>>;
+export declare const getTipoMuestras: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<TipoMuestra>[]>>;
 /**
  * Create a tipoMuestra in the web app table.
  * @param headers Request headers.
@@ -14,7 +14,7 @@ export declare function getTipoMuestras(headers: any, session: Session): Promise
  * @param body TipoMuestra data to be created.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export declare function createTipoMuestra(headers: any, session: Session, body: TipoMuestra): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const createTipoMuestra: (headers: any, session: Session, body: TipoMuestra) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 /**
  * Delete a tipoMuestra from the web app table.
  * @param headers Request headers.
@@ -22,7 +22,7 @@ export declare function createTipoMuestra(headers: any, session: Session, body: 
  * @param id ID of the tipoMuestra to be deleted.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export declare function deleteTipoMuestra(headers: any, session: Session, id: string): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const deleteTipoMuestra: (headers: any, session: Session, id: string) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 /**
  * Update a tipoMuestra in the web app table.
  * @param headers Request headers.
@@ -31,4 +31,4 @@ export declare function deleteTipoMuestra(headers: any, session: Session, id: st
  * @param body Updated tipoMuestra data.
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
-export declare function updateTipoMuestra(headers: any, session: Session, id: string, body: Partial<TipoMuestra>): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const updateTipoMuestra: (headers: any, session: Session, id: string, body: Partial<TipoMuestra>) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;

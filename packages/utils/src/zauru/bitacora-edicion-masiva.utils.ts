@@ -19,11 +19,11 @@ import {
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
  */
-export async function saveBitacoraPOMassive(
+export const saveBitacoraPOMassive = (
   headers: any,
   session: Session,
   body: BitacoraPOMassive
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { bitacora_ediciones_masivas_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -38,7 +38,7 @@ export async function saveBitacoraPOMassive(
 
     return response;
   });
-}
+};
 
 /**
  * Get getBitacorasPOMassive from the web app table.
@@ -46,10 +46,10 @@ export async function saveBitacoraPOMassive(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
  */
-export async function getBitacorasPOMassive(
+export const getBitacorasPOMassive = (
   headers: any,
   session: Session
-): Promise<AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>> {
+): Promise<AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { bitacora_ediciones_masivas_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -67,7 +67,7 @@ export async function getBitacorasPOMassive(
 
     return response.data;
   });
-}
+};
 
 /**
  * Put updateBitacorasPOMassive from the web app table.
@@ -75,12 +75,12 @@ export async function getBitacorasPOMassive(
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<BitacorasPOMassiveWebAppTable[]>.
  */
-export async function updateBitacorasPOMassive(
+export const updateBitacorasPOMassive = (
   headers: any,
   session: Session,
   body: BitacoraPOMassive,
   id_registro: string | number
-): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const { bitacora_ediciones_masivas_web_app_table_id } =
       await getVariablesByName(headers, session, [
@@ -96,4 +96,4 @@ export async function updateBitacorasPOMassive(
 
     return response;
   });
-}
+};

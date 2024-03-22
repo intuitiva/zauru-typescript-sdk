@@ -6,18 +6,18 @@ import { AxiosUtilsResponse, WebAppTableUpdateResponse, BitacoraPOMassive, WebAp
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
  */
-export declare function saveBitacoraPOMassive(headers: any, session: Session, body: BitacoraPOMassive): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const saveBitacoraPOMassive: (headers: any, session: Session, body: BitacoraPOMassive) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 /**
  * Get getBitacorasPOMassive from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
  */
-export declare function getBitacorasPOMassive(headers: any, session: Session): Promise<AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>>;
+export declare const getBitacorasPOMassive: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>>;
 /**
  * Put updateBitacorasPOMassive from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<BitacorasPOMassiveWebAppTable[]>.
  */
-export declare function updateBitacorasPOMassive(headers: any, session: Session, body: BitacoraPOMassive, id_registro: string | number): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const updateBitacorasPOMassive: (headers: any, session: Session, body: BitacoraPOMassive, id_registro: string | number) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;

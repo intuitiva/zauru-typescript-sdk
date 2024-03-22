@@ -41,10 +41,10 @@ import {
  * @param body
  * @returns
  */
-export async function markAsReceivePurchaseOrder(
+export const markAsReceivePurchaseOrder = (
   headers: any,
   body: Partial<PurchaseOrderGraphQL> & { fechaVencimiento?: string }
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = { ...body };
 
@@ -55,7 +55,7 @@ export async function markAsReceivePurchaseOrder(
     }
     return true;
   });
-}
+};
 
 /**
  * markAsReceivePartialPurchaseOrder
@@ -63,11 +63,11 @@ export async function markAsReceivePurchaseOrder(
  * @param body
  * @returns
  */
-export async function markAsReceivePartialPurchaseOrder(
+export const markAsReceivePartialPurchaseOrder = (
   headers: any,
   session: Session,
   body: Partial<PurchaseOrderGraphQL> & { fechaVencimiento?: string }
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = { ...body };
 
@@ -82,7 +82,7 @@ export async function markAsReceivePartialPurchaseOrder(
     }
     return true;
   });
-}
+};
 
 /**
  *
@@ -90,10 +90,10 @@ export async function markAsReceivePartialPurchaseOrder(
  * @param body
  * @returns
  */
-export async function createNewPurchaseOrder(
+export const createNewPurchaseOrder = (
   headers: any,
   body: Partial<PurchaseOrderGraphQL>
-): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> {
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     let sendBody = {
       ...body,
@@ -127,7 +127,7 @@ export async function createNewPurchaseOrder(
 
     return response.data;
   });
-}
+};
 
 /**
  *
@@ -135,11 +135,11 @@ export async function createNewPurchaseOrder(
  * @param body
  * @returns
  */
-export async function createNewAuthorizedPurchaseOrder(
+export const createNewAuthorizedPurchaseOrder = (
   headers: any,
   body: CreateNewPurchaseOrderBody,
   withReceive: boolean = true
-): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> {
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
       ...body,
@@ -169,7 +169,7 @@ export async function createNewAuthorizedPurchaseOrder(
 
     return response.data;
   });
-}
+};
 
 /**
  * receiveLotPurchaseOrder
@@ -177,10 +177,10 @@ export async function createNewAuthorizedPurchaseOrder(
  * @param body
  * @returns
  */
-export async function receiveLotPurchaseOrder(
+export const receiveLotPurchaseOrder = (
   headers: any,
   body: PurchaseOrderGraphQL & { fechaVencimiento: string }
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
       agency_id: body.agency_id,
@@ -208,7 +208,7 @@ export async function receiveLotPurchaseOrder(
     );
     return true;
   });
-}
+};
 
 /**
  * receivePurchaseOrder
@@ -216,10 +216,10 @@ export async function receiveLotPurchaseOrder(
  * @param body
  * @returns
  */
-export async function receivePurchaseOrder(
+export const receivePurchaseOrder = (
   headers: any,
   body: PurchaseOrderGraphQL
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
       agency_id: body.agency_id,
@@ -245,16 +245,16 @@ export async function receivePurchaseOrder(
     );
     return true;
   });
-}
+};
 
 /**
  *
  * @param headers
  * @returns
  */
-export async function getNewPurchaseOrderInfo(
+export const getNewPurchaseOrderInfo = (
   headers: any
-): Promise<AxiosUtilsResponse<NewPurchaseOrderResponse>> {
+): Promise<AxiosUtilsResponse<NewPurchaseOrderResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru.get<NewPurchaseOrderResponse>(
       "/purchases/purchase_orders/new.json",
@@ -273,19 +273,19 @@ export async function getNewPurchaseOrderInfo(
 
     return { ...response.data, purchasersList } as NewPurchaseOrderResponse;
   });
-}
+};
 
 /**
  * getPurchasesListDataTables Function for get all zauru orden-compras
  * @param headers
  * @returns
  */
-export async function getPurchasesListDataTables(
+export const getPurchasesListDataTables = (
   headers: any,
   body: DataTablesFilterBody
 ): Promise<
   AxiosUtilsResponse<PurchasesListResponseSchema<HTMLPurchasesListSchema>>
-> {
+> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru.post<
       PurchasesListResponseSchema<HTMLPurchasesListSchema>
@@ -293,7 +293,7 @@ export async function getPurchasesListDataTables(
 
     return response.data;
   });
-}
+};
 
 /**
  * getPurchasesList Function for get all zauru orden-compras
@@ -301,7 +301,7 @@ export async function getPurchasesListDataTables(
  * @param params
  * @returns
  */
-export async function getPurchasesList(
+export const getPurchasesList = (
   headers: any,
   session: Session,
   params: {
@@ -312,7 +312,7 @@ export async function getPurchasesList(
     agency_id?: string | number;
   } = {},
   config?: { fromProduction?: boolean }
-): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> {
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
     //Si quiere obtener los de producción, obtengo primero su agencia producción
     if (config?.fromProduction) {
@@ -336,14 +336,14 @@ export async function getPurchasesList(
 
     return response.data;
   });
-}
+};
 
 /**
  * getPurchase Function for get an especific purchase order
  * @param headers
  * @returns
  */
-export async function getPurchase(
+export const getPurchase = (
   headers: any,
   purchase_order_id: number | string
 ): Promise<
@@ -353,7 +353,7 @@ export async function getPurchase(
       baskets_memo_quantity: number;
     }
   >
-> {
+> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru<PurchaseOrderGraphQL>(
       `/purchases/purchase_orders/${purchase_order_id}.json`,
@@ -371,7 +371,7 @@ export async function getPurchase(
       baskets_memo_quantity,
     };
   });
-}
+};
 
 /**
  * enablePurchase Enable a purchase order
@@ -380,11 +380,11 @@ export async function getPurchase(
  * @param reception_id
  * @returns
  */
-export async function enablePurchase(
+export const enablePurchase = (
   headers: any,
   purchase_order_id: number,
   reception_id: number
-): Promise<AxiosUtilsResponse<any>> {
+): Promise<AxiosUtilsResponse<any>> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru.get<any>(
       `/purchases/receptions/${reception_id}/rebound.json?purchase_order_id=${purchase_order_id}`,
@@ -393,7 +393,7 @@ export async function enablePurchase(
 
     return response.data;
   });
-}
+};
 
 /**
  * updatePurchaseOrder
@@ -402,11 +402,11 @@ export async function enablePurchase(
  * @param purchase_order_id
  * @returns
  */
-export async function updatePurchaseOrder(
+export const updatePurchaseOrder = (
   headers: any,
   body: UpdatePurchaseOrderBody,
   purchase_order_id: number
-): Promise<AxiosUtilsResponse<any>> {
+): Promise<AxiosUtilsResponse<any>> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru.patch<any>(
       `/purchases/purchase_orders/${purchase_order_id}.json`,
@@ -416,7 +416,7 @@ export async function updatePurchaseOrder(
 
     return response.data;
   });
-}
+};
 
 /**
  * updatePurchaseOrder
@@ -425,11 +425,11 @@ export async function updatePurchaseOrder(
  * @param purchase_order_id
  * @returns
  */
-export async function updateReceivedPurchaseOrder(
+export const updateReceivedPurchaseOrder = (
   headers: any,
   body: UpdatePurchaseOrderBody,
   purchase_order_id: number
-): Promise<AxiosUtilsResponse<any>> {
+): Promise<AxiosUtilsResponse<any>> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru.patch<any>(
       `/purchases/purchase_orders/${purchase_order_id}/update_received.json`,
@@ -439,17 +439,17 @@ export async function updateReceivedPurchaseOrder(
 
     return response.data;
   });
-}
+};
 
 /**
  * getLast100Receptions
  * @param headers
  * @returns
  */
-export async function getLast100Receptions(
+export const getLast100Receptions = (
   session: Session,
   agency_id?: number | string
-): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> {
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
@@ -476,20 +476,20 @@ export async function getLast100Receptions(
 
     return response.data?.data?.purchase_orders;
   });
-}
+};
 
 /**
  * getPurchaseOrder
  * @param headers
  * @returns
  */
-export async function getPurchaseOrder(
+export const getPurchaseOrder = (
   session: Session,
   poId: string | number,
   config: { withLotStocksToMyAgency: boolean } = {
     withLotStocksToMyAgency: false,
   }
-): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> {
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
@@ -526,14 +526,14 @@ export async function getPurchaseOrder(
 
     return tempResponse;
   });
-}
+};
 
 /**
  * getPurchaseOrder
  * @param headers
  * @returns
  */
-export async function getGraphQLPurchaseOrderBetweenDates(
+export const getGraphQLPurchaseOrderBetweenDates = (
   session: Session,
   dates: {
     startDate: string;
@@ -557,7 +557,7 @@ export async function getGraphQLPurchaseOrderBetweenDates(
     withShipmentToMyAgency: false,
     withLotStocksToMyAgency: false,
   }
-): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> {
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
@@ -636,7 +636,7 @@ export async function getGraphQLPurchaseOrderBetweenDates(
 
     return responseData;
   });
-}
+};
 
 /**
  * deletePurchaseOrder
@@ -644,10 +644,10 @@ export async function getGraphQLPurchaseOrderBetweenDates(
  * @param id
  * @returns
  */
-export async function deletePurchaseOrder(
+export const deletePurchaseOrder = (
   headers: any,
   id: string | number
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     await httpZauru.delete(
       `/purchases/purchase_orders/${id}.json?destroy=true`,
@@ -656,7 +656,7 @@ export async function deletePurchaseOrder(
 
     return true;
   });
-}
+};
 
 /**
  * getPurchaseOrderByIdNumber
@@ -664,10 +664,10 @@ export async function deletePurchaseOrder(
  * @param idNumber
  * @returns
  */
-export async function getPurchasesOrderByIdNumber(
+export const getPurchasesOrderByIdNumber = (
   session: Session,
   id_number: string
-): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> {
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
@@ -698,4 +698,4 @@ export async function getPurchasesOrderByIdNumber(
 
     return response.data?.data?.purchase_orders;
   });
-}
+};

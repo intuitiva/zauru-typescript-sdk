@@ -8,67 +8,67 @@ import { AxiosUtilsResponse, BasketSchema, CreateNewPurchaseOrderBody, DataTable
  * @param body
  * @returns
  */
-export declare function markAsReceivePurchaseOrder(headers: any, body: Partial<PurchaseOrderGraphQL> & {
+export declare const markAsReceivePurchaseOrder: (headers: any, body: Partial<PurchaseOrderGraphQL> & {
     fechaVencimiento?: string;
-}): Promise<AxiosUtilsResponse<boolean>>;
+}) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * markAsReceivePartialPurchaseOrder
  * @param headers
  * @param body
  * @returns
  */
-export declare function markAsReceivePartialPurchaseOrder(headers: any, session: Session, body: Partial<PurchaseOrderGraphQL> & {
+export declare const markAsReceivePartialPurchaseOrder: (headers: any, session: Session, body: Partial<PurchaseOrderGraphQL> & {
     fechaVencimiento?: string;
-}): Promise<AxiosUtilsResponse<boolean>>;
+}) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  *
  * @param headers
  * @param body
  * @returns
  */
-export declare function createNewPurchaseOrder(headers: any, body: Partial<PurchaseOrderGraphQL>): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
+export declare const createNewPurchaseOrder: (headers: any, body: Partial<PurchaseOrderGraphQL>) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
 /**
  *
  * @param headers
  * @param body
  * @returns
  */
-export declare function createNewAuthorizedPurchaseOrder(headers: any, body: CreateNewPurchaseOrderBody, withReceive?: boolean): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
+export declare const createNewAuthorizedPurchaseOrder: (headers: any, body: CreateNewPurchaseOrderBody, withReceive?: boolean) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
 /**
  * receiveLotPurchaseOrder
  * @param headers
  * @param body
  * @returns
  */
-export declare function receiveLotPurchaseOrder(headers: any, body: PurchaseOrderGraphQL & {
+export declare const receiveLotPurchaseOrder: (headers: any, body: PurchaseOrderGraphQL & {
     fechaVencimiento: string;
-}): Promise<AxiosUtilsResponse<boolean>>;
+}) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * receivePurchaseOrder
  * @param headers
  * @param body
  * @returns
  */
-export declare function receivePurchaseOrder(headers: any, body: PurchaseOrderGraphQL): Promise<AxiosUtilsResponse<boolean>>;
+export declare const receivePurchaseOrder: (headers: any, body: PurchaseOrderGraphQL) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  *
  * @param headers
  * @returns
  */
-export declare function getNewPurchaseOrderInfo(headers: any): Promise<AxiosUtilsResponse<NewPurchaseOrderResponse>>;
+export declare const getNewPurchaseOrderInfo: (headers: any) => Promise<AxiosUtilsResponse<NewPurchaseOrderResponse>>;
 /**
  * getPurchasesListDataTables Function for get all zauru orden-compras
  * @param headers
  * @returns
  */
-export declare function getPurchasesListDataTables(headers: any, body: DataTablesFilterBody): Promise<AxiosUtilsResponse<PurchasesListResponseSchema<HTMLPurchasesListSchema>>>;
+export declare const getPurchasesListDataTables: (headers: any, body: DataTablesFilterBody) => Promise<AxiosUtilsResponse<PurchasesListResponseSchema<HTMLPurchasesListSchema>>>;
 /**
  * getPurchasesList Function for get all zauru orden-compras
  * @param headers
  * @param params
  * @returns
  */
-export declare function getPurchasesList(headers: any, session: Session, params?: {
+export declare const getPurchasesList: (headers: any, session: Session, params?: {
     fechaInicio?: string;
     fechaFin?: string;
     item?: string | number;
@@ -76,13 +76,13 @@ export declare function getPurchasesList(headers: any, session: Session, params?
     agency_id?: string | number;
 }, config?: {
     fromProduction?: boolean;
-}): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
+}) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
 /**
  * getPurchase Function for get an especific purchase order
  * @param headers
  * @returns
  */
-export declare function getPurchase(headers: any, purchase_order_id: number | string): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL & {
+export declare const getPurchase: (headers: any, purchase_order_id: number | string) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL & {
     baskets_memo: BasketSchema[];
     baskets_memo_quantity: number;
 }>>;
@@ -93,7 +93,7 @@ export declare function getPurchase(headers: any, purchase_order_id: number | st
  * @param reception_id
  * @returns
  */
-export declare function enablePurchase(headers: any, purchase_order_id: number, reception_id: number): Promise<AxiosUtilsResponse<any>>;
+export declare const enablePurchase: (headers: any, purchase_order_id: number, reception_id: number) => Promise<AxiosUtilsResponse<any>>;
 /**
  * updatePurchaseOrder
  * @param headers
@@ -101,7 +101,7 @@ export declare function enablePurchase(headers: any, purchase_order_id: number, 
  * @param purchase_order_id
  * @returns
  */
-export declare function updatePurchaseOrder(headers: any, body: UpdatePurchaseOrderBody, purchase_order_id: number): Promise<AxiosUtilsResponse<any>>;
+export declare const updatePurchaseOrder: (headers: any, body: UpdatePurchaseOrderBody, purchase_order_id: number) => Promise<AxiosUtilsResponse<any>>;
 /**
  * updatePurchaseOrder
  * @param headers
@@ -109,27 +109,27 @@ export declare function updatePurchaseOrder(headers: any, body: UpdatePurchaseOr
  * @param purchase_order_id
  * @returns
  */
-export declare function updateReceivedPurchaseOrder(headers: any, body: UpdatePurchaseOrderBody, purchase_order_id: number): Promise<AxiosUtilsResponse<any>>;
+export declare const updateReceivedPurchaseOrder: (headers: any, body: UpdatePurchaseOrderBody, purchase_order_id: number) => Promise<AxiosUtilsResponse<any>>;
 /**
  * getLast100Receptions
  * @param headers
  * @returns
  */
-export declare function getLast100Receptions(session: Session, agency_id?: number | string): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
+export declare const getLast100Receptions: (session: Session, agency_id?: number | string) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
 /**
  * getPurchaseOrder
  * @param headers
  * @returns
  */
-export declare function getPurchaseOrder(session: Session, poId: string | number, config?: {
+export declare const getPurchaseOrder: (session: Session, poId: string | number, config?: {
     withLotStocksToMyAgency: boolean;
-}): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
+}) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
 /**
  * getPurchaseOrder
  * @param headers
  * @returns
  */
-export declare function getGraphQLPurchaseOrderBetweenDates(session: Session, dates: {
+export declare const getGraphQLPurchaseOrderBetweenDates: (session: Session, dates: {
     startDate: string;
     endDate: string;
 }, config?: {
@@ -143,18 +143,18 @@ export declare function getGraphQLPurchaseOrderBetweenDates(session: Session, da
     withLotStocksToMyAgency?: boolean;
     itemId?: number | string;
     payeeCategoryId?: number | string;
-}): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
+}) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
 /**
  * deletePurchaseOrder
  * @param headers
  * @param id
  * @returns
  */
-export declare function deletePurchaseOrder(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
+export declare const deletePurchaseOrder: (headers: any, id: string | number) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * getPurchaseOrderByIdNumber
  * @param session
  * @param idNumber
  * @returns
  */
-export declare function getPurchasesOrderByIdNumber(session: Session, id_number: string): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
+export declare const getPurchasesOrderByIdNumber: (session: Session, id_number: string) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;

@@ -8,7 +8,7 @@ export const TEXT_PAYEE_CATEGORY_NAME_FOR_PRICE = "CAT-LABORATORIO: ";
  * @param headers
  * @returns
  */
-export async function getClientesLaboratorio(session) {
+export const getClientesLaboratorio = (session) => {
     return handlePossibleAxiosErrors(async () => {
         const clientesResponse = await getPayeeCategoriesByNotesMatch(session, TEXT_PAYEE_CATEGORY_NOTES_FOR_PRICE);
         if (clientesResponse.error || !clientesResponse.data) {
@@ -18,7 +18,7 @@ export async function getClientesLaboratorio(session) {
         clientesResponse.data.forEach((x) => clientes.push(...x.payees));
         return clientes;
     });
-}
+};
 /**
  * createNewLaboratoryClient
  * @param session
@@ -26,7 +26,7 @@ export async function getClientesLaboratorio(session) {
  * @param body
  * @returns
  */
-export async function createNewLaboratoryClient(headers, body) {
+export const createNewLaboratoryClient = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = {
             ...body,
@@ -41,7 +41,7 @@ export async function createNewLaboratoryClient(headers, body) {
         }
         return true;
     });
-}
+};
 /**
  * createNewLaboratoryClientCategoryPrice
  * @param session
@@ -49,7 +49,7 @@ export async function createNewLaboratoryClient(headers, body) {
  * @param body
  * @returns
  */
-export async function updateLaboratoryClientCategoryPrice(headers, body) {
+export const updateLaboratoryClientCategoryPrice = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = {
             ...body,
@@ -62,7 +62,7 @@ export async function updateLaboratoryClientCategoryPrice(headers, body) {
         }
         return true;
     });
-}
+};
 /**
  * createNewLaboratoryClientCategoryPrice
  * @param session
@@ -70,7 +70,7 @@ export async function updateLaboratoryClientCategoryPrice(headers, body) {
  * @param body
  * @returns
  */
-export async function createNewLaboratoryClientCategoryPrice(headers, session, body) {
+export const createNewLaboratoryClientCategoryPrice = (headers, session, body) => {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = {
             ...body,
@@ -110,14 +110,14 @@ export async function createNewLaboratoryClientCategoryPrice(headers, session, b
         }
         return true;
     });
-}
+};
 /**
  * deleteLaboratoryClientCategoryPrice
  * @param headers
  * @param body
  * @returns
  */
-export async function deleteLaboratoryClientCategoryPrice(headers, body) {
+export const deleteLaboratoryClientCategoryPrice = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         //Elimino la categoría
         await deletePayeeCategory(headers, body.id ?? "");
@@ -125,4 +125,4 @@ export async function deleteLaboratoryClientCategoryPrice(headers, body) {
         await deletePriceList(headers, body.price_list_id ?? "");
         return true;
     });
-}
+};

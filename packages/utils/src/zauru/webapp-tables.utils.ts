@@ -74,10 +74,10 @@ export const getRejectionWebAppTable = async (
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<ReceptionType[]>.
  */
-export async function getReceptionTypes(
+export const getReceptionTypes = (
   headers: any,
   session: Session
-): Promise<AxiosUtilsResponse<WebAppRowGraphQL<ReceptionType>[]>> {
+): Promise<AxiosUtilsResponse<WebAppRowGraphQL<ReceptionType>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { recepciones_receptions_type_table_id } = await getVariablesByName(
       headers,

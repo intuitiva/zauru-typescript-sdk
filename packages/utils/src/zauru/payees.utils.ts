@@ -30,9 +30,9 @@ export const TEXT_PAYEE_CATEGORY_NAME_FOR_PRICE = "CAT-LABORATORIO: ";
  * @param headers
  * @returns
  */
-export async function getClientesLaboratorio(
+export const getClientesLaboratorio = (
   session: Session
-): Promise<AxiosUtilsResponse<PayeeGraphQL[]>> {
+): Promise<AxiosUtilsResponse<PayeeGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const clientesResponse = await getPayeeCategoriesByNotesMatch(
       session,
@@ -48,7 +48,7 @@ export async function getClientesLaboratorio(
 
     return clientes;
   });
-}
+};
 
 /**
  * createNewLaboratoryClient
@@ -57,10 +57,10 @@ export async function getClientesLaboratorio(
  * @param body
  * @returns
  */
-export async function createNewLaboratoryClient(
+export const createNewLaboratoryClient = (
   headers: any,
   body: Partial<PayeeGraphQL>
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
       ...body,
@@ -80,7 +80,7 @@ export async function createNewLaboratoryClient(
 
     return true;
   });
-}
+};
 
 /**
  * createNewLaboratoryClientCategoryPrice
@@ -89,10 +89,10 @@ export async function createNewLaboratoryClient(
  * @param body
  * @returns
  */
-export async function updateLaboratoryClientCategoryPrice(
+export const updateLaboratoryClientCategoryPrice = (
   headers: any,
   body: Partial<PayeeCategoryGraphQL>
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody: Partial<PayeeCategoryGraphQL> = {
       ...body,
@@ -110,7 +110,7 @@ export async function updateLaboratoryClientCategoryPrice(
 
     return true;
   });
-}
+};
 
 /**
  * createNewLaboratoryClientCategoryPrice
@@ -119,11 +119,11 @@ export async function updateLaboratoryClientCategoryPrice(
  * @param body
  * @returns
  */
-export async function createNewLaboratoryClientCategoryPrice(
+export const createNewLaboratoryClientCategoryPrice = (
   headers: any,
   session: Session,
   body: Partial<PayeeCategoryGraphQL>
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody: Partial<PayeeCategoryGraphQL> = {
       ...body,
@@ -191,7 +191,7 @@ export async function createNewLaboratoryClientCategoryPrice(
     }
     return true;
   });
-}
+};
 
 /**
  * deleteLaboratoryClientCategoryPrice
@@ -199,10 +199,10 @@ export async function createNewLaboratoryClientCategoryPrice(
  * @param body
  * @returns
  */
-export async function deleteLaboratoryClientCategoryPrice(
+export const deleteLaboratoryClientCategoryPrice = (
   headers: any,
   body: Partial<PayeeCategoryGraphQL>
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     //Elimino la categoría
     await deletePayeeCategory(headers, body.id ?? "");
@@ -210,4 +210,4 @@ export async function deleteLaboratoryClientCategoryPrice(
     await deletePriceList(headers, body.price_list_id ?? "");
     return true;
   });
-}
+};

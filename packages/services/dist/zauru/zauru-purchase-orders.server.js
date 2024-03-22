@@ -12,7 +12,7 @@ import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery,
  * @param body
  * @returns
  */
-export async function markAsReceivePurchaseOrder(headers, body) {
+export const markAsReceivePurchaseOrder = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = { ...body };
         if (sendBody.fechaVencimiento) {
@@ -23,14 +23,14 @@ export async function markAsReceivePurchaseOrder(headers, body) {
         }
         return true;
     });
-}
+};
 /**
  * markAsReceivePartialPurchaseOrder
  * @param headers
  * @param body
  * @returns
  */
-export async function markAsReceivePartialPurchaseOrder(headers, session, body) {
+export const markAsReceivePartialPurchaseOrder = (headers, session, body) => {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = { ...body };
         if (sendBody.fechaVencimiento) {
@@ -41,14 +41,14 @@ export async function markAsReceivePartialPurchaseOrder(headers, session, body) 
         }
         return true;
     });
-}
+};
 /**
  *
  * @param headers
  * @param body
  * @returns
  */
-export async function createNewPurchaseOrder(headers, body) {
+export const createNewPurchaseOrder = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         let sendBody = {
             ...body,
@@ -71,14 +71,14 @@ export async function createNewPurchaseOrder(headers, body) {
         const response = await httpZauru.post(`/purchases/purchase_orders.json`, sendBody, { headers });
         return response.data;
     });
-}
+};
 /**
  *
  * @param headers
  * @param body
  * @returns
  */
-export async function createNewAuthorizedPurchaseOrder(headers, body, withReceive = true) {
+export const createNewAuthorizedPurchaseOrder = (headers, body, withReceive = true) => {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = {
             ...body,
@@ -96,14 +96,14 @@ export async function createNewAuthorizedPurchaseOrder(headers, body, withReceiv
         }
         return response.data;
     });
-}
+};
 /**
  * receiveLotPurchaseOrder
  * @param headers
  * @param body
  * @returns
  */
-export async function receiveLotPurchaseOrder(headers, body) {
+export const receiveLotPurchaseOrder = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = {
             agency_id: body.agency_id,
@@ -125,14 +125,14 @@ export async function receiveLotPurchaseOrder(headers, body) {
         await httpZauru.patch(`/purchases/purchase_orders/${body.id}/receive_action`, { purchase_order: sendBody }, { headers });
         return true;
     });
-}
+};
 /**
  * receivePurchaseOrder
  * @param headers
  * @param body
  * @returns
  */
-export async function receivePurchaseOrder(headers, body) {
+export const receivePurchaseOrder = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = {
             agency_id: body.agency_id,
@@ -152,13 +152,13 @@ export async function receivePurchaseOrder(headers, body) {
         await httpZauru.patch(`/purchases/purchase_orders/${body.id}/receive_action`, { purchase_order: sendBody }, { headers });
         return true;
     });
-}
+};
 /**
  *
  * @param headers
  * @returns
  */
-export async function getNewPurchaseOrderInfo(headers) {
+export const getNewPurchaseOrderInfo = (headers) => {
     return handlePossibleAxiosErrors(async () => {
         const response = await httpZauru.get("/purchases/purchase_orders/new.json", { headers });
         const purchasersList = [];
@@ -172,25 +172,25 @@ export async function getNewPurchaseOrderInfo(headers) {
         });
         return { ...response.data, purchasersList };
     });
-}
+};
 /**
  * getPurchasesListDataTables Function for get all zauru orden-compras
  * @param headers
  * @returns
  */
-export async function getPurchasesListDataTables(headers, body) {
+export const getPurchasesListDataTables = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         const response = await httpZauru.post(`/purchases/purchase_orders/datatables.json`, body, { headers });
         return response.data;
     });
-}
+};
 /**
  * getPurchasesList Function for get all zauru orden-compras
  * @param headers
  * @param params
  * @returns
  */
-export async function getPurchasesList(headers, session, params = {}, config) {
+export const getPurchasesList = (headers, session, params = {}, config) => {
     return handlePossibleAxiosErrors(async () => {
         //Si quiere obtener los de producción, obtengo primero su agencia producción
         if (config?.fromProduction) {
@@ -205,13 +205,13 @@ export async function getPurchasesList(headers, session, params = {}, config) {
         });
         return response.data;
     });
-}
+};
 /**
  * getPurchase Function for get an especific purchase order
  * @param headers
  * @returns
  */
-export async function getPurchase(headers, purchase_order_id) {
+export const getPurchase = (headers, purchase_order_id) => {
     return handlePossibleAxiosErrors(async () => {
         const response = await httpZauru(`/purchases/purchase_orders/${purchase_order_id}.json`, { method: "GET", headers });
         const baskets_memo = getBasketsSchema(response.data.memo);
@@ -224,7 +224,7 @@ export async function getPurchase(headers, purchase_order_id) {
             baskets_memo_quantity,
         };
     });
-}
+};
 /**
  * enablePurchase Enable a purchase order
  * @param headers
@@ -232,12 +232,12 @@ export async function getPurchase(headers, purchase_order_id) {
  * @param reception_id
  * @returns
  */
-export async function enablePurchase(headers, purchase_order_id, reception_id) {
+export const enablePurchase = (headers, purchase_order_id, reception_id) => {
     return handlePossibleAxiosErrors(async () => {
         const response = await httpZauru.get(`/purchases/receptions/${reception_id}/rebound.json?purchase_order_id=${purchase_order_id}`, { headers });
         return response.data;
     });
-}
+};
 /**
  * updatePurchaseOrder
  * @param headers
@@ -245,12 +245,12 @@ export async function enablePurchase(headers, purchase_order_id, reception_id) {
  * @param purchase_order_id
  * @returns
  */
-export async function updatePurchaseOrder(headers, body, purchase_order_id) {
+export const updatePurchaseOrder = (headers, body, purchase_order_id) => {
     return handlePossibleAxiosErrors(async () => {
         const response = await httpZauru.patch(`/purchases/purchase_orders/${purchase_order_id}.json`, body, { headers });
         return response.data;
     });
-}
+};
 /**
  * updatePurchaseOrder
  * @param headers
@@ -258,18 +258,18 @@ export async function updatePurchaseOrder(headers, body, purchase_order_id) {
  * @param purchase_order_id
  * @returns
  */
-export async function updateReceivedPurchaseOrder(headers, body, purchase_order_id) {
+export const updateReceivedPurchaseOrder = (headers, body, purchase_order_id) => {
     return handlePossibleAxiosErrors(async () => {
         const response = await httpZauru.patch(`/purchases/purchase_orders/${purchase_order_id}/update_received.json`, body, { headers });
         return response.data;
     });
-}
+};
 /**
  * getLast100Receptions
  * @param headers
  * @returns
  */
-export async function getLast100Receptions(session, agency_id) {
+export const getLast100Receptions = (session, agency_id) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
@@ -283,15 +283,15 @@ export async function getLast100Receptions(session, agency_id) {
         }
         return response.data?.data?.purchase_orders;
     });
-}
+};
 /**
  * getPurchaseOrder
  * @param headers
  * @returns
  */
-export async function getPurchaseOrder(session, poId, config = {
+export const getPurchaseOrder = (session, poId, config = {
     withLotStocksToMyAgency: false,
-}) {
+}) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
@@ -311,19 +311,19 @@ export async function getPurchaseOrder(session, poId, config = {
         }
         return tempResponse;
     });
-}
+};
 /**
  * getPurchaseOrder
  * @param headers
  * @returns
  */
-export async function getGraphQLPurchaseOrderBetweenDates(session, dates, config = {
+export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
     agencyFilter: true,
     consolidateIdFilter: false,
     useProductionAgencyId: false,
     withShipmentToMyAgency: false,
     withLotStocksToMyAgency: false,
-}) {
+}) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         let agency_id = config.agencyId;
@@ -375,26 +375,26 @@ export async function getGraphQLPurchaseOrderBetweenDates(session, dates, config
         }
         return responseData;
     });
-}
+};
 /**
  * deletePurchaseOrder
  * @param headers
  * @param id
  * @returns
  */
-export async function deletePurchaseOrder(headers, id) {
+export const deletePurchaseOrder = (headers, id) => {
     return handlePossibleAxiosErrors(async () => {
         await httpZauru.delete(`/purchases/purchase_orders/${id}.json?destroy=true`, { headers });
         return true;
     });
-}
+};
 /**
  * getPurchaseOrderByIdNumber
  * @param session
  * @param idNumber
  * @returns
  */
-export async function getPurchasesOrderByIdNumber(session, id_number) {
+export const getPurchasesOrderByIdNumber = (session, id_number) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
@@ -411,4 +411,4 @@ export async function getPurchasesOrderByIdNumber(session, id_number) {
         }
         return response.data?.data?.purchase_orders;
     });
-}
+};

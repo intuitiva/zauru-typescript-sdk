@@ -6,7 +6,7 @@ import { createWebAppTableRegister, getVariablesByName, getWebAppTableRegisters,
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
  */
-export async function saveBitacoraPOMassive(headers, session, body) {
+export const saveBitacoraPOMassive = (headers, session, body) => {
     return handlePossibleAxiosErrors(async () => {
         const { bitacora_ediciones_masivas_web_app_table_id } = await getVariablesByName(headers, session, [
             "bitacora_ediciones_masivas_web_app_table_id",
@@ -14,14 +14,14 @@ export async function saveBitacoraPOMassive(headers, session, body) {
         const response = await createWebAppTableRegister(headers, bitacora_ediciones_masivas_web_app_table_id, { ...body, modificadoPor: session.get("name") });
         return response;
     });
-}
+};
 /**
  * Get getBitacorasPOMassive from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
  */
-export async function getBitacorasPOMassive(headers, session) {
+export const getBitacorasPOMassive = (headers, session) => {
     return handlePossibleAxiosErrors(async () => {
         const { bitacora_ediciones_masivas_web_app_table_id } = await getVariablesByName(headers, session, [
             "bitacora_ediciones_masivas_web_app_table_id",
@@ -32,14 +32,14 @@ export async function getBitacorasPOMassive(headers, session) {
         }
         return response.data;
     });
-}
+};
 /**
  * Put updateBitacorasPOMassive from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<BitacorasPOMassiveWebAppTable[]>.
  */
-export async function updateBitacorasPOMassive(headers, session, body, id_registro) {
+export const updateBitacorasPOMassive = (headers, session, body, id_registro) => {
     return handlePossibleAxiosErrors(async () => {
         const { bitacora_ediciones_masivas_web_app_table_id } = await getVariablesByName(headers, session, [
             "bitacora_ediciones_masivas_web_app_table_id",
@@ -47,4 +47,4 @@ export async function updateBitacorasPOMassive(headers, session, body, id_regist
         const response = await updateWebAppTableRegister(headers, bitacora_ediciones_masivas_web_app_table_id, id_registro, { ...body, modificadoPor: session.get("name") });
         return response;
     });
-}
+};
