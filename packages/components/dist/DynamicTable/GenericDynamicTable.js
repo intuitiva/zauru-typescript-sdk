@@ -7,7 +7,7 @@ import { createModal } from "../Modal";
 import { Button } from "../Buttons/Button";
 import { useAppSelector } from "@zauru-sdk/redux";
 import { generateClientUUID } from "@zauru-sdk/common";
-import { LoadingInputSkeleton, WithTooltip } from "src";
+import { LoadingInputSkeleton, WithTooltip } from "./../index";
 import { TrashSvg } from "@zauru-sdk/icons";
 const GenericDynamicTableErrorComponent = ({ name, formName, }) => {
     const { formValidations } = useAppSelector((state) => state.formValidation);
