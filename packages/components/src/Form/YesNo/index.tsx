@@ -12,7 +12,7 @@ type Props = {
   disabled?: boolean;
 };
 
-const YesNo = (props: Props) => {
+export const YesNo = (props: Props) => {
   const {
     id,
     name,
@@ -75,5 +75,3 @@ const YesNo = (props: Props) => {
     </>
   );
 };
-
-export default YesNo;

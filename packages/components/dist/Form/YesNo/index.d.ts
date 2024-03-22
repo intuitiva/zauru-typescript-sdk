@@ -8,5 +8,5 @@ type Props = {
     onChange?: (value: boolean) => void;
     disabled?: boolean;
 };
-declare const YesNo: (props: Props) => import("react/jsx-runtime").JSX.Element;
-export default YesNo;
+export declare const YesNo: (props: Props) => import("react/jsx-runtime").JSX.Element;
+export {};

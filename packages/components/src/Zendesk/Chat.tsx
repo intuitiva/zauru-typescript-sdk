@@ -37,7 +37,7 @@ interface ZendeskProps {
   [key: string]: any; // Para propiedades adicionales que se pasen y se asignen a window.zESettings
 }
 
-const Zendesk: React.FC<ZendeskProps> = (props: ZendeskProps) => {
+export const Zendesk: React.FC<ZendeskProps> = (props: ZendeskProps) => {
   const { defer, configuration, token, ...other } = props;
 
   useEffect(() => {
@@ -81,5 +81,3 @@ const Zendesk: React.FC<ZendeskProps> = (props: ZendeskProps) => {
 
   return null;
 };
-
-export default Zendesk;

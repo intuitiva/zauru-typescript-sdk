@@ -23,7 +23,7 @@ export const ZendeskAPI = (...args) => {
         console.warn("Zendesk is not initialized yet");
     }
 };
-const Zendesk = (props) => {
+export const Zendesk = (props) => {
     const { defer, configuration, token, ...other } = props;
     useEffect(() => {
         const insertScript = () => {
@@ -61,4 +61,3 @@ const Zendesk = (props) => {
     }, [props, defer, other, configuration, token]);
     return null;
 };
-export default Zendesk;

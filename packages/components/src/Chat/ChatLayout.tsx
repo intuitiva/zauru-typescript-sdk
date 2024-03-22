@@ -23,7 +23,7 @@ interface ChatLayoutProps {
   };
 }
 
-const ChatLayout: React.FC<ChatLayoutProps> = ({
+export const ChatLayout: React.FC<ChatLayoutProps> = ({
   children,
   sendingMessage = false,
   formConfig = undefined,
@@ -129,5 +129,3 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({
     </div>
   );
 };
-
-export default ChatLayout;

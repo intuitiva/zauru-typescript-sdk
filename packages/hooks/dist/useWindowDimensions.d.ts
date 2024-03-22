@@ -1,1 +1,1 @@
-export default function useWindowDimensions(): number;
+export declare const useWindowDimensions: () => number;

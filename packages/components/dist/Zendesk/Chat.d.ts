@@ -10,5 +10,5 @@ interface ZendeskProps {
     };
     [key: string]: any;
 }
-declare const Zendesk: React.FC<ZendeskProps>;
-export default Zendesk;
+export declare const Zendesk: React.FC<ZendeskProps>;
+export {};

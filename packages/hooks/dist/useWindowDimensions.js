@@ -7,7 +7,7 @@ function getWindowDimensions() {
     // Devolver un valor predeterminado si window no está definido
     return 1000;
 }
-export default function useWindowDimensions() {
+export const useWindowDimensions = () => {
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions);
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -24,4 +24,4 @@ export default function useWindowDimensions() {
         }
     }, []);
     return windowDimensions;
-}
+};

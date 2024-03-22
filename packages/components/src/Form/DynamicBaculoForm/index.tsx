@@ -1,7 +1,7 @@
 import { TextField, TextFieldWithoutValidation } from "../TextField";
 import { TripleFieldContainer } from "../FieldContainer/TripleFieldContainer";
 import { DoubleFieldContainer } from "../FieldContainer/DoubleFieldContainer";
-import YesNo from "../YesNo";
+import { YesNo } from "../YesNo";
 import { TextArea } from "../TextArea";
 import { SelectField } from "../SelectField";
 import { FileUploadField } from "../FileUpload";

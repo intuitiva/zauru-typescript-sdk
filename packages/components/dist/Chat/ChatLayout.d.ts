@@ -13,5 +13,5 @@ interface ChatLayoutProps {
         messageFieldId: number;
     };
 }
-declare const ChatLayout: React.FC<ChatLayoutProps>;
-export default ChatLayout;
+export declare const ChatLayout: React.FC<ChatLayoutProps>;
+export {};

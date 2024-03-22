@@ -4,7 +4,7 @@ import { TextField } from "../Form";
 import { Form } from "@remix-run/react";
 import { LoadingInputSkeleton } from "./../index";
 import { AttachmentIconSVG, SendMessageIcon, SpinnerSvg, } from "@zauru-sdk/icons";
-const ChatLayout = ({ children, sendingMessage = false, formConfig = undefined, }) => {
+export const ChatLayout = ({ children, sendingMessage = false, formConfig = undefined, }) => {
     const refAttachment = useRef(null);
     const [formValues, setFormValues] = useState({ image: null });
     const handleAttachmentClick = () => {
@@ -25,4 +25,3 @@ const ChatLayout = ({ children, sendingMessage = false, formConfig = undefined, 
                             }
                         } })] })] }));
 };
-export default ChatLayout;
