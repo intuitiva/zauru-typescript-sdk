@@ -1,1 +1,1 @@
-export * from "./GraphQL.queries";
+export * from "./GraphQL.queries.js";
