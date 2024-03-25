@@ -1,4 +1,4 @@
-import { TextField, TextFieldWithoutValidation } from "../TextField";
+import { TextField, TextFieldWithoutValidation } from "../TextField/index.js";
 import { TripleFieldContainer } from "../FieldContainer/index.js";
 import { DoubleFieldContainer } from "../FieldContainer/index.js";
 import { YesNo } from "../YesNo/index.js";
@@ -14,7 +14,7 @@ import {
   GenericDynamicTableColumn,
   SelectFieldOption,
 } from "@zauru-sdk/types";
-import { GenericDynamicTable } from "../../DynamicTable/GenericDynamicTable";
+import { GenericDynamicTable } from "../../DynamicTable/GenericDynamicTable.js";
 import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/common";
 import { StaticAlert } from "../../Alerts/index.js";
 import { SubContainer } from "../../Containers/index.js";

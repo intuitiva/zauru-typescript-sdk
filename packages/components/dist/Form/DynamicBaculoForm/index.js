@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextField, TextFieldWithoutValidation } from "../TextField";
+import { TextField, TextFieldWithoutValidation } from "../TextField/index.js";
 import { TripleFieldContainer } from "../FieldContainer/index.js";
 import { DoubleFieldContainer } from "../FieldContainer/index.js";
 import { YesNo } from "../YesNo/index.js";
@@ -8,7 +8,7 @@ import { SelectField } from "../SelectField/index.js";
 import { FileUploadField } from "../FileUpload/index.js";
 import { FormDatePicker } from "../DatePicker/index.js";
 import { FormTimePicker } from "../TimePicker/index.js";
-import { GenericDynamicTable } from "../../DynamicTable/GenericDynamicTable";
+import { GenericDynamicTable } from "../../DynamicTable/GenericDynamicTable.js";
 import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/common";
 import { StaticAlert } from "../../Alerts/index.js";
 import { SubContainer } from "../../Containers/index.js";
