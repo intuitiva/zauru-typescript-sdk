@@ -1,2 +1,2 @@
-export * from "./Icons";
-export * from "./StylesConstants";
+export * from "./Icons.js";
+export * from "./StylesConstants.js";
