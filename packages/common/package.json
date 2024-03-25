@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/common",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Funciones de uso común en el desarrollo de webapps en Zauru",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

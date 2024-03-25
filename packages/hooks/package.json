@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/hooks",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Hooks reutilizables dentro de las webapps de Zauru.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,13 +29,13 @@
   },
   "dependencies": {
     "@remix-run/react": "^2.8.1",
-    "@zauru-sdk/common": "^1.0.31",
+    "@zauru-sdk/common": "^1.0.32",
     "@zauru-sdk/graphql": "^1.0.9",
     "@zauru-sdk/icons": "^1.0.19",
-    "@zauru-sdk/redux": "^1.0.31",
-    "@zauru-sdk/services": "^1.0.31",
+    "@zauru-sdk/redux": "^1.0.32",
+    "@zauru-sdk/services": "^1.0.32",
     "@zauru-sdk/types": "^1.0.31",
-    "@zauru-sdk/utils": "^1.0.31",
+    "@zauru-sdk/utils": "^1.0.32",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
