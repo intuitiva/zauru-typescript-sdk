@@ -1,6 +1,5 @@
 import moment from "moment";
 import "moment-timezone";
-import "moment/locale/es";
 import { MONTHS } from "@zauru-sdk/types";
 export const DESTINOS_MUESTRA_OPTIONS = [
     { label: "Microbiología", value: "microbiologa" },

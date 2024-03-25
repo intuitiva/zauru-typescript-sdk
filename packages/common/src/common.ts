@@ -1,6 +1,5 @@
 import moment from "moment";
 import "moment-timezone";
-import "moment/locale/es";
 import type {
   PayeeGraphQL,
   AxiosUtilsResponse,

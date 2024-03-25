@@ -1,5 +1,4 @@
 import "moment-timezone";
-import "moment/locale/es";
 import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption } from "@zauru-sdk/types";
 export declare const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[];
 /**
