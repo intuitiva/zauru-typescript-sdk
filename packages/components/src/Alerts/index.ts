@@ -1,2 +1,2 @@
-export * from "./ErrorBoundaryAlert/ErrorBoundaryAlert";
-export * from "./StaticAlert";
+export * from "./ErrorBoundaryAlert/ErrorBoundaryAlert.js";
+export * from "./StaticAlert.js";

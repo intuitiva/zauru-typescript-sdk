@@ -1,1 +1,1 @@
-export * from "./homeLayout";
+export * from "./homeLayout/index.js";

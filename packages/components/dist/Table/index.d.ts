@@ -1,1 +1,1 @@
-export * from "./ZauruTable";
+export * from "./ZauruTable.js";

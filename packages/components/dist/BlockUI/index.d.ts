@@ -1,1 +1,1 @@
-export * from "./BlockUI";
+export * from "./BlockUI.js";

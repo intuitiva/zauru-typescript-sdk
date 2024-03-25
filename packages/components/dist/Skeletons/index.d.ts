@@ -1,1 +1,1 @@
-export * from "./LoadingInputSkeleton";
+export * from "./LoadingInputSkeleton.js";

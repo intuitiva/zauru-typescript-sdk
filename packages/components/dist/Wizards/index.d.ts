@@ -1,1 +1,1 @@
-export * from "./StepWizard";
+export * from "./StepWizard.js";

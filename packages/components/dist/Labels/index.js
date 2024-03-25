@@ -1,1 +1,1 @@
-export * from "./InfoLabel";
+export * from "./InfoLabel/index.js";

@@ -1,1 +1,1 @@
-export * from "./LineSeparator";
+export * from "./LineSeparator.js";

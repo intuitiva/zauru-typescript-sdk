@@ -1,2 +1,2 @@
-export * from "./Chat";
-export * from "./zendesk.config";
+export * from "./Chat.js";
+export * from "./zendesk.config.js";

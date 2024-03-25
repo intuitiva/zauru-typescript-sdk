@@ -1,5 +1,5 @@
-export * from "./NavBar";
+export * from "./NavBar.js";
 
-export * from "./NavBar.types";
+export * from "./NavBar.types.js";
 
-export * from "./NavBar.utils";
+export * from "./NavBar.utils.js";

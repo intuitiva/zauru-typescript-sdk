@@ -1,2 +1,2 @@
-export * from "./ProgressBar";
-export * from "./ProgressCircle";
+export * from "./ProgressBar.js";
+export * from "./ProgressCircle.js";
