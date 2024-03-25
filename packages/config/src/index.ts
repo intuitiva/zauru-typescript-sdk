@@ -8,7 +8,8 @@ const rawConfig = {
   zendeskJWTKey: process.env.ZENDESK_JWT_KEY || "",
   zendeskJWTSecret: process.env.ZENDESK_JWT_SECRET || "",
   zendeskChatKey: process.env.ZENDESK_CHAT_KEY || "",
-  expirationDurationInSeconds: 60 * 60 * 24,
+  expirationDurationInSeconds:
+    process.env.EXPIRATION_TIME_IN_SECONDS || 60 * 60 * 24,
 };
 
 function getConfigValue(key: keyof typeof rawConfig) {
