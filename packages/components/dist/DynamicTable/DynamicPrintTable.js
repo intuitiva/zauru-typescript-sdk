@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useEffect, useCallback, useState } from "react";
-import { TextFieldWithoutValidation } from "./../index";
-import { SelectFieldWithoutValidation } from "./../index";
+import { TextFieldWithoutValidation } from "../Form/TextField";
+import { SelectFieldWithoutValidation } from "../Form/SelectField";
 import { useAppSelector } from "@zauru-sdk/redux";
 const errorAnimation = {
     hidden: { opacity: 0, y: -10 },
