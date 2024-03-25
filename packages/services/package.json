@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/services",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "Servicios de consulta a Zauru",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,7 +20,7 @@
   "dependencies": {
     "@remix-run/node": "^2.8.1",
     "@zauru-sdk/common": "^1.0.13",
-    "@zauru-sdk/config": "^1.0.24",
+    "@zauru-sdk/config": "^1.0.25",
     "@zauru-sdk/graphql": "^1.0.9",
     "@zauru-sdk/types": "^1.0.13",
     "axios": "^1.6.7",
