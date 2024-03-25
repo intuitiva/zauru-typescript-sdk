@@ -1,2 +1,2 @@
-export * from "./GraphQL.types";
-export * from "./Custom.types";
+export * from "./GraphQL.types.js";
+export * from "./Custom.types.js";
