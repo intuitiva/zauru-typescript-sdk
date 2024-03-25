@@ -8,5 +8,5 @@ export declare const config: {
     zendeskJWTKey: string;
     zendeskJWTSecret: string;
     zendeskChatKey: string;
-    expirationDurationInSeconds: number;
+    expirationDurationInSeconds: string | number;
 };
