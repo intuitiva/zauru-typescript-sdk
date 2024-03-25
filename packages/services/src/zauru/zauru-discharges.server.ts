@@ -5,7 +5,7 @@ import {
   NewDischargeBody,
   PDFResult,
 } from "@zauru-sdk/types";
-import { getVariablesByName } from "~/common.server.js";
+import { getVariablesByName } from "../common.server.js";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import httpZauru from "./httpZauru.server.js";
 

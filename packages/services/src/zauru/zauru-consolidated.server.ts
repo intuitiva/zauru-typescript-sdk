@@ -8,7 +8,7 @@ import {
   PDFResult,
 } from "@zauru-sdk/types";
 import httpZauru from "./httpZauru.server.js";
-import { getGraphQLAPIHeaders, getVariablesByName } from "~/common.server.js";
+import { getGraphQLAPIHeaders, getVariablesByName } from "../common.server.js";
 import httpGraphQLAPI from "./httpGraphQL.server.js";
 import { getConsolidatesBetweenDatesStringQuery } from "@zauru-sdk/graphql";
 

@@ -13,7 +13,7 @@ import {
   ResponseItemList,
   SearchItemParams,
 } from "@zauru-sdk/types";
-import { getGraphQLAPIHeaders } from "~/common.server.js";
+import { getGraphQLAPIHeaders } from "../common.server.js";
 import httpGraphQLAPI from "./httpGraphQL.server.js";
 import {
   getItemByNameStringQuery,

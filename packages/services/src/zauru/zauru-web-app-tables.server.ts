@@ -10,7 +10,7 @@ import {
   WebAppTableGraphQL,
   WebAppTableUpdateResponse,
 } from "@zauru-sdk/types";
-import { getGraphQLAPIHeaders, getVariablesByName } from "~/common.server.js";
+import { getGraphQLAPIHeaders, getVariablesByName } from "../common.server.js";
 import httpGraphQLAPI from "./httpGraphQL.server.js";
 import {
   getWebAppRowStringQuery,

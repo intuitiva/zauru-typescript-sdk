@@ -1,8 +1,12 @@
 import type { Session } from "@remix-run/node";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { AxiosUtilsResponse, PayeeCategoryGraphQL, PayeeGraphQL } from "@zauru-sdk/types";
+import {
+  AxiosUtilsResponse,
+  PayeeCategoryGraphQL,
+  PayeeGraphQL,
+} from "@zauru-sdk/types";
 import httpGraphQLAPI from "./httpGraphQL.server.js";
-import { getGraphQLAPIHeaders } from "~/common.server.js";
+import { getGraphQLAPIHeaders } from "../common.server.js";
 import {
   getClientCategoriesStringQuery,
   getPayeeByIdStringQuery,

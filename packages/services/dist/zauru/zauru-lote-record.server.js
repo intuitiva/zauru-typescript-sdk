@@ -1,4 +1,4 @@
-import { getVariablesByName } from "~/common.server.js";
+import { getVariablesByName } from "../common.server.js";
 import { createWebAppTableRegister, deleteWebAppTableRegister, getWebAppTableRegisters, } from "./zauru-web-app-tables.server.js";
 export async function getLoteRecord(headers, session) {
     const { lote_record_webapp_table_id: webapp_table_id } = await getVariablesByName(headers, session, ["lote_record_webapp_table_id"]);

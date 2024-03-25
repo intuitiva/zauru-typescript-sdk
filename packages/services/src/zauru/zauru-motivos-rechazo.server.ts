@@ -7,7 +7,7 @@ import {
   WebAppRowGraphQL,
   WebAppTableUpdateResponse,
 } from "@zauru-sdk/types";
-import { getVariablesByName } from "~/common.server.js";
+import { getVariablesByName } from "../common.server.js";
 import {
   createWebAppTableRegister,
   deleteWebAppTableRegister,

@@ -5,7 +5,7 @@ import {
   ShipmentGraphQL,
 } from "@zauru-sdk/types";
 import httpZauru from "./httpZauru.server.js";
-import { getGraphQLAPIHeaders } from "~/common.server.js";
+import { getGraphQLAPIHeaders } from "../common.server.js";
 import { Session } from "@remix-run/node";
 import httpGraphQLAPI from "./httpGraphQL.server.js";
 import { getShipmentsStringQuery } from "@zauru-sdk/graphql";

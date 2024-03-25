@@ -1,5 +1,5 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { getVariablesByName } from "~/common.server.js";
+import { getVariablesByName } from "../common.server.js";
 import { createWebAppTableRegister, deleteWebAppTableRegister, getWebAppTableRegisters, } from "./zauru-web-app-tables.server.js";
 export async function getMotivosRechazo(headers, session) {
     return handlePossibleAxiosErrors(async () => {

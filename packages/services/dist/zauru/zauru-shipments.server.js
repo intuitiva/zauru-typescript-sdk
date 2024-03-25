@@ -1,5 +1,5 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { getGraphQLAPIHeaders } from "~/common.server.js";
+import { getGraphQLAPIHeaders } from "../common.server.js";
 import httpGraphQLAPI from "./httpGraphQL.server.js";
 import { getShipmentsByToAgencyLast100StringQuery } from "@zauru-sdk/graphql";
 import httpZauru from "./httpZauru.server.js";
