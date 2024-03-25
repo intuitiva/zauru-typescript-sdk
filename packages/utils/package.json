@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/utils",
-  "version": "1.0.30",
+  "version": "1.0.31",
   "description": "Utilidades, parseo de request y demás para desarrollo de webapps de Zauru",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,11 +19,11 @@
   },
   "dependencies": {
     "@remix-run/node": "^2.8.1",
-    "@zauru-sdk/common": "^1.0.30",
+    "@zauru-sdk/common": "^1.0.31",
     "@zauru-sdk/config": "^1.0.25",
     "@zauru-sdk/graphql": "^1.0.9",
-    "@zauru-sdk/services": "^1.0.30",
-    "@zauru-sdk/types": "^1.0.26"
+    "@zauru-sdk/services": "^1.0.31",
+    "@zauru-sdk/types": "^1.0.31"
   },
   "engines": {
     "node": ">=18.0.0"
