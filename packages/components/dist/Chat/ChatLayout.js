@@ -1,6 +1,6 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { useRef, useState } from "react";
-import { TextField } from "../Form/TextField";
+import { TextField } from "../Form/TextField/index.js";
 import { Form } from "@remix-run/react";
 import { LoadingInputSkeleton } from "../Skeletons/LoadingInputSkeleton.js";
 import { AttachmentIconSVG, SendMessageIcon, SpinnerSvg, } from "@zauru-sdk/icons";

@@ -1,16 +1,18 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { TextField, TextFieldWithoutValidation } from "../TextField";
-import { TripleFieldContainer } from "../FieldContainer/TripleFieldContainer";
-import { DoubleFieldContainer } from "../FieldContainer/DoubleFieldContainer";
-import { YesNo } from "../YesNo";
-import { TextArea } from "../TextArea";
-import { SelectField } from "../SelectField";
-import { FileUploadField } from "../FileUpload";
-import { FormDatePicker } from "../DatePicker";
-import { FormTimePicker } from "../TimePicker";
-import { LineSeparator, StaticAlert, SubContainer } from "./../../index";
+import { TripleFieldContainer } from "../FieldContainer/index.js";
+import { DoubleFieldContainer } from "../FieldContainer/index.js";
+import { YesNo } from "../YesNo/index.js";
+import { TextArea } from "../TextArea/index.js";
+import { SelectField } from "../SelectField/index.js";
+import { FileUploadField } from "../FileUpload/index.js";
+import { FormDatePicker } from "../DatePicker/index.js";
+import { FormTimePicker } from "../TimePicker/index.js";
 import { GenericDynamicTable } from "../../DynamicTable/GenericDynamicTable";
 import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/common";
+import { StaticAlert } from "../../Alerts/index.js";
+import { SubContainer } from "../../Containers/index.js";
+import { LineSeparator } from "../../LineSeparator/index.js";
 export function DynamicBaculoForm(props) {
     const { form, options = { showDescription: false, showTitle: false }, formName = "", namesStr = "", defaultValues = [], showingRules = [], readOnly = false, } = props;
     if (!form) {

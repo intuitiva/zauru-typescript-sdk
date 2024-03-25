@@ -1,6 +1,6 @@
 import { Form, type FormMethod } from "@remix-run/react";
 import { type ReactNode } from "react";
-import { ButtonSectionContainer } from "./../../index";
+import { ButtonSectionContainer } from "../../Containers/index.js";
 
 type Props = {
   formId: string;

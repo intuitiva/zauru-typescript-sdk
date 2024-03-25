@@ -5,14 +5,14 @@ import {
   MenuAlt4Svg,
   OpcionButtonSvgIcon,
 } from "@zauru-sdk/icons";
-import { COLORS } from "./NavBar.utils";
+import { COLORS } from "./NavBar.utils.js";
 import type {
   ColorInterface,
   DropDownLinkButtonType,
   EntityProps,
   NavBarProps,
   NavItemProps,
-} from "./NavBar.types";
+} from "./NavBar.types.js";
 import { Link } from "@remix-run/react";
 
 const DropDownLinkButton = ({

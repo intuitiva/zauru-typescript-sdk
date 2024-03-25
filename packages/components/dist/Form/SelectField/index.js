@@ -3,7 +3,7 @@ import { IdeaIconSVG } from "@zauru-sdk/icons";
 import { useAppSelector } from "@zauru-sdk/redux";
 import { useEffect, useState } from "react";
 import Select, { components } from "react-select";
-import { LoadingInputSkeleton } from "./../../index";
+import { LoadingInputSkeleton } from "../../Skeletons/index.js";
 const Input = (props) => (_jsx(components.Input, { ...props, readOnly: props.selectProps.isReadOnly }));
 export const SelectFieldWithoutValidation = (props) => {
     const { id, name, title, defaultValue, defaultValueMulti = [], helpText, hint, options, onChange, onChangeMulti, isClearable = false, error = false, disabled = false, readOnly = false, isMulti = false, loading = false, className = "", onInputChange, } = props;

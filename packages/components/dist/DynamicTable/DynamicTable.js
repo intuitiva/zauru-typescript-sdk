@@ -1,8 +1,8 @@
 import { jsxs as _jsxs, Fragment as _Fragment, jsx as _jsx } from "react/jsx-runtime";
 import React, { useEffect, useState } from "react";
-import { TextAreaWithoutValidation } from "../Form/TextArea";
-import { TextFieldWithoutValidation } from "../Form/TextField";
-import { CheckboxWithoutValidation } from "../Form/Checkbox";
+import { TextAreaWithoutValidation } from "../Form/TextArea/index.js";
+import { TextFieldWithoutValidation } from "../Form/TextField/index.js";
+import { CheckboxWithoutValidation } from "../Form/Checkbox/index.js";
 export const DynamicTable = ({ forwardedRef, ...props }, ref) => {
     const [tableData, setTableData] = useState({});
     const { cellInputs, intersectionTitle, className, onChange, defaultValue, margins, } = props;

@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckboxWithoutValidation } from "../Checkbox";
+import { CheckboxWithoutValidation } from "../Checkbox/index.js";
 
 export type ChecklistItem = {
   id: string;

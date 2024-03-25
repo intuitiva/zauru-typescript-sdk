@@ -1,4 +1,3 @@
-import React from "react";
 //H1 Title Component
 export const TitleH1 = ({ texto }: any) => {
   return (

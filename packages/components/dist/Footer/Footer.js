@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
-import { LoadingInputSkeleton } from "./../index";
-import { ConnectionState } from "./../ConnectionState";
+import { LoadingInputSkeleton } from "../Skeletons/index.js";
+import { ConnectionState } from "./../ConnectionState/index.js";
 const COLORS = {
     purple: "bg-purple-500",
     pink: "bg-pink-500",

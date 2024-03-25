@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { TextField } from "../Form/TextField";
+import { TextField } from "../Form/TextField/index.js";
 import { Form } from "@remix-run/react";
 import { FormDocumentType } from "@zauru-sdk/types";
 import { LoadingInputSkeleton } from "../Skeletons/LoadingInputSkeleton.js";

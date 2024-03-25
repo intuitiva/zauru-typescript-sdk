@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { TextAreaWithoutValidation } from "../Form/TextArea";
-import { TextFieldWithoutValidation } from "../Form/TextField";
-import { CheckboxWithoutValidation } from "../Form/Checkbox";
+import { TextAreaWithoutValidation } from "../Form/TextArea/index.js";
+import { TextFieldWithoutValidation } from "../Form/TextField/index.js";
+import { CheckboxWithoutValidation } from "../Form/Checkbox/index.js";
 
 type Props = {
   cellInputs?: boolean;

@@ -1,5 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { CheckboxWithoutValidation } from "../Checkbox";
+import { CheckboxWithoutValidation } from "../Checkbox/index.js";
 export const Checklist = ({ items, onChange }) => {
     const handleCheckboxChange = (name, value) => {
         if (onChange) {

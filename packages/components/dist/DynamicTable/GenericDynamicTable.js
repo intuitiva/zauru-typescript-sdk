@@ -1,13 +1,14 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
-import { SelectFieldWithoutValidation } from "../Form/SelectField";
-import { TextFieldWithoutValidation } from "../Form/TextField";
-import { CheckboxWithoutValidation } from "../Form/Checkbox";
-import { createModal } from "../Modal";
-import { Button } from "../Buttons/Button";
+import { SelectFieldWithoutValidation } from "../Form/SelectField/index.js";
+import { TextFieldWithoutValidation } from "../Form/TextField/index.js";
+import { CheckboxWithoutValidation } from "../Form/Checkbox/index.js";
+import { createModal } from "../Modal/index.js";
+import { Button } from "../Buttons/index.js";
 import { useAppSelector } from "@zauru-sdk/redux";
 import { generateClientUUID } from "@zauru-sdk/common";
-import { LoadingInputSkeleton, WithTooltip } from "./../index";
+import { LoadingInputSkeleton } from "../Skeletons/index.js";
+import { WithTooltip } from "../WithTooltip/index.js";
 import { TrashSvg } from "@zauru-sdk/icons";
 const GenericDynamicTableErrorComponent = ({ name, formName, }) => {
     const { formValidations } = useAppSelector((state) => state.formValidation);

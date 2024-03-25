@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import React, { useState } from "react";
-import { LoadingInputSkeleton } from "./../index";
+import { LoadingInputSkeleton } from "../Skeletons/index.js";
 
 export type StepWizard = {
   index: number;

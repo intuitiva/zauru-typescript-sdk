@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { SelectFieldWithoutValidation } from "../Form/SelectField";
-import { TextFieldWithoutValidation } from "../Form/TextField";
-import { CheckboxWithoutValidation } from "../Form/Checkbox";
-import { createModal } from "../Modal";
-import { Button } from "../Buttons/Button";
+import { SelectFieldWithoutValidation } from "../Form/SelectField/index.js";
+import { TextFieldWithoutValidation } from "../Form/TextField/index.js";
+import { CheckboxWithoutValidation } from "../Form/Checkbox/index.js";
+import { createModal } from "../Modal/index.js";
+import { Button } from "../Buttons/index.js";
 import {
   GenericDynamicTableColumn,
   RowDataType,
@@ -11,7 +11,8 @@ import {
 } from "@zauru-sdk/types";
 import { useAppSelector } from "@zauru-sdk/redux";
 import { generateClientUUID } from "@zauru-sdk/common";
-import { LoadingInputSkeleton, WithTooltip } from "./../index";
+import { LoadingInputSkeleton } from "../Skeletons/index.js";
+import { WithTooltip } from "../WithTooltip/index.js";
 import { TrashSvg } from "@zauru-sdk/icons";
 
 type Props = {

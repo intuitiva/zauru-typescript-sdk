@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState } from "react";
 import { DropDownArrowSvgIcon, LogoutDropDownSvgIcon, MenuAlt4Svg, OpcionButtonSvgIcon, } from "@zauru-sdk/icons";
-import { COLORS } from "./NavBar.utils";
+import { COLORS } from "./NavBar.utils.js";
 import { Link } from "@remix-run/react";
 const DropDownLinkButton = ({ text, path, icon, buttonHover, }) => (_jsx(Link, { className: `block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 ${buttonHover ?? ""} dark:hover:bg-gray-700 dark:hover:text-white`, to: path, prefetch: "none", children: _jsxs("div", { className: "mx-auto pt-2", children: [icon, _jsx("span", { children: text })] }) }));
 const OptionsDropDownButton = ({ color, options, name }) => {

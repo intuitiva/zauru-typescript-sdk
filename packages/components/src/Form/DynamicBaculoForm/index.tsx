@@ -1,12 +1,12 @@
 import { TextField, TextFieldWithoutValidation } from "../TextField";
-import { TripleFieldContainer } from "../FieldContainer/TripleFieldContainer";
-import { DoubleFieldContainer } from "../FieldContainer/DoubleFieldContainer";
-import { YesNo } from "../YesNo";
-import { TextArea } from "../TextArea";
-import { SelectField } from "../SelectField";
-import { FileUploadField } from "../FileUpload";
-import { FormDatePicker } from "../DatePicker";
-import { FormTimePicker } from "../TimePicker";
+import { TripleFieldContainer } from "../FieldContainer/index.js";
+import { DoubleFieldContainer } from "../FieldContainer/index.js";
+import { YesNo } from "../YesNo/index.js";
+import { TextArea } from "../TextArea/index.js";
+import { SelectField } from "../SelectField/index.js";
+import { FileUploadField } from "../FileUpload/index.js";
+import { FormDatePicker } from "../DatePicker/index.js";
+import { FormTimePicker } from "../TimePicker/index.js";
 import {
   FormFieldGraphQL,
   FormGraphQL,
@@ -14,9 +14,11 @@ import {
   GenericDynamicTableColumn,
   SelectFieldOption,
 } from "@zauru-sdk/types";
-import { LineSeparator, StaticAlert, SubContainer } from "./../../index";
 import { GenericDynamicTable } from "../../DynamicTable/GenericDynamicTable";
 import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/common";
+import { StaticAlert } from "../../Alerts/index.js";
+import { SubContainer } from "../../Containers/index.js";
+import { LineSeparator } from "../../LineSeparator/index.js";
 
 type Props = {
   formName?: string;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { LoadingInputSkeleton } from "./../index";
-import { ConnectionState } from "./../ConnectionState";
+import { LoadingInputSkeleton } from "../Skeletons/index.js";
+import { ConnectionState } from "./../ConnectionState/index.js";
 
 type FooterProps = {
   href: string;
