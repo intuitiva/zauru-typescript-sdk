@@ -1,4 +1,4 @@
-import type { ColorInterface } from "../NavBar/NavBar.types";
+import type { ColorInterface } from "../NavBar/NavBar.types.js";
 
 type Props = {
   type?: "reset" | "button" | "submit" | undefined;

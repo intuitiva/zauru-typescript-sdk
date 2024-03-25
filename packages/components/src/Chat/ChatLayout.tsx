@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
-import { TextField } from "../Form";
+import { TextField } from "../Form/TextField";
 import { Form } from "@remix-run/react";
 import { FormDocumentType } from "@zauru-sdk/types";
-import { LoadingInputSkeleton } from "./../index";
+import { LoadingInputSkeleton } from "../Skeletons/LoadingInputSkeleton.js";
 import {
   AttachmentIconSVG,
   SendMessageIcon,

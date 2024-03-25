@@ -1,8 +1,8 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { useRef, useState } from "react";
-import { TextField } from "../Form";
+import { TextField } from "../Form/TextField";
 import { Form } from "@remix-run/react";
-import { LoadingInputSkeleton } from "./../index";
+import { LoadingInputSkeleton } from "../Skeletons/LoadingInputSkeleton.js";
 import { AttachmentIconSVG, SendMessageIcon, SpinnerSvg, } from "@zauru-sdk/icons";
 export const ChatLayout = ({ children, sendingMessage = false, formConfig = undefined, }) => {
     const refAttachment = useRef(null);
