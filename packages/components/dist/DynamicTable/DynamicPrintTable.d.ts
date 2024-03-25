@@ -19,5 +19,5 @@ type Props = {
         getTableState: (updatedData?: ReactNode[][]) => TableStateItem[] | undefined;
     }>;
 };
-declare const _default: React.ForwardRefExoticComponent<Props & React.RefAttributes<unknown>>;
-export default _default;
+export declare const DynamicPrintTable: ({ forwardedRef, ...props }: Props) => import("react/jsx-runtime").JSX.Element;
+export {};

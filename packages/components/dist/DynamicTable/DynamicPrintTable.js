@@ -7,7 +7,7 @@ const errorAnimation = {
     hidden: { opacity: 0, y: -10 },
     visible: { opacity: 1, y: 0 },
 };
-const DynamicPrintTable = ({ forwardedRef, ...props }) => {
+export const DynamicPrintTable = ({ forwardedRef, ...props }) => {
     const { items, onChange, className } = props;
     const { formValidations } = useAppSelector((state) => state.formValidation);
     const createItemSelect = (rowIndex, defaultValue) => (_jsx(SelectFieldWithoutValidation, { name: "item_select", isClearable: true, onChange: (value) => {
@@ -129,4 +129,3 @@ const DynamicPrintTable = ({ forwardedRef, ...props }) => {
                                             return sum + val;
                                         }, 0)] })] }) })] })] }));
 };
-export default React.forwardRef(DynamicPrintTable);

@@ -35,7 +35,7 @@ const errorAnimation = {
   visible: { opacity: 1, y: 0 },
 };
 
-const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
+export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
   const { items, onChange, className } = props;
   const { formValidations } = useAppSelector((state) => state.formValidation);
 
@@ -286,5 +286,3 @@ const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
     </div>
   );
 };
-
-export default React.forwardRef(DynamicPrintTable);
