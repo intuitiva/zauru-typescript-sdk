@@ -7,7 +7,8 @@ import type {
   SelectFieldOption,
   MonthsType,
 } from "@zauru-sdk/types";
-import { MONTHS } from "@zauru-sdk/types";
+import pkg from "@zauru-sdk/types";
+const { MONTHS } = pkg;
 
 export const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[] = [
   { label: "Microbiología", value: "microbiologa" },

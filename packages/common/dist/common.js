@@ -1,6 +1,7 @@
 import moment from "moment";
 import "moment-timezone";
-import { MONTHS } from "@zauru-sdk/types";
+import pkg from "@zauru-sdk/types";
+const { MONTHS } = pkg;
 export const DESTINOS_MUESTRA_OPTIONS = [
     { label: "Microbiología", value: "microbiologa" },
     { label: "Residuos de plaguicidas", value: "residuos_de_plaguicidas" },
