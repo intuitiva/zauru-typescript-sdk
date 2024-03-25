@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/components",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "description": "Componentes reutilizables en las WebApps de Zauru.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
