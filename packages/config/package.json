@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/config",
-  "version": "1.0.4",
+  "version": "1.0.24",
   "description": "Configuración centralizada para aplicaciones Zauru SDK",
   "type": "module",
   "main": "dist/index.js",
