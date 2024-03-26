@@ -25,7 +25,7 @@ import {
   getBasketsSchema,
   reduceAdd,
   toFixedIfNeeded,
-} from "../../common/dist";
+} from "@zauru-sdk/common";
 
 type ReturnType<T> = {
   data: T;

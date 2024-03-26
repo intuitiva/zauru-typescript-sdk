@@ -1,6 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { AlertType, showAlert } from "./index.js";
+import { AlertType, showAlert } from "./components/index.js";
 import type {
   AgencyGraphQL,
   BitacoraPOMassive,

@@ -1,6 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { showAlert } from "./index.js";
+import { showAlert } from "./components/index.js";
 import { catalogsFetchStart, catalogsFetchSuccess, useAppDispatch, useAppSelector, } from "@zauru-sdk/redux";
 const useApiCatalog = (CATALOG_NAME, otherParams) => {
     const fetcher = useFetcher();
