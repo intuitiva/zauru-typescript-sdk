@@ -1,7 +1,7 @@
 import { useFetcher } from "@remix-run/react";
 import { receptionFetchStart, receptionFetchSuccess, useAppDispatch, useAppSelector, } from "@zauru-sdk/redux";
 import { useEffect, useMemo, useState } from "react";
-import { showAlert } from "./index";
+import { showAlert } from "./index.js";
 import { getBasketsSchema, reduceAdd, toFixedIfNeeded, } from "../../common/dist";
 const useGetReceptionObject = (RECEPTION_NAME, { online = false, wheres = [] } = {}) => {
     const fetcher = useFetcher();

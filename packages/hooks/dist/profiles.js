@@ -1,6 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { showAlert } from "./index";
+import { showAlert } from "./index.js";
 import { profileFetchStart, profileFetchSuccess, useAppDispatch, useAppSelector, } from "@zauru-sdk/redux";
 const useGetProfile = (PROFILE_NAME) => {
     const fetcher = useFetcher();

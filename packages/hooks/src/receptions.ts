@@ -20,7 +20,7 @@ import {
   GenericDynamicTableColumn,
 } from "@zauru-sdk/types";
 import { useEffect, useMemo, useState } from "react";
-import { AlertType, showAlert } from "./index";
+import { AlertType, showAlert } from "./index.js";
 import {
   getBasketsSchema,
   reduceAdd,

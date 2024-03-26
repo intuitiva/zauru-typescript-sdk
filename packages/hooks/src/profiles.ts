@@ -1,6 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { AlertType, showAlert } from "./index";
+import { AlertType, showAlert } from "./index.js";
 import type {
   AgencyGraphQL,
   EmployeeGraphQL,

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { showAlert } from "./index";
+import { showAlert } from "./index.js";
 export const useValidateNotifications = (source) => {
     const { actionData, fetcher, loaderData } = source;
     useEffect(() => {

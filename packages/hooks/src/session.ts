@@ -5,7 +5,7 @@ import {
   useAppSelector,
 } from "@zauru-sdk/redux";
 import { useEffect, useState } from "react";
-import { showAlert } from "./index";
+import { showAlert } from "./index.js";
 
 export type SERVER_CONFIG_TYPES =
   | "sessionAttribute"
