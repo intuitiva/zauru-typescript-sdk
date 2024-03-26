@@ -179,7 +179,7 @@ export function DynamicBaculoForm(props: Props) {
             name={`${namesStr}${field.form_id}_${field.id}`}
             disabled={readOnly}
             defaultValue={
-              defaultValue?.value === "true" ?? field.default_value === "true"
+              field.default_value === "true" || defaultValue?.value === "true"
             }
           />
         );
