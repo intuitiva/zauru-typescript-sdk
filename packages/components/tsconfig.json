@@ -1,5 +1,5 @@
 {
-  "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["env.d.ts", "**/*.ts", "**/*.tsx", "**/*.css"],
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "lib": ["DOM", "DOM.Iterable", "ES2022"],

@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { LoadingInputSkeleton } from "../Skeletons/index.js";
 import { ConnectionState } from "./../ConnectionState/index.js";
 
 type FooterProps = {
@@ -32,16 +30,7 @@ export const Footer = ({
   selectedColor,
   showConnection = false,
 }: FooterProps) => {
-  const [client, setIsClient] = useState(false);
   const color = COLORS[selectedColor];
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!client) {
-    return <LoadingInputSkeleton />;
-  }
 
   return (
     <footer className={`inset-x-0 bottom-0 px-2 py-[20px] ${color}`}>
