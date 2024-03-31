@@ -22,3 +22,13 @@ npm link @zauru-sdk/redux
 npm link @zauru-sdk/services
 npm link @zauru-sdk/types
 npm link @zauru-sdk/utils
+
+npm unlink @zauru-sdk/common
+npm unlink @zauru-sdk/config
+npm unlink @zauru-sdk/graphql
+npm unlink @zauru-sdk/hooks
+npm unlink @zauru-sdk/icons
+npm unlink @zauru-sdk/redux
+npm unlink @zauru-sdk/services
+npm unlink @zauru-sdk/types
+npm unlink @zauru-sdk/utils

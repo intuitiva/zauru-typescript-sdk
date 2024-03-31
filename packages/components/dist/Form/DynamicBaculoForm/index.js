@@ -54,7 +54,7 @@ export function DynamicBaculoForm(props) {
             case "number":
                 return (_jsx(TextField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, defaultValue: defaultValue?.value ?? field.default_value, type: "number", disabled: readOnly }, field.id));
             case "yes_no":
-                return (_jsx(YesNo, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, disabled: readOnly, defaultValue: defaultValue?.value === "true" ?? field.default_value === "true" }, field.id));
+                return (_jsx(YesNo, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, disabled: readOnly, defaultValue: field.default_value === "true" || defaultValue?.value === "true" }, field.id));
             case "section":
                 return (_jsxs("div", { children: [_jsx(LineSeparator, {}), _jsx("h3", { className: "mb-10 text-3xl font-bold leading-8 text-gray-900", children: field.name })] }, field.id));
             case "multi_line_text":
