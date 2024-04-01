@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/services",
-  "version": "1.0.44",
+  "version": "1.0.45",
   "description": "Servicios de consulta a Zauru",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
