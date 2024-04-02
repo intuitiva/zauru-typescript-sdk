@@ -99,7 +99,7 @@ export declare const arrayToObject: (arr?: Array<any>, options?: {
 }) => {
     [key: string]: any;
 };
-export declare function convertToFormData(obj: any): import("undici-types").FormData;
+export declare function convertToFormData(obj: any): FormData;
 export declare const ZAURU_REGEX: {
     porcentaje: RegExp;
 };

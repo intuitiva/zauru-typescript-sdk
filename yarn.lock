@@ -1504,12 +1504,6 @@ __metadata:
   dependencies:
     "@types/react": "npm:^18.2.20"
     "@types/react-dom": "npm:^18.2.7"
-    eslint: "npm:^8.38.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    eslint-import-resolver-typescript: "npm:^3.6.1"
-    eslint-plugin-import: "npm:^2.28.1"
-    eslint-plugin-jsx-a11y: "npm:^6.7.1"
-    eslint-plugin-react: "npm:^7.33.2"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     tailwindcss: "npm:^3.4.1"

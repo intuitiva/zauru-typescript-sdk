@@ -2,14 +2,16 @@
   "name": "@zauru-sdk/common",
   "version": "1.0.49",
   "description": "Funciones de uso común en el desarrollo de webapps en Zauru",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Oscar Cuéllar",
@@ -22,9 +24,6 @@
     "@zauru-sdk/types": "^1.0.49",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.45"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   },
   "gitHead": "a80d6336cbfdb73447743c8e2c4a4721f2eea857"
 }

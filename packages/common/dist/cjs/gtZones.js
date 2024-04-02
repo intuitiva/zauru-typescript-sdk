@@ -1,4 +1,7 @@
-export const guatemalaCountryInfo = [
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getMunSelectOptions = exports.getDepSelectOptions = exports.guatemalaCountryInfo = void 0;
+exports.guatemalaCountryInfo = [
     { value: 0, label: "GUATEMALA,GUATEMALA" },
     {
         value: 1,
@@ -808,8 +811,8 @@ export const guatemalaCountryInfo = [
     { value: 356, label: "JUTIAPA,QUESADA" },
     { value: 357, label: "JUTIAPA,CERRO GORDO" },
 ];
-export const getDepSelectOptions = () => {
-    const optionsDep = guatemalaCountryInfo?.map((x) => {
+const getDepSelectOptions = () => {
+    const optionsDep = exports.guatemalaCountryInfo?.map((x) => {
         const value = x.label.split(",")[0];
         return { label: value, value };
     }) ?? [];
@@ -822,9 +825,11 @@ export const getDepSelectOptions = () => {
     const uniqueArray = Array.from(uniqueValues.values());
     return uniqueArray;
 };
-export const getMunSelectOptions = () => {
-    return (guatemalaCountryInfo?.map((x) => {
+exports.getDepSelectOptions = getDepSelectOptions;
+const getMunSelectOptions = () => {
+    return (exports.guatemalaCountryInfo?.map((x) => {
         const value = x.label.split(",")[1];
         return { label: value, value };
     }) ?? []);
 };
+exports.getMunSelectOptions = getMunSelectOptions;
