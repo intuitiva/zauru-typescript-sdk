@@ -97,6 +97,6 @@ export declare const getBasketDetailsByForm: (formInput: FormInput) => {
     totales: BasketDetailsFooter;
     headers: GenericDynamicTableColumn[];
 };
-export declare const useGetProviderNameByPurchaseOrder: (payees: PayeeGraphQL[], purchaseOrder: PurchaseOrderGraphQL) => string | null;
-export declare const useGetItemNameByPurchaseOrder: (items: ItemGraphQL[], purchaseOrder: PurchaseOrderGraphQL) => string | null;
+export declare const useGetProviderNameByPurchaseOrder: (payees: PayeeGraphQL[], purchaseOrder: PurchaseOrderGraphQL) => string;
+export declare const useGetItemNameByPurchaseOrder: (items: ItemGraphQL[], purchaseOrder: PurchaseOrderGraphQL) => string;
 export {};

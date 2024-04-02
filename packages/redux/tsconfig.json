@@ -1,22 +1,14 @@
 {
-  "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts"],
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "isolatedModules": true,
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
-    "esModuleInterop": true,
     "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
     "strict": true,
-    "allowJs": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "outDir": "./dist",
     "rootDir": "./src",
-    "declaration": true,
-    "declarationDir": "./dist",
     "paths": {
       "~/*": ["./src/*"]
     }

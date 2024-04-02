@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ExitSvg } from "@zauru-sdk/icons";
 import { createRoot } from "react-dom/client";
-import { AnimatePresence, motion } from "framer-motion";
 
 export type AlertType = "success" | "error" | "info" | "warning";
 
@@ -59,10 +58,7 @@ const Alert: React.FC<AlertProps> = ({ type, title, description, onClose }) => {
   }, [onClose]);
 
   return (
-    <motion.div
-      initial={{ y: -50, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      exit={{ y: -50, opacity: 0 }}
+    <div
       className={`fixed top-0 right-0 w-80 mt-10 mr-10 rounded-md shadow-lg ${getColor()} p-4 transition-transform duration-300`}
       style={{
         zIndex: 1000,
@@ -105,7 +101,7 @@ const Alert: React.FC<AlertProps> = ({ type, title, description, onClose }) => {
           style={{ width: `${progress * 100}%` }}
         ></div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -135,11 +131,7 @@ export const showAlert = (alertProps: AlertProps) => {
   updateAlertOffsets();
 
   const root = createRoot(container);
-  root.render(
-    <AnimatePresence>
-      <Alert {...alertProps} onClose={asyncOnClose} />
-    </AnimatePresence>
-  );
+  root.render(<Alert {...alertProps} onClose={asyncOnClose} />);
 };
 
 const updateAlertOffsets = () => {
