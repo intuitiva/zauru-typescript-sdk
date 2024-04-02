@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/hooks",
-  "version": "1.0.50",
+  "version": "1.0.51",
   "description": "Hooks reutilizables dentro de las webapps de Zauru.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -30,7 +30,7 @@
     "@zauru-sdk/common": "^1.0.50",
     "@zauru-sdk/graphql": "^1.0.48",
     "@zauru-sdk/icons": "^1.0.50",
-    "@zauru-sdk/redux": "^1.0.50",
+    "@zauru-sdk/redux": "^1.0.51",
     "@zauru-sdk/services": "^1.0.50",
     "@zauru-sdk/types": "^1.0.49",
     "@zauru-sdk/utils": "^1.0.50",
