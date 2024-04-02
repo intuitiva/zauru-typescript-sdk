@@ -1,21 +1,13 @@
 {
-  "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts"],
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "lib": ["ES2022"],
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "module": "ES2022",
     "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
-    "allowJs": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "outDir": "./dist",
     "rootDir": "./src",
-    "declaration": true,
-    "declarationDir": "./dist",
     "paths": {
       "~/*": ["./src/*"]
     }
