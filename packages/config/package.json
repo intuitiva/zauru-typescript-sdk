@@ -20,7 +20,6 @@
   "author": "Oscar Cuéllar",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "20.11.27",
     "typescript": "^5.1.6"
   },
   "gitHead": "4afb063c0534f4a103ffec5e7d5be75d283fdc00"
