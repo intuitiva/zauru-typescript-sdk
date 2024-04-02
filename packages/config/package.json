@@ -2,24 +2,26 @@
   "name": "@zauru-sdk/config",
   "version": "1.0.25",
   "description": "Configuración centralizada para aplicaciones Zauru SDK",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "dist"
+  ],
   "author": "Oscar Cuéllar",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "20.11.27",
     "typescript": "^5.1.6"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   },
   "gitHead": "4afb063c0534f4a103ffec5e7d5be75d283fdc00"
 }

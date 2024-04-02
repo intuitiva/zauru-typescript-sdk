@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.config = void 0;
 const rawConfig = {
     redisBaseURL: process.env.UPSTASH_REDIS_REST_URL || "",
     redisToken: process.env.UPSTASH_REDIS_REST_TOKEN || "",
@@ -16,6 +19,6 @@ function getConfigValue(key) {
     }
     return rawConfig[key];
 }
-export const config = new Proxy(rawConfig, {
+exports.config = new Proxy(rawConfig, {
     get: (_, key) => getConfigValue(key),
 });
