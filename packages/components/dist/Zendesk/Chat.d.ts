@@ -1,4 +1,4 @@
-/// <reference types="react" />
+/// <reference types="react" resolution-mode="require"/>
 export declare const logoutFromZendesk: () => void;
 export declare const ZendeskAPI: (...args: any[]) => void;
 interface ZendeskProps {

@@ -1,5 +1,5 @@
 import type { TableProps } from "react-data-table-component";
-import { ExpandableRowsComponent } from "react-data-table-component/dist/DataTable/types";
+import { ExpandableRowsComponent } from "react-data-table-component/dist/DataTable/types.js";
 type Props = TableProps<any> & {
     columns: any;
     conditionalRowStyles?: any;

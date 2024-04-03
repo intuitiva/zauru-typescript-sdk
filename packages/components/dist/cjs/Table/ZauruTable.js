@@ -1,8 +1,36 @@
-import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
-import { useSearchParams } from "@remix-run/react";
-import { useEffect, useState } from "react";
-import DataTable, { createTheme } from "react-data-table-component";
-import { SearchSVG } from "@zauru-sdk/icons";
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ZauruTable = void 0;
+const jsx_runtime_1 = require("react/jsx-runtime");
+const react_1 = require("@remix-run/react");
+const react_2 = require("react");
+const react_data_table_component_1 = require("react-data-table-component");
+const icons_1 = require("@zauru-sdk/icons");
+const ReactDataTableComponent = __importStar(require("react-data-table-component"));
+const DataTable = ReactDataTableComponent.default;
 const customStyles = {
     headCells: {
         style: {
@@ -28,7 +56,7 @@ const customStyles = {
         },
     },
 };
-createTheme("solarized", {
+(0, react_data_table_component_1.createTheme)("solarized", {
     text: {
         primary: "#002b36",
         secondary: "#002b36",
@@ -52,7 +80,7 @@ createTheme("solarized", {
         background: "black",
     },
 });
-createTheme("subTable", {
+(0, react_data_table_component_1.createTheme)("subTable", {
     text: {
         primary: "#002b36",
         secondary: "#002b36",
@@ -77,22 +105,22 @@ createTheme("subTable", {
     },
 });
 //Documentación de la tabla https://react-data-table-component.netlify.app/?path=/docs/getting-started-intro--docs
-export const ZauruTable = (props) => {
+const ZauruTable = (props) => {
     const { columns, conditionalRowStyles, data, loading = false, pagination, search, expandable, theme, className, offlineSearch = [], whitOutPagination = false, ...others } = props;
-    const [, setSearchParams] = useSearchParams({
+    const [, setSearchParams] = (0, react_1.useSearchParams)({
         page: "1",
         perPage: "10",
         search: "",
     });
-    const [filteredData, setFilteredData] = useState(data);
-    const [showTable, setShowTable] = useState(false);
-    useEffect(() => {
+    const [filteredData, setFilteredData] = (0, react_2.useState)(data);
+    const [showTable, setShowTable] = (0, react_2.useState)(false);
+    (0, react_2.useEffect)(() => {
         setShowTable(true);
     }, []);
-    useEffect(() => {
+    (0, react_2.useEffect)(() => {
         setFilteredData(data);
     }, [data]);
-    const subHeaderComponentMemo = (_jsxs(_Fragment, { children: [_jsx("input", { name: "search", type: "text", placeholder: search?.placeholderSearch ?? "Filtrar", "aria-label": "Search Input", className: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg px-2", onChange: (event) => {
+    const subHeaderComponentMemo = ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("input", { name: "search", type: "text", placeholder: search?.placeholderSearch ?? "Filtrar", "aria-label": "Search Input", className: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg px-2", onChange: (event) => {
                     const searchTerm = event.target.value;
                     if (offlineSearch.length > 0) {
                         filterData(searchTerm);
@@ -105,7 +133,7 @@ export const ZauruTable = (props) => {
                             search: searchTerm,
                         }));
                     }
-                } }), _jsx("button", { type: "button", name: "search", className: "px-2 font-bold", children: _jsx(SearchSVG, {}) })] }));
+                } }), (0, jsx_runtime_1.jsx)("button", { type: "button", name: "search", className: "px-2 font-bold", children: (0, jsx_runtime_1.jsx)(icons_1.SearchSVG, {}) })] }));
     const filterData = (searchTerm) => {
         if (!searchTerm || !offlineSearch || offlineSearch.length === 0) {
             setFilteredData(data);
@@ -133,7 +161,7 @@ export const ZauruTable = (props) => {
         }));
     };
     if (!showTable) {
-        return _jsx(_Fragment, { children: "Loading..." });
+        return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: "Loading..." });
     }
     //Textos en español de la tabla
     const paginationComponentOptions = {
@@ -144,5 +172,6 @@ export const ZauruTable = (props) => {
     };
     const loadSubHeader = !!(search || offlineSearch.length > 0);
     const subHeaderComponent = loadSubHeader ? subHeaderComponentMemo : undefined;
-    return (_jsx(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: columns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, expandableRows: !!expandable, expandableRowExpanded: expandable ? expandable.expandableRowExpanded : undefined, expandableRowsComponent: expandable ? expandable.expandableRowsComponent : undefined, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination ? pagination.totalRows : undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions ? pagination.rowsPerPageOptions : [10], ...others }));
+    return ((0, jsx_runtime_1.jsx)(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: columns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, expandableRows: !!expandable, expandableRowExpanded: expandable ? expandable.expandableRowExpanded : undefined, expandableRowsComponent: expandable ? expandable.expandableRowsComponent : undefined, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination ? pagination.totalRows : undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions ? pagination.rowsPerPageOptions : [10], ...others }));
 };
+exports.ZauruTable = ZauruTable;

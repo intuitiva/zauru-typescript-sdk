@@ -1,4 +1,4 @@
-/// <reference types="react" />
+/// <reference types="react" resolution-mode="require"/>
 type Props = {
     type?: "reset" | "button" | "submit" | undefined;
     title?: string;

@@ -5,9 +5,11 @@ import type {
   TableProps,
   TableStyles,
 } from "react-data-table-component";
-import DataTable, { createTheme } from "react-data-table-component";
+import { createTheme } from "react-data-table-component";
 import { SearchSVG } from "@zauru-sdk/icons";
-import { ExpandableRowsComponent } from "react-data-table-component/dist/DataTable/types";
+import * as ReactDataTableComponent from "react-data-table-component";
+const DataTable = ReactDataTableComponent.default as any;
+import { ExpandableRowsComponent } from "react-data-table-component/dist/DataTable/types.js";
 
 const customStyles: TableStyles = {
   headCells: {
