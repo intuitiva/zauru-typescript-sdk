@@ -2,16 +2,22 @@
   "name": "@zauru-sdk/utils",
   "version": "1.0.50",
   "description": "Utilidades, parseo de request y demás para desarrollo de webapps de Zauru",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "dist"
+  ],
   "author": "Oscar Cuéllar",
   "license": "MIT",
   "devDependencies": {
@@ -24,9 +30,6 @@
     "@zauru-sdk/graphql": "^1.0.48",
     "@zauru-sdk/services": "^1.0.50",
     "@zauru-sdk/types": "^1.0.49"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   },
   "gitHead": "4afb063c0534f4a103ffec5e7d5be75d283fdc00"
 }
