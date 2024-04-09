@@ -315,7 +315,7 @@ export const ArrowToRigth = () => {
       width="25"
       height="50"
     >
-      <line x1="10" y1="25" x2="40" y2="25" stroke="black" stroke-width="2" />
+      <line x1="10" y1="25" x2="40" y2="25" stroke="black" strokeWidth="2" />
       <polygon points="40,25 30,35 30,15" fill="black" />
     </svg>
   );
@@ -699,7 +699,7 @@ export const DownloadIconSVG = () => {
     >
       <g
         fill="none"
-        fill-rule="evenodd"
+        fillRule="evenodd"
         stroke="#000"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -707,6 +707,25 @@ export const DownloadIconSVG = () => {
       >
         <path d="M1 16v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3M6 11l4 4 4-4M10 1v14"></path>
       </g>
+    </svg>
+  );
+};
+
+export const DownloadIconSVG2 = () => {
+  return (
+    <svg
+      data-testid="geist-icon"
+      height="16"
+      strokeLinejoin="round"
+      viewBox="0 0 16 16"
+      width="16"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M8.75 1V1.75V8.68934L10.7197 6.71967L11.25 6.18934L12.3107 7.25L11.7803 7.78033L8.70711 10.8536C8.31658 11.2441 7.68342 11.2441 7.29289 10.8536L4.21967 7.78033L3.68934 7.25L4.75 6.18934L5.28033 6.71967L7.25 8.68934V1.75V1H8.75ZM13.5 9.25V13.5H2.5V9.25V8.5H1V9.25V14C1 14.5523 1.44771 15 2 15H14C14.5523 15 15 14.5523 15 14V9.25V8.5H13.5V9.25Z"
+        fill="currentColor"
+      ></path>
     </svg>
   );
 };
