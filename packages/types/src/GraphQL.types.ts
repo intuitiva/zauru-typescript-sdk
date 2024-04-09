@@ -445,6 +445,7 @@ export type FormGraphQL = {
   name: string;
   description: string;
   settings_form_fields: Partial<FormFieldGraphQL>[];
+  settings_form_submissions: FormSubmissionGraphQL[];
 };
 
 export type PriceListGraphQL = {
