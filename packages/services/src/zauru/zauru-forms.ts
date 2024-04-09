@@ -520,6 +520,20 @@ export async function getInvoiceFormSubmissionsByInvoiceId(
   });
 }
 
+export const getFormSubmissionAPIZauru = async (
+  headers: any,
+  id: number | string
+) => {
+  return handlePossibleAxiosErrors(async () => {
+    const responseZauru = await httpZauru.get(
+      `/settings/forms/form_submissions/${id}.json`,
+      { headers }
+    );
+
+    return responseZauru.data;
+  });
+};
+
 /**
  * createForm
  * @param headers
