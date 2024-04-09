@@ -636,6 +636,69 @@ export const getShipmentsStringQuery = (wheres: string[] = []) => {
   `;
 };
 
+export const getAllFormsStringQuery = (
+  config: { withSubmissions: boolean } = { withSubmissions: false }
+) => `
+query getAllForms {
+  settings_forms (
+      order_by: {zid: desc, version: desc}
+    ) {
+      id
+      zid
+      name
+      description
+      version
+      active
+      ${
+        config.withSubmissions
+          ? `settings_form_submission {
+                id
+                zid
+                reference
+                created_at
+                version
+                id_number
+                user_id
+                settings_form_submission_values {
+                  id
+                  form_field_id
+                  value
+                  settings_form_field {
+                    id
+                    name
+                    print_var_name
+                    field_type
+                    settings_form_field_options {
+                        id
+                        label
+                        position
+                        value
+                    }
+                  }
+                }`
+          : ""
+      }
+      settings_form_fields (order_by: {position: asc}) {
+        id
+        name
+        field_type
+        hint
+        required
+        default_value
+        position
+        print_var_name
+        form_id
+        settings_form_field_options {
+            id
+            label
+            position
+            value
+        }
+      }
+  }
+}
+`;
+
 export const getFormByNameStringQuery = `
 query getFormByName ($name: String) {
   settings_forms (

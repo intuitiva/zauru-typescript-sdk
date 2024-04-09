@@ -15,6 +15,7 @@ import {
 import { getGraphQLAPIHeaders } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
 import {
+  getAllFormsStringQuery,
   getFormByNameStringQuery,
   getFormSubmissionByIdStringQuery,
   getFormsByDocumentTypeStringQuery,
@@ -99,6 +100,55 @@ export async function getFormByName(
     const register = response?.data?.data?.settings_forms[0];
 
     return register;
+  });
+}
+
+/**
+ * getAllForms
+ */
+export async function getAllForms(
+  session: Session,
+  filters: { withSubmissions: boolean } = { withSubmissions: false }
+): Promise<AxiosUtilsResponse<FormGraphQL[]>> {
+  return handlePossibleAxiosErrors(async () => {
+    const headers = await getGraphQLAPIHeaders(session);
+
+    const response = await httpGraphQLAPI.post<{
+      data: { settings_forms: FormGraphQL[] };
+      errors?: {
+        message: string;
+        extensions: { path: string; code: string };
+      }[];
+    }>(
+      "",
+      {
+        query: getAllFormsStringQuery({
+          withSubmissions: filters.withSubmissions,
+        }),
+      },
+      { headers }
+    );
+
+    if (response.data.errors) {
+      throw new Error(response.data.errors.map((x) => x.message).join(";"));
+    }
+
+    const registers = response?.data?.data?.settings_forms;
+
+    // Filtrar los registros para obtener sólo los de la versión más alta.
+    const groupedByVersion = registers.reduce((acc, record) => {
+      const zid = record.zid;
+
+      if (!acc[zid]) {
+        acc[zid] = record;
+      }
+
+      return acc;
+    }, {} as { [key: string]: FormGraphQL });
+
+    const latestVersionRecords = Object.values(groupedByVersion).reverse();
+
+    return latestVersionRecords;
   });
 }
 

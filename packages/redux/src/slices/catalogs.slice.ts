@@ -58,6 +58,7 @@ export type CATALOGS_NAMES =
   | "invoiceFormSubmissions"
   | "myCases"
   | "myCaseFormSubmissions"
+  | "allForms"
   | "shipmentsToMyAgency"
   | "myAgencyLotStocks"
   | "shipments"
@@ -101,6 +102,7 @@ type CatalogState = {
   invoicesByLab: LoadingState<InvoiceGraphQL[]>;
   invoiceForms: LoadingState<FormGraphQL[]>;
   caseForms: LoadingState<FormGraphQL[]>;
+  allForms: LoadingState<FormGraphQL[]>;
   invoiceFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;
   myCases: LoadingState<CaseGraphQL[]>;
   myCaseFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;
@@ -144,6 +146,7 @@ const initialState: CatalogState = {
   invoicesByLab: createLoadingState([]),
   invoiceForms: createLoadingState([]),
   caseForms: createLoadingState([]),
+  allForms: createLoadingState([]),
   invoiceFormSubmissions: createLoadingState([]),
   myCases: createLoadingState([]),
   myCaseFormSubmissions: createLoadingState([]),

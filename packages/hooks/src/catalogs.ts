@@ -25,7 +25,7 @@ import type {
   Template,
   TipoMuestra,
   WebAppRowGraphQL,
-} from "@zauru-sdk/types";
+} from "~/types";
 import {
   CATALOGS_NAMES,
   ONLINE_CATALOGS_NAMES,
@@ -34,7 +34,7 @@ import {
   catalogsFetchSuccess,
   useAppDispatch,
   useAppSelector,
-} from "@zauru-sdk/redux";
+} from "~/redux";
 
 type CatalogType<T> = {
   data: T[];
@@ -409,6 +409,33 @@ export const useGetBitacoraRechazoMasivo = (
     "bitacoraRechazoMasivo",
     config
   );
+
+export const useGetAllForms = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: FormGraphQL[];
+} => {
+  const data = useGetReduxCatalog<FormGraphQL>("allForms", config);
+
+  // Filtrar los registros para obtener sólo los de la versión más alta.
+  const groupedByVersion = (data.data || []).reduce((acc, record) => {
+    const zid = record.zid;
+
+    if (!acc[zid]) {
+      acc[zid] = record;
+    }
+
+    return acc;
+  }, {} as { [key: string]: FormGraphQL });
+
+  const latestVersionRecords = Object.values(groupedByVersion);
+
+  return {
+    loading: data.loading,
+    data: latestVersionRecords.filter((x) => x.active),
+  };
+};
 
 export const useGetInvoiceForms = (
   config?: ReduxParamsConfig
