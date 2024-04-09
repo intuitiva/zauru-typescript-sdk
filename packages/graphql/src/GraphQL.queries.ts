@@ -651,7 +651,7 @@ query getAllForms {
       active
       ${
         config.withSubmissions
-          ? `settings_form_submission {
+          ? `settings_form_submissions {
                 id
                 zid
                 reference
@@ -675,7 +675,8 @@ query getAllForms {
                         value
                     }
                   }
-                }`
+                }
+              }`
           : ""
       }
       settings_form_fields (order_by: {position: asc}) {
