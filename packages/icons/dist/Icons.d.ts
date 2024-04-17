@@ -38,7 +38,9 @@ export declare const SendMessageIcon: () => import("react/jsx-runtime").JSX.Elem
 export declare const CheckIconSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const PrintIconSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const DownloadIconSVG: () => import("react/jsx-runtime").JSX.Element;
+export declare const DownloadIconSVG2: () => import("react/jsx-runtime").JSX.Element;
 export declare const LoadingIconSVG: () => import("react/jsx-runtime").JSX.Element;
+export declare const LoaderCircleSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const AttachmentIconSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const CustomIconFromImage: ({ imageName, height, width, }: {
     imageName: string;

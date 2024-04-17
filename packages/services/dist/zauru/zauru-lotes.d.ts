@@ -15,16 +15,6 @@ export declare const getBasketsLots: (headers: any, session: Session) => Promise
  * @returns
  */
 export declare const retenerLote: (headers: any, session: Session, lot_id: string, lot_name: string) => Promise<{
-    /**
-     *
-     * @param headers
-     * @param agency_id
-     * @param basket_id
-     * @param orders
-     * @param desde
-     * @param hasta
-     * @returns
-     */
     Nombre: string;
 }>;
 /**
@@ -35,16 +25,6 @@ export declare const retenerLote: (headers: any, session: Session, lot_id: strin
  * @returns
  */
 export declare const liberarLote: (headers: any, session: Session, lot_id: string, lot_name: string) => Promise<{
-    /**
-     *
-     * @param headers
-     * @param agency_id
-     * @param basket_id
-     * @param orders
-     * @param desde
-     * @param hasta
-     * @returns
-     */
     Nombre: string;
 }>;
 /**

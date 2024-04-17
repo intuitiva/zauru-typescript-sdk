@@ -38,6 +38,9 @@ export declare const getBundlesByItemCategoryIdStringQuery = "\nquery getBundles
 export declare const getBundleByNameStringQuery = "\nquery getBundleByName ($name: String) {\n  bundles (where: {name: {_eq: $name }}) {\n    id\n  }\n}\n";
 export declare const getItemByNameStringQuery = "\nquery getItemByName ($name: String) {\n  items (where: {active: {_eq: true }, name: {_eq: $name }}) {\n      id\n      name\n      stocks_only_integer\n      code\n      product_type\n  }\n}\n";
 export declare const getShipmentsStringQuery: (wheres?: string[]) => string;
+export declare const getAllFormsStringQuery: (config?: {
+    withSubmissions: boolean;
+}) => string;
 export declare const getFormByNameStringQuery = "\nquery getFormByName ($name: String) {\n  settings_forms (\n      where: {name: {_eq: $name }},\n      order_by: {zid: desc, version: desc}\n    ) {\n      id\n      zid\n      name\n      description\n      version\n      active\n      settings_form_fields (order_by: {position: asc}) {\n        id\n        name\n        field_type\n        hint\n        required\n        default_value\n        position\n        print_var_name\n        form_id\n        settings_form_field_options {\n            id\n            label\n            position\n            value\n        }\n      }\n  }\n}\n";
 export declare const getFormsStringQuery = "\nquery getForms {\n  settings_forms (\n      order_by: {zid: desc, version: desc}\n    ) {\n      id\n      zid\n      name\n      description\n      version\n      active\n      settings_form_fields (order_by: {position: asc}) {\n        id\n        name\n        field_type\n        hint\n        required\n        default_value\n        position\n        print_var_name\n        form_id\n        settings_form_field_options {\n            id\n            label\n            position\n            value\n        }\n      }\n  }\n}\n";
 export declare const getFormsByDocumentTypeStringQuery: (filters?: {

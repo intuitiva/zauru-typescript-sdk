@@ -25,7 +25,7 @@ import type {
   Template,
   TipoMuestra,
   WebAppRowGraphQL,
-} from "~/types";
+} from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
   ONLINE_CATALOGS_NAMES,
@@ -34,7 +34,7 @@ import {
   catalogsFetchSuccess,
   useAppDispatch,
   useAppSelector,
-} from "~/redux";
+} from "@zauru-sdk/redux";
 
 type CatalogType<T> = {
   data: T[];

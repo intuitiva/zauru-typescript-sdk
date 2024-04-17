@@ -9,6 +9,12 @@ export declare function getForms(session: Session): Promise<AxiosUtilsResponse<F
  */
 export declare function getFormByName(session: Session, name: string): Promise<AxiosUtilsResponse<FormGraphQL>>;
 /**
+ * getAllForms
+ */
+export declare function getAllForms(session: Session, filters?: {
+    withSubmissions: boolean;
+}): Promise<AxiosUtilsResponse<FormGraphQL[]>>;
+/**
  * getFormsByDocumentType
  */
 export declare function getFormsByDocumentType(session: Session, document_type: FormDocumentType, filters?: {
@@ -56,6 +62,7 @@ export declare function getLastInvoiceFormSubmission(session: Session, filters?:
 export declare function getInvoiceFormSubmissionsByInvoiceId(session: Session, invoice_id: string, filters?: {
     formZid?: number;
 }): Promise<AxiosUtilsResponse<SubmissionInvoicesGraphQL[]>>;
+export declare const getFormSubmissionAPIZauru: (headers: any, id: number | string) => Promise<AxiosUtilsResponse<any>>;
 /**
  * createForm
  * @param headers

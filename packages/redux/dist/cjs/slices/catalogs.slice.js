@@ -38,6 +38,7 @@ const initialState = {
     invoicesByLab: createLoadingState([]),
     invoiceForms: createLoadingState([]),
     caseForms: createLoadingState([]),
+    allForms: createLoadingState([]),
     invoiceFormSubmissions: createLoadingState([]),
     myCases: createLoadingState([]),
     myCaseFormSubmissions: createLoadingState([]),

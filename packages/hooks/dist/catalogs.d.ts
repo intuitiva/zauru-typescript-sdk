@@ -122,6 +122,10 @@ export declare const useGetBitacoraRechazoMasivo: (config?: ReduxParamsConfig) =
     loading: boolean;
     data: WebAppRowGraphQL<BitacoraPOMassive>[];
 };
+export declare const useGetAllForms: (config?: ReduxParamsConfig) => {
+    loading: boolean;
+    data: FormGraphQL[];
+};
 export declare const useGetInvoiceForms: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: FormGraphQL[];

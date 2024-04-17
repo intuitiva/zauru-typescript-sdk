@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteFormSubmission = exports.updateSubmissionInvoiceFormSubmission = exports.createFormSubmission = exports.updateForm = exports.deleteForm = exports.createForm = exports.getInvoiceFormSubmissionsByInvoiceId = exports.getLastInvoiceFormSubmission = exports.getMyCaseFormSubmissions = exports.getInvoiceFormSubmissionsByAgencyId = exports.getFormSubmissionById = exports.getFormsByDocumentType = exports.getFormByName = exports.getForms = void 0;
+exports.deleteFormSubmission = exports.updateSubmissionInvoiceFormSubmission = exports.createFormSubmission = exports.updateForm = exports.deleteForm = exports.createForm = exports.getFormSubmissionAPIZauru = exports.getInvoiceFormSubmissionsByInvoiceId = exports.getLastInvoiceFormSubmission = exports.getMyCaseFormSubmissions = exports.getInvoiceFormSubmissionsByAgencyId = exports.getFormSubmissionById = exports.getFormsByDocumentType = exports.getAllForms = exports.getFormByName = exports.getForms = void 0;
 const common_1 = require("@zauru-sdk/common");
 const common_js_1 = require("../common.js");
 const httpGraphQL_js_1 = __importDefault(require("./httpGraphQL.js"));
@@ -49,6 +49,34 @@ async function getFormByName(session, name) {
     });
 }
 exports.getFormByName = getFormByName;
+/**
+ * getAllForms
+ */
+async function getAllForms(session, filters = { withSubmissions: false }) {
+    return (0, common_1.handlePossibleAxiosErrors)(async () => {
+        const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
+        const response = await httpGraphQL_js_1.default.post("", {
+            query: (0, graphql_1.getAllFormsStringQuery)({
+                withSubmissions: filters.withSubmissions,
+            }),
+        }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
+        const registers = response?.data?.data?.settings_forms;
+        // Filtrar los registros para obtener sólo los de la versión más alta.
+        const groupedByVersion = registers.reduce((acc, record) => {
+            const zid = record.zid;
+            if (!acc[zid]) {
+                acc[zid] = record;
+            }
+            return acc;
+        }, {});
+        const latestVersionRecords = Object.values(groupedByVersion).reverse();
+        return latestVersionRecords;
+    });
+}
+exports.getAllForms = getAllForms;
 /**
  * getFormsByDocumentType
  */
@@ -256,6 +284,13 @@ async function getInvoiceFormSubmissionsByInvoiceId(session, invoice_id, filters
     });
 }
 exports.getInvoiceFormSubmissionsByInvoiceId = getInvoiceFormSubmissionsByInvoiceId;
+const getFormSubmissionAPIZauru = async (headers, id) => {
+    return (0, common_1.handlePossibleAxiosErrors)(async () => {
+        const responseZauru = await httpZauru_js_1.default.get(`/settings/forms/form_submissions/${id}.json`, { headers });
+        return responseZauru.data;
+    });
+};
+exports.getFormSubmissionAPIZauru = getFormSubmissionAPIZauru;
 /**
  * createForm
  * @param headers

@@ -1,6 +1,6 @@
 import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, FormSubmissionGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL } from "@zauru-sdk/types";
 export type ONLINE_CATALOGS_NAMES = "invoiceFormSubmissionsByInvoiceId" | "invoiceFormSubmissionsByAgencyId";
-export type CATALOGS_NAMES = "agencies" | "suggestedPrices" | "providers" | "providerCategories" | "receptionTypes" | "tiposDeMuestra" | "motivosRechazo" | "bitacoraRechazoMasivo" | "items" | "itemsByReception" | "itemsByLab" | "itemServicesByLab" | "itemCategoriesForLab" | "payees" | "payeesForLab" | "payeeCategoriesLabPrices" | "clientCategories" | "bundlesRecipForLab" | "currencies" | "paymentTerms" | "employeesByLab" | "employeesByCurrentAgency" | "invoicesByLab" | "invoiceForms" | "caseForms" | "invoiceFormSubmissions" | "myCases" | "myCaseFormSubmissions" | "shipmentsToMyAgency" | "myAgencyLotStocks" | "shipments" | "bookings" | "templates" | "bundlesForLab";
+export type CATALOGS_NAMES = "agencies" | "suggestedPrices" | "providers" | "providerCategories" | "receptionTypes" | "tiposDeMuestra" | "motivosRechazo" | "bitacoraRechazoMasivo" | "items" | "itemsByReception" | "itemsByLab" | "itemServicesByLab" | "itemCategoriesForLab" | "payees" | "payeesForLab" | "payeeCategoriesLabPrices" | "clientCategories" | "bundlesRecipForLab" | "currencies" | "paymentTerms" | "employeesByLab" | "employeesByCurrentAgency" | "invoicesByLab" | "invoiceForms" | "caseForms" | "invoiceFormSubmissions" | "myCases" | "myCaseFormSubmissions" | "allForms" | "shipmentsToMyAgency" | "myAgencyLotStocks" | "shipments" | "bookings" | "templates" | "bundlesForLab";
 type LoadingState<T> = {
     data: T;
     loading: boolean;
@@ -36,6 +36,7 @@ type CatalogState = {
     invoicesByLab: LoadingState<InvoiceGraphQL[]>;
     invoiceForms: LoadingState<FormGraphQL[]>;
     caseForms: LoadingState<FormGraphQL[]>;
+    allForms: LoadingState<FormGraphQL[]>;
     invoiceFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;
     myCases: LoadingState<CaseGraphQL[]>;
     myCaseFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;

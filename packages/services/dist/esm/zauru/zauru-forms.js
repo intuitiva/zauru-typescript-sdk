@@ -1,7 +1,7 @@
 import { arrayToObject, convertToFormData, handlePossibleAxiosErrors, } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
-import { getFormByNameStringQuery, getFormSubmissionByIdStringQuery, getFormsByDocumentTypeStringQuery, getFormsStringQuery, getInvoiceFormSubmissionsByAgencyIdStringQuery, getInvoiceFormSubmissionsByInvoiceIdStringQuery, getLastInvoiceFormSubmissionStringQuery, getMyCaseFormSubmissionsStringQuery, } from "@zauru-sdk/graphql";
+import { getAllFormsStringQuery, getFormByNameStringQuery, getFormSubmissionByIdStringQuery, getFormsByDocumentTypeStringQuery, getFormsStringQuery, getInvoiceFormSubmissionsByAgencyIdStringQuery, getInvoiceFormSubmissionsByInvoiceIdStringQuery, getLastInvoiceFormSubmissionStringQuery, getMyCaseFormSubmissionsStringQuery, } from "@zauru-sdk/graphql";
 import httpZauru from "./httpZauru.js";
 /**
  * getForms
@@ -39,6 +39,33 @@ export async function getFormByName(session, name) {
         }
         const register = response?.data?.data?.settings_forms[0];
         return register;
+    });
+}
+/**
+ * getAllForms
+ */
+export async function getAllForms(session, filters = { withSubmissions: false }) {
+    return handlePossibleAxiosErrors(async () => {
+        const headers = await getGraphQLAPIHeaders(session);
+        const response = await httpGraphQLAPI.post("", {
+            query: getAllFormsStringQuery({
+                withSubmissions: filters.withSubmissions,
+            }),
+        }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
+        const registers = response?.data?.data?.settings_forms;
+        // Filtrar los registros para obtener sólo los de la versión más alta.
+        const groupedByVersion = registers.reduce((acc, record) => {
+            const zid = record.zid;
+            if (!acc[zid]) {
+                acc[zid] = record;
+            }
+            return acc;
+        }, {});
+        const latestVersionRecords = Object.values(groupedByVersion).reverse();
+        return latestVersionRecords;
     });
 }
 /**
@@ -242,6 +269,12 @@ export async function getInvoiceFormSubmissionsByInvoiceId(session, invoice_id, 
         return latestVersionRecords;
     });
 }
+export const getFormSubmissionAPIZauru = async (headers, id) => {
+    return handlePossibleAxiosErrors(async () => {
+        const responseZauru = await httpZauru.get(`/settings/forms/form_submissions/${id}.json`, { headers });
+        return responseZauru.data;
+    });
+};
 /**
  * createForm
  * @param headers

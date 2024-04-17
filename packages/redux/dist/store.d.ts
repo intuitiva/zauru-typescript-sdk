@@ -1,6 +1,6 @@
 import type { TypedUseSelectorHook } from "react-redux";
 import { Tuple } from "@reduxjs/toolkit";
-export declare const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v2";
+export declare const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v2.1";
 export declare const cleanLocalStorage: () => void;
 export declare const store: import("@reduxjs/toolkit").EnhancedStore<any, import("redux").UnknownAction, Tuple<[import("redux").StoreEnhancer<{
     dispatch: {};
