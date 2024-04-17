@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/graphql",
-  "version": "1.0.57",
+  "version": "1.0.58",
   "description": "Queries de uso común para las aplicación de Zauru.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
