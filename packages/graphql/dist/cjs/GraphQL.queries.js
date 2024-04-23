@@ -213,8 +213,8 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config = {
 }) => `
 query getPurchaseOrdersBetweenDates(
     $agencyId: Int,
-    $startDate: timestamp,
-    $endDate: timestamp,
+    $startDate: ${config?.betweenIssueDate ? "date" : "timestamp"},
+    $endDate: ${config?.betweenIssueDate ? "date" : "timestamp"},
     $lotItemIdExclusion: Int = null,
     $poDetailTagId: Int = null,
     $payeeCategoryId: Int = null
@@ -237,7 +237,7 @@ query getPurchaseOrdersBetweenDates(
     : ""}
       ${config.consolidateIdFilter ? "consolidate_id: {_is_null: true}," : ""}
       ${config.betweenIssueDate
-    ? "issue_date: {_gte: $startDate::date, _lte: $endDate::date}"
+    ? "issue_date: {_gte: $startDate, _lte: $endDate}"
     : "created_at: {_gte: $startDate, _lte: $endDate}"}
     }
   ) {
