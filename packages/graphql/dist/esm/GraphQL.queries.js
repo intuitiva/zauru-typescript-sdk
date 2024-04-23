@@ -209,6 +209,7 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config = {
     itemIdFilter: false,
     consolidateIdFilter: false,
     withLotStocks: false,
+    betweenIssueDate: false,
 }) => `
 query getPurchaseOrdersBetweenDates(
     $agencyId: Int,
@@ -235,7 +236,9 @@ query getPurchaseOrdersBetweenDates(
     ? "purchase_order_details: {tag_id: {_eq: $poDetailTagId}},"
     : ""}
       ${config.consolidateIdFilter ? "consolidate_id: {_is_null: true}," : ""}
-      created_at: {_gte: $startDate, _lte: $endDate}
+      ${config.betweenIssueDate
+    ? "issue_date: {_gte: $startDate, _lte: $endDate}"
+    : "created_at: {_gte: $startDate, _lte: $endDate}"}
     }
   ) {
     id
