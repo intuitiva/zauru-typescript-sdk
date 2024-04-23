@@ -218,12 +218,14 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     lotItemIdExclusion?: number;
     poDetailTagId?: number;
     withLotStocks?: boolean;
+    betweenIssueDate?: boolean;
   } = {
     agencyFilter: false,
     payeeCategoryFilter: false,
     itemIdFilter: false,
     consolidateIdFilter: false,
     withLotStocks: false,
+    betweenIssueDate: false,
   }
 ) => `
 query getPurchaseOrdersBetweenDates(
@@ -259,7 +261,11 @@ query getPurchaseOrdersBetweenDates(
           : ""
       }
       ${config.consolidateIdFilter ? "consolidate_id: {_is_null: true}," : ""}
-      created_at: {_gte: $startDate, _lte: $endDate}
+      ${
+        config.betweenIssueDate
+          ? "issue_date: {_gte: $startDate, _lte: $endDate}"
+          : "created_at: {_gte: $startDate, _lte: $endDate}"
+      }
     }
   ) {
     id
