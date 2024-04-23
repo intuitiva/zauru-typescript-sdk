@@ -237,7 +237,7 @@ query getPurchaseOrdersBetweenDates(
     : ""}
       ${config.consolidateIdFilter ? "consolidate_id: {_is_null: true}," : ""}
       ${config.betweenIssueDate
-    ? "issue_date: {_gte: $startDate, _lte: $endDate}"
+    ? "issue_date: {_gte: $startDate::date, _lte: $endDate::date}"
     : "created_at: {_gte: $startDate, _lte: $endDate}"}
     }
   ) {
