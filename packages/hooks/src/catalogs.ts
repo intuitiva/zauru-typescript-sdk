@@ -243,6 +243,11 @@ export const useGetTemplates = (
   data: WebAppRowGraphQL<Template>[];
 } => useGetReduxCatalog<WebAppRowGraphQL<Template>>("templates", config);
 
+export const useGetPayeeCategories = (): {
+  loading: boolean;
+  data: PayeeCategoryGraphQL[];
+} => useGetReduxCatalog<PayeeCategoryGraphQL>("payeeCategories");
+
 export const useGetPayeeCategoriesLabPrices = (
   config: {
     withPriceListIdNull: boolean;

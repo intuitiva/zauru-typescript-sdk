@@ -46,6 +46,7 @@ export type CATALOGS_NAMES =
   | "payees"
   | "payeesForLab"
   | "payeeCategoriesLabPrices"
+  | "payeeCategories"
   | "clientCategories"
   | "bundlesRecipForLab"
   | "currencies"
@@ -80,6 +81,7 @@ type CatalogState = {
   payees: LoadingState<PayeeGraphQL[]>;
   payeesForLab: LoadingState<PayeeGraphQL[]>;
   payeeCategoriesLabPrices: LoadingState<PayeeCategoryGraphQL[]>;
+  payeeCategories: LoadingState<PayeeCategoryGraphQL[]>;
   clientCategories: LoadingState<PayeeCategoryGraphQL[]>;
   receptionTypes: LoadingState<WebAppRowGraphQL<ReceptionType>[]>;
   tiposDeMuestra: LoadingState<WebAppRowGraphQL<TipoMuestra>[]>;
@@ -134,6 +136,7 @@ const initialState: CatalogState = {
   payeesForLab: createLoadingState([]),
   itemCategoriesForLab: createLoadingState([]),
   payeeCategoriesLabPrices: createLoadingState([]),
+  payeeCategories: createLoadingState([]),
   clientCategories: createLoadingState([]),
   itemsByLab: createLoadingState([]),
   itemServicesByLab: createLoadingState([]),

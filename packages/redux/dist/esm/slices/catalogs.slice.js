@@ -26,6 +26,7 @@ const initialState = {
     payeesForLab: createLoadingState([]),
     itemCategoriesForLab: createLoadingState([]),
     payeeCategoriesLabPrices: createLoadingState([]),
+    payeeCategories: createLoadingState([]),
     clientCategories: createLoadingState([]),
     itemsByLab: createLoadingState([]),
     itemServicesByLab: createLoadingState([]),

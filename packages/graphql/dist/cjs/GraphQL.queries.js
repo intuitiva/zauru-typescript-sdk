@@ -468,7 +468,8 @@ exports.getItemsStringQuery = `
 query getItems {
   items (where: {active: {_eq: true }}) {
         id,
-        name
+        name,
+        code
     }
 }
 `;

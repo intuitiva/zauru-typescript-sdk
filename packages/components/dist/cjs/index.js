@@ -29,6 +29,7 @@ __exportStar(require("./Layouts/index.js"), exports);
 __exportStar(require("./LineSeparator/index.js"), exports);
 __exportStar(require("./Modal/index.js"), exports);
 __exportStar(require("./NavBar/index.js"), exports);
+__exportStar(require("./ProgressBar/index.js"), exports);
 __exportStar(require("./Skeletons/index.js"), exports);
 __exportStar(require("./Tab/index.js"), exports);
 __exportStar(require("./Table/index.js"), exports);

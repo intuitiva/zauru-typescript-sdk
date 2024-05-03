@@ -13,6 +13,7 @@ export * from "./Layouts/index.js";
 export * from "./LineSeparator/index.js";
 export * from "./Modal/index.js";
 export * from "./NavBar/index.js";
+export * from "./ProgressBar/index.js";
 export * from "./Skeletons/index.js";
 export * from "./Tab/index.js";
 export * from "./Table/index.js";

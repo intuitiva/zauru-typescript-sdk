@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { BasketSchema } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, BasketSchema } from "@zauru-sdk/types";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes de rechazo
  * @param headers
@@ -14,7 +14,7 @@ export declare const getLotesFormated: (headers: any, session: Session) => Promi
  * @param data
  * @param byPercent
  */
-export declare const procesarLote: (headers: any, session: Session, data: any, poId: number | string) => Promise<void>;
+export declare const procesarLote: (headers: any, session: Session, data: any, poId: number | string) => Promise<AxiosUtilsResponse<any>>;
 /**
  * Obtiene toda la información de lote, con las canastas y razones de rechazo
  * @param headers
