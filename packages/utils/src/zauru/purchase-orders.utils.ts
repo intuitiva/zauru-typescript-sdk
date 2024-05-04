@@ -1,8 +1,36 @@
 import type { Session } from "@remix-run/node";
-import { CURRENCY_PREFIX, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, generateDistinctCode, getLotesWithPurchaseFormated, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder } from "@zauru-sdk/services";
-import { AxiosUtilsResponse, DataTablesFilterBody, HTMLPurchasesListSchema, LoteWithPurchaseFormatedSchema, ObjectKeyString, PurchaseOrderGraphQL, PurchasesDataTableListFormatedSchema, PurchasesListResponseSchema, UpdatePurchaseOrderBody } from "@zauru-sdk/types";
-
+import {
+  CURRENCY_PREFIX,
+  getNewDateByFormat,
+  getStringFullDate,
+  getZauruDateByText,
+  handlePossibleAxiosErrors,
+} from "@zauru-sdk/common";
+import {
+  commitSession,
+  createNewPurchaseOrder,
+  deleteDelivery,
+  deletePurchaseOrder,
+  deleteReception,
+  generateDistinctCode,
+  getLotesWithPurchaseFormated,
+  getPurchaseOrder,
+  getPurchasesListDataTables,
+  getVariablesByName,
+  inactivarLote,
+  updateReceivedPurchaseOrder,
+} from "@zauru-sdk/services";
+import {
+  AxiosUtilsResponse,
+  DataTablesFilterBody,
+  HTMLPurchasesListSchema,
+  LoteWithPurchaseFormatedSchema,
+  ObjectKeyString,
+  PurchaseOrderGraphQL,
+  PurchasesDataTableListFormatedSchema,
+  PurchasesListResponseSchema,
+  UpdatePurchaseOrderBody,
+} from "@zauru-sdk/types";
 
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia
@@ -301,9 +329,13 @@ export const updateOchAndDis = async (
     const body = {
       purchase_order: {
         discount: data?.discount,
-        other_charges: data.other_charges,
       },
     } as UpdatePurchaseOrderBody;
+
+    if (data.other_charges) {
+      body.purchase_order.other_charges = Number(data.other_charges);
+    }
+
     await updateReceivedPurchaseOrder(headers, body, purchase_id);
 
     return true;
