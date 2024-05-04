@@ -1,5 +1,5 @@
-import { CURRENCY_PREFIX, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, generateDistinctCode, getLotesWithPurchaseFormated, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder } from "@zauru-sdk/services";
+import { CURRENCY_PREFIX, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, } from "@zauru-sdk/common";
+import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, generateDistinctCode, getLotesWithPurchaseFormated, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia
  * @param headers
@@ -182,9 +182,11 @@ export const updateOchAndDis = async (headers, data, purchase_id) => {
         const body = {
             purchase_order: {
                 discount: data?.discount,
-                other_charges: data.other_charges,
             },
         };
+        if (data.other_charges) {
+            body.purchase_order.other_charges = Number(data.other_charges);
+        }
         await updateReceivedPurchaseOrder(headers, body, purchase_id);
         return true;
     });

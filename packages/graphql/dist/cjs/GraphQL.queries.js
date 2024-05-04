@@ -330,7 +330,16 @@ query getWebAppRow($id: Int){
 `;
 exports.getWebAppRowsByWebAppTableIdStringQuery = `
 query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
-  webapp_rows (where: {webapp_table_id: {_eq: $webapp_table_id }}) {
+  webapp_rows (
+    where: {
+      webapp_table_id: {
+        _eq: $webapp_table_id 
+      }
+    },
+    order_by: { 
+      id: desc 
+    }
+  ) {
     id
     data
     created_at

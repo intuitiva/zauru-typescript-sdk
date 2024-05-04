@@ -188,9 +188,11 @@ const updateOchAndDis = async (headers, data, purchase_id) => {
         const body = {
             purchase_order: {
                 discount: data?.discount,
-                other_charges: data.other_charges,
             },
         };
+        if (data.other_charges) {
+            body.purchase_order.other_charges = Number(data.other_charges);
+        }
         await (0, services_1.updateReceivedPurchaseOrder)(headers, body, purchase_id);
         return true;
     });
