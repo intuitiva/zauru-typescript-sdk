@@ -9,6 +9,7 @@ query getLast100Receptions($agencyId: Int) @cached {
     payee_id
     issue_date
     discount
+    other_charges
     authorized
     received
     transport_type
@@ -231,7 +232,7 @@ query getPurchaseOrdersBetweenDates(
     $lotItemIdExclusion: Int = null,
     $poDetailTagId: Int = null
   ) {
-  purchase_orders(
+  purchase_orders (
     order_by: {id: desc}, 
     where: {
       ${
@@ -286,6 +287,7 @@ query getPurchaseOrdersBetweenDates(
     issue_date
     agency_id
     discount
+    other_charges
     consolidate_id
     purchase_order_details {
       item_id
