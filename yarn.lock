@@ -1366,7 +1366,7 @@ __metadata:
     "@zauru-sdk/hooks": "npm:^1.0.64"
     "@zauru-sdk/icons": "npm:^1.0.60"
     "@zauru-sdk/types": "npm:^1.0.60"
-    "@zauru-sdk/utils": "npm:^1.0.66"
+    "@zauru-sdk/utils": "npm:^1.0.67"
     framer-motion: "npm:^11.0.8"
     jsonwebtoken: "npm:^9.0.2"
     postcss: "npm:^8.4.35"
@@ -1444,7 +1444,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/services@npm:^1.0.66, @zauru-sdk/services@workspace:packages/services":
+"@zauru-sdk/services@npm:^1.0.67, @zauru-sdk/services@workspace:packages/services":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/services@workspace:packages/services"
   dependencies:
@@ -1467,7 +1467,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/utils@npm:^1.0.66, @zauru-sdk/utils@workspace:packages/utils":
+"@zauru-sdk/utils@npm:^1.0.67, @zauru-sdk/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/utils@workspace:packages/utils"
   dependencies:
@@ -1475,7 +1475,7 @@ __metadata:
     "@zauru-sdk/common": "npm:^1.0.60"
     "@zauru-sdk/config": "npm:^1.0.60"
     "@zauru-sdk/graphql": "npm:^1.0.66"
-    "@zauru-sdk/services": "npm:^1.0.66"
+    "@zauru-sdk/services": "npm:^1.0.67"
     "@zauru-sdk/types": "npm:^1.0.60"
     typescript: "npm:^5.1.6"
   languageName: unknown
