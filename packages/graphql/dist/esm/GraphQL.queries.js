@@ -204,30 +204,37 @@ query getLotStocksByAgencyId($agency_id: Int){
 }
 `;
 const getPurchaseOrdersBetweenDatesStringQuery = (config = {
-    agencyFilter: false,
-    payeeCategoryFilter: false,
-    itemIdFilter: false,
     consolidateIdFilter: false,
     withLotStocks: false,
     betweenIssueDate: false,
 }) => `
 query getPurchaseOrdersBetweenDates(
-    $agencyId: Int,
     $startDate: ${config?.betweenIssueDate ? "date" : "timestamp"},
     $endDate: ${config?.betweenIssueDate ? "date" : "timestamp"},
     $lotItemIdExclusion: Int = null,
-    $poDetailTagId: Int = null,
-    $payeeCategoryId: Int = null
+    $poDetailTagId: Int = null
   ) {
   purchase_orders(
     order_by: {id: desc}, 
     where: {
-      ${config.agencyFilter ? "agency_id: {_eq: $agencyId}," : ""} 
-      ${config.payeeCategoryFilter
-    ? "payee: {payee_category: {id: {_eq: $payeeCategoryId}}}},"
+      ${config.agencyId
+    ? `agency_id: {
+          _eq: ${config.agencyId}
+        },`
+    : ""} 
+      ${config.payeeCategoryId
+    ? `payee: {
+              payee_category: {
+                id: {
+                  _eq: ${config.payeeCategoryId}
+                }
+              }
+            },`
     : ""}
-      ${config.itemIdFilter
-    ? "purchase_order_details: {item_id: {_eq: 10}},"
+      ${config.itemId
+    ? `purchase_order_details: {
+              item_id: {_eq: ${config.itemId}}
+            },`
     : ""}
       ${config.lotItemIdExclusion
     ? "lots: {item_id: {_neq: $lotItemIdExclusion}},"

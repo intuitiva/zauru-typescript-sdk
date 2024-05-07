@@ -7,9 +7,9 @@ export declare const getShipmentsByToAgencyLast100StringQuery = "\nquery getShip
 export declare const getLotsByNameStringQuery = "\nquery getLots($name: String, $entity_id: Int){\n    lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: $entity_id}, name: {_eq: $name}}) {\n        id\n        name\n        description\n    }\n}\n";
 export declare const getLotStocksByAgencyIdStringQuery = "\nquery getLotStocksByAgencyId($agency_id: Int){\n  lot_stocks (\n    order_by: { id: desc },\n    where: { agency_id: { _eq: $agency_id }}\n    ){\n      id\n      available\n      lot_id\n      lot {\n        id\n        item_id\n        expires\n      }\n  }\n}\n";
 export declare const getPurchaseOrdersBetweenDatesStringQuery: (config?: {
-    agencyFilter?: boolean;
-    payeeCategoryFilter?: boolean;
-    itemIdFilter?: boolean;
+    agencyId?: number | string;
+    itemId?: number | string;
+    payeeCategoryId?: number | string;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
     poDetailTagId?: number;

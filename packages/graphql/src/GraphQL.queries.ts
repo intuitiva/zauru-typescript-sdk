@@ -211,9 +211,9 @@ query getLotStocksByAgencyId($agency_id: Int){
 
 export const getPurchaseOrdersBetweenDatesStringQuery = (
   config: {
-    agencyId?: number;
-    itemId?: number;
-    payeeCategoryId?: number;
+    agencyId?: number | string;
+    itemId?: number | string;
+    payeeCategoryId?: number | string;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
     poDetailTagId?: number;

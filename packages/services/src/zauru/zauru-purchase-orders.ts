@@ -571,19 +571,18 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     }
 
     const query = getPurchaseOrdersBetweenDatesStringQuery({
-      agencyFilter: config.agencyFilter,
+      agencyId: config.agencyFilter
+        ? agency_id ?? session.get("agency_id")
+        : undefined,
       consolidateIdFilter: config.consolidateIdFilter,
       lotItemIdExclusion: config.lotItemIdExclusion,
       poDetailTagId: config.poDetailTagId,
       withLotStocks: config.withLotStocksToMyAgency,
-      //itemId: config.itemId,
-      //payeeCategoryId: config.payeeCategoryId,
+      itemId: config.itemId,
+      payeeCategoryId: config.payeeCategoryId,
     });
 
     const variables = {
-      ...(config.agencyFilter
-        ? { agencyId: agency_id ?? session.get("agency_id") }
-        : {}),
       ...(config.lotItemIdExclusion
         ? { lotItemIdExclusion: config.lotItemIdExclusion }
         : {}),
