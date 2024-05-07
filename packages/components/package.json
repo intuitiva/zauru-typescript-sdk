@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/components",
-  "version": "1.0.67",
+  "version": "1.0.68",
   "description": "Componentes reutilizables en las WebApps de Zauru.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -37,7 +37,7 @@
     "@zauru-sdk/hooks": "^1.0.64",
     "@zauru-sdk/icons": "^1.0.60",
     "@zauru-sdk/types": "^1.0.60",
-    "@zauru-sdk/utils": "^1.0.67",
+    "@zauru-sdk/utils": "^1.0.68",
     "framer-motion": "^11.0.8",
     "jsonwebtoken": "^9.0.2",
     "react": "^18.2.0",
