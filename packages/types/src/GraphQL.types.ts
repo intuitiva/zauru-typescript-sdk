@@ -81,6 +81,7 @@ export type PurchaseOrderDetailsGraphQL = {
   delivered_quantity: number;
   tag_id: number;
   item: ItemGraphQL;
+  expire_date: string;
 };
 
 export type LotStockGraphQL = {

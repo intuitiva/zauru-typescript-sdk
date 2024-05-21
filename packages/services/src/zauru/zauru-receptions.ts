@@ -73,17 +73,26 @@ export async function createNewPurchaseOrderReception(
         memo: "LABORATORIO - Recibido parcialmente desde WebApp",
         purchase_order_id: body.id,
         needs_transit: false,
-        agency_id: session.get("agency_id"),
-        entity_id: session.get("selectedEntity"),
         received_at: getDatePickerCurrentDate(),
         invoice_number: "",
+        agency_id: session.get("agency_id"),
+        entity_id: session.get("selectedEntity"),
         reception_details_attributes: arrayToObject(
           body?.purchase_order_details?.map((x) => {
-            return {
+            const temp: any = {
               item_id: x.item_id,
               purchase_order_detail_id: x.id,
-              quantity: x.delivered_quantity,
             };
+
+            if (x.expire_date) {
+              temp.lot_delivered_quantity = [x.delivered_quantity];
+              temp.lot_name = [body.id_number];
+              temp.lot_expire = [x.expire_date];
+            } else {
+              temp.quantity = x.delivered_quantity;
+            }
+
+            return temp;
           })
         ),
       },
@@ -93,51 +102,6 @@ export async function createNewPurchaseOrderReception(
     await httpZauru.post(
       `/purchases/purchase_orders/${body.id}/receptions.json`,
       sendBody,
-      {
-        headers,
-      }
-    );
-
-    return true;
-  });
-}
-
-/**
- *
- * @param headers
- * @param poId
- * @returns
- */
-export async function createNewLotPurchaseOrderReception(
-  headers: any,
-  session: Session,
-  body: Partial<PurchaseOrderGraphQL> & { fechaVencimiento: string }
-): Promise<AxiosUtilsResponse<boolean>> {
-  return handlePossibleAxiosErrors(async () => {
-    const sendBody = {
-      memo: "LABORATORIO - Recibido parcialmente desde WebApp",
-      purchase_order_id: body.id,
-      needs_transit: false,
-      received_at: getDatePickerCurrentDate(),
-      invoice_number: "",
-      agency_id: session.get("agency_id"),
-      entity_id: session.get("selectedEntity"),
-      reception_details_attributes: arrayToObject(
-        body?.purchase_order_details?.map((x) => {
-          return {
-            item_id: x.item_id,
-            purchase_order_detail_id: x.id,
-            lot_delivered_quantity: [x.delivered_quantity],
-            lot_name: [body.id_number],
-            lot_expire: [body.fechaVencimiento],
-          };
-        })
-      ),
-    };
-
-    await httpZauru.post(
-      `/purchases/purchase_orders/${body.id}/receptions.json`,
-      { reception: sendBody, purchase_order_id: body.id },
       {
         headers,
       }

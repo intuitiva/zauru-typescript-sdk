@@ -19,10 +19,6 @@ import {
   SelectFieldOption,
   UpdatePurchaseOrderBody,
 } from "@zauru-sdk/types";
-import {
-  createNewLotPurchaseOrderReception,
-  createNewPurchaseOrderReception,
-} from "./zauru-receptions.js";
 import httpZauru from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
@@ -52,33 +48,6 @@ export const markAsReceivePurchaseOrder = (
       await receiveLotPurchaseOrder(headers, sendBody as any);
     } else {
       await receivePurchaseOrder(headers, sendBody as any);
-    }
-    return true;
-  });
-};
-
-/**
- * markAsReceivePartialPurchaseOrder
- * @param headers
- * @param body
- * @returns
- */
-export const markAsReceivePartialPurchaseOrder = (
-  headers: any,
-  session: Session,
-  body: Partial<PurchaseOrderGraphQL> & { fechaVencimiento?: string }
-): Promise<AxiosUtilsResponse<boolean>> => {
-  return handlePossibleAxiosErrors(async () => {
-    const sendBody = { ...body };
-
-    if (sendBody.fechaVencimiento) {
-      await createNewLotPurchaseOrderReception(
-        headers,
-        session,
-        sendBody as any
-      );
-    } else {
-      await createNewPurchaseOrderReception(headers, session, body);
     }
     return true;
   });
