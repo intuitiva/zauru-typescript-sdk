@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.zauruDateToLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.zauruDateToLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
 const moment_1 = __importDefault(require("moment"));
 require("moment-timezone");
 const types_1 = require("@zauru-sdk/types");
@@ -260,14 +260,24 @@ const getDateAfterDays = (daysAfterToday) => {
 };
 exports.getDateAfterDays = getDateAfterDays;
 const getPayeeFormated = (payee) => {
-    return `<${payee.id_number}> ${payee.tin ? `${payee.tin} | ` : ""}${payee.name}`;
+    return `${payee.id_number ? `<${payee.id_number}> ` : ""}${payee.tin ? `${payee.tin} | ` : ""}${payee.name}`.trim();
 };
 exports.getPayeeFormated = getPayeeFormated;
+const getPayeeInfoIdOptions = (payees) => {
+    return payees.map((x) => {
+        return {
+            label: `${x.id_number ? `<${x.id_number}> ` : ""}${x.tin ? `${x.tin} | ` : ""}${x.name}`.trim(),
+            value: x.id,
+            id: x.id,
+        };
+    });
+};
+exports.getPayeeInfoIdOptions = getPayeeInfoIdOptions;
 const getPayeeInfoOptions = (payees) => {
     return payees.map((x) => {
         return {
-            label: `<${x.id_number}> ${x.tin ? `${x.tin} | ` : ""}${x.name}`,
-            value: `<${x.id_number}> ${x.tin ? `${x.tin} | ` : ""}${x.name}`,
+            label: `${x.id_number ? `<${x.id_number}> ` : ""}${x.tin ? `${x.tin} | ` : ""}${x.name}`.trim(),
+            value: `${x.id_number ? `<${x.id_number}> ` : ""}${x.tin ? `${x.tin} | ` : ""}${x.name}`.trim(),
             id: x.id,
         };
     });

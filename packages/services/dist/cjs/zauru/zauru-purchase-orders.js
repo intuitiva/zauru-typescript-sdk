@@ -3,9 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPurchasesOrderByIdNumber = exports.deletePurchaseOrder = exports.getGraphQLPurchaseOrderBetweenDates = exports.getPurchaseOrder = exports.getLast100Receptions = exports.updateReceivedPurchaseOrder = exports.updatePurchaseOrder = exports.enablePurchase = exports.getPurchase = exports.getPurchasesList = exports.getPurchasesListDataTables = exports.getNewPurchaseOrderInfo = exports.receivePurchaseOrder = exports.receiveLotPurchaseOrder = exports.createNewAuthorizedPurchaseOrder = exports.createNewPurchaseOrder = exports.markAsReceivePartialPurchaseOrder = exports.markAsReceivePurchaseOrder = void 0;
+exports.getPurchasesOrderByIdNumber = exports.deletePurchaseOrder = exports.getGraphQLPurchaseOrderBetweenDates = exports.getPurchaseOrder = exports.getLast100Receptions = exports.updateReceivedPurchaseOrder = exports.updatePurchaseOrder = exports.enablePurchase = exports.getPurchase = exports.getPurchasesList = exports.getPurchasesListDataTables = exports.getNewPurchaseOrderInfo = exports.receivePurchaseOrder = exports.receiveLotPurchaseOrder = exports.createNewAuthorizedPurchaseOrder = exports.createNewPurchaseOrder = exports.markAsReceivePurchaseOrder = void 0;
 const common_1 = require("@zauru-sdk/common");
-const zauru_receptions_js_1 = require("./zauru-receptions.js");
 const httpZauru_js_1 = __importDefault(require("./httpZauru.js"));
 const common_js_1 = require("../common.js");
 const httpGraphQL_js_1 = __importDefault(require("./httpGraphQL.js"));
@@ -31,25 +30,6 @@ const markAsReceivePurchaseOrder = (headers, body) => {
     });
 };
 exports.markAsReceivePurchaseOrder = markAsReceivePurchaseOrder;
-/**
- * markAsReceivePartialPurchaseOrder
- * @param headers
- * @param body
- * @returns
- */
-const markAsReceivePartialPurchaseOrder = (headers, session, body) => {
-    return (0, common_1.handlePossibleAxiosErrors)(async () => {
-        const sendBody = { ...body };
-        if (sendBody.fechaVencimiento) {
-            await (0, zauru_receptions_js_1.createNewLotPurchaseOrderReception)(headers, session, sendBody);
-        }
-        else {
-            await (0, zauru_receptions_js_1.createNewPurchaseOrderReception)(headers, session, body);
-        }
-        return true;
-    });
-};
-exports.markAsReceivePartialPurchaseOrder = markAsReceivePartialPurchaseOrder;
 /**
  *
  * @param headers

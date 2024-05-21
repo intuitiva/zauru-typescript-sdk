@@ -360,6 +360,7 @@ const createNewLabItemRequest = (headers, session, body) => {
             "laboratory_proyect_id",
         ]);
         const id_number = (0, services_1.generateDistinctCode)("POLAB");
+        const insumos = JSON.parse(body.insumos);
         const sendBody = {
             ...body,
             shipping_date: body.issue_date,
@@ -372,14 +373,14 @@ const createNewLabItemRequest = (headers, session, body) => {
             id_number,
             reference: "LABORATORIO - Solicitud de insumos desde WebApp",
             origin: "LABORATORIO",
-            purchase_order_details: [
-                {
-                    booked_quantity: body.booked_quantity,
-                    item_id: body.item_id,
+            purchase_order_details: insumos.map((x) => {
+                return {
+                    booked_quantity: x.booked_quantity,
+                    item_id: x.item_id,
                     unit_cost: 1,
                     tag_id: Number(laboratory_proyect_id),
-                },
-            ],
+                };
+            }),
             taggings: [{ tag_id: Number(laboratory_proyect_id) }],
         };
         const response = await (0, services_1.createNewPurchaseOrder)(headers, sendBody);

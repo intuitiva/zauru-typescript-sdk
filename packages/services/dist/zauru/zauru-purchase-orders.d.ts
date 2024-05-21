@@ -12,15 +12,6 @@ export declare const markAsReceivePurchaseOrder: (headers: any, body: Partial<Pu
     fechaVencimiento?: string;
 }) => Promise<AxiosUtilsResponse<boolean>>;
 /**
- * markAsReceivePartialPurchaseOrder
- * @param headers
- * @param body
- * @returns
- */
-export declare const markAsReceivePartialPurchaseOrder: (headers: any, session: Session, body: Partial<PurchaseOrderGraphQL> & {
-    fechaVencimiento?: string;
-}) => Promise<AxiosUtilsResponse<boolean>>;
-/**
  *
  * @param headers
  * @param body

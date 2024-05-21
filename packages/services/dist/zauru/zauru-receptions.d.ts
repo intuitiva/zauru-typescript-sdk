@@ -22,12 +22,3 @@ export declare function deleteReception(headers: any, receptionId: string | numb
  * @returns
  */
 export declare function createNewPurchaseOrderReception(headers: any, session: Session, body: Partial<PurchaseOrderGraphQL>): Promise<AxiosUtilsResponse<boolean>>;
-/**
- *
- * @param headers
- * @param poId
- * @returns
- */
-export declare function createNewLotPurchaseOrderReception(headers: any, session: Session, body: Partial<PurchaseOrderGraphQL> & {
-    fechaVencimiento: string;
-}): Promise<AxiosUtilsResponse<boolean>>;
