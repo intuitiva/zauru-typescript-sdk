@@ -291,9 +291,23 @@ export const getDateAfterDays = (daysAfterToday: number) => {
 };
 
 export const getPayeeFormated = (payee: PayeeGraphQL) => {
-  return `<${payee.id_number}> ${payee.tin ? `${payee.tin} | ` : ""}${
-    payee.name
-  }`;
+  return `${payee.id_number ? `<${payee.id_number}> ` : ""}${
+    payee.tin ? `${payee.tin} | ` : ""
+  }${payee.name}`.trim();
+};
+
+export const getPayeeInfoIdOptions = (
+  payees: PayeeGraphQL[]
+): (SelectFieldOption & { id: number })[] => {
+  return payees.map((x) => {
+    return {
+      label: `${x.id_number ? `<${x.id_number}> ` : ""}${
+        x.tin ? `${x.tin} | ` : ""
+      }${x.name}`.trim(),
+      value: x.id,
+      id: x.id,
+    } as SelectFieldOption & { id: number };
+  });
 };
 
 export const getPayeeInfoOptions = (
@@ -301,8 +315,12 @@ export const getPayeeInfoOptions = (
 ): (SelectFieldOption & { id: number })[] => {
   return payees.map((x) => {
     return {
-      label: `<${x.id_number}> ${x.tin ? `${x.tin} | ` : ""}${x.name}`,
-      value: `<${x.id_number}> ${x.tin ? `${x.tin} | ` : ""}${x.name}`,
+      label: `${x.id_number ? `<${x.id_number}> ` : ""}${
+        x.tin ? `${x.tin} | ` : ""
+      }${x.name}`.trim(),
+      value: `${x.id_number ? `<${x.id_number}> ` : ""}${
+        x.tin ? `${x.tin} | ` : ""
+      }${x.name}`.trim(),
       id: x.id,
     } as SelectFieldOption & { id: number };
   });
