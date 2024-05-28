@@ -283,18 +283,19 @@ export async function updateLote(
   headers: any,
   lot_id: number,
   updatedData: UpdateLoteBody
-): Promise<any> {
-  const response = await httpZauru.patch<any>(
-    `/inventories/lots/${lot_id}.json`,
-    updatedData,
-    {
-      headers,
-    }
-  );
+): Promise<AxiosUtilsResponse<any>> {
+  return handlePossibleAxiosErrors(async () => {
+    const response = await httpZauru.patch<any>(
+      `/inventories/lots/${lot_id}.json`,
+      updatedData,
+      {
+        headers,
+      }
+    );
 
-  return response.data;
+    return response.data;
+  });
 }
-
 /**
  * getLotesExportJSON Function for get all zauru lotes by id_agencia
  * @param headers
