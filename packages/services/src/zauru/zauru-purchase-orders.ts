@@ -555,10 +555,6 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     });
 
     const variables = {
-      ...(config.lotItemIdExclusion
-        ? { lotItemIdExclusion: config.lotItemIdExclusion }
-        : {}),
-      ...(config.poDetailTagId ? { poDetailTagId: config.poDetailTagId } : {}),
       startDate: formatDateToUTC(dates.startDate),
       endDate: formatDateToUTC(dates.endDate),
     };
@@ -583,7 +579,8 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     }
 
     //============ Aplicación de filtros
-    let responseData: PurchaseOrderGraphQL[] = [];
+    let responseData: PurchaseOrderGraphQL[] =
+      response.data.data.purchase_orders;
 
     if (config.withShipmentToMyAgency) {
       responseData = response.data?.data?.purchase_orders.filter((x) =>
