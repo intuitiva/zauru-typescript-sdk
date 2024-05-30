@@ -5,7 +5,7 @@ export type ModalOption = "OK" | "CANCEL" | null;
 
 type ModalParams = {
   title: string;
-  description: React.ReactNode;
+  description: React.ReactNode | (() => React.ReactNode);
   okButtonText?: string;
   showOptions?: boolean;
 };
@@ -64,6 +64,9 @@ export const createModal = ({
     document.body.appendChild(modalOverlay);
     document.body.appendChild(modalWrapper);
 
+    const content =
+      typeof description === "function" ? description() : description;
+
     const ModalContent = () => (
       <div className="relative w-auto my-6 mx-auto max-w-3xl">
         <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -75,7 +78,7 @@ export const createModal = ({
               </span>
             </button>
           </div>
-          <div className="relative p-6 flex-auto">{description}</div>
+          <div className="relative p-6 flex-auto">{content}</div>
           {showOptions && (
             <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
               <button
