@@ -126,6 +126,7 @@ export declare const getGraphQLPurchaseOrderBetweenDates: (session: Session, dat
 }, config?: {
     agencyFilter: boolean;
     agencyId?: number;
+    id_number?: string;
     useProductionAgencyId?: boolean;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;

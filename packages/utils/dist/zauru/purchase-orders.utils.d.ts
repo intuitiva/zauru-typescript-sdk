@@ -45,20 +45,6 @@ export declare const updateOchAndDis: (headers: any, data: {
     other_charges?: number | string;
 }, purchase_id: number) => Promise<AxiosUtilsResponse<boolean>>;
 /**
- * updatePurchaseOrderReception
- * @param headers
- * @param data
- * @param purchase_id
- * @returns
- */
-export declare const updatePurchaseOrderReception: (headers: any, data: {
-    payee_id?: string;
-    purchase_order_details_attributes: Record<string, {
-        item_id: number;
-        id: number;
-    }>;
-}, purchase_id: number) => Promise<AxiosUtilsResponse<boolean>>;
-/**
  * Obtengo los id's de las órdenes de compra en un arreglo numérico
  * @param headers
  * @param session

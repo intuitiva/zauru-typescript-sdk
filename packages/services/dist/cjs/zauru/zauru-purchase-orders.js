@@ -345,24 +345,24 @@ const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
             itemId: config.itemId,
             payeeCategoryId: config.payeeCategoryId,
             betweenIssueDate: config.betweenIssueDate,
+            id_number: config.id_number,
         });
         const variables = {
-            ...(config.lotItemIdExclusion
-                ? { lotItemIdExclusion: config.lotItemIdExclusion }
-                : {}),
-            ...(config.poDetailTagId ? { poDetailTagId: config.poDetailTagId } : {}),
             startDate: (0, common_1.formatDateToUTC)(dates.startDate),
             endDate: (0, common_1.formatDateToUTC)(dates.endDate),
         };
-        const response = await httpGraphQL_js_1.default.post("", {
+        const graphQLBody = {
             query,
-            variables,
-        }, { headers });
+        };
+        if (!config.id_number) {
+            graphQLBody.variables = variables;
+        }
+        const response = await httpGraphQL_js_1.default.post("", graphQLBody, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
         }
         //============ Aplicación de filtros
-        let responseData = [];
+        let responseData = response.data.data.purchase_orders;
         if (config.withShipmentToMyAgency) {
             responseData = response.data?.data?.purchase_orders.filter((x) => x.shipment_purchase_orders.some((y) => y.shipment.agency_to_id?.toString() == session.get("agency_id")));
         }

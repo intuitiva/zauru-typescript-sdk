@@ -209,12 +209,12 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config = {
     withLotStocks: false,
     betweenIssueDate: false,
 }) => `
-query getPurchaseOrdersBetweenDates(
-    $startDate: ${config?.betweenIssueDate ? "date" : "timestamp"},
-    $endDate: ${config?.betweenIssueDate ? "date" : "timestamp"},
-    $lotItemIdExclusion: Int = null,
-    $poDetailTagId: Int = null
-  ) {
+query getPurchaseOrdersBetweenDates ${config.id_number
+    ? ""
+    : `(
+  $startDate: ${config?.betweenIssueDate ? "date" : "timestamp"},
+  $endDate: ${config?.betweenIssueDate ? "date" : "timestamp"}
+)`} {
   purchase_orders (
     order_by: {id: desc}, 
     where: {
@@ -238,15 +238,18 @@ query getPurchaseOrdersBetweenDates(
             },`
     : ""}
       ${config.lotItemIdExclusion
-    ? "lots: {item_id: {_neq: $lotItemIdExclusion}},"
+    ? `lots: {item_id: {_neq: ${config.lotItemIdExclusion}}},`
     : ""}
       ${config.poDetailTagId
-    ? "purchase_order_details: {tag_id: {_eq: $poDetailTagId}},"
+    ? `purchase_order_details: {tag_id: {_eq: ${config.poDetailTagId}}},`
     : ""}
       ${config.consolidateIdFilter ? "consolidate_id: {_is_null: true}," : ""}
-      ${config.betweenIssueDate
-    ? "issue_date: {_gte: $startDate, _lte: $endDate}"
-    : "created_at: {_gte: $startDate, _lte: $endDate}"}
+      ${config.id_number ? `id_number: {_ilike: "%${config.id_number}%"}` : ""}
+      ${config.id_number
+    ? ""
+    : config.betweenIssueDate
+        ? "issue_date: {_gte: $startDate, _lte: $endDate}"
+        : "created_at: {_gte: $startDate, _lte: $endDate}"}
     }
   ) {
     id

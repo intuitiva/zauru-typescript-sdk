@@ -50,9 +50,10 @@ export async function createNewPurchaseOrderReception(headers, session, body) {
                         purchase_order_detail_id: x.id,
                     };
                     if (x.expire_date) {
-                        temp.lot_delivered_quantity = [x.delivered_quantity];
+                        temp.lot_delivered_quantity = [`${x.delivered_quantity}`];
                         temp.lot_name = [body.id_number];
                         temp.lot_expire = [x.expire_date];
+                        temp.lot_description = [body.id_number];
                     }
                     else {
                         temp.quantity = x.delivered_quantity;

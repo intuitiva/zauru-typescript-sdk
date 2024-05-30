@@ -156,10 +156,12 @@ export async function getMyAgencyLotStocks(session) {
  * @returns
  */
 export async function updateLote(headers, lot_id, updatedData) {
-    const response = await httpZauru.patch(`/inventories/lots/${lot_id}.json`, updatedData, {
-        headers,
+    return handlePossibleAxiosErrors(async () => {
+        const response = await httpZauru.patch(`/inventories/lots/${lot_id}.json`, updatedData, {
+            headers,
+        });
+        return response.data;
     });
-    return response.data;
 }
 /**
  * getLotesExportJSON Function for get all zauru lotes by id_agencia

@@ -168,10 +168,12 @@ exports.getMyAgencyLotStocks = getMyAgencyLotStocks;
  * @returns
  */
 async function updateLote(headers, lot_id, updatedData) {
-    const response = await httpZauru_js_1.default.patch(`/inventories/lots/${lot_id}.json`, updatedData, {
-        headers,
+    return (0, common_1.handlePossibleAxiosErrors)(async () => {
+        const response = await httpZauru_js_1.default.patch(`/inventories/lots/${lot_id}.json`, updatedData, {
+            headers,
+        });
+        return response.data;
     });
-    return response.data;
 }
 exports.updateLote = updateLote;
 /**

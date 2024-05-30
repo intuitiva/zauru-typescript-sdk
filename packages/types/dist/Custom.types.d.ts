@@ -76,6 +76,7 @@ export type LoteRecordBody = {
 };
 export type UpdateLoteBody = {
     lot: {
+        name?: string;
         description: string;
     };
 };
@@ -219,13 +220,14 @@ export type PurchasesDataTableListFormatedSchema = {
 };
 export type UpdatePurchaseOrderBody = {
     purchase_order: {
+        id_number?: string;
         discount?: number;
         other_charges?: number;
         payee_id?: number | string;
         purchase_order_details_attributes?: {
             [key: string]: {
                 id?: string | number;
-                unit_cost: string | number;
+                unit_cost?: string | number;
                 item_id: string | number;
             };
         };

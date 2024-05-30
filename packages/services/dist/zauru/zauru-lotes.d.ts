@@ -53,7 +53,7 @@ export declare function getMyAgencyLotStocks(session: Session): Promise<AxiosUti
  * @param agency_id
  * @returns
  */
-export declare function updateLote(headers: any, lot_id: number, updatedData: UpdateLoteBody): Promise<any>;
+export declare function updateLote(headers: any, lot_id: number, updatedData: UpdateLoteBody): Promise<AxiosUtilsResponse<any>>;
 /**
  * getLotesExportJSON Function for get all zauru lotes by id_agencia
  * @param headers

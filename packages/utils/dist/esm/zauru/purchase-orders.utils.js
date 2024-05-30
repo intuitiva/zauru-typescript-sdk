@@ -192,25 +192,6 @@ export const updateOchAndDis = async (headers, data, purchase_id) => {
     });
 };
 /**
- * updatePurchaseOrderReception
- * @param headers
- * @param data
- * @param purchase_id
- * @returns
- */
-export const updatePurchaseOrderReception = async (headers, data, purchase_id) => {
-    return handlePossibleAxiosErrors(async () => {
-        const body = {
-            purchase_order: {
-                payee_id: data.payee_id,
-                purchase_order_details_attributes: data.purchase_order_details_attributes,
-            },
-        };
-        await updateReceivedPurchaseOrder(headers, body, purchase_id);
-        return true;
-    });
-};
-/**
  * Obtengo los id's de las órdenes de compra en un arreglo numérico
  * @param headers
  * @param session
