@@ -220,16 +220,21 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     poDetailTagId?: number;
     withLotStocks?: boolean;
     betweenIssueDate?: boolean;
+    id_number?: string;
   } = {
     consolidateIdFilter: false,
     withLotStocks: false,
     betweenIssueDate: false,
   }
 ) => `
-query getPurchaseOrdersBetweenDates(
-    $startDate: ${config?.betweenIssueDate ? "date" : "timestamp"},
-    $endDate: ${config?.betweenIssueDate ? "date" : "timestamp"}  
-  ) {
+query getPurchaseOrdersBetweenDates ${
+  config.id_number
+    ? ""
+    : `(
+  $startDate: ${config?.betweenIssueDate ? "date" : "timestamp"},
+  $endDate: ${config?.betweenIssueDate ? "date" : "timestamp"}
+)`
+} {
   purchase_orders (
     order_by: {id: desc}, 
     where: {
@@ -269,8 +274,11 @@ query getPurchaseOrdersBetweenDates(
           : ""
       }
       ${config.consolidateIdFilter ? "consolidate_id: {_is_null: true}," : ""}
+      ${config.id_number ? `id_number: {_ilike: "%${config.id_number}%"}` : ""}
       ${
-        config.betweenIssueDate
+        config.id_number
+          ? ""
+          : config.betweenIssueDate
           ? "issue_date: {_gte: $startDate, _lte: $endDate}"
           : "created_at: {_gte: $startDate, _lte: $endDate}"
       }

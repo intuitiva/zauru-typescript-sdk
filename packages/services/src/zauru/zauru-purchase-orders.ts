@@ -511,6 +511,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
   config: {
     agencyFilter: boolean;
     agencyId?: number;
+    id_number?: string;
     useProductionAgencyId?: boolean;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
@@ -552,6 +553,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       itemId: config.itemId,
       payeeCategoryId: config.payeeCategoryId,
       betweenIssueDate: config.betweenIssueDate,
+      id_number: config.id_number,
     });
 
     const variables = {
@@ -559,20 +561,21 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       endDate: formatDateToUTC(dates.endDate),
     };
 
+    const graphQLBody = {
+      query,
+    } as any;
+
+    if (!config.id_number) {
+      graphQLBody.variables = variables;
+    }
+
     const response = await httpGraphQLAPI.post<{
       data: { purchase_orders: PurchaseOrderGraphQL[] };
       errors?: {
         message: string;
         extensions: { path: string; code: string };
       }[];
-    }>(
-      "",
-      {
-        query,
-        variables,
-      },
-      { headers }
-    );
+    }>("", graphQLBody, { headers });
 
     if (response.data.errors) {
       throw new Error(response.data.errors.map((x) => x.message).join(";"));
