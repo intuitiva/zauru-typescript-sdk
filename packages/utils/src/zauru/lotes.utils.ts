@@ -6,8 +6,6 @@ import {
   toFixedIfNeeded,
 } from "@zauru-sdk/common";
 import {
-  createNewReception,
-  enablePurchase,
   getDeliveryByBooking,
   getLote,
   getLotesFiltered,
@@ -17,13 +15,12 @@ import {
   insertBookings,
   saveMotivosDeRechazoByPurchase,
   updateLote,
-  updatePurchaseOrder,
+  updateReceivedPurchaseOrder,
 } from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   BasketSchema,
   InsertBookingBody,
-  NewReceptionBody,
   UpdatePurchaseOrderBody,
 } from "@zauru-sdk/types";
 import { getPurchaseOrderDataTables } from "./purchase-orders.utils.js";
@@ -347,42 +344,16 @@ export const procesarLote = async (
     //=====================================================================================
     //=====================================================================================
     //PASO 4: Modificación de porcentaje de rechazo en la orden de compra
-    //4.1 El primer paso es devolver la recepción recibida en la orden de compra.
-    //Primero se debe obtener el id de dicha recepción
-    const reception = purchaseOrder.receptions[0];
-    const reception_details = reception?.reception_details[0];
-
-    //4.2 Habilito la orden de compra
-    await enablePurchase(headers, purchaseOrder.id, reception?.id);
 
     //4.3 Editar porcentajes de rechazo
     const updateBodyPurchase = {
       purchase_order: { discount: porcentajeRechazo },
     } as UpdatePurchaseOrderBody;
-    await updatePurchaseOrder(headers, updateBodyPurchase, purchaseOrder.id);
-
-    //4.4 Crear una nueva recepcion
-    const bodyReception = {
-      reception: {
-        agency_id: reception.agency_id,
-        entity_id: reception.entity_id,
-        needs_transit: false,
-        purchase_order_id: purchaseOrder.id,
-        received_at: new Date(Date.now() + 12096e5).toISOString().split("T")[0],
-        invoice_number: `${reception.invoice_number ?? ""}`,
-        reception_details_attributes: {
-          "0": {
-            item_id: `${reception_details?.item_id}`,
-            lot_delivered_quantity: [reception_details?.lot_delivered_quantity],
-            lot_description: [reception_details?.lot_description],
-            lot_expire: [reception_details?.lot_expire],
-            lot_name: [reception_details?.lot_name],
-            purchase_order_detail_id: `${reception_details?.purchase_order_detail_id}`,
-          },
-        },
-      },
-    } as NewReceptionBody;
-    await createNewReception(headers, bodyReception, purchaseOrder.id);
+    await updateReceivedPurchaseOrder(
+      headers,
+      updateBodyPurchase,
+      purchaseOrder.id
+    );
 
     //=====================================================================================
     //=====================================================================================
