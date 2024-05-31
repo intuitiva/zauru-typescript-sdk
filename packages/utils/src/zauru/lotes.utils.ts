@@ -118,8 +118,10 @@ export const procesarLote = async (
     const purchaseOrder = purchaseOrderResponse.data;
     const lbsEsperadas = purchaseOrder.lots[0].lot_stocks[0].available;
 
-    const lbsMalas = lbsEsperadas * (Number(porcentajeRechazo) / 100);
-    const lbsBuenas = lbsEsperadas - lbsMalas;
+    const lbsMalas = Number(
+      toFixedIfNeeded(lbsEsperadas * (Number(porcentajeRechazo) / 100))
+    );
+    const lbsBuenas = Number(toFixedIfNeeded(lbsEsperadas - lbsMalas));
 
     const baskets_memo = getBasketsSchema(purchaseOrder.memo);
     const baskets_memo_quantity = baskets_memo
