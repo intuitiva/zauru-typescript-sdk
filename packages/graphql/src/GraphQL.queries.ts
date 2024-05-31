@@ -980,7 +980,7 @@ query getInvoiceFormSubmissionsByAgencyId (
       },
       ${
         filters?.startDate?.length && filters?.endDate?.length
-          ? `created_at: { _gte: "${filters?.startDate}", _lte: "${filters?.endDate}" },`
+          ? `created_at: { _gte: "${filters?.startDate}T00:00:00", _lte: "${filters?.endDate}T00:00:00" },`
           : ""
       }
       invoice: {
