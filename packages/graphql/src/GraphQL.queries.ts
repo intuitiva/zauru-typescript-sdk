@@ -961,6 +961,7 @@ export const getInvoiceFormSubmissionsByAgencyIdStringQuery = (filters?: {
   bundle_ids?: number[];
   startDate?: string;
   endDate?: string;
+  formZid?: number | string;
 }) => {
   return `
 query getInvoiceFormSubmissionsByAgencyId (
@@ -969,6 +970,11 @@ query getInvoiceFormSubmissionsByAgencyId (
   submission_invoices(
     where: {
       settings_form_submission: {
+        ${
+          filters?.formZid
+            ? `settings_form: {zid: {_eq: ${filters?.formZid}}},`
+            : ""
+        }
         ${
           filters?.some_field_value
             ? `settings_form_submission_values: {
@@ -988,7 +994,9 @@ query getInvoiceFormSubmissionsByAgencyId (
         ${filters?.seller_id ? `seller_id: {_eq: ${filters?.seller_id} },` : ""}
         ${
           filters?.payee_id_number_search
-            ? `payee: { id_number: { _ilike: "%${filters?.payee_id_number_search}%"} },`
+            ? `payee: { 
+                id_number: { _ilike: "%${filters?.payee_id_number_search}%"} 
+              },`
             : ""
         }
         ${

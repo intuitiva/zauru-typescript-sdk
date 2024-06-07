@@ -286,6 +286,7 @@ export async function getInvoiceFormSubmissionsByAgencyId(
     some_field_value?: string;
     item_ids?: number[];
     bundle_ids?: number[];
+    formZid?: number | string;
   }
 ): Promise<AxiosUtilsResponse<SubmissionInvoicesGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
@@ -301,6 +302,7 @@ export async function getInvoiceFormSubmissionsByAgencyId(
       item_ids: filters?.item_ids,
       startDate: filters?.startDate,
       endDate: filters?.endDate,
+      formZid: filters?.formZid,
     });
 
     const response = await httpGraphQLAPI.post<{
