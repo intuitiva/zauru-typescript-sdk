@@ -187,7 +187,8 @@ type PesadaFooter = {
 };
 
 export const useGetPesadas = (
-  purchaseOrder: PurchaseOrderGraphQL
+  purchaseOrder: PurchaseOrderGraphQL,
+  stocks_only_integer: boolean = false
 ): [PesadaBody[], PesadaFooter, GenericDynamicTableColumn[]] => {
   const [pesadas, footerPesadas, headersPesadas] = useMemo(() => {
     const tempPesadas: PesadaBody[] = [
@@ -202,10 +203,11 @@ export const useGetPesadas = (
         const discount = parsedReference[2]
           ? Number(parsedReference[2]) ?? 0
           : 0;
-        //TODO sacar el peso de la canasta de la API de Zauru
+        //TODO sacar el peso de la canasta de la API de Zauru, ahorita se supone que no debería cambiar de 5 libras.
         const basketWeight = 5;
         let netWeight = totalWeight - baskets * basketWeight; //Se le resta el peso de las canastas
         netWeight = netWeight * ((100 - discount) / 100); //Se le aplica el descuento
+        if (stocks_only_integer) netWeight = totalWeight;
         const weightByBasket = netWeight / baskets;
 
         //Probable aprovechamiento en planta
@@ -407,8 +409,8 @@ export const useGetBasketDetails = (
         cc: number;
       }[] = [];
       for (let i = 0; i < bsq.length; i++) {
-        const found = joinedBaskets.find((item) => item.color === bsq[i].color);
-        const foundCC = bsqToCC.find((item) => item.color === bsq[i].color);
+        let found = joinedBaskets.find((item) => item.color === bsq[i].color);
+        let foundCC = bsqToCC.find((item) => item.color === bsq[i].color);
 
         if (found) {
           found.total += bsq[i].total;
@@ -545,4 +547,21 @@ export const useGetItemNameByPurchaseOrder = (
   }, [items, purchaseOrder]);
 
   return itemName;
+};
+
+export const useGetItemByPurchaseOrder = (
+  items: ItemGraphQL[],
+  purchaseOrder: PurchaseOrderGraphQL
+) => {
+  const item = useMemo(() => {
+    if (purchaseOrder.purchase_order_details.length > 0 && items.length > 0) {
+      const item = items.find(
+        (x) => x.id == purchaseOrder.purchase_order_details[0].item_id
+      );
+      return item;
+    }
+    return null;
+  }, [items, purchaseOrder]);
+
+  return item;
 };
