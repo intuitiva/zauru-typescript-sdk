@@ -207,7 +207,7 @@ export const useGetPesadas = (
         const basketWeight = 5;
         let netWeight = totalWeight - baskets * basketWeight; //Se le resta el peso de las canastas
         netWeight = netWeight * ((100 - discount) / 100); //Se le aplica el descuento
-        if (stocks_only_integer) netWeight = totalWeight;
+        if (stocks_only_integer) netWeight = totalWeight; //si es en unidades no divido el peso entre las canastas
         const weightByBasket = netWeight / baskets;
 
         //Probable aprovechamiento en planta
@@ -256,21 +256,29 @@ export const useGetPesadas = (
     const headers: GenericDynamicTableColumn[] = [
       { label: "#", name: "id", type: "label", width: 5 },
       { label: "Canastas", name: "baskets", type: "label" },
-      { label: "Peso báscula", name: "totalWeight", type: "label" },
-      { label: "Descuento (%)", name: "discount", type: "label" },
-      { label: "Peso Neto", name: "netWeight", type: "label" },
       {
-        label: "Peso Neto - %Rechazo",
+        label: `${stocks_only_integer ? "Unidades" : "Peso báscula"}`,
+        name: "totalWeight",
+        type: "label",
+      },
+      { label: "Descuento (%)", name: "discount", type: "label" },
+      {
+        label: `${stocks_only_integer ? "Unidades" : "Peso Neto"}`,
+        name: "netWeight",
+        type: "label",
+      },
+      {
+        label: `${stocks_only_integer ? "Unidades" : "Peso Neto"} - %Rechazo`,
         name: "probableUtilization",
         type: "label",
       },
       {
-        label: "Lb o Unidades descontadas",
+        label: `${stocks_only_integer ? "Unidades" : "Libras"} descontadas`,
         name: "lbDiscounted",
         type: "label",
       },
       {
-        label: "Peso Neto por canasta",
+        label: `${stocks_only_integer ? "Unidades" : "Peso Neto"} por canasta`,
         name: "weightByBasket",
         type: "label",
       },
@@ -407,6 +415,7 @@ export const useGetBasketDetails = (
         total: number;
         color: string;
         cc: number;
+        // granTotal: number;
       }[] = [];
       for (let i = 0; i < bsq.length; i++) {
         let found = joinedBaskets.find((item) => item.color === bsq[i].color);
@@ -417,7 +426,8 @@ export const useGetBasketDetails = (
         } else {
           joinedBaskets.push({
             id: i,
-            total: bsq[i].total + (foundCC ? foundCC.total : 0),
+            total: bsq[i].total - (foundCC ? foundCC.total : 0),
+            //granTotal: bsq[i].total,
             color: bsq[i].color,
             cc: foundCC ? foundCC.total : 0,
           });
@@ -430,12 +440,14 @@ export const useGetBasketDetails = (
           joinedBaskets?.map((x) => x.total).reduce(reduceAdd, 0)
         ),
         cc: joinedBaskets?.map((x) => x.cc).reduce(reduceAdd, 0),
+        //granTotal: joinedBaskets?.map((x) => x.granTotal).reduce(reduceAdd, 0),
       };
 
       const headers: GenericDynamicTableColumn[] = [
         { label: "Color", name: "color", type: "label" },
         { label: "Canastas recibidas", name: "total", type: "label" },
         { label: "Enviadas a CC", name: "cc", type: "label" },
+        //{ label: "Total", name: "granTotal", type: "label" },
       ];
 
       return [joinedBaskets, totales, headers];
