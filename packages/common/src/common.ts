@@ -326,13 +326,22 @@ export const getPayeeInfoOptions = (
   });
 };
 
-export const parsedBaculoFormValue = (value: any) => {
+export const parsedBaculoFormValue = (
+  value: any,
+  config: { trueValue: string; falseValue: string } = {
+    falseValue: "No",
+    trueValue: "Si",
+  }
+) => {
   if (value === "false") {
-    return "No";
+    return config.falseValue;
   } else if (value === "true") {
-    return "Si";
+    return config.trueValue;
   } else if (DESTINOS_MUESTRA_OPTIONS.some((x) => x.value === value)) {
     return DESTINOS_MUESTRA_OPTIONS.find((x) => x.value === value)?.label;
+  } else if (moment(value, "YYYY-MM-DD", true).isValid()) {
+    // Valida y convierte la fecha
+    return moment(value).format("DD/MM/YYYY");
   }
 
   return capitalLetter(value);
