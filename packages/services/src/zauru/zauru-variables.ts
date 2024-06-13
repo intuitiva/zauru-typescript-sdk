@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import httpZauru from "./httpZauru.js";
 import { VariableGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 
 /**
  * getVariables Function for get all zauru variables
@@ -65,3 +66,18 @@ export async function createVariable(
     } as AxiosUtilsResponse<VariableGraphQL>;
   }
 }
+
+export const updateVariable = async (
+  headers: any,
+  body: Partial<VariableGraphQL>
+): Promise<AxiosUtilsResponse<boolean>> => {
+  return handlePossibleAxiosErrors(async () => {
+    await httpZauru.patch(
+      `/apps/webapp_vars/${body.id}.json`,
+      { variable: body },
+      { headers }
+    );
+
+    return true;
+  });
+};

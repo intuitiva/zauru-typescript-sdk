@@ -341,3 +341,58 @@ export async function getVariablesByName(
 
   return returnObject;
 }
+
+export async function getVariablesSchemaByName(
+  headers: any,
+  session: Session,
+  names: Array<string>
+): Promise<VariableGraphQL[]> {
+  //variables
+  let variables: VariableGraphQL[] = [];
+
+  //consulto si ya están guardadas en la sesión
+  const tempVars: VariableGraphQL[] = session.get("variables");
+  if (Array.isArray(tempVars) && tempVars.length) {
+    //si ya están guardadas, uso esas
+    variables = tempVars;
+  } else {
+    //si no están en la sesión, las obtengo de zauru y luego las guardo en la sesión
+    //Obtengo mis variables, para tener los tags solicitados
+    const response = await getVariables(headers);
+    if (response.error) {
+      throw new Error(`${response.userMsg} - ${response.msg}`);
+    }
+    session.set("variables", response.data);
+    await commitSession(session);
+    variables = response.data ?? [];
+  }
+
+  const filtrados = variables.filter((value: VariableGraphQL) =>
+    names.includes(value.name)
+  );
+
+  return filtrados;
+}
+
+/**
+ * Actualiza las variables en la sesión.
+ * @param {any} headers - Headers necesarios para la consulta.
+ * @param {Session} session - La sesión actual.
+ * @returns {Promise<void>}
+ */
+export async function actualizarVariables(
+  headers: any,
+  session: Session
+): Promise<void> {
+  // Intentamos obtener las variables desde el servidor
+  const response = await getVariables(headers);
+  if (response.error) {
+    throw new Error(`${response.userMsg} - ${response.msg}`);
+  }
+
+  // Guardamos las variables en la sesión
+  session.set("variables", response.data);
+  await commitSession(session);
+
+  console.log("Variables actualizadas y sesión refrescada.");
+}
