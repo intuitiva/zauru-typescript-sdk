@@ -1355,3 +1355,12 @@ export const getCasesByResponsibleIdStringQuery = (wheres: string[] = []) => {
     }
   `;
 };
+
+export const getPrintTemplatesStringQuery = `
+query getPrintTemplates {
+    print_templates {
+        id
+        name
+    }
+}
+`;

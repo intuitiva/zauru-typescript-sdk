@@ -84,6 +84,11 @@ export type PurchaseOrderDetailsGraphQL = {
   expire_date: string;
 };
 
+export type PrintTemplateGraphQL = {
+  id: number;
+  name: string;
+};
+
 export type LotStockGraphQL = {
   id: number;
   available: number;

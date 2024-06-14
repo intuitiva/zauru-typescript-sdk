@@ -25,6 +25,7 @@ import type {
   Template,
   TipoMuestra,
   WebAppRowGraphQL,
+  PrintTemplateGraphQL,
 } from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
@@ -338,6 +339,13 @@ export const useGetPayeesForLab = (
   loading: boolean;
   data: PayeeGraphQL[];
 } => useGetReduxCatalog<PayeeGraphQL>("payeesForLab", config);
+
+export const useGetPrintTemplates = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: PrintTemplateGraphQL[];
+} => useGetReduxCatalog<PrintTemplateGraphQL>("printTemplates", config);
 
 export const useGetAgencies = (
   config?: ReduxParamsConfig

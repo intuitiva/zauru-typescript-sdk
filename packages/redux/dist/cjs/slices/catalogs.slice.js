@@ -45,6 +45,7 @@ const initialState = {
     myCaseFormSubmissions: createLoadingState([]),
     myAgencyLotStocks: createLoadingState([]),
     shipmentsToMyAgency: createLoadingState([]),
+    printTemplates: createLoadingState([]),
 };
 const catalogsSlice = (0, toolkit_1.createSlice)({
     name: "catalogs",
