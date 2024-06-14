@@ -150,6 +150,7 @@ export async function getInvoiceFormSubmissionsByAgencyId(session, agency_id, fi
             item_ids: filters?.item_ids,
             startDate: filters?.startDate,
             endDate: filters?.endDate,
+            formZid: filters?.formZid,
         });
         const response = await httpGraphQLAPI.post("", {
             query: queryBuilded,

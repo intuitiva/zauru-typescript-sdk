@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import httpZauru from "./httpZauru.js";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 /**
  * getVariables Function for get all zauru variables
  * @param headers
@@ -46,3 +47,9 @@ export async function createVariable(headers, body) {
         };
     }
 }
+export const updateVariable = async (headers, body) => {
+    return handlePossibleAxiosErrors(async () => {
+        await httpZauru.patch(`/apps/webapp_vars/${body.id}.json`, { variable: body }, { headers });
+        return true;
+    });
+};

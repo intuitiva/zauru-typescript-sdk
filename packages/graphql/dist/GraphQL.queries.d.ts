@@ -61,6 +61,7 @@ export declare const getInvoiceFormSubmissionsByAgencyIdStringQuery: (filters?: 
     bundle_ids?: number[];
     startDate?: string;
     endDate?: string;
+    formZid?: number | string;
 }) => string;
 export declare const getLastInvoiceFormSubmissionStringQuery: (filters?: {
     formZid?: number;

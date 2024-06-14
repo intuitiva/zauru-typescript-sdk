@@ -37,6 +37,7 @@ export declare function getInvoiceFormSubmissionsByAgencyId(session: Session, ag
     some_field_value?: string;
     item_ids?: number[];
     bundle_ids?: number[];
+    formZid?: number | string;
 }): Promise<AxiosUtilsResponse<SubmissionInvoicesGraphQL[]>>;
 /**
  * getMyCaseFormSubmissions

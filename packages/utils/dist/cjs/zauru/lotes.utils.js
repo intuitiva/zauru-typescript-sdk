@@ -71,8 +71,8 @@ const procesarLote = async (headers, session, data, poId) => {
         }
         const purchaseOrder = purchaseOrderResponse.data;
         const lbsEsperadas = purchaseOrder.lots[0].lot_stocks[0].available;
-        const lbsMalas = lbsEsperadas * (Number(porcentajeRechazo) / 100);
-        const lbsBuenas = lbsEsperadas - lbsMalas;
+        const lbsMalas = Number((0, common_1.toFixedIfNeeded)(lbsEsperadas * (Number(porcentajeRechazo) / 100)));
+        const lbsBuenas = Number((0, common_1.toFixedIfNeeded)(lbsEsperadas - lbsMalas));
         const baskets_memo = (0, common_1.getBasketsSchema)(purchaseOrder.memo);
         const baskets_memo_quantity = baskets_memo
             .map((basket) => basket.total)
@@ -239,39 +239,11 @@ const procesarLote = async (headers, session, data, poId) => {
         //=====================================================================================
         //=====================================================================================
         //PASO 4: Modificación de porcentaje de rechazo en la orden de compra
-        //4.1 El primer paso es devolver la recepción recibida en la orden de compra.
-        //Primero se debe obtener el id de dicha recepción
-        const reception = purchaseOrder.receptions[0];
-        const reception_details = reception?.reception_details[0];
-        //4.2 Habilito la orden de compra
-        await (0, services_1.enablePurchase)(headers, purchaseOrder.id, reception?.id);
         //4.3 Editar porcentajes de rechazo
         const updateBodyPurchase = {
             purchase_order: { discount: porcentajeRechazo },
         };
-        await (0, services_1.updatePurchaseOrder)(headers, updateBodyPurchase, purchaseOrder.id);
-        //4.4 Crear una nueva recepcion
-        const bodyReception = {
-            reception: {
-                agency_id: reception.agency_id,
-                entity_id: reception.entity_id,
-                needs_transit: false,
-                purchase_order_id: purchaseOrder.id,
-                received_at: new Date(Date.now() + 12096e5).toISOString().split("T")[0],
-                invoice_number: `${reception.invoice_number ?? ""}`,
-                reception_details_attributes: {
-                    "0": {
-                        item_id: `${reception_details?.item_id}`,
-                        lot_delivered_quantity: [reception_details?.lot_delivered_quantity],
-                        lot_description: [reception_details?.lot_description],
-                        lot_expire: [reception_details?.lot_expire],
-                        lot_name: [reception_details?.lot_name],
-                        purchase_order_detail_id: `${reception_details?.purchase_order_detail_id}`,
-                    },
-                },
-            },
-        };
-        await (0, services_1.createNewReception)(headers, bodyReception, purchaseOrder.id);
+        await (0, services_1.updateReceivedPurchaseOrder)(headers, updateBodyPurchase, purchaseOrder.id);
         //=====================================================================================
         //=====================================================================================
         //PASO 6: Guardar razones de rechazo en webapp table

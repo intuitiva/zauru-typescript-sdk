@@ -12,3 +12,4 @@ export declare function getVariables(headers: any): Promise<AxiosUtilsResponse<V
  * @returns
  */
 export declare function createVariable(headers: any, body: Partial<VariableGraphQL>): Promise<AxiosUtilsResponse<VariableGraphQL>>;
+export declare const updateVariable: (headers: any, body: Partial<VariableGraphQL>) => Promise<AxiosUtilsResponse<boolean>>;

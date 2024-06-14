@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getVariablesByName = exports.generateDistinctCode = exports.deleteSessionMessage = exports.saveSessionMessage = exports.getGraphQLAPIHeaders = exports.getHeaders = exports.loginWebApp = void 0;
+exports.actualizarVariables = exports.getVariablesSchemaByName = exports.getVariablesByName = exports.generateDistinctCode = exports.deleteSessionMessage = exports.saveSessionMessage = exports.getGraphQLAPIHeaders = exports.getHeaders = exports.loginWebApp = void 0;
 const node_1 = require("@remix-run/node");
 const sessions_js_1 = require("./sessions/sessions.js");
 const chalk_1 = __importDefault(require("chalk"));
@@ -233,3 +233,45 @@ async function getVariablesByName(headers, session, names) {
     return returnObject;
 }
 exports.getVariablesByName = getVariablesByName;
+async function getVariablesSchemaByName(headers, session, names) {
+    //variables
+    let variables = [];
+    //consulto si ya están guardadas en la sesión
+    const tempVars = session.get("variables");
+    if (Array.isArray(tempVars) && tempVars.length) {
+        //si ya están guardadas, uso esas
+        variables = tempVars;
+    }
+    else {
+        //si no están en la sesión, las obtengo de zauru y luego las guardo en la sesión
+        //Obtengo mis variables, para tener los tags solicitados
+        const response = await (0, zauru_variables_js_1.getVariables)(headers);
+        if (response.error) {
+            throw new Error(`${response.userMsg} - ${response.msg}`);
+        }
+        session.set("variables", response.data);
+        await (0, sessions_js_1.commitSession)(session);
+        variables = response.data ?? [];
+    }
+    const filtrados = variables.filter((value) => names.includes(value.name));
+    return filtrados;
+}
+exports.getVariablesSchemaByName = getVariablesSchemaByName;
+/**
+ * Actualiza las variables en la sesión.
+ * @param {any} headers - Headers necesarios para la consulta.
+ * @param {Session} session - La sesión actual.
+ * @returns {Promise<void>}
+ */
+async function actualizarVariables(headers, session) {
+    // Intentamos obtener las variables desde el servidor
+    const response = await (0, zauru_variables_js_1.getVariables)(headers);
+    if (response.error) {
+        throw new Error(`${response.userMsg} - ${response.msg}`);
+    }
+    // Guardamos las variables en la sesión
+    session.set("variables", response.data);
+    await (0, sessions_js_1.commitSession)(session);
+    console.log("Variables actualizadas y sesión refrescada.");
+}
+exports.actualizarVariables = actualizarVariables;

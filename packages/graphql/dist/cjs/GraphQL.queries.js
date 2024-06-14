@@ -891,6 +891,9 @@ query getInvoiceFormSubmissionsByAgencyId (
   submission_invoices(
     where: {
       settings_form_submission: {
+        ${filters?.formZid
+        ? `settings_form: {zid: {_eq: ${filters?.formZid}}},`
+        : ""}
         ${filters?.some_field_value
         ? `settings_form_submission_values: {
                   value: { _eq: "${filters?.some_field_value}" }
@@ -899,13 +902,15 @@ query getInvoiceFormSubmissionsByAgencyId (
         voided: {_eq: false}
       },
       ${filters?.startDate?.length && filters?.endDate?.length
-        ? `created_at: { _gte: "${filters?.startDate}", _lte: "${filters?.endDate}" },`
+        ? `created_at: { _gte: "${filters?.startDate}T00:00:00", _lte: "${filters?.endDate}T00:00:00" },`
         : ""}
       invoice: {
         agency_id: {_eq: $agency_id},
         ${filters?.seller_id ? `seller_id: {_eq: ${filters?.seller_id} },` : ""}
         ${filters?.payee_id_number_search
-        ? `payee: { id_number: { _ilike: "%${filters?.payee_id_number_search}%"} },`
+        ? `payee: { 
+                id_number: { _ilike: "%${filters?.payee_id_number_search}%"} 
+              },`
         : ""}
         ${filters?.item_ids?.length
         ? `invoice_details: {item_id: {_in: [${filters?.item_ids?.join(",")}]}}`

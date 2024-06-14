@@ -1,6 +1,6 @@
 import { Session } from "@remix-run/node";
 import { AxiosRequestHeaders } from "axios";
-import { EmployeeGraphQL, OauthProfile, ProfileResponse, AgencyGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
+import { EmployeeGraphQL, OauthProfile, ProfileResponse, AgencyGraphQL, VariableGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
 /**
  * loginWebApp
  * @param session
@@ -53,3 +53,11 @@ export declare function generateDistinctCode(prefix: string): string;
 export declare function getVariablesByName(headers: any, session: Session, names: Array<string>): Promise<{
     [key: string]: string;
 }>;
+export declare function getVariablesSchemaByName(headers: any, session: Session, names: Array<string>): Promise<VariableGraphQL[]>;
+/**
+ * Actualiza las variables en la sesión.
+ * @param {any} headers - Headers necesarios para la consulta.
+ * @param {Session} session - La sesión actual.
+ * @returns {Promise<void>}
+ */
+export declare function actualizarVariables(headers: any, session: Session): Promise<void>;

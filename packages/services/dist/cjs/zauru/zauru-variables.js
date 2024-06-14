@@ -3,9 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createVariable = exports.getVariables = void 0;
+exports.updateVariable = exports.createVariable = exports.getVariables = void 0;
 const chalk_1 = __importDefault(require("chalk"));
 const httpZauru_js_1 = __importDefault(require("./httpZauru.js"));
+const common_1 = require("@zauru-sdk/common");
 /**
  * getVariables Function for get all zauru variables
  * @param headers
@@ -54,3 +55,10 @@ async function createVariable(headers, body) {
     }
 }
 exports.createVariable = createVariable;
+const updateVariable = async (headers, body) => {
+    return (0, common_1.handlePossibleAxiosErrors)(async () => {
+        await httpZauru_js_1.default.patch(`/apps/webapp_vars/${body.id}.json`, { variable: body }, { headers });
+        return true;
+    });
+};
+exports.updateVariable = updateVariable;

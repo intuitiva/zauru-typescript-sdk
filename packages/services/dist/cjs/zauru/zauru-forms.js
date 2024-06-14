@@ -161,6 +161,7 @@ async function getInvoiceFormSubmissionsByAgencyId(session, agency_id, filters) 
             item_ids: filters?.item_ids,
             startDate: filters?.startDate,
             endDate: filters?.endDate,
+            formZid: filters?.formZid,
         });
         const response = await httpGraphQL_js_1.default.post("", {
             query: queryBuilded,

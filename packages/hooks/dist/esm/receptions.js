@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useGetItemNameByPurchaseOrder = exports.useGetProviderNameByPurchaseOrder = exports.getBasketDetailsByForm = exports.useGetBasketDetails = exports.getPesadasByForm = exports.useGetPesadas = exports.useGetPurchaseOrderGeneralInfo = exports.useGetNewPurchaseOrderInfo = exports.useGetRejectionInfo = exports.useGetBasketLots = exports.useGetPOReceptions = exports.useGetProcesses = void 0;
+exports.useGetItemByPurchaseOrder = exports.useGetItemNameByPurchaseOrder = exports.useGetProviderNameByPurchaseOrder = exports.getBasketDetailsByForm = exports.useGetBasketDetails = exports.getPesadasByForm = exports.useGetPesadas = exports.useGetPurchaseOrderGeneralInfo = exports.useGetNewPurchaseOrderInfo = exports.useGetRejectionInfo = exports.useGetBasketLots = exports.useGetPOReceptions = exports.useGetProcesses = void 0;
 const react_1 = require("@remix-run/react");
 const redux_1 = require("@zauru-sdk/redux");
 const react_2 = require("react");
@@ -78,7 +78,7 @@ const useGetNewPurchaseOrderInfo = () => useGetReceptionObject("newPurchaseOrder
 exports.useGetNewPurchaseOrderInfo = useGetNewPurchaseOrderInfo;
 const useGetPurchaseOrderGeneralInfo = () => useGetReceptionObject("purchaseOrderGeneralInfo");
 exports.useGetPurchaseOrderGeneralInfo = useGetPurchaseOrderGeneralInfo;
-const useGetPesadas = (purchaseOrder) => {
+const useGetPesadas = (purchaseOrder, stocks_only_integer = false) => {
     const [pesadas, footerPesadas, headersPesadas] = (0, react_2.useMemo)(() => {
         const tempPesadas = [
             ...purchaseOrder.purchase_order_details?.map((x, index) => {
@@ -92,10 +92,12 @@ const useGetPesadas = (purchaseOrder) => {
                 const discount = parsedReference[2]
                     ? Number(parsedReference[2]) ?? 0
                     : 0;
-                //TODO sacar el peso de la canasta de la API de Zauru
+                //TODO sacar el peso de la canasta de la API de Zauru, ahorita se supone que no debería cambiar de 5 libras.
                 const basketWeight = 5;
                 let netWeight = totalWeight - baskets * basketWeight; //Se le resta el peso de las canastas
                 netWeight = netWeight * ((100 - discount) / 100); //Se le aplica el descuento
+                if (stocks_only_integer)
+                    netWeight = totalWeight; //si es en unidades no divido el peso entre las canastas
                 const weightByBasket = netWeight / baskets;
                 //Probable aprovechamiento en planta
                 const probableUtilization = netWeight * ((100 - purchaseOrder?.discount) / 100);
@@ -128,21 +130,29 @@ const useGetPesadas = (purchaseOrder) => {
         const headers = [
             { label: "#", name: "id", type: "label", width: 5 },
             { label: "Canastas", name: "baskets", type: "label" },
-            { label: "Peso báscula", name: "totalWeight", type: "label" },
-            { label: "Descuento (%)", name: "discount", type: "label" },
-            { label: "Peso Neto", name: "netWeight", type: "label" },
             {
-                label: "Peso Neto - %Rechazo",
+                label: `${stocks_only_integer ? "Unidades" : "Peso báscula"}`,
+                name: "totalWeight",
+                type: "label",
+            },
+            { label: "Descuento (%)", name: "discount", type: "label" },
+            {
+                label: `${stocks_only_integer ? "Unidades" : "Peso Neto"}`,
+                name: "netWeight",
+                type: "label",
+            },
+            {
+                label: `${stocks_only_integer ? "Unidades" : "Peso Neto"} - %Rechazo`,
                 name: "probableUtilization",
                 type: "label",
             },
             {
-                label: "Lb o Unidades descontadas",
+                label: `${stocks_only_integer ? "Unidades" : "Libras"} descontadas`,
                 name: "lbDiscounted",
                 type: "label",
             },
             {
-                label: "Peso Neto por canasta",
+                label: `${stocks_only_integer ? "Unidades" : "Peso Neto"} por canasta`,
                 name: "weightByBasket",
                 type: "label",
             },
@@ -236,15 +246,16 @@ const useGetBasketDetails = (purchaseOrder) => {
         const bsqToCC = (0, common_1.getBasketsSchema)(purchaseOrder.memo);
         const joinedBaskets = [];
         for (let i = 0; i < bsq.length; i++) {
-            const found = joinedBaskets.find((item) => item.color === bsq[i].color);
-            const foundCC = bsqToCC.find((item) => item.color === bsq[i].color);
+            let found = joinedBaskets.find((item) => item.color === bsq[i].color);
+            let foundCC = bsqToCC.find((item) => item.color === bsq[i].color);
             if (found) {
                 found.total += bsq[i].total;
             }
             else {
                 joinedBaskets.push({
                     id: i,
-                    total: bsq[i].total + (foundCC ? foundCC.total : 0),
+                    total: bsq[i].total - (foundCC ? foundCC.total : 0),
+                    //granTotal: bsq[i].total,
                     color: bsq[i].color,
                     cc: foundCC ? foundCC.total : 0,
                 });
@@ -254,11 +265,13 @@ const useGetBasketDetails = (purchaseOrder) => {
             id: "",
             total: (0, common_1.toFixedIfNeeded)(joinedBaskets?.map((x) => x.total).reduce(common_1.reduceAdd, 0)),
             cc: joinedBaskets?.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
+            //granTotal: joinedBaskets?.map((x) => x.granTotal).reduce(reduceAdd, 0),
         };
         const headers = [
             { label: "Color", name: "color", type: "label" },
             { label: "Canastas recibidas", name: "total", type: "label" },
             { label: "Enviadas a CC", name: "cc", type: "label" },
+            //{ label: "Total", name: "granTotal", type: "label" },
         ];
         return [joinedBaskets, totales, headers];
     }, [purchaseOrder]);
@@ -346,3 +359,14 @@ const useGetItemNameByPurchaseOrder = (items, purchaseOrder) => {
     return itemName;
 };
 exports.useGetItemNameByPurchaseOrder = useGetItemNameByPurchaseOrder;
+const useGetItemByPurchaseOrder = (items, purchaseOrder) => {
+    const item = (0, react_2.useMemo)(() => {
+        if (purchaseOrder.purchase_order_details.length > 0 && items.length > 0) {
+            const item = items.find((x) => x.id == purchaseOrder.purchase_order_details[0].item_id);
+            return item;
+        }
+        return null;
+    }, [items, purchaseOrder]);
+    return item;
+};
+exports.useGetItemByPurchaseOrder = useGetItemByPurchaseOrder;

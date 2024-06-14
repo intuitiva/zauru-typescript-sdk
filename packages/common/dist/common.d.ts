@@ -83,7 +83,10 @@ export declare const getPayeeInfoIdOptions: (payees: PayeeGraphQL[]) => (SelectF
 export declare const getPayeeInfoOptions: (payees: PayeeGraphQL[]) => (SelectFieldOption & {
     id: number;
 })[];
-export declare const parsedBaculoFormValue: (value: any) => string | undefined;
+export declare const parsedBaculoFormValue: (value: any, config?: {
+    trueValue: string;
+    falseValue: string;
+}) => string | undefined;
 export declare function extractIdFromForm(s: string): number | null;
 /**
  * Formatea una fecha de tipo YYYY-MM-DD a 2023-08-07T20:56:00.540245
