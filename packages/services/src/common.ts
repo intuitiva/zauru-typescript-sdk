@@ -286,6 +286,7 @@ export function generateDistinctCode(prefix: string) {
   const codigoProducto = `${prefix}-${uuid}`;
   return codigoProducto;
 }
+
 /**
  *
  * @param headers
