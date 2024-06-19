@@ -65,7 +65,7 @@ export declare const stringDateToParsedUTCDate: (date: string) => Date;
  * @param date
  * @returns
  */
-export declare function zauruDateToLongString(date: string, hours?: boolean): string;
+export declare function zauruDateToLongString(date: string, hours?: boolean, utc?: boolean): string;
 /**
  * todayLongString
  * @param date
@@ -153,3 +153,4 @@ export declare function handlePossibleAxiosErrors<T>(action: () => Promise<T>): 
  * @returns
  */
 export declare function createPostgresUrl(host?: any, port?: any, dbName?: any, user?: any, password?: any, schema?: any): string;
+export declare const parsedObject: (obj: any) => any;

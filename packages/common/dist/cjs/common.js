@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createPostgresUrl = exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.zauruDateToLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.parsedObject = exports.createPostgresUrl = exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.zauruDateToLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
 const moment_1 = __importDefault(require("moment"));
 require("moment-timezone");
 const types_1 = require("@zauru-sdk/types");
@@ -197,12 +197,15 @@ exports.stringDateToParsedUTCDate = stringDateToParsedUTCDate;
  * @param date
  * @returns
  */
-function zauruDateToLongString(date, hours = false) {
+function zauruDateToLongString(date, hours = false, utc = true) {
     if (!date) {
         return "invalid date:zauruDateToLongString";
     }
     // Asume que la fecha de entrada está en UTC y la convierte a la zona horaria local del navegador
-    const issueDate = moment_1.default.utc(date).local();
+    let issueDate = moment_1.default.utc(date).local();
+    if (!utc) {
+        issueDate = moment_1.default.utc(date).local(true);
+    }
     let formatString = "dddd, D [de] MMMM [de] YYYY";
     if (hours) {
         formatString += ", HH:mm a"; // Añade la hora en formato de 12 horas con AM/PM
@@ -528,3 +531,18 @@ function createPostgresUrl(host = "localhost", port = "5432", dbName = "postgres
     return `postgresql://${authPart}@${host}:${port}/${dbName}?schema=${schema}`;
 }
 exports.createPostgresUrl = createPostgresUrl;
+const parsedObject = (obj) => {
+    if (typeof obj === "bigint") {
+        return obj.toString();
+    }
+    else if (Array.isArray(obj)) {
+        return obj.map(exports.parsedObject);
+    }
+    else if (obj !== null && typeof obj === "object") {
+        return Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, (0, exports.parsedObject)(value)]));
+    }
+    else {
+        return obj;
+    }
+};
+exports.parsedObject = parsedObject;
