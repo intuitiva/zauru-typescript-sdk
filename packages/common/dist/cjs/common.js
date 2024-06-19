@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.zauruDateToLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.createPostgresUrl = exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.zauruDateToLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
 const moment_1 = __importDefault(require("moment"));
 require("moment-timezone");
 const types_1 = require("@zauru-sdk/types");
@@ -510,3 +510,21 @@ async function handlePossibleAxiosErrors(action) {
     }
 }
 exports.handlePossibleAxiosErrors = handlePossibleAxiosErrors;
+/**
+ * createPostgresUrl
+ * @param host
+ * @param port
+ * @param dbName
+ * @param user
+ * @param password
+ * @param schema
+ * @returns
+ */
+function createPostgresUrl(host = "localhost", port = "5432", dbName = "postgres", user = "postgres", password = "", schema = "public") {
+    let authPart = user;
+    if (password) {
+        authPart += `:${password}`;
+    }
+    return `postgresql://${authPart}@${host}:${port}/${dbName}?schema=${schema}`;
+}
+exports.createPostgresUrl = createPostgresUrl;

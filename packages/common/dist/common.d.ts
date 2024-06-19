@@ -142,3 +142,14 @@ export declare const sortByProperty: (array: any[], property: string) => any[];
  * @returns A Promise of AxiosUtilsResponse<T>.
  */
 export declare function handlePossibleAxiosErrors<T>(action: () => Promise<T>): Promise<AxiosUtilsResponse<T>>;
+/**
+ * createPostgresUrl
+ * @param host
+ * @param port
+ * @param dbName
+ * @param user
+ * @param password
+ * @param schema
+ * @returns
+ */
+export declare function createPostgresUrl(host?: any, port?: any, dbName?: any, user?: any, password?: any, schema?: any): string;
