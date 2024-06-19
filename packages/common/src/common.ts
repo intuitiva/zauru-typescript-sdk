@@ -218,13 +218,21 @@ export const stringDateToParsedUTCDate = (date: string): Date => {
  * @param date
  * @returns
  */
-export function zauruDateToLongString(date: string, hours: boolean = false) {
+export function zauruDateToLongString(
+  date: string,
+  hours: boolean = false,
+  utc: boolean = true
+) {
   if (!date) {
     return "invalid date:zauruDateToLongString";
   }
 
   // Asume que la fecha de entrada está en UTC y la convierte a la zona horaria local del navegador
-  const issueDate = moment.utc(date).local();
+  let issueDate = moment.utc(date).local();
+
+  if (!utc) {
+    issueDate = moment.utc(date).local(true);
+  }
 
   let formatString = "dddd, D [de] MMMM [de] YYYY";
   if (hours) {
@@ -606,3 +614,17 @@ export function createPostgresUrl(
 
   return `postgresql://${authPart}@${host}:${port}/${dbName}?schema=${schema}`;
 }
+
+export const parsedObject = (obj: any): any => {
+  if (typeof obj === "bigint") {
+    return obj.toString();
+  } else if (Array.isArray(obj)) {
+    return obj.map(parsedObject);
+  } else if (obj !== null && typeof obj === "object") {
+    return Object.fromEntries(
+      Object.entries(obj).map(([key, value]) => [key, parsedObject(value)])
+    );
+  } else {
+    return obj;
+  }
+};
