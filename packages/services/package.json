@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/services",
-  "version": "1.0.73",
+  "version": "1.0.74",
   "description": "Servicios de consulta a Zauru",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@remix-run/node": "^2.8.1",
-    "@zauru-sdk/common": "^1.0.73",
+    "@zauru-sdk/common": "^1.0.74",
     "@zauru-sdk/config": "^1.0.60",
     "@zauru-sdk/graphql": "^1.0.72",
     "@zauru-sdk/types": "^1.0.72",
