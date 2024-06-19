@@ -535,6 +535,9 @@ const parsedObject = (obj) => {
     if (typeof obj === "bigint") {
         return obj.toString();
     }
+    else if (obj instanceof Date) {
+        return obj.toISOString();
+    }
     else if (Array.isArray(obj)) {
         return obj.map(exports.parsedObject);
     }

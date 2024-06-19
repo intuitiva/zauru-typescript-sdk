@@ -618,6 +618,8 @@ export function createPostgresUrl(
 export const parsedObject = (obj: any): any => {
   if (typeof obj === "bigint") {
     return obj.toString();
+  } else if (obj instanceof Date) {
+    return obj.toISOString();
   } else if (Array.isArray(obj)) {
     return obj.map(parsedObject);
   } else if (obj !== null && typeof obj === "object") {
