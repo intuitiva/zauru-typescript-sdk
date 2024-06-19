@@ -580,3 +580,29 @@ export async function handlePossibleAxiosErrors<T>(
     return { error: true, userMsg: error?.toString() } as AxiosUtilsResponse<T>;
   }
 }
+
+/**
+ * createPostgresUrl
+ * @param host
+ * @param port
+ * @param dbName
+ * @param user
+ * @param password
+ * @param schema
+ * @returns
+ */
+export function createPostgresUrl(
+  host: any = "localhost",
+  port: any = "5432",
+  dbName: any = "postgres",
+  user: any = "postgres",
+  password: any = "",
+  schema: any = "public"
+) {
+  let authPart = user;
+  if (password) {
+    authPart += `:${password}`;
+  }
+
+  return `postgresql://${authPart}@${host}:${port}/${dbName}?schema=${schema}`;
+}
