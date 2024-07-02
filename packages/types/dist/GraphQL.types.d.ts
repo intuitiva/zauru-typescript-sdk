@@ -240,6 +240,12 @@ export type EmployeeGraphQL = {
     agency_id: number;
     user_id: number;
     email: string;
+    seller: boolean;
+    active: boolean;
+    accountant: boolean;
+    inventory_controller: boolean;
+    buyer: boolean;
+    support_agent: boolean;
 };
 export type BundleDetailsGraphQL = {
     id: number;

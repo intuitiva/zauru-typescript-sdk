@@ -154,3 +154,7 @@ export declare function handlePossibleAxiosErrors<T>(action: () => Promise<T>): 
  */
 export declare function createPostgresUrl(host?: any, port?: any, dbName?: any, user?: any, password?: any, schema?: any): string;
 export declare const parsedObject: (obj: any) => any;
+export declare function calculateTimeDifference(timestamp: string): {
+    hours: number;
+    minutes: number;
+};
