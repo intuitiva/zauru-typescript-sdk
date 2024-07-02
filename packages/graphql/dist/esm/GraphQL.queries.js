@@ -541,6 +541,12 @@ query getEmployeeProfile ($id: Int) {
     id
     name
     user_id
+    seller
+    active
+    accountant
+    inventory_controller
+    buyer
+    support_agent
   }
 }
 `;
@@ -550,6 +556,13 @@ query getEmployeesByAgencyId ($id: Int) {
     name
     id
     user_id
+    email
+    seller
+    active
+    accountant
+    inventory_controller
+    buyer
+    support_agent
   }
 }
 `;
