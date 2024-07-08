@@ -105,6 +105,31 @@ export async function getPayee(
 }
 
 /**
+ * getCreatePayee
+ * @param headers
+ * @param session
+ * @param id
+ * @returns
+ */
+export async function getCreatePayee(
+  headers: any,
+  search: {
+    tin?: string;
+  }
+): Promise<AxiosUtilsResponse<PayeeGraphQL | undefined>> {
+  return handlePossibleAxiosErrors(async () => {
+    const response = await httpZauru.post<PayeeGraphQL>(
+      `/settings/payees/search_payee.json`,
+      search,
+      {
+        headers,
+      }
+    );
+    return response.data;
+  });
+}
+
+/**
  * getPayeesByCategoryId
  * @param session
  * @param categoryId

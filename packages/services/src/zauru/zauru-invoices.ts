@@ -9,6 +9,7 @@ import { getGraphQLAPIHeaders } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
 import { getInvoicesByAgencyIdStringQuery } from "@zauru-sdk/graphql";
 import httpZauru from "./httpZauru.js";
+
 /**
  * getInvoicesByAgencyId
  */
@@ -62,6 +63,41 @@ export async function getInvoicesByAgencyId(
 }
 
 /**
+ * createInvoice
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function createInvoice(
+  headers: any,
+  body: Partial<InvoiceGraphQL>
+): Promise<AxiosUtilsResponse<InvoiceGraphQL>> {
+  return handlePossibleAxiosErrors(async () => {
+    const sendBody = {
+      ...body,
+      invoice_details_attributes: arrayToObject(body.invoice_details),
+      tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+    } as any;
+
+    if (sendBody.deleted_invoice_details)
+      delete sendBody.deleted_invoice_details;
+    if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
+    if (sendBody.invoice_details) delete sendBody.invoice_details;
+    if (sendBody.tagging_invoices) delete sendBody.tagging_invoices;
+
+    console.log("ENVIANDO: ", JSON.stringify(sendBody));
+
+    const response = await httpZauru.post<InvoiceGraphQL>(
+      `/sales/unpaid_invoices.json`,
+      { invoice: sendBody },
+      { headers }
+    );
+
+    return response.data;
+  });
+}
+
+/**
  * createInvoiceOrder
  * @param headers
  * @param body
@@ -69,20 +105,23 @@ export async function getInvoicesByAgencyId(
  */
 export async function createInvoiceOrder(
   headers: any,
-  body: Partial<InvoiceGraphQL>
+  body: Partial<InvoiceGraphQL>,
+  esFactura: boolean = false
 ): Promise<AxiosUtilsResponse<InvoiceGraphQL>> {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
       ...body,
-      issued: false, // Esto lo hace una órden y no una factura
+      issued: esFactura, //(false) - Esto lo hace una órden y no una factura
       invoice_details_attributes: arrayToObject(body.invoice_details),
-      tag_ids: body.tagging_invoices?.map((x) => x.tag_id) ?? [],
+      tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+      taxable: esFactura ? 1 : 0,
     } as any;
 
     if (sendBody.deleted_invoice_details)
       delete sendBody.deleted_invoice_details;
     if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
     if (sendBody.invoice_details) delete sendBody.invoice_details;
+    if (sendBody.tagging_invoices) delete sendBody.tagging_invoices;
 
     const response = await httpZauru.post<InvoiceGraphQL>(
       `/sales/orders.json`,
