@@ -34,18 +34,17 @@ export async function getInvoicesByAgencyId(session, id) {
     });
 }
 /**
- * createInvoiceOrder
+ * createInvoice
  * @param headers
  * @param body
  * @returns
  */
-export async function createInvoiceOrder(headers, body) {
+export async function createInvoice(headers, body) {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = {
             ...body,
-            issued: false, // Esto lo hace una órden y no una factura
             invoice_details_attributes: arrayToObject(body.invoice_details),
-            tag_ids: body.tagging_invoices?.map((x) => x.tag_id) ?? [],
+            tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
         };
         if (sendBody.deleted_invoice_details)
             delete sendBody.deleted_invoice_details;
@@ -53,6 +52,36 @@ export async function createInvoiceOrder(headers, body) {
             delete sendBody.__rvfInternalFormId;
         if (sendBody.invoice_details)
             delete sendBody.invoice_details;
+        if (sendBody.tagging_invoices)
+            delete sendBody.tagging_invoices;
+        console.log("ENVIANDO: ", JSON.stringify(sendBody));
+        const response = await httpZauru.post(`/sales/unpaid_invoices.json`, { invoice: sendBody }, { headers });
+        return response.data;
+    });
+}
+/**
+ * createInvoiceOrder
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function createInvoiceOrder(headers, body, esFactura = false) {
+    return handlePossibleAxiosErrors(async () => {
+        const sendBody = {
+            ...body,
+            issued: esFactura, //(false) - Esto lo hace una órden y no una factura
+            invoice_details_attributes: arrayToObject(body.invoice_details),
+            tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+            taxable: esFactura ? 1 : 0,
+        };
+        if (sendBody.deleted_invoice_details)
+            delete sendBody.deleted_invoice_details;
+        if (sendBody.__rvfInternalFormId)
+            delete sendBody.__rvfInternalFormId;
+        if (sendBody.invoice_details)
+            delete sendBody.invoice_details;
+        if (sendBody.tagging_invoices)
+            delete sendBody.tagging_invoices;
         const response = await httpZauru.post(`/sales/orders.json`, { invoice: sendBody }, { headers });
         return response.data;
     });

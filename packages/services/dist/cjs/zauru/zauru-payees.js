@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePayeeCategory = exports.updatePayeeCategory = exports.createPayeeCategory = exports.updatePayee = exports.deletePayee = exports.createPayee = exports.getClientCategories = exports.getProviderCategories = exports.getPayeeCategories = exports.getPayeeCategoriesByNotesMatch = exports.getPayeesByCategoryId = exports.getPayee = exports.getProviders = exports.getPayees = void 0;
+exports.deletePayeeCategory = exports.updatePayeeCategory = exports.createPayeeCategory = exports.updatePayee = exports.deletePayee = exports.createPayee = exports.getClientCategories = exports.getProviderCategories = exports.getPayeeCategories = exports.getPayeeCategoriesByNotesMatch = exports.getPayeesByCategoryId = exports.getCreatePayee = exports.getPayee = exports.getProviders = exports.getPayees = void 0;
 const common_1 = require("@zauru-sdk/common");
 const httpGraphQL_js_1 = __importDefault(require("./httpGraphQL.js"));
 const common_js_1 = require("../common.js");
@@ -64,6 +64,22 @@ async function getPayee(session, id) {
     });
 }
 exports.getPayee = getPayee;
+/**
+ * getCreatePayee
+ * @param headers
+ * @param session
+ * @param id
+ * @returns
+ */
+async function getCreatePayee(headers, search) {
+    return (0, common_1.handlePossibleAxiosErrors)(async () => {
+        const response = await httpZauru_js_1.default.post(`/settings/payees/search_payee.json`, search, {
+            headers,
+        });
+        return response.data;
+    });
+}
+exports.getCreatePayee = getCreatePayee;
 /**
  * getPayeesByCategoryId
  * @param session

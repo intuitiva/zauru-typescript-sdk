@@ -1,6 +1,6 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getVariablesByName } from "../common.js";
-import { createWebAppTableRegister, deleteWebAppTableRegister, getWebAppTableRegisters, } from "./zauru-web-app-tables.js";
+import { createWebAppTableRegister, deleteWebAppTableRegister, getWebAppTableRegisters, updateWebAppTableRegister, } from "./zauru-web-app-tables.js";
 export async function getMotivosRechazo(headers, session) {
     return handlePossibleAxiosErrors(async () => {
         const { recepciones_rejection_types_webapp_table_id } = await getVariablesByName(headers, session, [
@@ -31,12 +31,12 @@ export async function createMotivoRechazo(headers, session, body) {
         return response;
     });
 }
-export async function updateMotivosRechazo(headers, session, id) {
+export async function updateMotivosRechazo(headers, session, id, Nombre) {
     return handlePossibleAxiosErrors(async () => {
         const { recepciones_rejection_types_webapp_table_id } = await getVariablesByName(headers, session, [
             "recepciones_rejection_types_webapp_table_id",
         ]);
-        const response = await deleteWebAppTableRegister(headers, recepciones_rejection_types_webapp_table_id, id);
+        const response = await updateWebAppTableRegister(headers, recepciones_rejection_types_webapp_table_id, id, { Nombre });
         return response;
     });
 }

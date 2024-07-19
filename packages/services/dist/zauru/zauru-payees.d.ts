@@ -19,6 +19,16 @@ export declare function getProviders(session: Session): Promise<AxiosUtilsRespon
  */
 export declare function getPayee(session: Session, id: number | string): Promise<AxiosUtilsResponse<PayeeGraphQL | undefined>>;
 /**
+ * getCreatePayee
+ * @param headers
+ * @param session
+ * @param id
+ * @returns
+ */
+export declare function getCreatePayee(headers: any, search: {
+    tin?: string;
+}): Promise<AxiosUtilsResponse<PayeeGraphQL | undefined>>;
+/**
  * getPayeesByCategoryId
  * @param session
  * @param categoryId

@@ -56,6 +56,21 @@ export async function getPayee(session, id) {
     });
 }
 /**
+ * getCreatePayee
+ * @param headers
+ * @param session
+ * @param id
+ * @returns
+ */
+export async function getCreatePayee(headers, search) {
+    return handlePossibleAxiosErrors(async () => {
+        const response = await httpZauru.post(`/settings/payees/search_payee.json`, search, {
+            headers,
+        });
+        return response.data;
+    });
+}
+/**
  * getPayeesByCategoryId
  * @param session
  * @param categoryId
