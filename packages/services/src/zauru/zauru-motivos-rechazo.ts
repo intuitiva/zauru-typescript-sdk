@@ -12,6 +12,7 @@ import {
   createWebAppTableRegister,
   deleteWebAppTableRegister,
   getWebAppTableRegisters,
+  updateWebAppTableRegister,
 } from "./zauru-web-app-tables.js";
 
 export async function getMotivosRechazo(
@@ -80,17 +81,19 @@ export async function createMotivoRechazo(
 export async function updateMotivosRechazo(
   headers: any,
   session: Session,
-  id: number
+  id: number,
+  Name: string
 ): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
   return handlePossibleAxiosErrors(async () => {
     const { recepciones_rejection_types_webapp_table_id } =
       await getVariablesByName(headers, session, [
         "recepciones_rejection_types_webapp_table_id",
       ]);
-    const response = await deleteWebAppTableRegister(
+    const response = await updateWebAppTableRegister(
       headers,
       recepciones_rejection_types_webapp_table_id,
-      id
+      id,
+      { Name }
     );
     return response;
   });
