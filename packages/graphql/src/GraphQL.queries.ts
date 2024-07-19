@@ -215,6 +215,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     agencyId?: number | string;
     itemId?: number | string;
     payeeCategoryId?: number | string;
+    payeeId?: number | string;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
     poDetailTagId?: number;
@@ -245,9 +246,12 @@ query getPurchaseOrdersBetweenDates ${
         },`
           : ""
       } 
+      ${config.consolidateIdFilter ? "consolidate_id: {_is_null: true}," : ""}
+      ${config.id_number ? `id_number: {_ilike: "%${config.id_number}%"}` : ""}
       ${
-        config.payeeCategoryId
+        config.payeeId || config.payeeCategoryId
           ? `payee: {
+              ${config.payeeId ? `id: { _eq: ${config.payeeId}},` : ""}
               payee_category: {
                 id: {
                   _eq: ${config.payeeCategoryId}
@@ -273,8 +277,6 @@ query getPurchaseOrdersBetweenDates ${
           ? `purchase_order_details: {tag_id: {_eq: ${config.poDetailTagId}}},`
           : ""
       }
-      ${config.consolidateIdFilter ? "consolidate_id: {_is_null: true}," : ""}
-      ${config.id_number ? `id_number: {_ilike: "%${config.id_number}%"}` : ""}
       ${
         config.id_number
           ? ""

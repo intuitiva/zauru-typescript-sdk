@@ -520,6 +520,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     withLotStocksToMyAgency?: boolean;
     itemId?: number | string;
     payeeCategoryId?: number | string;
+    payeeId?: number | string;
     betweenIssueDate?: boolean;
   } = {
     agencyFilter: true,
@@ -553,6 +554,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       itemId: config.itemId,
       payeeCategoryId: config.payeeCategoryId,
       betweenIssueDate: config.betweenIssueDate,
+      payeeId: config.payeeId,
       id_number: config.id_number,
     });
 
