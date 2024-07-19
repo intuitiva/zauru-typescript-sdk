@@ -325,6 +325,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
             itemId: config.itemId,
             payeeCategoryId: config.payeeCategoryId,
             betweenIssueDate: config.betweenIssueDate,
+            payeeId: config.payeeId,
             id_number: config.id_number,
         });
         const variables = {

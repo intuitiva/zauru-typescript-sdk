@@ -208,99 +208,109 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config = {
     consolidateIdFilter: false,
     withLotStocks: false,
     betweenIssueDate: false,
-}) => `
-query getPurchaseOrdersBetweenDates ${config.id_number
-    ? ""
-    : `(
-  $startDate: ${config?.betweenIssueDate ? "date" : "timestamp"},
-  $endDate: ${config?.betweenIssueDate ? "date" : "timestamp"}
-)`} {
-  purchase_orders (
-    order_by: {id: desc}, 
-    where: {
-      ${config.agencyId
-    ? `agency_id: {
-          _eq: ${config.agencyId}
-        },`
-    : ""} 
-      ${config.payeeCategoryId
-    ? `payee: {
-              payee_category: {
-                id: {
-                  _eq: ${config.payeeCategoryId}
-                }
-              }
-            },`
-    : ""}
-      ${config.itemId
-    ? `purchase_order_details: {
-              item_id: {_eq: ${config.itemId}}
-            },`
-    : ""}
-      ${config.lotItemIdExclusion
-    ? `lots: {item_id: {_neq: ${config.lotItemIdExclusion}}},`
-    : ""}
-      ${config.poDetailTagId
-    ? `purchase_order_details: {tag_id: {_eq: ${config.poDetailTagId}}},`
-    : ""}
-      ${config.consolidateIdFilter ? "consolidate_id: {_is_null: true}," : ""}
-      ${config.id_number ? `id_number: {_ilike: "%${config.id_number}%"}` : ""}
-      ${config.id_number
-    ? ""
-    : config.betweenIssueDate
-        ? "issue_date: {_gte: $startDate, _lte: $endDate}"
-        : "created_at: {_gte: $startDate, _lte: $endDate}"}
+}) => {
+    const conditions = [];
+    if (config.agencyId) {
+        conditions.push(`agency_id: { _eq: ${config.agencyId} }`);
     }
-  ) {
-    id
-    created_at
-    due
-    id_number
-    memo
-    payee_id
-    issue_date
-    agency_id
-    discount
-    other_charges
-    consolidate_id
-    purchase_order_details {
-      item_id
-      id
-      reference
-      booked_quantity
-      delivered_quantity
+    if (config.consolidateIdFilter) {
+        conditions.push("consolidate_id: { _is_null: true }");
     }
-    lots(where: {active: {_eq: true}}){
-      id
-      name
-      description
-      ${config.withLotStocks
-    ? `lot_stocks {
-              id
-              available
-              incoming
-              outgoing
-              agency_id
-            }`
-    : ""}
+    if (config.id_number) {
+        conditions.push(`id_number: { _ilike: "%${config.id_number}%" }`);
     }
-    shipment_purchase_orders {
-      shipment {
+    if (config.payeeId || config.payeeCategoryId) {
+        const payeeConditions = [];
+        if (config.payeeId) {
+            payeeConditions.push(`id: { _eq: ${config.payeeId} }`);
+        }
+        if (config.payeeCategoryId) {
+            payeeConditions.push(`payee_category: { id: { _eq: ${config.payeeCategoryId} } }`);
+        }
+        conditions.push(`payee: { ${payeeConditions.join(", ")} }`);
+    }
+    if (config.itemId) {
+        conditions.push(`purchase_order_details: { item_id: { _eq: ${config.itemId} } }`);
+    }
+    if (config.lotItemIdExclusion) {
+        conditions.push(`lots: { item_id: { _neq: ${config.lotItemIdExclusion} } }`);
+    }
+    if (config.poDetailTagId) {
+        conditions.push(`purchase_order_details: { tag_id: { _eq: ${config.poDetailTagId} } }`);
+    }
+    if (!config.id_number) {
+        conditions.push(config.betweenIssueDate
+            ? "issue_date: { _gte: $startDate, _lte: $endDate }"
+            : "created_at: { _gte: $startDate, _lte: $endDate }");
+    }
+    const whereClause = conditions.length
+        ? `where: { ${conditions.join(", ")} }`
+        : "";
+    const dateVariables = config.id_number
+        ? ""
+        : `(
+        $startDate: ${config.betweenIssueDate ? "date" : "timestamp"},
+        $endDate: ${config.betweenIssueDate ? "date" : "timestamp"}
+      )`;
+    const lotStocksFragment = config.withLotStocks
+        ? `
+      lot_stocks {
         id
-        zid
+        available
+        incoming
+        outgoing
+        agency_id
+      }
+    `
+        : "";
+    return `
+    query getPurchaseOrdersBetweenDates ${dateVariables} {
+      purchase_orders (
+        order_by: { id: desc },
+        ${whereClause}
+      ) {
+        id
+        created_at
+        due
         id_number
-        reference
-        needs_transport
+        memo
         payee_id
-        income
-        booker_id
-        agency_from_id
-        agency_to_id
+        issue_date
+        agency_id
+        discount
+        other_charges
+        consolidate_id
+        purchase_order_details {
+          item_id
+          id
+          reference
+          booked_quantity
+          delivered_quantity
+        }
+        lots(where: { active: { _eq: true } }) {
+          id
+          name
+          description
+          ${lotStocksFragment}
+        }
+        shipment_purchase_orders {
+          shipment {
+            id
+            zid
+            id_number
+            reference
+            needs_transport
+            payee_id
+            income
+            booker_id
+            agency_from_id
+            agency_to_id
+          }
+        }
       }
     }
-  }
-}
-`;
+  `;
+};
 exports.getPurchaseOrdersBetweenDatesStringQuery = getPurchaseOrdersBetweenDatesStringQuery;
 exports.getPayeesStringQuery = `
 query getPayees {

@@ -10,6 +10,7 @@ export declare const getPurchaseOrdersBetweenDatesStringQuery: (config?: {
     agencyId?: number | string;
     itemId?: number | string;
     payeeCategoryId?: number | string;
+    payeeId?: number | string;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
     poDetailTagId?: number;

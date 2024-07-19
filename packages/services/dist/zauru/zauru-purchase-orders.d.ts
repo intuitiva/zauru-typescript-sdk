@@ -135,6 +135,7 @@ export declare const getGraphQLPurchaseOrderBetweenDates: (session: Session, dat
     withLotStocksToMyAgency?: boolean;
     itemId?: number | string;
     payeeCategoryId?: number | string;
+    payeeId?: number | string;
     betweenIssueDate?: boolean;
 }) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
 /**
