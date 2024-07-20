@@ -334,6 +334,11 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
           description
           ${lotStocksFragment}
         }
+        webapp_table_rowables {
+            webapp_rows {
+                data
+            }
+        }
         shipment_purchase_orders {
           shipment {
             id
