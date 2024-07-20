@@ -1366,7 +1366,7 @@ __metadata:
     "@zauru-sdk/hooks": "npm:^1.0.76"
     "@zauru-sdk/icons": "npm:^1.0.60"
     "@zauru-sdk/types": "npm:^1.0.76"
-    "@zauru-sdk/utils": "npm:^1.0.78"
+    "@zauru-sdk/utils": "npm:^1.0.79"
     framer-motion: "npm:^11.0.8"
     jsonwebtoken: "npm:^9.0.2"
     postcss: "npm:^8.4.35"
@@ -1389,7 +1389,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/graphql@npm:^1.0.78, @zauru-sdk/graphql@workspace:packages/graphql":
+"@zauru-sdk/graphql@npm:^1.0.79, @zauru-sdk/graphql@workspace:packages/graphql":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/graphql@workspace:packages/graphql"
   dependencies:
@@ -1444,14 +1444,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/services@npm:^1.0.78, @zauru-sdk/services@workspace:packages/services":
+"@zauru-sdk/services@npm:^1.0.79, @zauru-sdk/services@workspace:packages/services":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/services@workspace:packages/services"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
     "@zauru-sdk/common": "npm:^1.0.76"
     "@zauru-sdk/config": "npm:^1.0.60"
-    "@zauru-sdk/graphql": "npm:^1.0.78"
+    "@zauru-sdk/graphql": "npm:^1.0.79"
     "@zauru-sdk/types": "npm:^1.0.76"
     axios: "npm:^1.6.7"
     chalk: "npm:5.3.0"
@@ -1467,15 +1467,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/utils@npm:^1.0.78, @zauru-sdk/utils@workspace:packages/utils":
+"@zauru-sdk/utils@npm:^1.0.79, @zauru-sdk/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/utils@workspace:packages/utils"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
     "@zauru-sdk/common": "npm:^1.0.76"
     "@zauru-sdk/config": "npm:^1.0.60"
-    "@zauru-sdk/graphql": "npm:^1.0.78"
-    "@zauru-sdk/services": "npm:^1.0.78"
+    "@zauru-sdk/graphql": "npm:^1.0.79"
+    "@zauru-sdk/services": "npm:^1.0.79"
     "@zauru-sdk/types": "npm:^1.0.76"
     typescript: "npm:^5.1.6"
   languageName: unknown
