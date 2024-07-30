@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calculateTimeDifference = exports.parsedObject = exports.createPostgresUrl = exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.zauruDateToLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.calculateTimeDifference = exports.parsedObject = exports.createPostgresUrl = exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.zauruDateToLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
 const moment_1 = __importDefault(require("moment"));
 require("moment-timezone");
 const types_1 = require("@zauru-sdk/types");
@@ -331,6 +331,21 @@ function formatDateToUTC(dateString) {
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}`;
 }
 exports.formatDateToUTC = formatDateToUTC;
+// Función para obtener la fecha formateada en español
+const getFormattedDate = (dateString) => {
+    const now = dateString ? new Date(dateString) : new Date();
+    const options = {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: false,
+    };
+    return new Intl.DateTimeFormat("es-ES", options).format(now);
+};
+exports.getFormattedDate = getFormattedDate;
 const formatDateToDatePicker = (date) => {
     const year = date.getFullYear();
     const month = `0${date.getMonth() + 1}`.slice(-2); // Los meses van de 0 a 11, así que le sumamos 1

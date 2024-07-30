@@ -61,6 +61,7 @@ export const GenericDynamicTable = (props) => {
             newDeletedData.push(deletedItem);
         }
         setDeletedData(newDeletedData);
+        onChange && onChange(tableData?.filter((x) => x.id !== rowId));
         setTableData((prevData) => prevData?.filter((x) => x.id !== rowId));
     };
     const handleChange = (name, value, rowId) => {

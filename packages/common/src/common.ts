@@ -382,6 +382,22 @@ export function formatDateToUTC(dateString: string): string {
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}`;
 }
 
+// Función para obtener la fecha formateada en español
+export const getFormattedDate = (dateString?: string) => {
+  const now = dateString ? new Date(dateString) : new Date();
+  const options = {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  };
+
+  return new Intl.DateTimeFormat("es-ES", options as any).format(now);
+};
+
 export const formatDateToDatePicker = (date: Date) => {
   const year = date.getFullYear();
   const month = `0${date.getMonth() + 1}`.slice(-2); // Los meses van de 0 a 11, así que le sumamos 1
