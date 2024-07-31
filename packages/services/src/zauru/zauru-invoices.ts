@@ -70,13 +70,15 @@ export async function getInvoicesByAgencyId(
  */
 export async function createInvoice(
   headers: any,
-  body: Partial<InvoiceGraphQL>
+  body: Partial<InvoiceGraphQL>,
+  sujetaAImpuestos: boolean = true
 ): Promise<AxiosUtilsResponse<InvoiceGraphQL>> {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
       ...body,
       invoice_details_attributes: arrayToObject(body.invoice_details),
       tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+      taxable: sujetaAImpuestos,
     } as any;
 
     if (sendBody.deleted_invoice_details)
@@ -84,8 +86,6 @@ export async function createInvoice(
     if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
     if (sendBody.invoice_details) delete sendBody.invoice_details;
     if (sendBody.tagging_invoices) delete sendBody.tagging_invoices;
-
-    console.log("ENVIANDO: ", JSON.stringify(sendBody));
 
     const response = await httpZauru.post<InvoiceGraphQL>(
       `/sales/unpaid_invoices.json`,
