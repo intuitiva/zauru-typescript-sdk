@@ -10,7 +10,7 @@ export declare function getInvoicesByAgencyId(session: Session, id: string | nul
  * @param body
  * @returns
  */
-export declare function createInvoice(headers: any, body: Partial<InvoiceGraphQL>): Promise<AxiosUtilsResponse<InvoiceGraphQL>>;
+export declare function createInvoice(headers: any, body: Partial<InvoiceGraphQL>, sujetaAImpuestos?: boolean): Promise<AxiosUtilsResponse<InvoiceGraphQL>>;
 /**
  * createInvoiceOrder
  * @param headers

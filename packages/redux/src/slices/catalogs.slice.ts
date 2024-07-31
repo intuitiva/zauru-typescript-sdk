@@ -24,6 +24,7 @@ import type {
   TipoMuestra,
   WebAppRowGraphQL,
   PrintTemplateGraphQL,
+  PaymentMethodGraphQL,
 } from "@zauru-sdk/types";
 
 export type ONLINE_CATALOGS_NAMES =
@@ -67,6 +68,7 @@ export type CATALOGS_NAMES =
   | "bookings"
   | "templates"
   | "bundlesForLab"
+  | "paymentMethods"
   | "printTemplates";
 
 type LoadingState<T> = {
@@ -112,6 +114,7 @@ type CatalogState = {
   myCaseFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;
   myAgencyLotStocks: LoadingState<LotStockGraphQL[]>;
   shipmentsToMyAgency: LoadingState<ShipmentGraphQL[]>;
+  paymentMethods: LoadingState<PaymentMethodGraphQL[]>;
   printTemplates: LoadingState<PrintTemplateGraphQL[]>;
 };
 
@@ -158,6 +161,7 @@ const initialState: CatalogState = {
   myCaseFormSubmissions: createLoadingState([]),
   myAgencyLotStocks: createLoadingState([]),
   shipmentsToMyAgency: createLoadingState([]),
+  paymentMethods: createLoadingState([]),
   printTemplates: createLoadingState([]),
 };
 

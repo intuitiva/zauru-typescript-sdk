@@ -46,12 +46,13 @@ exports.getInvoicesByAgencyId = getInvoicesByAgencyId;
  * @param body
  * @returns
  */
-async function createInvoice(headers, body) {
+async function createInvoice(headers, body, sujetaAImpuestos = true) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const sendBody = {
             ...body,
             invoice_details_attributes: (0, common_1.arrayToObject)(body.invoice_details),
             tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+            taxable: sujetaAImpuestos,
         };
         if (sendBody.deleted_invoice_details)
             delete sendBody.deleted_invoice_details;
@@ -61,7 +62,6 @@ async function createInvoice(headers, body) {
             delete sendBody.invoice_details;
         if (sendBody.tagging_invoices)
             delete sendBody.tagging_invoices;
-        console.log("ENVIANDO: ", JSON.stringify(sendBody));
         const response = await httpZauru_js_1.default.post(`/sales/unpaid_invoices.json`, { invoice: sendBody }, { headers });
         return response.data;
     });

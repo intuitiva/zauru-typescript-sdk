@@ -420,6 +420,12 @@ export type PaymentTermGraphQL = {
     account_to_id: number;
     allowed_payment_terms: AllowedPaymentTermGraphQL[];
 };
+export type PaymentMethodGraphQL = {
+    id: number;
+    name: string;
+    active: boolean;
+    avoid_overpay_showing_change: boolean;
+};
 export type CaseInvoiceGraphQL = {
     invoice: InvoiceGraphQL;
     case: CaseGraphQL;

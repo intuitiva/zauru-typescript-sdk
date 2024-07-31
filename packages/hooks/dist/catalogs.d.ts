@@ -1,4 +1,4 @@
-import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL } from "@zauru-sdk/types";
+import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL, PaymentMethodGraphQL } from "@zauru-sdk/types";
 import { ReduxParamsConfig } from "@zauru-sdk/redux";
 /**
  *
@@ -101,6 +101,10 @@ export declare const useGetSuggestedPrices: (config?: ReduxParamsConfig) => {
 export declare const useGetPaymentTerms: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: PaymentTermGraphQL[];
+};
+export declare const useGetPaymentMethods: (config?: ReduxParamsConfig) => {
+    loading: boolean;
+    data: PaymentMethodGraphQL[];
 };
 export declare const useGetEmployeesByLab: (config?: ReduxParamsConfig) => {
     loading: boolean;

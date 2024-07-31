@@ -26,6 +26,7 @@ import type {
   TipoMuestra,
   WebAppRowGraphQL,
   PrintTemplateGraphQL,
+  PaymentMethodGraphQL,
 } from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
@@ -367,6 +368,13 @@ export const useGetPaymentTerms = (
   loading: boolean;
   data: PaymentTermGraphQL[];
 } => useGetReduxCatalog<PaymentTermGraphQL>("paymentTerms", config);
+
+export const useGetPaymentMethods = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: PaymentMethodGraphQL[];
+} => useGetReduxCatalog<PaymentMethodGraphQL>("paymentMethods", config);
 
 export const useGetEmployeesByLab = (
   config?: ReduxParamsConfig

@@ -1283,6 +1283,33 @@ query getPaymentTerms {
 }
 `;
 
+export const getPaymentMethodsStringQuery = (config: {
+  onlyActives: boolean;
+}) => {
+  const conditions = [];
+
+  if (config.onlyActives) {
+    conditions.push(`active: { _eq: true}`);
+  }
+
+  const whereClause = conditions.length
+    ? `where: { ${conditions.join(", ")} }`
+    : "";
+
+  return `query getPaymentMethods {
+    payment_methods (
+        order_by: { id: desc },
+        ${whereClause}
+      ) {
+      id
+      active
+      name
+      avoid_overpay_showing_change
+    }
+}
+`;
+};
+
 export const getPaymentTermByIdStringQuery = `
 query getPaymentTermById ($id: Int) {
   payment_terms (where: {id: {_eq: $id }}) {

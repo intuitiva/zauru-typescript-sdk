@@ -25,6 +25,7 @@ export * from "./zauru/zauru-lotes.js";
 export * from "./zauru/zauru-motivos-rechazo.js";
 export * from "./zauru/zauru-payees.js";
 export * from "./zauru/zauru-payment-terms.js";
+export * from "./zauru/zauru-payment-method.js";
 export * from "./zauru/zauru-price-lists.js";
 export * from "./zauru/zauru-print-templates.js";
 export * from "./zauru/zauru-purchase-orders.js";
