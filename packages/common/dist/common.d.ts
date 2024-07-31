@@ -158,4 +158,5 @@ export declare const parsedObject: (obj: any) => any;
 export declare function calculateTimeDifference(timestamp: string): {
     hours: number;
     minutes: number;
+    label: string;
 };

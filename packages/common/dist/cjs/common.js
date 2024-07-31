@@ -568,7 +568,7 @@ function calculateTimeDifference(timestamp) {
     const currentTime = (0, moment_1.default)();
     const inputTime = (0, moment_1.default)(timestamp, "YYYY-MM-DD HH:mm:ss");
     if (!inputTime.isValid()) {
-        throw new Error("Invalid timestamp format");
+        return { hours: 0, minutes: 0, label: `---` };
     }
     const duration = moment_1.default.duration(currentTime.diff(inputTime));
     const hours = Math.floor(duration.asHours());
@@ -576,6 +576,7 @@ function calculateTimeDifference(timestamp) {
     return {
         hours: hours,
         minutes: minutes,
+        label: `${hours > 0 ? `${hours} ${hours > 1 ? "horas" : "hora"}` : ""}${minutes > 0 ? ` y ${minutes} ${minutes > 1 ? "minutos" : "minuto"}` : ""}.`,
     };
 }
 exports.calculateTimeDifference = calculateTimeDifference;

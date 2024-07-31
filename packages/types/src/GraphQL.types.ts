@@ -498,6 +498,33 @@ export type AllowedPaymentTermGraphQL = {
   payment_term_id: number;
 };
 
+export type TaggingPaymentGraphQL = {
+  id: number;
+  payment_id: number;
+  tag_id: number;
+};
+
+export type PaymentDetailsGraphQL = {
+  invoice_id: number;
+  reference: string;
+  amount: number;
+};
+
+export type PaymentGraphQL = {
+  id: number;
+  id_number: string;
+  draft: boolean;
+  payee_id: number;
+  date: string;
+  agency_id: number;
+  payment_method_id: number;
+  reference: string;
+  charger_id: number;
+  receipt: string;
+  payment_details: PaymentDetailsGraphQL[];
+  tagging_payments: TaggingPaymentGraphQL[];
+};
+
 export type PaymentTermGraphQL = {
   id: number;
   active: boolean;

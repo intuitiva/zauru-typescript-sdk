@@ -5,11 +5,17 @@ import { getPaymentMethodsStringQuery } from "@zauru-sdk/graphql";
 /**
  * getPaymentTerms
  */
+/**
+ * getPaymentTerms
+ */
 export async function getPaymentMethods(session, config = {
     onlyActives: true,
 }) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
+        console.log(getPaymentMethodsStringQuery({
+            onlyActives: config.onlyActives,
+        }));
         const response = await httpGraphQLAPI.post("", {
             query: getPaymentMethodsStringQuery({
                 onlyActives: config.onlyActives,
@@ -18,7 +24,7 @@ export async function getPaymentMethods(session, config = {
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
         }
-        const registers = response?.data?.data?.payment_terms;
+        const registers = response?.data?.data?.payment_methods;
         return registers;
     });
 }

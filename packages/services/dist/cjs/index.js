@@ -37,6 +37,7 @@ __exportStar(require("./zauru/zauru-lote-record.js"), exports);
 __exportStar(require("./zauru/zauru-lotes.js"), exports);
 __exportStar(require("./zauru/zauru-motivos-rechazo.js"), exports);
 __exportStar(require("./zauru/zauru-payees.js"), exports);
+__exportStar(require("./zauru/zauru-payments.js"), exports);
 __exportStar(require("./zauru/zauru-payment-terms.js"), exports);
 __exportStar(require("./zauru/zauru-payment-method.js"), exports);
 __exportStar(require("./zauru/zauru-price-lists.js"), exports);

@@ -650,12 +650,13 @@ export const parsedObject = (obj: any): any => {
 export function calculateTimeDifference(timestamp: string): {
   hours: number;
   minutes: number;
+  label: string;
 } {
   const currentTime = moment();
   const inputTime = moment(timestamp, "YYYY-MM-DD HH:mm:ss");
 
   if (!inputTime.isValid()) {
-    throw new Error("Invalid timestamp format");
+    return { hours: 0, minutes: 0, label: `---` };
   }
 
   const duration = moment.duration(currentTime.diff(inputTime));
@@ -665,5 +666,8 @@ export function calculateTimeDifference(timestamp: string): {
   return {
     hours: hours,
     minutes: minutes,
+    label: `${hours > 0 ? `${hours} ${hours > 1 ? "horas" : "hora"}` : ""}${
+      minutes > 0 ? ` y ${minutes} ${minutes > 1 ? "minutos" : "minuto"}` : ""
+    }.`,
   };
 }
