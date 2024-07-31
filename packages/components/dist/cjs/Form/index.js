@@ -27,3 +27,4 @@ __exportStar(require("./TextArea/index.js"), exports);
 __exportStar(require("./TextField/index.js"), exports);
 __exportStar(require("./TimePicker/index.js"), exports);
 __exportStar(require("./YesNo/index.js"), exports);
+__exportStar(require("./RadioButtonGroup/index.js"), exports);

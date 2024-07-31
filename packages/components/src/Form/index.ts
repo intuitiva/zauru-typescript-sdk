@@ -11,3 +11,4 @@ export * from "./TextArea/index.js";
 export * from "./TextField/index.js";
 export * from "./TimePicker/index.js";
 export * from "./YesNo/index.js";
+export * from "./RadioButtonGroup/index.js";
