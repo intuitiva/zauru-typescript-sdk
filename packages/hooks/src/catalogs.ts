@@ -106,6 +106,18 @@ const useApiCatalog = <T>(
   return data;
 };
 
+/**
+ * 
+ * @param CATALOG_NAME 
+ * @param param1 
+ * @returns 
+ * 
+ * otherParams usage example:
+ * 
+ * otherParams: {
+      includeDiscounts: "true",
+    }
+ */
 const useGetReduxCatalog = <T>(
   CATALOG_NAME: CATALOGS_NAMES,
   { online = false, wheres = [], otherParams }: ReduxParamsConfig = {}
