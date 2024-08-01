@@ -410,6 +410,21 @@ export type AllowedPaymentTermGraphQL = {
     payee_category_id: number;
     payment_term_id: number;
 };
+export type DiscountGraphQL = {
+    id: number;
+    active: boolean;
+    name: string;
+    percent: number;
+    amount: number;
+};
+export type AllowedDiscountGraphQL = {
+    id: number;
+    discount_id: number;
+    discount: DiscountGraphQL;
+    payment_term_id: number;
+    item_id: number;
+    bundle_id: number;
+};
 export type TaggingPaymentGraphQL = {
     id: number;
     payment_id: number;
@@ -443,6 +458,7 @@ export type PaymentTermGraphQL = {
     account_from_id: number;
     account_to_id: number;
     allowed_payment_terms: AllowedPaymentTermGraphQL[];
+    allowed_discounts: AllowedDiscountGraphQL[];
 };
 export type PaymentMethodGraphQL = {
     id: number;

@@ -667,7 +667,7 @@ export function calculateTimeDifference(timestamp: string): {
     hours: hours,
     minutes: minutes,
     label: `${hours > 0 ? `${hours} ${hours > 1 ? "horas" : "hora"}` : ""}${
-      minutes > 0 ? ` y ${minutes} ${minutes > 1 ? "minutos" : "minuto"}` : ""
-    }.`,
+      hours > 0 && minutes > 0 ? " y " : ""
+    }${minutes > 0 ? `${minutes} ${minutes > 1 ? "minutos" : "minuto"}` : ""}.`,
   };
 }

@@ -13,7 +13,8 @@ import httpZauru from "./httpZauru.js";
  * getPaymentTerms
  */
 export async function getPaymentTerms(
-  session: Session
+  session: Session,
+  config: { includeDiscounts: boolean } = { includeDiscounts: false }
 ): Promise<AxiosUtilsResponse<PaymentTermGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -27,7 +28,9 @@ export async function getPaymentTerms(
     }>(
       "",
       {
-        query: getPaymentTermsStringQuery,
+        query: getPaymentTermsStringQuery({
+          includeDiscounts: config.includeDiscounts,
+        }),
       },
       { headers }
     );

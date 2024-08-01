@@ -13,9 +13,6 @@ export async function getPaymentMethods(session, config = {
 }) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
-        console.log(getPaymentMethodsStringQuery({
-            onlyActives: config.onlyActives,
-        }));
         const response = await httpGraphQLAPI.post("", {
             query: getPaymentMethodsStringQuery({
                 onlyActives: config.onlyActives,

@@ -1148,16 +1148,27 @@ query getSuggestedPrices {
 }
 `;
 exports.getSuggestedPricesStringQuery = getSuggestedPricesStringQuery;
-exports.getPaymentTermsStringQuery = `
+const getPaymentTermsStringQuery = (config = { includeDiscounts: false }) => `
 query getPaymentTerms {
   payment_terms {
     active
     id
     memo
     name
+    ${config.includeDiscounts
+    ? `allowed_discounts {
+        discount {
+          id
+          name
+          percent
+          amount
+        }
+      }`
+    : ""}
   }
 }
 `;
+exports.getPaymentTermsStringQuery = getPaymentTermsStringQuery;
 const getPaymentMethodsStringQuery = (config) => {
     const conditions = [];
     if (config.onlyActives) {

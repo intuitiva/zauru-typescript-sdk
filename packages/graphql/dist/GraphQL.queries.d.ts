@@ -77,7 +77,9 @@ export declare const getSuggestedPricesStringQuery: (config?: {
     withItemCategories: boolean;
     onlyCurrent: boolean;
 }) => string;
-export declare const getPaymentTermsStringQuery = "\nquery getPaymentTerms {\n  payment_terms {\n    active\n    id\n    memo\n    name\n  }\n}\n";
+export declare const getPaymentTermsStringQuery: (config?: {
+    includeDiscounts: boolean;
+}) => string;
 export declare const getPaymentMethodsStringQuery: (config: {
     onlyActives: boolean;
 }) => string;

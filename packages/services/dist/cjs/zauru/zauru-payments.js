@@ -25,8 +25,8 @@ async function createPayment(headers, body) {
             delete sendBody.__rvfInternalFormId;
         if (sendBody.payment_details)
             delete sendBody.payment_details;
-        if (sendBody.tagging_payment)
-            delete sendBody.tagging_payment;
+        if (sendBody.tagging_payments)
+            delete sendBody.tagging_payments;
         const response = await httpZauru_js_1.default.post(`/sales/payments.json`, { payment: sendBody }, { headers });
         return response.data;
     });

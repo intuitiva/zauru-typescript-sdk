@@ -19,9 +19,6 @@ async function getPaymentMethods(session, config = {
 }) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
-        console.log((0, graphql_1.getPaymentMethodsStringQuery)({
-            onlyActives: config.onlyActives,
-        }));
         const response = await httpGraphQL_js_1.default.post("", {
             query: (0, graphql_1.getPaymentMethodsStringQuery)({
                 onlyActives: config.onlyActives,

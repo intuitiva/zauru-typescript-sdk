@@ -1272,13 +1272,27 @@ query getSuggestedPrices {
 }
 `;
 
-export const getPaymentTermsStringQuery = `
+export const getPaymentTermsStringQuery = (
+  config: { includeDiscounts: boolean } = { includeDiscounts: false }
+) => `
 query getPaymentTerms {
   payment_terms {
     active
     id
     memo
     name
+    ${
+      config.includeDiscounts
+        ? `allowed_discounts {
+        discount {
+          id
+          name
+          percent
+          amount
+        }
+      }`
+        : ""
+    }
   }
 }
 `;
