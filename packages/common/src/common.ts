@@ -383,7 +383,7 @@ export function formatDateToUTC(dateString: string): string {
 }
 
 // Función para obtener la fecha formateada en español
-export const getFormattedDate = (dateString?: string) => {
+export const getFormattedDate = (dateString?: string, utc: boolean = false) => {
   const now = dateString ? new Date(dateString) : new Date();
   const options = {
     weekday: "long",
@@ -393,8 +393,11 @@ export const getFormattedDate = (dateString?: string) => {
     hour: "numeric",
     minute: "numeric",
     hour12: false,
-    timeZone: "UTC",
-  };
+  } as any;
+
+  if (utc) {
+    options["timeZone"] = "UTC";
+  }
 
   return new Intl.DateTimeFormat("es-ES", options as any).format(now);
 };
