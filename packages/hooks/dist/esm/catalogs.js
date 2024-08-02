@@ -50,6 +50,18 @@ const useApiCatalog = (CATALOG_NAME, otherParams) => {
     }, []);
     return data;
 };
+/**
+ *
+ * @param CATALOG_NAME
+ * @param param1
+ * @returns
+ *
+ * otherParams usage example:
+ *
+ * otherParams: {
+      includeDiscounts: "true",
+    }
+ */
 const useGetReduxCatalog = (CATALOG_NAME, { online = false, wheres = [], otherParams } = {}) => {
     const fetcher = (0, react_1.useFetcher)();
     const dispatch = (0, redux_1.useAppDispatch)();

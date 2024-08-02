@@ -286,6 +286,7 @@ export type InvoiceGraphQL = {
     zid: number;
     id_number: string;
     order_number: string;
+    discount_id: number;
     invoice_number: string;
     reference: string;
     date: string;
