@@ -94,7 +94,7 @@ export declare function extractIdFromForm(s: string): number | null;
  * @returns
  */
 export declare function formatDateToUTC(dateString: string): string;
-export declare const getFormattedDate: (dateString?: string) => string;
+export declare const getFormattedDate: (dateString?: string, utc?: boolean) => string;
 export declare const formatDateToDatePicker: (date: Date) => string;
 export declare const formatTimeToTimePicker: (timeString: string) => Date;
 export declare const toFixedIfNeeded: (value: number) => string;
