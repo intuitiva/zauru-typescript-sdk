@@ -342,6 +342,7 @@ const getFormattedDate = (dateString) => {
         hour: "numeric",
         minute: "numeric",
         hour12: false,
+        timeZone: "UTC",
     };
     return new Intl.DateTimeFormat("es-ES", options).format(now);
 };
