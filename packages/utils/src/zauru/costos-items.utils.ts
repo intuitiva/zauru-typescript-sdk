@@ -118,9 +118,9 @@ export const obtenerSemanaAnterior = () => {
     " al Domingo " +
     fechaFin.date() +
     ", de " +
-    fechaInicio.format("MMMM") +
+    fechaFin.format("MMMM") +
     " de " +
-    fechaInicio.year();
+    fechaFin.year();
 
   return {
     fechaInicio: fechaInicioFormateada,
