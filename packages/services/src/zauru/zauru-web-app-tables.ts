@@ -32,6 +32,10 @@ export async function getWebAppRow<T>(
 
     const response = await httpGraphQLAPI.post<{
       data: { webapp_rows: WebAppRowGraphQL<T>[] };
+      errors?: {
+        message: string;
+        extensions: { path: string; code: string };
+      }[];
     }>(
       "",
       {
@@ -42,6 +46,10 @@ export async function getWebAppRow<T>(
       },
       { headers }
     );
+
+    if (response.data.errors) {
+      throw new Error(response.data.errors.map((x) => x.message).join(";"));
+    }
 
     return response.data?.data?.webapp_rows[0]?.data;
   });

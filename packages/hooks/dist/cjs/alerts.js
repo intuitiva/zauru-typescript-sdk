@@ -15,14 +15,14 @@ const useValidateNotifications = (source) => {
         }
     }, [loaderData]);
     (0, react_1.useEffect)(() => {
-        if (fetcher?.data?.title) {
+        if (fetcher?.data?.title && fetcher.state === "idle") {
             (0, index_js_1.showAlert)({
                 description: fetcher.data?.description,
                 title: fetcher.data?.title,
                 type: fetcher.data?.type,
             });
         }
-    }, [fetcher?.data]);
+    }, [fetcher?.data, fetcher?.state]);
     (0, react_1.useEffect)(() => {
         if (actionData?.title) {
             (0, index_js_1.showAlert)({

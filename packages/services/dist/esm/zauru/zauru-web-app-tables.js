@@ -17,6 +17,9 @@ export async function getWebAppRow(session, id) {
                 id,
             },
         }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
         return response.data?.data?.webapp_rows[0]?.data;
     });
 }

@@ -20,14 +20,14 @@ export const useValidateNotifications = (source: {
   }, [loaderData]);
 
   useEffect(() => {
-    if (fetcher?.data?.title) {
+    if (fetcher?.data?.title && fetcher.state === "idle") {
       showAlert({
         description: fetcher.data?.description,
         title: fetcher.data?.title,
         type: fetcher.data?.type,
       });
     }
-  }, [fetcher?.data]);
+  }, [fetcher?.data, fetcher?.state]);
 
   useEffect(() => {
     if (actionData?.title) {

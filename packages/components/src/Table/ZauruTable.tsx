@@ -252,12 +252,14 @@ export const ZauruTable = (props: Props) => {
       subHeader={loadSubHeader}
       subHeaderComponent={subHeaderComponent}
       paginationServer={!!pagination}
-      paginationTotalRows={pagination ? pagination.totalRows : undefined}
+      paginationTotalRows={pagination?.totalRows ?? undefined}
       onChangeRowsPerPage={pagination ? handlePerRowsChange : undefined}
       onChangePage={pagination ? handlePageChange : undefined}
       paginationComponentOptions={paginationComponentOptions}
       paginationRowsPerPageOptions={
-        pagination?.rowsPerPageOptions ? pagination.rowsPerPageOptions : [10]
+        pagination?.rowsPerPageOptions
+          ? pagination.rowsPerPageOptions
+          : [10, 50, 100]
       }
       {...others}
     />
