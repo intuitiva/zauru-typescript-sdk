@@ -204,11 +204,7 @@ query getLotStocksByAgencyId($agency_id: Int){
   }
 }
 `;
-const getPurchaseOrdersBetweenDatesStringQuery = (config = {
-    consolidateIdFilter: false,
-    withLotStocks: false,
-    betweenIssueDate: false,
-}) => {
+const getPurchaseOrdersBetweenDatesStringQuery = (config) => {
     const conditions = [];
     if (config.agencyId) {
         conditions.push(`agency_id: { _eq: ${config.agencyId} }`);
@@ -280,38 +276,46 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config = {
         discount
         other_charges
         consolidate_id
-        purchase_order_details {
-          item_id
-          id
-          reference
-          booked_quantity
-          delivered_quantity
-        }
-        lots(where: { active: { _eq: true } }) {
-          id
-          name
-          description
-          ${lotStocksFragment}
-        }
-        webapp_table_rowables {
-            webapp_rows {
-                data
+        ${config.withPODetails
+        ? `purchase_order_details {
+                item_id
+                id
+                reference
+                booked_quantity
+                delivered_quantity
+              }`
+        : ""}
+        ${config.withLots
+        ? `lots {
+                id
+                name
+                description
+                ${lotStocksFragment}
+              }`
+        : ""}
+        ${config.withWebAppRows
+        ? `webapp_table_rowables {
+                  webapp_rows {
+                      data
+                  }
+              }`
+        : ""}
+        ${config.withShipmentPurchaseOrders
+        ? `shipment_purchase_orders {
+            shipment {
+              id
+              zid
+              id_number
+              reference
+              needs_transport
+              payee_id
+              income
+              booker_id
+              agency_from_id
+              agency_to_id
             }
-        }
-        shipment_purchase_orders {
-          shipment {
-            id
-            zid
-            id_number
-            reference
-            needs_transport
-            payee_id
-            income
-            booker_id
-            agency_from_id
-            agency_to_id
-          }
-        }
+          }`
+        : ""}
       }
     }
   `;

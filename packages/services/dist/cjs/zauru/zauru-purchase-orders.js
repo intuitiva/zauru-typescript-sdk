@@ -325,6 +325,10 @@ const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
     withShipmentToMyAgency: false,
     withLotStocksToMyAgency: false,
     betweenIssueDate: false,
+    withPODetails: true,
+    withLots: true,
+    withShipmentPurchaseOrders: true,
+    withWebAppRows: true,
 }) => {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
@@ -347,6 +351,10 @@ const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
             betweenIssueDate: config.betweenIssueDate,
             payeeId: config.payeeId,
             id_number: config.id_number,
+            withPODetails: config.withPODetails,
+            withLots: config.withLots,
+            withShipmentPurchaseOrders: config.withShipmentPurchaseOrders,
+            withWebAppRows: config.withWebAppRows,
         });
         const variables = {
             startDate: (0, common_1.formatDateToUTC)(dates.startDate),

@@ -522,6 +522,10 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     payeeCategoryId?: number | string;
     payeeId?: number | string;
     betweenIssueDate?: boolean;
+    withPODetails?: boolean;
+    withLots?: boolean;
+    withShipmentPurchaseOrders?: boolean;
+    withWebAppRows?: boolean;
   } = {
     agencyFilter: true,
     consolidateIdFilter: false,
@@ -529,6 +533,10 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     withShipmentToMyAgency: false,
     withLotStocksToMyAgency: false,
     betweenIssueDate: false,
+    withPODetails: true,
+    withLots: true,
+    withShipmentPurchaseOrders: true,
+    withWebAppRows: true,
   }
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
@@ -556,6 +564,10 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       betweenIssueDate: config.betweenIssueDate,
       payeeId: config.payeeId,
       id_number: config.id_number,
+      withPODetails: config.withPODetails,
+      withLots: config.withLots,
+      withShipmentPurchaseOrders: config.withShipmentPurchaseOrders,
+      withWebAppRows: config.withWebAppRows,
     });
 
     const variables = {

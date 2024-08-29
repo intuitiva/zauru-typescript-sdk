@@ -6,7 +6,7 @@ export declare const getPurchaseOrderStringQuery: (config?: {
 export declare const getShipmentsByToAgencyLast100StringQuery = "\nquery getShipmentsByToAgencyLast100(\n    $agency_to_id: Int\n  ){\n    shipments(limit: 100, order_by: {id: desc}, where: {voided: {_eq: false}, shipped: {_eq: false}, delivered: {_eq: false}, agency_to_id: {_eq: $agency_to_id}}) {\n      id\n      zid\n      id_number\n      reference\n      needs_transport\n      payee_id\n      income\n      booker_id\n      agency_from_id\n      agency_to_id\n      transporter_id\n      created_at\n      movements {\n        id\n        booked_quantity\n        delivered_quantity\n        reference\n        lot {\n          id\n          name\n          description\n        }\n      }\n    }\n  }\n";
 export declare const getLotsByNameStringQuery = "\nquery getLots($name: String, $entity_id: Int){\n    lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: $entity_id}, name: {_eq: $name}}) {\n        id\n        name\n        description\n    }\n}\n";
 export declare const getLotStocksByAgencyIdStringQuery = "\nquery getLotStocksByAgencyId($agency_id: Int){\n  lot_stocks (\n    order_by: { id: desc },\n    where: { agency_id: { _eq: $agency_id }}\n    ){\n      id\n      available\n      lot_id\n      lot {\n        id\n        item_id\n        expires\n      }\n  }\n}\n";
-export declare const getPurchaseOrdersBetweenDatesStringQuery: (config?: {
+export declare const getPurchaseOrdersBetweenDatesStringQuery: (config: {
     agencyId?: number | string;
     itemId?: number | string;
     payeeCategoryId?: number | string;
@@ -17,6 +17,10 @@ export declare const getPurchaseOrdersBetweenDatesStringQuery: (config?: {
     withLotStocks?: boolean;
     betweenIssueDate?: boolean;
     id_number?: string;
+    withPODetails?: boolean;
+    withLots?: boolean;
+    withShipmentPurchaseOrders?: boolean;
+    withWebAppRows?: boolean;
 }) => string;
 export declare const getPayeesStringQuery = "\nquery getPayees {\n    payees {\n        id\n        id_number\n        name\n        tin\n        vendor\n        address_line_1\n    }\n}\n";
 export declare const getProvidersStringQuery = "\nquery getProviders {\n    payees (where: {vendor: {_eq: true}}) {\n        id\n        id_number\n        name\n        tin\n        address_line_1\n    }\n}\n";
