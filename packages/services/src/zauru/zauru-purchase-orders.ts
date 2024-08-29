@@ -510,7 +510,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
   },
   config: {
     agencyFilter: boolean;
-    agencyId?: number;
+    agencyId?: number | string;
     id_number?: string;
     useProductionAgencyId?: boolean;
     consolidateIdFilter?: boolean;
