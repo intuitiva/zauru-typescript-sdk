@@ -497,6 +497,7 @@ export type BitacoraPOMassive = {
   fechaHasta?: string;
   purchaseOrders: POHistoryMassive[];
   modificadoPor: string;
+  employeeId: number;
   fechaCreacion: string;
 };
 
