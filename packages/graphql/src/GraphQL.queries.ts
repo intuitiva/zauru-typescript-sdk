@@ -283,7 +283,9 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (config: {
 
   if (config.payeeCategoryIds && config.payeeCategoryIds.length > 0) {
     conditions.push(
-      `payee: { payee_category: { id: { _in: ${config.payeeCategoryIds} } } }`
+      `payee: { payee_category: { id: { _in: [${config.payeeCategoryIds.join(
+        ","
+      )}] } } }`
     );
   }
 
@@ -292,7 +294,9 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (config: {
     config.excludePayeeCategoryIds.length > 0
   ) {
     conditions.push(
-      `payee: { payee_category: { id: { _nin: ${config.excludePayeeCategoryIds} } } }`
+      `payee: { payee_category: { id: { _nin: [${config.excludePayeeCategoryIds.join(
+        ","
+      )}] } } }`
     );
   }
 

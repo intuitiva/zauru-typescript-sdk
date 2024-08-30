@@ -240,11 +240,11 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config) => {
             : "created_at: { _gte: $startDate, _lte: $endDate }");
     }
     if (config.payeeCategoryIds && config.payeeCategoryIds.length > 0) {
-        conditions.push(`payee: { payee_category: { id: { _in: ${config.payeeCategoryIds} } } }`);
+        conditions.push(`payee: { payee_category: { id: { _in: [${config.payeeCategoryIds.join(",")}] } } }`);
     }
     if (config.excludePayeeCategoryIds &&
         config.excludePayeeCategoryIds.length > 0) {
-        conditions.push(`payee: { payee_category: { id: { _nin: ${config.excludePayeeCategoryIds} } } }`);
+        conditions.push(`payee: { payee_category: { id: { _nin: [${config.excludePayeeCategoryIds.join(",")}] } } }`);
     }
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} }`
