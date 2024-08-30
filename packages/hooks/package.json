@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/hooks",
-  "version": "1.0.88",
+  "version": "1.0.92",
   "description": "Hooks reutilizables dentro de las webapps de Zauru.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
