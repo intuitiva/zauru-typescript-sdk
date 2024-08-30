@@ -257,10 +257,12 @@ export const useGetTemplates = (
   data: WebAppRowGraphQL<Template>[];
 } => useGetReduxCatalog<WebAppRowGraphQL<Template>>("templates", config);
 
-export const useGetPayeeCategories = (): {
+export const useGetPayeeCategories = (
+  config?: ReduxParamsConfig
+): {
   loading: boolean;
   data: PayeeCategoryGraphQL[];
-} => useGetReduxCatalog<PayeeCategoryGraphQL>("payeeCategories");
+} => useGetReduxCatalog<PayeeCategoryGraphQL>("payeeCategories", config);
 
 export const useGetPayeeCategoriesLabPrices = (
   config: {

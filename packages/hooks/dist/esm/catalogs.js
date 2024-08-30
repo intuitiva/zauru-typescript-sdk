@@ -139,7 +139,7 @@ const useGetBookings = (config) => useGetReduxCatalog("bookings", config);
 exports.useGetBookings = useGetBookings;
 const useGetTemplates = (config) => useGetReduxCatalog("templates", config);
 exports.useGetTemplates = useGetTemplates;
-const useGetPayeeCategories = () => useGetReduxCatalog("payeeCategories");
+const useGetPayeeCategories = (config) => useGetReduxCatalog("payeeCategories", config);
 exports.useGetPayeeCategories = useGetPayeeCategories;
 const useGetPayeeCategoriesLabPrices = (config = { withPriceListIdNull: false }) => {
     const data = useGetReduxCatalog("payeeCategoriesLabPrices");

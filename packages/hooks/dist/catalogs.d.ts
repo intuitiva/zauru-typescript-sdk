@@ -36,7 +36,7 @@ export declare const useGetTemplates: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: WebAppRowGraphQL<Template>[];
 };
-export declare const useGetPayeeCategories: () => {
+export declare const useGetPayeeCategories: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: PayeeCategoryGraphQL[];
 };

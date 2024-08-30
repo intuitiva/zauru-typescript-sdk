@@ -466,6 +466,7 @@ query getPayeeCategoryById ($id: Int) {
           tin
           active
           address_line_1
+          vendor
       }
   }
 }
