@@ -21,6 +21,8 @@ export declare const getPurchaseOrdersBetweenDatesStringQuery: (config: {
     withLots?: boolean;
     withShipmentPurchaseOrders?: boolean;
     withWebAppRows?: boolean;
+    payeeCategoryIds?: number[];
+    excludePayeeCategoryIds?: number[];
 }) => string;
 export declare const getPayeesStringQuery = "\nquery getPayees {\n    payees {\n        id\n        id_number\n        name\n        tin\n        vendor\n        address_line_1\n    }\n}\n";
 export declare const getProvidersStringQuery = "\nquery getProviders {\n    payees (where: {vendor: {_eq: true}}) {\n        id\n        id_number\n        name\n        tin\n        address_line_1\n    }\n}\n";

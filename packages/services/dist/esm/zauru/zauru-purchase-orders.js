@@ -309,6 +309,8 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
     withLots: true,
     withShipmentPurchaseOrders: true,
     withWebAppRows: true,
+    payeeCategoryIds: [],
+    excludePayeeCategoryIds: [],
 }) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
@@ -335,6 +337,8 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
             withLots: config.withLots,
             withShipmentPurchaseOrders: config.withShipmentPurchaseOrders,
             withWebAppRows: config.withWebAppRows,
+            payeeCategoryIds: config.payeeCategoryIds,
+            excludePayeeCategoryIds: config.excludePayeeCategoryIds,
         });
         const variables = {
             startDate: formatDateToUTC(dates.startDate),

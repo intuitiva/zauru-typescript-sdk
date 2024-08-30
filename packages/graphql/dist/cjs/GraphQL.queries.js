@@ -239,6 +239,13 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config) => {
             ? "issue_date: { _gte: $startDate, _lte: $endDate }"
             : "created_at: { _gte: $startDate, _lte: $endDate }");
     }
+    if (config.payeeCategoryIds && config.payeeCategoryIds.length > 0) {
+        conditions.push(`payee: { payee_category: { id: { _in: ${config.payeeCategoryIds} } } }`);
+    }
+    if (config.excludePayeeCategoryIds &&
+        config.excludePayeeCategoryIds.length > 0) {
+        conditions.push(`payee: { payee_category: { id: { _nin: ${config.excludePayeeCategoryIds} } } }`);
+    }
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} }`
         : "";
@@ -259,6 +266,46 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config) => {
       }
     `
         : "";
+    const purchaseOrderDetails = config.withPODetails
+        ? `purchase_order_details {
+            item_id
+            id
+            reference
+            booked_quantity
+            delivered_quantity
+          }`
+        : "";
+    const lots = config.withLots
+        ? `lots {
+              id
+              name
+              description
+              ${lotStocksFragment}
+            }`
+        : "";
+    const webAppRows = config.withWebAppRows
+        ? `webapp_table_rowables {
+            webapp_rows {
+                data
+            }
+        }`
+        : "";
+    const shipmentPurchase = config.withShipmentPurchaseOrders
+        ? `shipment_purchase_orders {
+    shipment {
+      id
+      zid
+      id_number
+      reference
+      needs_transport
+      payee_id
+      income
+      booker_id
+      agency_from_id
+      agency_to_id
+    }
+  }`
+        : "";
     return `
     query getPurchaseOrdersBetweenDates ${dateVariables} {
       purchase_orders (
@@ -276,46 +323,10 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config) => {
         discount
         other_charges
         consolidate_id
-        ${config.withPODetails
-        ? `purchase_order_details {
-                item_id
-                id
-                reference
-                booked_quantity
-                delivered_quantity
-              }`
-        : ""}
-        ${config.withLots
-        ? `lots {
-                id
-                name
-                description
-                ${lotStocksFragment}
-              }`
-        : ""}
-        ${config.withWebAppRows
-        ? `webapp_table_rowables {
-                  webapp_rows {
-                      data
-                  }
-              }`
-        : ""}
-        ${config.withShipmentPurchaseOrders
-        ? `shipment_purchase_orders {
-            shipment {
-              id
-              zid
-              id_number
-              reference
-              needs_transport
-              payee_id
-              income
-              booker_id
-              agency_from_id
-              agency_to_id
-            }
-          }`
-        : ""}
+        ${purchaseOrderDetails}
+        ${lots}
+        ${webAppRows}
+        ${shipmentPurchase}
       }
     }
   `;
