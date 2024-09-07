@@ -482,7 +482,7 @@ query getPayeeById ($id: Int) {
 }
 `;
 exports.getSuperCategoryByIdStringQuery = `
-query getSuperCategoryById ($id: Int) {
+query getSuperCategoryById ($id: bigint) {
   item_super_categories (where: {id: {_eq: $id }}) {
     item_categories {
         id
@@ -526,7 +526,7 @@ query getItems {
 }
 `;
 exports.getItemsBySuperCategoryStringQuery = `
-query getItemsBySuperCategory ($id: Int, $agency_id: Int) {
+query getItemsBySuperCategory ($id: bigint, $agency_id: Int) {
   item_super_categories (where: {id: {_eq: $id }}, order_by: {id: desc}) {
       item_categories {
         items (where: {active: {_eq: true }}) {
