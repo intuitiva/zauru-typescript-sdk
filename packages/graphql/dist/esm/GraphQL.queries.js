@@ -179,20 +179,21 @@ query getShipmentsByToAgencyLast100 {
   }
 `;
 exports.getShipmentsByToAgencyLast100StringQuery = getShipmentsByToAgencyLast100StringQuery;
-exports.getLotsByNameStringQuery = `
-query getLots($name: String, $entity_id: Int){
-    lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: $entity_id}, name: {_eq: $name}}) {
+const getLotsByNameStringQuery = (name, entity_id) => `
+query getLots {
+    lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: ${entity_id}}, name: {_eq: '${name}'}}) {
         id
         name
         description
     }
 }
 `;
-exports.getLotStocksByAgencyIdStringQuery = `
-query getLotStocksByAgencyId($agency_id: Int){
+exports.getLotsByNameStringQuery = getLotsByNameStringQuery;
+const getLotStocksByAgencyIdStringQuery = (agency_id) => `
+query getLotStocksByAgencyId {
   lot_stocks (
     order_by: { id: desc },
-    where: { agency_id: { _eq: $agency_id }}
+    where: { agency_id: { _eq: ${agency_id} } }
     ){
       id
       available
@@ -205,6 +206,7 @@ query getLotStocksByAgencyId($agency_id: Int){
   }
 }
 `;
+exports.getLotStocksByAgencyIdStringQuery = getLotStocksByAgencyIdStringQuery;
 const getPurchaseOrdersBetweenDatesStringQuery = (config) => {
     const conditions = [];
     if (config.agencyId) {

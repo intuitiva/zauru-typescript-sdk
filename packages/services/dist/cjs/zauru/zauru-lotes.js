@@ -115,11 +115,7 @@ async function getLoteByName(session, lot_name) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getLotsByNameStringQuery,
-            variables: {
-                name: lot_name,
-                entity_id: session.get("selectedEntity"),
-            },
+            query: (0, graphql_1.getLotsByNameStringQuery)(lot_name, Number(session.get("selectedEntity"))),
         }, { headers });
         if (response.data.errors) {
             throw new Error(`Ocurrió un error al obtener el lote por nombre: ${response.data.errors
@@ -143,10 +139,7 @@ async function getMyAgencyLotStocks(session) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getLotStocksByAgencyIdStringQuery,
-            variables: {
-                agency_id: session.get("agency_id"),
-            },
+            query: (0, graphql_1.getLotStocksByAgencyIdStringQuery)(Number(session.get("agency_id"))),
         }, { headers });
         if (response.data.errors) {
             throw new Error(`Ocurrió un error al obtener el stock de lotes por agencia: ${response.data.errors

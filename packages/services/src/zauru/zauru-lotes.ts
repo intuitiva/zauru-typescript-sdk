@@ -194,11 +194,10 @@ export async function getLoteByName(
     }>(
       "",
       {
-        query: getLotsByNameStringQuery,
-        variables: {
-          name: lot_name,
-          entity_id: session.get("selectedEntity"),
-        },
+        query: getLotsByNameStringQuery(
+          lot_name,
+          Number(session.get("selectedEntity"))
+        ),
       },
       { headers }
     );
@@ -243,10 +242,9 @@ export async function getMyAgencyLotStocks(
     }>(
       "",
       {
-        query: getLotStocksByAgencyIdStringQuery,
-        variables: {
-          agency_id: session.get("agency_id"),
-        },
+        query: getLotStocksByAgencyIdStringQuery(
+          Number(session.get("agency_id"))
+        ),
       },
       { headers }
     );

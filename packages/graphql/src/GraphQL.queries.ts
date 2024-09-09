@@ -183,9 +183,9 @@ query getShipmentsByToAgencyLast100 {
   }
 `;
 
-export const getLotsByNameStringQuery = `
-query getLots($name: String, $entity_id: Int){
-    lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: $entity_id}, name: {_eq: $name}}) {
+export const getLotsByNameStringQuery = (name: string, entity_id: number) => `
+query getLots {
+    lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: ${entity_id}}, name: {_eq: '${name}'}}) {
         id
         name
         description
@@ -193,11 +193,11 @@ query getLots($name: String, $entity_id: Int){
 }
 `;
 
-export const getLotStocksByAgencyIdStringQuery = `
-query getLotStocksByAgencyId($agency_id: Int){
+export const getLotStocksByAgencyIdStringQuery = (agency_id: number) => `
+query getLotStocksByAgencyId {
   lot_stocks (
     order_by: { id: desc },
-    where: { agency_id: { _eq: $agency_id }}
+    where: { agency_id: { _eq: ${agency_id} } }
     ){
       id
       available
