@@ -95,10 +95,7 @@ export async function getItemsByCategoryId(session, id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getItemsByCategoryStringQuery,
-            variables: {
-                id,
-            },
+            query: getItemsByCategoryStringQuery(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -119,10 +116,7 @@ export async function getItemCategory(session, id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getItemCategoryByIdStringQuery,
-            variables: {
-                id,
-            },
+            query: getItemCategoryByIdStringQuery(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -143,8 +137,7 @@ export async function getItemCategoriesBySuperCategoryId(session, id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post(``, {
-            query: getSuperCategoryByIdStringQuery,
-            variables: { id },
+            query: getSuperCategoryByIdStringQuery(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

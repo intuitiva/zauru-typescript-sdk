@@ -39,10 +39,7 @@ export async function getWebAppRow<T>(
     }>(
       "",
       {
-        query: getWebAppRowStringQuery,
-        variables: {
-          id,
-        },
+        query: getWebAppRowStringQuery(id),
       },
       { headers }
     );
@@ -77,10 +74,7 @@ export async function getWebAppTableRegisters<T>(
     }>(
       "",
       {
-        query: getWebAppRowsByWebAppTableIdStringQuery,
-        variables: {
-          webapp_table_id,
-        },
+        query: getWebAppRowsByWebAppTableIdStringQuery(Number(webapp_table_id)),
       },
       { headers }
     );

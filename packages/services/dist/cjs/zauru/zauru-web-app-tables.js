@@ -18,10 +18,7 @@ async function getWebAppRow(session, id) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getWebAppRowStringQuery,
-            variables: {
-                id,
-            },
+            query: (0, graphql_1.getWebAppRowStringQuery)(id),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -40,10 +37,7 @@ async function getWebAppTableRegisters(session, webapp_table_id) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getWebAppRowsByWebAppTableIdStringQuery,
-            variables: {
-                webapp_table_id,
-            },
+            query: (0, graphql_1.getWebAppRowsByWebAppTableIdStringQuery)(Number(webapp_table_id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

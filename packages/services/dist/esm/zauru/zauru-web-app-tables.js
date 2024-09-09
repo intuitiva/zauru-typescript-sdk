@@ -12,10 +12,7 @@ export async function getWebAppRow(session, id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getWebAppRowStringQuery,
-            variables: {
-                id,
-            },
+            query: getWebAppRowStringQuery(id),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -33,10 +30,7 @@ export async function getWebAppTableRegisters(session, webapp_table_id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getWebAppRowsByWebAppTableIdStringQuery,
-            variables: {
-                webapp_table_id,
-            },
+            query: getWebAppRowsByWebAppTableIdStringQuery(Number(webapp_table_id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

@@ -105,10 +105,7 @@ async function getItemsByCategoryId(session, id) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getItemsByCategoryStringQuery,
-            variables: {
-                id,
-            },
+            query: (0, graphql_1.getItemsByCategoryStringQuery)(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -130,10 +127,7 @@ async function getItemCategory(session, id) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getItemCategoryByIdStringQuery,
-            variables: {
-                id,
-            },
+            query: (0, graphql_1.getItemCategoryByIdStringQuery)(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -155,8 +149,7 @@ async function getItemCategoriesBySuperCategoryId(session, id) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post(``, {
-            query: graphql_1.getSuperCategoryByIdStringQuery,
-            variables: { id },
+            query: (0, graphql_1.getSuperCategoryByIdStringQuery)(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

@@ -52,10 +52,7 @@ async function getPayee(session, id) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const responsePayee = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getPayeeByIdStringQuery,
-            variables: {
-                id,
-            },
+            query: (0, graphql_1.getPayeeByIdStringQuery)(Number(id)),
         }, { headers });
         if (!responsePayee?.data?.data?.payees[0]) {
             throw new Error("No se encontró el beneficiario indicado");
@@ -90,8 +87,7 @@ async function getPayeesByCategoryId(session, id) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post(``, {
-            query: graphql_1.getPayeeCategoryByIdStringQuery,
-            variables: { id },
+            query: (0, graphql_1.getPayeeCategoryByIdStringQuery)(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

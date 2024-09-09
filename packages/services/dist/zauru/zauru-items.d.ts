@@ -24,7 +24,7 @@ export declare function getItemCategories(headers: any, item_category_id: string
 /**
  * getItemsByCategoryId
  */
-export declare function getItemsByCategoryId(session: Session, id: string): Promise<AxiosUtilsResponse<ItemGraphQL[]>>;
+export declare function getItemsByCategoryId(session: Session, id: string | number): Promise<AxiosUtilsResponse<ItemGraphQL[]>>;
 /**
  * getItemCategory
  * @param session

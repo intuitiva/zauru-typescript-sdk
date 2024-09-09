@@ -428,20 +428,22 @@ query getAgencies {
 }
 `;
 
-export const getWebAppRowStringQuery = `
-query getWebAppRow($id: Int){
-  webapp_rows(where: {id: {_eq: $id}}) {
+export const getWebAppRowStringQuery = (id: number) => `
+query getWebAppRow {
+  webapp_rows(where: {id: {_eq: ${id}}}) {
     data
   }
 }
 `;
 
-export const getWebAppRowsByWebAppTableIdStringQuery = `
-query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
+export const getWebAppRowsByWebAppTableIdStringQuery = (
+  webapp_table_id: number
+) => `
+query getWebAppRowsByWebAppTableId {
   webapp_rows (
     where: {
       webapp_table_id: {
-        _eq: $webapp_table_id 
+        _eq: ${webapp_table_id} 
       }
     },
     order_by: { 
@@ -455,9 +457,9 @@ query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
 }
 `;
 
-export const getPayeeCategoryByIdStringQuery = `
-query getPayeeCategoryById ($id: bigint) {
-  payee_categories (where: {id: {_eq: $id }}) {
+export const getPayeeCategoryByIdStringQuery = (id: number) => `
+query getPayeeCategoryById {
+  payee_categories (where: {id: {_eq: ${id} }}) {
       payees (order_by: { id: desc }) { 
           id
           name
@@ -538,9 +540,9 @@ query getClientCategories {
 }
 `;
 
-export const getPayeeByIdStringQuery = `
-query getPayeeById ($id: Int) {
-  payees (where: {id: {_eq: $id }}) {
+export const getPayeeByIdStringQuery = (id: number) => `
+query getPayeeById {
+  payees (where: {id: {_eq: ${id} }}) {
     id
     name
     id_number
@@ -553,9 +555,9 @@ query getPayeeById ($id: Int) {
 }
 `;
 
-export const getSuperCategoryByIdStringQuery = `
-query getSuperCategoryById ($id: bigint) {
-  item_super_categories (where: {id: {_eq: $id }}) {
+export const getSuperCategoryByIdStringQuery = (id: number) => `
+query getSuperCategoryById {
+  item_super_categories (where: {id: {_eq: ${id} }}) {
     item_categories {
         id
         name
@@ -566,9 +568,9 @@ query getSuperCategoryById ($id: bigint) {
 }
 `;
 
-export const getItemCategoryByIdStringQuery = `
-query getItemCategoryById ($id: bigint) {
-  item_categories (where: {id: {_eq: $id }}) {
+export const getItemCategoryByIdStringQuery = (id: number) => `
+query getItemCategoryById {
+  item_categories (where: {id: {_eq: ${id} }}) {
         id
         name
         notes
@@ -577,9 +579,9 @@ query getItemCategoryById ($id: bigint) {
 }
 `;
 
-export const getItemsByCategoryStringQuery = `
-query getItemsByCategory ($id: bigint) {
-  item_categories (where: {id: {_eq: $id }}) {
+export const getItemsByCategoryStringQuery = (id: number) => `
+query getItemsByCategory {
+  item_categories (where: {id: {_eq: ${id} }}) {
         items (where: {active: {_eq: true }}) {
             id,
             name,

@@ -44,10 +44,7 @@ export async function getPayee(session, id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const responsePayee = await httpGraphQLAPI.post("", {
-            query: getPayeeByIdStringQuery,
-            variables: {
-                id,
-            },
+            query: getPayeeByIdStringQuery(Number(id)),
         }, { headers });
         if (!responsePayee?.data?.data?.payees[0]) {
             throw new Error("No se encontró el beneficiario indicado");
@@ -80,8 +77,7 @@ export async function getPayeesByCategoryId(session, id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post(``, {
-            query: getPayeeCategoryByIdStringQuery,
-            variables: { id },
+            query: getPayeeCategoryByIdStringQuery(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

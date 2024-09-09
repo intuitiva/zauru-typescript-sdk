@@ -88,10 +88,7 @@ export async function getPayee(
     }>(
       "",
       {
-        query: getPayeeByIdStringQuery,
-        variables: {
-          id,
-        },
+        query: getPayeeByIdStringQuery(Number(id)),
       },
       { headers }
     );
@@ -152,8 +149,7 @@ export async function getPayeesByCategoryId(
     }>(
       ``,
       {
-        query: getPayeeCategoryByIdStringQuery,
-        variables: { id },
+        query: getPayeeCategoryByIdStringQuery(Number(id)),
       },
       { headers }
     );

@@ -366,19 +366,20 @@ query getAgencies {
   }
 }
 `;
-exports.getWebAppRowStringQuery = `
-query getWebAppRow($id: Int){
-  webapp_rows(where: {id: {_eq: $id}}) {
+const getWebAppRowStringQuery = (id) => `
+query getWebAppRow {
+  webapp_rows(where: {id: {_eq: ${id}}}) {
     data
   }
 }
 `;
-exports.getWebAppRowsByWebAppTableIdStringQuery = `
-query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
+exports.getWebAppRowStringQuery = getWebAppRowStringQuery;
+const getWebAppRowsByWebAppTableIdStringQuery = (webapp_table_id) => `
+query getWebAppRowsByWebAppTableId {
   webapp_rows (
     where: {
       webapp_table_id: {
-        _eq: $webapp_table_id 
+        _eq: ${webapp_table_id} 
       }
     },
     order_by: { 
@@ -391,9 +392,10 @@ query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
   }
 }
 `;
-exports.getPayeeCategoryByIdStringQuery = `
-query getPayeeCategoryById ($id: bigint) {
-  payee_categories (where: {id: {_eq: $id }}) {
+exports.getWebAppRowsByWebAppTableIdStringQuery = getWebAppRowsByWebAppTableIdStringQuery;
+const getPayeeCategoryByIdStringQuery = (id) => `
+query getPayeeCategoryById {
+  payee_categories (where: {id: {_eq: ${id} }}) {
       payees (order_by: { id: desc }) { 
           id
           name
@@ -408,6 +410,7 @@ query getPayeeCategoryById ($id: bigint) {
   }
 }
 `;
+exports.getPayeeCategoryByIdStringQuery = getPayeeCategoryByIdStringQuery;
 const getPayeeCategoriesByNotesMatchStringQuery = (match) => `
 query getPayeeCategoriesByNotesMatch {
   payee_categories(where: {notes: {_ilike: "%${match}%" }}) {
@@ -470,9 +473,9 @@ query getClientCategories {
   }
 }
 `;
-exports.getPayeeByIdStringQuery = `
-query getPayeeById ($id: Int) {
-  payees (where: {id: {_eq: $id }}) {
+const getPayeeByIdStringQuery = (id) => `
+query getPayeeById {
+  payees (where: {id: {_eq: ${id} }}) {
     id
     name
     id_number
@@ -484,9 +487,10 @@ query getPayeeById ($id: Int) {
   }
 }
 `;
-exports.getSuperCategoryByIdStringQuery = `
-query getSuperCategoryById ($id: bigint) {
-  item_super_categories (where: {id: {_eq: $id }}) {
+exports.getPayeeByIdStringQuery = getPayeeByIdStringQuery;
+const getSuperCategoryByIdStringQuery = (id) => `
+query getSuperCategoryById {
+  item_super_categories (where: {id: {_eq: ${id} }}) {
     item_categories {
         id
         name
@@ -496,9 +500,10 @@ query getSuperCategoryById ($id: bigint) {
   }
 }
 `;
-exports.getItemCategoryByIdStringQuery = `
-query getItemCategoryById ($id: bigint) {
-  item_categories (where: {id: {_eq: $id }}) {
+exports.getSuperCategoryByIdStringQuery = getSuperCategoryByIdStringQuery;
+const getItemCategoryByIdStringQuery = (id) => `
+query getItemCategoryById {
+  item_categories (where: {id: {_eq: ${id} }}) {
         id
         name
         notes
@@ -506,9 +511,10 @@ query getItemCategoryById ($id: bigint) {
   }
 }
 `;
-exports.getItemsByCategoryStringQuery = `
-query getItemsByCategory ($id: bigint) {
-  item_categories (where: {id: {_eq: $id }}) {
+exports.getItemCategoryByIdStringQuery = getItemCategoryByIdStringQuery;
+const getItemsByCategoryStringQuery = (id) => `
+query getItemsByCategory {
+  item_categories (where: {id: {_eq: ${id} }}) {
         items (where: {active: {_eq: true }}) {
             id,
             name,
@@ -519,6 +525,7 @@ query getItemsByCategory ($id: bigint) {
   }
 }
 `;
+exports.getItemsByCategoryStringQuery = getItemsByCategoryStringQuery;
 exports.getItemsStringQuery = `
 query getItems {
   items (where: {active: {_eq: true }}) {

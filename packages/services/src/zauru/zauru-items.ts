@@ -175,7 +175,7 @@ export async function getItemCategories(
  */
 export async function getItemsByCategoryId(
   session: Session,
-  id: string
+  id: string | number
 ): Promise<AxiosUtilsResponse<ItemGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -189,10 +189,7 @@ export async function getItemsByCategoryId(
     }>(
       "",
       {
-        query: getItemsByCategoryStringQuery,
-        variables: {
-          id,
-        },
+        query: getItemsByCategoryStringQuery(Number(id)),
       },
       { headers }
     );
@@ -232,10 +229,7 @@ export async function getItemCategory(
     }>(
       "",
       {
-        query: getItemCategoryByIdStringQuery,
-        variables: {
-          id,
-        },
+        query: getItemCategoryByIdStringQuery(Number(id)),
       },
       { headers }
     );
@@ -275,8 +269,7 @@ export async function getItemCategoriesBySuperCategoryId(
     }>(
       ``,
       {
-        query: getSuperCategoryByIdStringQuery,
-        variables: { id },
+        query: getSuperCategoryByIdStringQuery(Number(id)),
       },
       { headers }
     );
