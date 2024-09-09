@@ -3,4 +3,4 @@ import { AxiosUtilsResponse, CaseGraphQL } from "@zauru-sdk/types";
 /**
  * getCasesByResponsibleId
  */
-export declare function getCasesByResponsibleId(session: Session, responsible_id: string, wheres?: string[]): Promise<AxiosUtilsResponse<CaseGraphQL[]>>;
+export declare function getCasesByResponsibleId(session: Session, responsible_id: number | string, wheres?: string[]): Promise<AxiosUtilsResponse<CaseGraphQL[]>>;

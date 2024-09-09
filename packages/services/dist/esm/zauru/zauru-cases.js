@@ -9,10 +9,7 @@ export async function getCasesByResponsibleId(session, responsible_id, wheres = 
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getCasesByResponsibleIdStringQuery(wheres),
-            variables: {
-                responsible_id,
-            },
+            query: getCasesByResponsibleIdStringQuery(Number(responsible_id), wheres),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

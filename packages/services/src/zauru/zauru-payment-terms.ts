@@ -64,8 +64,7 @@ export async function getPaymentTermById(
     }>(
       "",
       {
-        query: getPaymentTermByIdStringQuery,
-        variables: { id },
+        query: getPaymentTermByIdStringQuery(Number(id)),
       },
       { headers }
     );

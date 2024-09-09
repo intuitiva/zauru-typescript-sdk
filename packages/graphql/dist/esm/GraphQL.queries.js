@@ -1223,9 +1223,9 @@ const getPaymentMethodsStringQuery = (config) => {
 `;
 };
 exports.getPaymentMethodsStringQuery = getPaymentMethodsStringQuery;
-exports.getPaymentTermByIdStringQuery = `
-query getPaymentTermById ($id: Int) {
-  payment_terms (where: {id: {_eq: $id }}) {
+const getPaymentTermByIdStringQuery = (id) => `
+query getPaymentTermById {
+  payment_terms (where: {id: {_eq: ${id} }}) {
     active
     id
     memo
@@ -1238,9 +1238,10 @@ query getPaymentTermById ($id: Int) {
   }
 }
 `;
-exports.getInvoicesByAgencyIdStringQuery = `
-query getInvoicesByAgencyId($id: bigint) {
-  invoices(limit: 1000, where: {agency_id: {_eq: $id}, voided: {_eq: false}}, order_by: {id: desc}) {
+exports.getPaymentTermByIdStringQuery = getPaymentTermByIdStringQuery;
+const getInvoicesByAgencyIdStringQuery = (id) => `
+query getInvoicesByAgencyId {
+  invoices(limit: 1000, where: {agency_id: {_eq: ${id}}, voided: {_eq: false}}, order_by: {id: desc}) {
     id
     zid
     id_number
@@ -1285,11 +1286,12 @@ query getInvoicesByAgencyId($id: bigint) {
   }
 }
 `;
-const getCasesByResponsibleIdStringQuery = (wheres = []) => {
+exports.getInvoicesByAgencyIdStringQuery = getInvoicesByAgencyIdStringQuery;
+const getCasesByResponsibleIdStringQuery = (responsible_id, wheres = []) => {
     const additionalWheres = wheres.join(",");
     return `
-    query getCasesByResponsibleId($responsible_id: Int) {
-      cases(where: {responsible_id: {_eq: $responsible_id}${additionalWheres.length > 0 ? "," : ""}${additionalWheres}}, order_by: {id: desc}) {
+    query getCasesByResponsibleId {
+      cases(where: {responsible_id: {_eq: ${responsible_id}}${additionalWheres.length > 0 ? "," : ""}${additionalWheres}}, order_by: {id: desc}) {
         id
         id_number
         serial_id

@@ -89,7 +89,7 @@ export declare const getPaymentTermsStringQuery: (config?: {
 export declare const getPaymentMethodsStringQuery: (config: {
     onlyActives: boolean;
 }) => string;
-export declare const getPaymentTermByIdStringQuery = "\nquery getPaymentTermById ($id: Int) {\n  payment_terms (where: {id: {_eq: $id }}) {\n    active\n    id\n    memo\n    name\n    account_from_id\n    account_to_id\n    allowed_payment_terms {\n      payee_category_id\n    }\n  }\n}\n";
-export declare const getInvoicesByAgencyIdStringQuery = "\nquery getInvoicesByAgencyId($id: bigint) {\n  invoices(limit: 1000, where: {agency_id: {_eq: $id}, voided: {_eq: false}}, order_by: {id: desc}) {\n    id\n    zid\n    id_number\n    currency_id\n    date\n    payee_id\n    total\n    subtotal\n    seller_id\n    order_number\n    memo\n    issued\n    invoice_number\n    id_number\n    payment_term_id\n    reference\n    submission_invoices {\n      id\n      settings_form_submission {\n        zid\n        voided\n        settings_form {\n          id\n          zid\n        }\n      }\n    }\n    invoice_details {\n      bundle_id\n      id\n      item_bundle_name\n      item_bundle_description\n      item_id\n      price\n      quantity\n      unit_price\n    }\n    payee {\n      name\n      payee_category_id\n    }\n  }\n}\n";
-export declare const getCasesByResponsibleIdStringQuery: (wheres?: string[]) => string;
+export declare const getPaymentTermByIdStringQuery: (id: number) => string;
+export declare const getInvoicesByAgencyIdStringQuery: (id: number) => string;
+export declare const getCasesByResponsibleIdStringQuery: (responsible_id: number, wheres?: string[]) => string;
 export declare const getPrintTemplatesStringQuery = "\nquery getPrintTemplates {\n    print_templates {\n        id\n        name\n    }\n}\n";

@@ -10,7 +10,7 @@ import { getCasesByResponsibleIdStringQuery } from "@zauru-sdk/graphql";
  */
 export async function getCasesByResponsibleId(
   session: Session,
-  responsible_id: string,
+  responsible_id: number | string,
   wheres: string[] = []
 ): Promise<AxiosUtilsResponse<CaseGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
@@ -25,10 +25,10 @@ export async function getCasesByResponsibleId(
     }>(
       "",
       {
-        query: getCasesByResponsibleIdStringQuery(wheres),
-        variables: {
-          responsible_id,
-        },
+        query: getCasesByResponsibleIdStringQuery(
+          Number(responsible_id),
+          wheres
+        ),
       },
       { headers }
     );

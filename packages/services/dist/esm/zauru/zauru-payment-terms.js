@@ -28,8 +28,7 @@ export async function getPaymentTermById(session, id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getPaymentTermByIdStringQuery,
-            variables: { id },
+            query: getPaymentTermByIdStringQuery(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
