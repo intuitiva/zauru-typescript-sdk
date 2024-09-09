@@ -124,10 +124,7 @@ export async function getItemByName(
     }>(
       "",
       {
-        query: getItemByNameStringQuery,
-        variables: {
-          name,
-        },
+        query: getItemByNameStringQuery(name),
       },
       { headers }
     );
@@ -310,8 +307,10 @@ export async function getItemsBySuperCategoryId(
     }>(
       ``,
       {
-        query: getItemsBySuperCategoryStringQuery,
-        variables: { id, agency_id },
+        query: getItemsBySuperCategoryStringQuery(
+          Number(id),
+          Number(agency_id)
+        ),
       },
       { headers }
     );

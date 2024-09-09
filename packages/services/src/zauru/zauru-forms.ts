@@ -79,10 +79,7 @@ export async function getFormByName(
     }>(
       "",
       {
-        query: getFormByNameStringQuery,
-        variables: {
-          name,
-        },
+        query: getFormByNameStringQuery(name),
       },
       { headers }
     );
@@ -172,10 +169,7 @@ export async function getFormsByDocumentType(
     }>(
       "",
       {
-        query: getFormsByDocumentTypeStringQuery(filters),
-        variables: {
-          document_type,
-        },
+        query: getFormsByDocumentTypeStringQuery(document_type, filters),
       },
       { headers }
     );
@@ -226,10 +220,7 @@ export async function getFormSubmissionById(
     }>(
       "",
       {
-        query: getFormSubmissionByIdStringQuery,
-        variables: {
-          formId: id,
-        },
+        query: getFormSubmissionByIdStringQuery(Number(id)),
       },
       { headers }
     );
@@ -292,18 +283,21 @@ export async function getInvoiceFormSubmissionsByAgencyId(
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
-    const queryBuilded = getInvoiceFormSubmissionsByAgencyIdStringQuery({
-      seller_id: filters?.seller_id,
-      payee_id_number_search: filters?.payee_id_number_search,
-      //some_field_value: filters?.some_field_value, //Este filtro ahora lo hago abajo, con código, porque al hacerlo así antes,
-      //no funcionaba para cuando se cambiaba un campo, por ejemplo, tengo campo1 con "blabla", si lo cambiaba a campo1 = "bleble",
-      //ese campo1 con "blabla" ya iba a ser la versión vieja, pero si buscaba por ese blabla, si me iba a seguir apareciendo.
-      bundle_ids: filters?.bundle_ids,
-      item_ids: filters?.item_ids,
-      startDate: filters?.startDate,
-      endDate: filters?.endDate,
-      formZid: filters?.formZid,
-    });
+    const queryBuilded = getInvoiceFormSubmissionsByAgencyIdStringQuery(
+      Number(agency_id),
+      {
+        seller_id: filters?.seller_id,
+        payee_id_number_search: filters?.payee_id_number_search,
+        //some_field_value: filters?.some_field_value, //Este filtro ahora lo hago abajo, con código, porque al hacerlo así antes,
+        //no funcionaba para cuando se cambiaba un campo, por ejemplo, tengo campo1 con "blabla", si lo cambiaba a campo1 = "bleble",
+        //ese campo1 con "blabla" ya iba a ser la versión vieja, pero si buscaba por ese blabla, si me iba a seguir apareciendo.
+        bundle_ids: filters?.bundle_ids,
+        item_ids: filters?.item_ids,
+        startDate: filters?.startDate,
+        endDate: filters?.endDate,
+        formZid: filters?.formZid,
+      }
+    );
 
     const response = await httpGraphQLAPI.post<{
       data: { submission_invoices: SubmissionInvoicesGraphQL[] };
@@ -315,9 +309,6 @@ export async function getInvoiceFormSubmissionsByAgencyId(
       "",
       {
         query: queryBuilded,
-        variables: {
-          agency_id,
-        },
       },
       { headers }
     );
@@ -375,13 +366,13 @@ export async function getMyCaseFormSubmissions(
     }>(
       "",
       {
-        query: getMyCaseFormSubmissionsStringQuery({
-          formZid: filters?.formZid,
-          caseId: filters?.caseId,
-        }),
-        variables: {
-          responsible_id: session.get("employee_id"),
-        },
+        query: getMyCaseFormSubmissionsStringQuery(
+          Number(session.get("employee_id")),
+          {
+            formZid: filters?.formZid,
+            caseId: filters?.caseId,
+          }
+        ),
       },
       { headers }
     );
@@ -489,12 +480,12 @@ export async function getInvoiceFormSubmissionsByInvoiceId(
     }>(
       "",
       {
-        query: getInvoiceFormSubmissionsByInvoiceIdStringQuery({
-          formZid: filters?.formZid,
-        }),
-        variables: {
-          invoice_id,
-        },
+        query: getInvoiceFormSubmissionsByInvoiceIdStringQuery(
+          Number(invoice_id),
+          {
+            formZid: filters?.formZid,
+          }
+        ),
       },
       { headers }
     );

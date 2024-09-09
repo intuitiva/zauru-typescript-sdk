@@ -535,9 +535,9 @@ query getItems {
     }
 }
 `;
-exports.getItemsBySuperCategoryStringQuery = `
-query getItemsBySuperCategory ($id: bigint, $agency_id: Int) {
-  item_super_categories (where: {id: {_eq: $id }}, order_by: {id: desc}) {
+const getItemsBySuperCategoryStringQuery = (id, agency_id) => `
+query getItemsBySuperCategory {
+  item_super_categories (where: {id: {_eq: ${id} }}, order_by: {id: desc}) {
       item_categories {
         items (where: {active: {_eq: true }}) {
             id,
@@ -548,7 +548,7 @@ query getItemsBySuperCategory ($id: bigint, $agency_id: Int) {
             measurement_unit,
             description
             product_type
-            stocks(where: {agency_id: {_eq: $agency_id}}, order_by: {id: desc}) {
+            stocks(where: {agency_id: {_eq: ${agency_id}}}, order_by: {id: desc}) {
               available
               id
               incoming
@@ -559,6 +559,7 @@ query getItemsBySuperCategory ($id: bigint, $agency_id: Int) {
   }
 }
 `;
+exports.getItemsBySuperCategoryStringQuery = getItemsBySuperCategoryStringQuery;
 exports.getConsolidatesBetweenDatesStringQuery = `
 query getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {
   consolidates (order_by: {id: desc}, where: {created_at: {_gte: $startDate, _lte: $endDate}}) {
@@ -573,9 +574,9 @@ query getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {
   }
 }
 `;
-exports.getEmployeeProfileStringQuery = `
-query getEmployeeProfile ($id: Int) {
-  employees(where: {id: {_eq: $id}}) {
+const getEmployeeProfileStringQuery = (id) => `
+query getEmployeeProfile {
+  employees(where: {id: {_eq: ${id}}}) {
     agency_id
     email
     entity_id
@@ -591,9 +592,10 @@ query getEmployeeProfile ($id: Int) {
   }
 }
 `;
-exports.getEmployeesByAgencyIdStringQuery = `
-query getEmployeesByAgencyId ($id: Int) {
-  employees(where: {agency_id: {_eq: $id}}) {
+exports.getEmployeeProfileStringQuery = getEmployeeProfileStringQuery;
+const getEmployeesByAgencyIdStringQuery = (id) => `
+query getEmployeesByAgencyId {
+  employees(where: {agency_id: {_eq: ${id}}}) {
     name
     id
     user_id
@@ -607,9 +609,10 @@ query getEmployeesByAgencyId ($id: Int) {
   }
 }
 `;
-exports.getBundlesByItemCategoryIdStringQuery = `
-query getBundlesByItemCategoryId ($id: Int) {
-  bundles(where: {active: {_eq: true}, item_category_id: {_eq: $id}}) {
+exports.getEmployeesByAgencyIdStringQuery = getEmployeesByAgencyIdStringQuery;
+const getBundlesByItemCategoryIdStringQuery = (id) => `
+query getBundlesByItemCategoryId {
+  bundles(where: {active: {_eq: true}, item_category_id: {_eq: ${id}}}) {
     id
     code
     description
@@ -625,16 +628,18 @@ query getBundlesByItemCategoryId ($id: Int) {
   }
 }
 `;
-exports.getBundleByNameStringQuery = `
-query getBundleByName ($name: String) {
-  bundles (where: {name: {_eq: $name }}) {
+exports.getBundlesByItemCategoryIdStringQuery = getBundlesByItemCategoryIdStringQuery;
+const getBundleByNameStringQuery = (name) => `
+query getBundleByName {
+  bundles (where: {name: {_eq: '${name}' }}) {
     id
   }
 }
 `;
-exports.getItemByNameStringQuery = `
-query getItemByName ($name: String) {
-  items (where: {active: {_eq: true }, name: {_eq: $name }}) {
+exports.getBundleByNameStringQuery = getBundleByNameStringQuery;
+const getItemByNameStringQuery = (name) => `
+query getItemByName {
+  items (where: {active: {_eq: true }, name: {_eq: '${name}' }}) {
       id
       name
       stocks_only_integer
@@ -643,6 +648,7 @@ query getItemByName ($name: String) {
   }
 }
 `;
+exports.getItemByNameStringQuery = getItemByNameStringQuery;
 const getShipmentsStringQuery = (wheres = []) => {
     const additionalWheres = wheres.join(",");
     return `query getShipments {
@@ -726,10 +732,10 @@ query getAllForms {
 }
 `;
 exports.getAllFormsStringQuery = getAllFormsStringQuery;
-exports.getFormByNameStringQuery = `
-query getFormByName ($name: String) {
+const getFormByNameStringQuery = (name) => `
+query getFormByName {
   settings_forms (
-      where: {name: {_eq: $name }},
+      where: {name: {_eq: '${name}' }},
       order_by: {zid: desc, version: desc}
     ) {
       id
@@ -758,6 +764,7 @@ query getFormByName ($name: String) {
   }
 }
 `;
+exports.getFormByNameStringQuery = getFormByNameStringQuery;
 exports.getFormsStringQuery = `
 query getForms {
   settings_forms (
@@ -789,12 +796,12 @@ query getForms {
   }
 }
 `;
-const getFormsByDocumentTypeStringQuery = (filters = {}) => `
-query getFormsByDocumentType ($document_type: String) {
+const getFormsByDocumentTypeStringQuery = (document_type, filters = {}) => `
+query getFormsByDocumentType {
   settings_forms (
       where: {
         ${filters?.formZid ? `zid: {_eq: ${filters?.formZid}},` : ""}
-        document_type: {_eq: $document_type}
+        document_type: {_eq: '${document_type}'}
       },
       order_by: {zid: desc, version: desc}
     ) {
@@ -831,8 +838,8 @@ query getFormsByDocumentType ($document_type: String) {
 }
 `;
 exports.getFormsByDocumentTypeStringQuery = getFormsByDocumentTypeStringQuery;
-const getMyCaseFormSubmissionsStringQuery = (filters = {}) => `
-query getMyCaseFormSubmissions ($responsible_id: Int) {
+const getMyCaseFormSubmissionsStringQuery = (responsible_id, filters = {}) => `
+query getMyCaseFormSubmissions {
   submission_cases (
     limit: 500,
     where: {
@@ -844,7 +851,7 @@ query getMyCaseFormSubmissions ($responsible_id: Int) {
       },
       case: {
           ${filters?.caseId ? `id: {_eq: ${filters?.caseId}},` : ""}
-        responsible_id: {_eq: $responsible_id}
+        responsible_id: {_eq: ${responsible_id}}
       }
     },
     order_by: {id: desc})
@@ -903,9 +910,9 @@ query getMyCaseFormSubmissions ($responsible_id: Int) {
 }
 `;
 exports.getMyCaseFormSubmissionsStringQuery = getMyCaseFormSubmissionsStringQuery;
-exports.getFormSubmissionByIdStringQuery = `
-query getFormSubmissionById ($formId: bigint) {
-  settings_form_submissions (where: {id: { _eq: $formId }}) {
+const getFormSubmissionByIdStringQuery = (formId) => `
+query getFormSubmissionById {
+  settings_form_submissions (where: {id: { _eq: ${formId} }}) {
       id
       zid
       reference
@@ -937,11 +944,10 @@ query getFormSubmissionById ($formId: bigint) {
   }
 }
 `;
-const getInvoiceFormSubmissionsByAgencyIdStringQuery = (filters) => {
+exports.getFormSubmissionByIdStringQuery = getFormSubmissionByIdStringQuery;
+const getInvoiceFormSubmissionsByAgencyIdStringQuery = (agency_id, filters) => {
     return `
-query getInvoiceFormSubmissionsByAgencyId (
-  $agency_id: Int
-  ) {
+query getInvoiceFormSubmissionsByAgencyId {
   submission_invoices(
     where: {
       settings_form_submission: {
@@ -959,7 +965,7 @@ query getInvoiceFormSubmissionsByAgencyId (
         ? `created_at: { _gte: "${filters?.startDate}T00:00:00", _lte: "${filters?.endDate}T00:00:00" },`
         : ""}
       invoice: {
-        agency_id: {_eq: $agency_id},
+        agency_id: {_eq: ${agency_id}},
         ${filters?.seller_id ? `seller_id: {_eq: ${filters?.seller_id} },` : ""}
         ${filters?.payee_id_number_search
         ? `payee: { 
@@ -1053,11 +1059,11 @@ query getLastInvoiceFormSubmission {
 }
 `;
 exports.getLastInvoiceFormSubmissionStringQuery = getLastInvoiceFormSubmissionStringQuery;
-const getInvoiceFormSubmissionsByInvoiceIdStringQuery = (filters = {}) => `
-query getInvoiceFormSubmissionsByInvoiceId ($invoice_id: bigint) {
+const getInvoiceFormSubmissionsByInvoiceIdStringQuery = (invoice_id, filters = {}) => `
+query getInvoiceFormSubmissionsByInvoiceId {
   submission_invoices(
       where: {
-        invoice_id: {_eq: $invoice_id},
+        invoice_id: {_eq: ${invoice_id}},
         settings_form_submission: {
           ${filters?.formZid
     ? `settings_form: {zid: {_eq: ${filters?.formZid}}},`

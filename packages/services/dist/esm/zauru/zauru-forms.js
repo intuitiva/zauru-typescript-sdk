@@ -26,10 +26,7 @@ export async function getFormByName(session, name) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getFormByNameStringQuery,
-            variables: {
-                name,
-            },
+            query: getFormByNameStringQuery(name),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -75,10 +72,7 @@ export async function getFormsByDocumentType(session, document_type, filters = {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getFormsByDocumentTypeStringQuery(filters),
-            variables: {
-                document_type,
-            },
+            query: getFormsByDocumentTypeStringQuery(document_type, filters),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -103,10 +97,7 @@ export async function getFormSubmissionById(headersZauru, session, id, config = 
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getFormSubmissionByIdStringQuery,
-            variables: {
-                formId: id,
-            },
+            query: getFormSubmissionByIdStringQuery(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -140,7 +131,7 @@ export async function getFormSubmissionById(headersZauru, session, id, config = 
 export async function getInvoiceFormSubmissionsByAgencyId(session, agency_id, filters) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
-        const queryBuilded = getInvoiceFormSubmissionsByAgencyIdStringQuery({
+        const queryBuilded = getInvoiceFormSubmissionsByAgencyIdStringQuery(Number(agency_id), {
             seller_id: filters?.seller_id,
             payee_id_number_search: filters?.payee_id_number_search,
             //some_field_value: filters?.some_field_value, //Este filtro ahora lo hago abajo, con código, porque al hacerlo así antes,
@@ -154,9 +145,6 @@ export async function getInvoiceFormSubmissionsByAgencyId(session, agency_id, fi
         });
         const response = await httpGraphQLAPI.post("", {
             query: queryBuilded,
-            variables: {
-                agency_id,
-            },
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -185,13 +173,10 @@ export async function getMyCaseFormSubmissions(headersZauru, session, filters = 
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getMyCaseFormSubmissionsStringQuery({
+            query: getMyCaseFormSubmissionsStringQuery(Number(session.get("employee_id")), {
                 formZid: filters?.formZid,
                 caseId: filters?.caseId,
             }),
-            variables: {
-                responsible_id: session.get("employee_id"),
-            },
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -247,12 +232,9 @@ export async function getInvoiceFormSubmissionsByInvoiceId(session, invoice_id, 
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getInvoiceFormSubmissionsByInvoiceIdStringQuery({
+            query: getInvoiceFormSubmissionsByInvoiceIdStringQuery(Number(invoice_id), {
                 formZid: filters?.formZid,
             }),
-            variables: {
-                invoice_id,
-            },
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

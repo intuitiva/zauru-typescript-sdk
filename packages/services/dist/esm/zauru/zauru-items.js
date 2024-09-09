@@ -60,10 +60,7 @@ export async function getItemByName(session, name) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getItemByNameStringQuery,
-            variables: {
-                name,
-            },
+            query: getItemByNameStringQuery(name),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -158,8 +155,7 @@ export async function getItemsBySuperCategoryId(session, id, agency_id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post(``, {
-            query: getItemsBySuperCategoryStringQuery,
-            variables: { id, agency_id },
+            query: getItemsBySuperCategoryStringQuery(Number(id), Number(agency_id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

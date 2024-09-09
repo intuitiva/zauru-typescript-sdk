@@ -33,10 +33,7 @@ async function getFormByName(session, name) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getFormByNameStringQuery,
-            variables: {
-                name,
-            },
+            query: (0, graphql_1.getFormByNameStringQuery)(name),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -84,10 +81,7 @@ async function getFormsByDocumentType(session, document_type, filters = {}) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: (0, graphql_1.getFormsByDocumentTypeStringQuery)(filters),
-            variables: {
-                document_type,
-            },
+            query: (0, graphql_1.getFormsByDocumentTypeStringQuery)(document_type, filters),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -113,10 +107,7 @@ async function getFormSubmissionById(headersZauru, session, id, config = { withF
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getFormSubmissionByIdStringQuery,
-            variables: {
-                formId: id,
-            },
+            query: (0, graphql_1.getFormSubmissionByIdStringQuery)(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -151,7 +142,7 @@ exports.getFormSubmissionById = getFormSubmissionById;
 async function getInvoiceFormSubmissionsByAgencyId(session, agency_id, filters) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
-        const queryBuilded = (0, graphql_1.getInvoiceFormSubmissionsByAgencyIdStringQuery)({
+        const queryBuilded = (0, graphql_1.getInvoiceFormSubmissionsByAgencyIdStringQuery)(Number(agency_id), {
             seller_id: filters?.seller_id,
             payee_id_number_search: filters?.payee_id_number_search,
             //some_field_value: filters?.some_field_value, //Este filtro ahora lo hago abajo, con código, porque al hacerlo así antes,
@@ -165,9 +156,6 @@ async function getInvoiceFormSubmissionsByAgencyId(session, agency_id, filters) 
         });
         const response = await httpGraphQL_js_1.default.post("", {
             query: queryBuilded,
-            variables: {
-                agency_id,
-            },
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -197,13 +185,10 @@ async function getMyCaseFormSubmissions(headersZauru, session, filters = {}, con
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: (0, graphql_1.getMyCaseFormSubmissionsStringQuery)({
+            query: (0, graphql_1.getMyCaseFormSubmissionsStringQuery)(Number(session.get("employee_id")), {
                 formZid: filters?.formZid,
                 caseId: filters?.caseId,
             }),
-            variables: {
-                responsible_id: session.get("employee_id"),
-            },
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -261,12 +246,9 @@ async function getInvoiceFormSubmissionsByInvoiceId(session, invoice_id, filters
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: (0, graphql_1.getInvoiceFormSubmissionsByInvoiceIdStringQuery)({
+            query: (0, graphql_1.getInvoiceFormSubmissionsByInvoiceIdStringQuery)(Number(invoice_id), {
                 formZid: filters?.formZid,
             }),
-            variables: {
-                invoice_id,
-            },
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

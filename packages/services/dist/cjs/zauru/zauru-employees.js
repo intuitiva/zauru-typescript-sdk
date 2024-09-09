@@ -15,10 +15,7 @@ async function getEmployeesByAgencyId(session, id) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getEmployeesByAgencyIdStringQuery,
-            variables: {
-                id,
-            },
+            query: (0, graphql_1.getEmployeesByAgencyIdStringQuery)(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

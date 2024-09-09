@@ -603,9 +603,12 @@ query getItems {
 }
 `;
 
-export const getItemsBySuperCategoryStringQuery = `
-query getItemsBySuperCategory ($id: bigint, $agency_id: Int) {
-  item_super_categories (where: {id: {_eq: $id }}, order_by: {id: desc}) {
+export const getItemsBySuperCategoryStringQuery = (
+  id: number,
+  agency_id: number
+) => `
+query getItemsBySuperCategory {
+  item_super_categories (where: {id: {_eq: ${id} }}, order_by: {id: desc}) {
       item_categories {
         items (where: {active: {_eq: true }}) {
             id,
@@ -616,7 +619,7 @@ query getItemsBySuperCategory ($id: bigint, $agency_id: Int) {
             measurement_unit,
             description
             product_type
-            stocks(where: {agency_id: {_eq: $agency_id}}, order_by: {id: desc}) {
+            stocks(where: {agency_id: {_eq: ${agency_id}}}, order_by: {id: desc}) {
               available
               id
               incoming
@@ -643,9 +646,9 @@ query getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {
 }
 `;
 
-export const getEmployeeProfileStringQuery = `
-query getEmployeeProfile ($id: Int) {
-  employees(where: {id: {_eq: $id}}) {
+export const getEmployeeProfileStringQuery = (id: number) => `
+query getEmployeeProfile {
+  employees(where: {id: {_eq: ${id}}}) {
     agency_id
     email
     entity_id
@@ -662,9 +665,9 @@ query getEmployeeProfile ($id: Int) {
 }
 `;
 
-export const getEmployeesByAgencyIdStringQuery = `
-query getEmployeesByAgencyId ($id: Int) {
-  employees(where: {agency_id: {_eq: $id}}) {
+export const getEmployeesByAgencyIdStringQuery = (id: number) => `
+query getEmployeesByAgencyId {
+  employees(where: {agency_id: {_eq: ${id}}}) {
     name
     id
     user_id
@@ -679,9 +682,9 @@ query getEmployeesByAgencyId ($id: Int) {
 }
 `;
 
-export const getBundlesByItemCategoryIdStringQuery = `
-query getBundlesByItemCategoryId ($id: Int) {
-  bundles(where: {active: {_eq: true}, item_category_id: {_eq: $id}}) {
+export const getBundlesByItemCategoryIdStringQuery = (id: number) => `
+query getBundlesByItemCategoryId {
+  bundles(where: {active: {_eq: true}, item_category_id: {_eq: ${id}}}) {
     id
     code
     description
@@ -698,17 +701,17 @@ query getBundlesByItemCategoryId ($id: Int) {
 }
 `;
 
-export const getBundleByNameStringQuery = `
-query getBundleByName ($name: String) {
-  bundles (where: {name: {_eq: $name }}) {
+export const getBundleByNameStringQuery = (name: string) => `
+query getBundleByName {
+  bundles (where: {name: {_eq: '${name}' }}) {
     id
   }
 }
 `;
 
-export const getItemByNameStringQuery = `
-query getItemByName ($name: String) {
-  items (where: {active: {_eq: true }, name: {_eq: $name }}) {
+export const getItemByNameStringQuery = (name: string) => `
+query getItemByName {
+  items (where: {active: {_eq: true }, name: {_eq: '${name}' }}) {
       id
       name
       stocks_only_integer
@@ -807,10 +810,10 @@ query getAllForms {
 }
 `;
 
-export const getFormByNameStringQuery = `
-query getFormByName ($name: String) {
+export const getFormByNameStringQuery = (name: string) => `
+query getFormByName {
   settings_forms (
-      where: {name: {_eq: $name }},
+      where: {name: {_eq: '${name}' }},
       order_by: {zid: desc, version: desc}
     ) {
       id
@@ -873,13 +876,14 @@ query getForms {
 `;
 
 export const getFormsByDocumentTypeStringQuery = (
+  document_type: string,
   filters: { formZid?: number } = {}
 ) => `
-query getFormsByDocumentType ($document_type: String) {
+query getFormsByDocumentType {
   settings_forms (
       where: {
         ${filters?.formZid ? `zid: {_eq: ${filters?.formZid}},` : ""}
-        document_type: {_eq: $document_type}
+        document_type: {_eq: '${document_type}'}
       },
       order_by: {zid: desc, version: desc}
     ) {
@@ -917,9 +921,10 @@ query getFormsByDocumentType ($document_type: String) {
 `;
 
 export const getMyCaseFormSubmissionsStringQuery = (
+  responsible_id: number,
   filters: { formZid?: number; caseId?: number } = {}
 ) => `
-query getMyCaseFormSubmissions ($responsible_id: Int) {
+query getMyCaseFormSubmissions {
   submission_cases (
     limit: 500,
     where: {
@@ -933,7 +938,7 @@ query getMyCaseFormSubmissions ($responsible_id: Int) {
       },
       case: {
           ${filters?.caseId ? `id: {_eq: ${filters?.caseId}},` : ""}
-        responsible_id: {_eq: $responsible_id}
+        responsible_id: {_eq: ${responsible_id}}
       }
     },
     order_by: {id: desc})
@@ -992,9 +997,9 @@ query getMyCaseFormSubmissions ($responsible_id: Int) {
 }
 `;
 
-export const getFormSubmissionByIdStringQuery = `
-query getFormSubmissionById ($formId: bigint) {
-  settings_form_submissions (where: {id: { _eq: $formId }}) {
+export const getFormSubmissionByIdStringQuery = (formId: number) => `
+query getFormSubmissionById {
+  settings_form_submissions (where: {id: { _eq: ${formId} }}) {
       id
       zid
       reference
@@ -1027,20 +1032,21 @@ query getFormSubmissionById ($formId: bigint) {
 }
 `;
 
-export const getInvoiceFormSubmissionsByAgencyIdStringQuery = (filters?: {
-  seller_id?: number | string;
-  payee_id_number_search?: string;
-  some_field_value?: string;
-  item_ids?: number[];
-  bundle_ids?: number[];
-  startDate?: string;
-  endDate?: string;
-  formZid?: number | string;
-}) => {
+export const getInvoiceFormSubmissionsByAgencyIdStringQuery = (
+  agency_id: number,
+  filters?: {
+    seller_id?: number | string;
+    payee_id_number_search?: string;
+    some_field_value?: string;
+    item_ids?: number[];
+    bundle_ids?: number[];
+    startDate?: string;
+    endDate?: string;
+    formZid?: number | string;
+  }
+) => {
   return `
-query getInvoiceFormSubmissionsByAgencyId (
-  $agency_id: Int
-  ) {
+query getInvoiceFormSubmissionsByAgencyId {
   submission_invoices(
     where: {
       settings_form_submission: {
@@ -1064,7 +1070,7 @@ query getInvoiceFormSubmissionsByAgencyId (
           : ""
       }
       invoice: {
-        agency_id: {_eq: $agency_id},
+        agency_id: {_eq: ${agency_id}},
         ${filters?.seller_id ? `seller_id: {_eq: ${filters?.seller_id} },` : ""}
         ${
           filters?.payee_id_number_search
@@ -1173,12 +1179,13 @@ query getLastInvoiceFormSubmission {
 `;
 
 export const getInvoiceFormSubmissionsByInvoiceIdStringQuery = (
+  invoice_id: number,
   filters: { formZid?: number } = {}
 ) => `
-query getInvoiceFormSubmissionsByInvoiceId ($invoice_id: bigint) {
+query getInvoiceFormSubmissionsByInvoiceId {
   submission_invoices(
       where: {
-        invoice_id: {_eq: $invoice_id},
+        invoice_id: {_eq: ${invoice_id}},
         settings_form_submission: {
           ${
             filters?.formZid

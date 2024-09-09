@@ -3,7 +3,7 @@ import { AxiosUtilsResponse, BundleGraphQL } from "@zauru-sdk/types";
 /**
  * getBundlesByItemCategoryId
  */
-export declare function getBundlesByItemCategoryId(session: Session, id: string): Promise<AxiosUtilsResponse<BundleGraphQL[]>>;
+export declare function getBundlesByItemCategoryId(session: Session, id: string | number): Promise<AxiosUtilsResponse<BundleGraphQL[]>>;
 /**
  * getBundleByName
  */

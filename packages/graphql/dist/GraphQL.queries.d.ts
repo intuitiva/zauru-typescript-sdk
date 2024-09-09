@@ -39,28 +39,28 @@ export declare const getSuperCategoryByIdStringQuery: (id: number) => string;
 export declare const getItemCategoryByIdStringQuery: (id: number) => string;
 export declare const getItemsByCategoryStringQuery: (id: number) => string;
 export declare const getItemsStringQuery = "\nquery getItems {\n  items (where: {active: {_eq: true }}) {\n        id,\n        name,\n        code\n    }\n}\n";
-export declare const getItemsBySuperCategoryStringQuery = "\nquery getItemsBySuperCategory ($id: bigint, $agency_id: Int) {\n  item_super_categories (where: {id: {_eq: $id }}, order_by: {id: desc}) {\n      item_categories {\n        items (where: {active: {_eq: true }}) {\n            id,\n            name,\n            stocks_only_integer,\n            code,\n            item_category_id,\n            measurement_unit,\n            description\n            product_type\n            stocks(where: {agency_id: {_eq: $agency_id}}, order_by: {id: desc}) {\n              available\n              id\n              incoming\n              outgoing\n            }\n        }\n  }\n  }\n}\n";
+export declare const getItemsBySuperCategoryStringQuery: (id: number, agency_id: number) => string;
 export declare const getConsolidatesBetweenDatesStringQuery = "\nquery getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {\n  consolidates (order_by: {id: desc}, where: {created_at: {_gte: $startDate, _lte: $endDate}}) {\n      id\n      id_number\n      created_at\n      name\n      purchase_orders {\n          id\n          due\n      }\n  }\n}\n";
-export declare const getEmployeeProfileStringQuery = "\nquery getEmployeeProfile ($id: Int) {\n  employees(where: {id: {_eq: $id}}) {\n    agency_id\n    email\n    entity_id\n    id\n    name\n    user_id\n    seller\n    active\n    accountant\n    inventory_controller\n    buyer\n    support_agent\n  }\n}\n";
-export declare const getEmployeesByAgencyIdStringQuery = "\nquery getEmployeesByAgencyId ($id: Int) {\n  employees(where: {agency_id: {_eq: $id}}) {\n    name\n    id\n    user_id\n    email\n    seller\n    active\n    accountant\n    inventory_controller\n    buyer\n    support_agent\n  }\n}\n";
-export declare const getBundlesByItemCategoryIdStringQuery = "\nquery getBundlesByItemCategoryId ($id: Int) {\n  bundles(where: {active: {_eq: true}, item_category_id: {_eq: $id}}) {\n    id\n    code\n    description\n    name\n    updated_at\n    image5\n    bundle_details_count\n    bundle_details {\n      id\n      item_id\n      quantity\n    }\n  }\n}\n";
-export declare const getBundleByNameStringQuery = "\nquery getBundleByName ($name: String) {\n  bundles (where: {name: {_eq: $name }}) {\n    id\n  }\n}\n";
-export declare const getItemByNameStringQuery = "\nquery getItemByName ($name: String) {\n  items (where: {active: {_eq: true }, name: {_eq: $name }}) {\n      id\n      name\n      stocks_only_integer\n      code\n      product_type\n  }\n}\n";
+export declare const getEmployeeProfileStringQuery: (id: number) => string;
+export declare const getEmployeesByAgencyIdStringQuery: (id: number) => string;
+export declare const getBundlesByItemCategoryIdStringQuery: (id: number) => string;
+export declare const getBundleByNameStringQuery: (name: string) => string;
+export declare const getItemByNameStringQuery: (name: string) => string;
 export declare const getShipmentsStringQuery: (wheres?: string[]) => string;
 export declare const getAllFormsStringQuery: (config?: {
     withSubmissions: boolean;
 }) => string;
-export declare const getFormByNameStringQuery = "\nquery getFormByName ($name: String) {\n  settings_forms (\n      where: {name: {_eq: $name }},\n      order_by: {zid: desc, version: desc}\n    ) {\n      id\n      zid\n      name\n      description\n      version\n      active\n      settings_form_fields (order_by: {position: asc}) {\n        id\n        name\n        field_type\n        hint\n        required\n        default_value\n        position\n        print_var_name\n        form_id\n        settings_form_field_options {\n            id\n            label\n            position\n            value\n        }\n      }\n  }\n}\n";
+export declare const getFormByNameStringQuery: (name: string) => string;
 export declare const getFormsStringQuery = "\nquery getForms {\n  settings_forms (\n      order_by: {zid: desc, version: desc}\n    ) {\n      id\n      zid\n      name\n      description\n      version\n      active\n      settings_form_fields (order_by: {position: asc}) {\n        id\n        name\n        field_type\n        hint\n        required\n        default_value\n        position\n        print_var_name\n        form_id\n        settings_form_field_options {\n            id\n            label\n            position\n            value\n        }\n      }\n  }\n}\n";
-export declare const getFormsByDocumentTypeStringQuery: (filters?: {
+export declare const getFormsByDocumentTypeStringQuery: (document_type: string, filters?: {
     formZid?: number;
 }) => string;
-export declare const getMyCaseFormSubmissionsStringQuery: (filters?: {
+export declare const getMyCaseFormSubmissionsStringQuery: (responsible_id: number, filters?: {
     formZid?: number;
     caseId?: number;
 }) => string;
-export declare const getFormSubmissionByIdStringQuery = "\nquery getFormSubmissionById ($formId: bigint) {\n  settings_form_submissions (where: {id: { _eq: $formId }}) {\n      id\n      zid\n      reference\n      created_at\n      version\n      id_number\n      settings_form {\n        id\n        name\n        description\n      }\n      settings_form_submission_values {\n        id\n        form_field_id\n        value\n        settings_form_field {\n          id\n          name\n          print_var_name\n          field_type\n          settings_form_field_options {\n              id\n              label\n              position\n              value\n          }\n        }\n      }\n  }\n}\n";
-export declare const getInvoiceFormSubmissionsByAgencyIdStringQuery: (filters?: {
+export declare const getFormSubmissionByIdStringQuery: (formId: number) => string;
+export declare const getInvoiceFormSubmissionsByAgencyIdStringQuery: (agency_id: number, filters?: {
     seller_id?: number | string;
     payee_id_number_search?: string;
     some_field_value?: string;
@@ -73,7 +73,7 @@ export declare const getInvoiceFormSubmissionsByAgencyIdStringQuery: (filters?: 
 export declare const getLastInvoiceFormSubmissionStringQuery: (filters?: {
     formZid?: number;
 }) => string;
-export declare const getInvoiceFormSubmissionsByInvoiceIdStringQuery: (filters?: {
+export declare const getInvoiceFormSubmissionsByInvoiceIdStringQuery: (invoice_id: number, filters?: {
     formZid?: number;
 }) => string;
 export declare const getCurrenciesStringQuery = "\nquery getCurrencies {\n  currencies {\n    id\n    name\n    prefix\n    code\n    country\n    plural_name\n  }\n}\n";

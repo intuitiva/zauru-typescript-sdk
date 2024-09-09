@@ -14,7 +14,7 @@ import httpZauru from "./httpZauru.js";
  */
 export async function getBundlesByItemCategoryId(
   session: Session,
-  id: string
+  id: string | number
 ): Promise<AxiosUtilsResponse<BundleGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -28,10 +28,7 @@ export async function getBundlesByItemCategoryId(
     }>(
       "",
       {
-        query: getBundlesByItemCategoryIdStringQuery,
-        variables: {
-          id,
-        },
+        query: getBundlesByItemCategoryIdStringQuery(Number(id)),
       },
       { headers }
     );

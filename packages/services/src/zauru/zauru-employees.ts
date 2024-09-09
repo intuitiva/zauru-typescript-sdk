@@ -24,10 +24,7 @@ export async function getEmployeesByAgencyId(
     }>(
       "",
       {
-        query: getEmployeesByAgencyIdStringQuery,
-        variables: {
-          id,
-        },
+        query: getEmployeesByAgencyIdStringQuery(Number(id)),
       },
       { headers }
     );

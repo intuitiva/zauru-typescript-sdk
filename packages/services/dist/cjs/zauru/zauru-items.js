@@ -68,10 +68,7 @@ async function getItemByName(session, name) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getItemByNameStringQuery,
-            variables: {
-                name,
-            },
+            query: (0, graphql_1.getItemByNameStringQuery)(name),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -171,8 +168,7 @@ async function getItemsBySuperCategoryId(session, id, agency_id) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post(``, {
-            query: graphql_1.getItemsBySuperCategoryStringQuery,
-            variables: { id, agency_id },
+            query: (0, graphql_1.getItemsBySuperCategoryStringQuery)(Number(id), Number(agency_id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

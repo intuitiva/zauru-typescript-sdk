@@ -10,10 +10,7 @@ export async function getBundlesByItemCategoryId(session, id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getBundlesByItemCategoryIdStringQuery,
-            variables: {
-                id,
-            },
+            query: getBundlesByItemCategoryIdStringQuery(Number(id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
