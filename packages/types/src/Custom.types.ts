@@ -690,6 +690,13 @@ export type RejectionWebAppTableObject = {
 
 export type ReceptionType = { Codigo: string; Nombre: string };
 
+export type ApiResponseFor4pinosReceptions = {
+  apiCall: number;
+  authorizedPO: PurchaseOrderGraphQL;
+  shipment: ShipmentGraphQL;
+  qcShipment: ShipmentGraphQL;
+};
+
 //Modelo con el cuál responde el backend
 export type QueueFormReceptionWebAppTable = {
   creadoPor: string;
@@ -697,12 +704,36 @@ export type QueueFormReceptionWebAppTable = {
   formSubmited: any;
   estado: string;
   agency_id: number;
+  apiResponses?: ApiResponseFor4pinosReceptions;
   description: string;
 };
 
 export type RowDataType = {
   id: any;
   [key: string]: any;
+};
+
+export type receptionType = {
+  [key: string]: {
+    agency_id: string;
+    received_at: string;
+    purchase_order_id: string;
+    entity_id: string;
+    needs_transit: string;
+    invoice_number: string;
+    reception_details_attributes: receptionDetailsType;
+  };
+};
+
+export type receptionDetailsType = {
+  [key: string]: {
+    item_id: string;
+    purchase_order_detail_id: string;
+    lot_delivered_quantity: string[];
+    lot_name: string[];
+    lot_expire: string[];
+    lot_description: string[];
+  };
 };
 
 export type GenericDynamicTableColumn = {
