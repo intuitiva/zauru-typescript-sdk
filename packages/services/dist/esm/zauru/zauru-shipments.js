@@ -10,10 +10,7 @@ export async function getShipmentsByToAgencyLast100Id_booking(session, agency_to
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getShipmentsByToAgencyLast100StringQuery,
-            variables: {
-                agency_to_id,
-            },
+            query: getShipmentsByToAgencyLast100StringQuery(Number(agency_to_id)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

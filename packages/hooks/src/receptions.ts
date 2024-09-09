@@ -1,9 +1,9 @@
 import { useFetcher } from "@remix-run/react";
 import {
   RECEPTION_NAMES,
-  ReduxParamsConfig,
   receptionFetchStart,
   receptionFetchSuccess,
+  ReduxParamsConfig,
   useAppDispatch,
   useAppSelector,
 } from "@zauru-sdk/redux";
@@ -12,12 +12,13 @@ import {
   ItemGraphQL,
   NewPurchaseOrderResponse,
   PayeeGraphQL,
-  PurchaseOrderGeneralInfo,
   PurchaseOrderGraphQL,
-  QueueFormReceptionWebAppTable,
-  RejectionWebAppTableObject,
   WebAppRowGraphQL,
   GenericDynamicTableColumn,
+  QueueFormReceptionWebAppTable,
+  RejectionWebAppTableObject,
+  PurchaseOrderGeneralInfo,
+  BasketSchema,
 } from "@zauru-sdk/types";
 import { useEffect, useMemo, useState } from "react";
 import { AlertType, showAlert } from "./index.js";
@@ -187,10 +188,12 @@ type PesadaFooter = {
 };
 
 export const useGetPesadas = (
-  purchaseOrder: PurchaseOrderGraphQL,
+  purchaseOrder?: PurchaseOrderGraphQL,
   stocks_only_integer: boolean = false
 ): [PesadaBody[], PesadaFooter, GenericDynamicTableColumn[]] => {
   const [pesadas, footerPesadas, headersPesadas] = useMemo(() => {
+    if (!purchaseOrder) return [[], {} as PesadaFooter, []];
+
     const tempPesadas: PesadaBody[] = [
       ...purchaseOrder.purchase_order_details?.map((x, index) => {
         const parsedReference = x.reference?.split(","); //eg: "reference": "698,25,0", // peso neto, canastas, descuento
@@ -341,37 +344,17 @@ export const getPesadasByForm = (formInput: FormInput) => {
     totalWeight: toFixedIfNeeded(
       tempPesadas?.map((x) => x.totalWeight).reduce(reduceAdd, 0)
     ),
-    discount: "-",
     netWeight: toFixedIfNeeded(
       tempPesadas?.map((x) => Number(x.netWeight)).reduce(reduceAdd, 0)
     ),
     weightByBasket: "-",
-    lbDiscounted: toFixedIfNeeded(
-      tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(reduceAdd, 0)
-    ),
-    probableUtilization: toFixedIfNeeded(
-      tempPesadas
-        ?.map((x) => Number(x.probableUtilization))
-        .reduce(reduceAdd, 0)
-    ),
   };
 
   const headers: GenericDynamicTableColumn[] = [
     { label: "#", name: "id", type: "label", width: 5 },
     { label: "Canastas", name: "baskets", type: "label" },
     { label: "Peso báscula", name: "totalWeight", type: "label" },
-    { label: "Descuento (%)", name: "discount", type: "label" },
     { label: "Peso Neto", name: "netWeight", type: "label" },
-    {
-      label: "Peso Neto - %Rechazo",
-      name: "probableUtilization",
-      type: "label",
-    },
-    {
-      label: "Lb o Unidades descontadas",
-      name: "lbDiscounted",
-      type: "label",
-    },
     {
       label: "Peso Neto por canasta",
       name: "weightByBasket",
@@ -396,17 +379,34 @@ type BasketDetailsFooter = {
 };
 
 export const useGetBasketDetails = (
-  purchaseOrder: PurchaseOrderGraphQL
+  purchaseOrder?: PurchaseOrderGraphQL
 ): [BasketDetailsBody[], BasketDetailsFooter, GenericDynamicTableColumn[]] => {
   const [basketsJoined, footerBasketsJoined, headersBasketsJoined] =
     useMemo(() => {
+      if (!purchaseOrder) return [[], {} as BasketDetailsFooter, []];
+
       const bsq =
-        purchaseOrder?.lots
-          ?.map((x) => {
-            const basket = getBasketsSchema(x.description);
-            return basket;
-          })
-          .flat(2) ?? [];
+        purchaseOrder?.lots.length > 0
+          ? purchaseOrder?.lots
+              ?.map((x) => {
+                const basket = getBasketsSchema(x.description);
+                return basket;
+              })
+              .flat(2)
+          : //------- INTENTO IMPRIMIR EL TOTAL DE CANASTAS DEL PURCHASE ORDER DETAILS, PORQUE DEPLANO HUBO UN ERROR EN LA CREACION DE LOS LOTES Y POR ESO VIENE VACIO
+          //ESTO SOLO ES UNA CONTINGENCIA PARA QUE POR LO MENOS PUEDAN IMPRIMIR EL NUMERO DE CANASTAS, PERO NO LES ESTARÁ MOSTRANDO EL COLOR
+          //--- TODO
+          purchaseOrder?.purchase_order_details.length > 0
+          ? purchaseOrder?.purchase_order_details
+              ?.map((x) => {
+                return {
+                  id: 0,
+                  color: "-",
+                  total: Number(x.reference.split(",")[1]) ?? 0,
+                } as BasketSchema;
+              })
+              .flat(2)
+          : [];
 
       const bsqToCC = getBasketsSchema(purchaseOrder.memo);
 
@@ -464,6 +464,13 @@ export const useGetBasketDetails = (
 export const getBasketDetailsByForm = (formInput: FormInput) => {
   const basketDetailsArray: BasketDetailsBody[] = [];
 
+  if (!formInput)
+    return {
+      basketDetailsArray,
+      totales: {} as BasketDetailsFooter,
+      headers: [],
+    };
+
   // Regex para identificar los campos relevantes
   const recPattern = /^rec\d+-(.+)$/;
   const qCPattern = /^qC\d+-(.+)$/;
@@ -483,12 +490,14 @@ export const getBasketDetailsByForm = (formInput: FormInput) => {
         if (existingBasket) {
           existingBasket.total += total;
         } else {
-          basketDetailsArray.push({
-            id: basketDetailsArray.length,
-            total,
-            color,
-            cc: 0, // Inicializar cc a 0, se actualizará más adelante si existe
-          });
+          if (total > 0) {
+            basketDetailsArray.push({
+              id: basketDetailsArray.length,
+              total,
+              color,
+              cc: 0, // Inicializar cc a 0, se actualizará más adelante si existe
+            });
+          }
         }
       }
 
@@ -529,9 +538,10 @@ export const getBasketDetailsByForm = (formInput: FormInput) => {
 
 export const useGetProviderNameByPurchaseOrder = (
   payees: PayeeGraphQL[],
-  purchaseOrder: PurchaseOrderGraphQL
+  purchaseOrder?: PurchaseOrderGraphQL
 ) => {
   const providerName = useMemo(() => {
+    if (!purchaseOrder) return null;
     const provider = payees.find((x) => x.id == purchaseOrder.payee_id);
     if (provider) {
       return `<${provider.id_number}> ${
@@ -546,9 +556,10 @@ export const useGetProviderNameByPurchaseOrder = (
 
 export const useGetItemNameByPurchaseOrder = (
   items: ItemGraphQL[],
-  purchaseOrder: PurchaseOrderGraphQL
+  purchaseOrder?: PurchaseOrderGraphQL
 ) => {
   const itemName = useMemo(() => {
+    if (!purchaseOrder) return null;
     if (purchaseOrder.purchase_order_details.length > 0 && items.length > 0) {
       const item = items.find(
         (x) => x.id == purchaseOrder.purchase_order_details[0].item_id
@@ -563,9 +574,10 @@ export const useGetItemNameByPurchaseOrder = (
 
 export const useGetItemByPurchaseOrder = (
   items: ItemGraphQL[],
-  purchaseOrder: PurchaseOrderGraphQL
+  purchaseOrder?: PurchaseOrderGraphQL
 ) => {
   const item = useMemo(() => {
+    if (!purchaseOrder) return null;
     if (purchaseOrder.purchase_order_details.length > 0 && items.length > 0) {
       const item = items.find(
         (x) => x.id == purchaseOrder.purchase_order_details[0].item_id

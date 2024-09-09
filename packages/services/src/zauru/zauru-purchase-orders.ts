@@ -422,6 +422,8 @@ export const getLast100Receptions = (
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
+    const agencyId = agency_id ?? Number(session.get("agency_id"));
+
     const response = await httpGraphQLAPI.post<{
       data: { purchase_orders: PurchaseOrderGraphQL[] };
       errors?: {
@@ -431,10 +433,7 @@ export const getLast100Receptions = (
     }>(
       "",
       {
-        query: getLast100ReceptionsStringQuery,
-        variables: {
-          agencyId: agency_id ?? session.get("agency_id"),
-        },
+        query: getLast100ReceptionsStringQuery(Number(agencyId)),
       },
       { headers }
     );
@@ -471,12 +470,9 @@ export const getPurchaseOrder = (
     }>(
       "",
       {
-        query: getPurchaseOrderStringQuery({
+        query: getPurchaseOrderStringQuery(Number(poId), {
           withLotStocks: config.withLotStocksToMyAgency,
         }),
-        variables: {
-          id: poId,
-        },
       },
       { headers }
     );
@@ -671,10 +667,7 @@ export const getPurchasesOrderByIdNumber = (
     }>(
       "",
       {
-        query: getPurchaseOrderByIdNumberStringQuery,
-        variables: {
-          id_number,
-        },
+        query: getPurchaseOrderByIdNumberStringQuery(id_number),
       },
       { headers }
     );

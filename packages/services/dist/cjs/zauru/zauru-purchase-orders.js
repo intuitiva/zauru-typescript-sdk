@@ -271,11 +271,9 @@ exports.updateReceivedPurchaseOrder = updateReceivedPurchaseOrder;
 const getLast100Receptions = (session, agency_id) => {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
+        const agencyId = agency_id ?? Number(session.get("agency_id"));
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getLast100ReceptionsStringQuery,
-            variables: {
-                agencyId: agency_id ?? session.get("agency_id"),
-            },
+            query: (0, graphql_1.getLast100ReceptionsStringQuery)(Number(agencyId)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -295,12 +293,9 @@ const getPurchaseOrder = (session, poId, config = {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: (0, graphql_1.getPurchaseOrderStringQuery)({
+            query: (0, graphql_1.getPurchaseOrderStringQuery)(Number(poId), {
                 withLotStocks: config.withLotStocksToMyAgency,
             }),
-            variables: {
-                id: poId,
-            },
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -415,10 +410,7 @@ const getPurchasesOrderByIdNumber = (session, id_number) => {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getPurchaseOrderByIdNumberStringQuery,
-            variables: {
-                id_number,
-            },
+            query: (0, graphql_1.getPurchaseOrderByIdNumberStringQuery)(id_number),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

@@ -25,10 +25,7 @@ export async function getShipmentsByToAgencyLast100Id_booking(
     }>(
       "",
       {
-        query: getShipmentsByToAgencyLast100StringQuery,
-        variables: {
-          agency_to_id,
-        },
+        query: getShipmentsByToAgencyLast100StringQuery(Number(agency_to_id)),
       },
       { headers }
     );

@@ -1,4 +1,4 @@
-import { ItemAssociatedLots, ItemGraphQL, NewPurchaseOrderResponse, PayeeGraphQL, PurchaseOrderGeneralInfo, PurchaseOrderGraphQL, QueueFormReceptionWebAppTable, RejectionWebAppTableObject, WebAppRowGraphQL, GenericDynamicTableColumn } from "@zauru-sdk/types";
+import { ItemAssociatedLots, ItemGraphQL, NewPurchaseOrderResponse, PayeeGraphQL, PurchaseOrderGraphQL, WebAppRowGraphQL, GenericDynamicTableColumn, QueueFormReceptionWebAppTable, RejectionWebAppTableObject, PurchaseOrderGeneralInfo } from "@zauru-sdk/types";
 type ConfigProps = {
     online?: boolean;
     wheres?: string[];
@@ -55,7 +55,7 @@ type PesadaFooter = {
     netWeight: string;
     weightByBasket: string;
 };
-export declare const useGetPesadas: (purchaseOrder: PurchaseOrderGraphQL, stocks_only_integer?: boolean) => [PesadaBody[], PesadaFooter, GenericDynamicTableColumn[]];
+export declare const useGetPesadas: (purchaseOrder?: PurchaseOrderGraphQL, stocks_only_integer?: boolean) => [PesadaBody[], PesadaFooter, GenericDynamicTableColumn[]];
 /**
  * Sirve para imprimir offline
  * @param formInput
@@ -67,11 +67,8 @@ export declare const getPesadasByForm: (formInput: FormInput) => {
         id: string;
         baskets: string;
         totalWeight: string;
-        discount: string;
         netWeight: string;
         weightByBasket: string;
-        lbDiscounted: string;
-        probableUtilization: string;
     };
     headers: GenericDynamicTableColumn[];
 };
@@ -86,7 +83,7 @@ type BasketDetailsFooter = {
     total: string;
     cc: number;
 };
-export declare const useGetBasketDetails: (purchaseOrder: PurchaseOrderGraphQL) => [BasketDetailsBody[], BasketDetailsFooter, GenericDynamicTableColumn[]];
+export declare const useGetBasketDetails: (purchaseOrder?: PurchaseOrderGraphQL) => [BasketDetailsBody[], BasketDetailsFooter, GenericDynamicTableColumn[]];
 /**
  * Para imprimir en modo offline
  * @param formInput
@@ -97,7 +94,7 @@ export declare const getBasketDetailsByForm: (formInput: FormInput) => {
     totales: BasketDetailsFooter;
     headers: GenericDynamicTableColumn[];
 };
-export declare const useGetProviderNameByPurchaseOrder: (payees: PayeeGraphQL[], purchaseOrder: PurchaseOrderGraphQL) => string;
-export declare const useGetItemNameByPurchaseOrder: (items: ItemGraphQL[], purchaseOrder: PurchaseOrderGraphQL) => string;
-export declare const useGetItemByPurchaseOrder: (items: ItemGraphQL[], purchaseOrder: PurchaseOrderGraphQL) => ItemGraphQL;
+export declare const useGetProviderNameByPurchaseOrder: (payees: PayeeGraphQL[], purchaseOrder?: PurchaseOrderGraphQL) => string;
+export declare const useGetItemNameByPurchaseOrder: (items: ItemGraphQL[], purchaseOrder?: PurchaseOrderGraphQL) => string;
+export declare const useGetItemByPurchaseOrder: (items: ItemGraphQL[], purchaseOrder?: PurchaseOrderGraphQL) => ItemGraphQL;
 export {};

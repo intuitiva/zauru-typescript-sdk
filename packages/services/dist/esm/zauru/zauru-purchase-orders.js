@@ -253,11 +253,9 @@ export const updateReceivedPurchaseOrder = (headers, body, purchase_order_id) =>
 export const getLast100Receptions = (session, agency_id) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
+        const agencyId = agency_id ?? Number(session.get("agency_id"));
         const response = await httpGraphQLAPI.post("", {
-            query: getLast100ReceptionsStringQuery,
-            variables: {
-                agencyId: agency_id ?? session.get("agency_id"),
-            },
+            query: getLast100ReceptionsStringQuery(Number(agencyId)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -276,12 +274,9 @@ export const getPurchaseOrder = (session, poId, config = {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getPurchaseOrderStringQuery({
+            query: getPurchaseOrderStringQuery(Number(poId), {
                 withLotStocks: config.withLotStocksToMyAgency,
             }),
-            variables: {
-                id: poId,
-            },
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
@@ -393,10 +388,7 @@ export const getPurchasesOrderByIdNumber = (session, id_number) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getPurchaseOrderByIdNumberStringQuery,
-            variables: {
-                id_number,
-            },
+            query: getPurchaseOrderByIdNumberStringQuery(id_number),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

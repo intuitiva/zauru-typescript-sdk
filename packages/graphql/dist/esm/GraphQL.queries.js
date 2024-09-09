@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPrintTemplatesStringQuery = exports.getCasesByResponsibleIdStringQuery = exports.getInvoicesByAgencyIdStringQuery = exports.getPaymentTermByIdStringQuery = exports.getPaymentMethodsStringQuery = exports.getPaymentTermsStringQuery = exports.getSuggestedPricesStringQuery = exports.getCurrenciesStringQuery = exports.getInvoiceFormSubmissionsByInvoiceIdStringQuery = exports.getLastInvoiceFormSubmissionStringQuery = exports.getInvoiceFormSubmissionsByAgencyIdStringQuery = exports.getFormSubmissionByIdStringQuery = exports.getMyCaseFormSubmissionsStringQuery = exports.getFormsByDocumentTypeStringQuery = exports.getFormsStringQuery = exports.getFormByNameStringQuery = exports.getAllFormsStringQuery = exports.getShipmentsStringQuery = exports.getItemByNameStringQuery = exports.getBundleByNameStringQuery = exports.getBundlesByItemCategoryIdStringQuery = exports.getEmployeesByAgencyIdStringQuery = exports.getEmployeeProfileStringQuery = exports.getConsolidatesBetweenDatesStringQuery = exports.getItemsBySuperCategoryStringQuery = exports.getItemsStringQuery = exports.getItemsByCategoryStringQuery = exports.getItemCategoryByIdStringQuery = exports.getSuperCategoryByIdStringQuery = exports.getPayeeByIdStringQuery = exports.getClientCategoriesStringQuery = exports.getProviderCategoriesStringQuery = exports.getPayeeCategoriesStringQuery = exports.getPayeeCategoriesByNotesMatchStringQuery = exports.getPayeeCategoryByIdStringQuery = exports.getWebAppRowsByWebAppTableIdStringQuery = exports.getWebAppRowStringQuery = exports.getAgenciesStringQuery = exports.getProvidersStringQuery = exports.getPayeesStringQuery = exports.getPurchaseOrdersBetweenDatesStringQuery = exports.getLotStocksByAgencyIdStringQuery = exports.getLotsByNameStringQuery = exports.getShipmentsByToAgencyLast100StringQuery = exports.getPurchaseOrderStringQuery = exports.getPurchaseOrderByIdNumberStringQuery = exports.getLast100ReceptionsStringQuery = void 0;
-exports.getLast100ReceptionsStringQuery = `
-query getLast100Receptions($agencyId: Int) @cached {
-  purchase_orders(limit: 100, order_by: {created_at: desc}, where: {voided: {_eq: false}, agency_id: {_eq: $agencyId}}) {
+const getLast100ReceptionsStringQuery = (agency_id) => `
+query getLast100Receptions {
+  purchase_orders(limit: 100, order_by: {created_at: desc}, where: {voided: {_eq: false}, agency_id: {_eq: ${agency_id}}}) {
     id
     created_at
     due
@@ -32,9 +32,10 @@ query getLast100Receptions($agencyId: Int) @cached {
   }
 }
 `;
-exports.getPurchaseOrderByIdNumberStringQuery = `
-query getPurchaseOrderByIdNumber($id_number: String) @cached {
-  purchase_orders(where: {id_number: {_eq: $id_number}}) {
+exports.getLast100ReceptionsStringQuery = getLast100ReceptionsStringQuery;
+const getPurchaseOrderByIdNumberStringQuery = (id_number) => `
+query getPurchaseOrderByIdNumber {
+  purchase_orders(where: {id_number: {_eq: '${id_number}'}}) {
     id
     created_at
     due
@@ -76,9 +77,10 @@ query getPurchaseOrderByIdNumber($id_number: String) @cached {
   }
 }
 `;
-const getPurchaseOrderStringQuery = (config = { withLotStocks: false }) => `
-query getPurchaseOrder($id: Int) @cached {
-  purchase_orders(where: {id: {_eq: $id}}) {
+exports.getPurchaseOrderByIdNumberStringQuery = getPurchaseOrderByIdNumberStringQuery;
+const getPurchaseOrderStringQuery = (id, config = { withLotStocks: false }) => `
+query getPurchaseOrder($id: bigint) @cached {
+  purchase_orders(where: {id: {_eq: ${id}}}) {
     id
     agency_id
     entity_id
@@ -147,11 +149,9 @@ query getPurchaseOrder($id: Int) @cached {
 }
 `;
 exports.getPurchaseOrderStringQuery = getPurchaseOrderStringQuery;
-exports.getShipmentsByToAgencyLast100StringQuery = `
-query getShipmentsByToAgencyLast100(
-    $agency_to_id: Int
-  ){
-    shipments(limit: 100, order_by: {id: desc}, where: {voided: {_eq: false}, shipped: {_eq: false}, delivered: {_eq: false}, agency_to_id: {_eq: $agency_to_id}}) {
+const getShipmentsByToAgencyLast100StringQuery = (agency_to_id) => `
+query getShipmentsByToAgencyLast100 {
+    shipments(limit: 100, order_by: {id: desc}, where: {voided: {_eq: false}, shipped: {_eq: false}, delivered: {_eq: false}, agency_to_id: {_eq: ${agency_to_id}}}) {
       id
       zid
       id_number
@@ -178,6 +178,7 @@ query getShipmentsByToAgencyLast100(
     }
   }
 `;
+exports.getShipmentsByToAgencyLast100StringQuery = getShipmentsByToAgencyLast100StringQuery;
 exports.getLotsByNameStringQuery = `
 query getLots($name: String, $entity_id: Int){
     lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: $entity_id}, name: {_eq: $name}}) {
@@ -389,7 +390,7 @@ query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
 }
 `;
 exports.getPayeeCategoryByIdStringQuery = `
-query getPayeeCategoryById ($id: Int) {
+query getPayeeCategoryById ($id: bigint) {
   payee_categories (where: {id: {_eq: $id }}) {
       payees (order_by: { id: desc }) { 
           id
@@ -494,7 +495,7 @@ query getSuperCategoryById ($id: bigint) {
 }
 `;
 exports.getItemCategoryByIdStringQuery = `
-query getItemCategoryById ($id: Int) {
+query getItemCategoryById ($id: bigint) {
   item_categories (where: {id: {_eq: $id }}) {
         id
         name
@@ -504,7 +505,7 @@ query getItemCategoryById ($id: Int) {
 }
 `;
 exports.getItemsByCategoryStringQuery = `
-query getItemsByCategory ($id: Int) {
+query getItemsByCategory ($id: bigint) {
   item_categories (where: {id: {_eq: $id }}) {
         items (where: {active: {_eq: true }}) {
             id,
@@ -1223,7 +1224,7 @@ query getPaymentTermById ($id: Int) {
 }
 `;
 exports.getInvoicesByAgencyIdStringQuery = `
-query getInvoicesByAgencyId($id: Int) {
+query getInvoicesByAgencyId($id: bigint) {
   invoices(limit: 1000, where: {agency_id: {_eq: $id}, voided: {_eq: false}}, order_by: {id: desc}) {
     id
     zid

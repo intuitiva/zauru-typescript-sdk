@@ -1,6 +1,6 @@
-export const getLast100ReceptionsStringQuery = `
-query getLast100Receptions($agencyId: Int) @cached {
-  purchase_orders(limit: 100, order_by: {created_at: desc}, where: {voided: {_eq: false}, agency_id: {_eq: $agencyId}}) {
+export const getLast100ReceptionsStringQuery = (agency_id: number) => `
+query getLast100Receptions {
+  purchase_orders(limit: 100, order_by: {created_at: desc}, where: {voided: {_eq: false}, agency_id: {_eq: ${agency_id}}}) {
     id
     created_at
     due
@@ -30,9 +30,9 @@ query getLast100Receptions($agencyId: Int) @cached {
 }
 `;
 
-export const getPurchaseOrderByIdNumberStringQuery = `
-query getPurchaseOrderByIdNumber($id_number: String) @cached {
-  purchase_orders(where: {id_number: {_eq: $id_number}}) {
+export const getPurchaseOrderByIdNumberStringQuery = (id_number: string) => `
+query getPurchaseOrderByIdNumber {
+  purchase_orders(where: {id_number: {_eq: '${id_number}'}}) {
     id
     created_at
     due
@@ -76,10 +76,11 @@ query getPurchaseOrderByIdNumber($id_number: String) @cached {
 `;
 
 export const getPurchaseOrderStringQuery = (
+  id: number,
   config: { withLotStocks: boolean } = { withLotStocks: false }
 ) => `
-query getPurchaseOrder($id: Int) @cached {
-  purchase_orders(where: {id: {_eq: $id}}) {
+query getPurchaseOrder($id: bigint) @cached {
+  purchase_orders(where: {id: {_eq: ${id}}}) {
     id
     agency_id
     entity_id
@@ -150,11 +151,11 @@ query getPurchaseOrder($id: Int) @cached {
 }
 `;
 
-export const getShipmentsByToAgencyLast100StringQuery = `
-query getShipmentsByToAgencyLast100(
-    $agency_to_id: Int
-  ){
-    shipments(limit: 100, order_by: {id: desc}, where: {voided: {_eq: false}, shipped: {_eq: false}, delivered: {_eq: false}, agency_to_id: {_eq: $agency_to_id}}) {
+export const getShipmentsByToAgencyLast100StringQuery = (
+  agency_to_id: number
+) => `
+query getShipmentsByToAgencyLast100 {
+    shipments(limit: 100, order_by: {id: desc}, where: {voided: {_eq: false}, shipped: {_eq: false}, delivered: {_eq: false}, agency_to_id: {_eq: ${agency_to_id}}}) {
       id
       zid
       id_number
@@ -455,7 +456,7 @@ query getWebAppRowsByWebAppTableId ($webapp_table_id: Int) {
 `;
 
 export const getPayeeCategoryByIdStringQuery = `
-query getPayeeCategoryById ($id: Int) {
+query getPayeeCategoryById ($id: bigint) {
   payee_categories (where: {id: {_eq: $id }}) {
       payees (order_by: { id: desc }) { 
           id
@@ -566,7 +567,7 @@ query getSuperCategoryById ($id: bigint) {
 `;
 
 export const getItemCategoryByIdStringQuery = `
-query getItemCategoryById ($id: Int) {
+query getItemCategoryById ($id: bigint) {
   item_categories (where: {id: {_eq: $id }}) {
         id
         name
@@ -577,7 +578,7 @@ query getItemCategoryById ($id: Int) {
 `;
 
 export const getItemsByCategoryStringQuery = `
-query getItemsByCategory ($id: Int) {
+query getItemsByCategory ($id: bigint) {
   item_categories (where: {id: {_eq: $id }}) {
         items (where: {active: {_eq: true }}) {
             id,
@@ -1377,7 +1378,7 @@ query getPaymentTermById ($id: Int) {
 `;
 
 export const getInvoicesByAgencyIdStringQuery = `
-query getInvoicesByAgencyId($id: Int) {
+query getInvoicesByAgencyId($id: bigint) {
   invoices(limit: 1000, where: {agency_id: {_eq: $id}, voided: {_eq: false}}, order_by: {id: desc}) {
     id
     zid

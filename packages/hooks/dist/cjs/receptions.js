@@ -80,6 +80,8 @@ const useGetPurchaseOrderGeneralInfo = () => useGetReceptionObject("purchaseOrde
 exports.useGetPurchaseOrderGeneralInfo = useGetPurchaseOrderGeneralInfo;
 const useGetPesadas = (purchaseOrder, stocks_only_integer = false) => {
     const [pesadas, footerPesadas, headersPesadas] = (0, react_2.useMemo)(() => {
+        if (!purchaseOrder)
+            return [[], {}, []];
         const tempPesadas = [
             ...purchaseOrder.purchase_order_details?.map((x, index) => {
                 const parsedReference = x.reference?.split(","); //eg: "reference": "698,25,0", // peso neto, canastas, descuento
@@ -202,30 +204,14 @@ const getPesadasByForm = (formInput) => {
         id: "",
         baskets: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0)),
         totalWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0)),
-        discount: "-",
         netWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0)),
         weightByBasket: "-",
-        lbDiscounted: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(common_1.reduceAdd, 0)),
-        probableUtilization: (0, common_1.toFixedIfNeeded)(tempPesadas
-            ?.map((x) => Number(x.probableUtilization))
-            .reduce(common_1.reduceAdd, 0)),
     };
     const headers = [
         { label: "#", name: "id", type: "label", width: 5 },
         { label: "Canastas", name: "baskets", type: "label" },
         { label: "Peso báscula", name: "totalWeight", type: "label" },
-        { label: "Descuento (%)", name: "discount", type: "label" },
         { label: "Peso Neto", name: "netWeight", type: "label" },
-        {
-            label: "Peso Neto - %Rechazo",
-            name: "probableUtilization",
-            type: "label",
-        },
-        {
-            label: "Lb o Unidades descontadas",
-            name: "lbDiscounted",
-            type: "label",
-        },
         {
             label: "Peso Neto por canasta",
             name: "weightByBasket",
@@ -237,12 +223,29 @@ const getPesadasByForm = (formInput) => {
 exports.getPesadasByForm = getPesadasByForm;
 const useGetBasketDetails = (purchaseOrder) => {
     const [basketsJoined, footerBasketsJoined, headersBasketsJoined] = (0, react_2.useMemo)(() => {
-        const bsq = purchaseOrder?.lots
-            ?.map((x) => {
-            const basket = (0, common_1.getBasketsSchema)(x.description);
-            return basket;
-        })
-            .flat(2) ?? [];
+        if (!purchaseOrder)
+            return [[], {}, []];
+        const bsq = purchaseOrder?.lots.length > 0
+            ? purchaseOrder?.lots
+                ?.map((x) => {
+                const basket = (0, common_1.getBasketsSchema)(x.description);
+                return basket;
+            })
+                .flat(2)
+            : //------- INTENTO IMPRIMIR EL TOTAL DE CANASTAS DEL PURCHASE ORDER DETAILS, PORQUE DEPLANO HUBO UN ERROR EN LA CREACION DE LOS LOTES Y POR ESO VIENE VACIO
+                //ESTO SOLO ES UNA CONTINGENCIA PARA QUE POR LO MENOS PUEDAN IMPRIMIR EL NUMERO DE CANASTAS, PERO NO LES ESTARÁ MOSTRANDO EL COLOR
+                //--- TODO
+                purchaseOrder?.purchase_order_details.length > 0
+                    ? purchaseOrder?.purchase_order_details
+                        ?.map((x) => {
+                        return {
+                            id: 0,
+                            color: "-",
+                            total: Number(x.reference.split(",")[1]) ?? 0,
+                        };
+                    })
+                        .flat(2)
+                    : [];
         const bsqToCC = (0, common_1.getBasketsSchema)(purchaseOrder.memo);
         const joinedBaskets = [];
         for (let i = 0; i < bsq.length; i++) {
@@ -285,6 +288,12 @@ exports.useGetBasketDetails = useGetBasketDetails;
  */
 const getBasketDetailsByForm = (formInput) => {
     const basketDetailsArray = [];
+    if (!formInput)
+        return {
+            basketDetailsArray,
+            totales: {},
+            headers: [],
+        };
     // Regex para identificar los campos relevantes
     const recPattern = /^rec\d+-(.+)$/;
     const qCPattern = /^qC\d+-(.+)$/;
@@ -300,12 +309,14 @@ const getBasketDetailsByForm = (formInput) => {
                     existingBasket.total += total;
                 }
                 else {
-                    basketDetailsArray.push({
-                        id: basketDetailsArray.length,
-                        total,
-                        color,
-                        cc: 0, // Inicializar cc a 0, se actualizará más adelante si existe
-                    });
+                    if (total > 0) {
+                        basketDetailsArray.push({
+                            id: basketDetailsArray.length,
+                            total,
+                            color,
+                            cc: 0, // Inicializar cc a 0, se actualizará más adelante si existe
+                        });
+                    }
                 }
             }
             // Comprobar si la clave es un campo "qC" y actualizar el campo cc correspondiente
@@ -339,6 +350,8 @@ const getBasketDetailsByForm = (formInput) => {
 exports.getBasketDetailsByForm = getBasketDetailsByForm;
 const useGetProviderNameByPurchaseOrder = (payees, purchaseOrder) => {
     const providerName = (0, react_2.useMemo)(() => {
+        if (!purchaseOrder)
+            return null;
         const provider = payees.find((x) => x.id == purchaseOrder.payee_id);
         if (provider) {
             return `<${provider.id_number}> ${provider.tin ? `${provider.tin} | ` : ""}${provider.name}`;
@@ -350,6 +363,8 @@ const useGetProviderNameByPurchaseOrder = (payees, purchaseOrder) => {
 exports.useGetProviderNameByPurchaseOrder = useGetProviderNameByPurchaseOrder;
 const useGetItemNameByPurchaseOrder = (items, purchaseOrder) => {
     const itemName = (0, react_2.useMemo)(() => {
+        if (!purchaseOrder)
+            return null;
         if (purchaseOrder.purchase_order_details.length > 0 && items.length > 0) {
             const item = items.find((x) => x.id == purchaseOrder.purchase_order_details[0].item_id);
             return `${item?.id} - ${item?.code} - ${item?.name}`;
@@ -361,6 +376,8 @@ const useGetItemNameByPurchaseOrder = (items, purchaseOrder) => {
 exports.useGetItemNameByPurchaseOrder = useGetItemNameByPurchaseOrder;
 const useGetItemByPurchaseOrder = (items, purchaseOrder) => {
     const item = (0, react_2.useMemo)(() => {
+        if (!purchaseOrder)
+            return null;
         if (purchaseOrder.purchase_order_details.length > 0 && items.length > 0) {
             const item = items.find((x) => x.id == purchaseOrder.purchase_order_details[0].item_id);
             return item;
