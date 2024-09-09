@@ -6,7 +6,7 @@ export declare const getPurchaseOrderStringQuery: (id: number, config?: {
 export declare const getShipmentsByToAgencyLast100StringQuery: (agency_to_id: number) => string;
 export declare const getLotsByNameStringQuery: (name: string, entity_id: number) => string;
 export declare const getLotStocksByAgencyIdStringQuery: (agency_id: number) => string;
-export declare const getPurchaseOrdersBetweenDatesStringQuery: (config: {
+export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: string, endDate: string, config: {
     agencyId?: number | string;
     itemId?: number | string;
     payeeCategoryId?: number | string;
@@ -40,7 +40,7 @@ export declare const getItemCategoryByIdStringQuery: (id: number) => string;
 export declare const getItemsByCategoryStringQuery: (id: number) => string;
 export declare const getItemsStringQuery = "\nquery getItems {\n  items (where: {active: {_eq: true }}) {\n        id,\n        name,\n        code\n    }\n}\n";
 export declare const getItemsBySuperCategoryStringQuery: (id: number, agency_id: number) => string;
-export declare const getConsolidatesBetweenDatesStringQuery = "\nquery getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {\n  consolidates (order_by: {id: desc}, where: {created_at: {_gte: $startDate, _lte: $endDate}}) {\n      id\n      id_number\n      created_at\n      name\n      purchase_orders {\n          id\n          due\n      }\n  }\n}\n";
+export declare const getConsolidatesBetweenDatesStringQuery: (startDate: string, endDate: string) => string;
 export declare const getEmployeeProfileStringQuery: (id: number) => string;
 export declare const getEmployeesByAgencyIdStringQuery: (id: number) => string;
 export declare const getBundlesByItemCategoryIdStringQuery: (id: number) => string;

@@ -63,11 +63,7 @@ const getConsolidatesBetweenDates = async (session, dates) => {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const headers = await (0, common_js_1.getGraphQLAPIHeaders)(session);
         const response = await httpGraphQL_js_1.default.post("", {
-            query: graphql_1.getConsolidatesBetweenDatesStringQuery,
-            variables: {
-                startDate: (0, common_1.formatDateToUTC)(dates.startDate),
-                endDate: (0, common_1.formatDateToUTC)(dates.endDate),
-            },
+            query: (0, graphql_1.getConsolidatesBetweenDatesStringQuery)((0, common_1.formatDateToUTC)(dates.startDate), (0, common_1.formatDateToUTC)(dates.endDate)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

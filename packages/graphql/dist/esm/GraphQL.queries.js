@@ -35,7 +35,7 @@ query getLast100Receptions {
 exports.getLast100ReceptionsStringQuery = getLast100ReceptionsStringQuery;
 const getPurchaseOrderByIdNumberStringQuery = (id_number) => `
 query getPurchaseOrderByIdNumber {
-  purchase_orders(where: {id_number: {_eq: '${id_number}'}}) {
+  purchase_orders(where: {id_number: {_eq: "${id_number}"}}) {
     id
     created_at
     due
@@ -181,7 +181,7 @@ query getShipmentsByToAgencyLast100 {
 exports.getShipmentsByToAgencyLast100StringQuery = getShipmentsByToAgencyLast100StringQuery;
 const getLotsByNameStringQuery = (name, entity_id) => `
 query getLots {
-    lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: ${entity_id}}, name: {_eq: '${name}'}}) {
+    lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: ${entity_id}}, name: {_eq: "${name}"}}) {
         id
         name
         description
@@ -207,7 +207,7 @@ query getLotStocksByAgencyId {
 }
 `;
 exports.getLotStocksByAgencyIdStringQuery = getLotStocksByAgencyIdStringQuery;
-const getPurchaseOrdersBetweenDatesStringQuery = (config) => {
+const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) => {
     const conditions = [];
     if (config.agencyId) {
         conditions.push(`agency_id: { _eq: ${config.agencyId} }`);
@@ -239,8 +239,8 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config) => {
     }
     if (!config.id_number) {
         conditions.push(config.betweenIssueDate
-            ? "issue_date: { _gte: $startDate, _lte: $endDate }"
-            : "created_at: { _gte: $startDate, _lte: $endDate }");
+            ? `issue_date: { _gte: "${startDate}", _lte: "${endDate}" }`
+            : `created_at: { _gte: "${startDate}", _lte: "${endDate}"}`);
     }
     if (config.payeeCategoryIds && config.payeeCategoryIds.length > 0) {
         conditions.push(`payee: { payee_category: { id: { _in: [${config.payeeCategoryIds.join(",")}] } } }`);
@@ -252,12 +252,6 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config) => {
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} }`
         : "";
-    const dateVariables = config.id_number
-        ? ""
-        : `(
-        $startDate: ${config.betweenIssueDate ? "date" : "timestamp"},
-        $endDate: ${config.betweenIssueDate ? "date" : "timestamp"}
-      )`;
     const lotStocksFragment = config.withLotStocks
         ? `
       lot_stocks {
@@ -310,7 +304,7 @@ const getPurchaseOrdersBetweenDatesStringQuery = (config) => {
   }`
         : "";
     return `
-    query getPurchaseOrdersBetweenDates ${dateVariables} {
+    query getPurchaseOrdersBetweenDates {
       purchase_orders (
         order_by: { id: desc },
         ${whereClause}
@@ -560,9 +554,9 @@ query getItemsBySuperCategory {
 }
 `;
 exports.getItemsBySuperCategoryStringQuery = getItemsBySuperCategoryStringQuery;
-exports.getConsolidatesBetweenDatesStringQuery = `
-query getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {
-  consolidates (order_by: {id: desc}, where: {created_at: {_gte: $startDate, _lte: $endDate}}) {
+const getConsolidatesBetweenDatesStringQuery = (startDate, endDate) => `
+query getConsolidatesBetweenDates {
+  consolidates (order_by: {id: desc}, where: {created_at: {_gte: "${startDate}", _lte: "${endDate}"}}) {
       id
       id_number
       created_at
@@ -574,6 +568,7 @@ query getConsolidatesBetweenDates ($startDate: timestamp, $endDate: timestamp) {
   }
 }
 `;
+exports.getConsolidatesBetweenDatesStringQuery = getConsolidatesBetweenDatesStringQuery;
 const getEmployeeProfileStringQuery = (id) => `
 query getEmployeeProfile {
   employees(where: {id: {_eq: ${id}}}) {
@@ -631,7 +626,7 @@ query getBundlesByItemCategoryId {
 exports.getBundlesByItemCategoryIdStringQuery = getBundlesByItemCategoryIdStringQuery;
 const getBundleByNameStringQuery = (name) => `
 query getBundleByName {
-  bundles (where: {name: {_eq: '${name}' }}) {
+  bundles (where: {name: {_eq: "${name}" }}) {
     id
   }
 }
@@ -639,7 +634,7 @@ query getBundleByName {
 exports.getBundleByNameStringQuery = getBundleByNameStringQuery;
 const getItemByNameStringQuery = (name) => `
 query getItemByName {
-  items (where: {active: {_eq: true }, name: {_eq: '${name}' }}) {
+  items (where: {active: {_eq: true }, name: {_eq: "${name}" }}) {
       id
       name
       stocks_only_integer
@@ -735,7 +730,7 @@ exports.getAllFormsStringQuery = getAllFormsStringQuery;
 const getFormByNameStringQuery = (name) => `
 query getFormByName {
   settings_forms (
-      where: {name: {_eq: '${name}' }},
+      where: {name: {_eq: "${name}" }},
       order_by: {zid: desc, version: desc}
     ) {
       id
@@ -801,7 +796,7 @@ query getFormsByDocumentType {
   settings_forms (
       where: {
         ${filters?.formZid ? `zid: {_eq: ${filters?.formZid}},` : ""}
-        document_type: {_eq: '${document_type}'}
+        document_type: {_eq: "${document_type}"}
       },
       order_by: {zid: desc, version: desc}
     ) {

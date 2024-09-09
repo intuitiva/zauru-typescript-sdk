@@ -551,39 +551,34 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       agency_id = hashAgencyId[session.get("agency_id")];
     }
 
-    const query = getPurchaseOrdersBetweenDatesStringQuery({
-      agencyId: config.agencyFilter
-        ? agency_id ?? session.get("agency_id")
-        : undefined,
-      consolidateIdFilter: config.consolidateIdFilter,
-      lotItemIdExclusion: config.lotItemIdExclusion,
-      poDetailTagId: config.poDetailTagId,
-      withLotStocks: config.withLotStocksToMyAgency,
-      itemId: config.itemId,
-      payeeCategoryId: config.payeeCategoryId,
-      betweenIssueDate: config.betweenIssueDate,
-      payeeId: config.payeeId,
-      id_number: config.id_number,
-      withPODetails: config.withPODetails,
-      withLots: config.withLots,
-      withShipmentPurchaseOrders: config.withShipmentPurchaseOrders,
-      withWebAppRows: config.withWebAppRows,
-      payeeCategoryIds: config.payeeCategoryIds,
-      excludePayeeCategoryIds: config.excludePayeeCategoryIds,
-    });
-
-    const variables = {
-      startDate: formatDateToUTC(dates.startDate),
-      endDate: formatDateToUTC(dates.endDate),
-    };
+    const query = getPurchaseOrdersBetweenDatesStringQuery(
+      formatDateToUTC(dates.startDate),
+      formatDateToUTC(dates.endDate),
+      {
+        agencyId: config.agencyFilter
+          ? agency_id ?? session.get("agency_id")
+          : undefined,
+        consolidateIdFilter: config.consolidateIdFilter,
+        lotItemIdExclusion: config.lotItemIdExclusion,
+        poDetailTagId: config.poDetailTagId,
+        withLotStocks: config.withLotStocksToMyAgency,
+        itemId: config.itemId,
+        payeeCategoryId: config.payeeCategoryId,
+        betweenIssueDate: config.betweenIssueDate,
+        payeeId: config.payeeId,
+        id_number: config.id_number,
+        withPODetails: config.withPODetails,
+        withLots: config.withLots,
+        withShipmentPurchaseOrders: config.withShipmentPurchaseOrders,
+        withWebAppRows: config.withWebAppRows,
+        payeeCategoryIds: config.payeeCategoryIds,
+        excludePayeeCategoryIds: config.excludePayeeCategoryIds,
+      }
+    );
 
     const graphQLBody = {
       query,
     } as any;
-
-    if (!config.id_number) {
-      graphQLBody.variables = variables;
-    }
 
     const response = await httpGraphQLAPI.post<{
       data: { purchase_orders: PurchaseOrderGraphQL[] };

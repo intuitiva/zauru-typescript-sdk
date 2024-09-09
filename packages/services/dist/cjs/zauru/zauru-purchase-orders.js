@@ -335,7 +335,7 @@ const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
             const hashAgencyId = JSON.parse(production_agency_id ?? "{}");
             agency_id = hashAgencyId[session.get("agency_id")];
         }
-        const query = (0, graphql_1.getPurchaseOrdersBetweenDatesStringQuery)({
+        const query = (0, graphql_1.getPurchaseOrdersBetweenDatesStringQuery)((0, common_1.formatDateToUTC)(dates.startDate), (0, common_1.formatDateToUTC)(dates.endDate), {
             agencyId: config.agencyFilter
                 ? agency_id ?? session.get("agency_id")
                 : undefined,
@@ -355,16 +355,9 @@ const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
             payeeCategoryIds: config.payeeCategoryIds,
             excludePayeeCategoryIds: config.excludePayeeCategoryIds,
         });
-        const variables = {
-            startDate: (0, common_1.formatDateToUTC)(dates.startDate),
-            endDate: (0, common_1.formatDateToUTC)(dates.endDate),
-        };
         const graphQLBody = {
             query,
         };
-        if (!config.id_number) {
-            graphQLBody.variables = variables;
-        }
         const response = await httpGraphQL_js_1.default.post("", graphQLBody, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

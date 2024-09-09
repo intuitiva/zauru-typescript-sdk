@@ -54,11 +54,7 @@ export const getConsolidatesBetweenDates = async (session, dates) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getConsolidatesBetweenDatesStringQuery,
-            variables: {
-                startDate: formatDateToUTC(dates.startDate),
-                endDate: formatDateToUTC(dates.endDate),
-            },
+            query: getConsolidatesBetweenDatesStringQuery(formatDateToUTC(dates.startDate), formatDateToUTC(dates.endDate)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

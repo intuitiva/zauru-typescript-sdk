@@ -107,11 +107,10 @@ export const getConsolidatesBetweenDates = async (
     }>(
       "",
       {
-        query: getConsolidatesBetweenDatesStringQuery,
-        variables: {
-          startDate: formatDateToUTC(dates.startDate),
-          endDate: formatDateToUTC(dates.endDate),
-        },
+        query: getConsolidatesBetweenDatesStringQuery(
+          formatDateToUTC(dates.startDate),
+          formatDateToUTC(dates.endDate)
+        ),
       },
       { headers }
     );
