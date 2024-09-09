@@ -7,6 +7,7 @@ exports.ESTADOS_COLA_RECEPCIONES = {
     EN_PROCESO: "En proceso",
     ERROR: "Con error",
     REINTENTANDO: "Reintentando",
+    PENDIENTE_DE_REINTENTO: "Pendiente de reintento",
     OFFLINE: "Registro local",
 };
 /**

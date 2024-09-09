@@ -4,6 +4,7 @@ export declare const ESTADOS_COLA_RECEPCIONES: {
     EN_PROCESO: string;
     ERROR: string;
     REINTENTANDO: string;
+    PENDIENTE_DE_REINTENTO: string;
     OFFLINE: string;
 };
 /**
