@@ -613,7 +613,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       );
     }
 
-    if (finalConfig.withLotStocksToMyAgency) {
+    if (finalConfig.withLotStocksToMyAgency && finalConfig.withLots) {
       responseData = responseData.map((x) => {
         x.lots = x.lots.map((y) => {
           y.lot_stocks = y.lot_stocks.filter(

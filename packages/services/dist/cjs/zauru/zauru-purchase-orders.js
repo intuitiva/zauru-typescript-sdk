@@ -371,7 +371,7 @@ const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {}) => {
         if (finalConfig.withShipmentToMyAgency) {
             responseData = response.data?.data?.purchase_orders.filter((x) => x.shipment_purchase_orders.some((y) => y.shipment.agency_to_id?.toString() == session.get("agency_id")));
         }
-        if (finalConfig.withLotStocksToMyAgency) {
+        if (finalConfig.withLotStocksToMyAgency && finalConfig.withLots) {
             responseData = responseData.map((x) => {
                 x.lots = x.lots.map((y) => {
                     y.lot_stocks = y.lot_stocks.filter((z) => z.agency_id == session.get("agency_id"));

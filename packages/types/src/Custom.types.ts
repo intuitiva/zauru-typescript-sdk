@@ -205,6 +205,7 @@ export type ItemAssociatedLots = {
 //Modelo con el cuál responde el backend
 export type MotivoRechazo = {
   Nombre: string;
+  relatedItems?: number[];
 };
 
 export type RegisterMotivosRechazoBody = {

@@ -163,6 +163,7 @@ export type ItemAssociatedLots = {
 };
 export type MotivoRechazo = {
     Nombre: string;
+    relatedItems?: number[];
 };
 export type RegisterMotivosRechazoBody = {
     Canastas?: string;

@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getGeneralQuery = void 0;
 const common_1 = require("@zauru-sdk/common");
-const common_js_1 = require("~/common.js");
-const httpGraphQL_js_1 = __importDefault(require("~/zauru/httpGraphQL.js"));
+const common_js_1 = require("../common.js");
+const httpGraphQL_js_1 = __importDefault(require("../zauru/httpGraphQL.js"));
 /**
  * getGeneralQuery
  * @param headers
