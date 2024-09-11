@@ -258,6 +258,25 @@ export const deletePurchaseOrderProcess = async (headers, session, id) => {
     });
 };
 /**
+ * updatePurchaseOrderReception
+ * @param headers
+ * @param data
+ * @param purchase_id
+ * @returns
+ */
+export const updatePurchaseOrderReception = async (headers, data, purchase_id) => {
+    return handlePossibleAxiosErrors(async () => {
+        const body = {
+            purchase_order: {
+                payee_id: data.payee_id,
+                purchase_order_details_attributes: data.purchase_order_details_attributes,
+            },
+        };
+        await updateReceivedPurchaseOrder(headers, body, purchase_id);
+        return true;
+    });
+};
+/**
  * Commitea una task iniciada para la pantalla de edición masiva de órdenes de compra
  * @param session
  * @param ordenes

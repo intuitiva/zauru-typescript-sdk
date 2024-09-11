@@ -63,6 +63,20 @@ export declare const getOrderIDS: (headers: any, session: Session, extraParams: 
  * @returns
  */
 export declare const deletePurchaseOrderProcess: (headers: any, session: Session, id: string | number) => Promise<AxiosUtilsResponse<boolean>>;
+/**
+ * updatePurchaseOrderReception
+ * @param headers
+ * @param data
+ * @param purchase_id
+ * @returns
+ */
+export declare const updatePurchaseOrderReception: (headers: any, data: {
+    payee_id?: string;
+    purchase_order_details_attributes: Record<string, {
+        item_id: number;
+        id: number;
+    }>;
+}, purchase_id: number) => Promise<AxiosUtilsResponse<boolean>>;
 export type TaskSchema = {
     timeStamp: number;
     iniciada: string;

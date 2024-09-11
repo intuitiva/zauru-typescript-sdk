@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createNewLabItemRequest = exports.deleteTask = exports.commitEndTask = exports.commitTask = exports.deletePurchaseOrderProcess = exports.getOrderIDS = exports.updateOchAndDis = exports.updatePurchaseItemPrice = exports.getPurchaseOrderDataTables = exports.getPurchasesDataTableListFormated = void 0;
+exports.createNewLabItemRequest = exports.deleteTask = exports.commitEndTask = exports.commitTask = exports.updatePurchaseOrderReception = exports.deletePurchaseOrderProcess = exports.getOrderIDS = exports.updateOchAndDis = exports.updatePurchaseItemPrice = exports.getPurchaseOrderDataTables = exports.getPurchasesDataTableListFormated = void 0;
 const common_1 = require("@zauru-sdk/common");
 const services_1 = require("@zauru-sdk/services");
 /**
@@ -266,6 +266,26 @@ const deletePurchaseOrderProcess = async (headers, session, id) => {
     });
 };
 exports.deletePurchaseOrderProcess = deletePurchaseOrderProcess;
+/**
+ * updatePurchaseOrderReception
+ * @param headers
+ * @param data
+ * @param purchase_id
+ * @returns
+ */
+const updatePurchaseOrderReception = async (headers, data, purchase_id) => {
+    return (0, common_1.handlePossibleAxiosErrors)(async () => {
+        const body = {
+            purchase_order: {
+                payee_id: data.payee_id,
+                purchase_order_details_attributes: data.purchase_order_details_attributes,
+            },
+        };
+        await (0, services_1.updateReceivedPurchaseOrder)(headers, body, purchase_id);
+        return true;
+    });
+};
+exports.updatePurchaseOrderReception = updatePurchaseOrderReception;
 /**
  * Commitea una task iniciada para la pantalla de edición masiva de órdenes de compra
  * @param session

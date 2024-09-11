@@ -289,51 +289,55 @@ export const getPurchaseOrder = (session, poId, config = {
     });
 };
 /**
- * getPurchaseOrder
+ * getGraphQLPurchaseOrderBetweenDates
  * @param headers
  * @returns
  */
-export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
-    agencyFilter: true,
-    consolidateIdFilter: false,
-    useProductionAgencyId: false,
-    withShipmentToMyAgency: false,
-    withLotStocksToMyAgency: false,
-    betweenIssueDate: false,
-    withPODetails: true,
-    withLots: true,
-    withShipmentPurchaseOrders: true,
-    withWebAppRows: true,
-    payeeCategoryIds: [],
-    excludePayeeCategoryIds: [],
-}) => {
+export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {}) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
-        let agency_id = config.agencyId;
-        if (config.useProductionAgencyId) {
-            const { production_agency_id /**{5693: 5696} */ } = await getVariablesByName(headers, session, ["production_agency_id"]);
+        // Valores por defecto para config
+        const defaultConfig = {
+            agencyFilter: true,
+            consolidateIdFilter: false,
+            useProductionAgencyId: false,
+            withShipmentToMyAgency: false,
+            withLotStocksToMyAgency: false,
+            betweenIssueDate: false,
+            withPODetails: true,
+            withLots: true,
+            withShipmentPurchaseOrders: true,
+            withWebAppRows: true,
+            payeeCategoryIds: [],
+            excludePayeeCategoryIds: [],
+        };
+        // Combinar config con los valores por defecto
+        const finalConfig = { ...defaultConfig, ...config };
+        let agency_id = finalConfig.agencyId;
+        if (finalConfig.useProductionAgencyId) {
+            const { production_agency_id } = await getVariablesByName(headers, session, ["production_agency_id"]);
             const hashAgencyId = JSON.parse(production_agency_id ?? "{}");
             agency_id = hashAgencyId[session.get("agency_id")];
         }
         const query = getPurchaseOrdersBetweenDatesStringQuery(formatDateToUTC(dates.startDate), formatDateToUTC(dates.endDate), {
-            agencyId: config.agencyFilter
+            agencyId: finalConfig.agencyFilter
                 ? agency_id ?? session.get("agency_id")
                 : undefined,
-            consolidateIdFilter: config.consolidateIdFilter,
-            lotItemIdExclusion: config.lotItemIdExclusion,
-            poDetailTagId: config.poDetailTagId,
-            withLotStocks: config.withLotStocksToMyAgency,
-            itemId: config.itemId,
-            payeeCategoryId: config.payeeCategoryId,
-            betweenIssueDate: config.betweenIssueDate,
-            payeeId: config.payeeId,
-            id_number: config.id_number,
-            withPODetails: config.withPODetails,
-            withLots: config.withLots,
-            withShipmentPurchaseOrders: config.withShipmentPurchaseOrders,
-            withWebAppRows: config.withWebAppRows,
-            payeeCategoryIds: config.payeeCategoryIds,
-            excludePayeeCategoryIds: config.excludePayeeCategoryIds,
+            consolidateIdFilter: finalConfig.consolidateIdFilter,
+            lotItemIdExclusion: finalConfig.lotItemIdExclusion,
+            poDetailTagId: finalConfig.poDetailTagId,
+            withLotStocks: finalConfig.withLotStocksToMyAgency,
+            itemId: finalConfig.itemId,
+            payeeCategoryId: finalConfig.payeeCategoryId,
+            betweenIssueDate: finalConfig.betweenIssueDate,
+            payeeId: finalConfig.payeeId,
+            id_number: finalConfig.id_number,
+            withPODetails: finalConfig.withPODetails,
+            withLots: finalConfig.withLots,
+            withShipmentPurchaseOrders: finalConfig.withShipmentPurchaseOrders,
+            withWebAppRows: finalConfig.withWebAppRows,
+            payeeCategoryIds: finalConfig.payeeCategoryIds,
+            excludePayeeCategoryIds: finalConfig.excludePayeeCategoryIds,
         });
         const graphQLBody = {
             query,
@@ -344,10 +348,10 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {
         }
         //============ Aplicación de filtros
         let responseData = response.data.data.purchase_orders;
-        if (config.withShipmentToMyAgency) {
+        if (finalConfig.withShipmentToMyAgency) {
             responseData = response.data?.data?.purchase_orders.filter((x) => x.shipment_purchase_orders.some((y) => y.shipment.agency_to_id?.toString() == session.get("agency_id")));
         }
-        if (config.withLotStocksToMyAgency) {
+        if (finalConfig.withLotStocksToMyAgency) {
             responseData = responseData.map((x) => {
                 x.lots = x.lots.map((y) => {
                     y.lot_stocks = y.lot_stocks.filter((z) => z.agency_id == session.get("agency_id"));

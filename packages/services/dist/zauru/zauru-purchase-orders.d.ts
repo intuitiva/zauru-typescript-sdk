@@ -116,7 +116,7 @@ export declare const getPurchaseOrder: (session: Session, poId: string | number,
     withLotStocksToMyAgency: boolean;
 }) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
 /**
- * getPurchaseOrder
+ * getGraphQLPurchaseOrderBetweenDates
  * @param headers
  * @returns
  */
@@ -124,7 +124,7 @@ export declare const getGraphQLPurchaseOrderBetweenDates: (session: Session, dat
     startDate: string;
     endDate: string;
 }, config?: {
-    agencyFilter: boolean;
+    agencyFilter?: boolean;
     agencyId?: number | string;
     id_number?: string;
     useProductionAgencyId?: boolean;
