@@ -352,7 +352,15 @@ export function formatDateToUTC(dateString: string): string {
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}`;
 }
 
-// Función para obtener la fecha formateada en español
+/**
+ * IMPORTANTE: Esta función está diseñada para funcionar solo en el lado del cliente.
+ * Para renderizado del lado del servidor, utilice una función alternativa.
+ *
+ * Función para obtener la fecha formateada en español
+ * @param dateString - Cadena de fecha opcional
+ * @param withHours - Indica si se debe incluir la hora en el formato
+ * @returns Fecha formateada en español
+ */
 export const getFormattedDate = (
   dateString?: string,
   withHours: boolean = true
