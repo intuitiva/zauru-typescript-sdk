@@ -362,24 +362,24 @@ export const getFormattedDate = (
   if (dateString) {
     // Detectar el formato de la fecha
     if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(dateString)) {
-      // Formato ISO (UTC)
-      date = new Date(dateString);
+      // Formato ISO (UTC o con desplazamiento)
+      date = new Date(dateString); // La fecha ISO ya contiene información de la zona horaria
     } else if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-      // Formato YYYY-MM-DD
-      date = new Date(dateString + "T00:00:00Z");
+      // Formato YYYY-MM-DD (sin zona horaria)
+      date = new Date(`${dateString}T00:00:00`); // Se interpreta en hora local, sin 'Z'
     } else if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
       // Formato DD-MM-YYYY
       const [day, month, year] = dateString.split("-");
-      date = new Date(`${year}-${month}-${day}T00:00:00Z`);
+      date = new Date(`${year}-${month}-${day}T00:00:00`); // Interpretar en hora local
     } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
       // Formato DD/MM/YYYY
       const [day, month, year] = dateString.split("/");
-      date = new Date(`${year}-${month}-${day}T00:00:00Z`);
+      date = new Date(`${year}-${month}-${day}T00:00:00`); // Interpretar en hora local
     } else {
       throw new Error("Formato de fecha no reconocido");
     }
   } else {
-    date = new Date();
+    date = new Date(); // Si no se proporciona dateString, usa la fecha actual en hora local
   }
 
   const options: Intl.DateTimeFormatOptions = {
@@ -387,7 +387,7 @@ export const getFormattedDate = (
     day: "numeric",
     month: "long",
     year: "numeric",
-    timeZone: "UTC",
+    timeZone: "America/Winnipeg", // Zona horaria de Winnipeg
   };
 
   if (withHours) {
