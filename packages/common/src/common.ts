@@ -362,24 +362,26 @@ export const getFormattedDate = (
   if (dateString) {
     // Detectar el formato de la fecha
     if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(dateString)) {
-      // Formato ISO (UTC o con desplazamiento)
-      date = new Date(dateString); // La fecha ISO ya contiene información de la zona horaria
+      // Formato ISO (UTC)
+      date = new Date(dateString);
+      // Ajustar a la hora local
+      date = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
     } else if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-      // Formato YYYY-MM-DD (sin zona horaria)
-      date = new Date(`${dateString}T00:00:00`); // Se interpreta en hora local, sin 'Z'
+      // Formato YYYY-MM-DD
+      date = new Date(`${dateString}T00:00:00`); // Hora local
     } else if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
       // Formato DD-MM-YYYY
       const [day, month, year] = dateString.split("-");
-      date = new Date(`${year}-${month}-${day}T00:00:00`); // Interpretar en hora local
+      date = new Date(`${year}-${month}-${day}T00:00:00`); // Hora local
     } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
       // Formato DD/MM/YYYY
       const [day, month, year] = dateString.split("/");
-      date = new Date(`${year}-${month}-${day}T00:00:00`); // Interpretar en hora local
+      date = new Date(`${year}-${month}-${day}T00:00:00`); // Hora local
     } else {
       throw new Error("Formato de fecha no reconocido");
     }
   } else {
-    date = new Date(); // Si no se proporciona dateString, usa la fecha actual en hora local
+    date = new Date(); // Fecha actual en hora local
   }
 
   const options: Intl.DateTimeFormatOptions = {
