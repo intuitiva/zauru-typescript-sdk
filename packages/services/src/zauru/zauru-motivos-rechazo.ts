@@ -82,7 +82,7 @@ export async function updateMotivosRechazo(
   headers: any,
   session: Session,
   id: number,
-  Nombre: string
+  body: MotivoRechazo
 ): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
   return handlePossibleAxiosErrors(async () => {
     const { recepciones_rejection_types_webapp_table_id } =
@@ -93,7 +93,7 @@ export async function updateMotivosRechazo(
       headers,
       recepciones_rejection_types_webapp_table_id,
       id,
-      { Nombre }
+      body
     );
     return response;
   });

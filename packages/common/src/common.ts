@@ -214,36 +214,6 @@ export const stringDateToParsedUTCDate = (date: string): Date => {
 };
 
 /**
- * zauruDateToLongString
- * @param date
- * @returns
- */
-export function zauruDateToLongString(
-  date: string,
-  hours: boolean = false,
-  utc: boolean = true
-) {
-  if (!date) {
-    return "invalid date:zauruDateToLongString";
-  }
-
-  // Asume que la fecha de entrada está en UTC y la convierte a la zona horaria local del navegador
-  let issueDate = moment.utc(date).local();
-
-  if (!utc) {
-    issueDate = moment.utc(date).local(true);
-  }
-
-  let formatString = "dddd, D [de] MMMM [de] YYYY";
-  if (hours) {
-    formatString += ", HH:mm a"; // Añade la hora en formato de 12 horas con AM/PM
-  }
-
-  // Formatea la fecha en el locale español
-  return issueDate.locale("es").format(formatString);
-}
-
-/**
  * todayLongString
  * @param date
  * @returns
@@ -383,23 +353,51 @@ export function formatDateToUTC(dateString: string): string {
 }
 
 // Función para obtener la fecha formateada en español
-export const getFormattedDate = (dateString?: string, utc: boolean = false) => {
-  const now = dateString ? new Date(dateString) : new Date();
-  const options = {
+export const getFormattedDate = (
+  dateString?: string,
+  withHours: boolean = true
+) => {
+  let date: Date;
+
+  if (dateString) {
+    // Detectar el formato de la fecha
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(dateString)) {
+      // Formato ISO (UTC)
+      date = new Date(dateString);
+    } else if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+      // Formato YYYY-MM-DD
+      date = new Date(dateString + "T00:00:00Z");
+    } else if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
+      // Formato DD-MM-YYYY
+      const [day, month, year] = dateString.split("-");
+      date = new Date(`${year}-${month}-${day}T00:00:00Z`);
+    } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
+      // Formato DD/MM/YYYY
+      const [day, month, year] = dateString.split("/");
+      date = new Date(`${year}-${month}-${day}T00:00:00Z`);
+    } else {
+      throw new Error("Formato de fecha no reconocido");
+    }
+  } else {
+    date = new Date();
+  }
+
+  const options: Intl.DateTimeFormatOptions = {
     weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    hour12: false,
-  } as any;
+    timeZone: "UTC",
+  };
 
-  if (utc) {
-    options["timeZone"] = "UTC";
+  if (withHours) {
+    options.hour = "numeric";
+    options.minute = "numeric";
+    options.second = "numeric";
+    options.hour12 = false;
   }
 
-  return new Intl.DateTimeFormat("es-ES", options as any).format(now);
+  return new Intl.DateTimeFormat("es-ES", options).format(date);
 };
 
 export const formatDateToDatePicker = (date: Date) => {
