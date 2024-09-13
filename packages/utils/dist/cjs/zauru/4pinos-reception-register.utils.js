@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register4pinosReception = void 0;
-const common_1 = require("@zauru-sdk/common");
 const services_1 = require("@zauru-sdk/services");
 const motivos_rechazo_utils_js_1 = require("./motivos-rechazo.utils.js");
 const _4pinos_receptions_form_history_utils_js_1 = require("./4pinos-receptions-form-history.utils.js");
@@ -22,7 +21,9 @@ const register4pinosReception = async ({ cookie, idWebAppTable, agency_id, value
             }
             const existentes = responsePOSearch?.data?.filter((x) => !x.voided);
             if (existentes?.length > 0) {
-                throw new Error(`Ya existe una órden de compra con este número de contraseña asociado, revise el listado general. Peso: ${existentes[0].due}, Ingresado el: ${(0, common_1.zauruDateToLongString)(existentes[0].issue_date)}, Memo: ${existentes[0].memo}, Tipo: ${existentes[0].reference}`);
+                throw new Error(`Ya existe una órden de compra con este número de contraseña asociado, revise el listado general. Peso: ${existentes[0].due}, Ingresado el: 
+            existentes[0].issue_date
+          , Memo: ${existentes[0].memo}, Tipo: ${existentes[0].reference}`);
             }
         }
         const esCentroDeAcopio = values?.esCentroDeAcopio === "true";

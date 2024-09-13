@@ -61,12 +61,6 @@ export declare const getStringFullDate: (date: Date) => string;
 export declare const localDateToUSDate: (dateStr: string) => string;
 export declare const stringDateToParsedUTCDate: (date: string) => Date;
 /**
- * zauruDateToLongString
- * @param date
- * @returns
- */
-export declare function zauruDateToLongString(date: string, hours?: boolean, utc?: boolean): string;
-/**
  * todayLongString
  * @param date
  * @returns
@@ -94,7 +88,16 @@ export declare function extractIdFromForm(s: string): number | null;
  * @returns
  */
 export declare function formatDateToUTC(dateString: string): string;
-export declare const getFormattedDate: (dateString?: string, utc?: boolean) => string;
+/**
+ * IMPORTANTE: Esta función está diseñada para funcionar solo en el lado del cliente.
+ * Para renderizado del lado del servidor, utilice una función alternativa.
+ *
+ * Función para obtener la fecha formateada en español
+ * @param dateString - Cadena de fecha opcional
+ * @param withHours - Indica si se debe incluir la hora en el formato
+ * @returns Fecha formateada en español
+ */
+export declare const getFormattedDate: (dateString?: string, withHours?: boolean) => string;
 export declare const formatDateToDatePicker: (date: Date) => string;
 export declare const formatTimeToTimePicker: (timeString: string) => Date;
 export declare const toFixedIfNeeded: (value: number) => string;

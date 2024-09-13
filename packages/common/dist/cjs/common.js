@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calculateTimeDifference = exports.parsedObject = exports.createPostgresUrl = exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.zauruDateToLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.calculateTimeDifference = exports.parsedObject = exports.createPostgresUrl = exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
 const moment_1 = __importDefault(require("moment"));
 require("moment-timezone");
 const types_1 = require("@zauru-sdk/types");
@@ -193,28 +193,6 @@ const stringDateToParsedUTCDate = (date) => {
 };
 exports.stringDateToParsedUTCDate = stringDateToParsedUTCDate;
 /**
- * zauruDateToLongString
- * @param date
- * @returns
- */
-function zauruDateToLongString(date, hours = false, utc = true) {
-    if (!date) {
-        return "invalid date:zauruDateToLongString";
-    }
-    // Asume que la fecha de entrada está en UTC y la convierte a la zona horaria local del navegador
-    let issueDate = moment_1.default.utc(date).local();
-    if (!utc) {
-        issueDate = moment_1.default.utc(date).local(true);
-    }
-    let formatString = "dddd, D [de] MMMM [de] YYYY";
-    if (hours) {
-        formatString += ", HH:mm a"; // Añade la hora en formato de 12 horas con AM/PM
-    }
-    // Formatea la fecha en el locale español
-    return issueDate.locale("es").format(formatString);
-}
-exports.zauruDateToLongString = zauruDateToLongString;
-/**
  * todayLongString
  * @param date
  * @returns
@@ -331,22 +309,60 @@ function formatDateToUTC(dateString) {
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}`;
 }
 exports.formatDateToUTC = formatDateToUTC;
-// Función para obtener la fecha formateada en español
-const getFormattedDate = (dateString, utc = false) => {
-    const now = dateString ? new Date(dateString) : new Date();
+/**
+ * IMPORTANTE: Esta función está diseñada para funcionar solo en el lado del cliente.
+ * Para renderizado del lado del servidor, utilice una función alternativa.
+ *
+ * Función para obtener la fecha formateada en español
+ * @param dateString - Cadena de fecha opcional
+ * @param withHours - Indica si se debe incluir la hora en el formato
+ * @returns Fecha formateada en español
+ */
+const getFormattedDate = (dateString, withHours = true) => {
+    let date;
+    if (dateString) {
+        // Detectar el formato de la fecha
+        if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(dateString)) {
+            // Formato ISO (UTC)
+            date = new Date(dateString);
+            // Ajustar a la hora local
+            date = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        }
+        else if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+            // Formato YYYY-MM-DD
+            date = new Date(`${dateString}T00:00:00`); // Hora local
+        }
+        else if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
+            // Formato DD-MM-YYYY
+            const [day, month, year] = dateString.split("-");
+            date = new Date(`${year}-${month}-${day}T00:00:00`); // Hora local
+        }
+        else if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
+            // Formato DD/MM/YYYY
+            const [day, month, year] = dateString.split("/");
+            date = new Date(`${year}-${month}-${day}T00:00:00`); // Hora local
+        }
+        else {
+            throw new Error("Formato de fecha no reconocido");
+        }
+    }
+    else {
+        date = new Date(); // Fecha actual en hora local
+    }
     const options = {
         weekday: "long",
         day: "numeric",
         month: "long",
         year: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: false,
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Obtiene la zona horaria del usuario
     };
-    if (utc) {
-        options["timeZone"] = "UTC";
+    if (withHours) {
+        options.hour = "numeric";
+        options.minute = "numeric";
+        options.second = "numeric";
+        options.hour12 = false;
     }
-    return new Intl.DateTimeFormat("es-ES", options).format(now);
+    return new Intl.DateTimeFormat("es-ES", options).format(date);
 };
 exports.getFormattedDate = getFormattedDate;
 const formatDateToDatePicker = (date) => {

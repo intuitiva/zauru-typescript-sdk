@@ -31,12 +31,12 @@ export async function createMotivoRechazo(headers, session, body) {
         return response;
     });
 }
-export async function updateMotivosRechazo(headers, session, id, Nombre) {
+export async function updateMotivosRechazo(headers, session, id, body) {
     return handlePossibleAxiosErrors(async () => {
         const { recepciones_rejection_types_webapp_table_id } = await getVariablesByName(headers, session, [
             "recepciones_rejection_types_webapp_table_id",
         ]);
-        const response = await updateWebAppTableRegister(headers, recepciones_rejection_types_webapp_table_id, id, { Nombre });
+        const response = await updateWebAppTableRegister(headers, recepciones_rejection_types_webapp_table_id, id, body);
         return response;
     });
 }

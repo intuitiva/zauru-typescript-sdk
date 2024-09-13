@@ -1,4 +1,3 @@
-import { zauruDateToLongString } from "@zauru-sdk/common";
 import {
   createNewAuthorizedPurchaseOrder,
   createNewReception,
@@ -63,11 +62,9 @@ export const register4pinosReception = async ({
 
       if (existentes?.length > 0) {
         throw new Error(
-          `Ya existe una órden de compra con este número de contraseña asociado, revise el listado general. Peso: ${
-            existentes[0].due
-          }, Ingresado el: ${zauruDateToLongString(
+          `Ya existe una órden de compra con este número de contraseña asociado, revise el listado general. Peso: ${existentes[0].due}, Ingresado el: 
             existentes[0].issue_date
-          )}, Memo: ${existentes[0].memo}, Tipo: ${existentes[0].reference}`
+          , Memo: ${existentes[0].memo}, Tipo: ${existentes[0].reference}`
         );
       }
     }

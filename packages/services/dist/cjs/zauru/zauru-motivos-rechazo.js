@@ -37,12 +37,12 @@ async function createMotivoRechazo(headers, session, body) {
     });
 }
 exports.createMotivoRechazo = createMotivoRechazo;
-async function updateMotivosRechazo(headers, session, id, Nombre) {
+async function updateMotivosRechazo(headers, session, id, body) {
     return (0, common_1.handlePossibleAxiosErrors)(async () => {
         const { recepciones_rejection_types_webapp_table_id } = await (0, common_js_1.getVariablesByName)(headers, session, [
             "recepciones_rejection_types_webapp_table_id",
         ]);
-        const response = await (0, zauru_web_app_tables_js_1.updateWebAppTableRegister)(headers, recepciones_rejection_types_webapp_table_id, id, { Nombre });
+        const response = await (0, zauru_web_app_tables_js_1.updateWebAppTableRegister)(headers, recepciones_rejection_types_webapp_table_id, id, body);
         return response;
     });
 }
