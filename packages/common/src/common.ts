@@ -389,7 +389,7 @@ export const getFormattedDate = (
     day: "numeric",
     month: "long",
     year: "numeric",
-    timeZone: "America/Winnipeg", // Zona horaria de Winnipeg
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Obtiene la zona horaria del usuario
   };
 
   if (withHours) {
