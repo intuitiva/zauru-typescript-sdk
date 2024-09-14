@@ -36,7 +36,7 @@ function DynamicBaculoForm(props) {
                 return ((0, jsx_runtime_1.jsx)(index_js_11.SubContainer, { title: field.name, children: (0, jsx_runtime_1.jsx)(GenericDynamicTable_js_1.GenericDynamicTable, { name: "fixed_columns_table", columns: columns }) }, field.id));
             }
             case "zauru_data":
-                return ((0, jsx_runtime_1.jsx)(index_js_1.TextFieldWithoutValidation, { title: `${field.required ? "*" : ""}${field.name}`, hint: field.hint, defaultValue: defaultValue?.value ?? field.default_value, disabled: true }, field.id));
+                return ((0, jsx_runtime_1.jsx)(index_js_1.TextField, { title: `${field.required ? "*" : ""}${field.name}`, hint: field.hint, defaultValue: defaultValue?.value ?? field.default_value, disabled: true }, field.id));
             case "hour":
                 return ((0, jsx_runtime_1.jsx)(index_js_9.FormTimePicker, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, disabled: readOnly, defaultValue: defaultValue?.value }, field.id));
             case "date":

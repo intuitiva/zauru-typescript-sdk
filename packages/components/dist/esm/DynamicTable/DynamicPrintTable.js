@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useEffect, useCallback, useState } from "react";
-import { TextFieldWithoutValidation } from "../Form/TextField/index.js";
-import { SelectFieldWithoutValidation } from "../Form/SelectField/index.js";
+import { TextField } from "../Form/TextField/index.js";
+import { SelectField } from "../Form/SelectField/index.js";
 import { useAppSelector } from "@zauru-sdk/redux";
 const errorAnimation = {
     hidden: { opacity: 0, y: -10 },
@@ -10,11 +10,11 @@ const errorAnimation = {
 export const DynamicPrintTable = ({ forwardedRef, ...props }) => {
     const { items, onChange, className } = props;
     const { formValidations } = useAppSelector((state) => state.formValidation);
-    const createItemSelect = (rowIndex, defaultValue) => (_jsx(SelectFieldWithoutValidation, { name: "item_select", isClearable: true, onChange: (value) => {
+    const createItemSelect = (rowIndex, defaultValue) => (_jsx(SelectField, { name: "item_select", isClearable: true, onChange: (value) => {
             const selectedItem = items?.find((x) => x.value === value?.value);
             updateRow(rowIndex, selectedItem);
         }, options: items, defaultValue: defaultValue }, rowIndex));
-    const createItemQuantity = (rowIndex, defaultValue) => (_jsx(TextFieldWithoutValidation, { name: "item_quantity", type: "number", integer: true, defaultValue: defaultValue ?? 1, min: 1, onChange: (value) => {
+    const createItemQuantity = (rowIndex, defaultValue) => (_jsx(TextField, { name: "item_quantity", type: "number", integer: true, defaultValue: defaultValue ?? 1, min: 1, onChange: (value) => {
             updateRow(rowIndex, undefined, Number(value));
         } }, rowIndex));
     const createTemplateName = (rowIndex, defaultValue) => (_jsx("div", { children: defaultValue != "" ? defaultValue : "No hay etiqueta" }, rowIndex));

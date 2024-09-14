@@ -2,7 +2,7 @@ import React from "react";
 export type ModalOption = "OK" | "CANCEL" | null;
 type ModalParams = {
     title: string;
-    description: React.ReactNode | (() => React.ReactNode);
+    description: React.ReactNode;
     okButtonText?: string;
     showOptions?: boolean;
 };

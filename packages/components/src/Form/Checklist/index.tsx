@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckboxWithoutValidation } from "../Checkbox/index.js";
+import { CheckBox } from "../Checkbox/index.js";
 
 export type ChecklistItem = {
   id: string;
@@ -24,7 +24,7 @@ export const Checklist: React.FC<ChecklistProps> = ({ items, onChange }) => {
   return (
     <div>
       {items.map((item) => (
-        <CheckboxWithoutValidation
+        <CheckBox
           key={item.id}
           {...item}
           onChange={(value) => handleCheckboxChange(item.name, value)}

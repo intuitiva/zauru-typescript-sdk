@@ -64,7 +64,6 @@ const GenericDynamicTable = (props) => {
             newDeletedData.push(deletedItem);
         }
         setDeletedData(newDeletedData);
-        onChange && onChange(tableData?.filter((x) => x.id !== rowId));
         setTableData((prevData) => prevData?.filter((x) => x.id !== rowId));
     };
     const handleChange = (name, value, rowId) => {
@@ -97,10 +96,10 @@ const GenericDynamicTable = (props) => {
                         return ((0, jsx_runtime_1.jsx)("td", { className: "align-middle p-1", children: (0, jsx_runtime_1.jsx)("div", { children: defaultVal }) }, `${rowData.id}-${column.name}`));
                     }
                     const FieldComponent = column.type === "textField"
-                        ? index_js_2.TextFieldWithoutValidation
+                        ? index_js_2.TextField
                         : column.type === "checkbox"
-                            ? index_js_3.CheckboxWithoutValidation
-                            : index_js_1.SelectFieldWithoutValidation;
+                            ? index_js_3.CheckBox
+                            : index_js_1.SelectField;
                     const setTableValue = (columnName, newValue) => {
                         setTableData((prevState) => {
                             // Encontrar el índice de la fila que está cambiando
@@ -185,7 +184,7 @@ const GenericDynamicTable = (props) => {
             setFilteredTableData(tableData);
         }
     };
-    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [name && ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(GenericDynamicTableErrorComponent, { name: name }), (0, jsx_runtime_1.jsx)("input", { name: name, type: "hidden", value: JSON.stringify(tableData), hidden: true }), (0, jsx_runtime_1.jsx)("input", { name: `deleted_${name}`, type: "hidden", value: JSON.stringify(deletedData), hidden: true })] })), (0, jsx_runtime_1.jsxs)("div", { className: `${className}`, children: [searcheables.length > 0 && ((0, jsx_runtime_1.jsx)("div", { children: (0, jsx_runtime_1.jsx)(index_js_2.TextFieldWithoutValidation, { className: "mb-2", name: "search", title: `Buscar por: ${searcheables
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [name && ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(GenericDynamicTableErrorComponent, { name: name }), (0, jsx_runtime_1.jsx)("input", { name: name, type: "hidden", value: JSON.stringify(tableData), hidden: true }), (0, jsx_runtime_1.jsx)("input", { name: `deleted_${name}`, type: "hidden", value: JSON.stringify(deletedData), hidden: true })] })), (0, jsx_runtime_1.jsxs)("div", { className: `${className}`, children: [searcheables.length > 0 && ((0, jsx_runtime_1.jsx)("div", { children: (0, jsx_runtime_1.jsx)(index_js_2.TextField, { className: "mb-2", name: "search", title: `Buscar por: ${searcheables
                                 .map((x) => x.label)
                                 .join(", ")}`, onChange: handleChangeSearch, disabled: loading }) })), (0, jsx_runtime_1.jsxs)("table", { className: "w-full", children: [(0, jsx_runtime_1.jsx)("thead", { children: renderHeader() }), (0, jsx_runtime_1.jsx)("tbody", { children: renderRows() }), footerRow && !editable ? ((0, jsx_runtime_1.jsx)("tfoot", { className: "border-t-2 border-black", children: (0, jsx_runtime_1.jsx)("tr", { children: Object.keys(footerRow ?? {})?.map((x, indx) => {
                                         return ((0, jsx_runtime_1.jsx)("td", { className: "align-middle", children: footerRow[x] }, indx));

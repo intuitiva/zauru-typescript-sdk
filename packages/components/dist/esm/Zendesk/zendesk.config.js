@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+//import jwt from "jsonwebtoken";
 export function zendeskJwt(current_user, configuration) {
     // get the INFO
     const jwtSecret = configuration.zendeskJWTSecret;
@@ -16,9 +16,10 @@ export function zendeskJwt(current_user, configuration) {
         scope: "user",
         exp: expiresIn,
     };
-    const jwtHeader = { kid: jwtKey, typ: "JWT", alg: "HS256" };
-    return jwt.sign(payload, jwtSecret, {
-        algorithm: "HS256",
-        header: jwtHeader,
-    });
+    // const jwtHeader: jwt.JwtHeader = { kid: jwtKey, typ: "JWT", alg: "HS256" };
+    // return jwt.sign(payload, jwtSecret, {
+    //   algorithm: "HS256",
+    //   header: jwtHeader,
+    // });
+    return {};
 }

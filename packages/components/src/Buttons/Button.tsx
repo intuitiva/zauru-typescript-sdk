@@ -1,4 +1,6 @@
 import type { ColorInterface } from "../NavBar/NavBar.types.js";
+import { useFormContext } from "react-hook-form";
+import { WithTooltip } from "../index.js";
 
 type Props = {
   type?: "reset" | "button" | "submit" | undefined;
@@ -27,6 +29,10 @@ export const Button = (props: Props) => {
     className = "",
     disabled = false,
   } = props;
+
+  const formContext = useFormContext();
+  const formHasErrors = formContext ? !formContext.formState.isValid : false;
+  const formErrors = formContext ? formContext.formState.errors : {};
 
   const COLORS = {
     green: {
@@ -67,17 +73,25 @@ export const Button = (props: Props) => {
 
   const inside = children ?? title;
 
-  return (
+  const errorMessage = formHasErrors
+    ? Object.values(formErrors)
+        .map((error) => error?.message?.toString())
+        .join(", ")
+    : "";
+
+  const buttonContent = (
     <button
       type={type}
       name="action"
-      disabled={loading || disabled}
+      disabled={loading || disabled || formHasErrors}
       value={name}
       onClick={onClickSave}
-      className={`ml-2 ${loading || disabled ? " bg-opacity-25 " : ""} ${
+      className={`ml-2 ${
+        loading || disabled || formHasErrors ? " bg-opacity-25 " : ""
+      } ${
         loading
           ? " cursor-progress"
-          : `${disabled ? "" : `hover:${color.bg700}`}`
+          : `${disabled || formHasErrors ? "" : `hover:${color.bg700}`}`
       } inline-flex justify-center rounded-md border border-transparent ${
         color.bg600
       } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
@@ -86,5 +100,11 @@ export const Button = (props: Props) => {
     >
       {loading ? loadingText : inside}
     </button>
+  );
+
+  return formHasErrors ? (
+    <WithTooltip text={errorMessage}>{buttonContent}</WithTooltip>
+  ) : (
+    buttonContent
   );
 };

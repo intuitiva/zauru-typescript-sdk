@@ -36,10 +36,17 @@ const customStyles = {
         style: {
             color: "#202124",
             fontSize: "14px",
-            justifyContent: "left", // Alinea el texto a la izquierda
-            whiteSpace: "normal", // Permite el ajuste de texto
-            wordBreak: "break-word", // Asegura que las palabras se rompan correctamente para evitar desbordamientos
-            maxWidth: "150px", // Establece un ancho máximo para las celdas del encabezado
+            justifyContent: "left",
+            whiteSpace: "normal",
+            wordBreak: "break-word",
+            maxWidth: "250px",
+            padding: "4px", // Add some padding
+        },
+    },
+    cells: {
+        style: {
+            whiteSpace: "normal", // Allow wrapping for cell content
+            wordBreak: "break-word",
         },
     },
     rows: {

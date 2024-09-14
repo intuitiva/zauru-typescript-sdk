@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
-import { SelectFieldWithoutValidation } from "../Form/SelectField/index.js";
-import { TextFieldWithoutValidation } from "../Form/TextField/index.js";
-import { CheckboxWithoutValidation } from "../Form/Checkbox/index.js";
+import { SelectField } from "../Form/SelectField/index.js";
+import { TextField } from "../Form/TextField/index.js";
+import { CheckBox } from "../Form/Checkbox/index.js";
 import { createModal } from "../Modal/index.js";
 import { Button } from "../Buttons/index.js";
 import { useAppSelector } from "@zauru-sdk/redux";
@@ -61,7 +61,6 @@ export const GenericDynamicTable = (props) => {
             newDeletedData.push(deletedItem);
         }
         setDeletedData(newDeletedData);
-        onChange && onChange(tableData?.filter((x) => x.id !== rowId));
         setTableData((prevData) => prevData?.filter((x) => x.id !== rowId));
     };
     const handleChange = (name, value, rowId) => {
@@ -94,10 +93,10 @@ export const GenericDynamicTable = (props) => {
                         return (_jsx("td", { className: "align-middle p-1", children: _jsx("div", { children: defaultVal }) }, `${rowData.id}-${column.name}`));
                     }
                     const FieldComponent = column.type === "textField"
-                        ? TextFieldWithoutValidation
+                        ? TextField
                         : column.type === "checkbox"
-                            ? CheckboxWithoutValidation
-                            : SelectFieldWithoutValidation;
+                            ? CheckBox
+                            : SelectField;
                     const setTableValue = (columnName, newValue) => {
                         setTableData((prevState) => {
                             // Encontrar el índice de la fila que está cambiando
@@ -182,7 +181,7 @@ export const GenericDynamicTable = (props) => {
             setFilteredTableData(tableData);
         }
     };
-    return (_jsxs(_Fragment, { children: [name && (_jsxs(_Fragment, { children: [_jsx(GenericDynamicTableErrorComponent, { name: name }), _jsx("input", { name: name, type: "hidden", value: JSON.stringify(tableData), hidden: true }), _jsx("input", { name: `deleted_${name}`, type: "hidden", value: JSON.stringify(deletedData), hidden: true })] })), _jsxs("div", { className: `${className}`, children: [searcheables.length > 0 && (_jsx("div", { children: _jsx(TextFieldWithoutValidation, { className: "mb-2", name: "search", title: `Buscar por: ${searcheables
+    return (_jsxs(_Fragment, { children: [name && (_jsxs(_Fragment, { children: [_jsx(GenericDynamicTableErrorComponent, { name: name }), _jsx("input", { name: name, type: "hidden", value: JSON.stringify(tableData), hidden: true }), _jsx("input", { name: `deleted_${name}`, type: "hidden", value: JSON.stringify(deletedData), hidden: true })] })), _jsxs("div", { className: `${className}`, children: [searcheables.length > 0 && (_jsx("div", { children: _jsx(TextField, { className: "mb-2", name: "search", title: `Buscar por: ${searcheables
                                 .map((x) => x.label)
                                 .join(", ")}`, onChange: handleChangeSearch, disabled: loading }) })), _jsxs("table", { className: "w-full", children: [_jsx("thead", { children: renderHeader() }), _jsx("tbody", { children: renderRows() }), footerRow && !editable ? (_jsx("tfoot", { className: "border-t-2 border-black", children: _jsx("tr", { children: Object.keys(footerRow ?? {})?.map((x, indx) => {
                                         return (_jsx("td", { className: "align-middle", children: footerRow[x] }, indx));

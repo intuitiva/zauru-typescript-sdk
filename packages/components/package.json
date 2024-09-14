@@ -31,6 +31,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
     "@reduxjs/toolkit": "^2.2.1",
     "@remix-run/react": "^2.8.1",
     "@zauru-sdk/common": "^1.0.99",
@@ -43,9 +44,11 @@
     "react": "^18.2.0",
     "react-data-table-component": "^7.6.2",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.53.0",
     "react-is": "^18.2.0",
     "react-select": "^5.8.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "zod": "^3.23.8"
   },
   "gitHead": "4afb063c0534f4a103ffec5e7d5be75d283fdc00"
 }

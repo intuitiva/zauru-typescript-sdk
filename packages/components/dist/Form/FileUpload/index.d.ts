@@ -9,13 +9,12 @@ type Props = {
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     disabled?: boolean;
     readOnly?: boolean;
-    error?: string | undefined;
     fileTypes?: string[];
     showAvailableTypes?: boolean;
     className?: string;
     defaultValue?: string | File;
     download?: boolean;
+    required?: boolean;
 };
-export declare const FileUploadFieldWithoutValidation: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export declare const FileUploadField: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

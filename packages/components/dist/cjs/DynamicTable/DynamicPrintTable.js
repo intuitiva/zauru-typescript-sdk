@@ -36,11 +36,11 @@ const errorAnimation = {
 const DynamicPrintTable = ({ forwardedRef, ...props }) => {
     const { items, onChange, className } = props;
     const { formValidations } = (0, redux_1.useAppSelector)((state) => state.formValidation);
-    const createItemSelect = (rowIndex, defaultValue) => ((0, jsx_runtime_1.jsx)(index_js_2.SelectFieldWithoutValidation, { name: "item_select", isClearable: true, onChange: (value) => {
+    const createItemSelect = (rowIndex, defaultValue) => ((0, jsx_runtime_1.jsx)(index_js_2.SelectField, { name: "item_select", isClearable: true, onChange: (value) => {
             const selectedItem = items?.find((x) => x.value === value?.value);
             updateRow(rowIndex, selectedItem);
         }, options: items, defaultValue: defaultValue }, rowIndex));
-    const createItemQuantity = (rowIndex, defaultValue) => ((0, jsx_runtime_1.jsx)(index_js_1.TextFieldWithoutValidation, { name: "item_quantity", type: "number", integer: true, defaultValue: defaultValue ?? 1, min: 1, onChange: (value) => {
+    const createItemQuantity = (rowIndex, defaultValue) => ((0, jsx_runtime_1.jsx)(index_js_1.TextField, { name: "item_quantity", type: "number", integer: true, defaultValue: defaultValue ?? 1, min: 1, onChange: (value) => {
             updateRow(rowIndex, undefined, Number(value));
         } }, rowIndex));
     const createTemplateName = (rowIndex, defaultValue) => ((0, jsx_runtime_1.jsx)("div", { children: defaultValue != "" ? defaultValue : "No hay etiqueta" }, rowIndex));

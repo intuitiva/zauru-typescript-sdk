@@ -1,4 +1,4 @@
-import { TextField, TextFieldWithoutValidation } from "../TextField/index.js";
+import { TextField } from "../TextField/index.js";
 import { TripleFieldContainer } from "../FieldContainer/index.js";
 import { DoubleFieldContainer } from "../FieldContainer/index.js";
 import { YesNo } from "../YesNo/index.js";
@@ -74,7 +74,7 @@ export function DynamicBaculoForm(props: Props) {
       }
       case "zauru_data":
         return (
-          <TextFieldWithoutValidation
+          <TextField
             key={field.id}
             title={`${field.required ? "*" : ""}${field.name}`}
             hint={field.hint}

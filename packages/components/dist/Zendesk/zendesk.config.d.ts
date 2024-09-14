@@ -6,4 +6,4 @@ export declare function zendeskJwt(current_user: {
 }, configuration: {
     zendeskJWTSecret: string;
     zendeskJWTKey: string;
-}): string;
+}): {};

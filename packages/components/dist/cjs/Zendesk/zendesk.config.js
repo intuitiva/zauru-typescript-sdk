@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+//import jwt from "jsonwebtoken";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.zendeskJwt = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 function zendeskJwt(current_user, configuration) {
     // get the INFO
     const jwtSecret = configuration.zendeskJWTSecret;
@@ -22,10 +19,11 @@ function zendeskJwt(current_user, configuration) {
         scope: "user",
         exp: expiresIn,
     };
-    const jwtHeader = { kid: jwtKey, typ: "JWT", alg: "HS256" };
-    return jsonwebtoken_1.default.sign(payload, jwtSecret, {
-        algorithm: "HS256",
-        header: jwtHeader,
-    });
+    // const jwtHeader: jwt.JwtHeader = { kid: jwtKey, typ: "JWT", alg: "HS256" };
+    // return jwt.sign(payload, jwtSecret, {
+    //   algorithm: "HS256",
+    //   header: jwtHeader,
+    // });
+    return {};
 }
 exports.zendeskJwt = zendeskJwt;

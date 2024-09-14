@@ -10,6 +10,7 @@ import type {
   ColorInterface,
   DropDownLinkButtonType,
   EntityProps,
+  NavBarItemsSchema,
   NavBarProps,
   NavItemProps,
 } from "./NavBar.types.js";
@@ -88,7 +89,7 @@ const NavItem = ({
       <div
         className={`${
           specialColor ? specialColor.bg700 : color.bg700
-        } container text-white w-56 sm:w-auto h-10 text-sm py-1 uppercase rounded shadow hover:shadow-lg outline-none rounded-full focus:outline-none my-auto sm:my-0 sm:mr-1 mb-1 ease-linear transition-all duration-150 `}
+        } container text-white w-full sm:w-auto h-10 text-sm py-1 uppercase shadow hover:shadow-lg outline-none rounded-full focus:outline-none my-auto sm:my-0 sm:mr-1 mb-1 ease-linear transition-all duration-150 `}
       >
         <Link
           className="px-3 flex items-center text-xs leading-snug text-white uppercase hover:opacity-75"
@@ -114,36 +115,36 @@ export const NavBar = ({
   const color: ColorInterface = COLORS[selectedColor];
   const [NavBarOpen, setNavBarOpen] = useState(false);
 
+  const renderNavItems = (items: NavBarItemsSchema[]) => (
+    <div className="flex flex-col lg:flex-row w-full">
+      {items.map((item, index) => {
+        const specialColor: ColorInterface | undefined = item.color
+          ? COLORS[item.color]
+          : undefined;
+        return (
+          <NavItem
+            key={index}
+            name={item.name}
+            link={item.link}
+            icon={item.icon}
+            specialColor={specialColor}
+            color={color}
+            childrens={item.childrens?.map((x) => {
+              return { ...x } as any;
+            })}
+          />
+        );
+      })}
+    </div>
+  );
+
   const options = (
     <>
-      <ul>
-        {loggedIn && (
-          <div className="flex flex-col sm:flex-row ">
-            {items
-              .filter((item) => item.loggedIn)
-              .map((item, index) => {
-                const specialColor: ColorInterface | undefined = item.color
-                  ? COLORS[item.color]
-                  : undefined;
-                return (
-                  <NavItem
-                    key={index}
-                    name={item.name}
-                    link={item.link}
-                    icon={item.icon}
-                    specialColor={specialColor}
-                    color={color}
-                    childrens={item.childrens?.map((x) => {
-                      return { ...x } as any;
-                    })}
-                  />
-                );
-              })}
-          </div>
-        )}
+      <ul className="w-full lg:flex lg:items-center">
+        {renderNavItems(items.filter((item) => item.loggedIn === loggedIn))}
       </ul>
-      <ul className="sm:flex sm:flex-col ml-auto lg:flex-row">
-        {loggedIn ? (
+      <ul className="sm:flex sm:flex-col lg:flex-row ml-auto">
+        {loggedIn && (
           <OptionsDropDownButton
             color={color}
             options={[
@@ -156,20 +157,6 @@ export const NavBar = ({
               />,
             ]}
           />
-        ) : (
-          items
-            .filter((item) => !item.loggedIn)
-            .map((item, index) => {
-              return (
-                <NavItem
-                  key={index}
-                  name={item.name}
-                  link={item.link}
-                  icon={item.icon}
-                  color={color}
-                />
-              );
-            })
         )}
       </ul>
     </>
@@ -207,16 +194,18 @@ export const NavBar = ({
         </div>
         {/* Menú para dispositivos móviles */}
         <div
-          className={`lg:hidden absolute top-0 left-0 z-50 w-64 h-full ${
+          className={`lg:hidden fixed top-0 left-0 z-50 w-64 h-full ${
             color.bg700
           } shadow-lg transform ${
             NavBarOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 ease-in-out`}
+          } transition-transform duration-300 ease-in-out overflow-y-auto`}
         >
-          {options}
+          <div className="p-4">{options}</div>
         </div>
         {/* Menú para escritorio */}
-        <div className="hidden lg:flex w-full lg:w-auto">{options}</div>
+        <div className="hidden lg:flex lg:items-center w-full lg:w-auto">
+          {options}
+        </div>
       </div>
     </nav>
   );

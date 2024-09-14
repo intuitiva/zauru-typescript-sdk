@@ -1,11 +1,10 @@
 import { IdeaIconSVG } from "@zauru-sdk/icons";
-import { useAppSelector } from "@zauru-sdk/redux";
 import React, { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 type Props = {
   id?: string;
   name?: string;
-  formName?: string;
   title?: string;
   defaultValue?: string | number;
   hidden?: boolean;
@@ -19,15 +18,15 @@ type Props = {
   onKeyDown?: (event: React.KeyboardEvent) => void;
   disabled?: boolean;
   readOnly?: boolean;
-  error?: string;
   min?: string | number;
   integer?: boolean;
   stopChangeEvents?: boolean;
   style?: React.CSSProperties;
   className?: string;
+  required?: boolean;
 };
 
-export const TextFieldWithoutValidation = (props: Props) => {
+export const TextField = (props: Props) => {
   const {
     id,
     name,
@@ -42,15 +41,26 @@ export const TextFieldWithoutValidation = (props: Props) => {
     integer = false,
     stopChangeEvents,
     style,
-    error,
     title,
     helpText,
     className,
     hint,
+    required,
   } = props;
 
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const [value, setValue] = useState(defaultValue);
+  const {
+    register: tempRegister,
+    formState: { errors },
+  } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
+  const error = errors ? errors[props.name ?? "-1"] : undefined;
+  const register = tempRegister
+    ? tempRegister(props.name ?? "-1", {
+        valueAsNumber: props.type === "number",
+        required,
+      })
+    : undefined; // Solo usar register si está disponible
 
   const color = error ? "red" : "gray";
 
@@ -68,15 +78,19 @@ export const TextFieldWithoutValidation = (props: Props) => {
       <input
         type={type}
         id={id ?? name}
-        name={name}
         value={defaultValue}
         readOnly={true}
         hidden={true}
+        {...(register ?? {})}
+        name={name}
       />
     );
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (register) {
+      register.onChange(event);
+    }
     if (stopChangeEvents) {
       event.stopPropagation();
       event.preventDefault();
@@ -114,7 +128,6 @@ export const TextFieldWithoutValidation = (props: Props) => {
   const inputComponent = (
     <input
       type={type}
-      name={name}
       readOnly={readOnly}
       disabled={disabled}
       id={id ?? name}
@@ -124,7 +137,6 @@ export const TextFieldWithoutValidation = (props: Props) => {
         e.currentTarget.blur();
       }}
       step={type === "number" ? 0.01 : undefined} //para aceptar decimales
-      onChange={handleInputChange}
       onKeyDown={(event: React.KeyboardEvent) => {
         handleKeyDown(event);
         onKeyDown && onKeyDown(event);
@@ -132,6 +144,9 @@ export const TextFieldWithoutValidation = (props: Props) => {
       min={min}
       style={style}
       className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
+      {...(register ?? {})}
+      name={name}
+      onChange={handleInputChange}
     />
   );
 
@@ -147,6 +162,7 @@ export const TextFieldWithoutValidation = (props: Props) => {
           className={`block mb-1 text-sm font-medium text-${color}-700 dark:text-${color}-500`}
         >
           {title}
+          {required && <span className="text-red-500">*</span>}
         </label>
       )}
       <div className="flex relative items-center">
@@ -170,7 +186,7 @@ export const TextFieldWithoutValidation = (props: Props) => {
       </div>
       {error && (
         <p className={`mt-2 text-sm text-${color}-600 dark:text-${color}-500`}>
-          <span className="font-medium">Oops!</span> {error}
+          <span className="font-medium">Oops!</span> {error.message?.toString()}
         </p>
       )}
       {!error && hint && (
@@ -182,13 +198,4 @@ export const TextFieldWithoutValidation = (props: Props) => {
       )}
     </div>
   );
-};
-
-export const TextField = (props: Props) => {
-  const { formValidations } = useAppSelector((state) => state.formValidation);
-  const error = formValidations[props.formName ?? "-1"]?.[props.name ?? "-1"];
-
-  props = { ...props, error };
-
-  return <TextFieldWithoutValidation {...props} />;
 };

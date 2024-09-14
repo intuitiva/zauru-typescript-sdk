@@ -1,8 +1,8 @@
 import { jsxs as _jsxs, Fragment as _Fragment, jsx as _jsx } from "react/jsx-runtime";
 import React, { useEffect, useState } from "react";
-import { TextAreaWithoutValidation } from "../Form/TextArea/index.js";
-import { TextFieldWithoutValidation } from "../Form/TextField/index.js";
-import { CheckboxWithoutValidation } from "../Form/Checkbox/index.js";
+import { TextArea } from "../Form/TextArea/index.js";
+import { TextField } from "../Form/TextField/index.js";
+import { CheckBox } from "../Form/Checkbox/index.js";
 export const DynamicTable = ({ forwardedRef, ...props }, ref) => {
     const [tableData, setTableData] = useState({});
     const { cellInputs, intersectionTitle, className, onChange, defaultValue, margins, } = props;
@@ -147,7 +147,7 @@ export const DynamicTable = ({ forwardedRef, ...props }, ref) => {
         return (_jsxs("tr", { children: [_jsx("th", { className: "align-middle py-2 text-center", style: {
                         ...cellBordered,
                         ...pastelGrayBackground,
-                    }, children: intersectionTitle ?? "" }), cols.map((col) => (_jsx("th", { className: "align-middle py-2 text-center", style: { ...cellBordered, ...pastelGrayBackground }, children: _jsxs("div", { className: "inline-flex", children: [_jsx(TextFieldWithoutValidation, { style: { maxWidth: "45%", minWidth: "45%" }, name: `column${col.id}`, defaultValue: tableData[`column${col.id}`] || 1, type: "number", onChange: (value) => handleInputChange(`column${col.id}`, value) }), col.id > 0 && (_jsx("button", { className: "bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2", onClick: () => removeCol(col.id), children: "x" }))] }) }, col.id))), _jsx("th", { children: _jsx("button", { className: "bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded", onClick: addCol, children: "+" }) })] }));
+                    }, children: intersectionTitle ?? "" }), cols.map((col) => (_jsx("th", { className: "align-middle py-2 text-center", style: { ...cellBordered, ...pastelGrayBackground }, children: _jsxs("div", { className: "inline-flex", children: [_jsx(TextField, { style: { maxWidth: "45%", minWidth: "45%" }, name: `column${col.id}`, defaultValue: tableData[`column${col.id}`] || 1, type: "number", onChange: (value) => handleInputChange(`column${col.id}`, value) }), col.id > 0 && (_jsx("button", { className: "bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2", onClick: () => removeCol(col.id), children: "x" }))] }) }, col.id))), _jsx("th", { children: _jsx("button", { className: "bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded", onClick: addCol, children: "+" }) })] }));
     };
     const renderRow = (rowId) => {
         const cols = getCols();
@@ -157,14 +157,14 @@ export const DynamicTable = ({ forwardedRef, ...props }, ref) => {
                         textOverflow: "ellipsis",
                         msTextOverflow: "ellipsis",
                         maxWidth: "200px",
-                    }, children: _jsxs("div", { className: "inline-flex", children: [_jsx(TextFieldWithoutValidation, { style: { maxWidth: "45%", minWidth: "45%" }, name: `row${rowId}`, defaultValue: tableData[`row${rowId}`] || 1, type: "number", onChange: (value) => handleInputChange(`row${rowId}`, value) }), rowId > 0 && (_jsx("button", { className: "bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2", onClick: () => {
+                    }, children: _jsxs("div", { className: "inline-flex", children: [_jsx(TextField, { style: { maxWidth: "45%", minWidth: "45%" }, name: `row${rowId}`, defaultValue: tableData[`row${rowId}`] || 1, type: "number", onChange: (value) => handleInputChange(`row${rowId}`, value) }), rowId > 0 && (_jsx("button", { className: "bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2", onClick: () => {
                                     removeRow(rowId);
                                 }, children: "x" }))] }) }), cols.map((col) => {
                     const cellId = `cell-${rowId}-${col.id}`;
                     const cellValidation = tableData[cellId] === true;
                     if (!cellInputs)
                         tableData[cellId] = cellValidation;
-                    return (_jsx("td", { id: cellId, style: { ...cellBordered, ...cellCenteredContent }, children: cellInputs ? (_jsx(TextAreaWithoutValidation, { name: cellId, defaultValue: tableData[cellId] || "", onChange: (value) => handleInputChange(cellId, value) })) : (_jsx(CheckboxWithoutValidation, { name: cellId, defaultValue: cellValidation, onChange: (value) => {
+                    return (_jsx("td", { id: cellId, style: { ...cellBordered, ...cellCenteredContent }, children: cellInputs ? (_jsx(TextArea, { name: cellId, defaultValue: tableData[cellId] || "", onChange: (value) => handleInputChange(cellId, value) })) : (_jsx(CheckBox, { name: cellId, defaultValue: cellValidation, onChange: (value) => {
                                 if (value) {
                                     return handleValidation(cellId, col.id, rowId);
                                 }

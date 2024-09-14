@@ -9,6 +9,6 @@ const Checklist = ({ items, onChange }) => {
             onChange(name, value);
         }
     };
-    return ((0, jsx_runtime_1.jsx)("div", { children: items.map((item) => ((0, jsx_runtime_1.jsx)(index_js_1.CheckboxWithoutValidation, { ...item, onChange: (value) => handleCheckboxChange(item.name, value) }, item.id))) }));
+    return ((0, jsx_runtime_1.jsx)("div", { children: items.map((item) => ((0, jsx_runtime_1.jsx)(index_js_1.CheckBox, { ...item, onChange: (value) => handleCheckboxChange(item.name, value) }, item.id))) }));
 };
 exports.Checklist = Checklist;

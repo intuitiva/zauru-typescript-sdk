@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { TextAreaWithoutValidation } from "../Form/TextArea/index.js";
-import { TextFieldWithoutValidation } from "../Form/TextField/index.js";
-import { CheckboxWithoutValidation } from "../Form/Checkbox/index.js";
+import { TextArea } from "../Form/TextArea/index.js";
+import { TextField } from "../Form/TextField/index.js";
+import { CheckBox } from "../Form/Checkbox/index.js";
 
 type Props = {
   cellInputs?: boolean;
@@ -251,7 +251,7 @@ export const DynamicTable = (
             style={{ ...cellBordered, ...pastelGrayBackground }}
           >
             <div className="inline-flex">
-              <TextFieldWithoutValidation
+              <TextField
                 style={{ maxWidth: "45%", minWidth: "45%" }}
                 name={`column${col.id}`}
                 defaultValue={tableData[`column${col.id}`] || 1}
@@ -298,7 +298,7 @@ export const DynamicTable = (
           }}
         >
           <div className="inline-flex">
-            <TextFieldWithoutValidation
+            <TextField
               style={{ maxWidth: "45%", minWidth: "45%" }}
               name={`row${rowId}`}
               defaultValue={tableData[`row${rowId}`] || 1}
@@ -329,13 +329,13 @@ export const DynamicTable = (
               style={{ ...cellBordered, ...cellCenteredContent }}
             >
               {cellInputs ? (
-                <TextAreaWithoutValidation
+                <TextArea
                   name={cellId}
                   defaultValue={tableData[cellId] || ""}
                   onChange={(value) => handleInputChange(cellId, value)}
                 />
               ) : (
-                <CheckboxWithoutValidation
+                <CheckBox
                   name={cellId}
                   defaultValue={cellValidation}
                   onChange={(value) => {

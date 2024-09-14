@@ -1,10 +1,9 @@
-import { useAppSelector } from "@zauru-sdk/redux";
 import React, { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 type Props = {
   id?: string;
   name: string;
-  formName?: string;
   title?: string;
   defaultValue?: string | number;
   hidden?: boolean;
@@ -14,14 +13,14 @@ type Props = {
   onKeyDown?: (event: React.KeyboardEvent) => void;
   disabled?: boolean;
   readOnly?: boolean;
-  error?: string | undefined;
   rows?: number;
   cols?: number;
   stopChangeEvents?: boolean;
   className?: string;
+  required?: boolean;
 };
 
-export const TextAreaWithoutValidation = (props: Props) => {
+export const TextArea = (props: Props) => {
   const {
     id,
     name,
@@ -32,15 +31,23 @@ export const TextAreaWithoutValidation = (props: Props) => {
     onChange,
     onKeyDown,
     disabled = false,
-    error = false,
     readOnly = false,
     rows,
     cols,
     stopChangeEvents,
     className = "",
+    required,
   } = props;
 
   const [value, setValue] = useState(defaultValue);
+  const {
+    register: tempRegister,
+    formState: { errors },
+  } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
+  const error = errors ? errors[props.name ?? "-1"] : undefined;
+  const register = tempRegister
+    ? tempRegister(props.name ?? "-1", { required })
+    : undefined; // Solo usar register si está disponible
 
   const color = error ? "red" : "gray";
   const isReadOnly = disabled || readOnly;
@@ -56,15 +63,19 @@ export const TextAreaWithoutValidation = (props: Props) => {
     return (
       <textarea
         id={id ?? name}
-        name={name}
         value={defaultValue}
         readOnly={true}
         hidden={true}
+        {...(register ?? {})}
+        name={name}
       />
     );
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (register) {
+      register.onChange(event);
+    }
     if (stopChangeEvents) {
       event.stopPropagation();
       event.preventDefault();
@@ -81,10 +92,10 @@ export const TextAreaWithoutValidation = (props: Props) => {
           className={`block text-sm font-medium text-${color}-700 dark:text-${color}-500`}
         >
           {title}
+          {required && <span className="text-red-500">*</span>}
         </label>
       )}
       <textarea
-        name={name}
         readOnly={readOnly}
         disabled={disabled}
         id={id ?? name}
@@ -92,15 +103,17 @@ export const TextAreaWithoutValidation = (props: Props) => {
         value={value}
         rows={rows}
         cols={cols}
-        onChange={handleInputChange}
         onKeyDown={(event: React.KeyboardEvent) => {
           onKeyDown && onKeyDown(event);
         }}
         className={`mt-1 block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
+        {...(register ?? {})}
+        name={name}
+        onChange={handleInputChange}
       />
       {error && (
         <p className={`mt-2 text-sm text-${color}-600 dark:text-${color}-500`}>
-          <span className="font-medium">Oops!</span> {error}
+          <span className="font-medium">Oops!</span> {error.message?.toString()}
         </p>
       )}
       {!error && hint && (
@@ -112,14 +125,4 @@ export const TextAreaWithoutValidation = (props: Props) => {
       )}
     </div>
   );
-};
-
-//<reference> https://tailwindui.com/components/application-ui/forms/form-layouts
-export const TextArea = (props: Props) => {
-  const { formValidations } = useAppSelector((state) => state.formValidation);
-  const error = formValidations[props.formName ?? "-1"]?.[props.name ?? "-1"];
-
-  props = { ...props, error };
-
-  return <TextAreaWithoutValidation {...props} />;
 };

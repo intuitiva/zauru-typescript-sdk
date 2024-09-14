@@ -1,6 +1,6 @@
 import { ClockIconSVG, CloseSvgIcon, IdeaIconSVG } from "@zauru-sdk/icons";
-import { useAppSelector } from "@zauru-sdk/redux";
 import React, { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 type Props = {
   id?: string;
@@ -12,11 +12,11 @@ type Props = {
   defaultValue?: string;
   onChange?: (value: string) => void;
   tabIndex?: number;
-  error?: string;
   disabled?: boolean;
+  required?: boolean;
 };
 
-export const FormTimePickerWithoutValidation = (props: Props) => {
+export const FormTimePicker = (props: Props) => {
   const {
     id,
     name,
@@ -26,12 +26,20 @@ export const FormTimePickerWithoutValidation = (props: Props) => {
     helpText,
     onChange,
     tabIndex,
-    error,
     disabled = false,
+    required = false,
   } = props;
 
   const [value, setValue] = useState<string>(defaultValue);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const {
+    register: tempRegister,
+    formState: { errors },
+  } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
+  const error = errors ? errors[props.name ?? "-1"] : undefined;
+  const register = tempRegister
+    ? tempRegister(props.name ?? "-1", { required })
+    : undefined; // Solo usar register si está disponible
 
   const color = error ? "red" : "gray";
 
@@ -49,6 +57,14 @@ export const FormTimePickerWithoutValidation = (props: Props) => {
     onChange && onChange("");
   };
 
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    onChange && onChange(e.target.value);
+    if (register) {
+      register.onChange(e);
+    }
+  };
+
   return (
     <>
       {title && (
@@ -57,6 +73,7 @@ export const FormTimePickerWithoutValidation = (props: Props) => {
           className={`block text-sm font-medium ${textColor}`}
         >
           {title}
+          {required && <span className="text-red-500">*</span>}
         </label>
       )}
       <div className="flex relative items-center">
@@ -65,16 +82,14 @@ export const FormTimePickerWithoutValidation = (props: Props) => {
         </div>
         <input
           id={id}
-          name={name}
           tabIndex={tabIndex}
           type="time"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setValue(e.target.value);
-            onChange && onChange(e.target.value);
-          }}
           value={value}
           pattern="\d{2}:\d{2}"
           className={`${bgColor} ${borderColor} ${textColor} text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5`}
+          {...(register ?? {})}
+          name={name}
+          onChange={handleOnChange}
         />
         {value && (
           <button
@@ -104,7 +119,7 @@ export const FormTimePickerWithoutValidation = (props: Props) => {
       </div>
       {error && (
         <p className={`mt-2 text-sm text-${color}-600 dark:text-${color}-500`}>
-          <span className="font-medium">Oops!</span> {error}
+          <span className="font-medium">Oops!</span> {error.message?.toString()}
         </p>
       )}
       {!error && hint && (
@@ -116,12 +131,4 @@ export const FormTimePickerWithoutValidation = (props: Props) => {
       )}
     </>
   );
-};
-
-export const FormTimePicker = (props: Props) => {
-  const { formValidations } = useAppSelector((state) => state.formValidation);
-  const error = formValidations[props.formName ?? "-1"]?.[props.name ?? "-1"];
-  props = { ...props, error };
-
-  return <FormTimePickerWithoutValidation {...props} />;
 };

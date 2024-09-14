@@ -1,6 +1,11 @@
 import { jsx as _jsx } from "react/jsx-runtime";
+import { useFormContext } from "react-hook-form";
+import { WithTooltip } from "../index.js";
 export const Button = (props) => {
     const { type = "submit", loading = false, loadingText = "Guardando...", title = "Guardar", name = "save", onClickSave, selectedColor = "indigo", children, className = "", disabled = false, } = props;
+    const formContext = useFormContext();
+    const formHasErrors = formContext ? !formContext.formState.isValid : false;
+    const formErrors = formContext ? formContext.formState.errors : {};
     const COLORS = {
         green: {
             bg900: "bg-green-900",
@@ -37,7 +42,13 @@ export const Button = (props) => {
     };
     const color = COLORS[selectedColor];
     const inside = children ?? title;
-    return (_jsx("button", { type: type, name: "action", disabled: loading || disabled, value: name, onClick: onClickSave, className: `ml-2 ${loading || disabled ? " bg-opacity-25 " : ""} ${loading
+    const errorMessage = formHasErrors
+        ? Object.values(formErrors)
+            .map((error) => error?.message?.toString())
+            .join(", ")
+        : "";
+    const buttonContent = (_jsx("button", { type: type, name: "action", disabled: loading || disabled || formHasErrors, value: name, onClick: onClickSave, className: `ml-2 ${loading || disabled || formHasErrors ? " bg-opacity-25 " : ""} ${loading
             ? " cursor-progress"
-            : `${disabled ? "" : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }));
+            : `${disabled || formHasErrors ? "" : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }));
+    return formHasErrors ? (_jsx(WithTooltip, { text: errorMessage, children: buttonContent })) : (buttonContent);
 };

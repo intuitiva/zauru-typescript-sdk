@@ -1,74 +1,143 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { IdeaIconSVG } from "@zauru-sdk/icons";
-import { useAppSelector } from "@zauru-sdk/redux";
-import { useEffect, useState } from "react";
-import Select, { components } from "react-select";
+import { useEffect, useState, useRef } from "react";
 import { LoadingInputSkeleton } from "../../Skeletons/index.js";
-const Input = (props) => (_jsx(components.Input, { ...props, readOnly: props.selectProps.isReadOnly }));
-export const SelectFieldWithoutValidation = (props) => {
-    const { id, name, title, defaultValue, defaultValueMulti = [], helpText, hint, options, onChange, onChangeMulti, isClearable = false, error = false, disabled = false, readOnly = false, isMulti = false, loading = false, className = "", onInputChange, } = props;
+import { useFormContext, Controller } from "react-hook-form";
+export const SelectField = (props) => {
+    const { id, name, title, defaultValue, defaultValueMulti = [], helpText, hint, options, onChange, onChangeMulti, isClearable = false, disabled = false, readOnly = false, isMulti = false, loading = false, className = "", onInputChange, required, } = props;
     const [value, setValue] = useState(defaultValue || null);
     const [valueMulti, setValueMulti] = useState(defaultValueMulti);
-    const [inputValue, setInputValue] = useState("");
+    const [inputValue, setInputValue] = useState(defaultValue?.label || "");
     const [showTooltip, setShowTooltip] = useState(false);
-    const [isClient, setIsClient] = useState(typeof window !== "undefined");
-    const menuIsOpen = readOnly ? false : props?.menuIsOpen;
+    const [isOpen, setIsOpen] = useState(false);
+    const [filteredOptions, setFilteredOptions] = useState(options);
+    const [highlightedIndex, setHighlightedIndex] = useState(-1);
+    const selectRef = useRef(null);
+    const optionsRef = useRef(null);
+    const [isTabPressed, setIsTabPressed] = useState(false);
+    const [isEnterPressed, setIsEnterPressed] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
+    const { control, formState: { errors }, setValue: setFormValue, } = useFormContext() || { formState: {} };
+    const error = errors ? errors[props.name ?? "-1"] : undefined;
     const color = error ? "red" : "gray";
-    let documentRef = null;
     const isReadOnly = disabled || readOnly;
     const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
     const textColor = isReadOnly ? "text-gray-500" : `text-${color}-900`;
     const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-500`;
-    if (typeof window !== "undefined") {
-        documentRef = document;
-    }
     useEffect(() => {
-        setValue(defaultValue || null);
-    }, [defaultValue]);
+        setFilteredOptions(options);
+    }, [options]);
     useEffect(() => {
-        setIsClient(true);
+        const handleClickOutside = (event) => {
+            if (selectRef.current &&
+                !selectRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        if (defaultValue) {
+            setValue(defaultValue);
+            setInputValue(defaultValue.label);
+            setFormValue(name || "", defaultValue);
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
     }, []);
-    if (!isClient || loading || !documentRef) {
-        return (_jsxs(_Fragment, { children: [title && (_jsx("label", { htmlFor: error ? `${name}-error` : `${name}-success`, className: `block text-sm font-medium text-${color}-700 dark:text-${color}-500`, children: title })), _jsx(LoadingInputSkeleton, {}), helpText && (_jsx("p", { className: `mt-2 italic text-sm text-${color}-500 dark:text-${color}-400`, children: helpText }))] }));
-    }
-    const handleOnChange = (selection) => {
-        // Verificar si el valor de selección es un objeto con propiedades 'value' y 'label'
-        if (typeof selection === "object" &&
-            selection !== null &&
-            "value" in selection &&
-            "label" in selection) {
-            setValue(selection);
-            onChange && onChange(selection);
+    const handleInputChange = (e) => {
+        const newValue = e.target.value;
+        setInputValue(newValue);
+        onInputChange && onInputChange(newValue);
+        setIsSearching(true);
+        setFilteredOptions(options.filter((option) => option.label.toLowerCase().includes(newValue.toLowerCase())));
+    };
+    const handleOptionClick = (option) => {
+        if (isMulti) {
+            const newValue = valueMulti.some((v) => v.value === option.value)
+                ? valueMulti.filter((v) => v.value !== option.value)
+                : [...valueMulti, option];
+            setValueMulti(newValue);
+            onChangeMulti && onChangeMulti(newValue);
+            setFormValue(name || "", newValue);
+        }
+        else {
+            setValue(option);
+            setInputValue(option.label);
+            onChange && onChange(option);
+            setFormValue(name || "", option);
+        }
+        setIsOpen(false);
+    };
+    const handleClear = () => {
+        if (isMulti) {
+            setValueMulti([]);
+            onChangeMulti && onChangeMulti([]);
+            setFormValue(name || "", []);
         }
         else {
             setValue(null);
             onChange && onChange(null);
+            setFormValue(name || "", null);
+        }
+        setInputValue("");
+    };
+    const handleBlur = () => {
+        setTimeout(() => {
+            if (isTabPressed &&
+                filteredOptions.length > 0 &&
+                !isEnterPressed &&
+                isSearching) {
+                handleOptionClick(filteredOptions[0]);
+            }
+            setIsTabPressed(false);
+            setIsEnterPressed(false);
+            setIsSearching(false);
+            setIsOpen(false);
+        }, 200);
+    };
+    const handleKeyDown = (e) => {
+        if (e.key === "Tab") {
+            setIsTabPressed(true);
+        }
+        else if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setHighlightedIndex((prevIndex) => prevIndex < filteredOptions.length - 1 ? prevIndex + 1 : 0);
+            scrollToHighlightedOption();
+        }
+        else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setHighlightedIndex((prevIndex) => prevIndex > 0 ? prevIndex - 1 : filteredOptions.length - 1);
+            scrollToHighlightedOption();
+        }
+        else if (e.key === "Enter" && highlightedIndex !== -1) {
+            e.preventDefault();
+            setIsEnterPressed(true);
+            handleOptionClick(filteredOptions[highlightedIndex]);
         }
     };
-    const handleOnChangeMulti = (selection) => {
-        if (Array.isArray(selection)) {
-            setValueMulti(selection);
-            onChangeMulti &&
-                onChangeMulti(selection);
-        }
-        else {
-            setValueMulti([]);
-            onChangeMulti && onChangeMulti([]);
+    const scrollToHighlightedOption = () => {
+        if (optionsRef.current && optionsRef.current.children[highlightedIndex]) {
+            const highlightedOption = optionsRef.current.children[highlightedIndex];
+            highlightedOption.scrollIntoView({
+                block: "center",
+                inline: "center",
+                behavior: "smooth",
+            });
         }
     };
-    const selectComponent = (_jsxs(_Fragment, { children: [_jsx(Select, { className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`, id: isMulti ? undefined : id, instanceId: isMulti ? undefined : id, isDisabled: disabled, name: isMulti ? undefined : name, options: options, onChange: isMulti ? handleOnChangeMulti : handleOnChange, defaultValue: isMulti ? valueMulti : value, onInputChange: (newValue, actionMeta) => {
-                    setInputValue(newValue);
-                    onInputChange && onInputChange(newValue, actionMeta);
-                }, inputValue: inputValue, onMenuOpen: () => { }, onMenuClose: () => { }, menuPortalTarget: documentRef?.body, styles: { menuPortal: (base) => ({ ...base, zIndex: 9999 }) }, isClearable: isClearable, isSearchable: true, components: { Input }, menuIsOpen: menuIsOpen, 
-                //windowThreshold={50}
-                isMulti: isMulti }), isMulti && (_jsx("input", { hidden: true, readOnly: true, name: name, value: valueMulti.map((x) => x?.value).join(","), id: id }))] }));
-    return (_jsxs("div", { className: `col-span-6 sm:col-span-3 ${className}`, children: [title && (_jsx("label", { htmlFor: error ? `${name}-error` : `${name}-success`, className: `block text-sm font-medium ${color === "red"
+    if (loading) {
+        return (_jsxs(_Fragment, { children: [title && (_jsx("label", { htmlFor: error ? `${name}-error` : `${name}-success`, className: `block text-sm font-medium text-${color}-700 dark:text-${color}-500`, children: title })), _jsx(LoadingInputSkeleton, {}), helpText && (_jsx("p", { className: `mt-2 italic text-sm text-${color}-500 dark:text-${color}-400`, children: helpText }))] }));
+    }
+    return (_jsxs("div", { className: `col-span-6 sm:col-span-3 ${className}`, ref: selectRef, children: [title && (_jsxs("label", { htmlFor: error ? `${name}-error` : `${name}-success`, className: `block text-sm font-medium ${color === "red"
                     ? "text-red-700 dark:text-red-500"
-                    : "text-gray-700 dark:text-gray-500"}`, children: title })), _jsxs("div", { className: "flex relative items-center", children: [selectComponent, helpText && (_jsx("div", { className: "flex items-center relative ml-3", children: _jsxs("div", { className: "relative cursor-pointer", onMouseEnter: () => setShowTooltip(true), onMouseLeave: () => setShowTooltip(false), children: [_jsx(IdeaIconSVG, {}), showTooltip && (_jsx("div", { className: "absolute -left-48 top-0 mt-8 p-2 bg-white border rounded shadow text-black z-50", children: helpText }))] }) }))] }), error && (_jsxs("p", { className: `mt-2 text-sm text-${color}-600 dark:text-${color}-500`, children: [_jsx("span", { className: "font-medium", children: "Oops!" }), " ", error] })), !error && hint && (_jsx("p", { className: `mt-2 italic text-sm text-${color}-500 dark:text-${color}-400`, children: hint }))] }));
-};
-export const SelectField = (props) => {
-    const { formValidations } = useAppSelector((state) => state.formValidation);
-    const error = formValidations[props.formName ?? "-1"]?.[props.name ?? "-1"];
-    props = { ...props, error };
-    return _jsx(SelectFieldWithoutValidation, { ...props });
+                    : "text-gray-700 dark:text-gray-500"}`, children: [title, required && _jsx("span", { className: "text-red-500", children: "*" })] })), _jsxs("div", { className: "relative", children: [_jsx(Controller, { name: name || "", control: control, rules: { required }, defaultValue: defaultValue || (isMulti ? [] : null), render: ({ field }) => (_jsx("input", { ...field, type: "text", id: id, value: inputValue, onFocus: () => setIsOpen(true), onBlur: handleBlur, onKeyDown: handleKeyDown, readOnly: isReadOnly, disabled: disabled, className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`, placeholder: isMulti ? "Select options..." : "Select an option...", onChange: (e) => {
+                                field.onChange(e);
+                                handleInputChange(e);
+                            } })) }), isClearable && (value || valueMulti.length > 0) && (_jsx("button", { type: "button", onClick: handleClear, className: "absolute inset-y-0 right-0 pr-3 flex items-center", children: "\u00D7" })), isOpen && !isReadOnly && (_jsx("ul", { ref: optionsRef, className: "absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm", children: filteredOptions.map((option, index) => (_jsx("li", { className: `cursor-pointer select-none relative py-2 pl-3 pr-9 ${(isMulti
+                                ? valueMulti.some((v) => v.value === option.value)
+                                : value?.value === option.value)
+                                ? "text-white bg-indigo-600"
+                                : index === highlightedIndex
+                                    ? "text-black bg-sky-200"
+                                    : "text-gray-900"}`, onClick: () => handleOptionClick(option), onMouseEnter: () => setHighlightedIndex(index), onMouseLeave: () => setHighlightedIndex(-1), children: option.label }, `${option.value}-${index}`))) }))] }), isMulti && (_jsx("div", { className: "mt-2 flex flex-wrap gap-2", children: valueMulti.map((option, index) => (_jsxs("span", { className: "bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded", children: [option.label, _jsx("button", { type: "button", onClick: () => handleOptionClick(option), className: "ml-1 text-blue-600 hover:text-blue-800", children: "\u00D7" })] }, `${option.value}-${index}`))) })), helpText && (_jsx("div", { className: "flex items-center relative mt-1", children: _jsxs("div", { className: "relative cursor-pointer", onMouseEnter: () => setShowTooltip(true), onMouseLeave: () => setShowTooltip(false), children: [_jsx(IdeaIconSVG, {}), showTooltip && (_jsx("div", { className: "absolute -left-48 top-0 mt-8 p-2 bg-white border rounded shadow text-black z-50", children: helpText }))] }) })), error && (_jsxs("p", { className: `mt-2 text-sm text-${color}-600 dark:text-${color}-500`, children: [_jsx("span", { className: "font-medium", children: "Oops!" }), " ", error?.message?.toString() || "Error desconocido"] })), !error && hint && (_jsx("p", { className: `mt-2 italic text-sm text-${color}-500 dark:text-${color}-400`, children: hint }))] }));
 };

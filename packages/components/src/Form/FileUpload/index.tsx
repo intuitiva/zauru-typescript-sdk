@@ -1,6 +1,6 @@
 import { DownloadIconSVG, IdeaIconSVG } from "@zauru-sdk/icons";
-import { useAppSelector } from "@zauru-sdk/redux";
 import React, { useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 type Props = {
   id?: string;
@@ -12,15 +12,15 @@ type Props = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   readOnly?: boolean;
-  error?: string | undefined;
   fileTypes?: string[];
   showAvailableTypes?: boolean;
   className?: string;
   defaultValue?: string | File;
   download?: boolean;
+  required?: boolean;
 };
 
-export const FileUploadFieldWithoutValidation = (props: Props) => {
+export const FileUploadField = (props: Props) => {
   const {
     id,
     name,
@@ -30,13 +30,22 @@ export const FileUploadFieldWithoutValidation = (props: Props) => {
     onChange,
     disabled = false,
     readOnly = false,
-    error,
     fileTypes = [],
     showAvailableTypes = false,
     className,
     defaultValue = undefined,
     download = false,
+    required = false,
   } = props;
+
+  const {
+    register: tempRegister,
+    formState: { errors },
+  } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
+  const error = errors ? errors[props.name ?? "-1"] : undefined;
+  const register = tempRegister
+    ? tempRegister(props.name ?? "-1", { required })
+    : undefined; // Solo usar register si está disponible
 
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
@@ -76,17 +85,32 @@ export const FileUploadFieldWithoutValidation = (props: Props) => {
             className={`block mb-1 text-sm font-medium text-gray-700`}
           >
             {title}
+            {required && <span className="text-red-500">*</span>}
           </label>
         )}{" "}
         <div
           role="button"
           tabIndex={0}
           onClick={() => {
+            if (register) {
+              register.onChange({
+                target: {
+                  value: defaultValue,
+                },
+              });
+            }
             window.open(defaultValue, "_blank");
           }}
           onKeyDown={(event) => {
             // Permite que el evento se active con la tecla Enter
             if (event.key === "Enter") {
+              if (register) {
+                register.onChange({
+                  target: {
+                    value: defaultValue,
+                  },
+                });
+              }
               window.open(defaultValue, "_blank");
             }
           }}
@@ -164,7 +188,7 @@ export const FileUploadFieldWithoutValidation = (props: Props) => {
       </div>
       {error && (
         <p className={`mt-2 text-sm text-${color}-600`}>
-          <span className="font-medium">Oops!</span> {error}
+          <span className="font-medium">Oops!</span> {error.message?.toString()}
         </p>
       )}
       {!error && hintMessage && (
@@ -172,13 +196,4 @@ export const FileUploadFieldWithoutValidation = (props: Props) => {
       )}
     </div>
   );
-};
-
-export const FileUploadField = (props: Props) => {
-  const { formValidations } = useAppSelector((state) => state.formValidation);
-  const error = formValidations[props.formName ?? "-1"]?.[props.name ?? "-1"];
-
-  props = { ...props, error };
-
-  return <FileUploadFieldWithoutValidation {...props} />;
 };

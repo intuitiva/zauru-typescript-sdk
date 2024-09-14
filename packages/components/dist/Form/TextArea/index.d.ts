@@ -2,7 +2,6 @@ import React from "react";
 type Props = {
     id?: string;
     name: string;
-    formName?: string;
     title?: string;
     defaultValue?: string | number;
     hidden?: boolean;
@@ -12,12 +11,11 @@ type Props = {
     onKeyDown?: (event: React.KeyboardEvent) => void;
     disabled?: boolean;
     readOnly?: boolean;
-    error?: string | undefined;
     rows?: number;
     cols?: number;
     stopChangeEvents?: boolean;
     className?: string;
+    required?: boolean;
 };
-export declare const TextAreaWithoutValidation: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export declare const TextArea: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

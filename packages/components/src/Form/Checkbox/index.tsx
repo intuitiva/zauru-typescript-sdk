@@ -1,10 +1,9 @@
-import { useAppSelector } from "@zauru-sdk/redux";
 import React, { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 type Props = {
   id?: string;
   name?: string;
-  formName?: string;
   label?: string;
   defaultValue?: boolean;
   onChange?: (
@@ -12,19 +11,19 @@ type Props = {
     event: React.ChangeEvent<HTMLInputElement>
   ) => { stopUIChange: boolean } | void;
   disabled?: boolean;
-  error?: string | undefined;
   borderColor?: string;
+  required?: boolean;
 };
 
-export const CheckboxWithoutValidation = (props: Props) => {
+export const CheckBox = (props: Props) => {
   const {
     id,
     name,
     defaultValue = false,
     onChange,
     disabled = false,
-    error,
     label,
+    required = false,
   } = props;
 
   const [checked, setChecked] = useState(defaultValue);
@@ -35,6 +34,9 @@ export const CheckboxWithoutValidation = (props: Props) => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
+    if (register) {
+      register.onChange(event);
+    }
     if (onChange) {
       const result = onChange(isChecked, event);
       if (result?.stopUIChange) {
@@ -44,6 +46,15 @@ export const CheckboxWithoutValidation = (props: Props) => {
     setChecked(isChecked);
   };
 
+  const {
+    register: tempRegister,
+    formState: { errors },
+  } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
+  const error = errors ? errors[props.name ?? "-1"] : undefined;
+  const register = tempRegister
+    ? tempRegister(props.name ?? "-1", { required })
+    : undefined; // Solo usar register si está disponible
+
   const color = error ? "red" : "gray";
   const borderColor = disabled ? "border-gray-300" : `border-${color}-500`;
 
@@ -51,11 +62,12 @@ export const CheckboxWithoutValidation = (props: Props) => {
     <input
       type="checkbox"
       id={id ?? name}
-      name={name}
       checked={checked}
-      onChange={handleInputChange}
       className={`form-checkbox h-4 w-4 text-indigo-600 ${borderColor} focus:border-indigo-500 focus:ring-indigo-500`}
       disabled={disabled}
+      {...(register ?? {})}
+      name={name}
+      onChange={handleInputChange}
     />
   );
 
@@ -73,24 +85,15 @@ export const CheckboxWithoutValidation = (props: Props) => {
             className={`ml-2 block text-sm font-medium text-${color}-700 dark:text-${color}-500`}
           >
             {label}
+            {required && <span className="text-red-500">*</span>}
           </label>
         )}
       </div>
       {error && (
         <p className={`mt-2 text-sm text-${color}-600 dark:text-${color}-500`}>
-          <span className="font-medium">Oops!</span> {error}
+          <span className="font-medium">Oops!</span> {error.message?.toString()}
         </p>
       )}
     </div>
   );
-};
-
-//<reference> https://tailwindui.com/components/application-ui/forms/form-layouts
-export const CheckBox = (props: Props) => {
-  const { formValidations } = useAppSelector((state) => state.formValidation);
-  const error = formValidations[props.formName ?? "-1"]?.[props.name ?? "-1"];
-
-  props = { ...props, error };
-
-  return <CheckboxWithoutValidation {...props} />;
 };

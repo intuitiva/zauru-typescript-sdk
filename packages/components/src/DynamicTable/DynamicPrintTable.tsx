@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback, useState, type ReactNode } from "react";
-import { TextFieldWithoutValidation } from "../Form/TextField/index.js";
-import { SelectFieldWithoutValidation } from "../Form/SelectField/index.js";
-import type { SingleValue } from "react-select";
+import { TextField } from "../Form/TextField/index.js";
+import { SelectField } from "../Form/SelectField/index.js";
 import { useAppSelector } from "@zauru-sdk/redux";
 import { SelectFieldOption } from "@zauru-sdk/types";
 
@@ -43,11 +42,11 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
     rowIndex: number,
     defaultValue?: SelectFieldOption
   ) => (
-    <SelectFieldWithoutValidation
+    <SelectField
       key={rowIndex}
       name="item_select"
       isClearable
-      onChange={(value: SingleValue<SelectFieldOption>) => {
+      onChange={(value: SelectFieldOption | null) => {
         const selectedItem = items?.find((x) => x.value === value?.value);
         updateRow(rowIndex, selectedItem);
       }}
@@ -57,7 +56,7 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
   );
 
   const createItemQuantity = (rowIndex: number, defaultValue?: number) => (
-    <TextFieldWithoutValidation
+    <TextField
       key={rowIndex}
       name="item_quantity"
       type="number"

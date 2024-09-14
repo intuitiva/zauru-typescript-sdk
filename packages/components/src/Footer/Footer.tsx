@@ -37,7 +37,7 @@ export const Footer = ({
       <div className="px-4 mx-auto flex flex-wrap items-center justify-center">
         <p className="text-white text-[1.2rem]">
           {`Creado en `} <a href={href}>Zauru</a>{" "}
-          {`con ❤️ ${new Date().getFullYear()} v.3.2`}
+          {`con ❤️ ${new Date().getFullYear()} v.2.0.0`}
         </p>
         {showConnection && (
           <div className="ml-5">

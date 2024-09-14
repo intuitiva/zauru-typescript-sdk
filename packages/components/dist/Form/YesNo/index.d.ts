@@ -7,6 +7,7 @@ type Props = {
     helpText?: string;
     onChange?: (value: boolean) => void;
     disabled?: boolean;
+    required?: boolean;
 };
 export declare const YesNo: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

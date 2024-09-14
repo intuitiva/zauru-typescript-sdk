@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { SelectFieldWithoutValidation } from "../Form/SelectField/index.js";
-import { TextFieldWithoutValidation } from "../Form/TextField/index.js";
-import { CheckboxWithoutValidation } from "../Form/Checkbox/index.js";
+import { SelectField } from "../Form/SelectField/index.js";
+import { TextField } from "../Form/TextField/index.js";
+import { CheckBox } from "../Form/Checkbox/index.js";
 import { createModal } from "../Modal/index.js";
 import { Button } from "../Buttons/index.js";
 import {
@@ -122,7 +122,6 @@ export const GenericDynamicTable = (props: Props) => {
       newDeletedData.push(deletedItem);
     }
     setDeletedData(newDeletedData);
-    onChange && onChange(tableData?.filter((x) => x.id !== rowId));
     setTableData((prevData) => prevData?.filter((x) => x.id !== rowId));
   };
 
@@ -200,10 +199,10 @@ export const GenericDynamicTable = (props: Props) => {
 
           const FieldComponent =
             column.type === "textField"
-              ? TextFieldWithoutValidation
+              ? TextField
               : column.type === "checkbox"
-              ? CheckboxWithoutValidation
-              : SelectFieldWithoutValidation;
+              ? CheckBox
+              : SelectField;
 
           const setTableValue = (columnName: string, newValue: any) => {
             setTableData((prevState) => {
@@ -361,7 +360,7 @@ export const GenericDynamicTable = (props: Props) => {
       <div className={`${className}`}>
         {searcheables.length > 0 && (
           <div>
-            <TextFieldWithoutValidation
+            <TextField
               className="mb-2"
               name="search"
               title={`Buscar por: ${searcheables

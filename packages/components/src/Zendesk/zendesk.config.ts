@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+//import jwt from "jsonwebtoken";
 
 export function zendeskJwt(
   current_user: {
@@ -31,10 +31,12 @@ export function zendeskJwt(
     exp: expiresIn,
   };
 
-  const jwtHeader: jwt.JwtHeader = { kid: jwtKey, typ: "JWT", alg: "HS256" };
+  // const jwtHeader: jwt.JwtHeader = { kid: jwtKey, typ: "JWT", alg: "HS256" };
 
-  return jwt.sign(payload, jwtSecret, {
-    algorithm: "HS256",
-    header: jwtHeader,
-  });
+  // return jwt.sign(payload, jwtSecret, {
+  //   algorithm: "HS256",
+  //   header: jwtHeader,
+  // });
+
+  return {};
 }
