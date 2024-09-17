@@ -124,7 +124,7 @@ export const useGetProcesses = (
   data: WebAppRowGraphQL<QueueFormReceptionWebAppTable>[];
 } =>
   useGetReceptionObject<WebAppRowGraphQL<QueueFormReceptionWebAppTable>[]>(
-    "queueNewReceptions",
+    "queueReceptions",
     config
   );
 

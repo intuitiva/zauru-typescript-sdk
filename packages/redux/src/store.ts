@@ -43,7 +43,7 @@ type Whitelist = {
   [K in keyof RootState]?: string[];
 };
 
-export const cleanLocalStorage = () => {
+export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
   const savedState = localStorage.getItem(LOCAL_STORAGE_REDUX_NAME);
   const state = JSON.parse(savedState ?? "{}") as RootState;
   try {
@@ -80,11 +80,6 @@ export const cleanLocalStorage = () => {
   }
 
   try {
-    const whitelist: Whitelist = {
-      automaticNumbers: ["purchaseOrderIdNumber", "dischargeIdNumber"],
-      receptions: ["queueNewReceptions"],
-    };
-
     if (!(typeof document === "undefined") && Object.keys(state)?.length > 0) {
       const initialState: RootState = {
         catalogs: catalogsReducer(undefined, { type: "" }),

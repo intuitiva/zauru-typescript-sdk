@@ -29,7 +29,12 @@ const initialState = {
         loading: false,
         reFetch: false,
     },
-    queueNewReceptions: {
+    queueReceptions: {
+        data: [],
+        loading: false,
+        reFetch: false,
+    },
+    offlineQueueReceptions: {
         data: [],
         loading: false,
         reFetch: false,

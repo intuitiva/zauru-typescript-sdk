@@ -36,7 +36,7 @@ const preloadedState = (() => {
         // Ignorar los errores, se utiliza el estado inicial definido en cada reducer
     }
 })();
-const cleanLocalStorage = () => {
+const cleanLocalStorage = (whitelist = {}) => {
     const savedState = localStorage.getItem(exports.LOCAL_STORAGE_REDUX_NAME);
     const state = JSON.parse(savedState ?? "{}");
     try {
@@ -69,10 +69,6 @@ const cleanLocalStorage = () => {
         console.error(error);
     }
     try {
-        const whitelist = {
-            automaticNumbers: ["purchaseOrderIdNumber", "dischargeIdNumber"],
-            receptions: ["queueNewReceptions"],
-        };
         if (!(typeof document === "undefined") && Object.keys(state)?.length > 0) {
             const initialState = {
                 catalogs: (0, catalogs_slice_js_1.default)(undefined, { type: "" }),

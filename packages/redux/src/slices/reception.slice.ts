@@ -16,7 +16,8 @@ export type RECEPTION_NAMES =
   | "newPurchaseOrderInfo"
   | "purchaseOrderGeneralInfo"
   | "poReceptions"
-  | "queueNewReceptions";
+  | "offlineQueueReceptions"
+  | "queueReceptions";
 
 export interface ReceptionState {
   basketLots: { loading: boolean; data: ItemAssociatedLots; reFetch: boolean };
@@ -40,7 +41,12 @@ export interface ReceptionState {
     data: PurchaseOrderGraphQL[];
     reFetch: boolean;
   };
-  queueNewReceptions: {
+  queueReceptions: {
+    loading: boolean;
+    data: WebAppRowGraphQL<QueueFormReceptionWebAppTable>[];
+    reFetch: boolean;
+  };
+  offlineQueueReceptions: {
     loading: boolean;
     data: WebAppRowGraphQL<QueueFormReceptionWebAppTable>[];
     reFetch: boolean;
@@ -73,7 +79,12 @@ const initialState: ReceptionState = {
     loading: false,
     reFetch: false,
   },
-  queueNewReceptions: {
+  queueReceptions: {
+    data: [],
+    loading: false,
+    reFetch: false,
+  },
+  offlineQueueReceptions: {
     data: [],
     loading: false,
     reFetch: false,

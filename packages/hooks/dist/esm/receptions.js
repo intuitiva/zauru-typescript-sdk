@@ -66,7 +66,7 @@ const useGetReceptionObject = (RECEPTION_NAME, { online = false, wheres = [] } =
     }, []);
     return data;
 };
-const useGetProcesses = (config) => useGetReceptionObject("queueNewReceptions", config);
+const useGetProcesses = (config) => useGetReceptionObject("queueReceptions", config);
 exports.useGetProcesses = useGetProcesses;
 const useGetPOReceptions = (config) => useGetReceptionObject("poReceptions", config);
 exports.useGetPOReceptions = useGetPOReceptions;

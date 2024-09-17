@@ -1,7 +1,10 @@
 import type { TypedUseSelectorHook } from "react-redux";
 import { Tuple } from "@reduxjs/toolkit";
 export declare const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v2.1";
-export declare const cleanLocalStorage: () => void;
+type Whitelist = {
+    [K in keyof RootState]?: string[];
+};
+export declare const cleanLocalStorage: (whitelist?: Whitelist) => void;
 export declare const store: import("@reduxjs/toolkit").EnhancedStore<any, import("redux").UnknownAction, Tuple<[import("redux").StoreEnhancer<{
     dispatch: {};
 }>, import("redux").StoreEnhancer]>>;
@@ -16,3 +19,4 @@ export type ReduxParamsConfig = {
         [key: string]: string;
     };
 };
+export {};

@@ -1,5 +1,5 @@
 import { ItemAssociatedLots, NewPurchaseOrderResponse, PurchaseOrderGeneralInfo, PurchaseOrderGraphQL, RejectionWebAppTableObject, WebAppRowGraphQL, QueueFormReceptionWebAppTable } from "@zauru-sdk/types";
-export type RECEPTION_NAMES = "basketLots" | "rejectionInfo" | "newPurchaseOrderInfo" | "purchaseOrderGeneralInfo" | "poReceptions" | "queueNewReceptions";
+export type RECEPTION_NAMES = "basketLots" | "rejectionInfo" | "newPurchaseOrderInfo" | "purchaseOrderGeneralInfo" | "poReceptions" | "offlineQueueReceptions" | "queueReceptions";
 export interface ReceptionState {
     basketLots: {
         loading: boolean;
@@ -26,7 +26,12 @@ export interface ReceptionState {
         data: PurchaseOrderGraphQL[];
         reFetch: boolean;
     };
-    queueNewReceptions: {
+    queueReceptions: {
+        loading: boolean;
+        data: WebAppRowGraphQL<QueueFormReceptionWebAppTable>[];
+        reFetch: boolean;
+    };
+    offlineQueueReceptions: {
         loading: boolean;
         data: WebAppRowGraphQL<QueueFormReceptionWebAppTable>[];
         reFetch: boolean;
