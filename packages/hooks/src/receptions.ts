@@ -174,8 +174,8 @@ type PesadaBody = {
   discount: number;
   netWeight: string;
   weightByBasket: string;
-  probableUtilization: number;
-  lbDiscounted: number;
+  probableUtilization: string;
+  lbDiscounted: string;
 };
 
 type PesadaFooter = {
@@ -227,8 +227,8 @@ export const useGetPesadas = (
           discount,
           netWeight: toFixedIfNeeded(netWeight),
           weightByBasket: toFixedIfNeeded(weightByBasket),
-          probableUtilization,
-          lbDiscounted,
+          probableUtilization: toFixedIfNeeded(probableUtilization),
+          lbDiscounted: toFixedIfNeeded(lbDiscounted),
         };
       }),
     ];
@@ -329,8 +329,8 @@ export const getPesadasByForm = (formInput: FormInput) => {
       discount,
       netWeight: toFixedIfNeeded(netWeight),
       weightByBasket: toFixedIfNeeded(weightByBasket),
-      probableUtilization,
-      lbDiscounted,
+      probableUtilization: toFixedIfNeeded(probableUtilization),
+      lbDiscounted: toFixedIfNeeded(lbDiscounted),
     });
 
     index++;
