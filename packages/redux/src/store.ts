@@ -12,7 +12,7 @@ import automaticNumberReducer from "./slices/automaticNumbers.slice.js";
 import tableReducer from "./slices/tables.slice.js";
 import formValidationReducer from "./slices/formValidation.slice.js";
 
-export const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v2.1";
+export const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v3.1.1";
 
 const persistanceLocalStorageMiddleware =
   (store: MiddlewareAPI) => (next: (action: any) => any) => (action: any) => {
