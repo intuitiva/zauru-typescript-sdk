@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/hooks",
-  "version": "1.0.99",
+  "version": "1.0.101",
   "description": "Hooks reutilizables dentro de las webapps de Zauru.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -29,7 +29,7 @@
     "@remix-run/react": "^2.8.1",
     "@zauru-sdk/common": "^1.0.99",
     "@zauru-sdk/icons": "^1.0.60",
-    "@zauru-sdk/redux": "^1.0.98",
+    "@zauru-sdk/redux": "^1.0.101",
     "@zauru-sdk/types": "^1.0.98",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
