@@ -102,18 +102,29 @@ const receptionSlice = createSlice({
       state,
       action: PayloadAction<{ name: RECEPTION_NAMES; data: any }>
     ) => {
-      state[action.payload.name].data = action.payload.data;
+      if (state[action.payload.name].data) {
+        state[action.payload.name].data = action.payload.data;
+      } else {
+        console.error("receptionFetchSuccess not found: ", action.payload.name);
+      }
       state[action.payload.name].loading = false;
     },
     receptionConcatToArray: (
       state,
       action: PayloadAction<{ name: RECEPTION_NAMES; data: any }>
     ) => {
-      if (Array.isArray(state[action.payload.name].data)) {
-        state[action.payload.name].data = [
-          ...(state[action.payload.name].data as any),
-          action.payload.data,
-        ];
+      if (state[action.payload.name].data) {
+        if (Array.isArray(state[action.payload.name].data)) {
+          state[action.payload.name].data = [
+            ...(state[action.payload.name].data as any),
+            action.payload.data,
+          ];
+        }
+      } else {
+        console.error(
+          "receptionConcatToArray not found: ",
+          action.payload.name
+        );
       }
       state[action.payload.name].loading = false;
     },

@@ -48,15 +48,25 @@ const receptionSlice = (0, toolkit_1.createSlice)({
             state[action.payload].loading = true;
         },
         receptionFetchSuccess: (state, action) => {
-            state[action.payload.name].data = action.payload.data;
+            if (state[action.payload.name].data) {
+                state[action.payload.name].data = action.payload.data;
+            }
+            else {
+                console.error("receptionFetchSuccess not found: ", action.payload.name);
+            }
             state[action.payload.name].loading = false;
         },
         receptionConcatToArray: (state, action) => {
-            if (Array.isArray(state[action.payload.name].data)) {
-                state[action.payload.name].data = [
-                    ...state[action.payload.name].data,
-                    action.payload.data,
-                ];
+            if (state[action.payload.name].data) {
+                if (Array.isArray(state[action.payload.name].data)) {
+                    state[action.payload.name].data = [
+                        ...state[action.payload.name].data,
+                        action.payload.data,
+                    ];
+                }
+            }
+            else {
+                console.error("receptionConcatToArray not found: ", action.payload.name);
             }
             state[action.payload.name].loading = false;
         },
