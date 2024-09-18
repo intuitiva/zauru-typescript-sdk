@@ -428,7 +428,9 @@ query getAgencies {
 export const getWebAppRowStringQuery = (id: number) => `
 query getWebAppRow {
   webapp_rows(where: {id: {_eq: ${id}}}) {
+    id
     data
+    created_at
   }
 }
 `;

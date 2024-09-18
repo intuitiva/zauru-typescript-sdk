@@ -1,5 +1,5 @@
 import { IdeaIconSVG } from "@zauru-sdk/icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 type Props = {
@@ -73,20 +73,6 @@ export const TextField = (props: Props) => {
     setValue(defaultValue);
   }, [defaultValue]);
 
-  if (hidden) {
-    return (
-      <input
-        type={type}
-        id={id ?? name}
-        value={defaultValue}
-        readOnly={true}
-        hidden={true}
-        {...(register ?? {})}
-        name={name}
-      />
-    );
-  }
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (register) {
       register.onChange(event);
@@ -124,6 +110,21 @@ export const TextField = (props: Props) => {
       }
     }
   };
+
+  if (hidden) {
+    return (
+      <input
+        type={"hidden"}
+        id={id ?? name}
+        value={value}
+        readOnly={true}
+        hidden={true}
+        {...(register ?? {})}
+        name={name}
+        onChange={handleInputChange}
+      />
+    );
+  }
 
   const inputComponent = (
     <input

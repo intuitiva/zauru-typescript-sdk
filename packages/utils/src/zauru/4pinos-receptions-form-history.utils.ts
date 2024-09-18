@@ -4,6 +4,7 @@ import {
   createWebAppTableRegister,
   deleteWebAppTableRegister,
   getVariablesByName,
+  getWebAppRow,
   getWebAppTableRegisters,
   updateWebAppTableRegister,
 } from "@zauru-sdk/services";
@@ -53,6 +54,34 @@ export const getQueueFormReceptionHistories = (
     }
 
     const history = response?.data ?? [];
+
+    return history;
+  });
+};
+
+/**
+ * Get getQueueFormReceptionHistories from the web app table.
+ * @param headers Request headers.
+ * @param session Session object.
+ * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable[]>.
+ */
+export const getQueueFormReceptionHistoryByID = (
+  session: Session,
+  id: string | number
+): Promise<AxiosUtilsResponse<QueueFormReceptionWebAppTable | null>> => {
+  return handlePossibleAxiosErrors(async () => {
+    const response = await getWebAppRow<QueueFormReceptionWebAppTable>(
+      session,
+      Number(id)
+    );
+
+    if (response.error) {
+      throw new Error(
+        `Ocurrió un error al consultar el historial de colas: ${response.userMsg}`
+      );
+    }
+
+    const history = response?.data ?? null;
 
     return history;
   });

@@ -152,7 +152,11 @@ export const SelectField = (props: Props) => {
         !isEnterPressed &&
         isSearching
       ) {
-        handleOptionClick(filteredOptions[0]);
+        if (highlightedIndex >= 0) {
+          handleOptionClick(filteredOptions[highlightedIndex]);
+        } else {
+          handleOptionClick(filteredOptions[0]);
+        }
       }
       setIsTabPressed(false);
       setIsEnterPressed(false);

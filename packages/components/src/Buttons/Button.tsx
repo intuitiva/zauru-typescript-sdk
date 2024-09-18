@@ -1,6 +1,6 @@
 import type { ColorInterface } from "../NavBar/NavBar.types.js";
 import { useFormContext } from "react-hook-form";
-import { WithTooltip } from "../index.js";
+import { WithTooltip } from "..";
 
 type Props = {
   type?: "reset" | "button" | "submit" | undefined;
@@ -14,6 +14,7 @@ type Props = {
   children?: React.ReactNode;
   className?: string;
   disabled?: boolean;
+  enableFormErrorsValidation?: boolean;
 };
 
 export const Button = (props: Props) => {
@@ -28,6 +29,7 @@ export const Button = (props: Props) => {
     children,
     className = "",
     disabled = false,
+    enableFormErrorsValidation = true,
   } = props;
 
   const formContext = useFormContext();
@@ -73,25 +75,34 @@ export const Button = (props: Props) => {
 
   const inside = children ?? title;
 
-  const errorMessage = formHasErrors
-    ? Object.values(formErrors)
-        .map((error) => error?.message?.toString())
-        .join(", ")
-    : "";
+  const errorMessage =
+    enableFormErrorsValidation && formHasErrors
+      ? Object.values(formErrors)
+          .map((error) => error?.message?.toString())
+          .join(", ")
+      : "";
 
   const buttonContent = (
     <button
       type={type}
       name="action"
-      disabled={loading || disabled || formHasErrors}
+      disabled={
+        loading || disabled || (enableFormErrorsValidation && formHasErrors)
+      }
       value={name}
       onClick={onClickSave}
       className={`ml-2 ${
-        loading || disabled || formHasErrors ? " bg-opacity-25 " : ""
+        loading || disabled || (enableFormErrorsValidation && formHasErrors)
+          ? " bg-opacity-25 "
+          : ""
       } ${
         loading
           ? " cursor-progress"
-          : `${disabled || formHasErrors ? "" : `hover:${color.bg700}`}`
+          : `${
+              disabled || (enableFormErrorsValidation && formHasErrors)
+                ? ""
+                : `hover:${color.bg700}`
+            }`
       } inline-flex justify-center rounded-md border border-transparent ${
         color.bg600
       } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
@@ -102,7 +113,7 @@ export const Button = (props: Props) => {
     </button>
   );
 
-  return formHasErrors ? (
+  return enableFormErrorsValidation && formHasErrors ? (
     <WithTooltip text={errorMessage}>{buttonContent}</WithTooltip>
   ) : (
     buttonContent
