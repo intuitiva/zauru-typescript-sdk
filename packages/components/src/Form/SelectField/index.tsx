@@ -184,6 +184,12 @@ export const SelectField = (props: Props) => {
       e.preventDefault();
       setIsEnterPressed(true);
       handleOptionClick(filteredOptions[highlightedIndex]);
+    } else if (e.key === "Backspace" && (value || valueMulti.length > 0)) {
+      e.preventDefault();
+      handleClear();
+      setInputValue("");
+      setFilteredOptions(options);
+      setIsOpen(true);
     }
   };
 
@@ -249,7 +255,6 @@ export const SelectField = (props: Props) => {
               {...field}
               type="text"
               id={id}
-              autoComplete="off"
               value={inputValue}
               onFocus={() => setIsOpen(true)}
               onBlur={handleBlur}
@@ -264,6 +269,7 @@ export const SelectField = (props: Props) => {
                 field.onChange(e);
                 handleInputChange(e);
               }}
+              autoComplete="off"
             />
           )}
         />
