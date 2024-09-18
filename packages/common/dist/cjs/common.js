@@ -241,6 +241,8 @@ const getDateAfterDays = (daysAfterToday) => {
 };
 exports.getDateAfterDays = getDateAfterDays;
 const getPayeeFormated = (payee) => {
+    if (!payee)
+        return "-";
     return `${payee.id_number ? `<${payee.id_number}> ` : ""}${payee.tin ? `${payee.tin} | ` : ""}${payee.name}`.trim();
 };
 exports.getPayeeFormated = getPayeeFormated;

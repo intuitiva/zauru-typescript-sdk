@@ -70,7 +70,7 @@ export declare function isToday(dateStr: string): boolean;
 export declare const getDatePickerCurrentDate: () => string;
 export declare const getTimePickerCurrentTime: () => string;
 export declare const getDateAfterDays: (daysAfterToday: number) => string;
-export declare const getPayeeFormated: (payee: PayeeGraphQL) => string;
+export declare const getPayeeFormated: (payee?: PayeeGraphQL) => string;
 export declare const getPayeeInfoIdOptions: (payees: PayeeGraphQL[]) => (SelectFieldOption & {
     id: number;
 })[];
