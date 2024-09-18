@@ -1,3 +1,4 @@
+import { getFormattedDate } from "@zauru-sdk/common";
 import {
   createNewAuthorizedPurchaseOrder,
   createNewReception,
@@ -11,7 +12,6 @@ import {
   saveMotivosDeRechazoByPurchase,
 } from "@zauru-sdk/services";
 import {
-  ItemAssociatedLots,
   ApiResponseFor4pinosReceptions,
   PurchaseOrderDetailsGraphQL,
   CreateNewPurchaseOrderBody,
@@ -62,17 +62,16 @@ export const register4pinosReception = async ({
 
       if (existentes?.length > 0) {
         throw new Error(
-          `Ya existe una órden de compra con este número de contraseña asociado, revise el listado general. Peso: ${existentes[0].due}, Ingresado el: 
-            existentes[0].issue_date
-          , Memo: ${existentes[0].memo}, Tipo: ${existentes[0].reference}`
+          `Ya existe una órden de compra con este número de contraseña asociado, revise el listado general. Peso: ${
+            existentes[0].due
+          }, Ingresado el: ${getFormattedDate(
+            existentes[0].issue_date,
+            false
+          )}, Memo: ${existentes[0].memo}, Tipo: ${existentes[0].reference}`
         );
       }
     }
 
-    const esCentroDeAcopio = values?.esCentroDeAcopio === "true";
-    const basketLots = JSON.parse(
-      values?.basketLots.toString()
-    ) as ItemAssociatedLots;
     const webapp_table_rejection = {
       Canastas: "int",
       Razon_primaria: "string",
@@ -101,13 +100,19 @@ export const register4pinosReception = async ({
     const quality_control_agency = hashRecepcionesQCAgency[agency_id];
 
     //-------------------REACT SELECT VALUES-------------------------
-    const vendor = values.vendor as string;
+    console.log("values", values);
+    const vendor = values.vendor as number;
     const itemId = values.item as string;
     const purchaser = values.purchaser as string;
     const payeeType = values.rType as string;
     const idNumberInput = values.idNumberInput as string;
     const discountReason = values.discountReason as string;
     const issue_date = values.issue_date as string;
+    const esCentroDeAcopio = values?.esCentroDeAcopio === "true";
+    const singleBasketWeight = Number(values.singleBasketWeight as string);
+    const recepciones_basket_item_id = Number(
+      values?.recepciones_basket_item_id.toString()
+    );
     const rejections = JSON.parse(
       values.rejections.toString() ?? "[]"
     ) as string[];
@@ -131,17 +136,17 @@ export const register4pinosReception = async ({
 
     let keys: string[] = Object.keys(values);
     let netWeight: string = values.netWgt as string;
-    let singleBasketWeight = values.singleBasketWeight as string;
     const total_baskets = values.totalBaskets + "";
-    const stockInteger = values.stockInteger + "" == "true";
+    const stockInteger = values.stockInteger == "true";
     let webapp_table_object: any = {};
 
     const buildArray = (keyIncludes: string, processValue: any) => {
+      const regex = /\d/; // Expresión regular para buscar al menos un dígito.
       return keys
-        .filter((key) => key.includes(keyIncludes))
-        .map((kbv) => [
-          kbv.substring(keyIncludes?.length, kbv?.length),
-          processValue(values[kbv]),
+        .filter((key) => key.includes(keyIncludes) && regex.test(key))
+        .map((key) => [
+          key.substring(keyIncludes?.length, key?.length),
+          processValue(values[key]),
         ])
         .filter(([key, value]) => Number(value) > 0)
         .map(([kv, val]) => `${val}-${kv}`);
@@ -151,7 +156,11 @@ export const register4pinosReception = async ({
       const regex = /\d/; // Expresión regular para buscar al menos un dígito.
       return keys
         .filter((key) => key.includes(keyIncludes) && regex.test(key))
-        .map((kbv) => processValue(values[kbv] === "" ? 0 : values[kbv]));
+        .map((key) =>
+          processValue(
+            values[key] === "" || values[key] === "NaN" ? 0 : values[key]
+          )
+        );
     };
 
     const processValues = () => {
@@ -186,57 +195,57 @@ export const register4pinosReception = async ({
       detail_weights,
     ] = processValues();
 
-    //build net_weights
-    const detail_netWeights = keys
-      .filter((key: string) => key.includes("weight"))
-      .map(
-        (kbv: string, index: number) =>
-          (parseFloat(values[kbv] as string) -
-            (stockInteger
-              ? 0
-              : detail_baskets[index] * parseFloat(singleBasketWeight))) *
-          ((100 - detail_discounts[index]) / 100)
-      );
-
-    // //---------------------------PURCHASE ORDER OBJECT----------------------------------
-    console.log("========================================>");
-    console.log("paso 1: REGISTRANDO NUEVA ORDEN DE COMPRA AUTORIZADA...");
-    const newPurchaseOrderDetails: Partial<PurchaseOrderDetailsGraphQL>[] = [];
-    detail_baskets.forEach((x, index) => {
-      newPurchaseOrderDetails.push({
-        reference: `${detail_weights[index]},${detail_baskets[index]},${detail_discounts[index]}`,
-        item_id: Number(itemId),
-        booked_quantity: detail_netWeights[index],
-        unit_cost: 1,
-      });
-    });
-
-    const newPurchaseOrderBody: CreateNewPurchaseOrderBody = {
-      reference: payeeType,
-      taxable: false,
-      issue_date,
-      shipping_date: issue_date,
-      incoterm_id: purchaseOrderGeneralInfo?.incoterm_id,
-      currency_id: purchaseOrderGeneralInfo?.currency_id,
-      charge_term_id: purchaseOrderGeneralInfo?.charge_term_id,
-      payee_info: vendor,
-      agency_id,
-      purchaser_id: Number(purchaser),
-      import: false,
-      tag_ids: ["", tag_id],
-      memo: qualityControlBaskets + "",
-      origin: netWeight,
-      purchase_order_details: newPurchaseOrderDetails,
-      incoterm_destination: provenance.slice(0, 254),
-      transport_type: discountReason,
-      id_number: idNumberInput,
-      ...(esCentroDeAcopio
-        ? { discount: Number(controlCalidadValues.porcentajeRechazo) }
-        : {}),
-    };
-
     //========== PRIMERA LLAMADA DE API Y CAPTURA DE ERRORES
     if (apiResponses.apiCall === 1) {
+      console.log("========================================>");
+      console.log("paso 1: REGISTRANDO NUEVA ORDEN DE COMPRA AUTORIZADA...");
+      //build net_weights
+      const detail_netWeights = keys
+        .filter((key: string) => key.includes("weight"))
+        .map((key: string, index: number) => {
+          const weight = Number(values[key] as string);
+          const detail_basket = Number(detail_baskets[index]);
+          const detail_discount = Number(detail_discounts[index]) ?? 0;
+          return (
+            (weight - (stockInteger ? 0 : detail_basket * singleBasketWeight)) *
+            ((100 - detail_discount) / 100)
+          );
+        });
+
+      const newPurchaseOrderDetails: Partial<PurchaseOrderDetailsGraphQL>[] =
+        detail_baskets.map((x, index) => {
+          return {
+            reference: `${detail_weights[index]},${x},${detail_discounts[index]}`,
+            item_id: Number(itemId),
+            booked_quantity: detail_netWeights[index],
+            unit_cost: 1,
+          };
+        });
+
+      const newPurchaseOrderBody: CreateNewPurchaseOrderBody = {
+        reference: payeeType,
+        taxable: false,
+        issue_date,
+        shipping_date: issue_date,
+        incoterm_id: purchaseOrderGeneralInfo?.incoterm_id,
+        currency_id: purchaseOrderGeneralInfo?.currency_id,
+        charge_term_id: purchaseOrderGeneralInfo?.charge_term_id,
+        payee_id: vendor,
+        agency_id,
+        purchaser_id: Number(purchaser),
+        import: false,
+        tag_ids: ["", tag_id],
+        memo: qualityControlBaskets + "",
+        origin: netWeight,
+        purchase_order_details: newPurchaseOrderDetails,
+        incoterm_destination: provenance.slice(0, 254),
+        transport_type: discountReason,
+        id_number: idNumberInput,
+        ...(esCentroDeAcopio
+          ? { discount: Number(controlCalidadValues.porcentajeRechazo) }
+          : {}),
+      };
+
       console.log(
         "REGISTRANDO ORDEN DE COMPRA: ",
         JSON.stringify(newPurchaseOrderBody)
@@ -254,123 +263,52 @@ export const register4pinosReception = async ({
       ) {
         throw new Error(
           "Error al intentar crear la órden de compra autorizada: " +
-            newAuthorizedPurchaseResponse?.userMsg
+            newAuthorizedPurchaseResponse?.userMsg +
+            " Body: " +
+            JSON.stringify(newPurchaseOrderBody)
         );
       }
       apiResponses.authorizedPO = newAuthorizedPurchaseResponse.data;
       apiResponses.apiCall = apiResponses.apiCall + 1;
     }
 
-    console.log("========================================>");
-    console.log(
-      "paso 2: CREANDO RECEPCION, ENVIO DE CANASTAS, WEBAPP TABLE DE RECHAZO DIRECTO"
-    );
-
-    const createNewReceptionBodyFunction = () => {
-      const receptionDetails: receptionDetailsType = {};
-      apiResponses.authorizedPO.purchase_order_details.forEach(
-        (pod: PurchaseOrderDetailsGraphQL, index: number) =>
-          (receptionDetails[index] = {
-            item_id: `${pod.item_id}`,
-            purchase_order_detail_id: `${pod.id}`,
-            lot_delivered_quantity: [`${pod.booked_quantity}`],
-            lot_name: [apiResponses.authorizedPO.id_number],
-            lot_expire: [
-              new Date(Date.now() + 12096e5).toISOString().split("T")[0],
-            ],
-            lot_description: [received_baskets.join(",")],
-          })
-      );
-
-      const newReception: receptionType = {
-        reception: {
-          agency_id,
-          received_at: issue_date,
-          purchase_order_id: apiResponses.authorizedPO.id + "",
-          entity_id: apiResponses.authorizedPO.entity_id + "",
-          needs_transit: "0",
-          invoice_number: "",
-          reception_details_attributes: receptionDetails,
-        },
-      };
-      return newReception;
-    };
-
-    const createBasketsShipmentBodyFunction = () => {
-      const movementDetails: Partial<MovementGraphQL>[] = [];
-
-      received_baskets.forEach((basket: any, index: any) => {
-        movementDetails.push({
-          item_id: basketLots?.recepciones_basket_item_id,
-          lot_id: basket.split("-")[1],
-          booked_quantity: basket.split("-")[0],
-        });
-      });
-
-      const BasketShipment: InsertBookingBody = {
-        booker_id: Number(purchaser),
-        reference: "Envio de canastas (De proveedor a agencia)",
-        needs_transport: false,
-        planned_delivery: issue_date,
-        agency_from_id: Number(origin_agency),
-        agency_to_id: agency_id,
-        movements: movementDetails,
-      };
-
-      return BasketShipment;
-    };
-
-    const createQCBasketShipmentBody = async () => {
-      const qcMovementDetails: Partial<MovementGraphQL>[] = [];
-
-      qualityControlBaskets.forEach((basket: any) => {
-        qcMovementDetails.push({
-          item_id: basketLots?.recepciones_basket_item_id,
-          lot_id: Number(basket.split("-")[1]),
-          booked_quantity: Number(basket.split("-")[0]),
-        });
-      });
-
-      const total_qc_baskets = parseInt(values.totalQCBaskets + "");
-      const basket_weight = parseFloat(netWeight) / parseInt(total_baskets);
-      const lotResponse = await getLoteByName(
-        session,
-        apiResponses.authorizedPO.id_number
-      );
-
-      if (lotResponse.error || !lotResponse.data) {
-        throw new Error(
-          "Error al intentar obtener el lote por nombre: " +
-            lotResponse?.userMsg
-        );
-      }
-
-      if (lotResponse.data?.id) {
-        qcMovementDetails.push({
-          item_id: apiResponses.authorizedPO.purchase_order_details[0].item_id,
-          lot_id: Number(lotResponse.data.id),
-          booked_quantity: Number(Math.round(total_qc_baskets * basket_weight)), //TODO: Revisar si esto está bien así.
-        });
-      }
-
-      const qcBasketShipment: InsertBookingBody = {
-        booker_id: Number(purchaser),
-        reference: "Envio de canastas y verduras a CC",
-        needs_transport: false,
-        planned_delivery: issue_date,
-        agency_from_id: agency_id,
-        agency_to_id: quality_control_agency,
-        movements: qcMovementDetails,
-      };
-
-      return qcBasketShipment;
-    };
-
-    //first create reception and receive it with the basket shipment
-    const newReception = createNewReceptionBodyFunction();
-    const newBasketShipment = createBasketsShipmentBodyFunction();
-
     if (apiResponses.apiCall === 2) {
+      const createNewReceptionBodyFunction = () => {
+        const receptionDetails: receptionDetailsType = {};
+        apiResponses.authorizedPO.purchase_order_details.forEach(
+          (pod: PurchaseOrderDetailsGraphQL, index: number) =>
+            (receptionDetails[index] = {
+              item_id: `${pod.item_id}`,
+              purchase_order_detail_id: `${pod.id}`,
+              lot_delivered_quantity: [`${pod.booked_quantity}`],
+              lot_name: [apiResponses.authorizedPO.id_number],
+              lot_expire: [
+                new Date(Date.now() + 12096e5).toISOString().split("T")[0],
+              ],
+              lot_description: [received_baskets.join(",")],
+            })
+        );
+
+        const newReception: receptionType = {
+          reception: {
+            agency_id,
+            received_at: issue_date,
+            purchase_order_id: apiResponses.authorizedPO.id + "",
+            entity_id: apiResponses.authorizedPO.entity_id + "",
+            needs_transit: "0",
+            invoice_number: "",
+            reception_details_attributes: receptionDetails,
+          },
+        };
+        return newReception;
+      };
+
+      //first create reception and receive it with the basket shipment
+      const newReception = createNewReceptionBodyFunction();
+      console.log("========================================>");
+      console.log(
+        "paso 2: CREANDO RECEPCION, ENVIO DE CANASTAS, WEBAPP TABLE DE RECHAZO DIRECTO"
+      );
       console.log("------------ CREANDO RECEPCIÓN.......");
       const responseNewReception = await createNewReception(
         headers,
@@ -390,6 +328,31 @@ export const register4pinosReception = async ({
 
     if (apiResponses.apiCall === 3) {
       console.log("------------- REALIZANDO ENVÍO DE CANASTAS A LA AGENCIA");
+      const createBasketsShipmentBodyFunction = () => {
+        const movementDetails: Partial<MovementGraphQL>[] = [];
+
+        received_baskets.forEach((basket: any, index: any) => {
+          movementDetails.push({
+            item_id: recepciones_basket_item_id,
+            lot_id: basket.split("-")[1],
+            booked_quantity: basket.split("-")[0],
+          });
+        });
+
+        const BasketShipment: InsertBookingBody = {
+          booker_id: Number(purchaser),
+          reference: "Envio de canastas (De proveedor a agencia)",
+          needs_transport: false,
+          planned_delivery: issue_date,
+          agency_from_id: Number(origin_agency),
+          agency_to_id: agency_id,
+          movements: movementDetails,
+        };
+
+        return BasketShipment;
+      };
+
+      const newBasketShipment = createBasketsShipmentBodyFunction();
       const newShipmentResponse = await insertBookings(
         headers,
         newBasketShipment,
@@ -397,7 +360,10 @@ export const register4pinosReception = async ({
       );
       if (newShipmentResponse.error || !newShipmentResponse.data) {
         throw new Error(
-          "Error al intentar crear el envío: " + newShipmentResponse?.userMsg
+          "Error al intentar crear el envío: " +
+            newShipmentResponse?.userMsg +
+            " Body: " +
+            JSON.stringify(newBasketShipment)
         );
       }
       apiResponses.apiCall = apiResponses.apiCall + 1;
@@ -423,11 +389,60 @@ export const register4pinosReception = async ({
       //Al momento de este comentario, un ejemplo es que sólo Planta Central no es centro de acopio
       //Ellos si envían canastas a control de calidad.
       //Si es de un centro de acopio, se salta esto...
-      const newQCBasketShipment = await createQCBasketShipmentBody();
-      if (apiResponses.apiCall === 5) {
+      if (apiResponses.apiCall === 5 && qualityControlBaskets.length > 0) {
         console.log(
           "------------- REALIZANDO ENVÍO DE CANASTAS A CONTROL DE CALIDAD"
         );
+
+        const total_qc_baskets = parseInt(values.totalQCBaskets + "");
+        const basket_weight = parseFloat(netWeight) / parseInt(total_baskets);
+        const lotResponse = await getLoteByName(
+          session,
+          apiResponses.authorizedPO.id_number
+        );
+
+        if (lotResponse.error || !lotResponse.data || !lotResponse.data.id) {
+          throw new Error(
+            "Error al intentar obtener el lote por nombre: " +
+              lotResponse?.userMsg
+          );
+        }
+
+        const createQCBasketShipmentBody = async () => {
+          const qcMovementDetails: Partial<MovementGraphQL>[] =
+            qualityControlBaskets.map((basket: any) => {
+              const booked_quantity = Number(basket.split("-")[0]);
+              const lot_id = Number(basket.split("-")[1]);
+              return {
+                item_id: recepciones_basket_item_id,
+                lot_id,
+                booked_quantity,
+                reference: "Canastas a control de calidad.",
+              };
+            });
+
+          qcMovementDetails.push({
+            item_id:
+              apiResponses.authorizedPO.purchase_order_details[0].item_id,
+            lot_id: Number(lotResponse.data?.id),
+            booked_quantity: Number(total_qc_baskets * basket_weight), //TODO: Revisar si esto está bien así.
+            reference: "Verduras a control de calidad.",
+          });
+
+          const qcBasketShipment: InsertBookingBody = {
+            booker_id: Number(purchaser),
+            reference: "Envio de canastas y verduras a CC",
+            needs_transport: false,
+            planned_delivery: issue_date,
+            agency_from_id: agency_id,
+            agency_to_id: quality_control_agency,
+            movements: qcMovementDetails,
+          };
+
+          return qcBasketShipment;
+        };
+
+        const newQCBasketShipment = await createQCBasketShipmentBody();
         const new_qc_shipment_response = await insertBookings(
           headers,
           newQCBasketShipment,
@@ -437,7 +452,9 @@ export const register4pinosReception = async ({
           console.log("Body: ", JSON.stringify(newQCBasketShipment));
           throw new Error(
             "Error al intentar crear el envío a control de calidad: " +
-              new_qc_shipment_response?.userMsg
+              new_qc_shipment_response?.userMsg +
+              " Body: " +
+              JSON.stringify(newQCBasketShipment)
           );
         }
 

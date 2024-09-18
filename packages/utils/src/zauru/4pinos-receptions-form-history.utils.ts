@@ -104,6 +104,8 @@ export const createQueueFormReceptionHistory = (
       await getVariablesByName(headers, session, [
         "queue_form_recepcion_submited_web_app_table_id",
       ]);
+    //Esto es para simular el tiempo de carga de la API nunca subir a producción
+    //await new Promise((resolve) => setTimeout(resolve, 7000));
     const response =
       await createWebAppTableRegister<QueueFormReceptionWebAppTable>(
         headers,
