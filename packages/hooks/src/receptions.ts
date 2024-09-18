@@ -204,7 +204,9 @@ export const useGetPesadas = (
           ? Number(parsedReference[1]) ?? 0
           : 0;
         const discount = parsedReference[2]
-          ? Number(parsedReference[2]) ?? 0
+          ? isNaN(Number(parsedReference[2]))
+            ? 0
+            : Number(parsedReference[2])
           : 0;
         //TODO sacar el peso de la canasta de la API de Zauru, ahorita se supone que no debería cambiar de 5 libras.
         const basketWeight = 5;
@@ -307,9 +309,17 @@ export const getPesadasByForm = (
   // Iterar sobre los campos del formulario y extraer la información de pesadas
   let index = 0;
   while (formInput.hasOwnProperty(`basket${index}`)) {
-    const baskets = Number(formInput[`basket${index}`] || 0) ?? 0;
-    const totalWeight = Number(formInput[`weight${index}`] || 0) ?? 0;
-    const discount = Number(formInput[`discount${index}`] || 0) ?? 0;
+    const baskets = isNaN(Number(formInput[`basket${index}`]))
+      ? 0
+      : Number(formInput[`basket${index}`]);
+    const totalWeight = isNaN(Number(formInput[`weight${index}`]))
+      ? 0
+      : Number(formInput[`weight${index}`]);
+    const discount = isNaN(Number(formInput[`discount${index}`]))
+      ? 0
+      : Number(formInput[`discount${index}`]);
+
+    console.log("ARMADO: ", baskets, totalWeight, discount);
 
     // Realizar los cálculos necesarios
     const basketWeight = 5;
