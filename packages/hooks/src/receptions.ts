@@ -307,9 +307,9 @@ export const getPesadasByForm = (
   // Iterar sobre los campos del formulario y extraer la información de pesadas
   let index = 0;
   while (formInput.hasOwnProperty(`basket${index}`)) {
-    const baskets = Number(formInput[`basket${index}`] || 0);
-    const totalWeight = Number(formInput[`weight${index}`] || 0);
-    const discount = Number(formInput[`discount${index}`] || 0);
+    const baskets = Number(formInput[`basket${index}`] || 0) ?? 0;
+    const totalWeight = Number(formInput[`weight${index}`] || 0) ?? 0;
+    const discount = Number(formInput[`discount${index}`] || 0) ?? 0;
 
     // Realizar los cálculos necesarios
     const basketWeight = 5;
