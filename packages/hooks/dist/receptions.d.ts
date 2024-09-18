@@ -44,8 +44,8 @@ type PesadaBody = {
     discount: number;
     netWeight: string;
     weightByBasket: string;
-    probableUtilization: string;
-    lbDiscounted: string;
+    probableUtilization: number;
+    lbDiscounted: number;
 };
 type PesadaFooter = {
     id: string;
@@ -61,7 +61,7 @@ export declare const useGetPesadas: (purchaseOrder?: PurchaseOrderGraphQL, stock
  * @param formInput
  * @returns
  */
-export declare const getPesadasByForm: (formInput: FormInput) => {
+export declare const getPesadasByForm: (formInput: FormInput, stocks_only_integer?: boolean) => {
     tempPesadas: PesadaBody[];
     totales: {
         id: string;

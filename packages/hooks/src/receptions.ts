@@ -174,8 +174,8 @@ type PesadaBody = {
   discount: number;
   netWeight: string;
   weightByBasket: string;
-  probableUtilization: string;
-  lbDiscounted: string;
+  probableUtilization: number;
+  lbDiscounted: number;
 };
 
 type PesadaFooter = {
@@ -225,10 +225,10 @@ export const useGetPesadas = (
           baskets,
           totalWeight,
           discount,
-          netWeight: toFixedIfNeeded(netWeight).toString(),
-          weightByBasket: toFixedIfNeeded(weightByBasket).toString(),
-          probableUtilization: toFixedIfNeeded(probableUtilization).toString(),
-          lbDiscounted: toFixedIfNeeded(lbDiscounted).toString(),
+          netWeight: toFixedIfNeeded(netWeight)?.toString(),
+          weightByBasket: toFixedIfNeeded(weightByBasket)?.toString(),
+          probableUtilization,
+          lbDiscounted,
         };
       }),
     ];
@@ -237,18 +237,18 @@ export const useGetPesadas = (
       id: "",
       baskets: toFixedIfNeeded(
         tempPesadas?.map((x) => x.baskets).reduce(reduceAdd, 0)
-      ).toString(),
+      )?.toString(),
       totalWeight: toFixedIfNeeded(
         tempPesadas?.map((x) => x.totalWeight).reduce(reduceAdd, 0)
-      ).toString(),
+      )?.toString(),
       discount: "-",
       netWeight: toFixedIfNeeded(
         tempPesadas?.map((x) => Number(x.netWeight)).reduce(reduceAdd, 0)
-      ).toString(),
+      )?.toString(),
       weightByBasket: "-",
       lbDiscounted: toFixedIfNeeded(
         tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(reduceAdd, 0)
-      ),
+      )?.toString(),
       probableUtilization: toFixedIfNeeded(
         tempPesadas
           ?.map((x) => Number(x.probableUtilization))
@@ -331,10 +331,10 @@ export const getPesadasByForm = (
       baskets,
       totalWeight,
       discount,
-      netWeight: netWeight.toString(),
-      weightByBasket: weightByBasket.toString(),
-      probableUtilization: probableUtilization.toString(),
-      lbDiscounted: lbDiscounted.toString(),
+      netWeight: toFixedIfNeeded(netWeight)?.toString(),
+      weightByBasket: toFixedIfNeeded(weightByBasket)?.toString(),
+      probableUtilization,
+      lbDiscounted,
     });
 
     index++;
@@ -450,7 +450,7 @@ export const useGetBasketDetails = (
         id: "",
         total: toFixedIfNeeded(
           joinedBaskets?.map((x) => x.total).reduce(reduceAdd, 0)
-        ).toString(),
+        )?.toString(),
         cc: joinedBaskets?.map((x) => x.cc).reduce(reduceAdd, 0),
         //granTotal: joinedBaskets?.map((x) => x.granTotal).reduce(reduceAdd, 0),
       };

@@ -110,21 +110,21 @@ const useGetPesadas = (purchaseOrder, stocks_only_integer = false) => {
                     baskets,
                     totalWeight,
                     discount,
-                    netWeight: (0, common_1.toFixedIfNeeded)(netWeight).toString(),
-                    weightByBasket: (0, common_1.toFixedIfNeeded)(weightByBasket).toString(),
-                    probableUtilization: (0, common_1.toFixedIfNeeded)(probableUtilization).toString(),
-                    lbDiscounted: (0, common_1.toFixedIfNeeded)(lbDiscounted).toString(),
+                    netWeight: (0, common_1.toFixedIfNeeded)(netWeight)?.toString(),
+                    weightByBasket: (0, common_1.toFixedIfNeeded)(weightByBasket)?.toString(),
+                    probableUtilization,
+                    lbDiscounted,
                 };
             }),
         ];
         const totales = {
             id: "",
-            baskets: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0)).toString(),
-            totalWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0)).toString(),
+            baskets: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0))?.toString(),
+            totalWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0))?.toString(),
             discount: "-",
-            netWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0)).toString(),
+            netWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0))?.toString(),
             weightByBasket: "-",
-            lbDiscounted: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(common_1.reduceAdd, 0)),
+            lbDiscounted: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(common_1.reduceAdd, 0))?.toString(),
             probableUtilization: (0, common_1.toFixedIfNeeded)(tempPesadas
                 ?.map((x) => Number(x.probableUtilization))
                 .reduce(common_1.reduceAdd, 0)),
@@ -169,7 +169,7 @@ exports.useGetPesadas = useGetPesadas;
  * @param formInput
  * @returns
  */
-const getPesadasByForm = (formInput) => {
+const getPesadasByForm = (formInput, stocks_only_integer = false) => {
     // Inicializar array de pesadas
     const tempPesadas = [];
     // Iterar sobre los campos del formulario y extraer la información de pesadas
@@ -182,6 +182,7 @@ const getPesadasByForm = (formInput) => {
         const basketWeight = 5;
         let netWeight = totalWeight - baskets * basketWeight;
         netWeight = netWeight * ((100 - discount) / 100);
+        netWeight = stocks_only_integer ? totalWeight : netWeight;
         const weightByBasket = netWeight / baskets;
         //Probable aprovechamiento en planta
         const probableUtilization = netWeight * ((100 - (Number(formInput.porcentajeRechazo) ?? 0)) / 100);
@@ -193,10 +194,10 @@ const getPesadasByForm = (formInput) => {
             baskets,
             totalWeight,
             discount,
-            netWeight: netWeight.toString(),
-            weightByBasket: weightByBasket.toString(),
-            probableUtilization: probableUtilization.toString(),
-            lbDiscounted: lbDiscounted.toString(),
+            netWeight: (0, common_1.toFixedIfNeeded)(netWeight)?.toString(),
+            weightByBasket: (0, common_1.toFixedIfNeeded)(weightByBasket)?.toString(),
+            probableUtilization,
+            lbDiscounted,
         });
         index++;
     }
@@ -210,10 +211,18 @@ const getPesadasByForm = (formInput) => {
     const headers = [
         { label: "#", name: "id", type: "label", width: 5 },
         { label: "Canastas", name: "baskets", type: "label" },
-        { label: "Peso báscula", name: "totalWeight", type: "label" },
-        { label: "Peso Neto", name: "netWeight", type: "label" },
         {
-            label: "Peso Neto por canasta",
+            label: `${stocks_only_integer ? "Unidades" : "Peso báscula"}`,
+            name: "totalWeight",
+            type: "label",
+        },
+        {
+            label: `${stocks_only_integer ? "Unidades" : "Peso Neto"}`,
+            name: "netWeight",
+            type: "label",
+        },
+        {
+            label: `${stocks_only_integer ? "Unidades" : "Peso Neto"} por canasta`,
             name: "weightByBasket",
             type: "label",
         },
@@ -266,7 +275,7 @@ const useGetBasketDetails = (purchaseOrder) => {
         }
         const totales = {
             id: "",
-            total: (0, common_1.toFixedIfNeeded)(joinedBaskets?.map((x) => x.total).reduce(common_1.reduceAdd, 0)).toString(),
+            total: (0, common_1.toFixedIfNeeded)(joinedBaskets?.map((x) => x.total).reduce(common_1.reduceAdd, 0))?.toString(),
             cc: joinedBaskets?.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
             //granTotal: joinedBaskets?.map((x) => x.granTotal).reduce(reduceAdd, 0),
         };
