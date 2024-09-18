@@ -297,7 +297,10 @@ export const useGetPesadas = (
  * @param formInput
  * @returns
  */
-export const getPesadasByForm = (formInput: FormInput) => {
+export const getPesadasByForm = (
+  formInput: FormInput,
+  stocks_only_integer: boolean = false
+) => {
   // Inicializar array de pesadas
   const tempPesadas: PesadaBody[] = [];
 
@@ -312,6 +315,7 @@ export const getPesadasByForm = (formInput: FormInput) => {
     const basketWeight = 5;
     let netWeight = totalWeight - baskets * basketWeight;
     netWeight = netWeight * ((100 - discount) / 100);
+    netWeight = stocks_only_integer ? totalWeight : netWeight;
     const weightByBasket = netWeight / baskets;
 
     //Probable aprovechamiento en planta
@@ -353,10 +357,18 @@ export const getPesadasByForm = (formInput: FormInput) => {
   const headers: GenericDynamicTableColumn[] = [
     { label: "#", name: "id", type: "label", width: 5 },
     { label: "Canastas", name: "baskets", type: "label" },
-    { label: "Peso báscula", name: "totalWeight", type: "label" },
-    { label: "Peso Neto", name: "netWeight", type: "label" },
     {
-      label: "Peso Neto por canasta",
+      label: `${stocks_only_integer ? "Unidades" : "Peso báscula"}`,
+      name: "totalWeight",
+      type: "label",
+    },
+    {
+      label: `${stocks_only_integer ? "Unidades" : "Peso Neto"}`,
+      name: "netWeight",
+      type: "label",
+    },
+    {
+      label: `${stocks_only_integer ? "Unidades" : "Peso Neto"} por canasta`,
       name: "weightByBasket",
       type: "label",
     },
