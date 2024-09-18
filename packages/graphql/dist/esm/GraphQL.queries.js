@@ -363,7 +363,9 @@ query getAgencies {
 const getWebAppRowStringQuery = (id) => `
 query getWebAppRow {
   webapp_rows(where: {id: {_eq: ${id}}}) {
+    id
     data
+    created_at
   }
 }
 `;

@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Button = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
+const WithTooltip_js_1 = require("../WithTooltip/WithTooltip.js");
 const react_hook_form_1 = require("react-hook-form");
-const index_js_1 = require("../index.js");
 const Button = (props) => {
-    const { type = "submit", loading = false, loadingText = "Guardando...", title = "Guardar", name = "save", onClickSave, selectedColor = "indigo", children, className = "", disabled = false, } = props;
+    const { type = "submit", loading = false, loadingText = "Guardando...", title = "Guardar", name = "save", onClickSave, selectedColor = "indigo", children, className = "", disabled = false, enableFormErrorsValidation = true, } = props;
     const formContext = (0, react_hook_form_1.useFormContext)();
     const formHasErrors = formContext ? !formContext.formState.isValid : false;
     const formErrors = formContext ? formContext.formState.errors : {};
@@ -45,14 +45,18 @@ const Button = (props) => {
     };
     const color = COLORS[selectedColor];
     const inside = children ?? title;
-    const errorMessage = formHasErrors
+    const errorMessage = enableFormErrorsValidation && formHasErrors
         ? Object.values(formErrors)
             .map((error) => error?.message?.toString())
             .join(", ")
         : "";
-    const buttonContent = ((0, jsx_runtime_1.jsx)("button", { type: type, name: "action", disabled: loading || disabled || formHasErrors, value: name, onClick: onClickSave, className: `ml-2 ${loading || disabled || formHasErrors ? " bg-opacity-25 " : ""} ${loading
+    const buttonContent = ((0, jsx_runtime_1.jsx)("button", { type: type, name: "action", disabled: loading || disabled || (enableFormErrorsValidation && formHasErrors), value: name, onClick: onClickSave, className: `ml-2 ${loading || disabled || (enableFormErrorsValidation && formHasErrors)
+            ? " bg-opacity-25 "
+            : ""} ${loading
             ? " cursor-progress"
-            : `${disabled || formHasErrors ? "" : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }));
-    return formHasErrors ? ((0, jsx_runtime_1.jsx)(index_js_1.WithTooltip, { text: errorMessage, children: buttonContent })) : (buttonContent);
+            : `${disabled || (enableFormErrorsValidation && formHasErrors)
+                ? ""
+                : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }));
+    return enableFormErrorsValidation && formHasErrors ? ((0, jsx_runtime_1.jsx)(WithTooltip_js_1.WithTooltip, { text: errorMessage, children: buttonContent })) : (buttonContent);
 };
 exports.Button = Button;

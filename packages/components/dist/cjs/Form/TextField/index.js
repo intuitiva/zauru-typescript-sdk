@@ -25,9 +25,6 @@ const TextField = (props) => {
     (0, react_1.useEffect)(() => {
         setValue(defaultValue);
     }, [defaultValue]);
-    if (hidden) {
-        return ((0, jsx_runtime_1.jsx)("input", { type: type, id: id ?? name, value: defaultValue, readOnly: true, hidden: true, ...(register ?? {}), name: name }));
-    }
     const handleInputChange = (event) => {
         if (register) {
             register.onChange(event);
@@ -65,6 +62,9 @@ const TextField = (props) => {
             }
         }
     };
+    if (hidden) {
+        return ((0, jsx_runtime_1.jsx)("input", { type: "hidden", id: id ?? name, value: value, readOnly: true, hidden: true, ...(register ?? {}), name: name, onChange: handleInputChange }));
+    }
     const inputComponent = ((0, jsx_runtime_1.jsx)("input", { type: type, readOnly: readOnly, disabled: disabled, id: id ?? name, autoComplete: "given-name", value: value, onWheel: (e) => {
             e.currentTarget.blur();
         }, step: type === "number" ? 0.01 : undefined, onKeyDown: (event) => {

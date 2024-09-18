@@ -15,6 +15,13 @@ export declare const ESTADOS_COLA_RECEPCIONES: {
  */
 export declare const getQueueFormReceptionHistories: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<QueueFormReceptionWebAppTable>[]>>;
 /**
+ * Get getQueueFormReceptionHistories from the web app table.
+ * @param headers Request headers.
+ * @param session Session object.
+ * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable[]>.
+ */
+export declare const getQueueFormReceptionHistoryByID: (session: Session, id: string | number) => Promise<AxiosUtilsResponse<QueueFormReceptionWebAppTable | null>>;
+/**
  * Create a template in the web app table.
  * @param headers Request headers.
  * @param session Session object.

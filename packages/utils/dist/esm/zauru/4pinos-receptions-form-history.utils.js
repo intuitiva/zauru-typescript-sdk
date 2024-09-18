@@ -1,5 +1,5 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { createWebAppTableRegister, deleteWebAppTableRegister, getVariablesByName, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/services";
+import { createWebAppTableRegister, deleteWebAppTableRegister, getVariablesByName, getWebAppRow, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/services";
 export const ESTADOS_COLA_RECEPCIONES = {
     EN_PROCESO: "En proceso",
     ERROR: "Con error",
@@ -23,6 +23,22 @@ export const getQueueFormReceptionHistories = (headers, session) => {
             throw new Error(`Ocurrió un error al consultar el historial de colas: ${response.userMsg}`);
         }
         const history = response?.data ?? [];
+        return history;
+    });
+};
+/**
+ * Get getQueueFormReceptionHistories from the web app table.
+ * @param headers Request headers.
+ * @param session Session object.
+ * @returns A Promise of AxiosUtilsResponse<QueueFormReceptionWebAppTable[]>.
+ */
+export const getQueueFormReceptionHistoryByID = (session, id) => {
+    return handlePossibleAxiosErrors(async () => {
+        const response = await getWebAppRow(session, Number(id));
+        if (response.error) {
+            throw new Error(`Ocurrió un error al consultar el historial de colas: ${response.userMsg}`);
+        }
+        const history = response?.data ?? null;
         return history;
     });
 };

@@ -100,7 +100,7 @@ export declare function formatDateToUTC(dateString: string): string;
 export declare const getFormattedDate: (dateString?: string, withHours?: boolean) => string;
 export declare const formatDateToDatePicker: (date: Date) => string;
 export declare const formatTimeToTimePicker: (timeString: string) => Date;
-export declare const toFixedIfNeeded: (value: number) => string;
+export declare const toFixedIfNeeded: (value: number) => string | number;
 export declare const isNumeric: (value: any) => boolean;
 export declare function incrementString(str: string): string;
 export declare function getParsedIdFromString(inputString: string): number;

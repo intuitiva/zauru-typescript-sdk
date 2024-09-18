@@ -225,10 +225,10 @@ export const useGetPesadas = (
           baskets,
           totalWeight,
           discount,
-          netWeight: toFixedIfNeeded(netWeight),
-          weightByBasket: toFixedIfNeeded(weightByBasket),
-          probableUtilization: toFixedIfNeeded(probableUtilization),
-          lbDiscounted: toFixedIfNeeded(lbDiscounted),
+          netWeight: toFixedIfNeeded(netWeight).toString(),
+          weightByBasket: toFixedIfNeeded(weightByBasket).toString(),
+          probableUtilization: toFixedIfNeeded(probableUtilization).toString(),
+          lbDiscounted: toFixedIfNeeded(lbDiscounted).toString(),
         };
       }),
     ];
@@ -237,14 +237,14 @@ export const useGetPesadas = (
       id: "",
       baskets: toFixedIfNeeded(
         tempPesadas?.map((x) => x.baskets).reduce(reduceAdd, 0)
-      ),
+      ).toString(),
       totalWeight: toFixedIfNeeded(
         tempPesadas?.map((x) => x.totalWeight).reduce(reduceAdd, 0)
-      ),
+      ).toString(),
       discount: "-",
       netWeight: toFixedIfNeeded(
         tempPesadas?.map((x) => Number(x.netWeight)).reduce(reduceAdd, 0)
-      ),
+      ).toString(),
       weightByBasket: "-",
       lbDiscounted: toFixedIfNeeded(
         tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(reduceAdd, 0)
@@ -327,10 +327,10 @@ export const getPesadasByForm = (formInput: FormInput) => {
       baskets,
       totalWeight,
       discount,
-      netWeight: toFixedIfNeeded(netWeight),
-      weightByBasket: toFixedIfNeeded(weightByBasket),
-      probableUtilization: toFixedIfNeeded(probableUtilization),
-      lbDiscounted: toFixedIfNeeded(lbDiscounted),
+      netWeight: netWeight.toString(),
+      weightByBasket: weightByBasket.toString(),
+      probableUtilization: probableUtilization.toString(),
+      lbDiscounted: lbDiscounted.toString(),
     });
 
     index++;
@@ -438,7 +438,7 @@ export const useGetBasketDetails = (
         id: "",
         total: toFixedIfNeeded(
           joinedBaskets?.map((x) => x.total).reduce(reduceAdd, 0)
-        ),
+        ).toString(),
         cc: joinedBaskets?.map((x) => x.cc).reduce(reduceAdd, 0),
         //granTotal: joinedBaskets?.map((x) => x.granTotal).reduce(reduceAdd, 0),
       };

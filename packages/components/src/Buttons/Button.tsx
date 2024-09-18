@@ -1,6 +1,6 @@
+import { WithTooltip } from "../WithTooltip/WithTooltip.js";
 import type { ColorInterface } from "../NavBar/NavBar.types.js";
 import { useFormContext } from "react-hook-form";
-import { WithTooltip } from "..";
 
 type Props = {
   type?: "reset" | "button" | "submit" | undefined;

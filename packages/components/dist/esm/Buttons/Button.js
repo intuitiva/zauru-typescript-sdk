@@ -1,8 +1,8 @@
 import { jsx as _jsx } from "react/jsx-runtime";
+import { WithTooltip } from "../WithTooltip/WithTooltip.js";
 import { useFormContext } from "react-hook-form";
-import { WithTooltip } from "../index.js";
 export const Button = (props) => {
-    const { type = "submit", loading = false, loadingText = "Guardando...", title = "Guardar", name = "save", onClickSave, selectedColor = "indigo", children, className = "", disabled = false, } = props;
+    const { type = "submit", loading = false, loadingText = "Guardando...", title = "Guardar", name = "save", onClickSave, selectedColor = "indigo", children, className = "", disabled = false, enableFormErrorsValidation = true, } = props;
     const formContext = useFormContext();
     const formHasErrors = formContext ? !formContext.formState.isValid : false;
     const formErrors = formContext ? formContext.formState.errors : {};
@@ -42,13 +42,17 @@ export const Button = (props) => {
     };
     const color = COLORS[selectedColor];
     const inside = children ?? title;
-    const errorMessage = formHasErrors
+    const errorMessage = enableFormErrorsValidation && formHasErrors
         ? Object.values(formErrors)
             .map((error) => error?.message?.toString())
             .join(", ")
         : "";
-    const buttonContent = (_jsx("button", { type: type, name: "action", disabled: loading || disabled || formHasErrors, value: name, onClick: onClickSave, className: `ml-2 ${loading || disabled || formHasErrors ? " bg-opacity-25 " : ""} ${loading
+    const buttonContent = (_jsx("button", { type: type, name: "action", disabled: loading || disabled || (enableFormErrorsValidation && formHasErrors), value: name, onClick: onClickSave, className: `ml-2 ${loading || disabled || (enableFormErrorsValidation && formHasErrors)
+            ? " bg-opacity-25 "
+            : ""} ${loading
             ? " cursor-progress"
-            : `${disabled || formHasErrors ? "" : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }));
-    return formHasErrors ? (_jsx(WithTooltip, { text: errorMessage, children: buttonContent })) : (buttonContent);
+            : `${disabled || (enableFormErrorsValidation && formHasErrors)
+                ? ""
+                : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }));
+    return enableFormErrorsValidation && formHasErrors ? (_jsx(WithTooltip, { text: errorMessage, children: buttonContent })) : (buttonContent);
 };

@@ -249,6 +249,7 @@ export const SelectField = (props: Props) => {
               {...field}
               type="text"
               id={id}
+              autoComplete="off"
               value={inputValue}
               onFocus={() => setIsOpen(true)}
               onBlur={handleBlur}

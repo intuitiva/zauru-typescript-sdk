@@ -429,7 +429,7 @@ export const formatTimeToTimePicker = (timeString: string) => {
 
 export const toFixedIfNeeded = (value: number) => {
   if (!value) {
-    return "0";
+    return value;
   }
 
   if (Number.isInteger(value)) {

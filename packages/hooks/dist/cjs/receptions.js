@@ -110,19 +110,19 @@ const useGetPesadas = (purchaseOrder, stocks_only_integer = false) => {
                     baskets,
                     totalWeight,
                     discount,
-                    netWeight: (0, common_1.toFixedIfNeeded)(netWeight),
-                    weightByBasket: (0, common_1.toFixedIfNeeded)(weightByBasket),
-                    probableUtilization: (0, common_1.toFixedIfNeeded)(probableUtilization),
-                    lbDiscounted: (0, common_1.toFixedIfNeeded)(lbDiscounted),
+                    netWeight: (0, common_1.toFixedIfNeeded)(netWeight).toString(),
+                    weightByBasket: (0, common_1.toFixedIfNeeded)(weightByBasket).toString(),
+                    probableUtilization: (0, common_1.toFixedIfNeeded)(probableUtilization).toString(),
+                    lbDiscounted: (0, common_1.toFixedIfNeeded)(lbDiscounted).toString(),
                 };
             }),
         ];
         const totales = {
             id: "",
-            baskets: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0)),
-            totalWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0)),
+            baskets: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0)).toString(),
+            totalWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0)).toString(),
             discount: "-",
-            netWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0)),
+            netWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0)).toString(),
             weightByBasket: "-",
             lbDiscounted: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(common_1.reduceAdd, 0)),
             probableUtilization: (0, common_1.toFixedIfNeeded)(tempPesadas
@@ -193,10 +193,10 @@ const getPesadasByForm = (formInput) => {
             baskets,
             totalWeight,
             discount,
-            netWeight: (0, common_1.toFixedIfNeeded)(netWeight),
-            weightByBasket: (0, common_1.toFixedIfNeeded)(weightByBasket),
-            probableUtilization: (0, common_1.toFixedIfNeeded)(probableUtilization),
-            lbDiscounted: (0, common_1.toFixedIfNeeded)(lbDiscounted),
+            netWeight: netWeight.toString(),
+            weightByBasket: weightByBasket.toString(),
+            probableUtilization: probableUtilization.toString(),
+            lbDiscounted: lbDiscounted.toString(),
         });
         index++;
     }
@@ -266,7 +266,7 @@ const useGetBasketDetails = (purchaseOrder) => {
         }
         const totales = {
             id: "",
-            total: (0, common_1.toFixedIfNeeded)(joinedBaskets?.map((x) => x.total).reduce(common_1.reduceAdd, 0)),
+            total: (0, common_1.toFixedIfNeeded)(joinedBaskets?.map((x) => x.total).reduce(common_1.reduceAdd, 0)).toString(),
             cc: joinedBaskets?.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
             //granTotal: joinedBaskets?.map((x) => x.granTotal).reduce(reduceAdd, 0),
         };

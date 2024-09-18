@@ -381,7 +381,7 @@ const formatTimeToTimePicker = (timeString) => {
 exports.formatTimeToTimePicker = formatTimeToTimePicker;
 const toFixedIfNeeded = (value) => {
     if (!value) {
-        return "0";
+        return value;
     }
     if (Number.isInteger(value)) {
         return value.toString().replace(".00", "");

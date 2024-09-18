@@ -22,9 +22,6 @@ export const TextField = (props) => {
     useEffect(() => {
         setValue(defaultValue);
     }, [defaultValue]);
-    if (hidden) {
-        return (_jsx("input", { type: type, id: id ?? name, value: defaultValue, readOnly: true, hidden: true, ...(register ?? {}), name: name }));
-    }
     const handleInputChange = (event) => {
         if (register) {
             register.onChange(event);
@@ -62,6 +59,9 @@ export const TextField = (props) => {
             }
         }
     };
+    if (hidden) {
+        return (_jsx("input", { type: "hidden", id: id ?? name, value: value, readOnly: true, hidden: true, ...(register ?? {}), name: name, onChange: handleInputChange }));
+    }
     const inputComponent = (_jsx("input", { type: type, readOnly: readOnly, disabled: disabled, id: id ?? name, autoComplete: "given-name", value: value, onWheel: (e) => {
             e.currentTarget.blur();
         }, step: type === "number" ? 0.01 : undefined, onKeyDown: (event) => {

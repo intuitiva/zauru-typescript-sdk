@@ -65,9 +65,9 @@ export declare const getPesadasByForm: (formInput: FormInput) => {
     tempPesadas: PesadaBody[];
     totales: {
         id: string;
-        baskets: string;
-        totalWeight: string;
-        netWeight: string;
+        baskets: string | number;
+        totalWeight: string | number;
+        netWeight: string | number;
         weightByBasket: string;
     };
     headers: GenericDynamicTableColumn[];

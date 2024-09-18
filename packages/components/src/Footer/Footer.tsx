@@ -12,6 +12,7 @@ type FooterProps = {
     | "green"
     | "red"
     | "sky";
+  version?: string;
 };
 
 const COLORS = {
@@ -29,6 +30,7 @@ export const Footer = ({
   href,
   selectedColor,
   showConnection = false,
+  version = "2.0.5",
 }: FooterProps) => {
   const color = COLORS[selectedColor];
 
@@ -37,7 +39,7 @@ export const Footer = ({
       <div className="px-4 mx-auto flex flex-wrap items-center justify-center">
         <p className="text-white text-[1.2rem]">
           {`Creado en `} <a href={href}>Zauru</a>{" "}
-          {`con ❤️ ${new Date().getFullYear()} v.2.0.3`}
+          {`con ❤️ ${new Date().getFullYear()} v.${version}`}
         </p>
         {showConnection && (
           <div className="ml-5">

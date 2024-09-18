@@ -10,6 +10,7 @@ type Props = {
     children?: React.ReactNode;
     className?: string;
     disabled?: boolean;
+    enableFormErrorsValidation?: boolean;
 };
 export declare const Button: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};
