@@ -268,7 +268,8 @@ export const getDateAfterDays = (daysAfterToday: number) => {
   return `${year}-${month}-${day}`;
 };
 
-export const getPayeeFormated = (payee: PayeeGraphQL) => {
+export const getPayeeFormated = (payee?: PayeeGraphQL) => {
+  if (!payee) return "-";
   return `${payee.id_number ? `<${payee.id_number}> ` : ""}${
     payee.tin ? `${payee.tin} | ` : ""
   }${payee.name}`.trim();
