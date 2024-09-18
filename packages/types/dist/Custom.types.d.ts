@@ -266,7 +266,7 @@ export type PurchaseOrderGeneralInfo = {
     charge_term_id: number;
 };
 export type ExtendedPurchaseOrderBody = {
-    payee_info: string;
+    payee_info?: string;
     tag_ids: string[];
     purchase_order_details: Partial<PurchaseOrderDetailsGraphQL>[];
 };

@@ -122,6 +122,13 @@ const SelectField = (props) => {
             setIsEnterPressed(true);
             handleOptionClick(filteredOptions[highlightedIndex]);
         }
+        else if (e.key === "Backspace" && (value || valueMulti.length > 0)) {
+            e.preventDefault();
+            handleClear();
+            setInputValue("");
+            setFilteredOptions(options);
+            setIsOpen(true);
+        }
     };
     const scrollToHighlightedOption = () => {
         if (optionsRef.current && optionsRef.current.children[highlightedIndex]) {
@@ -138,10 +145,10 @@ const SelectField = (props) => {
     }
     return ((0, jsx_runtime_1.jsxs)("div", { className: `col-span-6 sm:col-span-3 ${className}`, ref: selectRef, children: [title && ((0, jsx_runtime_1.jsxs)("label", { htmlFor: error ? `${name}-error` : `${name}-success`, className: `block text-sm font-medium ${color === "red"
                     ? "text-red-700 dark:text-red-500"
-                    : "text-gray-700 dark:text-gray-500"}`, children: [title, required && (0, jsx_runtime_1.jsx)("span", { className: "text-red-500", children: "*" })] })), (0, jsx_runtime_1.jsxs)("div", { className: "relative", children: [(0, jsx_runtime_1.jsx)(react_hook_form_1.Controller, { name: name || "", control: control, rules: { required }, defaultValue: defaultValue || (isMulti ? [] : null), render: ({ field }) => ((0, jsx_runtime_1.jsx)("input", { ...field, type: "text", id: id, autoComplete: "off", value: inputValue, onFocus: () => setIsOpen(true), onBlur: handleBlur, onKeyDown: handleKeyDown, readOnly: isReadOnly, disabled: disabled, className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`, placeholder: isMulti ? "Select options..." : "Select an option...", onChange: (e) => {
+                    : "text-gray-700 dark:text-gray-500"}`, children: [title, required && (0, jsx_runtime_1.jsx)("span", { className: "text-red-500", children: "*" })] })), (0, jsx_runtime_1.jsxs)("div", { className: "relative", children: [(0, jsx_runtime_1.jsx)(react_hook_form_1.Controller, { name: name || "", control: control, rules: { required }, defaultValue: defaultValue || (isMulti ? [] : null), render: ({ field }) => ((0, jsx_runtime_1.jsx)("input", { ...field, type: "text", id: id, value: inputValue, onFocus: () => setIsOpen(true), onBlur: handleBlur, onKeyDown: handleKeyDown, readOnly: isReadOnly, disabled: disabled, className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`, placeholder: isMulti ? "Select options..." : "Select an option...", onChange: (e) => {
                                 field.onChange(e);
                                 handleInputChange(e);
-                            } })) }), isClearable && (value || valueMulti.length > 0) && ((0, jsx_runtime_1.jsx)("button", { type: "button", onClick: handleClear, className: "absolute inset-y-0 right-0 pr-3 flex items-center", children: "\u00D7" })), isOpen && !isReadOnly && ((0, jsx_runtime_1.jsx)("ul", { ref: optionsRef, className: "absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm", children: filteredOptions.map((option, index) => ((0, jsx_runtime_1.jsx)("li", { className: `cursor-pointer select-none relative py-2 pl-3 pr-9 ${(isMulti
+                            }, autoComplete: "off" })) }), isClearable && (value || valueMulti.length > 0) && ((0, jsx_runtime_1.jsx)("button", { type: "button", onClick: handleClear, className: "absolute inset-y-0 right-0 pr-3 flex items-center", children: "\u00D7" })), isOpen && !isReadOnly && ((0, jsx_runtime_1.jsx)("ul", { ref: optionsRef, className: "absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm", children: filteredOptions.map((option, index) => ((0, jsx_runtime_1.jsx)("li", { className: `cursor-pointer select-none relative py-2 pl-3 pr-9 ${(isMulti
                                 ? valueMulti.some((v) => v.value === option.value)
                                 : value?.value === option.value)
                                 ? "text-white bg-indigo-600"
