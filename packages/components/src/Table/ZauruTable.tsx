@@ -9,7 +9,6 @@ import { createTheme } from "react-data-table-component";
 import { SearchSVG } from "@zauru-sdk/icons";
 import * as ReactDataTableComponent from "react-data-table-component";
 const DataTable = ReactDataTableComponent.default as any;
-import { ExpandableRowsComponent } from "react-data-table-component/dist/DataTable/types.js";
 
 const customStyles: TableStyles = {
   headCells: {
@@ -108,10 +107,6 @@ type Props = TableProps<any> & {
   search?: {
     placeholderSearch?: string;
   };
-  expandable?: {
-    expandableRowExpanded?: (row: any) => boolean;
-    expandableRowsComponent?: ExpandableRowsComponent<any>;
-  };
   theme?: "solarized" | "subTable";
   className?: string;
 };
@@ -125,7 +120,6 @@ export const ZauruTable = (props: Props) => {
     loading = false,
     pagination,
     search,
-    expandable,
     theme,
     className,
     offlineSearch = [],
@@ -249,13 +243,6 @@ export const ZauruTable = (props: Props) => {
       persistTableHead
       responsive
       noHeader
-      expandableRows={!!expandable}
-      expandableRowExpanded={
-        expandable ? expandable.expandableRowExpanded : undefined
-      }
-      expandableRowsComponent={
-        expandable ? expandable.expandableRowsComponent : undefined
-      }
       subHeader={loadSubHeader}
       subHeaderComponent={subHeaderComponent}
       paginationServer={!!pagination}
