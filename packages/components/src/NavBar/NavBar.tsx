@@ -13,7 +13,7 @@ import type {
   NavBarProps,
   NavItemProps,
 } from "./NavBar.types.js";
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 
 const OptionsDropDownButton = ({ color, options, name }: EntityProps) => {
   const [showOptionsMenu, setShowOptionsMenu] = useState(true);
@@ -89,10 +89,13 @@ export const NavBar = ({
   loggedIn,
   items,
   selectedColor,
+  version,
 }: NavBarProps) => {
   const color: ColorInterface = COLORS[selectedColor];
   const [NavBarOpen, setNavBarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [currentVersion, setCurrentVersion] = useState(version);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isDarkMode) {
@@ -102,8 +105,18 @@ export const NavBar = ({
     }
   }, [isDarkMode]);
 
+  useEffect(() => {
+    if (version !== currentVersion) {
+      setCurrentVersion(version);
+    }
+  }, [version, currentVersion]);
+
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
+  };
+
+  const refreshPage = () => {
+    navigate(0);
   };
 
   const renderNavItems = (items: NavBarItemsSchema[]) => (
@@ -168,7 +181,7 @@ export const NavBar = ({
   return (
     <nav className={`py-3 ${color.bg600} dark:bg-gray-800`}>
       <div className="flex items-center justify-between ml-5 mr-5">
-        <div className="flex justify-between w-full lg:w-auto">
+        <div className="flex justify-between items-center w-full lg:w-auto">
           <Link
             className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
             to={"/home"}
@@ -186,6 +199,14 @@ export const NavBar = ({
               </>
             }
           />
+          {version !== currentVersion && (
+            <button
+              className={`ml-2 px-2 py-1 text-xs text-white ${color.bg700} rounded-full hover:${color.bg900} transition-colors duration-200`}
+              onClick={refreshPage}
+            >
+              🔄 Actualizar versión
+            </button>
+          )}
           <button
             className={`rounded lg:hidden focus:outline-none focus:ring focus:${color.ring600} focus:ring-opacity-50`}
             aria-label="Toggle mobile menu"

@@ -1,5 +1,4 @@
 import type { TableProps } from "react-data-table-component";
-import { ExpandableRowsComponent } from "react-data-table-component/dist/DataTable/types.js";
 type Props = TableProps<any> & {
     columns: any;
     conditionalRowStyles?: any;
@@ -13,10 +12,6 @@ type Props = TableProps<any> & {
     offlineSearch?: string[];
     search?: {
         placeholderSearch?: string;
-    };
-    expandable?: {
-        expandableRowExpanded?: (row: any) => boolean;
-        expandableRowsComponent?: ExpandableRowsComponent<any>;
     };
     theme?: "solarized" | "subTable";
     className?: string;

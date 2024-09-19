@@ -1,6 +1,7 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { createWebAppTableRegister, deleteWebAppTableRegister, getVariablesByName, getWebAppRow, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/services";
 export const ESTADOS_COLA_RECEPCIONES = {
+    INICIADO: "Iniciado",
     EN_PROCESO: "En proceso",
     ERROR: "Con error",
     REINTENTANDO: "Reintentando",
@@ -56,6 +57,7 @@ export const createQueueFormReceptionHistory = (headers, session, body) => {
         ]);
         //Esto es para simular el tiempo de carga de la API nunca subir a producción
         //await new Promise((resolve) => setTimeout(resolve, 7000));
+        //throw new Error("Error al crear el historial de colas");
         const response = await createWebAppTableRegister(headers, queue_form_recepcion_submited_web_app_table_id, body);
         return response;
     });

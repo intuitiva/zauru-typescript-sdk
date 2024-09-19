@@ -2,10 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Button = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
-const WithTooltip_js_1 = require("../WithTooltip/WithTooltip.js");
 const react_hook_form_1 = require("react-hook-form");
 const Button = (props) => {
-    const { type = "submit", loading = false, loadingText = "Guardando...", title = "Guardar", name = "save", onClickSave, selectedColor = "indigo", children, className = "", disabled = false, enableFormErrorsValidation = true, } = props;
+    const { type = "submit", loading = false, loadingText = "Guardando...", title = "Guardar", name = "save", onClickSave, selectedColor = "indigo", children, className = "", disabled = false, enableFormErrorsValidation = false, enableFormErrorsDescriptions = false, } = props;
     const formContext = (0, react_hook_form_1.useFormContext)();
     const formHasErrors = formContext ? !formContext.formState.isValid : false;
     const formErrors = formContext ? formContext.formState.errors : {};
@@ -45,7 +44,7 @@ const Button = (props) => {
     };
     const color = COLORS[selectedColor];
     const inside = children ?? title;
-    const errorMessage = enableFormErrorsValidation && formHasErrors
+    const errorMessage = formHasErrors
         ? Object.values(formErrors)
             .map((error) => error?.message?.toString())
             .join(", ")
@@ -57,6 +56,7 @@ const Button = (props) => {
             : `${disabled || (enableFormErrorsValidation && formHasErrors)
                 ? ""
                 : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }));
-    return enableFormErrorsValidation && formHasErrors ? ((0, jsx_runtime_1.jsx)(WithTooltip_js_1.WithTooltip, { text: errorMessage, children: buttonContent })) : (buttonContent);
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(enableFormErrorsValidation && formHasErrors && errorMessage) ||
+                (enableFormErrorsDescriptions && errorMessage) ? ((0, jsx_runtime_1.jsx)("div", { className: "flex flex-col items-end mb-2", children: (0, jsx_runtime_1.jsx)("div", { className: "p-2 bg-red-100 border border-red-400 text-red-700 rounded-md shadow-sm", children: (0, jsx_runtime_1.jsx)("p", { className: "text-sm", children: errorMessage }) }) })) : null, buttonContent] }));
 };
 exports.Button = Button;

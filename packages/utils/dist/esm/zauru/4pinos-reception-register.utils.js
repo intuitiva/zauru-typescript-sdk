@@ -11,6 +11,16 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
     };
     try {
         if (apiResponses.apiCall === 1) {
+            const responseUpdate = await updateQueueFormReceptionHistory(headers, session, {
+                estado: ESTADOS_COLA_RECEPCIONES.EN_PROCESO,
+            }, idWebAppTable);
+            if (responseUpdate.error) {
+                throw new Error("Error al intentar actualizar el estado de la cola: " +
+                    responseUpdate?.userMsg);
+            }
+            apiResponses.apiCall = apiResponses.apiCall + 1;
+        }
+        if (apiResponses.apiCall === 2) {
             //SI EL API CALL ES DIFERENTE DE 1 SIGNIFICA QUE SOLO VA A REINTENTAR DESDE DONDE FALLÓ
             //Validando que no exista ya una recepción con ese número:
             const responsePOSearch = await getPurchasesOrderByIdNumber(session, values?.idNumberInput);
@@ -106,7 +116,7 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
         };
         let [received_baskets, qualityControlBaskets, detail_baskets, detail_discounts, detail_weights,] = processValues();
         //========== PRIMERA LLAMADA DE API Y CAPTURA DE ERRORES
-        if (apiResponses.apiCall === 1) {
+        if (apiResponses.apiCall === 2) {
             console.log("========================================>");
             console.log("paso 1: REGISTRANDO NUEVA ORDEN DE COMPRA AUTORIZADA...");
             //build net_weights
@@ -162,7 +172,7 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
             apiResponses.authorizedPO = newAuthorizedPurchaseResponse.data;
             apiResponses.apiCall = apiResponses.apiCall + 1;
         }
-        if (apiResponses.apiCall === 2) {
+        if (apiResponses.apiCall === 3) {
             const createNewReceptionBodyFunction = () => {
                 const receptionDetails = {};
                 apiResponses.authorizedPO.purchase_order_details.forEach((pod, index) => (receptionDetails[index] = {
@@ -200,7 +210,7 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
             }
             apiResponses.apiCall = apiResponses.apiCall + 1;
         }
-        if (apiResponses.apiCall === 3) {
+        if (apiResponses.apiCall === 4) {
             console.log("------------- REALIZANDO ENVÍO DE CANASTAS A LA AGENCIA");
             const createBasketsShipmentBodyFunction = () => {
                 const movementDetails = [];
@@ -233,7 +243,7 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
             apiResponses.apiCall = apiResponses.apiCall + 1;
             apiResponses.shipment = newShipmentResponse.data;
         }
-        if (apiResponses.apiCall === 4) {
+        if (apiResponses.apiCall === 5) {
             console.log("------------- RECIBIENDO EL ENVÍO DE CANASTAS");
             const getShipmentResponse = await getDeliveryByBooking(headers, apiResponses.shipment.id);
             if (getShipmentResponse.error) {
@@ -245,10 +255,10 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
             //Al momento de este comentario, un ejemplo es que sólo Planta Central no es centro de acopio
             //Ellos si envían canastas a control de calidad.
             //Si es de un centro de acopio, se salta esto...
-            if (apiResponses.apiCall === 5 && qualityControlBaskets.length > 0) {
+            if (apiResponses.apiCall === 6 && qualityControlBaskets.length > 0) {
                 console.log("------------- REALIZANDO ENVÍO DE CANASTAS A CONTROL DE CALIDAD");
-                const total_qc_baskets = parseInt(values.totalQCBaskets + "");
-                const basket_weight = parseFloat(netWeight) / parseInt(total_baskets);
+                const total_qc_baskets = Number(values.totalQCBaskets);
+                const netWeightByBasket = Number(netWeight) / total_qc_baskets;
                 const lotResponse = await getLoteByName(session, apiResponses.authorizedPO.id_number);
                 if (lotResponse.error || !lotResponse.data || !lotResponse.data.id) {
                     throw new Error("Error al intentar obtener el lote por nombre: " +
@@ -268,7 +278,7 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
                     qcMovementDetails.push({
                         item_id: apiResponses.authorizedPO.purchase_order_details[0].item_id,
                         lot_id: Number(lotResponse.data?.id),
-                        booked_quantity: Number(total_qc_baskets * basket_weight), //TODO: Revisar si esto está bien así.
+                        booked_quantity: total_qc_baskets * netWeightByBasket,
                         reference: "Verduras a control de calidad.",
                     });
                     const qcBasketShipment = {
@@ -294,16 +304,18 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
                 apiResponses.apiCall = apiResponses.apiCall + 1;
                 apiResponses.qcShipment = new_qc_shipment_response.data;
             }
-            if (apiResponses.apiCall === 6) {
+            if (apiResponses.apiCall === 7) {
                 console.log("------------- RECIBIENDO ENVÍO DE CANASTAS A CONTROL DE CALIDAD");
                 const getQCDeliveryResponse = await getDeliveryByBooking(headers, apiResponses.qcShipment.id);
                 if (getQCDeliveryResponse.error) {
                     throw new Error("Error al intentar recibir el envío de control de calidad: " +
-                        getQCDeliveryResponse?.userMsg);
+                        getQCDeliveryResponse?.userMsg +
+                        " Body: " +
+                        JSON.stringify(apiResponses.qcShipment));
                 }
                 apiResponses.apiCall = apiResponses.apiCall + 1;
             }
-            if (apiResponses.apiCall === 7) {
+            if (apiResponses.apiCall === 8 || qualityControlBaskets.length === 0) {
                 if (webapp_table_object.Canastas !== "" &&
                     webapp_table_object.Canastas !== "0") {
                     console.log("----------- Guardando rechazo de canastas directo...... -----------");
@@ -321,13 +333,13 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
                 }
             }
         }
-        if (esCentroDeAcopio) {
+        else {
             //Si es centro de acopio, guardo los motivos de rechazo
             if (controlCalidadValues?.razonPrincipal ||
                 controlCalidadValues?.razonSecundaria ||
                 controlCalidadValues?.razonTerciaria ||
                 controlCalidadValues?.otrasRazones) {
-                if (apiResponses.apiCall === 5) {
+                if (apiResponses.apiCall === 6) {
                     console.log("========================================>");
                     console.log("paso 3: GUARDAR MOTIVOS DE RECHAZO");
                     const saveMotivosResponse = await saveMotivosDeRechazoByPurchase(headers, session, {
@@ -358,4 +370,75 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
             apiResponses,
         }, idWebAppTable);
     }
+};
+export const retryPO = async (register, session, headers, hostname, cookie) => {
+    console.log("REINTENTO DE REGISTRO DE ORDEN DE COMPRA =======================>");
+    if (!register.data.apiResponses || register.data.apiResponses.apiCall === 1) {
+        const responsePOSearch = await getPurchasesOrderByIdNumber(session, register.data?.formSubmited?.idNumberInput);
+        if (responsePOSearch.error || !responsePOSearch.data) {
+            console.error("Validate Exists: ", responsePOSearch.userMsg);
+            return {
+                error: true,
+                title: "No se logró comunicar con la red.",
+                type: "error",
+                description: `No hay comunicación con la red para el reintento - Validate Exists: ${responsePOSearch.userMsg}`,
+            };
+        }
+        const existentes = responsePOSearch?.data?.filter((x) => !x.voided);
+        if (existentes?.length > 0) {
+            const msg = `Ya existe una órden de compra con este número de contraseña asociado, revise el listado general. Peso: ${existentes[0].due}, Ingresado el: ${getFormattedDate(existentes[0].issue_date)}, Memo: ${existentes[0].memo}, Tipo: ${existentes[0].reference}`;
+            console.error(msg);
+            await updateQueueFormReceptionHistory(headers, session, {
+                description: msg,
+                estado: ESTADOS_COLA_RECEPCIONES.ERROR,
+            }, register.id);
+            return {
+                error: true,
+                title: "No se puede crear la órden de compra.",
+                type: "error",
+                description: msg,
+            };
+        }
+    }
+    const queueResponse = await updateQueueFormReceptionHistory(headers, session, {
+        estado: ESTADOS_COLA_RECEPCIONES.REINTENTANDO,
+    }, register.id);
+    if (queueResponse.error || !queueResponse.data?.id) {
+        return {
+            error: true,
+            title: "No se logró comunicar con la red.",
+            type: "error",
+            description: `No hay comunicación con la red para el reintento: ${queueResponse?.userMsg}`,
+        };
+    }
+    if (hostname.includes("localhost")) {
+        console.log("------- EJECUTANDO LOCALMENTE", ` para ${register.data?.formSubmited?.idNumberInput}`);
+        register4pinosReception({
+            values: register.data?.formSubmited,
+            cookie,
+            idWebAppTable: register.id,
+            agency_id: register.data?.agency_id,
+            originApiResponses: register.data?.apiResponses,
+        });
+    }
+    else {
+        console.log("------- ENVIANDO A EJECUTAR NETLIFY FUNCTION: 4pinosNewPurchaseOrder-background", ` para ${register.data?.formSubmited?.idNumberInput}`);
+        fetch(`https://${hostname}/.netlify/functions/4pinosNewPurchaseOrder-background`, {
+            method: "post",
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({
+                values: register.data?.formSubmited,
+                cookie,
+                idWebAppTable: register.id,
+                agency_id: register.data?.agency_id,
+                originApiResponses: register.data?.apiResponses,
+            }),
+        });
+    }
+    return {
+        error: false,
+        title: "Reintento iniciado con éxito.",
+        type: "success",
+        description: `Se está procesando el reintento de ingreso de recepción!.`,
+    };
 };

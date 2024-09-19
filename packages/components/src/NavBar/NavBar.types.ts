@@ -20,6 +20,7 @@ export type NavBarProps = {
     | "red"
     | "sky";
   LinkComponent?: any;
+  version?: string;
 };
 
 export type NavBarStateProps = {

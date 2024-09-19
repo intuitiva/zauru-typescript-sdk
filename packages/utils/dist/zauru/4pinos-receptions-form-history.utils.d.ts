@@ -1,6 +1,7 @@
 import type { Session } from "@remix-run/node";
 import { AxiosUtilsResponse, QueueFormReceptionWebAppTable, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 export declare const ESTADOS_COLA_RECEPCIONES: {
+    INICIADO: string;
     EN_PROCESO: string;
     ERROR: string;
     REINTENTANDO: string;

@@ -12,6 +12,7 @@ export type NavBarProps = {
     items: Array<NavBarItemsSchema>;
     selectedColor: "pink" | "purple" | "slate" | "green" | "yellow" | "red" | "sky";
     LinkComponent?: any;
+    version?: string;
 };
 export type NavBarStateProps = {
     NavBarOpen: boolean;
@@ -40,11 +41,4 @@ export type EntityProps = {
     name?: string;
     color: ColorInterface;
     options: any[];
-};
-export type DropDownLinkButtonType = {
-    text: string;
-    path: string;
-    icon?: any;
-    buttonHover?: string;
-    LinkComponent?: any;
 };

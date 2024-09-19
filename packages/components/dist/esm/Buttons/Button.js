@@ -1,8 +1,7 @@
-import { jsx as _jsx } from "react/jsx-runtime";
-import { WithTooltip } from "../WithTooltip/WithTooltip.js";
+import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { useFormContext } from "react-hook-form";
 export const Button = (props) => {
-    const { type = "submit", loading = false, loadingText = "Guardando...", title = "Guardar", name = "save", onClickSave, selectedColor = "indigo", children, className = "", disabled = false, enableFormErrorsValidation = true, } = props;
+    const { type = "submit", loading = false, loadingText = "Guardando...", title = "Guardar", name = "save", onClickSave, selectedColor = "indigo", children, className = "", disabled = false, enableFormErrorsValidation = false, enableFormErrorsDescriptions = false, } = props;
     const formContext = useFormContext();
     const formHasErrors = formContext ? !formContext.formState.isValid : false;
     const formErrors = formContext ? formContext.formState.errors : {};
@@ -42,7 +41,7 @@ export const Button = (props) => {
     };
     const color = COLORS[selectedColor];
     const inside = children ?? title;
-    const errorMessage = enableFormErrorsValidation && formHasErrors
+    const errorMessage = formHasErrors
         ? Object.values(formErrors)
             .map((error) => error?.message?.toString())
             .join(", ")
@@ -54,5 +53,6 @@ export const Button = (props) => {
             : `${disabled || (enableFormErrorsValidation && formHasErrors)
                 ? ""
                 : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }));
-    return enableFormErrorsValidation && formHasErrors ? (_jsx(WithTooltip, { text: errorMessage, children: buttonContent })) : (buttonContent);
+    return (_jsxs(_Fragment, { children: [(enableFormErrorsValidation && formHasErrors && errorMessage) ||
+                (enableFormErrorsDescriptions && errorMessage) ? (_jsx("div", { className: "flex flex-col items-end mb-2", children: _jsx("div", { className: "p-2 bg-red-100 border border-red-400 text-red-700 rounded-md shadow-sm", children: _jsx("p", { className: "text-sm", children: errorMessage }) }) })) : null, buttonContent] }));
 };
