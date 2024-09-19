@@ -319,8 +319,6 @@ export const getPesadasByForm = (
       ? 0
       : Number(formInput[`discount${index}`]);
 
-    console.log("ARMADO: ", baskets, totalWeight, discount);
-
     // Realizar los cálculos necesarios
     const basketWeight = 5;
     let netWeight = totalWeight - baskets * basketWeight;
@@ -504,7 +502,9 @@ export const getBasketDetailsByForm = (formInput: FormInput) => {
       // Comprobar si la clave es un campo "rec" y extraer el color y la cantidad
       if ((match = recPattern.exec(key))) {
         const color = match[1];
-        const total = Number(formInput[key] || 0);
+        const total = isNaN(Number(formInput[key]))
+          ? 0
+          : Number(formInput[key]);
 
         const existingBasket = basketDetailsArray.find(
           (item) => item.color === color
@@ -526,7 +526,7 @@ export const getBasketDetailsByForm = (formInput: FormInput) => {
       // Comprobar si la clave es un campo "qC" y actualizar el campo cc correspondiente
       if ((match = qCPattern.exec(key))) {
         const color = match[1];
-        const cc = Number(formInput[key] || 0);
+        const cc = isNaN(Number(formInput[key])) ? 0 : Number(formInput[key]);
 
         const existingBasket = basketDetailsArray.find(
           (item) => item.color === color
@@ -541,11 +541,10 @@ export const getBasketDetailsByForm = (formInput: FormInput) => {
   // Calcular los totales para footerBasketsDetails
   const totales: BasketDetailsFooter = {
     id: "",
-    total: basketDetailsArray
-      .map((x) => x.total)
-      .reduce((acc, val) => acc + val, 0)
-      .toFixed(2),
-    cc: basketDetailsArray.map((x) => x.cc).reduce((acc, val) => acc + val, 0),
+    total: toFixedIfNeeded(
+      basketDetailsArray.map((x) => x.total).reduce(reduceAdd, 0)
+    )?.toString(),
+    cc: basketDetailsArray.map((x) => x.cc).reduce(reduceAdd, 0),
   };
 
   // Definir los encabezados de la tabla
