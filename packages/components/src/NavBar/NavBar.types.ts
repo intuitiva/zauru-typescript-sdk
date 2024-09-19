@@ -54,11 +54,3 @@ export type EntityProps = {
   color: ColorInterface;
   options: any[];
 };
-
-export type DropDownLinkButtonType = {
-  text: string;
-  path: string;
-  icon?: any;
-  buttonHover?: string;
-  LinkComponent?: any;
-};

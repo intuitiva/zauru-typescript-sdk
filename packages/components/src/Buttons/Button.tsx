@@ -1,4 +1,3 @@
-import { WithTooltip } from "../WithTooltip/WithTooltip.js";
 import type { ColorInterface } from "../NavBar/NavBar.types.js";
 import { useFormContext } from "react-hook-form";
 
@@ -15,6 +14,7 @@ type Props = {
   className?: string;
   disabled?: boolean;
   enableFormErrorsValidation?: boolean;
+  enableFormErrorsDescriptions?: boolean;
 };
 
 export const Button = (props: Props) => {
@@ -29,7 +29,8 @@ export const Button = (props: Props) => {
     children,
     className = "",
     disabled = false,
-    enableFormErrorsValidation = true,
+    enableFormErrorsValidation = false,
+    enableFormErrorsDescriptions = false,
   } = props;
 
   const formContext = useFormContext();
@@ -75,12 +76,11 @@ export const Button = (props: Props) => {
 
   const inside = children ?? title;
 
-  const errorMessage =
-    enableFormErrorsValidation && formHasErrors
-      ? Object.values(formErrors)
-          .map((error) => error?.message?.toString())
-          .join(", ")
-      : "";
+  const errorMessage = formHasErrors
+    ? Object.values(formErrors)
+        .map((error) => error?.message?.toString())
+        .join(", ")
+    : "";
 
   const buttonContent = (
     <button
@@ -113,9 +113,17 @@ export const Button = (props: Props) => {
     </button>
   );
 
-  return enableFormErrorsValidation && formHasErrors ? (
-    <WithTooltip text={errorMessage}>{buttonContent}</WithTooltip>
-  ) : (
-    buttonContent
+  return (
+    <>
+      {(enableFormErrorsValidation && formHasErrors && errorMessage) ||
+      (enableFormErrorsDescriptions && errorMessage) ? (
+        <div className="flex flex-col items-end mb-2">
+          <div className="p-2 bg-red-100 border border-red-400 text-red-700 rounded-md shadow-sm">
+            <p className="text-sm">{errorMessage}</p>
+          </div>
+        </div>
+      ) : null}
+      {buttonContent}
+    </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DropDownArrowSvgIcon,
   LogoutDropDownSvgIcon,
@@ -8,33 +8,12 @@ import {
 import { COLORS } from "./NavBar.utils.js";
 import type {
   ColorInterface,
-  DropDownLinkButtonType,
   EntityProps,
   NavBarItemsSchema,
   NavBarProps,
   NavItemProps,
 } from "./NavBar.types.js";
 import { Link } from "@remix-run/react";
-
-const DropDownLinkButton = ({
-  text,
-  path,
-  icon,
-  buttonHover,
-}: DropDownLinkButtonType) => (
-  <Link
-    className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 ${
-      buttonHover ?? ""
-    } dark:hover:bg-gray-700 dark:hover:text-white`}
-    to={path}
-    prefetch="none"
-  >
-    <div className="mx-auto pt-2">
-      {icon}
-      <span>{text}</span>
-    </div>
-  </Link>
-);
 
 const OptionsDropDownButton = ({ color, options, name }: EntityProps) => {
   const [showOptionsMenu, setShowOptionsMenu] = useState(true);
@@ -55,7 +34,9 @@ const OptionsDropDownButton = ({ color, options, name }: EntityProps) => {
             hidden={showOptionsMenu}
             onMouseLeave={() => setShowOptionsMenu(true)}
           >
-            {options.map((option) => option)}
+            {options.map((option, index) => (
+              <React.Fragment key={index}>{option}</React.Fragment>
+            ))}
           </div>
         </div>
       </div>
@@ -77,12 +58,9 @@ const NavItem = ({
         name={name}
         color={color}
         options={childrens.map((x, index) => (
-          <DropDownLinkButton
-            key={index}
-            text={x.name}
-            path={x.link}
-            buttonHover="hover:bg-red-100"
-          />
+          <Link key={index} to={x.link} className="hover:bg-red-100">
+            {x.name}
+          </Link>
         ))}
       />
     ) : (
@@ -114,6 +92,19 @@ export const NavBar = ({
 }: NavBarProps) => {
   const color: ColorInterface = COLORS[selectedColor];
   const [NavBarOpen, setNavBarOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   const renderNavItems = (items: NavBarItemsSchema[]) => (
     <div className="flex flex-col lg:flex-row w-full">
@@ -148,13 +139,25 @@ export const NavBar = ({
           <OptionsDropDownButton
             color={color}
             options={[
-              <DropDownLinkButton
-                key={0}
-                text="Cerrar Sesión"
-                path="/logout"
-                icon={<LogoutDropDownSvgIcon />}
-                buttonHover="hover:bg-red-100"
-              />,
+              <Link
+                className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
+                to="/logout"
+                prefetch="none"
+              >
+                <div className="mx-auto pt-2">
+                  {<LogoutDropDownSvgIcon />}
+                  <span>Cerrar sesión</span>
+                </div>
+              </Link>,
+              <button
+                className={`block w-full text-left px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white`}
+                onClick={toggleDarkMode}
+              >
+                <div className="mx-auto pt-2">
+                  {isDarkMode ? "🌞" : "🌙"}
+                  <span>{isDarkMode ? "Modo Claro" : "Modo Oscuro"}</span>
+                </div>
+              </button>,
             ]}
           />
         )}
@@ -163,7 +166,7 @@ export const NavBar = ({
   );
 
   return (
-    <nav className={`py-3 ${color.bg600}`}>
+    <nav className={`py-3 ${color.bg600} dark:bg-gray-800`}>
       <div className="flex items-center justify-between ml-5 mr-5">
         <div className="flex justify-between w-full lg:w-auto">
           <Link
@@ -196,7 +199,7 @@ export const NavBar = ({
         <div
           className={`lg:hidden fixed top-0 left-0 z-50 w-64 h-full ${
             color.bg700
-          } shadow-lg transform ${
+          } dark:bg-gray-900 shadow-lg transform ${
             NavBarOpen ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-300 ease-in-out overflow-y-auto`}
         >
