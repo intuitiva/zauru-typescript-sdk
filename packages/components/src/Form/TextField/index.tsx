@@ -114,11 +114,10 @@ export const TextField = (props: Props) => {
   if (hidden) {
     return (
       <input
-        type={"hidden"}
+        type={type}
         id={id ?? name}
-        value={value}
-        readOnly={true}
-        hidden={true}
+        value={defaultValue}
+        hidden
         {...(register ?? {})}
         name={name}
         onChange={handleInputChange}
@@ -129,10 +128,10 @@ export const TextField = (props: Props) => {
   const inputComponent = (
     <input
       type={type}
-      readOnly={readOnly}
+      readOnly={isReadOnly}
       disabled={disabled}
       id={id ?? name}
-      autoComplete="given-name"
+      autoComplete="off"
       value={value}
       onWheel={(e: React.WheelEvent<HTMLInputElement>) => {
         e.currentTarget.blur();
