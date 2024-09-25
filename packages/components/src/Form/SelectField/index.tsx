@@ -79,7 +79,7 @@ export const SelectField = (props: Props) => {
   const isReadOnly = disabled || readOnly;
   const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
   const textColor = isReadOnly ? "text-gray-500" : `text-${color}-900`;
-  const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-500`;
+  const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-200`;
 
   useEffect(() => {
     setFilteredOptions(options);
@@ -98,7 +98,9 @@ export const SelectField = (props: Props) => {
     if (defaultValue) {
       setValue(defaultValue);
       setInputValue(defaultValue.label);
-      setFormValue(name || "", defaultValue.value);
+      if (setFormValue) {
+        setFormValue(name || "", defaultValue.value);
+      }
     }
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -129,15 +131,19 @@ export const SelectField = (props: Props) => {
         : [...valueMulti, option];
       setValueMulti(newValue);
       onChangeMulti && onChangeMulti(newValue);
-      setFormValue(
-        name || "",
-        newValue.map((v) => v.value)
-      );
+      if (setFormValue) {
+        setFormValue(
+          name || "",
+          newValue.map((v) => v.value)
+        );
+      }
     } else {
       setValue(option);
       setInputValue(option.label);
       onChange && onChange(option);
-      setFormValue(name || "", option.value);
+      if (setFormValue) {
+        setFormValue(name || "", option.value);
+      }
     }
     setIsOpen(false);
   };
@@ -146,11 +152,15 @@ export const SelectField = (props: Props) => {
     if (isMulti) {
       setValueMulti([]);
       onChangeMulti && onChangeMulti([]);
-      setFormValue(name || "", []);
+      if (setFormValue) {
+        setFormValue(name || "", []);
+      }
     } else {
       setValue(null);
       onChange && onChange(null);
-      setFormValue(name || "", "");
+      if (setFormValue) {
+        setFormValue(name || "", "");
+      }
     }
     setInputValue("");
   };
