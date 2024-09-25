@@ -524,6 +524,14 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     withWebAppRows?: boolean;
     payeeCategoryIds?: number[];
     excludePayeeCategoryIds?: number[];
+    discountComparisonOperator?:
+      | "_eq"
+      | "_neq"
+      | "_gte"
+      | "_lte"
+      | "_gt"
+      | "_lt";
+    discount?: number;
   } = {}
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
@@ -582,6 +590,8 @@ export const getGraphQLPurchaseOrderBetweenDates = (
         withWebAppRows: finalConfig.withWebAppRows,
         payeeCategoryIds: finalConfig.payeeCategoryIds,
         excludePayeeCategoryIds: finalConfig.excludePayeeCategoryIds,
+        discountComparisonOperator: finalConfig.discountComparisonOperator,
+        discount: finalConfig.discount,
       }
     );
 

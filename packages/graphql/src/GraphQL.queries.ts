@@ -231,6 +231,14 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     withWebAppRows?: boolean;
     payeeCategoryIds?: number[];
     excludePayeeCategoryIds?: number[];
+    discountComparisonOperator?:
+      | "_eq"
+      | "_neq"
+      | "_gte"
+      | "_lte"
+      | "_gt"
+      | "_lt";
+    discount?: number;
   }
 ) => {
   const conditions = [];
@@ -302,6 +310,12 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
       `payee: { payee_category: { id: { _nin: [${config.excludePayeeCategoryIds.join(
         ","
       )}] } } }`
+    );
+  }
+
+  if (config.discountComparisonOperator && config.discount) {
+    conditions.push(
+      `discount: { ${config.discountComparisonOperator}: ${config.discount} }`
     );
   }
 

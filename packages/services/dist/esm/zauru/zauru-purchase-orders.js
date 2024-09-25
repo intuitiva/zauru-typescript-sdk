@@ -338,6 +338,8 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {})
             withWebAppRows: finalConfig.withWebAppRows,
             payeeCategoryIds: finalConfig.payeeCategoryIds,
             excludePayeeCategoryIds: finalConfig.excludePayeeCategoryIds,
+            discountComparisonOperator: finalConfig.discountComparisonOperator,
+            discount: finalConfig.discount,
         });
         const graphQLBody = {
             query,
