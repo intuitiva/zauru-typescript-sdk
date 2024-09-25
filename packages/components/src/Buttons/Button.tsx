@@ -83,34 +83,35 @@ export const Button = (props: Props) => {
     : "";
 
   const buttonContent = (
-    <button
-      type={type}
-      name="action"
-      disabled={
-        loading || disabled || (enableFormErrorsValidation && formHasErrors)
-      }
-      value={name}
-      onClick={onClickSave}
-      className={`ml-2 ${
-        loading || disabled || (enableFormErrorsValidation && formHasErrors)
-          ? " bg-opacity-25 "
-          : ""
-      } ${
-        loading
-          ? " cursor-progress"
-          : `${
-              disabled || (enableFormErrorsValidation && formHasErrors)
-                ? ""
-                : `hover:${color.bg700}`
-            }`
-      } inline-flex justify-center rounded-md border border-transparent ${
-        color.bg600
-      } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
-        color.ring500
-      } focus:ring-offset-2 ${className}`}
-    >
-      {loading ? loadingText : inside}
-    </button>
+    <>
+      <input type="hidden" name="action" value={name} />
+      <button
+        type={type}
+        disabled={
+          loading || disabled || (enableFormErrorsValidation && formHasErrors)
+        }
+        onClick={onClickSave}
+        className={`ml-2 ${
+          loading || disabled || (enableFormErrorsValidation && formHasErrors)
+            ? " bg-opacity-25 "
+            : ""
+        } ${
+          loading
+            ? " cursor-progress"
+            : `${
+                disabled || (enableFormErrorsValidation && formHasErrors)
+                  ? ""
+                  : `hover:${color.bg700}`
+              }`
+        } inline-flex justify-center rounded-md border border-transparent ${
+          color.bg600
+        } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
+          color.ring500
+        } focus:ring-offset-2 ${className}`}
+      >
+        {loading ? loadingText : inside}
+      </button>
+    </>
   );
 
   return (

@@ -46,8 +46,7 @@ export const ReactZodForm = (props: Props) => {
   return (
     <FormProvider {...methods}>
       <Form
-        onSubmit={onSubmit ? methods.handleSubmit(onSubmit) : undefined}
-        //onSubmit={methods.handleSubmit(handleSubmit)}
+        onSubmit={methods.handleSubmit(handleSubmit)}
         method={method}
         id={id}
       >

@@ -2,7 +2,7 @@ import { IdeaIconSVG } from "@zauru-sdk/icons";
 import { SelectFieldOption } from "@zauru-sdk/types";
 import React, { useEffect, useState, useRef, KeyboardEvent } from "react";
 import { LoadingInputSkeleton } from "../../Skeletons/index.js";
-import { useFormContext, Controller } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 type Props = {
   id?: string;
@@ -45,7 +45,7 @@ export const SelectField = (props: Props) => {
     loading = false,
     className = "",
     onInputChange,
-    required,
+    required = false,
   } = props;
 
   const [value, setValue] = useState<SelectFieldOption | null>(
@@ -64,11 +64,16 @@ export const SelectField = (props: Props) => {
   const [isEnterPressed, setIsEnterPressed] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const {
-    control,
+    register: tempRegister,
     formState: { errors },
     setValue: setFormValue,
   } = useFormContext() || { formState: {} };
   const error = errors ? errors[props.name ?? "-1"] : undefined;
+  const register = tempRegister
+    ? tempRegister(props.name ?? "-1", {
+        required,
+      })
+    : undefined; // Solo usar register si está disponible
 
   const color = error ? "red" : "gray";
   const isReadOnly = disabled || readOnly;
@@ -93,7 +98,7 @@ export const SelectField = (props: Props) => {
     if (defaultValue) {
       setValue(defaultValue);
       setInputValue(defaultValue.label);
-      setFormValue(name || "", defaultValue);
+      setFormValue(name || "", defaultValue.value);
     }
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -104,6 +109,9 @@ export const SelectField = (props: Props) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
+    if (register) {
+      register.onChange(e);
+    }
     setInputValue(newValue);
     onInputChange && onInputChange(newValue);
     setIsSearching(true);
@@ -121,12 +129,15 @@ export const SelectField = (props: Props) => {
         : [...valueMulti, option];
       setValueMulti(newValue);
       onChangeMulti && onChangeMulti(newValue);
-      setFormValue(name || "", newValue);
+      setFormValue(
+        name || "",
+        newValue.map((v) => v.value)
+      );
     } else {
       setValue(option);
       setInputValue(option.label);
       onChange && onChange(option);
-      setFormValue(name || "", option);
+      setFormValue(name || "", option.value);
     }
     setIsOpen(false);
   };
@@ -139,7 +150,7 @@ export const SelectField = (props: Props) => {
     } else {
       setValue(null);
       onChange && onChange(null);
-      setFormValue(name || "", null);
+      setFormValue(name || "", "");
     }
     setInputValue("");
   };
@@ -245,33 +256,30 @@ export const SelectField = (props: Props) => {
         </label>
       )}
       <div className="relative">
-        <Controller
-          name={name || ""}
-          control={control}
-          rules={{ required }}
-          defaultValue={defaultValue || (isMulti ? [] : null)}
-          render={({ field }) => (
-            <input
-              {...field}
-              type="text"
-              id={id}
-              value={inputValue}
-              onFocus={() => setIsOpen(true)}
-              onBlur={handleBlur}
-              onKeyDown={handleKeyDown}
-              readOnly={isReadOnly}
-              disabled={disabled}
-              className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
-              placeholder={
-                isMulti ? "Select options..." : "Select an option..."
-              }
-              onChange={(e) => {
-                field.onChange(e);
-                handleInputChange(e);
-              }}
-              autoComplete="off"
-            />
-          )}
+        <input
+          type="text"
+          id={id}
+          value={inputValue}
+          onFocus={() => setIsOpen(true)}
+          onKeyDown={handleKeyDown}
+          readOnly={isReadOnly}
+          disabled={disabled}
+          className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
+          placeholder={isMulti ? "Select options..." : "Select an option..."}
+          autoComplete="off"
+          onChange={handleInputChange}
+          onBlur={handleBlur}
+          required={required}
+        />
+        <input
+          type="hidden"
+          {...(register ?? {})}
+          name={name}
+          value={
+            isMulti
+              ? valueMulti.map((v) => v.value).join(",")
+              : value?.value || ""
+          }
         />
         {isClearable && (value || valueMulti.length > 0) && (
           <button
