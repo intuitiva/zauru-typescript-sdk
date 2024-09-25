@@ -23,9 +23,7 @@ const ReactZodForm = (props) => {
             submit(event?.target, { method });
         }
     };
-    return ((0, jsx_runtime_1.jsx)(react_hook_form_1.FormProvider, { ...methods, children: (0, jsx_runtime_1.jsx)(react_1.Form, { onSubmit: onSubmit ? methods.handleSubmit(onSubmit) : undefined, 
-            //onSubmit={methods.handleSubmit(handleSubmit)}
-            method: method, id: id, children: children }) }));
+    return ((0, jsx_runtime_1.jsx)(react_hook_form_1.FormProvider, { ...methods, children: (0, jsx_runtime_1.jsx)(react_1.Form, { onSubmit: methods.handleSubmit(handleSubmit), method: method, id: id, children: children }) }));
 };
 exports.ReactZodForm = ReactZodForm;
 exports.default = exports.ReactZodForm;

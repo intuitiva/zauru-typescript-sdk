@@ -9,7 +9,7 @@ const TextField = (props) => {
     const { id, name, defaultValue = "", hidden, type = "text", onChange, onKeyDown, disabled = false, readOnly = false, min, integer = false, stopChangeEvents, style, title, helpText, className, hint, required, } = props;
     const [showTooltip, setShowTooltip] = (0, react_1.useState)(false);
     const [value, setValue] = (0, react_1.useState)(defaultValue);
-    const { register: tempRegister, formState: { errors }, } = (0, react_hook_form_1.useFormContext)() || { formState: {} }; // Obtener el contexto solo si existe
+    const { register: tempRegister, formState: { errors }, setValue: setOnFormValue, } = (0, react_hook_form_1.useFormContext)() || { formState: {} }; // Obtener el contexto solo si existe
     const error = errors ? errors[props.name ?? "-1"] : undefined;
     const register = tempRegister
         ? tempRegister(props.name ?? "-1", {
@@ -23,9 +23,11 @@ const TextField = (props) => {
     const textColor = isReadOnly ? "text-gray-500" : `text-${color}-900`;
     const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-500`;
     (0, react_1.useEffect)(() => {
+        setOnFormValue(name ?? "-1", defaultValue);
         setValue(defaultValue);
     }, [defaultValue]);
     const handleInputChange = (event) => {
+        const newValue = event.target.value;
         if (register) {
             register.onChange(event);
         }
@@ -33,18 +35,8 @@ const TextField = (props) => {
             event.stopPropagation();
             event.preventDefault();
         }
-        if (integer && type === "number") {
-            const value = event.target.value;
-            const isInteger = /^[0-9]*$/.test(value);
-            if (isInteger || value === "") {
-                setValue(value);
-                onChange && onChange(value, event);
-            }
-        }
-        else {
-            setValue(event.target.value);
-            onChange && onChange(event.target.value, event);
-        }
+        setValue(newValue);
+        onChange && onChange(newValue, event);
     };
     const handleKeyDown = (event) => {
         if (integer && type === "number") {
@@ -63,9 +55,9 @@ const TextField = (props) => {
         }
     };
     if (hidden) {
-        return ((0, jsx_runtime_1.jsx)("input", { type: "hidden", id: id ?? name, value: value, readOnly: true, hidden: true, ...(register ?? {}), name: name, onChange: handleInputChange }));
+        return ((0, jsx_runtime_1.jsx)("input", { type: type, id: id ?? name, value: value, hidden: true, ...(register ?? {}), name: name, onChange: handleInputChange }));
     }
-    const inputComponent = ((0, jsx_runtime_1.jsx)("input", { type: type, readOnly: readOnly, disabled: disabled, id: id ?? name, autoComplete: "given-name", value: value, onWheel: (e) => {
+    const inputComponent = ((0, jsx_runtime_1.jsx)("input", { type: type, readOnly: isReadOnly, disabled: disabled, id: id ?? name, autoComplete: "off", value: value, onWheel: (e) => {
             e.currentTarget.blur();
         }, step: type === "number" ? 0.01 : undefined, onKeyDown: (event) => {
             handleKeyDown(event);

@@ -7,7 +7,7 @@ const react_1 = require("react");
 const index_js_1 = require("../../Skeletons/index.js");
 const react_hook_form_1 = require("react-hook-form");
 const SelectField = (props) => {
-    const { id, name, title, defaultValue, defaultValueMulti = [], helpText, hint, options, onChange, onChangeMulti, isClearable = false, disabled = false, readOnly = false, isMulti = false, loading = false, className = "", onInputChange, required, } = props;
+    const { id, name, title, defaultValue, defaultValueMulti = [], helpText, hint, options, onChange, onChangeMulti, isClearable = false, disabled = false, readOnly = false, isMulti = false, loading = false, className = "", onInputChange, required = false, } = props;
     const [value, setValue] = (0, react_1.useState)(defaultValue || null);
     const [valueMulti, setValueMulti] = (0, react_1.useState)(defaultValueMulti);
     const [inputValue, setInputValue] = (0, react_1.useState)(defaultValue?.label || "");
@@ -20,8 +20,13 @@ const SelectField = (props) => {
     const [isTabPressed, setIsTabPressed] = (0, react_1.useState)(false);
     const [isEnterPressed, setIsEnterPressed] = (0, react_1.useState)(false);
     const [isSearching, setIsSearching] = (0, react_1.useState)(false);
-    const { control, formState: { errors }, setValue: setFormValue, } = (0, react_hook_form_1.useFormContext)() || { formState: {} };
+    const { register: tempRegister, formState: { errors }, setValue: setFormValue, } = (0, react_hook_form_1.useFormContext)() || { formState: {} };
     const error = errors ? errors[props.name ?? "-1"] : undefined;
+    const register = tempRegister
+        ? tempRegister(props.name ?? "-1", {
+            required,
+        })
+        : undefined; // Solo usar register si está disponible
     const color = error ? "red" : "gray";
     const isReadOnly = disabled || readOnly;
     const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
@@ -40,7 +45,7 @@ const SelectField = (props) => {
         if (defaultValue) {
             setValue(defaultValue);
             setInputValue(defaultValue.label);
-            setFormValue(name || "", defaultValue);
+            setFormValue(name || "", defaultValue.value);
         }
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
@@ -49,6 +54,9 @@ const SelectField = (props) => {
     }, []);
     const handleInputChange = (e) => {
         const newValue = e.target.value;
+        if (register) {
+            register.onChange(e);
+        }
         setInputValue(newValue);
         onInputChange && onInputChange(newValue);
         setIsSearching(true);
@@ -61,13 +69,13 @@ const SelectField = (props) => {
                 : [...valueMulti, option];
             setValueMulti(newValue);
             onChangeMulti && onChangeMulti(newValue);
-            setFormValue(name || "", newValue);
+            setFormValue(name || "", newValue.map((v) => v.value));
         }
         else {
             setValue(option);
             setInputValue(option.label);
             onChange && onChange(option);
-            setFormValue(name || "", option);
+            setFormValue(name || "", option.value);
         }
         setIsOpen(false);
     };
@@ -80,7 +88,7 @@ const SelectField = (props) => {
         else {
             setValue(null);
             onChange && onChange(null);
-            setFormValue(name || "", null);
+            setFormValue(name || "", "");
         }
         setInputValue("");
     };
@@ -145,10 +153,9 @@ const SelectField = (props) => {
     }
     return ((0, jsx_runtime_1.jsxs)("div", { className: `col-span-6 sm:col-span-3 ${className}`, ref: selectRef, children: [title && ((0, jsx_runtime_1.jsxs)("label", { htmlFor: error ? `${name}-error` : `${name}-success`, className: `block text-sm font-medium ${color === "red"
                     ? "text-red-700 dark:text-red-500"
-                    : "text-gray-700 dark:text-gray-500"}`, children: [title, required && (0, jsx_runtime_1.jsx)("span", { className: "text-red-500", children: "*" })] })), (0, jsx_runtime_1.jsxs)("div", { className: "relative", children: [(0, jsx_runtime_1.jsx)(react_hook_form_1.Controller, { name: name || "", control: control, rules: { required }, defaultValue: defaultValue || (isMulti ? [] : null), render: ({ field }) => ((0, jsx_runtime_1.jsx)("input", { ...field, type: "text", id: id, value: inputValue, onFocus: () => setIsOpen(true), onBlur: handleBlur, onKeyDown: handleKeyDown, readOnly: isReadOnly, disabled: disabled, className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`, placeholder: isMulti ? "Select options..." : "Select an option...", onChange: (e) => {
-                                field.onChange(e);
-                                handleInputChange(e);
-                            }, autoComplete: "off" })) }), isClearable && (value || valueMulti.length > 0) && ((0, jsx_runtime_1.jsx)("button", { type: "button", onClick: handleClear, className: "absolute inset-y-0 right-0 pr-3 flex items-center", children: "\u00D7" })), isOpen && !isReadOnly && ((0, jsx_runtime_1.jsx)("ul", { ref: optionsRef, className: "absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm", children: filteredOptions.map((option, index) => ((0, jsx_runtime_1.jsx)("li", { className: `cursor-pointer select-none relative py-2 pl-3 pr-9 ${(isMulti
+                    : "text-gray-700 dark:text-gray-500"}`, children: [title, required && (0, jsx_runtime_1.jsx)("span", { className: "text-red-500", children: "*" })] })), (0, jsx_runtime_1.jsxs)("div", { className: "relative", children: [(0, jsx_runtime_1.jsx)("input", { type: "text", id: id, value: inputValue, onFocus: () => setIsOpen(true), onKeyDown: handleKeyDown, readOnly: isReadOnly, disabled: disabled, className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`, placeholder: isMulti ? "Select options..." : "Select an option...", autoComplete: "off", onChange: handleInputChange, onBlur: handleBlur, required: required }), (0, jsx_runtime_1.jsx)("input", { type: "hidden", ...(register ?? {}), name: name, value: isMulti
+                            ? valueMulti.map((v) => v.value).join(",")
+                            : value?.value || "" }), isClearable && (value || valueMulti.length > 0) && ((0, jsx_runtime_1.jsx)("button", { type: "button", onClick: handleClear, className: "absolute inset-y-0 right-0 pr-3 flex items-center", children: "\u00D7" })), isOpen && !isReadOnly && ((0, jsx_runtime_1.jsx)("ul", { ref: optionsRef, className: "absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm", children: filteredOptions.map((option, index) => ((0, jsx_runtime_1.jsx)("li", { className: `cursor-pointer select-none relative py-2 pl-3 pr-9 ${(isMulti
                                 ? valueMulti.some((v) => v.value === option.value)
                                 : value?.value === option.value)
                                 ? "text-white bg-indigo-600"

@@ -20,8 +20,6 @@ export const ReactZodForm = (props) => {
             submit(event?.target, { method });
         }
     };
-    return (_jsx(FormProvider, { ...methods, children: _jsx(Form, { onSubmit: onSubmit ? methods.handleSubmit(onSubmit) : undefined, 
-            //onSubmit={methods.handleSubmit(handleSubmit)}
-            method: method, id: id, children: children }) }));
+    return (_jsx(FormProvider, { ...methods, children: _jsx(Form, { onSubmit: methods.handleSubmit(handleSubmit), method: method, id: id, children: children }) }));
 };
 export default ReactZodForm;

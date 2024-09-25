@@ -46,13 +46,13 @@ export const Button = (props) => {
             .map((error) => error?.message?.toString())
             .join(", ")
         : "";
-    const buttonContent = (_jsx("button", { type: type, name: "action", disabled: loading || disabled || (enableFormErrorsValidation && formHasErrors), value: name, onClick: onClickSave, className: `ml-2 ${loading || disabled || (enableFormErrorsValidation && formHasErrors)
-            ? " bg-opacity-25 "
-            : ""} ${loading
-            ? " cursor-progress"
-            : `${disabled || (enableFormErrorsValidation && formHasErrors)
-                ? ""
-                : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }));
+    const buttonContent = (_jsxs(_Fragment, { children: [_jsx("input", { type: "hidden", name: "action", value: name }), _jsx("button", { type: type, disabled: loading || disabled || (enableFormErrorsValidation && formHasErrors), onClick: onClickSave, className: `ml-2 ${loading || disabled || (enableFormErrorsValidation && formHasErrors)
+                    ? " bg-opacity-25 "
+                    : ""} ${loading
+                    ? " cursor-progress"
+                    : `${disabled || (enableFormErrorsValidation && formHasErrors)
+                        ? ""
+                        : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside })] }));
     return (_jsxs(_Fragment, { children: [(enableFormErrorsValidation && formHasErrors && errorMessage) ||
                 (enableFormErrorsDescriptions && errorMessage) ? (_jsx("div", { className: "flex flex-col items-end mb-2", children: _jsx("div", { className: "p-2 bg-red-100 border border-red-400 text-red-700 rounded-md shadow-sm", children: _jsx("p", { className: "text-sm", children: errorMessage }) }) })) : null, buttonContent] }));
 };

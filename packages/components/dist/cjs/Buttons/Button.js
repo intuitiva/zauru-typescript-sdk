@@ -49,13 +49,13 @@ const Button = (props) => {
             .map((error) => error?.message?.toString())
             .join(", ")
         : "";
-    const buttonContent = ((0, jsx_runtime_1.jsx)("button", { type: type, name: "action", disabled: loading || disabled || (enableFormErrorsValidation && formHasErrors), value: name, onClick: onClickSave, className: `ml-2 ${loading || disabled || (enableFormErrorsValidation && formHasErrors)
-            ? " bg-opacity-25 "
-            : ""} ${loading
-            ? " cursor-progress"
-            : `${disabled || (enableFormErrorsValidation && formHasErrors)
-                ? ""
-                : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }));
+    const buttonContent = ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("input", { type: "hidden", name: "action", value: name }), (0, jsx_runtime_1.jsx)("button", { type: type, disabled: loading || disabled || (enableFormErrorsValidation && formHasErrors), onClick: onClickSave, className: `ml-2 ${loading || disabled || (enableFormErrorsValidation && formHasErrors)
+                    ? " bg-opacity-25 "
+                    : ""} ${loading
+                    ? " cursor-progress"
+                    : `${disabled || (enableFormErrorsValidation && formHasErrors)
+                        ? ""
+                        : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside })] }));
     return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(enableFormErrorsValidation && formHasErrors && errorMessage) ||
                 (enableFormErrorsDescriptions && errorMessage) ? ((0, jsx_runtime_1.jsx)("div", { className: "flex flex-col items-end mb-2", children: (0, jsx_runtime_1.jsx)("div", { className: "p-2 bg-red-100 border border-red-400 text-red-700 rounded-md shadow-sm", children: (0, jsx_runtime_1.jsx)("p", { className: "text-sm", children: errorMessage }) }) })) : null, buttonContent] }));
 };

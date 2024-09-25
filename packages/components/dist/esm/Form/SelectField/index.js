@@ -2,9 +2,9 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
 import { IdeaIconSVG } from "@zauru-sdk/icons";
 import { useEffect, useState, useRef } from "react";
 import { LoadingInputSkeleton } from "../../Skeletons/index.js";
-import { useFormContext, Controller } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 export const SelectField = (props) => {
-    const { id, name, title, defaultValue, defaultValueMulti = [], helpText, hint, options, onChange, onChangeMulti, isClearable = false, disabled = false, readOnly = false, isMulti = false, loading = false, className = "", onInputChange, required, } = props;
+    const { id, name, title, defaultValue, defaultValueMulti = [], helpText, hint, options, onChange, onChangeMulti, isClearable = false, disabled = false, readOnly = false, isMulti = false, loading = false, className = "", onInputChange, required = false, } = props;
     const [value, setValue] = useState(defaultValue || null);
     const [valueMulti, setValueMulti] = useState(defaultValueMulti);
     const [inputValue, setInputValue] = useState(defaultValue?.label || "");
@@ -17,8 +17,13 @@ export const SelectField = (props) => {
     const [isTabPressed, setIsTabPressed] = useState(false);
     const [isEnterPressed, setIsEnterPressed] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
-    const { control, formState: { errors }, setValue: setFormValue, } = useFormContext() || { formState: {} };
+    const { register: tempRegister, formState: { errors }, setValue: setFormValue, } = useFormContext() || { formState: {} };
     const error = errors ? errors[props.name ?? "-1"] : undefined;
+    const register = tempRegister
+        ? tempRegister(props.name ?? "-1", {
+            required,
+        })
+        : undefined; // Solo usar register si está disponible
     const color = error ? "red" : "gray";
     const isReadOnly = disabled || readOnly;
     const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
@@ -37,7 +42,7 @@ export const SelectField = (props) => {
         if (defaultValue) {
             setValue(defaultValue);
             setInputValue(defaultValue.label);
-            setFormValue(name || "", defaultValue);
+            setFormValue(name || "", defaultValue.value);
         }
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
@@ -46,6 +51,9 @@ export const SelectField = (props) => {
     }, []);
     const handleInputChange = (e) => {
         const newValue = e.target.value;
+        if (register) {
+            register.onChange(e);
+        }
         setInputValue(newValue);
         onInputChange && onInputChange(newValue);
         setIsSearching(true);
@@ -58,13 +66,13 @@ export const SelectField = (props) => {
                 : [...valueMulti, option];
             setValueMulti(newValue);
             onChangeMulti && onChangeMulti(newValue);
-            setFormValue(name || "", newValue);
+            setFormValue(name || "", newValue.map((v) => v.value));
         }
         else {
             setValue(option);
             setInputValue(option.label);
             onChange && onChange(option);
-            setFormValue(name || "", option);
+            setFormValue(name || "", option.value);
         }
         setIsOpen(false);
     };
@@ -77,7 +85,7 @@ export const SelectField = (props) => {
         else {
             setValue(null);
             onChange && onChange(null);
-            setFormValue(name || "", null);
+            setFormValue(name || "", "");
         }
         setInputValue("");
     };
@@ -142,10 +150,9 @@ export const SelectField = (props) => {
     }
     return (_jsxs("div", { className: `col-span-6 sm:col-span-3 ${className}`, ref: selectRef, children: [title && (_jsxs("label", { htmlFor: error ? `${name}-error` : `${name}-success`, className: `block text-sm font-medium ${color === "red"
                     ? "text-red-700 dark:text-red-500"
-                    : "text-gray-700 dark:text-gray-500"}`, children: [title, required && _jsx("span", { className: "text-red-500", children: "*" })] })), _jsxs("div", { className: "relative", children: [_jsx(Controller, { name: name || "", control: control, rules: { required }, defaultValue: defaultValue || (isMulti ? [] : null), render: ({ field }) => (_jsx("input", { ...field, type: "text", id: id, value: inputValue, onFocus: () => setIsOpen(true), onBlur: handleBlur, onKeyDown: handleKeyDown, readOnly: isReadOnly, disabled: disabled, className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`, placeholder: isMulti ? "Select options..." : "Select an option...", onChange: (e) => {
-                                field.onChange(e);
-                                handleInputChange(e);
-                            }, autoComplete: "off" })) }), isClearable && (value || valueMulti.length > 0) && (_jsx("button", { type: "button", onClick: handleClear, className: "absolute inset-y-0 right-0 pr-3 flex items-center", children: "\u00D7" })), isOpen && !isReadOnly && (_jsx("ul", { ref: optionsRef, className: "absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm", children: filteredOptions.map((option, index) => (_jsx("li", { className: `cursor-pointer select-none relative py-2 pl-3 pr-9 ${(isMulti
+                    : "text-gray-700 dark:text-gray-500"}`, children: [title, required && _jsx("span", { className: "text-red-500", children: "*" })] })), _jsxs("div", { className: "relative", children: [_jsx("input", { type: "text", id: id, value: inputValue, onFocus: () => setIsOpen(true), onKeyDown: handleKeyDown, readOnly: isReadOnly, disabled: disabled, className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`, placeholder: isMulti ? "Select options..." : "Select an option...", autoComplete: "off", onChange: handleInputChange, onBlur: handleBlur, required: required }), _jsx("input", { type: "hidden", ...(register ?? {}), name: name, value: isMulti
+                            ? valueMulti.map((v) => v.value).join(",")
+                            : value?.value || "" }), isClearable && (value || valueMulti.length > 0) && (_jsx("button", { type: "button", onClick: handleClear, className: "absolute inset-y-0 right-0 pr-3 flex items-center", children: "\u00D7" })), isOpen && !isReadOnly && (_jsx("ul", { ref: optionsRef, className: "absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm", children: filteredOptions.map((option, index) => (_jsx("li", { className: `cursor-pointer select-none relative py-2 pl-3 pr-9 ${(isMulti
                                 ? valueMulti.some((v) => v.value === option.value)
                                 : value?.value === option.value)
                                 ? "text-white bg-indigo-600"

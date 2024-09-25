@@ -367,6 +367,7 @@ const register4pinosReception = async ({ cookie, idWebAppTable, agency_id, value
         //SI OCURRE ALGÚN ERROR, SE INTENTA GUARDAR EL RETRY
         console.log("========================================>");
         console.log("paso -1: ACTUALIZAR EL REGISTRO DE LA COLA A ERROR");
+        console.error(`Error: ${e?.toString()}, idWebAppTable: ${idWebAppTable}`);
         await (0, _4pinos_receptions_form_history_utils_js_1.updateQueueFormReceptionHistory)(headers, session, {
             estado: _4pinos_receptions_form_history_utils_js_1.ESTADOS_COLA_RECEPCIONES.ERROR,
             description: e?.toString(),
