@@ -570,6 +570,7 @@ export const register4pinosReception = async ({
     //SI OCURRE ALGÚN ERROR, SE INTENTA GUARDAR EL RETRY
     console.log("========================================>");
     console.log("paso -1: ACTUALIZAR EL REGISTRO DE LA COLA A ERROR");
+    console.error(`Error: ${e?.toString()}, idWebAppTable: ${idWebAppTable}`);
     await updateQueueFormReceptionHistory(
       headers,
       session,
