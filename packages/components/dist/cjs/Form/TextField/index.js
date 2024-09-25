@@ -21,9 +21,11 @@ const TextField = (props) => {
     const isReadOnly = disabled || readOnly;
     const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
     const textColor = isReadOnly ? "text-gray-500" : `text-${color}-900`;
-    const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-500`;
+    const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-200`;
     (0, react_1.useEffect)(() => {
-        setOnFormValue(name ?? "-1", defaultValue);
+        if (setOnFormValue) {
+            setOnFormValue(name ?? "-1", defaultValue);
+        }
         setValue(defaultValue);
     }, [defaultValue]);
     const handleInputChange = (event) => {

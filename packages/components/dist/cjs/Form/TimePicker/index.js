@@ -17,7 +17,7 @@ const FormTimePicker = (props) => {
     const color = error ? "red" : "gray";
     const isReadOnly = disabled;
     const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
-    const textColor = isReadOnly ? "text-gray-500" : `text-${color}-500`;
+    const textColor = isReadOnly ? "text-gray-500" : `text-${color}-900`;
     const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-200`;
     (0, react_1.useEffect)(() => {
         setValue(defaultValue);
