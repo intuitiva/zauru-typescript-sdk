@@ -53,6 +53,7 @@ export const TextField = (props: Props) => {
   const {
     register: tempRegister,
     formState: { errors },
+    setValue: setOnFormValue,
   } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
   const error = errors ? errors[props.name ?? "-1"] : undefined;
   const register = tempRegister
@@ -70,10 +71,13 @@ export const TextField = (props: Props) => {
   const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-500`;
 
   useEffect(() => {
+    setOnFormValue(name ?? "-1", defaultValue);
     setValue(defaultValue);
   }, [defaultValue]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+
     if (register) {
       register.onChange(event);
     }
@@ -81,17 +85,9 @@ export const TextField = (props: Props) => {
       event.stopPropagation();
       event.preventDefault();
     }
-    if (integer && type === "number") {
-      const value = event.target.value;
-      const isInteger = /^[0-9]*$/.test(value);
-      if (isInteger || value === "") {
-        setValue(value);
-        onChange && onChange(value, event);
-      }
-    } else {
-      setValue(event.target.value);
-      onChange && onChange(event.target.value, event);
-    }
+
+    setValue(newValue);
+    onChange && onChange(newValue, event);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -116,7 +112,7 @@ export const TextField = (props: Props) => {
       <input
         type={type}
         id={id ?? name}
-        value={defaultValue}
+        value={value}
         hidden
         {...(register ?? {})}
         name={name}
