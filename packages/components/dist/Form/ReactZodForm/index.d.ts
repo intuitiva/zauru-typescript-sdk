@@ -7,6 +7,7 @@ type Props = {
     onSubmit?: SubmitHandler<FieldValues>;
     id?: string;
     method?: "post" | "put" | "delete" | "patch";
+    className?: string;
 };
 export declare const ReactZodForm: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export default ReactZodForm;

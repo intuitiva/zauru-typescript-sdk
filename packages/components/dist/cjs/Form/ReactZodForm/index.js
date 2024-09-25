@@ -8,7 +8,7 @@ const react_hook_form_1 = require("react-hook-form");
 const zod_2 = require("zod");
 const emptySchema = zod_2.z.any();
 const ReactZodForm = (props) => {
-    const { children, method = "post", schema = emptySchema, onSubmit, id, } = props;
+    const { children, method = "post", schema = emptySchema, onSubmit, id, className, } = props;
     const submit = (0, react_1.useSubmit)();
     const methods = (0, react_hook_form_1.useForm)({
         resolver: (0, zod_1.zodResolver)(schema),
@@ -23,7 +23,7 @@ const ReactZodForm = (props) => {
             submit(event?.target, { method });
         }
     };
-    return ((0, jsx_runtime_1.jsx)(react_hook_form_1.FormProvider, { ...methods, children: (0, jsx_runtime_1.jsx)(react_1.Form, { onSubmit: methods.handleSubmit(handleSubmit), method: method, id: id, children: children }) }));
+    return ((0, jsx_runtime_1.jsx)(react_hook_form_1.FormProvider, { ...methods, children: (0, jsx_runtime_1.jsx)(react_1.Form, { onSubmit: methods.handleSubmit(handleSubmit), method: method, id: id, className: className, children: children }) }));
 };
 exports.ReactZodForm = ReactZodForm;
 exports.default = exports.ReactZodForm;

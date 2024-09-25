@@ -5,7 +5,7 @@ import { FormProvider, useForm, } from "react-hook-form";
 import { z } from "zod";
 const emptySchema = z.any();
 export const ReactZodForm = (props) => {
-    const { children, method = "post", schema = emptySchema, onSubmit, id, } = props;
+    const { children, method = "post", schema = emptySchema, onSubmit, id, className, } = props;
     const submit = useSubmit();
     const methods = useForm({
         resolver: zodResolver(schema),
@@ -20,6 +20,6 @@ export const ReactZodForm = (props) => {
             submit(event?.target, { method });
         }
     };
-    return (_jsx(FormProvider, { ...methods, children: _jsx(Form, { onSubmit: methods.handleSubmit(handleSubmit), method: method, id: id, children: children }) }));
+    return (_jsx(FormProvider, { ...methods, children: _jsx(Form, { onSubmit: methods.handleSubmit(handleSubmit), method: method, id: id, className: className, children: children }) }));
 };
 export default ReactZodForm;

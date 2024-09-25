@@ -40,3 +40,4 @@ __exportStar(require("./WithTooltip/index.js"), exports);
 __exportStar(require("./Wizards/index.js"), exports);
 __exportStar(require("./Zendesk/index.js"), exports);
 __exportStar(require("./HOC/ValidateEmployeeAccess/index.js"), exports);
+__exportStar(require("./SidePanel/index.js"), exports);

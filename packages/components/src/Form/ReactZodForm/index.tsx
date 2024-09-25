@@ -15,6 +15,7 @@ type Props = {
   onSubmit?: SubmitHandler<FieldValues>;
   id?: string;
   method?: "post" | "put" | "delete" | "patch";
+  className?: string;
 };
 
 const emptySchema = z.any();
@@ -26,6 +27,7 @@ export const ReactZodForm = (props: Props) => {
     schema = emptySchema,
     onSubmit,
     id,
+    className,
   } = props;
 
   const submit = useSubmit();
@@ -49,6 +51,7 @@ export const ReactZodForm = (props: Props) => {
         onSubmit={methods.handleSubmit(handleSubmit)}
         method={method}
         id={id}
+        className={className}
       >
         {children}
       </Form>

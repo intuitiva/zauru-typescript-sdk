@@ -61,7 +61,7 @@ export const FormDatePicker = (props: Props) => {
   };
 
   return (
-    <>
+    <div>
       {title && (
         <label
           htmlFor={error ? `${name}-error` : `${name}-success`}
@@ -130,6 +130,6 @@ export const FormDatePicker = (props: Props) => {
           {hint}
         </p>
       )}
-    </>
+    </div>
   );
 };
