@@ -2,7 +2,7 @@
   "name": "@zauru-sdk/components",
   "version": "1.0.119",
   "description": "Componentes reutilizables en las WebApps de Zauru.",
-  "main": "./dist/cjs/index.js",
+  "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",

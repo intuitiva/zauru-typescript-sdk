@@ -2,7 +2,7 @@
   "name": "@zauru-sdk/icons",
   "version": "1.0.119",
   "description": "Iconos para las WebApps de Zauru.",
-  "main": "./dist/cjs/index.js",
+  "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {
