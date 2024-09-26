@@ -296,8 +296,9 @@ export const changePricesInit = (headers, session, specialItems, body) => {
             costosEspecialesActualizados: costosEspecialesWithPurchaseIds,
         });
         if (response.error || !response.data) {
-            const errorMsg = `Error al guardar la bitácora de costos ${response.userMsg}` ??
-                "Respuesta vacía de saveBitacoraCostos en changePrices";
+            const errorMsg = response.userMsg
+                ? `Error al guardar la bitácora de costos ${response.userMsg}`
+                : "Respuesta vacía de saveBitacoraCostos en changePrices";
             console.error(errorMsg);
             throw new Error(errorMsg);
         }

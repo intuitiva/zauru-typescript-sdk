@@ -44,6 +44,6 @@ export declare const LoaderCircleSVG: () => import("react/jsx-runtime").JSX.Elem
 export declare const AttachmentIconSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const CustomIconFromImage: ({ imageName, height, width, }: {
     imageName: string;
-    width?: number | undefined;
-    height?: number | undefined;
+    width?: number;
+    height?: number;
 }) => import("react/jsx-runtime").JSX.Element;

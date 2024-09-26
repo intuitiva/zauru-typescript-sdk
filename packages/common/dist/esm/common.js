@@ -3,7 +3,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calculateTimeDifference = exports.parsedObject = exports.createPostgresUrl = exports.handlePossibleAxiosErrors = exports.sortByProperty = exports.capitalLetter = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.reduceAdd = exports.ZAURU_REGEX = exports.convertToFormData = exports.arrayToObject = exports.getParsedIdFromString = exports.incrementString = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.formatDateToUTC = exports.extractIdFromForm = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.isToday = exports.todayLongString = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.truncateText = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.isJsonArray = exports.extractValueBetweenTags = exports.generateClientUUID = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.generateClientUUID = generateClientUUID;
+exports.extractValueBetweenTags = extractValueBetweenTags;
+exports.isJsonArray = isJsonArray;
+exports.truncateText = truncateText;
+exports.todayLongString = todayLongString;
+exports.isToday = isToday;
+exports.extractIdFromForm = extractIdFromForm;
+exports.formatDateToUTC = formatDateToUTC;
+exports.incrementString = incrementString;
+exports.getParsedIdFromString = getParsedIdFromString;
+exports.convertToFormData = convertToFormData;
+exports.reduceAdd = reduceAdd;
+exports.capitalLetter = capitalLetter;
+exports.handlePossibleAxiosErrors = handlePossibleAxiosErrors;
+exports.createPostgresUrl = createPostgresUrl;
+exports.calculateTimeDifference = calculateTimeDifference;
 const moment_1 = __importDefault(require("moment"));
 require("moment-timezone");
 const types_1 = require("@zauru-sdk/types");
@@ -38,7 +54,6 @@ function generateClientUUID() {
         return v.toString(16);
     });
 }
-exports.generateClientUUID = generateClientUUID;
 /**
  * extractValueBetweenTags
  * @param input
@@ -50,7 +65,6 @@ function extractValueBetweenTags(input, tagName) {
     const match = input.match(regex);
     return match ? match[1] : "";
 }
-exports.extractValueBetweenTags = extractValueBetweenTags;
 /**
  * isJsonArray
  * @param value
@@ -65,7 +79,6 @@ function isJsonArray(value) {
         return false;
     }
 }
-exports.isJsonArray = isJsonArray;
 /**
  *
  * @param date Recibe el date en formato UTC
@@ -139,7 +152,6 @@ function truncateText(text, maxLength) {
         return text;
     }
 }
-exports.truncateText = truncateText;
 const getTodayDaysDifference = (date) => {
     // Crear el objeto de Moment para la fecha de creación
     const fechaCreacion = (0, moment_1.default)(date);
@@ -207,7 +219,6 @@ function todayLongString(hours = false) {
     // Formatea la fecha en el locale español
     return issueDate.locale("es").format(formatString);
 }
-exports.todayLongString = todayLongString;
 function isToday(dateStr) {
     // Parsea la fecha dada y la fecha actual a inicio del día (00:00:00)
     const givenDate = (0, moment_1.default)(dateStr).startOf("day");
@@ -215,7 +226,6 @@ function isToday(dateStr) {
     // Compara si son iguales
     return givenDate.isSame(today);
 }
-exports.isToday = isToday;
 const getDatePickerCurrentDate = () => {
     const date = new Date();
     const year = date.getFullYear();
@@ -293,7 +303,6 @@ function extractIdFromForm(s) {
     }
     return null;
 }
-exports.extractIdFromForm = extractIdFromForm;
 /**
  * Formatea una fecha de tipo YYYY-MM-DD a 2023-08-07T20:56:00.540245
  * @param dateString
@@ -310,7 +319,6 @@ function formatDateToUTC(dateString) {
     const milliseconds = String(date.getUTCMilliseconds()).padStart(3, "0");
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}`;
 }
-exports.formatDateToUTC = formatDateToUTC;
 /**
  * IMPORTANTE: Esta función está diseñada para funcionar solo en el lado del cliente.
  * Para renderizado del lado del servidor, utilice una función alternativa.
@@ -413,7 +421,6 @@ function incrementString(str) {
         .padStart(numberPart.length, "0");
     return prefix + incrementedString;
 }
-exports.incrementString = incrementString;
 function getParsedIdFromString(inputString) {
     const regex = /<(\d+)>/; // Expresión regular para encontrar el número entre los corchetes
     const match = inputString.match(regex); // Buscar la coincidencia en el string
@@ -427,7 +434,6 @@ function getParsedIdFromString(inputString) {
     }
     return number;
 }
-exports.getParsedIdFromString = getParsedIdFromString;
 const arrayToObject = (arr = [], options) => {
     return arr.reduce((acc, cur, idx) => {
         const tempVal = cur;
@@ -470,7 +476,6 @@ function convertToFormData(obj) {
     appendFormData(obj);
     return formData;
 }
-exports.convertToFormData = convertToFormData;
 exports.ZAURU_REGEX = {
     porcentaje: /^\d{1,2}(\.\d{1,2})?$/,
 };
@@ -483,7 +488,6 @@ exports.ZAURU_REGEX = {
 function reduceAdd(accumulator, a) {
     return accumulator + a;
 }
-exports.reduceAdd = reduceAdd;
 /**
  * Truncar decimales, ejemplo: truncateDecimals(43.434340934, 2) => 43.43
  * @param number
@@ -519,7 +523,6 @@ function capitalLetter(str = "") {
     }
     return str;
 }
-exports.capitalLetter = capitalLetter;
 const sortByProperty = (array, property) => {
     // Crear una copia del array
     const arrayCopy = [...array];
@@ -548,7 +551,6 @@ async function handlePossibleAxiosErrors(action) {
         return { error: true, userMsg: error?.toString() };
     }
 }
-exports.handlePossibleAxiosErrors = handlePossibleAxiosErrors;
 /**
  * createPostgresUrl
  * @param host
@@ -566,7 +568,6 @@ function createPostgresUrl(host = "localhost", port = "5432", dbName = "postgres
     }
     return `postgresql://${authPart}@${host}:${port}/${dbName}?schema=${schema}`;
 }
-exports.createPostgresUrl = createPostgresUrl;
 const parsedObject = (obj) => {
     if (typeof obj === "bigint") {
         return obj.toString();
@@ -600,4 +601,3 @@ function calculateTimeDifference(timestamp) {
         label: `${hours > 0 ? `${hours} ${hours > 1 ? "horas" : "hora"}` : ""}${hours > 0 && minutes > 0 ? " y " : ""}${minutes > 0 ? `${minutes} ${minutes > 1 ? "minutos" : "minuto"}` : ""}.`,
     };
 }
-exports.calculateTimeDifference = calculateTimeDifference;
