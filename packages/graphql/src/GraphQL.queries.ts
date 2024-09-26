@@ -313,7 +313,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     );
   }
 
-  if (config.discountComparisonOperator && config.discount) {
+  if (!!config.discountComparisonOperator && !!config.discount) {
     conditions.push(
       `discount: { ${config.discountComparisonOperator}: ${config.discount} }`
     );

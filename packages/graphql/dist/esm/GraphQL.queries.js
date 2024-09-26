@@ -249,7 +249,7 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
         config.excludePayeeCategoryIds.length > 0) {
         conditions.push(`payee: { payee_category: { id: { _nin: [${config.excludePayeeCategoryIds.join(",")}] } } }`);
     }
-    if (config.discountComparisonOperator && config.discount) {
+    if (!!config.discountComparisonOperator && !!config.discount) {
         conditions.push(`discount: { ${config.discountComparisonOperator}: ${config.discount} }`);
     }
     const whereClause = conditions.length
