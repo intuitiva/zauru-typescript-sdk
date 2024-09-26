@@ -1,7 +1,6 @@
 import axios from "axios";
 import chalk from "chalk";
 import { config } from "@zauru-sdk/config";
-import { AxiosUtilsResponse } from "@zauru-sdk/types";
 
 const axiosInstance = axios.create({
   baseURL: `${config.zauruBaseURL}`,
@@ -13,13 +12,15 @@ axiosInstance.interceptors.request.use(
     console.log(`---------------- EJECUTANDO REQUEST ----------------`);
     //console.time(`${request.baseURL}${request.url}`);
     console.log(chalk.green(`${request.baseURL}${request.url}`));
-    request.timeout = 120000;
+    request.timeout = 220000;
 
     return request;
   },
   function (error) {
     console.log(
-      chalk.red("---------------- ERROR CON REQUEST ----------------")
+      chalk.red(
+        "---------------- ERROR CON REQUEST (REQUEST INTERCEPTOR) ----------------"
+      )
     );
     console.log(`${error}`);
     // Do something with request error
@@ -36,7 +37,9 @@ axiosInstance.interceptors.response.use(
   },
   function (error) {
     console.log(
-      chalk.red("---------------- ERROR CON REQUEST ----------------")
+      chalk.red(
+        "---------------- ERROR CON REQUEST (RESPONSE INTERCEPTOR) ----------------"
+      )
     );
     console.log(`${error}`);
     // Do something with response error
