@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/redux",
-  "version": "1.0.118",
+  "version": "1.0.119",
   "description": "Estructura de Redux propuesta para el desarrollo de webapps en Zauru.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
-    "@zauru-sdk/types": "^1.0.118",
+    "@zauru-sdk/types": "^1.0.119",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.0",
