@@ -7,7 +7,7 @@ Este proyecto utiliza [Lerna](https://lerna.js.org/) para gestionar un monorepo 
 Para instalar las dependencias del monorepo, ejecuta el siguiente comando en la raíz del proyecto:
 
 ```bash
-pnpm install
+yarn install
 ```
 
 Para construir todos los paquetes, ejecuta:
