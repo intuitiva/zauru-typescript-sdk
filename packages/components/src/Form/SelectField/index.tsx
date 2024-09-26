@@ -274,7 +274,7 @@ export const SelectField = (props: Props) => {
           onKeyDown={handleKeyDown}
           readOnly={isReadOnly}
           disabled={disabled}
-          className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
+          className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm pr-10`}
           placeholder={isMulti ? "Select options..." : "Select an option..."}
           autoComplete="off"
           onChange={handleInputChange}
@@ -299,6 +299,24 @@ export const SelectField = (props: Props) => {
           >
             ×
           </button>
+        )}
+        {!isClearable && (value || valueMulti.length > 0) && (
+          <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <svg
+              className="h-5 w-5 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </span>
         )}
         {isOpen && !isReadOnly && (
           <ul

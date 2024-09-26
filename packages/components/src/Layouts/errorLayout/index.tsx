@@ -7,7 +7,7 @@ import {
   Link,
 } from "@remix-run/react";
 
-export const ErrorLayout = () => {
+export const ErrorLayout = ({ from }: { from?: string }) => {
   const error = useRouteError();
 
   return (
@@ -30,6 +30,11 @@ export const ErrorLayout = () => {
               ? error.message
               : "Ha ocurrido un error inesperado"}
           </p>
+          {from && (
+            <p className="text-lg text-gray-400 mb-4 text-center">
+              Error lanzado desde: {from}
+            </p>
+          )}
         </div>
         <Link
           to="/"
