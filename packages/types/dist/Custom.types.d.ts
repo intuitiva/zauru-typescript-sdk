@@ -624,6 +624,7 @@ export type QueueFormReceptionWebAppTable = {
     agency_id: number;
     apiResponses?: ApiResponseFor4pinosReceptions;
     description: string;
+    timeStamp?: number;
 };
 export type RowDataType = {
     id: any;
