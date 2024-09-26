@@ -433,6 +433,7 @@ export type BitacoraPOMassive = {
     modificadoPor: string;
     employeeId: number;
     fechaCreacion: string;
+    observations: string;
 };
 export type ConsolidatedHistory = {
     creadoPor: string;

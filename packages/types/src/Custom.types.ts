@@ -500,6 +500,7 @@ export type BitacoraPOMassive = {
   modificadoPor: string;
   employeeId: number;
   fechaCreacion: string;
+  observations: string;
 };
 
 //Modelo con el cuál responde el backend
