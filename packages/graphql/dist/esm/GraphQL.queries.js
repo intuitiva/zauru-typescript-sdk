@@ -360,6 +360,7 @@ query getAgencies {
   agencies {
     id
     name
+    address_line_2
   }
 }
 `;

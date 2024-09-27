@@ -28,7 +28,7 @@ export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: strin
 }) => string;
 export declare const getPayeesStringQuery = "\nquery getPayees {\n    payees {\n        id\n        id_number\n        name\n        tin\n        vendor\n        address_line_1\n    }\n}\n";
 export declare const getProvidersStringQuery = "\nquery getProviders {\n    payees (where: {vendor: {_eq: true}}) {\n        id\n        id_number\n        name\n        tin\n        address_line_1\n    }\n}\n";
-export declare const getAgenciesStringQuery = "\nquery getAgencies {\n  agencies {\n    id\n    name\n  }\n}\n";
+export declare const getAgenciesStringQuery = "\nquery getAgencies {\n  agencies {\n    id\n    name\n    address_line_2\n  }\n}\n";
 export declare const getWebAppRowStringQuery: (id: number) => string;
 export declare const getWebAppRowsByWebAppTableIdStringQuery: (webapp_table_id: number) => string;
 export declare const getPayeeCategoryByIdStringQuery: (id: number) => string;
