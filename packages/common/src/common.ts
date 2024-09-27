@@ -684,3 +684,28 @@ export function calculateTimeDifference(timestamp: string): {
     }${minutes > 0 ? `${minutes} ${minutes > 1 ? "minutos" : "minuto"}` : ""}.`,
   };
 }
+
+// Función para crear un código único con fecha en formato compacto y en mayúsculas
+export function createCode(suffix: string | null): string {
+  const timestamp = Math.floor(Date.now() / 1000)
+    .toString(36)
+    .toUpperCase(); // Timestamp en base 36 y convertido a mayúsculas
+  const code = `${timestamp}`;
+
+  return suffix ? `${suffix}-${code}` : code;
+}
+
+// Función para obtener la información del código generado
+export function parseCode(code: string) {
+  // Si tiene un sufijo, lo separamos
+  const hasSuffix = code.includes("-") && isNaN(Number(code.split("-")[0]));
+  const [suffixOrTimestamp, timestamp] = code.split("-");
+
+  const dateTimestamp = hasSuffix ? timestamp : suffixOrTimestamp;
+  const date = new Date(parseInt(dateTimestamp, 36) * 1000); // Convertimos el timestamp de nuevo a milisegundos
+
+  return {
+    date: date,
+    suffix: hasSuffix ? suffixOrTimestamp : null, // Solo devolvemos el sufijo si existe
+  };
+}
