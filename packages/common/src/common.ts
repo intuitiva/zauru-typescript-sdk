@@ -249,6 +249,25 @@ export const getDatePickerCurrentDate = () => {
   return `${year}-${month}-${day}`;
 };
 
+export const obtenerFechaActualConZonaHoraria = (
+  zonaHoraria: "America/Guatemala"
+) => {
+  const fecha = new Date();
+  const opciones: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: zonaHoraria,
+  };
+
+  const fechaFormateada = new Intl.DateTimeFormat("es-ES", opciones).format(
+    fecha
+  );
+  const [dia, mes, anio] = fechaFormateada.split("/");
+
+  return `${anio}-${mes}-${dia}`;
+};
+
 export const getTimePickerCurrentTime = () => {
   const date = new Date();
   const hours = String(date.getHours()).padStart(2, "0");
