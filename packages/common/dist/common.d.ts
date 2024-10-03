@@ -68,6 +68,7 @@ export declare const stringDateToParsedUTCDate: (date: string) => Date;
 export declare function todayLongString(hours?: boolean): string;
 export declare function isToday(dateStr: string): boolean;
 export declare const getDatePickerCurrentDate: () => string;
+export declare const obtenerFechaActualConZonaHoraria: (zonaHoraria: "America/Guatemala") => string;
 export declare const getTimePickerCurrentTime: () => string;
 export declare const getDateAfterDays: (daysAfterToday: number) => string;
 export declare const getPayeeFormated: (payee?: PayeeGraphQL) => string;
