@@ -1,5 +1,6 @@
 import type { Session } from "@remix-run/node";
 import { AxiosUtilsResponse, EmployeeGraphQL } from "@zauru-sdk/types";
+export declare function getEmployees(session: Session): Promise<AxiosUtilsResponse<EmployeeGraphQL[]>>;
 /**
  * getEmployeesByAgencyId
  */
