@@ -47,15 +47,7 @@ type PesadaBody = {
     probableUtilization: number;
     lbDiscounted: number;
 };
-type PesadaFooter = {
-    id: string;
-    baskets: string;
-    totalWeight: string;
-    discount: string;
-    netWeight: string;
-    weightByBasket: string;
-};
-export declare const useGetPesadas: (purchaseOrder?: PurchaseOrderGraphQL, stocks_only_integer?: boolean) => [PesadaBody[], PesadaFooter, GenericDynamicTableColumn[]];
+export declare const useGetPesadas: (purchaseOrder?: PurchaseOrderGraphQL, stocks_only_integer?: boolean) => [PesadaBody[], any[], GenericDynamicTableColumn[]];
 /**
  * Sirve para imprimir offline
  * @param formInput
@@ -64,12 +56,8 @@ export declare const useGetPesadas: (purchaseOrder?: PurchaseOrderGraphQL, stock
 export declare const getPesadasByForm: (formInput: FormInput, stocks_only_integer?: boolean) => {
     tempPesadas: PesadaBody[];
     totales: {
-        id: string;
-        baskets: string | number;
-        totalWeight: string | number;
-        netWeight: string | number;
-        weightByBasket: string;
-    };
+        contennt: string;
+    }[];
     headers: GenericDynamicTableColumn[];
 };
 type BasketDetailsBody = {

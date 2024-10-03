@@ -41,4 +41,5 @@ export type EntityProps = {
     name?: string;
     color: ColorInterface;
     options: any[];
+    specialColor?: ColorInterface;
 };

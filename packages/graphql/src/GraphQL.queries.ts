@@ -13,6 +13,7 @@ query getLast100Receptions {
     authorized
     received
     transport_type
+    shipment_reference
     purchase_order_details {
       item_id
       id
@@ -47,6 +48,7 @@ query getPurchaseOrderByIdNumber {
     received
     discount
     other_charges
+    shipment_reference
     webapp_table_rowables {
         webapp_rows {
             data
@@ -98,6 +100,7 @@ query getPurchaseOrder($id: bigint) @cached {
     discount
     delivery_date
     other_charges
+    shipment_reference
     webapp_table_rowables {
         webapp_rows {
             data
@@ -396,6 +399,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
         discount
         other_charges
         consolidate_id
+        shipment_reference
         ${purchaseOrderDetails}
         ${lots}
         ${webAppRows}

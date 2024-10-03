@@ -81,7 +81,7 @@ exports.useGetPurchaseOrderGeneralInfo = useGetPurchaseOrderGeneralInfo;
 const useGetPesadas = (purchaseOrder, stocks_only_integer = false) => {
     const [pesadas, footerPesadas, headersPesadas] = (0, react_2.useMemo)(() => {
         if (!purchaseOrder)
-            return [[], {}, []];
+            return [[], [], []];
         const tempPesadas = [
             ...purchaseOrder.purchase_order_details?.map((x, index) => {
                 const parsedReference = x.reference?.split(","); //eg: "reference": "698,25,0", // peso neto, canastas, descuento
@@ -119,18 +119,38 @@ const useGetPesadas = (purchaseOrder, stocks_only_integer = false) => {
                 };
             }),
         ];
-        const totales = {
-            id: "",
-            baskets: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0))?.toString(),
-            totalWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0))?.toString(),
-            discount: "-",
-            netWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0))?.toString(),
-            weightByBasket: "-",
-            lbDiscounted: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(common_1.reduceAdd, 0))?.toString(),
-            probableUtilization: (0, common_1.toFixedIfNeeded)(tempPesadas
-                ?.map((x) => Number(x.probableUtilization))
-                .reduce(common_1.reduceAdd, 0)),
-        };
+        const totales = [
+            //baskets
+            {
+                contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0))?.toString(),
+            },
+            //totalWeight
+            {
+                contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0))?.toString(),
+            },
+            //discount
+            {
+                contennt: "-",
+            },
+            //netWeight
+            {
+                contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0))?.toString(),
+            },
+            //weightByBasket
+            {
+                contennt: "-",
+            },
+            //lbDiscounted
+            {
+                contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(common_1.reduceAdd, 0))?.toString(),
+            },
+            //probableUtilization
+            {
+                contennt: (0, common_1.toFixedIfNeeded)(tempPesadas
+                    ?.map((x) => Number(x.probableUtilization))
+                    .reduce(common_1.reduceAdd, 0)),
+            },
+        ];
         const headers = [
             { label: "#", name: "id", type: "label", width: 5 },
             { label: "Canastas", name: "baskets", type: "label" },
@@ -209,13 +229,24 @@ const getPesadasByForm = (formInput, stocks_only_integer = false) => {
         });
         index++;
     }
-    const totales = {
-        id: "",
-        baskets: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0)),
-        totalWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0)),
-        netWeight: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0)),
-        weightByBasket: "-",
-    };
+    const totales = [
+        //baskets
+        {
+            contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0))?.toString(),
+        },
+        //totalWeight
+        {
+            contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0))?.toString(),
+        },
+        //netWeight
+        {
+            contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0))?.toString(),
+        },
+        //weightByBasket
+        {
+            contennt: "-",
+        },
+    ];
     const headers = [
         { label: "#", name: "id", type: "label", width: 5 },
         { label: "Canastas", name: "baskets", type: "label" },

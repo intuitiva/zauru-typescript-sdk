@@ -178,21 +178,12 @@ type PesadaBody = {
   lbDiscounted: number;
 };
 
-type PesadaFooter = {
-  id: string;
-  baskets: string;
-  totalWeight: string;
-  discount: string;
-  netWeight: string;
-  weightByBasket: string;
-};
-
 export const useGetPesadas = (
   purchaseOrder?: PurchaseOrderGraphQL,
   stocks_only_integer: boolean = false
-): [PesadaBody[], PesadaFooter, GenericDynamicTableColumn[]] => {
+): [PesadaBody[], any[], GenericDynamicTableColumn[]] => {
   const [pesadas, footerPesadas, headersPesadas] = useMemo(() => {
-    if (!purchaseOrder) return [[], {} as PesadaFooter, []];
+    if (!purchaseOrder) return [[], [], []];
 
     const tempPesadas: PesadaBody[] = [
       ...purchaseOrder.purchase_order_details?.map((x, index) => {
@@ -235,28 +226,48 @@ export const useGetPesadas = (
       }),
     ];
 
-    const totales = {
-      id: "",
-      baskets: toFixedIfNeeded(
-        tempPesadas?.map((x) => x.baskets).reduce(reduceAdd, 0)
-      )?.toString(),
-      totalWeight: toFixedIfNeeded(
-        tempPesadas?.map((x) => x.totalWeight).reduce(reduceAdd, 0)
-      )?.toString(),
-      discount: "-",
-      netWeight: toFixedIfNeeded(
-        tempPesadas?.map((x) => Number(x.netWeight)).reduce(reduceAdd, 0)
-      )?.toString(),
-      weightByBasket: "-",
-      lbDiscounted: toFixedIfNeeded(
-        tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(reduceAdd, 0)
-      )?.toString(),
-      probableUtilization: toFixedIfNeeded(
-        tempPesadas
-          ?.map((x) => Number(x.probableUtilization))
-          .reduce(reduceAdd, 0)
-      ),
-    };
+    const totales = [
+      //baskets
+      {
+        contennt: toFixedIfNeeded(
+          tempPesadas?.map((x) => x.baskets).reduce(reduceAdd, 0)
+        )?.toString(),
+      },
+      //totalWeight
+      {
+        contennt: toFixedIfNeeded(
+          tempPesadas?.map((x) => x.totalWeight).reduce(reduceAdd, 0)
+        )?.toString(),
+      },
+      //discount
+      {
+        contennt: "-",
+      },
+      //netWeight
+      {
+        contennt: toFixedIfNeeded(
+          tempPesadas?.map((x) => Number(x.netWeight)).reduce(reduceAdd, 0)
+        )?.toString(),
+      },
+      //weightByBasket
+      {
+        contennt: "-",
+      },
+      //lbDiscounted
+      {
+        contennt: toFixedIfNeeded(
+          tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(reduceAdd, 0)
+        )?.toString(),
+      },
+      //probableUtilization
+      {
+        contennt: toFixedIfNeeded(
+          tempPesadas
+            ?.map((x) => Number(x.probableUtilization))
+            .reduce(reduceAdd, 0)
+        ),
+      },
+    ];
 
     const headers: GenericDynamicTableColumn[] = [
       { label: "#", name: "id", type: "label", width: 5 },
@@ -348,19 +359,30 @@ export const getPesadasByForm = (
     index++;
   }
 
-  const totales = {
-    id: "",
-    baskets: toFixedIfNeeded(
-      tempPesadas?.map((x) => x.baskets).reduce(reduceAdd, 0)
-    ),
-    totalWeight: toFixedIfNeeded(
-      tempPesadas?.map((x) => x.totalWeight).reduce(reduceAdd, 0)
-    ),
-    netWeight: toFixedIfNeeded(
-      tempPesadas?.map((x) => Number(x.netWeight)).reduce(reduceAdd, 0)
-    ),
-    weightByBasket: "-",
-  };
+  const totales = [
+    //baskets
+    {
+      contennt: toFixedIfNeeded(
+        tempPesadas?.map((x) => x.baskets).reduce(reduceAdd, 0)
+      )?.toString(),
+    },
+    //totalWeight
+    {
+      contennt: toFixedIfNeeded(
+        tempPesadas?.map((x) => x.totalWeight).reduce(reduceAdd, 0)
+      )?.toString(),
+    },
+    //netWeight
+    {
+      contennt: toFixedIfNeeded(
+        tempPesadas?.map((x) => Number(x.netWeight)).reduce(reduceAdd, 0)
+      )?.toString(),
+    },
+    //weightByBasket
+    {
+      contennt: "-",
+    },
+  ];
 
   const headers: GenericDynamicTableColumn[] = [
     { label: "#", name: "id", type: "label", width: 5 },

@@ -3,7 +3,7 @@ import { IdeaIconSVG } from "@zauru-sdk/icons";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 export const TextField = (props) => {
-    const { id, name, defaultValue = "", hidden, type = "text", onChange, onKeyDown, disabled = false, readOnly = false, min, integer = false, stopChangeEvents, style, title, helpText, className, hint, required, } = props;
+    const { id, name, defaultValue = "", hidden, type = "text", onChange, onKeyDown, disabled = false, readOnly = false, min, integer = false, stopChangeEvents, style, title, helpText, className = "", hint, required, } = props;
     const [showTooltip, setShowTooltip] = useState(false);
     const [value, setValue] = useState(defaultValue);
     const { register: tempRegister, formState: { errors }, setValue: setOnFormValue, } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe

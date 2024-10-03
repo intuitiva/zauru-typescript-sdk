@@ -182,6 +182,7 @@ export type PurchaseOrderGraphQL = {
   discount: number;
   other_charges: number;
   delivery_date: string;
+  shipment_reference: string;
   webapp_table_rowables?: {
     webapp_rows?: {
       data?: {
