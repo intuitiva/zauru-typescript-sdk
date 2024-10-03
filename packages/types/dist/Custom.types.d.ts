@@ -627,6 +627,26 @@ export type QueueFormReceptionWebAppTable = {
     description: string;
     timeStamp?: number;
 };
+export type QueueShipmentsForm = {
+    creadoPor: string;
+    fechaCreacion: string;
+    formSubmited: {
+        agency_from: number;
+        transporter_id: number;
+        date: string;
+        shipment_number: string;
+        agency_to: number;
+        purchase_orders: {
+            id: number;
+            lot_id: number;
+        }[];
+    };
+    estado: string;
+    agency_id: number;
+    apiStep: number;
+    description: string;
+    timeStamp?: number;
+};
 export type receptionType = {
     [key: string]: {
         agency_id: string;

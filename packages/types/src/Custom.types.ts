@@ -699,7 +699,6 @@ export type ApiResponseFor4pinosReceptions = {
   qcShipment: ShipmentGraphQL;
 };
 
-//Modelo con el cuál responde el backend
 export type QueueFormReceptionWebAppTable = {
   creadoPor: string;
   fechaCreacion: string;
@@ -707,6 +706,24 @@ export type QueueFormReceptionWebAppTable = {
   estado: string;
   agency_id: number;
   apiResponses?: ApiResponseFor4pinosReceptions;
+  description: string;
+  timeStamp?: number;
+};
+
+export type QueueShipmentsForm = {
+  creadoPor: string;
+  fechaCreacion: string;
+  formSubmited: {
+    agency_from: number;
+    transporter_id: number;
+    date: string;
+    shipment_number: string;
+    agency_to: number;
+    purchase_orders: { id: number; lot_id: number }[];
+  };
+  estado: string;
+  agency_id: number;
+  apiStep: number;
   description: string;
   timeStamp?: number;
 };
