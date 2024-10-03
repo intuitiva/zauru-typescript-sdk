@@ -315,6 +315,7 @@ export type EmployeeGraphQL = {
   inventory_controller: boolean;
   buyer: boolean;
   support_agent: boolean;
+  position: string;
 };
 
 export type BundleDetailsGraphQL = {

@@ -682,6 +682,21 @@ query getEmployeeProfile {
     inventory_controller
     buyer
     support_agent
+    position
+  }
+}
+`;
+
+export const getEmployeesStringQuery = `
+query getEmployees {
+  employees {
+    name
+    id
+    user_id
+    email
+    seller
+    active
+    position
   }
 }
 `;
@@ -699,6 +714,7 @@ query getEmployeesByAgencyId {
     inventory_controller
     buyer
     support_agent
+    position
   }
 }
 `;
