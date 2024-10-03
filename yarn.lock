@@ -1408,12 +1408,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zauru-sdk/common@npm:^2.0.4, @zauru-sdk/common@workspace:packages/common":
+"@zauru-sdk/common@npm:^2.0.7, @zauru-sdk/common@workspace:packages/common":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/common@workspace:packages/common"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
-    "@zauru-sdk/types": "npm:^2.0.4"
+    "@zauru-sdk/types": "npm:^2.0.7"
     moment: "npm:^2.30.1"
     moment-timezone: "npm:^0.5.45"
     typescript: "npm:^5.1.6"
@@ -1432,11 +1432,11 @@ __metadata:
     "@types/react": "npm:^18.2.20"
     "@types/react-dom": "npm:^18.2.7"
     "@types/styled-components": "npm:^5.1.34"
-    "@zauru-sdk/common": "npm:^2.0.4"
-    "@zauru-sdk/hooks": "npm:^2.0.6"
+    "@zauru-sdk/common": "npm:^2.0.7"
+    "@zauru-sdk/hooks": "npm:^2.0.7"
     "@zauru-sdk/icons": "npm:^2.0.0"
-    "@zauru-sdk/types": "npm:^2.0.4"
-    "@zauru-sdk/utils": "npm:^2.0.4"
+    "@zauru-sdk/types": "npm:^2.0.7"
+    "@zauru-sdk/utils": "npm:^2.0.7"
     framer-motion: "npm:^11.7.0"
     jsonwebtoken: "npm:^9.0.2"
     postcss: "npm:^8.4.35"
@@ -1461,7 +1461,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/graphql@npm:^2.0.4, @zauru-sdk/graphql@workspace:packages/graphql":
+"@zauru-sdk/graphql@npm:^2.0.7, @zauru-sdk/graphql@workspace:packages/graphql":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/graphql@workspace:packages/graphql"
   dependencies:
@@ -1469,17 +1469,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/hooks@npm:^2.0.6, @zauru-sdk/hooks@workspace:packages/hooks":
+"@zauru-sdk/hooks@npm:^2.0.7, @zauru-sdk/hooks@workspace:packages/hooks":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/hooks@workspace:packages/hooks"
   dependencies:
     "@remix-run/react": "npm:^2.8.1"
     "@types/react": "npm:^18.2.20"
     "@types/react-dom": "npm:^18.2.7"
-    "@zauru-sdk/common": "npm:^2.0.4"
+    "@zauru-sdk/common": "npm:^2.0.7"
     "@zauru-sdk/icons": "npm:^2.0.0"
-    "@zauru-sdk/redux": "npm:^2.0.4"
-    "@zauru-sdk/types": "npm:^2.0.4"
+    "@zauru-sdk/redux": "npm:^2.0.7"
+    "@zauru-sdk/types": "npm:^2.0.7"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     tailwindcss: "npm:^3.4.1"
@@ -1500,14 +1500,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/redux@npm:^2.0.4, @zauru-sdk/redux@workspace:packages/redux":
+"@zauru-sdk/redux@npm:^2.0.7, @zauru-sdk/redux@workspace:packages/redux":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/redux@workspace:packages/redux"
   dependencies:
     "@reduxjs/toolkit": "npm:^2.2.1"
     "@types/react": "npm:^18.2.20"
     "@types/react-dom": "npm:^18.2.7"
-    "@zauru-sdk/types": "npm:^2.0.4"
+    "@zauru-sdk/types": "npm:^2.0.7"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-redux: "npm:^9.1.0"
@@ -1516,22 +1516,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/services@npm:^2.0.4, @zauru-sdk/services@workspace:packages/services":
+"@zauru-sdk/services@npm:^2.0.7, @zauru-sdk/services@workspace:packages/services":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/services@workspace:packages/services"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
-    "@zauru-sdk/common": "npm:^2.0.4"
+    "@zauru-sdk/common": "npm:^2.0.7"
     "@zauru-sdk/config": "npm:^2.0.0"
-    "@zauru-sdk/graphql": "npm:^2.0.4"
-    "@zauru-sdk/types": "npm:^2.0.4"
+    "@zauru-sdk/graphql": "npm:^2.0.7"
+    "@zauru-sdk/types": "npm:^2.0.7"
     axios: "npm:^1.6.7"
     chalk: "npm:5.3.0"
     typescript: "npm:^5.1.6"
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/types@npm:^2.0.4, @zauru-sdk/types@workspace:packages/types":
+"@zauru-sdk/types@npm:^2.0.7, @zauru-sdk/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/types@workspace:packages/types"
   dependencies:
@@ -1539,16 +1539,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/utils@npm:^2.0.4, @zauru-sdk/utils@workspace:packages/utils":
+"@zauru-sdk/utils@npm:^2.0.7, @zauru-sdk/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/utils@workspace:packages/utils"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
-    "@zauru-sdk/common": "npm:^2.0.4"
+    "@zauru-sdk/common": "npm:^2.0.7"
     "@zauru-sdk/config": "npm:^2.0.0"
-    "@zauru-sdk/graphql": "npm:^2.0.4"
-    "@zauru-sdk/services": "npm:^2.0.4"
-    "@zauru-sdk/types": "npm:^2.0.4"
+    "@zauru-sdk/graphql": "npm:^2.0.7"
+    "@zauru-sdk/services": "npm:^2.0.7"
+    "@zauru-sdk/types": "npm:^2.0.7"
     typescript: "npm:^5.1.6"
   languageName: unknown
   linkType: soft
