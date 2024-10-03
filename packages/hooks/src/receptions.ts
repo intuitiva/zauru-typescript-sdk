@@ -178,10 +178,16 @@ type PesadaBody = {
   lbDiscounted: number;
 };
 
+export type FooterColumnConfig = {
+  content: React.ReactNode;
+  className?: string;
+  name?: string;
+};
+
 export const useGetPesadas = (
   purchaseOrder?: PurchaseOrderGraphQL,
   stocks_only_integer: boolean = false
-): [PesadaBody[], any[], GenericDynamicTableColumn[]] => {
+): [PesadaBody[], FooterColumnConfig[], GenericDynamicTableColumn[]] => {
   const [pesadas, footerPesadas, headersPesadas] = useMemo(() => {
     if (!purchaseOrder) return [[], [], []];
 
@@ -229,47 +235,55 @@ export const useGetPesadas = (
     const totales = [
       //#
       {
-        contennt: "",
+        content: "",
+        name: "id",
       },
       //baskets
       {
-        contennt: toFixedIfNeeded(
+        content: toFixedIfNeeded(
           tempPesadas?.map((x) => x.baskets).reduce(reduceAdd, 0)
         )?.toString(),
+        name: "baskets",
       },
       //totalWeight
       {
-        contennt: toFixedIfNeeded(
+        content: toFixedIfNeeded(
           tempPesadas?.map((x) => x.totalWeight).reduce(reduceAdd, 0)
         )?.toString(),
+        name: "totalWeight",
       },
       //discount
       {
-        contennt: "-",
+        content: "-",
+        name: "discount",
       },
       //netWeight
       {
-        contennt: toFixedIfNeeded(
+        content: toFixedIfNeeded(
           tempPesadas?.map((x) => Number(x.netWeight)).reduce(reduceAdd, 0)
         )?.toString(),
+        name: "netWeight",
       },
       //weightByBasket
       {
-        contennt: "-",
+        content: "-",
+        name: "weightByBasket",
       },
       //lbDiscounted
       {
-        contennt: toFixedIfNeeded(
+        content: toFixedIfNeeded(
           tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(reduceAdd, 0)
         )?.toString(),
+        name: "lbDiscounted",
       },
       //probableUtilization
       {
-        contennt: toFixedIfNeeded(
+        content: toFixedIfNeeded(
           tempPesadas
             ?.map((x) => Number(x.probableUtilization))
             .reduce(reduceAdd, 0)
         ),
+        name: "probableUtilization",
       },
     ];
 
@@ -366,29 +380,34 @@ export const getPesadasByForm = (
   const totales = [
     //#
     {
-      contennt: "",
+      content: "",
+      name: "id",
     },
     //baskets
     {
-      contennt: toFixedIfNeeded(
+      content: toFixedIfNeeded(
         tempPesadas?.map((x) => x.baskets).reduce(reduceAdd, 0)
       )?.toString(),
+      name: "baskets",
     },
     //totalWeight
     {
-      contennt: toFixedIfNeeded(
+      content: toFixedIfNeeded(
         tempPesadas?.map((x) => x.totalWeight).reduce(reduceAdd, 0)
       )?.toString(),
+      name: "totalWeight",
     },
     //netWeight
     {
-      contennt: toFixedIfNeeded(
+      content: toFixedIfNeeded(
         tempPesadas?.map((x) => Number(x.netWeight)).reduce(reduceAdd, 0)
       )?.toString(),
+      name: "netWeight",
     },
     //weightByBasket
     {
-      contennt: "-",
+      content: "-",
+      name: "weightByBasket",
     },
   ];
 
@@ -424,7 +443,7 @@ type BasketDetailsBody = {
 
 export const useGetBasketDetails = (
   purchaseOrder?: PurchaseOrderGraphQL
-): [BasketDetailsBody[], any[], GenericDynamicTableColumn[]] => {
+): [BasketDetailsBody[], FooterColumnConfig[], GenericDynamicTableColumn[]] => {
   const [basketsJoined, footerBasketsJoined, headersBasketsJoined] =
     useMemo(() => {
       if (!purchaseOrder) return [[], [], []];
@@ -481,17 +500,20 @@ export const useGetBasketDetails = (
       const totales = [
         //color
         {
-          contennt: "",
+          content: "",
+          name: "color",
         },
         //total
         {
-          contennt: toFixedIfNeeded(
+          content: toFixedIfNeeded(
             joinedBaskets?.map((x) => x.total).reduce(reduceAdd, 0)
           )?.toString(),
+          name: "total",
         },
         //cc
         {
-          contennt: joinedBaskets?.map((x) => x.cc).reduce(reduceAdd, 0),
+          content: joinedBaskets?.map((x) => x.cc).reduce(reduceAdd, 0),
+          name: "cc",
         },
       ];
 
@@ -573,17 +595,20 @@ export const getBasketDetailsByForm = (formInput: FormInput) => {
   const totales = [
     //color
     {
-      contennt: "",
+      content: "",
+      name: "color",
     },
     //total
     {
-      contennt: toFixedIfNeeded(
+      content: toFixedIfNeeded(
         basketDetailsArray.map((x) => x.total).reduce(reduceAdd, 0)
       )?.toString(),
+      name: "total",
     },
     //cc
     {
-      contennt: basketDetailsArray.map((x) => x.cc).reduce(reduceAdd, 0),
+      content: basketDetailsArray.map((x) => x.cc).reduce(reduceAdd, 0),
+      name: "cc",
     },
   ];
 
