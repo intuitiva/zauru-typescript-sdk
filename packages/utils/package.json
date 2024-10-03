@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/utils",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "Utilidades, parseo de request y demás para desarrollo de webapps de Zauru",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
@@ -24,11 +24,11 @@
   },
   "dependencies": {
     "@remix-run/node": "^2.8.1",
-    "@zauru-sdk/common": "^2.0.7",
+    "@zauru-sdk/common": "^2.0.10",
     "@zauru-sdk/config": "^2.0.0",
     "@zauru-sdk/graphql": "^2.0.7",
-    "@zauru-sdk/services": "^2.0.9",
-    "@zauru-sdk/types": "^2.0.7"
+    "@zauru-sdk/services": "^2.0.10",
+    "@zauru-sdk/types": "^2.0.10"
   },
   "gitHead": "4afb063c0534f4a103ffec5e7d5be75d283fdc00"
 }
