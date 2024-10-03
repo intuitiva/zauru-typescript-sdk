@@ -404,6 +404,13 @@ export const useGetEmployeesByCurrentAgency = (
   data: EmployeeGraphQL[];
 } => useGetReduxCatalog<EmployeeGraphQL>("employeesByCurrentAgency", config);
 
+export const useGetEmployees = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: EmployeeGraphQL[];
+} => useGetReduxCatalog<EmployeeGraphQL>("employees", config);
+
 export const useGetShipmentsToMyAgency = (
   config?: ReduxParamsConfig
 ): {

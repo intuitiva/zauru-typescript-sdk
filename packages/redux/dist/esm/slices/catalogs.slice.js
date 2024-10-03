@@ -34,6 +34,7 @@ const initialState = {
     bundlesForLab: createLoadingState([]),
     currencies: createLoadingState([]),
     paymentTerms: createLoadingState([]),
+    employees: createLoadingState([]),
     employeesByLab: createLoadingState([]),
     employeesByCurrentAgency: createLoadingState([]),
     invoicesByLab: createLoadingState([]),

@@ -69,6 +69,7 @@ export type CATALOGS_NAMES =
   | "templates"
   | "bundlesForLab"
   | "paymentMethods"
+  | "employees"
   | "printTemplates";
 
 type LoadingState<T> = {
@@ -103,6 +104,7 @@ type CatalogState = {
   bundlesForLab: LoadingState<BundleGraphQL[]>;
   currencies: LoadingState<CurrencyGraphQL[]>;
   paymentTerms: LoadingState<PaymentTermGraphQL[]>;
+  employees: LoadingState<EmployeeGraphQL[]>;
   employeesByLab: LoadingState<EmployeeGraphQL[]>;
   employeesByCurrentAgency: LoadingState<EmployeeGraphQL[]>;
   invoicesByLab: LoadingState<InvoiceGraphQL[]>;
@@ -150,6 +152,7 @@ const initialState: CatalogState = {
   bundlesForLab: createLoadingState([]),
   currencies: createLoadingState([]),
   paymentTerms: createLoadingState([]),
+  employees: createLoadingState([]),
   employeesByLab: createLoadingState([]),
   employeesByCurrentAgency: createLoadingState([]),
   invoicesByLab: createLoadingState([]),

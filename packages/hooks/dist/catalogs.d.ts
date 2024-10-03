@@ -114,6 +114,10 @@ export declare const useGetEmployeesByCurrentAgency: (config?: ReduxParamsConfig
     loading: boolean;
     data: EmployeeGraphQL[];
 };
+export declare const useGetEmployees: (config?: ReduxParamsConfig) => {
+    loading: boolean;
+    data: EmployeeGraphQL[];
+};
 export declare const useGetShipmentsToMyAgency: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: ShipmentGraphQL[];
