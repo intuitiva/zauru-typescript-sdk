@@ -1433,7 +1433,7 @@ __metadata:
     "@types/react-dom": "npm:^18.2.7"
     "@types/styled-components": "npm:^5.1.34"
     "@zauru-sdk/common": "npm:^2.0.7"
-    "@zauru-sdk/hooks": "npm:^2.0.7"
+    "@zauru-sdk/hooks": "npm:^2.0.8"
     "@zauru-sdk/icons": "npm:^2.0.0"
     "@zauru-sdk/types": "npm:^2.0.7"
     "@zauru-sdk/utils": "npm:^2.0.7"
@@ -1469,7 +1469,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/hooks@npm:^2.0.7, @zauru-sdk/hooks@workspace:packages/hooks":
+"@zauru-sdk/hooks@npm:^2.0.8, @zauru-sdk/hooks@workspace:packages/hooks":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/hooks@workspace:packages/hooks"
   dependencies:
@@ -1478,7 +1478,7 @@ __metadata:
     "@types/react-dom": "npm:^18.2.7"
     "@zauru-sdk/common": "npm:^2.0.7"
     "@zauru-sdk/icons": "npm:^2.0.0"
-    "@zauru-sdk/redux": "npm:^2.0.7"
+    "@zauru-sdk/redux": "npm:^2.0.8"
     "@zauru-sdk/types": "npm:^2.0.7"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -1500,7 +1500,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/redux@npm:^2.0.7, @zauru-sdk/redux@workspace:packages/redux":
+"@zauru-sdk/redux@npm:^2.0.8, @zauru-sdk/redux@workspace:packages/redux":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/redux@workspace:packages/redux"
   dependencies:
