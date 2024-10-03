@@ -38,7 +38,7 @@ export const getQueueShipmentsFormHistories = (
 
     if (response.error) {
       throw new Error(
-        `Ocurrió un error al consultar el historial de colas: ${response.userMsg}`
+        `Ocurrió un error al consultar el historial de envíos: ${response.userMsg}`
       );
     }
 
@@ -49,12 +49,12 @@ export const getQueueShipmentsFormHistories = (
 };
 
 /**
- * Get getQueueFormReceptionHistories from the web app table.
+ * Get getQueueShipmentsFormHistories from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueShipmentsForm[]>.
  */
-export const getQueueFormReceptionHistoryByID = (
+export const getQueueShipmentsFormHistoryByID = (
   session: Session,
   id: string | number
 ): Promise<AxiosUtilsResponse<QueueShipmentsForm | null>> => {
@@ -83,7 +83,7 @@ export const getQueueFormReceptionHistoryByID = (
  * @param body QueueShipmentsForm data to be created.
  * @returns A Promise of AxiosUtilsResponse<QueueShipmentsForm>.
  */
-export const createQueueFormReceptionHistory = (
+export const createQueueShipmentsFormHistory = (
   headers: any,
   session: Session,
   body: QueueShipmentsForm
@@ -106,12 +106,12 @@ export const createQueueFormReceptionHistory = (
 };
 
 /**
- * Put updateQueueFormReception from the web app table.
+ * Put updateQueueShipmentsForm from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueShipmentsForm[]>.
  */
-export const updateQueueFormReceptionHistory = (
+export const updateQueueShipmentsFormHistory = (
   headers: any,
   session: Session,
   body: Partial<QueueShipmentsForm>,
@@ -135,12 +135,12 @@ export const updateQueueFormReceptionHistory = (
 };
 
 /**
- * Delete QueueFormReceptionHistory from the web app table.
+ * Delete QueueShipmentsFormHistory from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueShipmentsForm[]>.
  */
-export const deleteQueueFormReceptionHistory = (
+export const deleteQueueShipmentsFormHistory = (
   headers: any,
   session: Session,
   id: string
