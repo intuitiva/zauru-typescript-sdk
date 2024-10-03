@@ -13,19 +13,19 @@ export const getQueueShipmentsFormHistories = (headers, session) => {
         ]);
         const response = await getWebAppTableRegisters(session, queue_form_shipment_submited_web_app_table_id);
         if (response.error) {
-            throw new Error(`Ocurrió un error al consultar el historial de colas: ${response.userMsg}`);
+            throw new Error(`Ocurrió un error al consultar el historial de envíos: ${response.userMsg}`);
         }
         const history = response?.data ?? [];
         return history;
     });
 };
 /**
- * Get getQueueFormReceptionHistories from the web app table.
+ * Get getQueueShipmentsFormHistories from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueShipmentsForm[]>.
  */
-export const getQueueFormReceptionHistoryByID = (session, id) => {
+export const getQueueShipmentsFormHistoryByID = (session, id) => {
     return handlePossibleAxiosErrors(async () => {
         const response = await getWebAppRow(session, Number(id));
         if (response.error) {
@@ -42,7 +42,7 @@ export const getQueueFormReceptionHistoryByID = (session, id) => {
  * @param body QueueShipmentsForm data to be created.
  * @returns A Promise of AxiosUtilsResponse<QueueShipmentsForm>.
  */
-export const createQueueFormReceptionHistory = (headers, session, body) => {
+export const createQueueShipmentsFormHistory = (headers, session, body) => {
     return handlePossibleAxiosErrors(async () => {
         const { queue_form_shipment_submited_web_app_table_id } = await getVariablesByName(headers, session, [
             "queue_form_shipment_submited_web_app_table_id",
@@ -55,12 +55,12 @@ export const createQueueFormReceptionHistory = (headers, session, body) => {
     });
 };
 /**
- * Put updateQueueFormReception from the web app table.
+ * Put updateQueueShipmentsForm from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueShipmentsForm[]>.
  */
-export const updateQueueFormReceptionHistory = (headers, session, body, id_registro) => {
+export const updateQueueShipmentsFormHistory = (headers, session, body, id_registro) => {
     return handlePossibleAxiosErrors(async () => {
         const { queue_form_shipment_submited_web_app_table_id } = await getVariablesByName(headers, session, [
             "queue_form_shipment_submited_web_app_table_id",
@@ -70,12 +70,12 @@ export const updateQueueFormReceptionHistory = (headers, session, body, id_regis
     });
 };
 /**
- * Delete QueueFormReceptionHistory from the web app table.
+ * Delete QueueShipmentsFormHistory from the web app table.
  * @param headers Request headers.
  * @param session Session object.
  * @returns A Promise of AxiosUtilsResponse<QueueShipmentsForm[]>.
  */
-export const deleteQueueFormReceptionHistory = (headers, session, id) => {
+export const deleteQueueShipmentsFormHistory = (headers, session, id) => {
     return handlePossibleAxiosErrors(async () => {
         const { queue_form_shipment_submited_web_app_table_id } = await getVariablesByName(headers, session, [
             "queue_form_shipment_submited_web_app_table_id",
