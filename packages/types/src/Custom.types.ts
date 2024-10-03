@@ -711,11 +711,6 @@ export type QueueFormReceptionWebAppTable = {
   timeStamp?: number;
 };
 
-export type RowDataType = {
-  id: any;
-  [key: string]: any;
-};
-
 export type receptionType = {
   [key: string]: {
     agency_id: string;
@@ -739,6 +734,11 @@ export type receptionDetailsType = {
   };
 };
 
+export type RowDataType = {
+  id: any;
+  [key: string]: any;
+};
+
 export type GenericDynamicTableColumn = {
   name: string;
   label: string;
@@ -754,4 +754,6 @@ export type GenericDynamicTableColumn = {
     value: any,
     setTableValue: (columnName: string, newValue: any) => void
   ) => void;
+  headerClassName?: string;
+  cellClassName?: string;
 };
