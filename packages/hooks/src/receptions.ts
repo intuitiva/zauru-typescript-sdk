@@ -227,6 +227,10 @@ export const useGetPesadas = (
     ];
 
     const totales = [
+      //#
+      {
+        contennt: "",
+      },
       //baskets
       {
         contennt: toFixedIfNeeded(
@@ -360,6 +364,10 @@ export const getPesadasByForm = (
   }
 
   const totales = [
+    //#
+    {
+      contennt: "",
+    },
     //baskets
     {
       contennt: toFixedIfNeeded(
@@ -414,18 +422,12 @@ type BasketDetailsBody = {
   cc: number;
 };
 
-type BasketDetailsFooter = {
-  id: string;
-  total: string;
-  cc: number;
-};
-
 export const useGetBasketDetails = (
   purchaseOrder?: PurchaseOrderGraphQL
-): [BasketDetailsBody[], BasketDetailsFooter, GenericDynamicTableColumn[]] => {
+): [BasketDetailsBody[], any[], GenericDynamicTableColumn[]] => {
   const [basketsJoined, footerBasketsJoined, headersBasketsJoined] =
     useMemo(() => {
-      if (!purchaseOrder) return [[], {} as BasketDetailsFooter, []];
+      if (!purchaseOrder) return [[], [], []];
 
       const bsq =
         purchaseOrder?.lots.length > 0
@@ -476,14 +478,22 @@ export const useGetBasketDetails = (
         }
       }
 
-      const totales = {
-        id: "",
-        total: toFixedIfNeeded(
-          joinedBaskets?.map((x) => x.total).reduce(reduceAdd, 0)
-        )?.toString(),
-        cc: joinedBaskets?.map((x) => x.cc).reduce(reduceAdd, 0),
-        //granTotal: joinedBaskets?.map((x) => x.granTotal).reduce(reduceAdd, 0),
-      };
+      const totales = [
+        //color
+        {
+          contennt: "",
+        },
+        //total
+        {
+          contennt: toFixedIfNeeded(
+            joinedBaskets?.map((x) => x.total).reduce(reduceAdd, 0)
+          )?.toString(),
+        },
+        //cc
+        {
+          contennt: joinedBaskets?.map((x) => x.cc).reduce(reduceAdd, 0),
+        },
+      ];
 
       const headers: GenericDynamicTableColumn[] = [
         { label: "Color", name: "color", type: "label" },
@@ -509,7 +519,7 @@ export const getBasketDetailsByForm = (formInput: FormInput) => {
   if (!formInput)
     return {
       basketDetailsArray,
-      totales: {} as BasketDetailsFooter,
+      totales: [],
       headers: [],
     };
 
@@ -560,14 +570,22 @@ export const getBasketDetailsByForm = (formInput: FormInput) => {
     }
   }
 
-  // Calcular los totales para footerBasketsDetails
-  const totales: BasketDetailsFooter = {
-    id: "",
-    total: toFixedIfNeeded(
-      basketDetailsArray.map((x) => x.total).reduce(reduceAdd, 0)
-    )?.toString(),
-    cc: basketDetailsArray.map((x) => x.cc).reduce(reduceAdd, 0),
-  };
+  const totales = [
+    //color
+    {
+      contennt: "",
+    },
+    //total
+    {
+      contennt: toFixedIfNeeded(
+        basketDetailsArray.map((x) => x.total).reduce(reduceAdd, 0)
+      )?.toString(),
+    },
+    //cc
+    {
+      contennt: basketDetailsArray.map((x) => x.cc).reduce(reduceAdd, 0),
+    },
+  ];
 
   // Definir los encabezados de la tabla
   const headers: GenericDynamicTableColumn[] = [

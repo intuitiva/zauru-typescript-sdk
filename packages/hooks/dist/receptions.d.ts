@@ -66,12 +66,7 @@ type BasketDetailsBody = {
     color: string;
     cc: number;
 };
-type BasketDetailsFooter = {
-    id: string;
-    total: string;
-    cc: number;
-};
-export declare const useGetBasketDetails: (purchaseOrder?: PurchaseOrderGraphQL) => [BasketDetailsBody[], BasketDetailsFooter, GenericDynamicTableColumn[]];
+export declare const useGetBasketDetails: (purchaseOrder?: PurchaseOrderGraphQL) => [BasketDetailsBody[], any[], GenericDynamicTableColumn[]];
 /**
  * Para imprimir en modo offline
  * @param formInput
@@ -79,7 +74,11 @@ export declare const useGetBasketDetails: (purchaseOrder?: PurchaseOrderGraphQL)
  */
 export declare const getBasketDetailsByForm: (formInput: FormInput) => {
     basketDetailsArray: BasketDetailsBody[];
-    totales: BasketDetailsFooter;
+    totales: ({
+        contennt: string;
+    } | {
+        contennt: number;
+    })[];
     headers: GenericDynamicTableColumn[];
 };
 export declare const useGetProviderNameByPurchaseOrder: (payees: PayeeGraphQL[], purchaseOrder?: PurchaseOrderGraphQL) => string;

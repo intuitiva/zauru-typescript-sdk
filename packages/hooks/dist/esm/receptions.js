@@ -120,6 +120,10 @@ const useGetPesadas = (purchaseOrder, stocks_only_integer = false) => {
             }),
         ];
         const totales = [
+            //#
+            {
+                contennt: "",
+            },
             //baskets
             {
                 contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0))?.toString(),
@@ -230,6 +234,10 @@ const getPesadasByForm = (formInput, stocks_only_integer = false) => {
         index++;
     }
     const totales = [
+        //#
+        {
+            contennt: "",
+        },
         //baskets
         {
             contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0))?.toString(),
@@ -272,7 +280,7 @@ exports.getPesadasByForm = getPesadasByForm;
 const useGetBasketDetails = (purchaseOrder) => {
     const [basketsJoined, footerBasketsJoined, headersBasketsJoined] = (0, react_2.useMemo)(() => {
         if (!purchaseOrder)
-            return [[], {}, []];
+            return [[], [], []];
         const bsq = purchaseOrder?.lots.length > 0
             ? purchaseOrder?.lots
                 ?.map((x) => {
@@ -312,12 +320,20 @@ const useGetBasketDetails = (purchaseOrder) => {
                 });
             }
         }
-        const totales = {
-            id: "",
-            total: (0, common_1.toFixedIfNeeded)(joinedBaskets?.map((x) => x.total).reduce(common_1.reduceAdd, 0))?.toString(),
-            cc: joinedBaskets?.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
-            //granTotal: joinedBaskets?.map((x) => x.granTotal).reduce(reduceAdd, 0),
-        };
+        const totales = [
+            //color
+            {
+                contennt: "",
+            },
+            //total
+            {
+                contennt: (0, common_1.toFixedIfNeeded)(joinedBaskets?.map((x) => x.total).reduce(common_1.reduceAdd, 0))?.toString(),
+            },
+            //cc
+            {
+                contennt: joinedBaskets?.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
+            },
+        ];
         const headers = [
             { label: "Color", name: "color", type: "label" },
             { label: "Canastas recibidas", name: "total", type: "label" },
@@ -339,7 +355,7 @@ const getBasketDetailsByForm = (formInput) => {
     if (!formInput)
         return {
             basketDetailsArray,
-            totales: {},
+            totales: [],
             headers: [],
         };
     // Regex para identificar los campos relevantes
@@ -380,12 +396,20 @@ const getBasketDetailsByForm = (formInput) => {
             }
         }
     }
-    // Calcular los totales para footerBasketsDetails
-    const totales = {
-        id: "",
-        total: (0, common_1.toFixedIfNeeded)(basketDetailsArray.map((x) => x.total).reduce(common_1.reduceAdd, 0))?.toString(),
-        cc: basketDetailsArray.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
-    };
+    const totales = [
+        //color
+        {
+            contennt: "",
+        },
+        //total
+        {
+            contennt: (0, common_1.toFixedIfNeeded)(basketDetailsArray.map((x) => x.total).reduce(common_1.reduceAdd, 0))?.toString(),
+        },
+        //cc
+        {
+            contennt: basketDetailsArray.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
+        },
+    ];
     // Definir los encabezados de la tabla
     const headers = [
         { label: "Color", name: "color", type: "label" },
