@@ -9,11 +9,16 @@ import {
   RowDataType,
   SelectFieldOption,
 } from "@zauru-sdk/types";
-import { useAppSelector } from "@zauru-sdk/redux";
 import { generateClientUUID } from "@zauru-sdk/common";
 import { LoadingInputSkeleton } from "../Skeletons/index.js";
 import { WithTooltip } from "../WithTooltip/index.js";
 import { TrashSvg } from "@zauru-sdk/icons";
+import { useFormContext } from "react-hook-form";
+
+export type FooterColumnConfig = {
+  content: React.ReactNode;
+  className?: string;
+};
 
 type Props = {
   name?: string;
@@ -21,7 +26,7 @@ type Props = {
   columns: GenericDynamicTableColumn[];
   onChange?: (tableState?: any[]) => void;
   defaultValue?: RowDataType[];
-  footerRow?: RowDataType;
+  footerRow?: FooterColumnConfig[];
   thCSSProperties?: React.CSSProperties;
   thElementsClassName?: string;
   editable?: boolean;
@@ -31,26 +36,75 @@ type Props = {
   defaultItemsPerPage?: number;
   itemsPerPageOptions?: number[];
   withoutBg?: boolean;
+  orientation?: "horizontal" | "vertical";
+  maxRows?: number;
 };
 
-const GenericDynamicTableErrorComponent = ({
-  name,
-  formName,
-}: {
-  name: string;
-  formName?: string;
-}) => {
-  const { formValidations } = useAppSelector((state) => state.formValidation);
-  const error = formValidations[formName ?? "-1"]?.[name ?? "-1"];
+const GenericDynamicTableErrorComponent = ({ name }: { name: string }) => {
+  const {
+    formState: { errors },
+  } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
+  const error = errors ? errors[name ?? "-1"] : undefined;
 
   return error ? (
     <p className={`mt-2 text-sm text-red-600 dark:text-red-500`}>
-      <span className="font-medium">Oops!</span> {error}
+      <span className="font-medium">Oops!</span> {error?.message?.toString()}
     </p>
   ) : (
     <></>
   );
 };
+
+/**
+ *
+ * @param props
+ * @returns
+ *
+ * @example
+ *<GenericDynamicTable
+    name="invoice_details"
+    withoutBg
+    editable={!show}
+    defaultValue={
+      invoiceDetailsDefaultValue ?? [{ id: crypto.randomUUID() }]
+    }
+    columns={[
+      {
+        label: "Producto",
+        name: "item_id",
+        type: "selectField",
+        options: productOptions,
+        disabled: show,
+        onChange: (rowData, value, setTableValue) => {
+          const price = getProductPrice(value);
+          setTableValue("price", price);
+        },
+        headerClassName: "text-center font-bold",
+        cellClassName: "text-center",
+      },
+      {
+        label: "Cantidad",
+        name: "quantity",
+        type: "textField",
+        textFieldType: "number",
+        disabled: show,
+        onChange: (rowData, value, setTableValue) => {
+          const price = rowData["price"] ?? 0;
+          const quantity = Number(value) || 0;
+          setTableValue("total", price * quantity);
+        },
+        headerClassName: "text-right font-semibold",
+        cellClassName: "text-right",
+      }
+    ]}
+    footerRow={[
+      { content: "Total", className: "text-left font-bold" },
+      { content: calculateTotal(), className: "text-center" },
+      { content: "", className: "text-center" }
+    ]}
+    maxRows={2}
+  />
+ */
 
 export const GenericDynamicTable = (props: Props) => {
   const {
@@ -69,6 +123,8 @@ export const GenericDynamicTable = (props: Props) => {
     itemsPerPageOptions = [10, 50, 100],
     name,
     withoutBg = false,
+    orientation = "horizontal",
+    maxRows,
   } = props;
 
   const [tableData, setTableData] = useState<RowDataType[]>(defaultValue);
@@ -98,6 +154,9 @@ export const GenericDynamicTable = (props: Props) => {
   };
 
   const addRow = () => {
+    if (maxRows && tableData.length >= maxRows) {
+      return;
+    }
     const defs: { [key: string]: any } = {};
     columns.forEach((x) => {
       defs[`${x.name}`] =
@@ -126,160 +185,175 @@ export const GenericDynamicTable = (props: Props) => {
   };
 
   const handleChange = (name: string, value: any, rowId: string) => {
-    // Encontrar el índice de la fila que está cambiando
-    const rowIndex = tableData.findIndex((x) => x.id === rowId);
-
-    // Crear una copia del objeto en esa fila
-    const updatedRow = { ...tableData[rowIndex], [name]: value };
-
-    // Copiar todo el array
-    const updatedData = [...tableData];
-
-    // Reemplazar el objeto en la fila que cambió
-    updatedData[rowIndex] = updatedRow;
-
-    // Actualizar el estado con el nuevo array
-    setTableData(updatedData);
-    onChange && onChange(updatedData);
+    setTableData((prevData) => {
+      const updatedData = prevData.map((row) => {
+        if (row.id === rowId) {
+          return { ...row, [name]: value };
+        }
+        return row;
+      });
+      onChange && onChange(updatedData);
+      return updatedData;
+    });
   };
 
-  const renderHeader = () => (
-    <tr style={{ ...thCSSProperties }}>
-      {columns.map((column, index) => {
-        const ancho =
-          column.width ?? (editable ? 94 : 100) / (columns.length ?? 1);
-        return (
+  const renderHeader = () => {
+    if (orientation === "horizontal") {
+      return (
+        <tr style={{ ...thCSSProperties }}>
+          {columns.map((column, index) => {
+            const ancho =
+              column.width ?? (editable ? 94 : 100) / (columns.length ?? 1);
+            return (
+              <th
+                key={index}
+                className={`text-left align-middle p-2 ${thElementsClassName} ${
+                  column.headerClassName || ""
+                }`}
+                style={{ width: `${ancho}%` }}
+              >
+                {column.label}
+              </th>
+            );
+          })}
+          {editable && <th style={{ width: "4%" }}></th>}
+        </tr>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  const renderRow = (rowData: RowDataType, index: number) => {
+    if (orientation === "horizontal") {
+      return (
+        <tr
+          key={rowData.id}
+          className={index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : ""}
+        >
+          {columns.map((column) => renderCell(rowData, column))}
+          {editable && renderDeleteButton(rowData)}
+        </tr>
+      );
+    } else {
+      return columns.map((column) => (
+        <tr
+          key={`${rowData.id}-${column.name}`}
+          className={index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : ""}
+        >
           <th
-            key={index}
-            className={`text-left align-middle p-2 ${thElementsClassName}`}
-            style={{ width: `${ancho}%` }}
+            className={`text-left align-middle p-2 ${thElementsClassName} ${
+              column.headerClassName || ""
+            }`}
           >
             {column.label}
           </th>
-        );
-      })}
-      {editable && <th style={{ width: "4%" }}></th>}
-    </tr>
-  );
+          {renderCell(rowData, column)}
+          {editable &&
+            column === columns[columns.length - 1] &&
+            renderDeleteButton(rowData)}
+        </tr>
+      ));
+    }
+  };
 
-  const renderRow = (rowData: RowDataType, index: number) => {
+  const renderCell = (
+    rowData: RowDataType,
+    column: GenericDynamicTableColumn
+  ) => {
+    if (loading) {
+      return (
+        <td
+          key={`${rowData.id}-${column.name}`}
+          className={`align-middle p-1 ${column.cellClassName || ""}`}
+        >
+          <LoadingInputSkeleton />
+        </td>
+      );
+    }
+    const tempVal = rowData[column.name as any];
+
+    const defaultVal =
+      column.type === "selectField"
+        ? column.options?.find((x) => x.value === tempVal)
+        : tempVal;
+
+    if (column.type === "label") {
+      return (
+        <td
+          key={`${rowData.id}-${column.name}`}
+          className={`align-middle p-1 ${column.cellClassName || ""}`}
+        >
+          <div>{defaultVal}</div>
+        </td>
+      );
+    }
+
+    const FieldComponent =
+      column.type === "textField"
+        ? TextField
+        : column.type === "checkbox"
+        ? CheckBox
+        : SelectField;
+
+    const setTableValue = (columnName: string, newValue: any) => {
+      handleChange(columnName, newValue, rowData.id);
+    };
+
     return (
-      <tr
-        key={rowData.id}
-        className={index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : ""}
+      <td
+        key={`${rowData.id}-${column.name}`}
+        className={`align-middle p-1 ${column.cellClassName || ""}`}
       >
-        {columns.map((column) => {
-          if (loading) {
-            return (
-              <td
-                key={`${rowData.id}-${column.name}`}
-                className="align-middle p-1"
-              >
-                <LoadingInputSkeleton />
-              </td>
-            );
-          }
-          const tempVal = rowData[column.name as any];
-
-          const defaultVal =
-            column.type === "selectField"
-              ? column.options?.find((x) => x.value === tempVal)
-              : tempVal;
-
-          if (column.type === "label") {
-            return (
-              <td
-                key={`${rowData.id}-${column.name}`}
-                className="align-middle p-1"
-              >
-                <div>{defaultVal}</div>
-              </td>
-            );
-          }
-
-          const FieldComponent =
-            column.type === "textField"
-              ? TextField
-              : column.type === "checkbox"
-              ? CheckBox
-              : SelectField;
-
-          const setTableValue = (columnName: string, newValue: any) => {
-            setTableData((prevState) => {
-              // Encontrar el índice de la fila que está cambiando
-              const rowIndex = prevState.findIndex((x) => x.id === rowData.id);
-              // Crear una copia del objeto en esa fila
-              const updatedRow = {
-                ...prevState[rowIndex],
-                [columnName]: newValue,
-              };
-              // Copiar todo el array
-              const updatedData = [...prevState];
-
-              // Reemplazar el objeto en la fila que cambió
-              updatedData[rowIndex] = updatedRow;
-              return updatedData;
-            });
-          };
-
-          return (
-            <td
-              key={`${rowData.id}-${column.name}`}
-              className="align-middle p-1"
-            >
-              {column.loadingOptions ? (
-                <LoadingInputSkeleton />
-              ) : (
-                <FieldComponent
-                  key={`${rowData.id}-${column.name}`}
-                  //name={column.name}
-                  type={column.textFieldType}
-                  integer={!!column.integer}
-                  disabled={column.disabled}
-                  isClearable
-                  onChange={(value: any) => {
-                    const sendValue = value?.value ?? value;
-                    handleChange(column.name, sendValue, rowData.id);
-                    column.onChange &&
-                      column.onChange(rowData, sendValue, setTableValue);
-                  }}
-                  defaultValue={defaultVal}
-                  options={column.options ?? []}
-                />
-              )}
-            </td>
-          );
-        })}
-        {editable && (
-          <td className="align-middle w-16">
-            <WithTooltip text="Eliminar">
-              <button
-                className="bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2"
-                onClick={(
-                  event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-                ) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  createModal({
-                    title: "¿Está seguro que quiere eliminar este registro?",
-                    description:
-                      "Una vez eliminada la información no podrá ser recuperada.",
-                  }).then((response) => {
-                    if (response === "OK") {
-                      removeRow(rowData.id);
-                    }
-                  });
-                }}
-                type="button"
-              >
-                <TrashSvg />
-              </button>
-            </WithTooltip>
-          </td>
+        {column.loadingOptions ? (
+          <LoadingInputSkeleton />
+        ) : (
+          <FieldComponent
+            key={`${rowData.id}-${column.name}`}
+            name={`${rowData.id}-${column.name}`}
+            type={column.textFieldType}
+            integer={!!column.integer}
+            disabled={column.disabled}
+            isClearable
+            onChange={(value: any) => {
+              const sendValue = value?.value ?? value;
+              handleChange(column.name, sendValue, rowData.id);
+              column.onChange &&
+                column.onChange(rowData, sendValue, setTableValue);
+            }}
+            defaultValue={defaultVal}
+            options={column.options ?? []}
+          />
         )}
-      </tr>
+      </td>
     );
   };
+
+  const renderDeleteButton = (rowData: RowDataType) => (
+    <td className="align-middle w-16">
+      <WithTooltip text="Eliminar">
+        <button
+          className="bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2"
+          onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            event.preventDefault();
+            event.stopPropagation();
+            createModal({
+              title: "¿Está seguro que quiere eliminar este registro?",
+              description:
+                "Una vez eliminada la información no podrá ser recuperada.",
+            }).then((response) => {
+              if (response === "OK") {
+                removeRow(rowData.id);
+              }
+            });
+          }}
+          type="button"
+        >
+          <TrashSvg />
+        </button>
+      </WithTooltip>
+    </td>
+  );
 
   const renderRows = () => {
     let mapeable = filteredTableData.slice(
@@ -372,42 +446,50 @@ export const GenericDynamicTable = (props: Props) => {
           </div>
         )}
         <table className="w-full">
-          <thead>{renderHeader()}</thead>
+          {orientation === "horizontal" && <thead>{renderHeader()}</thead>}
           <tbody>{renderRows()}</tbody>
-          {footerRow && !editable ? (
-            <tfoot className="border-t-2 border-black">
-              <tr>
-                {Object.keys(footerRow ?? {})?.map((x, indx) => {
-                  return (
-                    <td className="align-middle" key={indx}>
-                      {(footerRow as any)[x]}
-                    </td>
-                  );
-                })}
-              </tr>
-            </tfoot>
-          ) : editable ? (
+          {editable && (
             <tfoot>
               <tr>
-                <td className="align-middle">
-                  <button
-                    className="bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded"
-                    onClick={(
-                      event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-                    ) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      addRow();
-                    }}
-                    type="button"
-                  >
-                    +
-                  </button>
+                <td
+                  colSpan={
+                    orientation === "horizontal" ? columns.length + 1 : 2
+                  }
+                  className="align-middle"
+                >
+                  {(!maxRows || tableData.length < maxRows) && (
+                    <button
+                      className="bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded"
+                      onClick={(
+                        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                      ) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        addRow();
+                      }}
+                      type="button"
+                    >
+                      +
+                    </button>
+                  )}
                 </td>
               </tr>
             </tfoot>
-          ) : (
-            <></>
+          )}
+          {footerRow && (
+            <tfoot className="border-t-2 border-black">
+              <tr>
+                {footerRow.map((column, index) => (
+                  <td
+                    key={index}
+                    colSpan={orientation === "vertical" ? 2 : 1}
+                    className={`align-middle ${column.className || ""}`}
+                  >
+                    {column.content}
+                  </td>
+                ))}
+              </tr>
+            </tfoot>
           )}
         </table>
         {paginated && totalPages() > 1 && (

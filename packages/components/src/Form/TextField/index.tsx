@@ -43,7 +43,7 @@ export const TextField = (props: Props) => {
     style,
     title,
     helpText,
-    className,
+    className = "",
     hint,
     required,
   } = props;
