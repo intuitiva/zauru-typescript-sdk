@@ -122,37 +122,45 @@ const useGetPesadas = (purchaseOrder, stocks_only_integer = false) => {
         const totales = [
             //#
             {
-                contennt: "",
+                content: "",
+                name: "id",
             },
             //baskets
             {
-                contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0))?.toString(),
+                content: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0))?.toString(),
+                name: "baskets",
             },
             //totalWeight
             {
-                contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0))?.toString(),
+                content: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0))?.toString(),
+                name: "totalWeight",
             },
             //discount
             {
-                contennt: "-",
+                content: "-",
+                name: "discount",
             },
             //netWeight
             {
-                contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0))?.toString(),
+                content: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0))?.toString(),
+                name: "netWeight",
             },
             //weightByBasket
             {
-                contennt: "-",
+                content: "-",
+                name: "weightByBasket",
             },
             //lbDiscounted
             {
-                contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(common_1.reduceAdd, 0))?.toString(),
+                content: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.lbDiscounted)).reduce(common_1.reduceAdd, 0))?.toString(),
+                name: "lbDiscounted",
             },
             //probableUtilization
             {
-                contennt: (0, common_1.toFixedIfNeeded)(tempPesadas
+                content: (0, common_1.toFixedIfNeeded)(tempPesadas
                     ?.map((x) => Number(x.probableUtilization))
                     .reduce(common_1.reduceAdd, 0)),
+                name: "probableUtilization",
             },
         ];
         const headers = [
@@ -236,23 +244,28 @@ const getPesadasByForm = (formInput, stocks_only_integer = false) => {
     const totales = [
         //#
         {
-            contennt: "",
+            content: "",
+            name: "id",
         },
         //baskets
         {
-            contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0))?.toString(),
+            content: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.baskets).reduce(common_1.reduceAdd, 0))?.toString(),
+            name: "baskets",
         },
         //totalWeight
         {
-            contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0))?.toString(),
+            content: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => x.totalWeight).reduce(common_1.reduceAdd, 0))?.toString(),
+            name: "totalWeight",
         },
         //netWeight
         {
-            contennt: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0))?.toString(),
+            content: (0, common_1.toFixedIfNeeded)(tempPesadas?.map((x) => Number(x.netWeight)).reduce(common_1.reduceAdd, 0))?.toString(),
+            name: "netWeight",
         },
         //weightByBasket
         {
-            contennt: "-",
+            content: "-",
+            name: "weightByBasket",
         },
     ];
     const headers = [
@@ -323,15 +336,18 @@ const useGetBasketDetails = (purchaseOrder) => {
         const totales = [
             //color
             {
-                contennt: "",
+                content: "",
+                name: "color",
             },
             //total
             {
-                contennt: (0, common_1.toFixedIfNeeded)(joinedBaskets?.map((x) => x.total).reduce(common_1.reduceAdd, 0))?.toString(),
+                content: (0, common_1.toFixedIfNeeded)(joinedBaskets?.map((x) => x.total).reduce(common_1.reduceAdd, 0))?.toString(),
+                name: "total",
             },
             //cc
             {
-                contennt: joinedBaskets?.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
+                content: joinedBaskets?.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
+                name: "cc",
             },
         ];
         const headers = [
@@ -399,15 +415,18 @@ const getBasketDetailsByForm = (formInput) => {
     const totales = [
         //color
         {
-            contennt: "",
+            content: "",
+            name: "color",
         },
         //total
         {
-            contennt: (0, common_1.toFixedIfNeeded)(basketDetailsArray.map((x) => x.total).reduce(common_1.reduceAdd, 0))?.toString(),
+            content: (0, common_1.toFixedIfNeeded)(basketDetailsArray.map((x) => x.total).reduce(common_1.reduceAdd, 0))?.toString(),
+            name: "total",
         },
         //cc
         {
-            contennt: basketDetailsArray.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
+            content: basketDetailsArray.map((x) => x.cc).reduce(common_1.reduceAdd, 0),
+            name: "cc",
         },
     ];
     // Definir los encabezados de la tabla

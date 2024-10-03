@@ -47,7 +47,12 @@ type PesadaBody = {
     probableUtilization: number;
     lbDiscounted: number;
 };
-export declare const useGetPesadas: (purchaseOrder?: PurchaseOrderGraphQL, stocks_only_integer?: boolean) => [PesadaBody[], any[], GenericDynamicTableColumn[]];
+export type FooterColumnConfig = {
+    content: React.ReactNode;
+    className?: string;
+    name?: string;
+};
+export declare const useGetPesadas: (purchaseOrder?: PurchaseOrderGraphQL, stocks_only_integer?: boolean) => [PesadaBody[], FooterColumnConfig[], GenericDynamicTableColumn[]];
 /**
  * Sirve para imprimir offline
  * @param formInput
@@ -56,7 +61,8 @@ export declare const useGetPesadas: (purchaseOrder?: PurchaseOrderGraphQL, stock
 export declare const getPesadasByForm: (formInput: FormInput, stocks_only_integer?: boolean) => {
     tempPesadas: PesadaBody[];
     totales: {
-        contennt: string;
+        content: string;
+        name: string;
     }[];
     headers: GenericDynamicTableColumn[];
 };
@@ -66,7 +72,7 @@ type BasketDetailsBody = {
     color: string;
     cc: number;
 };
-export declare const useGetBasketDetails: (purchaseOrder?: PurchaseOrderGraphQL) => [BasketDetailsBody[], any[], GenericDynamicTableColumn[]];
+export declare const useGetBasketDetails: (purchaseOrder?: PurchaseOrderGraphQL) => [BasketDetailsBody[], FooterColumnConfig[], GenericDynamicTableColumn[]];
 /**
  * Para imprimir en modo offline
  * @param formInput
@@ -75,9 +81,11 @@ export declare const useGetBasketDetails: (purchaseOrder?: PurchaseOrderGraphQL)
 export declare const getBasketDetailsByForm: (formInput: FormInput) => {
     basketDetailsArray: BasketDetailsBody[];
     totales: ({
-        contennt: string;
+        content: string;
+        name: string;
     } | {
-        contennt: number;
+        content: number;
+        name: string;
     })[];
     headers: GenericDynamicTableColumn[];
 };
