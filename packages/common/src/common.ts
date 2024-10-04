@@ -718,7 +718,7 @@ export function calculateTimeDifference(timestamp: string): {
  * // With suffix
  * createCode("INV"); // Returns something like "INV-1A2B3C4D"
  */
-export function createCode(suffix: string | null): string {
+export function createCode(suffix?: string | null): string {
   const timestamp = Math.floor(Date.now() / 1000)
     .toString(36)
     .toUpperCase(); // Timestamp in base 36 and converted to uppercase
