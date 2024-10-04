@@ -1436,7 +1436,7 @@ __metadata:
     "@zauru-sdk/hooks": "npm:^2.0.11"
     "@zauru-sdk/icons": "npm:^2.0.0"
     "@zauru-sdk/types": "npm:^2.0.10"
-    "@zauru-sdk/utils": "npm:^2.0.11"
+    "@zauru-sdk/utils": "npm:^2.0.12"
     framer-motion: "npm:^11.7.0"
     jsonwebtoken: "npm:^9.0.2"
     postcss: "npm:^8.4.35"
@@ -1539,7 +1539,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/utils@npm:^2.0.11, @zauru-sdk/utils@workspace:packages/utils":
+"@zauru-sdk/utils@npm:^2.0.12, @zauru-sdk/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/utils@workspace:packages/utils"
   dependencies:
