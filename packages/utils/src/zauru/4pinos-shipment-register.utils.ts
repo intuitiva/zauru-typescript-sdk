@@ -1,5 +1,9 @@
 import { Session } from "@remix-run/node";
-import { getHeaders, getSession } from "@zauru-sdk/services";
+import {
+  getHeaders,
+  getSession,
+  updateReceivedPurchaseOrder,
+} from "@zauru-sdk/services";
 import { QueueShipmentsForm } from "@zauru-sdk/types";
 import { WebAppRowGraphQL } from "@zauru-sdk/types";
 import { updateQueueShipmentsFormHistory } from "./4pinos-shipments-form-history.utils.js";
@@ -26,7 +30,39 @@ export const register4pinosShipment = async ({
   const session = await getSession(cookie);
   const headers = await getHeaders(cookie, session);
 
-  console.log(values);
+  try {
+    //PASO 1: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA
+    for (const purchaseOrder of values.purchase_orders) {
+      const response = await updateReceivedPurchaseOrder(
+        headers,
+        {
+          purchase_order: {
+            shipment_number: values.shipment_number,
+          },
+        },
+        purchaseOrder.id
+      );
+
+      if (response.error) {
+        throw new Error(
+          `Error al actualizar la orden de compra ${purchaseOrder.id}: ${response.userMsg}`
+        );
+      }
+    }
+  } catch (e) {
+    console.log("========================================>");
+    console.log("paso -1: ACTUALIZAR EL REGISTRO DE LA COLA A ERROR");
+    console.error(`Error: ${e?.toString()}, idWebAppTable: ${idWebAppTable}`);
+    await updateQueueShipmentsFormHistory(
+      headers,
+      session,
+      {
+        estado: ESTADOS_COLA_RECEPCIONES.ERROR,
+        description: e?.toString(),
+      },
+      idWebAppTable
+    );
+  }
 };
 
 export const retryShipmennt = async (

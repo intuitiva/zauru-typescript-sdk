@@ -271,6 +271,7 @@ export type PurchasesDataTableListFormatedSchema = {
 
 export type UpdatePurchaseOrderBody = {
   purchase_order: {
+    shipment_number?: string;
     id_number?: string;
     discount?: number;
     other_charges?: number;
