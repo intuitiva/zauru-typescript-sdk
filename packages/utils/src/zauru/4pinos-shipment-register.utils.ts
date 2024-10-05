@@ -6,7 +6,10 @@ import {
 } from "@zauru-sdk/services";
 import { QueueShipmentsForm } from "@zauru-sdk/types";
 import { WebAppRowGraphQL } from "@zauru-sdk/types";
-import { updateQueueShipmentsFormHistory } from "./4pinos-shipments-form-history.utils.js";
+import {
+  deleteQueueShipmentsFormHistory,
+  updateQueueShipmentsFormHistory,
+} from "./4pinos-shipments-form-history.utils.js";
 import { ESTADOS_COLA_RECEPCIONES } from "./4pinos-receptions-form-history.utils.js";
 
 export const register4pinosShipment = async ({
@@ -49,6 +52,15 @@ export const register4pinosShipment = async ({
         );
       }
     }
+
+    console.log("========================================>");
+    console.log("paso 4: ELIMINAR EL REGISTRO DE LA COLA");
+    //ELIMINAR EL REGISTRO DE LA COLA
+    await deleteQueueShipmentsFormHistory(
+      headers,
+      session,
+      idWebAppTable.toString()
+    );
   } catch (e) {
     console.log("========================================>");
     console.log("paso -1: ACTUALIZAR EL REGISTRO DE LA COLA A ERROR");

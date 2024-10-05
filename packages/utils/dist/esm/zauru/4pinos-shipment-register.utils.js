@@ -1,5 +1,5 @@
 import { getHeaders, getSession, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
-import { updateQueueShipmentsFormHistory } from "./4pinos-shipments-form-history.utils.js";
+import { deleteQueueShipmentsFormHistory, updateQueueShipmentsFormHistory, } from "./4pinos-shipments-form-history.utils.js";
 import { ESTADOS_COLA_RECEPCIONES } from "./4pinos-receptions-form-history.utils.js";
 export const register4pinosShipment = async ({ cookie, idWebAppTable, agency_id, values, }) => {
     const session = await getSession(cookie);
@@ -16,6 +16,10 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, agency_id,
                 throw new Error(`Error al actualizar la orden de compra ${purchaseOrder.id}: ${response.userMsg}`);
             }
         }
+        console.log("========================================>");
+        console.log("paso 4: ELIMINAR EL REGISTRO DE LA COLA");
+        //ELIMINAR EL REGISTRO DE LA COLA
+        await deleteQueueShipmentsFormHistory(headers, session, idWebAppTable.toString());
     }
     catch (e) {
         console.log("========================================>");
