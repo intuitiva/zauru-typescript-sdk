@@ -1,3 +1,6 @@
+import { Session } from "@remix-run/node";
+import { QueueShipmentsForm } from "@zauru-sdk/types";
+import { WebAppRowGraphQL } from "@zauru-sdk/types";
 export declare const register4pinosShipment: ({ cookie, idWebAppTable, agency_id, values, }: {
     cookie: string;
     idWebAppTable: number;
@@ -14,3 +17,9 @@ export declare const register4pinosShipment: ({ cookie, idWebAppTable, agency_id
         }[];
     };
 }) => Promise<void>;
+export declare const retryShipmennt: (register: WebAppRowGraphQL<QueueShipmentsForm>, session: Session, headers: any, hostname: string, cookie: string | null) => Promise<{
+    error: boolean;
+    title: string;
+    type: string;
+    description: string;
+}>;
