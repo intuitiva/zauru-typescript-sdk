@@ -71,6 +71,7 @@ export type ShipmentGraphQL = {
     id_number: string;
     reference: string;
     planned_delivery: string;
+    planned_shipping: string;
     agency_from_id: number;
     agency_to_id: number;
     transporter_id: number;

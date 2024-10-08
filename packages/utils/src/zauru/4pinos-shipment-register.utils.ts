@@ -2,6 +2,7 @@ import { Session } from "@remix-run/node";
 import {
   getHeaders,
   getSession,
+  insertBookings,
   updateReceivedPurchaseOrder,
 } from "@zauru-sdk/services";
 import { InsertBookingBody, QueueShipmentsForm } from "@zauru-sdk/types";
@@ -53,11 +54,32 @@ export const register4pinosShipment = async ({
     }
 
     //PASO 2: CREAR EL ENVIO
-
-    //const createShipmentResponse = await shipment;
+    const shipmentBody: InsertBookingBody = {
+      reference: `Envío: ${values.shipment_number} realizado desde la aplicación web.`,
+      agency_from_id: values.agency_from,
+      agency_to_id: values.agency_to,
+      transporter_id: values.transporter_id,
+      planned_delivery: values.planned_delivery,
+      planned_shipping: values.planned_shipping,
+      movements: values.purchase_orders.map((purchaseOrder) => ({
+        lot_id: purchaseOrder.lot_id,
+      })),
+    };
 
     console.log("========================================>");
-    console.log("paso 4: ELIMINAR EL REGISTRO DE LA COLA");
+    console.log("Enviando: ", JSON.stringify(shipmentBody));
+    const createBookingResponse = await insertBookings(headers, shipmentBody);
+
+    if (createBookingResponse.error) {
+      throw new Error(
+        `Error al crear el envío: ${
+          createBookingResponse.userMsg
+        } con el body: ${JSON.stringify(shipmentBody)}`
+      );
+    }
+
+    console.log("========================================>");
+    console.log("paso 3: ELIMINAR EL REGISTRO DE LA COLA");
     //ELIMINAR EL REGISTRO DE LA COLA
     await deleteQueueShipmentsFormHistory(
       headers,
