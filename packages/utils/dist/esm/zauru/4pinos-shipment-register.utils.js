@@ -6,6 +6,8 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, values, })
     const headers = await getHeaders(cookie, session);
     try {
         //PASO 1: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA
+        console.log("========================================>");
+        console.log("paso 1: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA");
         for (const purchaseOrder of values.purchase_orders) {
             const response = await updateReceivedPurchaseOrder(headers, {
                 purchase_order: {
@@ -29,6 +31,7 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, values, })
             })),
         };
         console.log("========================================>");
+        console.log("paso 2: CREAR EL ENVIO");
         console.log("Enviando: ", JSON.stringify(shipmentBody));
         const createBookingResponse = await insertBookings(headers, shipmentBody);
         if (createBookingResponse.error) {
