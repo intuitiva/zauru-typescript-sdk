@@ -717,7 +717,8 @@ export type QueueShipmentsForm = {
   formSubmited: {
     agency_from: number;
     transporter_id: number;
-    date: string;
+    planned_shipping: string;
+    planned_delivery: string;
     shipment_number: string;
     agency_to: number;
     purchase_orders: { id: number; lot_id: number }[];

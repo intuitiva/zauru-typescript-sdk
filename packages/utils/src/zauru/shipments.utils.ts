@@ -1,7 +1,22 @@
 import type { Session } from "@remix-run/node";
-import { getDatePickerCurrentDate, handlePossibleAxiosErrors, reduceAdd } from "@zauru-sdk/common";
-import { getDeliveryByBooking, getMyAgencyLotStocks, getShipmentsByToAgencyLast100Id_booking, getVariablesByName, insertBookings } from "@zauru-sdk/services";
-import { AxiosUtilsResponse, InsertBookingBody, MovementGraphQL, ShipmentGraphQL } from "@zauru-sdk/types";
+import {
+  getDatePickerCurrentDate,
+  handlePossibleAxiosErrors,
+  reduceAdd,
+} from "@zauru-sdk/common";
+import {
+  getDeliveryByBooking,
+  getMyAgencyLotStocks,
+  getShipmentsByToAgencyLast100Id_booking,
+  getVariablesByName,
+  insertBookings,
+} from "@zauru-sdk/services";
+import {
+  AxiosUtilsResponse,
+  InsertBookingBody,
+  MovementGraphQL,
+  ShipmentGraphQL,
+} from "@zauru-sdk/types";
 
 /**
  *

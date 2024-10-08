@@ -1,7 +1,7 @@
 import { getHeaders, getSession, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
 import { deleteQueueShipmentsFormHistory, updateQueueShipmentsFormHistory, } from "./4pinos-shipments-form-history.utils.js";
 import { ESTADOS_COLA_RECEPCIONES } from "./4pinos-receptions-form-history.utils.js";
-export const register4pinosShipment = async ({ cookie, idWebAppTable, agency_id, values, }) => {
+export const register4pinosShipment = async ({ cookie, idWebAppTable, values, }) => {
     const session = await getSession(cookie);
     const headers = await getHeaders(cookie, session);
     try {
@@ -16,6 +16,8 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, agency_id,
                 throw new Error(`Error al actualizar la orden de compra ${purchaseOrder.id}: ${response.userMsg}`);
             }
         }
+        //PASO 2: CREAR EL ENVIO
+        //const createShipmentResponse = await shipment;
         console.log("========================================>");
         console.log("paso 4: ELIMINAR EL REGISTRO DE LA COLA");
         //ELIMINAR EL REGISTRO DE LA COLA
@@ -50,7 +52,6 @@ export const retryShipmennt = async (register, session, headers, hostname, cooki
             values: register.data?.formSubmited,
             cookie: cookie || "",
             idWebAppTable: register.id,
-            agency_id: register.data?.agency_id,
         });
     }
     else {
@@ -62,7 +63,6 @@ export const retryShipmennt = async (register, session, headers, hostname, cooki
                 values: register.data?.formSubmited,
                 cookie: cookie || "",
                 idWebAppTable: register.id,
-                agency_id: register.data?.agency_id,
             }),
         });
     }
