@@ -21,8 +21,9 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, values, })
         //PASO 2: CREAR EL ENVIO
         const shipmentBody = {
             reference: `Envío: ${values.shipment_number} realizado desde la aplicación web.`,
-            agency_from_id: values.agency_from,
-            agency_to_id: values.agency_to,
+            agency_from_id: values.agency_from_id,
+            agency_to_id: values.agency_to_id,
+            booker_id: values.booker_id,
             transporter_id: values.transporter_id,
             planned_delivery: values.planned_delivery,
             planned_shipping: values.planned_shipping,

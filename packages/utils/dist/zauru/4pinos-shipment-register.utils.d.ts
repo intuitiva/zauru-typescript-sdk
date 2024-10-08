@@ -5,12 +5,13 @@ export declare const register4pinosShipment: ({ cookie, idWebAppTable, values, }
     cookie: string;
     idWebAppTable: number;
     values: {
-        agency_from: number;
+        booker_id: number;
+        agency_from_id: number;
         transporter_id: number;
         planned_shipping: string;
         planned_delivery: string;
         shipment_number: string;
-        agency_to: number;
+        agency_to_id: number;
         purchase_orders: {
             id: number;
             lot_id: number;

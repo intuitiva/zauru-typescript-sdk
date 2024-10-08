@@ -21,12 +21,13 @@ export const register4pinosShipment = async ({
   cookie: string;
   idWebAppTable: number;
   values: {
-    agency_from: number;
+    booker_id: number;
+    agency_from_id: number;
     transporter_id: number;
     planned_shipping: string;
     planned_delivery: string;
     shipment_number: string;
-    agency_to: number;
+    agency_to_id: number;
     purchase_orders: { id: number; lot_id: number }[];
   };
 }) => {
@@ -60,8 +61,9 @@ export const register4pinosShipment = async ({
     //PASO 2: CREAR EL ENVIO
     const shipmentBody: InsertBookingBody = {
       reference: `Envío: ${values.shipment_number} realizado desde la aplicación web.`,
-      agency_from_id: values.agency_from,
-      agency_to_id: values.agency_to,
+      agency_from_id: values.agency_from_id,
+      agency_to_id: values.agency_to_id,
+      booker_id: values.booker_id,
       transporter_id: values.transporter_id,
       planned_delivery: values.planned_delivery,
       planned_shipping: values.planned_shipping,
