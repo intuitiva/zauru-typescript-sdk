@@ -512,8 +512,8 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
     poDetailTagId?: number;
-    withShipmentToMyAgency?: boolean;
-    withLotStocksToMyAgency?: boolean;
+    onlyWithShipmentToMyAgency?: boolean;
+    onlyWithLotStocksToMyAgency?: boolean;
     itemId?: number | string;
     payeeCategoryId?: number | string;
     payeeId?: number | string;
@@ -524,6 +524,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     withWebAppRows?: boolean;
     payeeCategoryIds?: number[];
     excludePayeeCategoryIds?: number[];
+    withLotStocks?: boolean;
     discountComparisonOperator?:
       | "_eq"
       | "_neq"
@@ -542,8 +543,8 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       agencyFilter: true,
       consolidateIdFilter: false,
       useProductionAgencyId: false,
-      withShipmentToMyAgency: false,
-      withLotStocksToMyAgency: false,
+      onlyWithShipmentToMyAgency: false,
+      onlyWithLotStocksToMyAgency: false,
       betweenIssueDate: false,
       withPODetails: true,
       withLots: true,
@@ -551,6 +552,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       withWebAppRows: true,
       payeeCategoryIds: [],
       excludePayeeCategoryIds: [],
+      withLotStocks: false,
     };
 
     // Combinar config con los valores por defecto
@@ -578,7 +580,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
         consolidateIdFilter: finalConfig.consolidateIdFilter,
         lotItemIdExclusion: finalConfig.lotItemIdExclusion,
         poDetailTagId: finalConfig.poDetailTagId,
-        withLotStocks: finalConfig.withLotStocksToMyAgency,
+        withLotStocks: finalConfig.withLotStocks,
         itemId: finalConfig.itemId,
         payeeCategoryId: finalConfig.payeeCategoryId,
         betweenIssueDate: finalConfig.betweenIssueDate,
@@ -615,7 +617,10 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     let responseData: PurchaseOrderGraphQL[] =
       response.data.data.purchase_orders;
 
-    if (finalConfig.withShipmentToMyAgency) {
+    if (
+      finalConfig.onlyWithShipmentToMyAgency &&
+      finalConfig.withShipmentPurchaseOrders
+    ) {
       responseData = response.data?.data?.purchase_orders.filter((x) =>
         x.shipment_purchase_orders.some(
           (y) => y.shipment.agency_to_id?.toString() == session.get("agency_id")
@@ -623,7 +628,11 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       );
     }
 
-    if (finalConfig.withLotStocksToMyAgency && finalConfig.withLots) {
+    if (
+      finalConfig.onlyWithLotStocksToMyAgency &&
+      finalConfig.withLots &&
+      finalConfig.withLotStocks
+    ) {
       responseData = responseData.map((x) => {
         x.lots = x.lots.map((y) => {
           y.lot_stocks = y.lot_stocks.filter(
