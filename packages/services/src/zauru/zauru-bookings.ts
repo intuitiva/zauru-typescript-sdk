@@ -35,8 +35,6 @@ export const insertBookings = async (
       sendBody[`temp_purchase_order_id`] = `${temp_purchase_order_id}`;
     }
 
-    console.log("REALIZANDO ENVIO, ENVIANDO: ", JSON.stringify(sendBody));
-
     const response = await httpZauru.post<ShipmentGraphQL>(
       `/inventories/bookings.json`,
       sendBody,

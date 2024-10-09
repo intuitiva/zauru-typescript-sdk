@@ -26,7 +26,7 @@ export const register4pinosShipment = async ({
     transporter_id: number;
     planned_shipping: string;
     planned_delivery: string;
-    shipment_number: string;
+    shipment_reference: string;
     agency_to_id: number;
     purchase_orders: {
       id: number;
@@ -50,7 +50,7 @@ export const register4pinosShipment = async ({
         headers,
         {
           purchase_order: {
-            shipment_number: values.shipment_number,
+            shipment_reference: values.shipment_reference,
           },
         },
         purchaseOrder.id
@@ -65,11 +65,11 @@ export const register4pinosShipment = async ({
 
     //PASO 2: CREAR EL ENVIO
     const shipmentBody: InsertBookingBody = {
-      reference: `Envío: ${values.shipment_number} realizado desde la aplicación web.`,
+      reference: `Envío: ${values.shipment_reference} realizado desde la aplicación web.`,
       agency_from_id: values.agency_from_id,
       agency_to_id: values.agency_to_id,
       booker_id: values.booker_id,
-      id_number: values.shipment_number,
+      id_number: values.shipment_reference,
       transporter_id: values.transporter_id,
       planned_delivery: values.planned_delivery,
       planned_shipping: values.planned_shipping,
@@ -147,7 +147,7 @@ export const retryShipmennt = async (
   if (hostname.includes("localhost")) {
     console.log(
       "------- EJECUTANDO LOCALMENTE",
-      ` para ${register.data?.formSubmited?.shipment_number}`
+      ` para ${register.data?.formSubmited?.shipment_reference}`
     );
     register4pinosShipment({
       values: register.data?.formSubmited,
@@ -157,7 +157,7 @@ export const retryShipmennt = async (
   } else {
     console.log(
       "------- ENVIANDO A EJECUTAR NETLIFY FUNCTION: 4pinosNewShipment-background",
-      ` para ${register.data?.formSubmited?.shipment_number}`
+      ` para ${register.data?.formSubmited?.shipment_reference}`
     );
     fetch(
       `https://${hostname}/.netlify/functions/4pinosNewShipment-background`,
