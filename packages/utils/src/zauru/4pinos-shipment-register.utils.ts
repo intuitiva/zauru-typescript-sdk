@@ -69,6 +69,7 @@ export const register4pinosShipment = async ({
       agency_from_id: values.agency_from_id,
       agency_to_id: values.agency_to_id,
       booker_id: values.booker_id,
+      id_number: values.shipment_number,
       transporter_id: values.transporter_id,
       planned_delivery: values.planned_delivery,
       planned_shipping: values.planned_shipping,
