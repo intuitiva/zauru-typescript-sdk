@@ -8,6 +8,7 @@ export declare function getShipments(session: Session, config: {
     suffix?: string;
     id_number?: string;
     id_number_not_null?: boolean;
+    id_number_not_equal?: string;
 }): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>>;
 /**
  * receiveShipment_booking

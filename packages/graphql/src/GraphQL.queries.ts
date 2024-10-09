@@ -161,6 +161,7 @@ export const getLast100ShipmentsStringQuery = ({
   shipped = false,
   delivered = false,
   id_number_not_null = false,
+  id_number_not_equal,
   id_number,
 }: {
   agency_to_id?: number;
@@ -170,6 +171,7 @@ export const getLast100ShipmentsStringQuery = ({
   shipped?: boolean;
   delivered?: boolean;
   id_number?: string;
+  id_number_not_equal?: string;
 }) => {
   let conditions = [];
 
@@ -191,6 +193,10 @@ export const getLast100ShipmentsStringQuery = ({
 
   if (id_number) {
     conditions.push(`id_number: {_eq: "${id_number}"}`);
+  }
+
+  if (id_number_not_equal) {
+    conditions.push(`id_number: {_neq: "${id_number_not_equal}"}`);
   }
 
   return `query getLast100Shipments {

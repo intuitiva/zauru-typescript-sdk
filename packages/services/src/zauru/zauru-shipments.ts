@@ -16,6 +16,7 @@ export async function getShipments(
     suffix?: string;
     id_number?: string;
     id_number_not_null?: boolean;
+    id_number_not_equal?: string;
   }
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
@@ -26,7 +27,10 @@ export async function getShipments(
       suffix: config.suffix,
       id_number: config.id_number,
       id_number_not_null: config.id_number_not_null,
+      id_number_not_equal: config.id_number_not_equal,
     });
+
+    console.log("query", query);
 
     const response = await httpGraphQLAPI.post<{
       data: { shipments: ShipmentGraphQL[] };
