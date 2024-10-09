@@ -6,10 +6,12 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, apiStep, v
     const headers = await getHeaders(cookie, session);
     let proccess_step = apiStep ?? 1;
     try {
+        //TODO: VERIFICAR SI EL ENVIO YA EXISTE
         if (proccess_step === 1) {
             //PASO 1: CREAR EL ENVIO
             const shipmentBody = {
-                reference: `Envío: ${values.shipment_reference} realizado desde la aplicación web.`,
+                memo: values?.memo || "",
+                reference: `Envío: ${values.shipment_reference} realizado desde la aplicación web de recepciones.`,
                 agency_from_id: values.agency_from_id,
                 agency_to_id: values.agency_to_id,
                 booker_id: values.booker_id,

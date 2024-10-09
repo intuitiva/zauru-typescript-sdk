@@ -30,6 +30,7 @@ export const register4pinosShipment = async ({
     planned_delivery: string;
     shipment_reference: string;
     agency_to_id: number;
+    memo?: string;
     purchase_orders: {
       id: number;
       lot_id: number;
@@ -43,10 +44,12 @@ export const register4pinosShipment = async ({
   let proccess_step = apiStep ?? 1;
 
   try {
+    //TODO: VERIFICAR SI EL ENVIO YA EXISTE
     if (proccess_step === 1) {
       //PASO 1: CREAR EL ENVIO
       const shipmentBody: InsertBookingBody = {
-        reference: `Envío: ${values.shipment_reference} realizado desde la aplicación web.`,
+        memo: values?.memo || "",
+        reference: `Envío: ${values.shipment_reference} realizado desde la aplicación web de recepciones.`,
         agency_from_id: values.agency_from_id,
         agency_to_id: values.agency_to_id,
         booker_id: values.booker_id,

@@ -3,7 +3,12 @@ import { AxiosUtilsResponse, ShipmentGraphQL } from "@zauru-sdk/types";
 /**
  * getShipments
  */
-export declare function getShipments(session: Session, agency_to_id: string | number, suffix?: string): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>>;
+export declare function getShipments(session: Session, config: {
+    agency_to_id: string | number;
+    suffix?: string;
+    id_number?: string;
+    id_number_not_null?: boolean;
+}): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>>;
 /**
  * receiveShipment_booking
  * @param headers

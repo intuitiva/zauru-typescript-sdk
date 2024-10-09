@@ -28,7 +28,9 @@ export const getShipmentsToMyAgency = async (
   session: Session
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
-    const response = await getShipments(session, session.get("agency_id"));
+    const response = await getShipments(session, {
+      agency_to_id: session.get("agency_id"),
+    });
 
     if (response.error) {
       throw new Error(

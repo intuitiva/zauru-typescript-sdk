@@ -11,18 +11,22 @@ import httpZauru from "./httpZauru.js";
  */
 export async function getShipments(
   session: Session,
-  agency_to_id: string | number,
-  suffix?: string
+  config: {
+    agency_to_id: string | number;
+    suffix?: string;
+    id_number?: string;
+    id_number_not_null?: boolean;
+  }
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
     const query = getLast100ShipmentsStringQuery({
-      agency_to_id: Number(agency_to_id),
-      suffix,
+      agency_to_id: Number(config.agency_to_id),
+      suffix: config.suffix,
+      id_number: config.id_number,
+      id_number_not_null: config.id_number_not_null,
     });
-
-    console.log("BUSCANDO: ", JSON.stringify({ query }));
 
     const response = await httpGraphQLAPI.post<{
       data: { shipments: ShipmentGraphQL[] };
