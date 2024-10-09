@@ -3,8 +3,9 @@ export declare const getPurchaseOrderByIdNumberStringQuery: (id_number: string) 
 export declare const getPurchaseOrderStringQuery: (id: number, config?: {
     withLotStocks: boolean;
 }) => string;
-export declare const getLast100ShipmentsStringQuery: ({ agency_to_id, suffix, voided, shipped, delivered, id_number_not_null, id_number, id_number_not_empty, }: {
+export declare const getLast100ShipmentsStringQuery: ({ agency_to_id, agency_from_id, suffix, voided, id_number_not_null, id_number, id_number_not_empty, }: {
     agency_to_id?: number;
+    agency_from_id?: number;
     suffix?: string;
     id_number_not_null?: boolean;
     voided?: boolean;

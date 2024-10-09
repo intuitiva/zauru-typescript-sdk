@@ -11,12 +11,14 @@ export async function getShipments(session, config) {
         const headers = await getGraphQLAPIHeaders(session);
         const query = getLast100ShipmentsStringQuery({
             agency_to_id: Number(config.agency_to_id),
+            agency_from_id: config.agency_from_id
+                ? Number(config.agency_from_id)
+                : undefined,
             suffix: config.suffix,
             id_number: config.id_number,
             id_number_not_null: config.id_number_not_null,
             id_number_not_empty: config.id_number_not_empty,
         });
-        console.log("query", query);
         const response = await httpGraphQLAPI.post("", {
             query,
         }, { headers });
@@ -39,6 +41,20 @@ export async function receiveShipment_booking(headers, id) {
         if (!response.data) {
             throw new Error("Sin respuesta de: /inventories/bookings/id/deliver.json");
         }
+        return true;
+    });
+}
+/**
+ * despacharShipment_booking
+ * Esta función cambia el atributo 'shipment' de los envíos a 'true', lo que indica que el envío está en tránsito.
+ * Esto es utilizado para marcar los envíos que necesitan ser entregados en las tablas como "En tránsito".
+ * @param headers
+ * @param id
+ * @returns
+ */
+export async function despacharShipment_booking(headers, id) {
+    return handlePossibleAxiosErrors(async () => {
+        await httpZauru.get(`/inventories/bookings/${id}/ship`, { headers });
         return true;
     });
 }
