@@ -158,7 +158,15 @@ export const getShipmentsByToAgencyLast100StringQuery = (
   agency_to_id: number
 ) => `
 query getShipmentsByToAgencyLast100 {
-    shipments(limit: 100, order_by: {id: desc}, where: {voided: {_eq: false}, shipped: {_eq: false}, delivered: {_eq: false}, agency_to_id: {_eq: ${agency_to_id}}}) {
+  shipments(
+    limit: 100, 
+    order_by: {id: desc}, 
+    where: {
+        voided: {_eq: false}, 
+        shipped: {_eq: false}, 
+        delivered: {_eq: false}, 
+        agency_to_id: {_eq: ${agency_to_id}}
+      }) {
       id
       zid
       id_number
