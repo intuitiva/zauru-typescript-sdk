@@ -152,12 +152,11 @@ query getPurchaseOrder($id: bigint) @cached {
 }
 `;
 exports.getPurchaseOrderStringQuery = getPurchaseOrderStringQuery;
-const getLast100ShipmentsStringQuery = ({ agency_to_id, suffix, }) => {
-    let conditions = [
-        "voided: {_eq: false}",
-        "shipped: {_eq: false}",
-        "delivered: {_eq: false}",
-    ];
+const getLast100ShipmentsStringQuery = ({ agency_to_id, suffix, voided = false, shipped = false, delivered = false, }) => {
+    let conditions = [];
+    conditions.push(`voided: {_eq: ${voided}}`);
+    conditions.push(`shipped: {_eq: ${shipped}}`);
+    conditions.push(`delivered: {_eq: ${delivered}}`);
     if (suffix) {
         conditions.push(`id_number: {_ilike: "%${suffix}%"}`);
     }
