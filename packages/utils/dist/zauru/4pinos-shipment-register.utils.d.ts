@@ -16,6 +16,7 @@ export declare const register4pinosShipment: ({ cookie, idWebAppTable, values, }
             id: number;
             lot_id: number;
             booked_quantity: number;
+            item_id: number;
         }[];
     };
 }) => Promise<void>;
