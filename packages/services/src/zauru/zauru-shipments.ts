@@ -3,15 +3,16 @@ import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { AxiosUtilsResponse, ShipmentGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
-import { getShipmentsByToAgencyLast100StringQuery } from "@zauru-sdk/graphql";
+import { getLast100ShipmentsStringQuery } from "@zauru-sdk/graphql";
 import httpZauru from "./httpZauru.js";
 
 /**
- * getShipmentsByToAgencyLast100Id_booking
+ * getShipments
  */
-export async function getShipmentsByToAgencyLast100Id_booking(
+export async function getShipments(
   session: Session,
-  agency_to_id: string | number
+  agency_to_id: string | number,
+  suffix?: string
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -25,7 +26,10 @@ export async function getShipmentsByToAgencyLast100Id_booking(
     }>(
       "",
       {
-        query: getShipmentsByToAgencyLast100StringQuery(Number(agency_to_id)),
+        query: getLast100ShipmentsStringQuery({
+          agency_to_id: Number(agency_to_id),
+          suffix,
+        }),
       },
       { headers }
     );

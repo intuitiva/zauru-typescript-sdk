@@ -7,7 +7,7 @@ import {
 import {
   getDeliveryByBooking,
   getMyAgencyLotStocks,
-  getShipmentsByToAgencyLast100Id_booking,
+  getShipments,
   getVariablesByName,
   insertBookings,
 } from "@zauru-sdk/services";
@@ -28,10 +28,7 @@ export const getShipmentsToMyAgency = async (
   session: Session
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
-    const response = await getShipmentsByToAgencyLast100Id_booking(
-      session,
-      session.get("agency_id")
-    );
+    const response = await getShipments(session, session.get("agency_id"));
 
     if (response.error) {
       throw new Error(

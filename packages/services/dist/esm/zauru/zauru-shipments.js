@@ -1,16 +1,19 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
-import { getShipmentsByToAgencyLast100StringQuery } from "@zauru-sdk/graphql";
+import { getLast100ShipmentsStringQuery } from "@zauru-sdk/graphql";
 import httpZauru from "./httpZauru.js";
 /**
- * getShipmentsByToAgencyLast100Id_booking
+ * getShipments
  */
-export async function getShipmentsByToAgencyLast100Id_booking(session, agency_to_id) {
+export async function getShipments(session, agency_to_id, suffix) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getShipmentsByToAgencyLast100StringQuery(Number(agency_to_id)),
+            query: getLast100ShipmentsStringQuery({
+                agency_to_id: Number(agency_to_id),
+                suffix,
+            }),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

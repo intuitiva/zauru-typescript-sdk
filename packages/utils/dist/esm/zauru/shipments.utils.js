@@ -1,5 +1,5 @@
 import { getDatePickerCurrentDate, handlePossibleAxiosErrors, reduceAdd, } from "@zauru-sdk/common";
-import { getDeliveryByBooking, getMyAgencyLotStocks, getShipmentsByToAgencyLast100Id_booking, getVariablesByName, insertBookings, } from "@zauru-sdk/services";
+import { getDeliveryByBooking, getMyAgencyLotStocks, getShipments, getVariablesByName, insertBookings, } from "@zauru-sdk/services";
 /**
  *
  * @param headers
@@ -8,7 +8,7 @@ import { getDeliveryByBooking, getMyAgencyLotStocks, getShipmentsByToAgencyLast1
  */
 export const getShipmentsToMyAgency = async (session) => {
     return handlePossibleAxiosErrors(async () => {
-        const response = await getShipmentsByToAgencyLast100Id_booking(session, session.get("agency_id"));
+        const response = await getShipments(session, session.get("agency_id"));
         if (response.error) {
             throw new Error(`Ocurrió un error al consultar los envíos a mi agencia actual: ${response.userMsg}`);
         }

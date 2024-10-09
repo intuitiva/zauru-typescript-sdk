@@ -54,6 +54,7 @@ export const register4pinosShipment = async ({
         transporter_id: values.transporter_id,
         planned_delivery: values.planned_delivery,
         planned_shipping: values.planned_shipping,
+        needs_transport: true,
         movements: values.purchase_orders.map((purchaseOrder) => ({
           lot_id: purchaseOrder.lot_id,
           booked_quantity: purchaseOrder.booked_quantity,
@@ -74,6 +75,8 @@ export const register4pinosShipment = async ({
         );
       }
     }
+
+    proccess_step++;
 
     if (proccess_step === 2) {
       //PASO 2: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA
@@ -99,6 +102,8 @@ export const register4pinosShipment = async ({
         }
       }
     }
+
+    proccess_step++;
 
     console.log("========================================>");
     console.log("paso 3: ELIMINAR EL REGISTRO DE LA COLA");

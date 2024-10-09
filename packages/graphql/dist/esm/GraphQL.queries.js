@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPrintTemplatesStringQuery = exports.getCasesByResponsibleIdStringQuery = exports.getInvoicesByAgencyIdStringQuery = exports.getPaymentTermByIdStringQuery = exports.getPaymentMethodsStringQuery = exports.getPaymentTermsStringQuery = exports.getSuggestedPricesStringQuery = exports.getCurrenciesStringQuery = exports.getInvoiceFormSubmissionsByInvoiceIdStringQuery = exports.getLastInvoiceFormSubmissionStringQuery = exports.getInvoiceFormSubmissionsByAgencyIdStringQuery = exports.getFormSubmissionByIdStringQuery = exports.getMyCaseFormSubmissionsStringQuery = exports.getFormsByDocumentTypeStringQuery = exports.getFormsStringQuery = exports.getFormByNameStringQuery = exports.getAllFormsStringQuery = exports.getShipmentsStringQuery = exports.getItemByNameStringQuery = exports.getBundleByNameStringQuery = exports.getBundlesByItemCategoryIdStringQuery = exports.getEmployeesByAgencyIdStringQuery = exports.getEmployeesStringQuery = exports.getEmployeeProfileStringQuery = exports.getConsolidatesBetweenDatesStringQuery = exports.getItemsBySuperCategoryStringQuery = exports.getItemsStringQuery = exports.getItemsByCategoryStringQuery = exports.getItemCategoryByIdStringQuery = exports.getSuperCategoryByIdStringQuery = exports.getPayeeByIdStringQuery = exports.getClientCategoriesStringQuery = exports.getProviderCategoriesStringQuery = exports.getPayeeCategoriesStringQuery = exports.getPayeeCategoriesByNotesMatchStringQuery = exports.getPayeeCategoryByIdStringQuery = exports.getWebAppRowsByWebAppTableIdStringQuery = exports.getWebAppRowStringQuery = exports.getAgenciesStringQuery = exports.getProvidersStringQuery = exports.getPayeesStringQuery = exports.getPurchaseOrdersBetweenDatesStringQuery = exports.getLotStocksByAgencyIdStringQuery = exports.getLotsByNameStringQuery = exports.getShipmentsByToAgencyLast100StringQuery = exports.getPurchaseOrderStringQuery = exports.getPurchaseOrderByIdNumberStringQuery = exports.getLast100ReceptionsStringQuery = void 0;
+exports.getPrintTemplatesStringQuery = exports.getCasesByResponsibleIdStringQuery = exports.getInvoicesByAgencyIdStringQuery = exports.getPaymentTermByIdStringQuery = exports.getPaymentMethodsStringQuery = exports.getPaymentTermsStringQuery = exports.getSuggestedPricesStringQuery = exports.getCurrenciesStringQuery = exports.getInvoiceFormSubmissionsByInvoiceIdStringQuery = exports.getLastInvoiceFormSubmissionStringQuery = exports.getInvoiceFormSubmissionsByAgencyIdStringQuery = exports.getFormSubmissionByIdStringQuery = exports.getMyCaseFormSubmissionsStringQuery = exports.getFormsByDocumentTypeStringQuery = exports.getFormsStringQuery = exports.getFormByNameStringQuery = exports.getAllFormsStringQuery = exports.getShipmentsStringQuery = exports.getItemByNameStringQuery = exports.getBundleByNameStringQuery = exports.getBundlesByItemCategoryIdStringQuery = exports.getEmployeesByAgencyIdStringQuery = exports.getEmployeesStringQuery = exports.getEmployeeProfileStringQuery = exports.getConsolidatesBetweenDatesStringQuery = exports.getItemsBySuperCategoryStringQuery = exports.getItemsStringQuery = exports.getItemsByCategoryStringQuery = exports.getItemCategoryByIdStringQuery = exports.getSuperCategoryByIdStringQuery = exports.getPayeeByIdStringQuery = exports.getClientCategoriesStringQuery = exports.getProviderCategoriesStringQuery = exports.getPayeeCategoriesStringQuery = exports.getPayeeCategoriesByNotesMatchStringQuery = exports.getPayeeCategoryByIdStringQuery = exports.getWebAppRowsByWebAppTableIdStringQuery = exports.getWebAppRowStringQuery = exports.getAgenciesStringQuery = exports.getProvidersStringQuery = exports.getPayeesStringQuery = exports.getPurchaseOrdersBetweenDatesStringQuery = exports.getLotStocksByAgencyIdStringQuery = exports.getLotsByNameStringQuery = exports.getLast100ShipmentsStringQuery = exports.getPurchaseOrderStringQuery = exports.getPurchaseOrderByIdNumberStringQuery = exports.getLast100ReceptionsStringQuery = void 0;
 const getLast100ReceptionsStringQuery = (agency_id) => `
 query getLast100Receptions {
   purchase_orders(limit: 100, order_by: {created_at: desc}, where: {voided: {_eq: false}, agency_id: {_eq: ${agency_id}}}) {
@@ -152,17 +152,26 @@ query getPurchaseOrder($id: bigint) @cached {
 }
 `;
 exports.getPurchaseOrderStringQuery = getPurchaseOrderStringQuery;
-const getShipmentsByToAgencyLast100StringQuery = (agency_to_id) => `
-query getShipmentsByToAgencyLast100 {
-  shipments(
-    limit: 100, 
-    order_by: {id: desc}, 
-    where: {
-        voided: {_eq: false}, 
-        shipped: {_eq: false}, 
-        delivered: {_eq: false}, 
-        agency_to_id: {_eq: ${agency_to_id}}
-      }) {
+const getLast100ShipmentsStringQuery = ({ agency_to_id, suffix, }) => {
+    let conditions = [
+        "voided: {_eq: false}",
+        "shipped: {_eq: false}",
+        "delivered: {_eq: false}",
+    ];
+    if (suffix) {
+        conditions.push(`id_number: {_ilike: "%${suffix}%"}`);
+    }
+    if (agency_to_id) {
+        conditions.push(`agency_to_id: {_eq: ${agency_to_id}}`);
+    }
+    return `query getLast100Shipments {
+    shipments(
+      limit: 100, 
+      order_by: {id: desc}, 
+      where: {
+        ${conditions.join(", ")}
+      }
+    ) {
       id
       zid
       id_number
@@ -187,9 +196,9 @@ query getShipmentsByToAgencyLast100 {
         }
       }
     }
-  }
-`;
-exports.getShipmentsByToAgencyLast100StringQuery = getShipmentsByToAgencyLast100StringQuery;
+  }`;
+};
+exports.getLast100ShipmentsStringQuery = getLast100ShipmentsStringQuery;
 const getLotsByNameStringQuery = (name, entity_id) => `
 query getLots {
     lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: ${entity_id}}, name: {_eq: "${name}"}}) {

@@ -1,9 +1,9 @@
 import type { Session } from "@remix-run/node";
 import { AxiosUtilsResponse, ShipmentGraphQL } from "@zauru-sdk/types";
 /**
- * getShipmentsByToAgencyLast100Id_booking
+ * getShipments
  */
-export declare function getShipmentsByToAgencyLast100Id_booking(session: Session, agency_to_id: string | number): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>>;
+export declare function getShipments(session: Session, agency_to_id: string | number, suffix?: string): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>>;
 /**
  * receiveShipment_booking
  * @param headers

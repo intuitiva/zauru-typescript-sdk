@@ -154,19 +154,35 @@ query getPurchaseOrder($id: bigint) @cached {
 }
 `;
 
-export const getShipmentsByToAgencyLast100StringQuery = (
-  agency_to_id: number
-) => `
-query getShipmentsByToAgencyLast100 {
-  shipments(
-    limit: 100, 
-    order_by: {id: desc}, 
-    where: {
-        voided: {_eq: false}, 
-        shipped: {_eq: false}, 
-        delivered: {_eq: false}, 
-        agency_to_id: {_eq: ${agency_to_id}}
-      }) {
+export const getLast100ShipmentsStringQuery = ({
+  agency_to_id,
+  suffix,
+}: {
+  agency_to_id?: number;
+  suffix?: string;
+}) => {
+  let conditions = [
+    "voided: {_eq: false}",
+    "shipped: {_eq: false}",
+    "delivered: {_eq: false}",
+  ];
+
+  if (suffix) {
+    conditions.push(`id_number: {_ilike: "%${suffix}%"}`);
+  }
+
+  if (agency_to_id) {
+    conditions.push(`agency_to_id: {_eq: ${agency_to_id}}`);
+  }
+
+  return `query getLast100Shipments {
+    shipments(
+      limit: 100, 
+      order_by: {id: desc}, 
+      where: {
+        ${conditions.join(", ")}
+      }
+    ) {
       id
       zid
       id_number
@@ -191,8 +207,8 @@ query getShipmentsByToAgencyLast100 {
         }
       }
     }
-  }
-`;
+  }`;
+};
 
 export const getLotsByNameStringQuery = (name: string, entity_id: number) => `
 query getLots {
