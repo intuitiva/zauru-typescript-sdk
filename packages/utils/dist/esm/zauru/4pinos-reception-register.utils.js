@@ -100,10 +100,11 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
             otrasRazones: values.otrasRazones,
         };
         let keys = Object.keys(values);
-        let netWeight = values.netWgt;
-        const total_baskets = values.totalBaskets + "";
-        const stockInteger = values.stockInteger == "true";
         let webapp_table_object = {};
+        const netWeight = Number(values.netWgt);
+        const total_baskets = Number(values.totalBaskets);
+        const netWeightByBasket = Number(netWeight) / total_baskets;
+        const stockInteger = values.stockInteger == "true";
         const buildArray = (keyIncludes, processValue) => {
             const regex = /\d/; // Expresión regular para buscar al menos un dígito.
             return keys
@@ -178,7 +179,7 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
                 import: false,
                 tag_ids: ["", tag_id],
                 memo: qualityControlBaskets + "",
-                origin: netWeight,
+                origin: netWeight?.toString(),
                 purchase_order_details: newPurchaseOrderDetails,
                 incoterm_destination: provenance.slice(0, 254),
                 transport_type: discountReason,
@@ -285,7 +286,6 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
             if (apiResponses.apiCall === 6 && qualityControlBaskets.length > 0) {
                 console.log("------------- REALIZANDO ENVÍO DE CANASTAS A CONTROL DE CALIDAD");
                 const total_qc_baskets = Number(values.totalQCBaskets);
-                const netWeightByBasket = Number(netWeight) / total_qc_baskets;
                 const lotResponse = await getLoteByName(session, apiResponses.authorizedPO.id_number);
                 if (lotResponse.error || !lotResponse.data || !lotResponse.data.id) {
                     throw new Error("Error al intentar obtener el lote por nombre: " +
