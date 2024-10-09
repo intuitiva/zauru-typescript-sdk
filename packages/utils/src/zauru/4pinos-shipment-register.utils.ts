@@ -28,7 +28,7 @@ export const register4pinosShipment = async ({
     planned_delivery: string;
     shipment_number: string;
     agency_to_id: number;
-    purchase_orders: { id: number; lot_id: number }[];
+    purchase_orders: { id: number; lot_id: number; booked_quantity: number }[];
   };
 }) => {
   const session = await getSession(cookie);
@@ -69,6 +69,7 @@ export const register4pinosShipment = async ({
       planned_shipping: values.planned_shipping,
       movements: values.purchase_orders.map((purchaseOrder) => ({
         lot_id: purchaseOrder.lot_id,
+        booked_quantity: purchaseOrder.booked_quantity,
       })),
     };
 

@@ -722,7 +722,7 @@ export type QueueShipmentsForm = {
     planned_delivery: string;
     shipment_number: string;
     agency_to_id: number;
-    purchase_orders: { id: number; lot_id: number }[];
+    purchase_orders: { id: number; lot_id: number; booked_quantity: number }[];
   };
   estado: string;
   agency_id: number;

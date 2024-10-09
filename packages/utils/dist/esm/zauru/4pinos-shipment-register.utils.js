@@ -29,6 +29,7 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, values, })
             planned_shipping: values.planned_shipping,
             movements: values.purchase_orders.map((purchaseOrder) => ({
                 lot_id: purchaseOrder.lot_id,
+                booked_quantity: purchaseOrder.booked_quantity,
             })),
         };
         console.log("========================================>");
