@@ -9,11 +9,13 @@ import httpZauru from "./httpZauru.js";
 export async function getShipments(session, agency_to_id, suffix) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
+        const query = getLast100ShipmentsStringQuery({
+            agency_to_id: Number(agency_to_id),
+            suffix,
+        });
+        console.log("BUSCANDO: ", JSON.stringify({ query }));
         const response = await httpGraphQLAPI.post("", {
-            query: getLast100ShipmentsStringQuery({
-                agency_to_id: Number(agency_to_id),
-                suffix,
-            }),
+            query,
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

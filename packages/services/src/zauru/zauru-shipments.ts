@@ -17,6 +17,13 @@ export async function getShipments(
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
+    const query = getLast100ShipmentsStringQuery({
+      agency_to_id: Number(agency_to_id),
+      suffix,
+    });
+
+    console.log("BUSCANDO: ", JSON.stringify({ query }));
+
     const response = await httpGraphQLAPI.post<{
       data: { shipments: ShipmentGraphQL[] };
       errors?: {
@@ -26,10 +33,7 @@ export async function getShipments(
     }>(
       "",
       {
-        query: getLast100ShipmentsStringQuery({
-          agency_to_id: Number(agency_to_id),
-          suffix,
-        }),
+        query,
       },
       { headers }
     );
