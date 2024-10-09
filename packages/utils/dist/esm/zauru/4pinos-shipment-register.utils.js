@@ -1,45 +1,50 @@
 import { getHeaders, getSession, insertBookings, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
 import { deleteQueueShipmentsFormHistory, updateQueueShipmentsFormHistory, } from "./4pinos-shipments-form-history.utils.js";
 import { ESTADOS_COLA_RECEPCIONES } from "./4pinos-receptions-form-history.utils.js";
-export const register4pinosShipment = async ({ cookie, idWebAppTable, values, }) => {
+export const register4pinosShipment = async ({ cookie, idWebAppTable, apiStep, values, }) => {
     const session = await getSession(cookie);
     const headers = await getHeaders(cookie, session);
+    let proccess_step = apiStep ?? 1;
     try {
-        //PASO 1: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA
-        console.log("========================================>");
-        console.log("paso 1: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA");
-        for (const purchaseOrder of values.purchase_orders) {
-            const response = await updateReceivedPurchaseOrder(headers, {
-                purchase_order: {
-                    shipment_reference: values.shipment_reference,
-                },
-            }, purchaseOrder.id);
-            if (response.error) {
-                throw new Error(`Error al actualizar la orden de compra ${purchaseOrder.id}: ${response.userMsg}`);
+        if (proccess_step === 1) {
+            //PASO 1: CREAR EL ENVIO
+            const shipmentBody = {
+                reference: `Envío: ${values.shipment_reference} realizado desde la aplicación web.`,
+                agency_from_id: values.agency_from_id,
+                agency_to_id: values.agency_to_id,
+                booker_id: values.booker_id,
+                id_number: values.shipment_reference,
+                transporter_id: values.transporter_id,
+                planned_delivery: values.planned_delivery,
+                planned_shipping: values.planned_shipping,
+                movements: values.purchase_orders.map((purchaseOrder) => ({
+                    lot_id: purchaseOrder.lot_id,
+                    booked_quantity: purchaseOrder.booked_quantity,
+                    item_id: purchaseOrder.item_id,
+                })),
+            };
+            console.log("========================================>");
+            console.log("paso 1: CREAR EL ENVIO");
+            console.log("Enviando: ", JSON.stringify(shipmentBody));
+            const createBookingResponse = await insertBookings(headers, shipmentBody);
+            if (createBookingResponse.error) {
+                throw new Error(`Error al crear el envío: ${createBookingResponse.userMsg} con el body: ${JSON.stringify(shipmentBody)}`);
             }
         }
-        //PASO 2: CREAR EL ENVIO
-        const shipmentBody = {
-            reference: `Envío: ${values.shipment_reference} realizado desde la aplicación web.`,
-            agency_from_id: values.agency_from_id,
-            agency_to_id: values.agency_to_id,
-            booker_id: values.booker_id,
-            id_number: values.shipment_reference,
-            transporter_id: values.transporter_id,
-            planned_delivery: values.planned_delivery,
-            planned_shipping: values.planned_shipping,
-            movements: values.purchase_orders.map((purchaseOrder) => ({
-                lot_id: purchaseOrder.lot_id,
-                booked_quantity: purchaseOrder.booked_quantity,
-                item_id: purchaseOrder.item_id,
-            })),
-        };
-        console.log("========================================>");
-        console.log("paso 2: CREAR EL ENVIO");
-        console.log("Enviando: ", JSON.stringify(shipmentBody));
-        const createBookingResponse = await insertBookings(headers, shipmentBody);
-        if (createBookingResponse.error) {
-            throw new Error(`Error al crear el envío: ${createBookingResponse.userMsg} con el body: ${JSON.stringify(shipmentBody)}`);
+        if (proccess_step === 2) {
+            //PASO 2: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA
+            console.log("========================================>");
+            console.log("paso 2: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA");
+            for (const purchaseOrder of values.purchase_orders) {
+                const response = await updateReceivedPurchaseOrder(headers, {
+                    purchase_order: {
+                        shipment_reference: values.shipment_reference,
+                    },
+                }, purchaseOrder.id);
+                if (response.error) {
+                    throw new Error(`Error al actualizar la orden de compra ${purchaseOrder.id}: ${response.userMsg}`);
+                }
+            }
         }
         console.log("========================================>");
         console.log("paso 3: ELIMINAR EL REGISTRO DE LA COLA");
@@ -53,6 +58,7 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, values, })
         await updateQueueShipmentsFormHistory(headers, session, {
             estado: ESTADOS_COLA_RECEPCIONES.ERROR,
             description: e?.toString(),
+            apiStep: proccess_step,
         }, idWebAppTable);
     }
 };
@@ -75,6 +81,7 @@ export const retryShipmennt = async (register, session, headers, hostname, cooki
             values: register.data?.formSubmited,
             cookie: cookie || "",
             idWebAppTable: register.id,
+            apiStep: register.data?.apiStep,
         });
     }
     else {
@@ -86,6 +93,7 @@ export const retryShipmennt = async (register, session, headers, hostname, cooki
                 values: register.data?.formSubmited,
                 cookie: cookie || "",
                 idWebAppTable: register.id,
+                apiStep: register.data?.apiStep,
             }),
         });
     }

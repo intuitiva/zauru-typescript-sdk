@@ -1,9 +1,10 @@
 import { Session } from "@remix-run/node";
 import { QueueShipmentsForm } from "@zauru-sdk/types";
 import { WebAppRowGraphQL } from "@zauru-sdk/types";
-export declare const register4pinosShipment: ({ cookie, idWebAppTable, values, }: {
+export declare const register4pinosShipment: ({ cookie, idWebAppTable, apiStep, values, }: {
     cookie: string;
     idWebAppTable: number;
+    apiStep?: number;
     values: {
         booker_id: number;
         agency_from_id: number;
