@@ -152,7 +152,7 @@ query getPurchaseOrder($id: bigint) @cached {
 }
 `;
 exports.getPurchaseOrderStringQuery = getPurchaseOrderStringQuery;
-const getLast100ShipmentsStringQuery = ({ agency_to_id, suffix, voided = false, shipped = false, delivered = false, id_number_not_null = false, id_number_not_equal, id_number, }) => {
+const getLast100ShipmentsStringQuery = ({ agency_to_id, suffix, voided = false, shipped = false, delivered = false, id_number_not_null = false, id_number, id_number_not_empty = false, }) => {
     let conditions = [];
     conditions.push(`voided: {_eq: ${voided}}`);
     conditions.push(`shipped: {_eq: ${shipped}}`);
@@ -163,14 +163,14 @@ const getLast100ShipmentsStringQuery = ({ agency_to_id, suffix, voided = false, 
     if (agency_to_id) {
         conditions.push(`agency_to_id: {_eq: ${agency_to_id}}`);
     }
-    if (id_number_not_null) {
-        conditions.push(`id_number: {_is_null: false}`);
-    }
     if (id_number) {
         conditions.push(`id_number: {_eq: "${id_number}"}`);
     }
-    if (id_number_not_equal) {
-        conditions.push(`id_number: {_neq: "${id_number_not_equal}"}`);
+    if (id_number_not_empty) {
+        conditions.push(`id_number: {_neq: ""}`);
+    }
+    if (id_number_not_null) {
+        conditions.push(`id_number: {_is_null: false}`);
     }
     return `query getLast100Shipments {
     shipments(
