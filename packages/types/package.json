@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/types",
-  "version": "2.0.24",
+  "version": "2.0.33",
   "description": "Estructuras de Zauru, tipado de modelos y modelos personalizados.",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
