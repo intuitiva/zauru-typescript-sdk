@@ -36,6 +36,7 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, apiStep, s
             }
             new_shipment_id = createBookingResponse.data?.id;
         }
+        proccess_step++;
         if (proccess_step === 2) {
             //PASO 2: DESPACHAR EL ENVIO -- PONER EN TRANSITO
             console.log("========================================>");
