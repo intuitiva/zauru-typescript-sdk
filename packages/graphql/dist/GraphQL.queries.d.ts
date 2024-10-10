@@ -3,16 +3,18 @@ export declare const getPurchaseOrderByIdNumberStringQuery: (id_number: string) 
 export declare const getPurchaseOrderStringQuery: (id: number, config?: {
     withLotStocks: boolean;
 }) => string;
-export declare const getLast100ShipmentsStringQuery: ({ agency_to_id, agency_from_id, suffix, voided, id_number_not_null, id_number, id_number_not_empty, }: {
+export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, suffix, voided, id_number_not_null, id_number, id_number_not_empty, withMovementLots, limit, id, wheres, }: {
     agency_to_id?: number;
     agency_from_id?: number;
     suffix?: string;
     id_number_not_null?: boolean;
     voided?: boolean;
-    shipped?: boolean;
-    delivered?: boolean;
     id_number?: string;
     id_number_not_empty?: boolean;
+    withMovementLots?: boolean;
+    limit?: number;
+    id?: number;
+    wheres?: string[];
 }) => string;
 export declare const getLotsByNameStringQuery: (name: string, entity_id: number) => string;
 export declare const getLotStocksByAgencyIdStringQuery: (agency_id: number) => string;
@@ -59,7 +61,6 @@ export declare const getEmployeesByAgencyIdStringQuery: (id: number) => string;
 export declare const getBundlesByItemCategoryIdStringQuery: (id: number) => string;
 export declare const getBundleByNameStringQuery: (name: string) => string;
 export declare const getItemByNameStringQuery: (name: string) => string;
-export declare const getShipmentsStringQuery: (wheres?: string[]) => string;
 export declare const getAllFormsStringQuery: (config?: {
     withSubmissions: boolean;
 }) => string;

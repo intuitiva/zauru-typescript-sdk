@@ -135,11 +135,13 @@ export type ShipmentGraphQL = {
   income: boolean;
   booker_id: number;
   shipped: boolean;
+  shipped_at: string;
   shipper_id: number;
   delivered: boolean;
   delivered_at: string;
   voided: boolean;
   returned: boolean;
+  returned_at: string;
   memo: string;
   movements: MovementGraphQL[];
 };

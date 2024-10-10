@@ -56,7 +56,9 @@ export const getBookings = async (session, wheres = []) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getShipmentsStringQuery([...wheres, "delivered: {_eq: false}"]),
+            query: getShipmentsStringQuery({
+                wheres: [...wheres, "delivered: {_eq: false}"],
+            }),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

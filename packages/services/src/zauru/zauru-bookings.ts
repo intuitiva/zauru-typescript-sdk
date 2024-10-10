@@ -97,7 +97,9 @@ export const getBookings = async (
     }>(
       "",
       {
-        query: getShipmentsStringQuery([...wheres, "delivered: {_eq: false}"]),
+        query: getShipmentsStringQuery({
+          wheres: [...wheres, "delivered: {_eq: false}"],
+        }),
       },
       { headers }
     );

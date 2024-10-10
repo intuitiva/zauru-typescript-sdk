@@ -10,6 +10,7 @@ export declare function getShipments(session: Session, config: {
     id_number?: string;
     id_number_not_null?: boolean;
     id_number_not_empty?: boolean;
+    withMovementLots?: boolean;
 }): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>>;
 /**
  * receiveShipment_booking

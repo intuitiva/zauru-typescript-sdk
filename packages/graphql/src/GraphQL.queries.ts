@@ -154,7 +154,7 @@ query getPurchaseOrder($id: bigint) @cached {
 }
 `;
 
-export const getLast100ShipmentsStringQuery = ({
+export const getShipmentsStringQuery = ({
   agency_to_id,
   agency_from_id,
   suffix,
@@ -162,16 +162,22 @@ export const getLast100ShipmentsStringQuery = ({
   id_number_not_null = false,
   id_number,
   id_number_not_empty = false,
+  withMovementLots = false,
+  limit = 1000,
+  id,
+  wheres,
 }: {
   agency_to_id?: number;
   agency_from_id?: number;
   suffix?: string;
   id_number_not_null?: boolean;
   voided?: boolean;
-  shipped?: boolean;
-  delivered?: boolean;
   id_number?: string;
   id_number_not_empty?: boolean;
+  withMovementLots?: boolean;
+  limit?: number;
+  id?: number;
+  wheres?: string[];
 }) => {
   let conditions = [];
 
@@ -201,9 +207,25 @@ export const getLast100ShipmentsStringQuery = ({
     conditions.push(`id_number: {_is_null: false}`);
   }
 
+  if (id) {
+    conditions.push(`id: {_eq: ${id}}`);
+  }
+
+  if (wheres) {
+    conditions.push(...wheres);
+  }
+
+  const movementLots = withMovementLots
+    ? `lot {
+          id
+          name
+          description
+        }`
+    : "";
+
   return `query getLast100Shipments {
     shipments(
-      limit: 100, 
+      limit: ${limit}, 
       order_by: {id: desc}, 
       where: {
         ${conditions.join(", ")}
@@ -221,16 +243,21 @@ export const getLast100ShipmentsStringQuery = ({
       agency_to_id
       transporter_id
       created_at
+      planned_shipping
+      planned_delivery
+      delivered
+      shipped
+      shipped_at
+      delivered_at
+      returned
+      returned_at
       movements {
         id
         booked_quantity
         delivered_quantity
         reference
-        lot {
-          id
-          name
-          description
-        }
+        item_id
+        ${movementLots}
       }
     }
   }`;
@@ -807,31 +834,6 @@ query getItemByName {
   }
 }
 `;
-
-export const getShipmentsStringQuery = (wheres: string[] = []) => {
-  const additionalWheres = wheres.join(",");
-  return `query getShipments {
-      shipments (${
-        additionalWheres.length > 0 ? `where: {${additionalWheres}},` : ""
-      } order_by: {id: desc}) {
-        id
-        id_number
-        reference
-        needs_transport
-        payee_id
-        booker_id
-        shipped
-        shipper_id
-        delivered
-        delivered_at
-        voided
-        returned
-        memo
-        planned_delivery
-      }
-    }
-  `;
-};
 
 export const getAllFormsStringQuery = (
   config: { withSubmissions: boolean } = { withSubmissions: false }

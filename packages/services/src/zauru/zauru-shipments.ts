@@ -3,7 +3,7 @@ import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { AxiosUtilsResponse, ShipmentGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
-import { getLast100ShipmentsStringQuery } from "@zauru-sdk/graphql";
+import { getShipmentsStringQuery } from "@zauru-sdk/graphql";
 import httpZauru from "./httpZauru.js";
 
 /**
@@ -18,12 +18,13 @@ export async function getShipments(
     id_number?: string;
     id_number_not_null?: boolean;
     id_number_not_empty?: boolean;
+    withMovementLots?: boolean;
   }
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
-    const query = getLast100ShipmentsStringQuery({
+    const query = getShipmentsStringQuery({
       agency_to_id: Number(config.agency_to_id),
       agency_from_id: config.agency_from_id
         ? Number(config.agency_from_id)
@@ -32,6 +33,7 @@ export async function getShipments(
       id_number: config.id_number,
       id_number_not_null: config.id_number_not_null,
       id_number_not_empty: config.id_number_not_empty,
+      withMovementLots: config.withMovementLots,
     });
 
     const response = await httpGraphQLAPI.post<{
