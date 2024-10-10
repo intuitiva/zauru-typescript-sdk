@@ -118,9 +118,12 @@ export async function deleteShipment_booking(
   id: string | number
 ): Promise<AxiosUtilsResponse<boolean>> {
   return handlePossibleAxiosErrors(async () => {
-    await httpZauru.delete<any>(`/inventories/bookings/${id}.json`, {
-      headers,
-    });
+    await httpZauru.delete<any>(
+      `/inventories/bookings/${id}.json?destroy=true`,
+      {
+        headers,
+      }
+    );
     return true;
   });
 }

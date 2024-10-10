@@ -69,7 +69,7 @@ export async function despacharShipment_booking(headers, id) {
  */
 export async function deleteShipment_booking(headers, id) {
     return handlePossibleAxiosErrors(async () => {
-        await httpZauru.delete(`/inventories/bookings/${id}.json`, {
+        await httpZauru.delete(`/inventories/bookings/${id}.json?destroy=true`, {
             headers,
         });
         return true;
