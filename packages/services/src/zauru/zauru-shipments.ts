@@ -12,7 +12,7 @@ import httpZauru from "./httpZauru.js";
 export async function getShipments(
   session: Session,
   config: {
-    agency_to_id: string | number;
+    agency_to_id?: string | number;
     agency_from_id?: string | number;
     suffix?: string;
     id_number?: string;
@@ -25,7 +25,9 @@ export async function getShipments(
     const headers = await getGraphQLAPIHeaders(session);
 
     const query = getShipmentsStringQuery({
-      agency_to_id: Number(config.agency_to_id),
+      agency_to_id: config.agency_to_id
+        ? Number(config.agency_to_id)
+        : undefined,
       agency_from_id: config.agency_from_id
         ? Number(config.agency_from_id)
         : undefined,
