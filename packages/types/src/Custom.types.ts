@@ -731,7 +731,8 @@ export type QueueShipmentsForm = {
   };
   estado: string;
   agency_id: number;
-  apiStep: number;
+  apiStep?: number;
+  shipment_id?: number;
   description: string;
   timeStamp?: number;
 };

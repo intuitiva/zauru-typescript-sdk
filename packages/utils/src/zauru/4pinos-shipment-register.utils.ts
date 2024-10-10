@@ -1,5 +1,6 @@
 import { Session } from "@remix-run/node";
 import {
+  despacharShipment_booking,
   getHeaders,
   getSession,
   insertBookings,
@@ -17,11 +18,13 @@ export const register4pinosShipment = async ({
   cookie,
   idWebAppTable,
   apiStep,
+  shipment_id,
   values,
 }: {
   cookie: string;
   idWebAppTable: number;
   apiStep?: number;
+  shipment_id?: number;
   values: {
     booker_id: number;
     agency_from_id: number;
@@ -42,6 +45,7 @@ export const register4pinosShipment = async ({
   const session = await getSession(cookie);
   const headers = await getHeaders(cookie, session);
   let proccess_step = apiStep ?? 1;
+  let new_shipment_id = shipment_id ?? undefined;
 
   try {
     //TODO: VERIFICAR SI EL ENVIO YA EXISTE
@@ -77,15 +81,33 @@ export const register4pinosShipment = async ({
           } con el body: ${JSON.stringify(shipmentBody)}`
         );
       }
+
+      new_shipment_id = createBookingResponse.data?.id;
+    }
+
+    if (proccess_step === 2) {
+      //PASO 2: DESPACHAR EL ENVIO -- PONER EN TRANSITO
+      console.log("========================================>");
+      console.log("paso 2: DESPACHAR EL ENVIO -- PONER EN TRANSITO");
+      const dispatchShipmentResponse = await despacharShipment_booking(
+        headers,
+        Number(new_shipment_id)
+      );
+
+      if (dispatchShipmentResponse.error) {
+        throw new Error(
+          `Error al despachar el envío: ${dispatchShipmentResponse.userMsg} con el id: ${new_shipment_id}`
+        );
+      }
     }
 
     proccess_step++;
 
-    if (proccess_step === 2) {
+    if (proccess_step === 3) {
       //PASO 2: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA
       console.log("========================================>");
       console.log(
-        "paso 2: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA"
+        "paso 3: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA"
       );
       for (const purchaseOrder of values.purchase_orders) {
         const response = await updateReceivedPurchaseOrder(
@@ -170,6 +192,7 @@ export const retryShipmennt = async (
       cookie: cookie || "",
       idWebAppTable: register.id,
       apiStep: register.data?.apiStep,
+      shipment_id: register.data?.shipment_id,
     });
   } else {
     console.log(
@@ -186,6 +209,7 @@ export const retryShipmennt = async (
           cookie: cookie || "",
           idWebAppTable: register.id,
           apiStep: register.data?.apiStep,
+          shipment_id: register.data?.shipment_id,
         }),
       }
     );
