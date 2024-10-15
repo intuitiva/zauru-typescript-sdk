@@ -111,6 +111,7 @@ export async function despacharShipment_booking(
 
 /**
  * deleteShipment_booking
+ * Esta función se utiliza para cancelar una Reservación, cancelando un shipment que todavía no ha sido puesto en tránsito ni entregado. Está cancelando prácticamente la primera fase, el borrador.
  * @param headers
  * @param id
  * @returns
