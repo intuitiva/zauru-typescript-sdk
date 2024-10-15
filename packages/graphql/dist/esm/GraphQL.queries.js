@@ -201,6 +201,7 @@ const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided 
       zid
       id_number
       reference
+      memo
       needs_transport
       payee_id
       income

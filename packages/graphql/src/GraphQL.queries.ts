@@ -241,6 +241,7 @@ export const getShipmentsStringQuery = ({
       zid
       id_number
       reference
+      memo
       needs_transport
       payee_id
       income
