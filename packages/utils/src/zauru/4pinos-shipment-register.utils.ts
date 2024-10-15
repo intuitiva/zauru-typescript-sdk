@@ -1,6 +1,5 @@
 import { Session } from "@remix-run/node";
 import {
-  despacharShipment_booking,
   getHeaders,
   getSession,
   insertBookings,
@@ -88,6 +87,8 @@ export const register4pinosShipment = async ({
 
     proccess_step++;
 
+    //SE QUITA EL DESPACHO AUTOMATICO, PORQUE SE VA A HACER MANUAL AHORA
+    /*
     if (proccess_step === 2) {
       //PASO 2: DESPACHAR EL ENVIO -- PONER EN TRANSITO
       console.log("========================================>");
@@ -103,6 +104,7 @@ export const register4pinosShipment = async ({
         );
       }
     }
+    */
 
     proccess_step++;
 

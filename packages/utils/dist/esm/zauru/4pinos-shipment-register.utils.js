@@ -1,4 +1,4 @@
-import { despacharShipment_booking, getHeaders, getSession, insertBookings, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
+import { getHeaders, getSession, insertBookings, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
 import { deleteQueueShipmentsFormHistory, updateQueueShipmentsFormHistory, } from "./4pinos-shipments-form-history.utils.js";
 import { ESTADOS_COLA_RECEPCIONES } from "./4pinos-receptions-form-history.utils.js";
 export const register4pinosShipment = async ({ cookie, idWebAppTable, apiStep, shipment_id, values, }) => {
@@ -38,15 +38,24 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, apiStep, s
             new_shipment_id = createBookingResponse.data?.id;
         }
         proccess_step++;
+        //SE QUITA EL DESPACHO AUTOMATICO, PORQUE SE VA A HACER MANUAL AHORA
+        /*
         if (proccess_step === 2) {
-            //PASO 2: DESPACHAR EL ENVIO -- PONER EN TRANSITO
-            console.log("========================================>");
-            console.log("paso 2: DESPACHAR EL ENVIO -- PONER EN TRANSITO");
-            const dispatchShipmentResponse = await despacharShipment_booking(headers, Number(new_shipment_id));
-            if (dispatchShipmentResponse.error) {
-                throw new Error(`Error al despachar el envío: ${dispatchShipmentResponse.userMsg} con el id: ${new_shipment_id}`);
-            }
+          //PASO 2: DESPACHAR EL ENVIO -- PONER EN TRANSITO
+          console.log("========================================>");
+          console.log("paso 2: DESPACHAR EL ENVIO -- PONER EN TRANSITO");
+          const dispatchShipmentResponse = await despacharShipment_booking(
+            headers,
+            Number(new_shipment_id)
+          );
+    
+          if (dispatchShipmentResponse.error) {
+            throw new Error(
+              `Error al despachar el envío: ${dispatchShipmentResponse.userMsg} con el id: ${new_shipment_id}`
+            );
+          }
         }
+        */
         proccess_step++;
         if (proccess_step === 3) {
             //PASO 2: COLOCO EL NUMERO DE ENVIO EN TODAS LAS ORDENES DE COMPRA
