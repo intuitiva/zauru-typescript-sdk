@@ -225,6 +225,7 @@ const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided 
         delivered_quantity
         reference
         item_id
+        lot_id
         ${movementLots}
       }
     }

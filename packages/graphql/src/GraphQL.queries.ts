@@ -265,6 +265,7 @@ export const getShipmentsStringQuery = ({
         delivered_quantity
         reference
         item_id
+        lot_id
         ${movementLots}
       }
     }
