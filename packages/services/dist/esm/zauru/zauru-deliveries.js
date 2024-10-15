@@ -30,6 +30,7 @@ export async function getDeliveriesDataTables(headers, body) {
 }
 /**
  * deleteDelivery
+ * Esta función elimina (devuelve) un envío que ya ha sido entregado.
  * @param headers
  * @param id
  * @returns

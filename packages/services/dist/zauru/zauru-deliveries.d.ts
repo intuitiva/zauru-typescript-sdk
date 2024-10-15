@@ -15,6 +15,7 @@ export declare function getDelivery(headers: any, idDelivery: string): Promise<A
 export declare function getDeliveriesDataTables(headers: any, body: DataTablesFilterBody): Promise<AxiosUtilsResponse<HTMLDataTableDeliveries>>;
 /**
  * deleteDelivery
+ * Esta función elimina (devuelve) un envío que ya ha sido entregado.
  * @param headers
  * @param id
  * @returns

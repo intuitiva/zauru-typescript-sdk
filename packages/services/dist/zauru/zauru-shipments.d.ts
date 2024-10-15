@@ -31,6 +31,7 @@ export declare function receiveShipment_booking(headers: any, id: string | numbe
 export declare function despacharShipment_booking(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
 /**
  * deleteShipment_booking
+ * Esta función se utiliza para cancelar una Reservación, cancelando un shipment que todavía no ha sido puesto en tránsito ni entregado. Está cancelando prácticamente la primera fase, el borrador.
  * @param headers
  * @param id
  * @returns
