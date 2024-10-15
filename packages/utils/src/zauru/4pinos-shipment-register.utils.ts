@@ -35,6 +35,7 @@ export const register4pinosShipment = async ({
     memo?: string;
     purchase_orders: {
       id: number;
+      id_number: string;
       lot_id: number;
       booked_quantity: number;
       item_id: number;
@@ -66,6 +67,7 @@ export const register4pinosShipment = async ({
           booked_quantity: purchaseOrder.booked_quantity,
           item_id: purchaseOrder.item_id,
           delivered_quantity: purchaseOrder.booked_quantity,
+          reference: `PO_ID_${purchaseOrder.id};PO_ID_NUMBER_${purchaseOrder.id_number}`,
         })),
       };
 

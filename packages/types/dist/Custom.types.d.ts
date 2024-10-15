@@ -644,6 +644,7 @@ export type QueueShipmentsForm = {
             lot_id: number;
             booked_quantity: number;
             item_id: number;
+            id_number: string;
         }[];
     };
     estado: string;

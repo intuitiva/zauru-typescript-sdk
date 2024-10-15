@@ -26,6 +26,7 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, apiStep, s
                     booked_quantity: purchaseOrder.booked_quantity,
                     item_id: purchaseOrder.item_id,
                     delivered_quantity: purchaseOrder.booked_quantity,
+                    reference: `PO_ID_${purchaseOrder.id};PO_ID_NUMBER_${purchaseOrder.id_number}`,
                 })),
             };
             console.log("========================================>");

@@ -17,6 +17,7 @@ export declare const register4pinosShipment: ({ cookie, idWebAppTable, apiStep, 
         memo?: string;
         purchase_orders: {
             id: number;
+            id_number: string;
             lot_id: number;
             booked_quantity: number;
             item_id: number;
