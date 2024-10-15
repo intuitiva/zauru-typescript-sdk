@@ -52,7 +52,7 @@ export const register4pinosShipment = async ({
     if (proccess_step === 1) {
       //PASO 1: CREAR EL ENVIO
       const shipmentBody: InsertBookingBody = {
-        memo: values?.memo || "",
+        memo: `ENVIO_MATERIA_PRIMA_${values?.memo || ""}`,
         reference: `Envío de materia prima entre agencias, con código: ${values.shipment_reference}, realizado desde la aplicación web de recepciones.`,
         agency_from_id: values.agency_from_id,
         agency_to_id: values.agency_to_id,
@@ -133,7 +133,7 @@ export const register4pinosShipment = async ({
     proccess_step++;
 
     console.log("========================================>");
-    console.log("paso 3: ELIMINAR EL REGISTRO DE LA COLA");
+    console.log("paso 4: ELIMINAR EL REGISTRO DE LA COLA");
     //ELIMINAR EL REGISTRO DE LA COLA
     await deleteQueueShipmentsFormHistory(
       headers,

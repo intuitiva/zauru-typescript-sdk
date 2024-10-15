@@ -11,6 +11,7 @@ export declare function getShipments(session: Session, config: {
     id_number_not_null?: boolean;
     id_number_not_empty?: boolean;
     withMovementLots?: boolean;
+    memoILike?: string;
 }): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>>;
 /**
  * receiveShipment_booking

@@ -19,6 +19,7 @@ export async function getShipments(
     id_number_not_null?: boolean;
     id_number_not_empty?: boolean;
     withMovementLots?: boolean;
+    memoILike?: string;
   }
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
@@ -36,6 +37,7 @@ export async function getShipments(
       id_number_not_null: config.id_number_not_null,
       id_number_not_empty: config.id_number_not_empty,
       withMovementLots: config.withMovementLots,
+      memoILike: config.memoILike,
     });
 
     const response = await httpGraphQLAPI.post<{

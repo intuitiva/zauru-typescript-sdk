@@ -166,6 +166,7 @@ export const getShipmentsStringQuery = ({
   limit = 1000,
   id,
   wheres,
+  memoILike,
 }: {
   agency_to_id?: number;
   agency_from_id?: number;
@@ -178,6 +179,7 @@ export const getShipmentsStringQuery = ({
   limit?: number;
   id?: number;
   wheres?: string[];
+  memoILike?: string;
 }) => {
   let conditions = [];
 
@@ -213,6 +215,10 @@ export const getShipmentsStringQuery = ({
 
   if (wheres) {
     conditions.push(...wheres);
+  }
+
+  if (memoILike) {
+    conditions.push(`memo: {_ilike: "%${memoILike}%"}`);
   }
 
   const movementLots = withMovementLots
