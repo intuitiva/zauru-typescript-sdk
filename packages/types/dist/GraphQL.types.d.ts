@@ -88,6 +88,7 @@ export type ShipmentGraphQL = {
     voided: boolean;
     returned: boolean;
     returned_at: string;
+    returner_id: number;
     memo: string;
     movements: MovementGraphQL[];
 };

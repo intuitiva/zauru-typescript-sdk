@@ -218,6 +218,7 @@ const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided 
       delivered_at
       returned
       returned_at
+      returner_id
       movements {
         id
         booked_quantity

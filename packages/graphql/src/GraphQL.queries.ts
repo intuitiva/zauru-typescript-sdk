@@ -258,6 +258,7 @@ export const getShipmentsStringQuery = ({
       delivered_at
       returned
       returned_at
+      returner_id
       movements {
         id
         booked_quantity
