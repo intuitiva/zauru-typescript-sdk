@@ -66,6 +66,7 @@ export const register4pinosShipment = async ({
           lot_id: purchaseOrder.lot_id,
           booked_quantity: purchaseOrder.booked_quantity,
           item_id: purchaseOrder.item_id,
+          delivered_quantity: purchaseOrder.booked_quantity,
         })),
       };
 

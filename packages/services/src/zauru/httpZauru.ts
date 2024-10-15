@@ -41,7 +41,6 @@ axiosInstance.interceptors.response.use(
         "---------------- ERROR CON REQUEST (RESPONSE INTERCEPTOR) ----------------"
       )
     );
-    console.log(`${error}`);
     // Do something with response error
     const { response } = error;
     const msgError = response

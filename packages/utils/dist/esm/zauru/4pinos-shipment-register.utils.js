@@ -25,6 +25,7 @@ export const register4pinosShipment = async ({ cookie, idWebAppTable, apiStep, s
                     lot_id: purchaseOrder.lot_id,
                     booked_quantity: purchaseOrder.booked_quantity,
                     item_id: purchaseOrder.item_id,
+                    delivered_quantity: purchaseOrder.booked_quantity,
                 })),
             };
             console.log("========================================>");

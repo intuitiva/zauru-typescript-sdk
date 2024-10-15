@@ -24,7 +24,6 @@ axiosInstance.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
     console.log(chalk.red("---------------- ERROR CON REQUEST (RESPONSE INTERCEPTOR) ----------------"));
-    console.log(`${error}`);
     // Do something with response error
     const { response } = error;
     const msgError = response
