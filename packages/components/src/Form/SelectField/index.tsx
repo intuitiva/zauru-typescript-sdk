@@ -61,7 +61,6 @@ export const SelectField = (props: Props) => {
   const selectRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<HTMLUListElement>(null);
   const [isTabPressed, setIsTabPressed] = useState<boolean>(false);
-  const [isEnterPressed, setIsEnterPressed] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const {
     register: tempRegister,
@@ -145,6 +144,9 @@ export const SelectField = (props: Props) => {
         setFormValue(name || "", option.value);
       }
     }
+    setHighlightedIndex(-1);
+    setIsSearching(false);
+    setFilteredOptions([]);
     setIsOpen(false);
   };
 
@@ -167,25 +169,13 @@ export const SelectField = (props: Props) => {
 
   const handleBlur = () => {
     setTimeout(() => {
-      if (
-        isTabPressed &&
-        filteredOptions.length > 0 &&
-        !isEnterPressed &&
-        isSearching
-      ) {
-        if (highlightedIndex >= 0) {
-          handleOptionClick(filteredOptions[highlightedIndex]);
-        } else {
-          handleOptionClick(filteredOptions[0]);
-        }
-      } else if (isTabPressed) {
-        if (highlightedIndex >= 0) {
-          handleOptionClick(filteredOptions[highlightedIndex]);
-        }
+      if (isTabPressed && highlightedIndex >= 0) {
+        handleOptionClick(filteredOptions[highlightedIndex]);
+      } else if (isTabPressed && filteredOptions.length > 0 && isSearching) {
+        handleOptionClick(filteredOptions[0]);
       }
 
       setIsTabPressed(false);
-      setIsEnterPressed(false);
       setIsSearching(false);
       setIsOpen(false);
     }, 200);
@@ -208,7 +198,6 @@ export const SelectField = (props: Props) => {
       scrollToHighlightedOption();
     } else if (e.key === "Enter" && highlightedIndex !== -1) {
       e.preventDefault();
-      setIsEnterPressed(true);
       handleOptionClick(filteredOptions[highlightedIndex]);
     } else if (e.key === "Backspace" && (value || valueMulti.length > 0)) {
       e.preventDefault();

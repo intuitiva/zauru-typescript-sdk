@@ -69,7 +69,7 @@ const FilterIcon = () => (
   </svg>
 );
 
-const SidePanel: React.FC<SidePanelProps> = ({
+export const SidePanel: React.FC<SidePanelProps> = ({
   children,
   closeOnClickOutside = true,
   widthPercentage = 25,
@@ -149,5 +149,3 @@ const SidePanel: React.FC<SidePanelProps> = ({
     </>
   );
 };
-
-export default SidePanel;

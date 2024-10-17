@@ -6,9 +6,17 @@ import {
   useRouteError,
   Link,
 } from "@remix-run/react";
+import { useState } from "react";
 
-export const ErrorLayout = ({ from }: { from?: string }) => {
+export const ErrorLayout = ({
+  from,
+  error: parentError,
+}: {
+  from?: string;
+  error?: Error;
+}) => {
   const error = useRouteError();
+  const [showDetails, setShowDetails] = useState(!!parentError);
 
   return (
     <html lang="es" className="bg-gray-900 text-white">
@@ -22,7 +30,7 @@ export const ErrorLayout = ({ from }: { from?: string }) => {
       <body className="min-h-screen flex flex-col items-center justify-center p-4">
         <img src="/logo.png" alt="Zauru Logo" className="mb-8 h-20" />
         <h1 className="text-5xl font-extrabold text-red-500 mb-6">¡Ups!</h1>
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-2xl flex flex-col items-center">
           <p className="text-2xl text-gray-300 mb-8 text-center">
             {isRouteErrorResponse(error)
               ? `Error ${error.status}: ${error.statusText}`
@@ -35,6 +43,23 @@ export const ErrorLayout = ({ from }: { from?: string }) => {
               Error lanzado desde: {from}
             </p>
           )}
+          {parentError && (
+            <div className="mb-4 text-center">
+              <button
+                onClick={() => setShowDetails(!showDetails)}
+                className="text-blue-400 hover:text-blue-300 transition duration-300"
+              >
+                {showDetails ? "Ocultar detalles" : "Ver más detalles"}
+              </button>
+              {showDetails && (
+                <p className="mt-2 text-gray-400 text-sm">
+                  {parentError instanceof Error
+                    ? parentError.message
+                    : String(parentError)}
+                </p>
+              )}
+            </div>
+          )}
         </div>
         <Link
           to="/"
@@ -42,7 +67,7 @@ export const ErrorLayout = ({ from }: { from?: string }) => {
         >
           Regresar al inicio
         </Link>
-        <div className="mt-12 text-gray-500">
+        <div className="mt-12 text-gray-500 text-center">
           <p>Si el problema persiste, por favor contacta a soporte.</p>
         </div>
         <Scripts />
