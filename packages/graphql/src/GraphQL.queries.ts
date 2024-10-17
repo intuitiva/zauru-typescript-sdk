@@ -158,7 +158,10 @@ export const getShipmentsStringQuery = ({
   agency_to_id,
   agency_from_id,
   suffix,
-  voided = false,
+  voided,
+  delivered,
+  shipped,
+  returned,
   id_number_not_null = false,
   id_number,
   id_number_not_empty = false,
@@ -173,6 +176,9 @@ export const getShipmentsStringQuery = ({
   suffix?: string;
   id_number_not_null?: boolean;
   voided?: boolean;
+  delivered?: boolean;
+  shipped?: boolean;
+  returned?: boolean;
   id_number?: string;
   id_number_not_empty?: boolean;
   withMovementLots?: boolean;
@@ -219,6 +225,22 @@ export const getShipmentsStringQuery = ({
 
   if (memoILike) {
     conditions.push(`memo: {_ilike: "%${memoILike}%"}`);
+  }
+
+  if (voided !== undefined) {
+    conditions.push(`voided: {_eq: ${voided}}`);
+  }
+
+  if (delivered !== undefined) {
+    conditions.push(`delivered: {_eq: ${delivered}}`);
+  }
+
+  if (shipped !== undefined) {
+    conditions.push(`shipped: {_eq: ${shipped}}`);
+  }
+
+  if (returned !== undefined) {
+    conditions.push(`returned: {_eq: ${returned}}`);
   }
 
   const movementLots = withMovementLots

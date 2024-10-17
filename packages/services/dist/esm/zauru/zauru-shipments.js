@@ -22,6 +22,10 @@ export async function getShipments(session, config) {
             id_number_not_empty: config.id_number_not_empty,
             withMovementLots: config.withMovementLots,
             memoILike: config.memoILike,
+            voided: config.voided,
+            delivered: config.delivered,
+            shipped: config.shipped,
+            returned: config.returned,
         });
         const response = await httpGraphQLAPI.post("", {
             query,
