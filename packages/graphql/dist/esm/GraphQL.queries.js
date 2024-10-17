@@ -154,7 +154,6 @@ query getPurchaseOrder($id: bigint) @cached {
 exports.getPurchaseOrderStringQuery = getPurchaseOrderStringQuery;
 const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null = false, id_number, id_number_not_empty = false, withMovementLots = false, limit = 1000, id, wheres, memoILike, }) => {
     let conditions = [];
-    conditions.push(`voided: {_eq: ${voided}}`);
     if (suffix) {
         conditions.push(`id_number: {_ilike: "%${suffix}%"}`);
     }
@@ -205,9 +204,11 @@ const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided,
     shipments(
       limit: ${limit}, 
       order_by: {id: desc}, 
-      where: {
+      ${conditions.length > 0
+        ? `where: {
         ${conditions.join(", ")}
-      }
+      }`
+        : ""}
     ) {
       id
       zid

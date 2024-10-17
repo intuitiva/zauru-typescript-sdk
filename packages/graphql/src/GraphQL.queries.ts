@@ -189,8 +189,6 @@ export const getShipmentsStringQuery = ({
 }) => {
   let conditions = [];
 
-  conditions.push(`voided: {_eq: ${voided}}`);
-
   if (suffix) {
     conditions.push(`id_number: {_ilike: "%${suffix}%"}`);
   }
@@ -255,8 +253,12 @@ export const getShipmentsStringQuery = ({
     shipments(
       limit: ${limit}, 
       order_by: {id: desc}, 
-      where: {
+      ${
+        conditions.length > 0
+          ? `where: {
         ${conditions.join(", ")}
+      }`
+          : ""
       }
     ) {
       id
