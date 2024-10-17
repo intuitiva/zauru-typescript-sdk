@@ -15,7 +15,6 @@ export const SelectField = (props) => {
     const selectRef = useRef(null);
     const optionsRef = useRef(null);
     const [isTabPressed, setIsTabPressed] = useState(false);
-    const [isEnterPressed, setIsEnterPressed] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const { register: tempRegister, formState: { errors }, setValue: setFormValue, } = useFormContext() || { formState: {} };
     const error = errors ? errors[props.name ?? "-1"] : undefined;
@@ -80,6 +79,9 @@ export const SelectField = (props) => {
                 setFormValue(name || "", option.value);
             }
         }
+        setHighlightedIndex(-1);
+        setIsSearching(false);
+        setFilteredOptions([]);
         setIsOpen(false);
     };
     const handleClear = () => {
@@ -101,24 +103,13 @@ export const SelectField = (props) => {
     };
     const handleBlur = () => {
         setTimeout(() => {
-            if (isTabPressed &&
-                filteredOptions.length > 0 &&
-                !isEnterPressed &&
-                isSearching) {
-                if (highlightedIndex >= 0) {
-                    handleOptionClick(filteredOptions[highlightedIndex]);
-                }
-                else {
-                    handleOptionClick(filteredOptions[0]);
-                }
+            if (isTabPressed && highlightedIndex >= 0) {
+                handleOptionClick(filteredOptions[highlightedIndex]);
             }
-            else if (isTabPressed) {
-                if (highlightedIndex >= 0) {
-                    handleOptionClick(filteredOptions[highlightedIndex]);
-                }
+            else if (isTabPressed && filteredOptions.length > 0 && isSearching) {
+                handleOptionClick(filteredOptions[0]);
             }
             setIsTabPressed(false);
-            setIsEnterPressed(false);
             setIsSearching(false);
             setIsOpen(false);
         }, 200);
@@ -139,7 +130,6 @@ export const SelectField = (props) => {
         }
         else if (e.key === "Enter" && highlightedIndex !== -1) {
             e.preventDefault();
-            setIsEnterPressed(true);
             handleOptionClick(filteredOptions[highlightedIndex]);
         }
         else if (e.key === "Backspace" && (value || valueMulti.length > 0)) {

@@ -17,5 +17,5 @@ interface SidePanelProps {
     widthPercentage?: number;
     buttonIcon?: "chevron" | "filter" | ReactNode;
 }
-declare const SidePanel: React.FC<SidePanelProps>;
-export default SidePanel;
+export declare const SidePanel: React.FC<SidePanelProps>;
+export {};

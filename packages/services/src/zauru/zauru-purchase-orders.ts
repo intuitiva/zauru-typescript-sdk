@@ -508,6 +508,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     agencyFilter?: boolean;
     agencyId?: number | string;
     id_number?: string;
+    shipment_reference?: string;
     useProductionAgencyId?: boolean;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
@@ -552,6 +553,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       withWebAppRows: true,
       payeeCategoryIds: [],
       excludePayeeCategoryIds: [],
+      shipment_reference: undefined,
       withLotStocks: false,
     };
 
@@ -594,6 +596,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
         excludePayeeCategoryIds: finalConfig.excludePayeeCategoryIds,
         discountComparisonOperator: finalConfig.discountComparisonOperator,
         discount: finalConfig.discount,
+        shipment_reference: finalConfig.shipment_reference,
       }
     );
 

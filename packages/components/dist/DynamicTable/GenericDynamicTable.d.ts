@@ -3,6 +3,7 @@ import { GenericDynamicTableColumn, RowDataType, SelectFieldOption } from "@zaur
 export type FooterColumnConfig = {
     content: React.ReactNode;
     className?: string;
+    name?: string;
 };
 type Props = {
     name?: string;
@@ -33,6 +34,7 @@ type Props = {
     name="invoice_details"
     withoutBg
     editable={!show}
+    searcheables={[{ value: "id_number", label: "No. Contraseña" }]}
     defaultValue={
       invoiceDetailsDefaultValue ?? [{ id: crypto.randomUUID() }]
     }

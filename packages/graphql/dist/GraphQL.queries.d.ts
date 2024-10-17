@@ -39,6 +39,7 @@ export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: strin
     withWebAppRows?: boolean;
     payeeCategoryIds?: number[];
     excludePayeeCategoryIds?: number[];
+    shipment_reference?: string;
     discountComparisonOperator?: "_eq" | "_neq" | "_gte" | "_lte" | "_gt" | "_lt";
     discount?: number;
 }) => string;
