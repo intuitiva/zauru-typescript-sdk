@@ -190,7 +190,7 @@ export const register4pinosReception = async ({
     const netWeight = Number(values.netWgt);
     const total_baskets = Number(values.totalBaskets);
     const netWeightByBasket = Number(netWeight) / total_baskets;
-    const stockInteger = values.stockInteger == "true";
+    const pesoEnUnidades = values.stockInteger == "true";
 
     const buildArray = (keyIncludes: string, processValue: any) => {
       const regex = /\d/; // Expresión regular para buscar al menos un dígito.
@@ -258,9 +258,11 @@ export const register4pinosReception = async ({
           const weight = Number(values[key] as string);
           const detail_basket = Number(detail_baskets[index]);
           const detail_discount = Number(detail_discounts[index]) ?? 0;
+          const descuentoPesoCanasta = pesoEnUnidades
+            ? 0
+            : detail_basket * singleBasketWeight;
           return (
-            (weight - (stockInteger ? 0 : detail_basket * singleBasketWeight)) *
-            ((100 - detail_discount) / 100)
+            (weight - descuentoPesoCanasta) * ((100 - detail_discount) / 100)
           );
         });
 
@@ -476,7 +478,10 @@ export const register4pinosReception = async ({
             item_id:
               apiResponses.authorizedPO.purchase_order_details[0].item_id,
             lot_id: Number(lotResponse.data?.id),
-            booked_quantity: total_qc_baskets * netWeightByBasket,
+            //Si es por unidad, se redondea al entero más cercano, por ejemplo 12.3 quedaría como
+            booked_quantity: pesoEnUnidades
+              ? Math.round(total_qc_baskets * netWeightByBasket)
+              : total_qc_baskets * netWeightByBasket,
             reference: "Verduras a control de calidad.",
           });
 
