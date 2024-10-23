@@ -435,6 +435,7 @@ export type BitacoraPOMassive = {
     employeeId: number;
     fechaCreacion: string;
     observations: string;
+    replace: boolean;
 };
 export type ConsolidatedHistory = {
     creadoPor: string;
