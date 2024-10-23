@@ -634,7 +634,7 @@ export type QueueShipmentsForm = {
     formSubmited: {
         booker_id: number;
         agency_from_id: number;
-        transporter_id: number;
+        transporter: string;
         planned_shipping: string;
         planned_delivery: string;
         shipment_reference: string;
