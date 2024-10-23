@@ -104,7 +104,7 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
         const netWeight = Number(values.netWgt);
         const total_baskets = Number(values.totalBaskets);
         const netWeightByBasket = Number(netWeight) / total_baskets;
-        const stockInteger = values.stockInteger == "true";
+        const pesoEnUnidades = values.stockInteger == "true";
         const buildArray = (keyIncludes, processValue) => {
             const regex = /\d/; // Expresión regular para buscar al menos un dígito.
             return keys
@@ -154,8 +154,10 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
                 const weight = Number(values[key]);
                 const detail_basket = Number(detail_baskets[index]);
                 const detail_discount = Number(detail_discounts[index]) ?? 0;
-                return ((weight - (stockInteger ? 0 : detail_basket * singleBasketWeight)) *
-                    ((100 - detail_discount) / 100));
+                const descuentoPesoCanasta = pesoEnUnidades
+                    ? 0
+                    : detail_basket * singleBasketWeight;
+                return ((weight - descuentoPesoCanasta) * ((100 - detail_discount) / 100));
             });
             const newPurchaseOrderDetails = detail_baskets.map((x, index) => {
                 return {
@@ -305,7 +307,10 @@ export const register4pinosReception = async ({ cookie, idWebAppTable, agency_id
                     qcMovementDetails.push({
                         item_id: apiResponses.authorizedPO.purchase_order_details[0].item_id,
                         lot_id: Number(lotResponse.data?.id),
-                        booked_quantity: total_qc_baskets * netWeightByBasket,
+                        //Si es por unidad, se redondea al entero más cercano, por ejemplo 12.3 quedaría como
+                        booked_quantity: pesoEnUnidades
+                            ? Math.round(total_qc_baskets * netWeightByBasket)
+                            : total_qc_baskets * netWeightByBasket,
                         reference: "Verduras a control de calidad.",
                     });
                     const qcBasketShipment = {
