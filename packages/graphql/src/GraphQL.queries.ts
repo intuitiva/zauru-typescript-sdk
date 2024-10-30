@@ -466,7 +466,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     : "";
 
   const lots = config.withLots
-    ? `lots {
+    ? `lots (order_by: {id: desc}) {
               id
               name
               description

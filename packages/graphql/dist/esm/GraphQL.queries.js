@@ -345,7 +345,7 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
           }`
         : "";
     const lots = config.withLots
-        ? `lots {
+        ? `lots (order_by: {id: desc}) {
               id
               name
               description
