@@ -29,10 +29,7 @@ export async function getInvoicesByAgencyId(
     }>(
       "",
       {
-        query: getInvoicesByAgencyIdStringQuery,
-        variables: {
-          id,
-        },
+        query: getInvoicesByAgencyIdStringQuery(Number(id ?? 0)),
       },
       { headers }
     );

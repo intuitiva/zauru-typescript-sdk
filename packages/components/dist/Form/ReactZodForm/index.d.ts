@@ -8,6 +8,7 @@ type Props = {
     id?: string;
     method?: "post" | "put" | "delete" | "patch";
     className?: string;
+    encType?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain";
 };
 export declare const ReactZodForm: (props: Props) => import("react/jsx-runtime").JSX.Element;
-export default ReactZodForm;
+export {};

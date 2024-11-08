@@ -16,6 +16,10 @@ type Props = {
   id?: string;
   method?: "post" | "put" | "delete" | "patch";
   className?: string;
+  encType?:
+    | "application/x-www-form-urlencoded"
+    | "multipart/form-data"
+    | "text/plain";
 };
 
 const emptySchema = z.any();
@@ -28,6 +32,7 @@ export const ReactZodForm = (props: Props) => {
     onSubmit,
     id,
     className,
+    encType,
   } = props;
 
   const submit = useSubmit();
@@ -52,11 +57,10 @@ export const ReactZodForm = (props: Props) => {
         method={method}
         id={id}
         className={className}
+        encType={encType}
       >
         {children}
       </Form>
     </FormProvider>
   );
 };
-
-export default ReactZodForm;

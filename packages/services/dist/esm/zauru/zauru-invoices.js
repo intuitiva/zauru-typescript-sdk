@@ -10,10 +10,7 @@ export async function getInvoicesByAgencyId(session, id) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getInvoicesByAgencyIdStringQuery,
-            variables: {
-                id,
-            },
+            query: getInvoicesByAgencyIdStringQuery(Number(id ?? 0)),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

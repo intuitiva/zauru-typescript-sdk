@@ -371,10 +371,10 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {})
         //Esto se aplica porque hay veces que hay mas de un lote,
         //esto se debe a que en el momento que se hace una actualización sobre
         //una orden de compra, se crea una recepción nueva lo que genera también un nuevo lote.
-        if (finalConfig.onlyLastLot) {
+        if (finalConfig.onlyFirstLot) {
             responseData = responseData.map((x) => {
                 if (x.lots.length > 0) {
-                    x.lots = [x.lots[x.lots.length - 1]];
+                    x.lots = [x.lots[0]];
                 }
                 return x;
             });
