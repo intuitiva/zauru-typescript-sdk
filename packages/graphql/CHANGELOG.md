@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.56](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.55...v2.0.56) (2024-11-12)
+
+**Note:** Version bump only for package @zauru-sdk/graphql
+
+
+
+
+
 ## [2.0.52](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.51...v2.0.52) (2024-10-30)
 
 **Note:** Version bump only for package @zauru-sdk/graphql
