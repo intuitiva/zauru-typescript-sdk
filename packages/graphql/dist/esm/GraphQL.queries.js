@@ -1193,55 +1193,57 @@ const getSuggestedPricesStringQuery = (config = {
     withItems: false,
     withItemCategories: false,
     onlyCurrent: false,
-}) => `
-query getSuggestedPrices {
-  suggested_prices ${config?.notNullPriceList || config?.onlyCurrent
-    ? `(
-        where: {${[
-        config?.onlyCurrent ? "current: { _eq: true }" : "",
-        config?.notNullPriceList ? "price_list_id: { _is_null: false }" : "",
-    ]
-        .filter(Boolean)
-        .join(", ")}
-        }
-      )`
-    : ""} {
-    id
-    current
-    currency_id
-    amount
-    bundle_id
-    item_id
-    notes
-    price_list_id
-    flexible_price
-    price_list {
-      payee_categories {
-        id
-      }
+}) => {
+    const conditions = [];
+    if (config.onlyCurrent) {
+        conditions.push("current: { _eq: true }");
     }
-    ${config?.withItems
-    ? `item {
-            id
-            name
-            stocks_only_integer
-            code
-            product_type
-            ${config?.withItemCategories
-        ? `
-                item_category {
-                    id
-                    name
-                    notes
-                    items_count
-                }
-              `
-        : ""}
-        }`
-    : ""}
+    if (config.notNullPriceList) {
+        conditions.push("price_list_id: { _is_null: false }");
+    }
+    const whereClause = conditions.length
+        ? `where: { ${conditions.join(", ")} }`
+        : "";
+    const itemCategories = config?.withItemCategories
+        ? `item_category {
+          id
+          name
+          notes
+          items_count
+      }
+    `
+        : "";
+    const items = config?.withItems
+        ? `item {
+        id
+        name
+        stocks_only_integer
+        code
+        product_type
+        ${itemCategories}
+    }`
+        : "";
+    return `query getSuggestedPrices {
+    suggested_prices ${whereClause} {
+      id
+      current
+      currency_id
+      amount
+      bundle_id
+      item_id
+      notes
+      price_list_id
+      flexible_price
+      price_list {
+        payee_categories {
+          id
+        }
+      }
+      ${items}
+    }
   }
-}
 `;
+};
 exports.getSuggestedPricesStringQuery = getSuggestedPricesStringQuery;
 const getPaymentTermsStringQuery = (config = { includeDiscounts: false }) => `
 query getPaymentTerms {

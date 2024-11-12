@@ -49,7 +49,7 @@ export async function getSuggestedPrices(
       notNullPriceList = false,
       withItems = false,
       withItemCategories = false,
-      onlyCurrent = false,
+      onlyCurrent = true,
     } = config;
     const headers = await getGraphQLAPIHeaders(session);
 
