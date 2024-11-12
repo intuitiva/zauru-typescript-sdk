@@ -19,7 +19,7 @@ import {
   SelectFieldOption,
   UpdatePurchaseOrderBody,
 } from "@zauru-sdk/types";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
 import {

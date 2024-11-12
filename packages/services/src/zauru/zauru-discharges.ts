@@ -7,7 +7,7 @@ import {
 } from "@zauru-sdk/types";
 import { getVariablesByName } from "../common.js";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 
 /**
  *

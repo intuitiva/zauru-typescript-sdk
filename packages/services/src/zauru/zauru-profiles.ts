@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 import httpOauth from "./httpOauth.js";
 import {
   AgencyGraphQL,

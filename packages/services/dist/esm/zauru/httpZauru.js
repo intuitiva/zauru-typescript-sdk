@@ -32,5 +32,4 @@ axiosInstance.interceptors.response.use(function (response) {
     console.log(chalk.red(`${msgError}`));
     throw new Error(msgError);
 });
-const httpZauru = axiosInstance;
-export default httpZauru;
+export const httpZauru = axiosInstance;

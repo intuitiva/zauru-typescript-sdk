@@ -1,6 +1,6 @@
 import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { AxiosUtilsResponse, PaymentGraphQL } from "@zauru-sdk/types";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 
 /**
  * createInvoice

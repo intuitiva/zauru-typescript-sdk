@@ -4,7 +4,7 @@ import { AxiosUtilsResponse, ShipmentGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
 import { getShipmentsStringQuery } from "@zauru-sdk/graphql";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 
 /**
  * getShipments

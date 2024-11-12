@@ -5,7 +5,7 @@ import {
   HTMLDataTableDeliveries,
   ShipmentGraphQL,
 } from "@zauru-sdk/types";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 
 /**
  * getDelivery

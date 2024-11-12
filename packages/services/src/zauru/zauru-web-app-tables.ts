@@ -16,7 +16,7 @@ import {
   getWebAppRowStringQuery,
   getWebAppRowsByWebAppTableIdStringQuery,
 } from "@zauru-sdk/graphql";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 
 /**
  * getWebAppRow

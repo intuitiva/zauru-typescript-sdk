@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 import { VariableGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 

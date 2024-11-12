@@ -4,7 +4,7 @@ import {
   InsertBookingBody,
   ShipmentGraphQL,
 } from "@zauru-sdk/types";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { Session } from "@remix-run/node";
 import httpGraphQLAPI from "./httpGraphQL.js";

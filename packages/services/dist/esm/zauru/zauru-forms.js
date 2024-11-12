@@ -2,7 +2,7 @@ import { arrayToObject, convertToFormData, handlePossibleAxiosErrors, } from "@z
 import { getGraphQLAPIHeaders } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
 import { getAllFormsStringQuery, getFormByNameStringQuery, getFormSubmissionByIdStringQuery, getFormsByDocumentTypeStringQuery, getFormsStringQuery, getInvoiceFormSubmissionsByAgencyIdStringQuery, getInvoiceFormSubmissionsByInvoiceIdStringQuery, getLastInvoiceFormSubmissionStringQuery, getMyCaseFormSubmissionsStringQuery, } from "@zauru-sdk/graphql";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 /**
  * getForms
  */

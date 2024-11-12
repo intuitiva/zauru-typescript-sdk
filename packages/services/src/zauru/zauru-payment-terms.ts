@@ -7,7 +7,7 @@ import {
   getPaymentTermByIdStringQuery,
   getPaymentTermsStringQuery,
 } from "@zauru-sdk/graphql";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 
 /**
  * getPaymentTerms

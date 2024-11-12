@@ -53,6 +53,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-const httpZauru = axiosInstance;
-
-export default httpZauru;
+export const httpZauru = axiosInstance;

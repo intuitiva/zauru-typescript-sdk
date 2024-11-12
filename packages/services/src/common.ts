@@ -2,7 +2,7 @@ import { Session, redirect } from "@remix-run/node";
 import { commitSession, getSession } from "./sessions/sessions.js";
 import { AxiosRequestHeaders } from "axios";
 import chalk from "chalk";
-import httpZauru from "./zauru/httpZauru.js";
+import { httpZauru } from "./zauru/httpZauru.js";
 import {
   getAgencyInfo,
   getEmployeeInfo,

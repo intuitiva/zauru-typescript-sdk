@@ -23,7 +23,7 @@ import {
   getItemsStringQuery,
   getSuperCategoryByIdStringQuery,
 } from "@zauru-sdk/graphql";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 
 //============================ FORMATEADO DE ITEMS
 function extractIdFromURL(input: string): number {

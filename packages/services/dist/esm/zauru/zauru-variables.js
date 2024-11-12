@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 /**
  * getVariables Function for get all zauru variables

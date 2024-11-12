@@ -2,7 +2,7 @@ import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import httpGraphQLAPI from "./httpGraphQL.js";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { getClientCategoriesStringQuery, getPayeeByIdStringQuery, getPayeeCategoriesByNotesMatchStringQuery, getPayeeCategoriesStringQuery, getPayeeCategoryByIdStringQuery, getPayeesStringQuery, getProviderCategoriesStringQuery, getProvidersStringQuery, } from "@zauru-sdk/graphql";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 /**
  * getPayees
  * @param headers

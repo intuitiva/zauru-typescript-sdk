@@ -1,5 +1,5 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders } from "../common.js";
 import httpGraphQLAPI from "./httpGraphQL.js";
 import { getSuggestedPricesStringQuery } from "@zauru-sdk/graphql";

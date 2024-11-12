@@ -1,6 +1,6 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { AxiosUtilsResponse, TagGraphQL } from "@zauru-sdk/types";
-import httpZauru from "./httpZauru.js";
+import { httpZauru } from "./httpZauru.js";
 
 /**
  * createTag
