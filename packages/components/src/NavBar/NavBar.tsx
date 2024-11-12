@@ -15,35 +15,30 @@ import type {
 } from "./NavBar.types.js";
 import { Link, useNavigate } from "@remix-run/react";
 
-const OptionsDropDownButton = ({
-  color,
-  options,
-  name,
-  specialColor,
-}: EntityProps) => {
+const OptionsDropDownButton = ({ color, options, name }: EntityProps) => {
   const [showOptionsMenu, setShowOptionsMenu] = useState(true);
 
   return (
-    <div
-      className={`${
-        specialColor ? specialColor.bg700 : color.bg700
-      } container text-white w-full sm:w-auto h-10 text-sm py-1 uppercase shadow hover:shadow-lg outline-none rounded-full focus:outline-none my-auto sm:my-0 sm:mr-1 mb-1 ease-linear transition-all duration-150`}
-    >
-      <button
-        onClick={() => setShowOptionsMenu(!showOptionsMenu)}
-        className={`relative flex items-center p-2 text-xs text-white ${color.bg700} active:${color.bg900} border border-transparent rounded-full uppercase focus:ring-opacity-40 focus:outline-none`}
-      >
-        {name ?? <OpcionButtonSvgIcon />}
-        <DropDownArrowSvgIcon />
-      </button>
-      <div
-        className="absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800"
-        hidden={showOptionsMenu}
-        onMouseLeave={() => setShowOptionsMenu(true)}
-      >
-        {options.map((option, index) => (
-          <React.Fragment key={index}>{option}</React.Fragment>
-        ))}
+    <div className="nav-item ml-auto">
+      <div className="flex justify-center">
+        <div className="relative inline-block">
+          <button
+            onClick={() => setShowOptionsMenu(!showOptionsMenu)}
+            className={`relative flex items-center p-2 text-xs text-white ${color.bg700} active:${color.bg900} border border-transparent rounded-full uppercase focus:ring-opacity-40 focus:outline-none`}
+          >
+            {name ?? <OpcionButtonSvgIcon />}
+            <DropDownArrowSvgIcon />
+          </button>
+          <div
+            className="absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800"
+            hidden={showOptionsMenu}
+            onMouseLeave={() => setShowOptionsMenu(true)}
+          >
+            {options.map((option, index) => (
+              <React.Fragment key={index}>{option}</React.Fragment>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -189,7 +184,7 @@ export const NavBar = ({
   );
 
   return (
-    <nav className={`py-3 ${color.bg600} dark:bg-gray-800`}>
+    <nav className={`py-3 ${color.bg600}`}>
       <div className="flex items-center justify-between ml-5 mr-5">
         <div className="flex justify-between items-center w-full lg:w-auto">
           <Link

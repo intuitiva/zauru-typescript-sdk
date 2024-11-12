@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const ButtonSectionContainer = (props: Props) => {
-  const { children, className, whitBg = true } = props;
+  const { children, className, whitBg = false } = props;
 
   return (
     <div
