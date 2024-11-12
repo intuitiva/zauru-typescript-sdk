@@ -18,7 +18,7 @@ const Alert = ({ type, title, description, onClose }) => {
             case "info":
                 return "bg-blue-100 text-blue-800";
             case "warning":
-                return "bg-yellow-400 text-yellow-900";
+                return "bg-yellow-100 text-yellow-800";
             default:
                 return "bg-gray-100 text-gray-800";
         }
