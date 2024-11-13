@@ -42,6 +42,7 @@ export async function getSuggestedPrices(
     withItems?: boolean;
     withItemCategories?: boolean;
     onlyCurrent?: boolean;
+    item_super_category_id?: number;
   }
 ): Promise<AxiosUtilsResponse<SuggestedPriceGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
@@ -50,6 +51,7 @@ export async function getSuggestedPrices(
       withItems = false,
       withItemCategories = false,
       onlyCurrent = true,
+      item_super_category_id,
     } = config;
     const headers = await getGraphQLAPIHeaders(session);
 
@@ -67,6 +69,7 @@ export async function getSuggestedPrices(
           withItems,
           withItemCategories,
           onlyCurrent,
+          item_super_category_id,
         }),
       },
       { headers }
