@@ -106,6 +106,7 @@ const Alert: React.FC<AlertProps> = ({ type, title, description, onClose }) => {
 };
 
 let activeAlerts: HTMLElement[] = [];
+let lastAlerts: { title: string; description: string; type: AlertType }[] = [];
 
 export const showAlert = (alertProps: AlertProps) => {
   if (typeof document === "undefined") {
@@ -127,11 +128,34 @@ export const showAlert = (alertProps: AlertProps) => {
     }, 0);
   };
 
+  // Check if the alert is a duplicate
+  const isDuplicate = lastAlerts.some(
+    (lastAlert) =>
+      lastAlert.title === alertProps.title &&
+      lastAlert.description === alertProps.description &&
+      lastAlert.type === alertProps.type
+  );
+
+  if (isDuplicate) {
+    return; // Do not show the alert if it's a duplicate
+  }
+
   activeAlerts.push(container);
   updateAlertOffsets();
 
   const root = createRoot(container);
   root.render(<Alert {...alertProps} onClose={asyncOnClose} />);
+
+  // Update the last alerts shown
+  lastAlerts.push(alertProps);
+  setTimeout(() => {
+    lastAlerts = lastAlerts.filter(
+      (lastAlert) =>
+        lastAlert.title !== alertProps.title ||
+        lastAlert.description !== alertProps.description ||
+        lastAlert.type !== alertProps.type
+    );
+  }, 4000); // Remove the alert from the last alerts list after 4 seconds
 };
 
 const updateAlertOffsets = () => {

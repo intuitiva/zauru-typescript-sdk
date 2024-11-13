@@ -18,7 +18,7 @@ const Alert = ({ type, title, description, onClose }) => {
             case "info":
                 return "bg-blue-100 text-blue-800";
             case "warning":
-                return "bg-yellow-100 text-yellow-800";
+                return "bg-yellow-200 text-yellow-800";
             default:
                 return "bg-gray-100 text-gray-800";
         }
@@ -70,6 +70,7 @@ const Alert = ({ type, title, description, onClose }) => {
                         }, children: (0, jsx_runtime_1.jsx)(icons_1.ExitSvg, {}) })] }), (0, jsx_runtime_1.jsx)("div", { className: "mt-2", children: (0, jsx_runtime_1.jsx)("p", { className: "text-sm overflow-wrap break-words", children: description }) }), (0, jsx_runtime_1.jsx)("div", { className: "relative h-1 mt-4 bg-gray-200 rounded", children: (0, jsx_runtime_1.jsx)("div", { className: `absolute left-0 top-0 h-full ${getColor()} rounded`, style: { width: `${progress * 100}%` } }) })] }));
 };
 let activeAlerts = [];
+let lastAlerts = [];
 const showAlert = (alertProps) => {
     if (typeof document === "undefined") {
         return;
@@ -87,10 +88,24 @@ const showAlert = (alertProps) => {
             onClose();
         }, 0);
     };
+    // Check if the alert is a duplicate
+    const isDuplicate = lastAlerts.some((lastAlert) => lastAlert.title === alertProps.title &&
+        lastAlert.description === alertProps.description &&
+        lastAlert.type === alertProps.type);
+    if (isDuplicate) {
+        return; // Do not show the alert if it's a duplicate
+    }
     activeAlerts.push(container);
     updateAlertOffsets();
     const root = (0, client_1.createRoot)(container);
     root.render((0, jsx_runtime_1.jsx)(Alert, { ...alertProps, onClose: asyncOnClose }));
+    // Update the last alerts shown
+    lastAlerts.push(alertProps);
+    setTimeout(() => {
+        lastAlerts = lastAlerts.filter((lastAlert) => lastAlert.title !== alertProps.title ||
+            lastAlert.description !== alertProps.description ||
+            lastAlert.type !== alertProps.type);
+    }, 4000); // Remove the alert from the last alerts list after 4 seconds
 };
 exports.showAlert = showAlert;
 const updateAlertOffsets = () => {
