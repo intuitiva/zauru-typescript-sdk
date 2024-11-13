@@ -1456,17 +1456,28 @@ export const getSuggestedPricesStringQuery = (
 };
 
 export const getPaymentTermsStringQuery = (
-  config: { includeDiscounts: boolean } = { includeDiscounts: false }
-) => `
-query getPaymentTerms {
-  payment_terms {
-    active
-    id
-    memo
-    name
-    ${
-      config.includeDiscounts
-        ? `allowed_discounts {
+  config: {
+    includeAllowedDiscounts: boolean;
+    includeAllowedPaymentTerms: boolean;
+    onlyActives: boolean;
+  } = {
+    includeAllowedDiscounts: false,
+    includeAllowedPaymentTerms: false,
+    onlyActives: true,
+  }
+) => {
+  const conditions = [];
+
+  if (config.onlyActives) {
+    conditions.push(`active: { _eq: true}`);
+  }
+
+  const whereClause = conditions.length
+    ? `where: { ${conditions.join(", ")} }`
+    : "";
+
+  const allowedDiscounts = config.includeAllowedDiscounts
+    ? `allowed_discounts {
         discount {
           id
           name
@@ -1474,11 +1485,27 @@ query getPaymentTerms {
           amount
         }
       }`
-        : ""
-    }
+    : "";
+
+  const allowedPaymentTerms = config.includeAllowedPaymentTerms
+    ? `allowed_payment_terms {
+        payment_term_id
+      }`
+    : "";
+
+  return `query getPaymentTerms {
+    payment_terms (
+      ${whereClause}
+    ) {
+      active
+      id
+      memo
+      name
+      ${allowedDiscounts}
+      ${allowedPaymentTerms}
   }
-}
-`;
+  `;
+};
 
 export const getPaymentMethodsStringQuery = (config: {
   onlyActives: boolean;

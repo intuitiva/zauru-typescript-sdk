@@ -6,13 +6,16 @@ import { httpZauru } from "./httpZauru.js";
 /**
  * getPaymentTerms
  */
-export async function getPaymentTerms(session, config = { includeDiscounts: false }) {
+export async function getPaymentTerms(session, config = {
+    includeAllowedDiscounts: false,
+    includeAllowedPaymentTerms: false,
+    onlyActives: true,
+}) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
+        const query = getPaymentTermsStringQuery(config);
         const response = await httpGraphQLAPI.post("", {
-            query: getPaymentTermsStringQuery({
-                includeDiscounts: config.includeDiscounts,
-            }),
+            query,
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

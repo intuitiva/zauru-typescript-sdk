@@ -14,10 +14,20 @@ import { httpZauru } from "./httpZauru.js";
  */
 export async function getPaymentTerms(
   session: Session,
-  config: { includeDiscounts: boolean } = { includeDiscounts: false }
+  config: {
+    includeAllowedDiscounts: boolean;
+    includeAllowedPaymentTerms: boolean;
+    onlyActives: boolean;
+  } = {
+    includeAllowedDiscounts: false,
+    includeAllowedPaymentTerms: false,
+    onlyActives: true,
+  }
 ): Promise<AxiosUtilsResponse<PaymentTermGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
+
+    const query = getPaymentTermsStringQuery(config);
 
     const response = await httpGraphQLAPI.post<{
       data: { payment_terms: PaymentTermGraphQL[] };
@@ -28,9 +38,7 @@ export async function getPaymentTerms(
     }>(
       "",
       {
-        query: getPaymentTermsStringQuery({
-          includeDiscounts: config.includeDiscounts,
-        }),
+        query,
       },
       { headers }
     );
