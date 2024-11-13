@@ -1503,8 +1503,9 @@ export const getPaymentTermsStringQuery = (
       name
       ${allowedDiscounts}
       ${allowedPaymentTerms}
+    }
   }
-  `;
+`;
 };
 
 export const getPaymentMethodsStringQuery = (config: {
