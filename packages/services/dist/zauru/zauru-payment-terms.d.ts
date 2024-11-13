@@ -4,9 +4,9 @@ import { AxiosUtilsResponse, PaymentTermGraphQL } from "@zauru-sdk/types";
  * getPaymentTerms
  */
 export declare function getPaymentTerms(session: Session, config?: {
-    includeAllowedDiscounts: boolean;
-    includeAllowedPaymentTerms: boolean;
-    onlyActives: boolean;
+    includeAllowedDiscounts?: boolean;
+    includeAllowedPaymentTerms?: boolean;
+    onlyActives?: boolean;
 }): Promise<AxiosUtilsResponse<PaymentTermGraphQL[]>>;
 /**
  * getPaymentTermById
