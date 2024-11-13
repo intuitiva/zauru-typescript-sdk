@@ -1195,6 +1195,9 @@ const getSuggestedPricesStringQuery = (config = {
     onlyCurrent: false,
 }) => {
     const conditions = [];
+    if (config.item_super_category_id) {
+        conditions.push(`item: { item_category: { item_super_category_id: { _eq: ${config.item_super_category_id} } } }`);
+    }
     if (config.onlyCurrent) {
         conditions.push("current: { _eq: true }");
     }

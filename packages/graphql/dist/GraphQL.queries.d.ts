@@ -101,6 +101,7 @@ export declare const getSuggestedPricesStringQuery: (config?: {
     withItems: boolean;
     withItemCategories: boolean;
     onlyCurrent: boolean;
+    item_super_category_id?: number;
 }) => string;
 export declare const getPaymentTermsStringQuery: (config?: {
     includeDiscounts: boolean;
