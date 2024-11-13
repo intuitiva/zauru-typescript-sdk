@@ -23,7 +23,7 @@ import moment from "moment";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpZauru } from "./httpZauru.js";
 import { createLoteRecord } from "./zauru-lote-record.js";
-import httpGraphQLAPI from "./httpGraphQL.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
 import {
   getLotStocksByAgencyIdStringQuery,
   getLotsByNameStringQuery,

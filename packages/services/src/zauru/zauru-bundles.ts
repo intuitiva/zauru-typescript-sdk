@@ -2,7 +2,7 @@ import type { Session } from "@remix-run/node";
 import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { AxiosUtilsResponse, BundleGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
-import httpGraphQLAPI from "./httpGraphQL.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
 import {
   getBundleByNameStringQuery,
   getBundlesByItemCategoryIdStringQuery,

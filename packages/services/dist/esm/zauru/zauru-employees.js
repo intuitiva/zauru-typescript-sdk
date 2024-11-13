@@ -1,6 +1,6 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
-import httpGraphQLAPI from "./httpGraphQL.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getEmployeesByAgencyIdStringQuery, getEmployeesStringQuery, } from "@zauru-sdk/graphql";
 export async function getEmployees(session) {
     return handlePossibleAxiosErrors(async () => {

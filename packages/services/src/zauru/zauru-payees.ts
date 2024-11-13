@@ -5,7 +5,7 @@ import {
   PayeeCategoryGraphQL,
   PayeeGraphQL,
 } from "@zauru-sdk/types";
-import httpGraphQLAPI from "./httpGraphQL.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getGraphQLAPIHeaders } from "../common.js";
 import {
   getClientCategoriesStringQuery,

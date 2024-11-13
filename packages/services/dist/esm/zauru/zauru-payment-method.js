@@ -1,6 +1,6 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
-import httpGraphQLAPI from "./httpGraphQL.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getPaymentMethodsStringQuery } from "@zauru-sdk/graphql";
 /**
  * getPaymentTerms

@@ -1,7 +1,7 @@
 import { arrayToObject, convertToFormData, formatDateToUTC, getBasketsSchema, handlePossibleAxiosErrors, reduceAdd, } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
-import httpGraphQLAPI from "./httpGraphQL.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, } from "@zauru-sdk/graphql";
 /**
  * markAsReceivePurchaseOrder

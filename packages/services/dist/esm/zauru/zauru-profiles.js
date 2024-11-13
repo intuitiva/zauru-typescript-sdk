@@ -1,5 +1,5 @@
 import { httpZauru } from "./httpZauru.js";
-import httpOauth from "./httpOauth.js";
+import { httpOauth } from "./httpOauth.js";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { config } from "@zauru-sdk/config";
 /**

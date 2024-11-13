@@ -50,6 +50,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-const httpGraphQLAPI = axiosInstance;
-
-export default httpGraphQLAPI;
+export const httpGraphQLAPI = axiosInstance;

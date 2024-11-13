@@ -33,5 +33,4 @@ axiosInstance.interceptors.response.use(function (response) {
     console.log(chalk.red(`${msgError}`));
     throw new Error(msgError);
 });
-const httpGraphQLAPI = axiosInstance;
-export default httpGraphQLAPI;
+export const httpGraphQLAPI = axiosInstance;

@@ -33,5 +33,4 @@ axiosInstance.interceptors.response.use(function (response) {
     console.log(chalk.red(`${msgError}`));
     throw new Error(msgError);
 });
-const httpOauth = axiosInstance;
-export default httpOauth;
+export const httpOauth = axiosInstance;

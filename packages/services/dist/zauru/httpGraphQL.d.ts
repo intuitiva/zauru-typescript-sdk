@@ -1,2 +1,1 @@
-declare const httpGraphQLAPI: import("axios").AxiosInstance;
-export default httpGraphQLAPI;
+export declare const httpGraphQLAPI: import("axios").AxiosInstance;

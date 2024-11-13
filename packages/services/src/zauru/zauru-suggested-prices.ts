@@ -7,7 +7,7 @@ import {
 import { httpZauru } from "./httpZauru.js";
 import { Session } from "@remix-run/node";
 import { getGraphQLAPIHeaders } from "../common.js";
-import httpGraphQLAPI from "./httpGraphQL.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getSuggestedPricesStringQuery } from "@zauru-sdk/graphql";
 
 /**

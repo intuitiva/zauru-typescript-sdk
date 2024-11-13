@@ -1,5 +1,5 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import httpGraphQLAPI from "./httpGraphQL.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { getPrintTemplatesStringQuery } from "@zauru-sdk/graphql";
 /**

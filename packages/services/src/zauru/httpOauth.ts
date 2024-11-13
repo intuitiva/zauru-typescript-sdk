@@ -50,6 +50,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-const httpOauth = axiosInstance;
-
-export default httpOauth;
+export const httpOauth = axiosInstance;
