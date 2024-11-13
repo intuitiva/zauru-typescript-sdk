@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.66](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.65...v2.0.66) (2024-11-13)
+
+
+### Reverts
+
+* Revert "# update alert" ([2396341](https://github.com/intuitiva/zauru-typescript-sdk/commit/23963416247e0fdd558b60d26b8adcddcbb87a56))
+
+
+
+
+
 ## [2.0.65](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.64...v2.0.65) (2024-11-13)
 
 **Note:** Version bump only for package @zauru-sdk/hooks
