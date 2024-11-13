@@ -190,6 +190,7 @@ const useGetReduxCatalog = <T>(
           title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
           description: "Error: " + ex,
         });
+        setData({ ...data, loading: false });
       }
     }
   }, []);
