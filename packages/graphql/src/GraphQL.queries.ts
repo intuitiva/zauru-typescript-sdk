@@ -1427,7 +1427,7 @@ export const getSuggestedPricesStringQuery = (
     : "";
 
   return `query getSuggestedPrices {
-    suggested_prices ${whereClause} {
+    suggested_prices (${whereClause}) {
       id
       current
       currency_id
