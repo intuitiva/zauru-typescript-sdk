@@ -24,6 +24,7 @@ type Props = {
   style?: React.CSSProperties;
   className?: string;
   required?: boolean;
+  autoComplete?: React.HTMLInputAutoCompleteAttribute;
 };
 
 export const TextField = (props: Props) => {
@@ -46,6 +47,7 @@ export const TextField = (props: Props) => {
     className = "",
     hint,
     required,
+    autoComplete = "off",
   } = props;
 
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
@@ -129,7 +131,6 @@ export const TextField = (props: Props) => {
       readOnly={isReadOnly}
       disabled={disabled}
       id={id ?? name}
-      autoComplete="off"
       value={value}
       onWheel={(e: React.WheelEvent<HTMLInputElement>) => {
         e.currentTarget.blur();
@@ -144,11 +145,12 @@ export const TextField = (props: Props) => {
       className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
       {...(register ?? {})}
       name={name}
+      autoComplete={autoComplete}
       onChange={handleInputChange}
     />
   );
 
-  if (!error && !title) {
+  if (!error && !title && !helpText) {
     return <div className={`${className}`}>{inputComponent}</div>;
   }
 

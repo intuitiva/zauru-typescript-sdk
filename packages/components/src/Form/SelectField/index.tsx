@@ -94,19 +94,67 @@ export const SelectField = (props: Props) => {
       }
     };
 
-    if (defaultValue) {
-      setValue(defaultValue);
-      setInputValue(defaultValue.label);
-      if (setFormValue) {
-        setFormValue(name || "", defaultValue.value);
-      }
-    }
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleSetSingleValue = (value?: SelectFieldOption) => {
+    if (value) {
+      setValue(value);
+      setInputValue(value.label);
+      if (setFormValue) {
+        setFormValue(name || "", value.value);
+      }
+    } else {
+      setValue(null);
+      setInputValue("");
+      if (setFormValue) {
+        setFormValue(name || "", "");
+      }
+    }
+    onChange && onChange(value ?? null);
+  };
+
+  const handleAddMultiValue = (value?: SelectFieldOption) => {
+    if (value) {
+      const existValue = options.some((v) => v.value === value.value);
+      const noEstaYaSeleccionado = !valueMulti.some(
+        (v) => v.value === value.value
+      );
+      if (existValue && noEstaYaSeleccionado) {
+        const newValue = [...valueMulti, value];
+        setValueMulti(newValue);
+        if (setFormValue) {
+          setFormValue(
+            name || "",
+            newValue.map((v) => v.value)
+          );
+        }
+        onChangeMulti && onChangeMulti(newValue);
+      }
+    } else {
+      setValueMulti([]);
+      if (setFormValue) {
+        setFormValue(name || "", []);
+      }
+      setInputValue("");
+      onChangeMulti && onChangeMulti([]);
+    }
+  };
+
+  const handleRemoveMultiValue = (value: SelectFieldOption) => {
+    const newValue = valueMulti.filter((v) => v.value !== value.value);
+    setValueMulti(newValue);
+    if (setFormValue) {
+      setFormValue(
+        name || "",
+        newValue.map((v) => v.value)
+      );
+    }
+    onChangeMulti && onChangeMulti(newValue);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -125,46 +173,22 @@ export const SelectField = (props: Props) => {
 
   const handleOptionClick = (option: SelectFieldOption) => {
     if (isMulti) {
-      const newValue = valueMulti.some((v) => v.value === option.value)
-        ? valueMulti.filter((v) => v.value !== option.value)
-        : [...valueMulti, option];
-      setValueMulti(newValue);
-      onChangeMulti && onChangeMulti(newValue);
-      if (setFormValue) {
-        setFormValue(
-          name || "",
-          newValue.map((v) => v.value)
-        );
-      }
+      handleAddMultiValue(option);
     } else {
-      setValue(option);
-      setInputValue(option.label);
-      onChange && onChange(option);
-      if (setFormValue) {
-        setFormValue(name || "", option.value);
-      }
+      handleSetSingleValue(option);
     }
     setHighlightedIndex(-1);
     setIsSearching(false);
-    setFilteredOptions([]);
+    setFilteredOptions(options);
     setIsOpen(false);
   };
 
   const handleClear = () => {
     if (isMulti) {
-      setValueMulti([]);
-      onChangeMulti && onChangeMulti([]);
-      if (setFormValue) {
-        setFormValue(name || "", []);
-      }
+      handleAddMultiValue();
     } else {
-      setValue(null);
-      onChange && onChange(null);
-      if (setFormValue) {
-        setFormValue(name || "", "");
-      }
+      handleSetSingleValue();
     }
-    setInputValue("");
   };
 
   const handleBlur = () => {
@@ -175,6 +199,7 @@ export const SelectField = (props: Props) => {
         handleOptionClick(filteredOptions[0]);
       }
 
+      setHighlightedIndex(-1);
       setIsTabPressed(false);
       setIsSearching(false);
       setIsOpen(false);
@@ -260,21 +285,48 @@ export const SelectField = (props: Props) => {
         </label>
       )}
       <div className="relative">
-        <input
-          type="text"
-          id={id}
-          value={inputValue}
-          onFocus={() => setIsOpen(true)}
-          onKeyDown={handleKeyDown}
-          readOnly={isReadOnly}
-          disabled={disabled}
-          className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm pr-10`}
-          placeholder={isMulti ? "Select options..." : "Select an option..."}
-          autoComplete="off"
-          onChange={handleInputChange}
-          onBlur={handleBlur}
-          required={required}
-        />
+        <div className="flex items-center">
+          <input
+            type="text"
+            id={id}
+            value={inputValue}
+            onFocus={() => setIsOpen(true)}
+            onKeyDown={handleKeyDown}
+            readOnly={isReadOnly}
+            disabled={disabled}
+            className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm pr-10`}
+            placeholder={isMulti ? "Select options..." : "Select an option..."}
+            autoComplete="off"
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            required={required}
+          />
+          {isClearable && (value || valueMulti.length > 0) && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+            >
+              ×
+            </button>
+          )}
+          {helpText && (
+            <div className="flex items-center relative ml-3">
+              <div
+                className="relative cursor-pointer"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              >
+                <IdeaIconSVG />
+                {showTooltip && (
+                  <div className="absolute -left-48 top-0 mt-8 p-2 bg-white border rounded shadow text-black z-50">
+                    {helpText}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
         <input
           type="hidden"
           {...(register ?? {})}
@@ -285,33 +337,6 @@ export const SelectField = (props: Props) => {
               : value?.value || ""
           }
         />
-        {isClearable && (value || valueMulti.length > 0) && (
-          <button
-            type="button"
-            onClick={handleClear}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-          >
-            ×
-          </button>
-        )}
-        {!isClearable && (value || valueMulti.length > 0) && (
-          <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            <svg
-              className="h-5 w-5 text-green-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </span>
-        )}
         {isOpen && !isReadOnly && (
           <ul
             ref={optionsRef}
@@ -341,7 +366,7 @@ export const SelectField = (props: Props) => {
           </ul>
         )}
       </div>
-      {isMulti && (
+      {isMulti && valueMulti.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-2">
           {valueMulti.map((option, index) => (
             <span
@@ -351,29 +376,13 @@ export const SelectField = (props: Props) => {
               {option.label}
               <button
                 type="button"
-                onClick={() => handleOptionClick(option)}
+                onClick={() => handleRemoveMultiValue(option)}
                 className="ml-1 text-blue-600 hover:text-blue-800"
               >
                 ×
               </button>
             </span>
           ))}
-        </div>
-      )}
-      {helpText && (
-        <div className="flex items-center relative mt-1">
-          <div
-            className="relative cursor-pointer"
-            onMouseEnter={() => setShowTooltip(true)}
-            onMouseLeave={() => setShowTooltip(false)}
-          >
-            <IdeaIconSVG />
-            {showTooltip && (
-              <div className="absolute -left-48 top-0 mt-8 p-2 bg-white border rounded shadow text-black z-50">
-                {helpText}
-              </div>
-            )}
-          </div>
         </div>
       )}
       {error && (
