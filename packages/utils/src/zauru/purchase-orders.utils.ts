@@ -604,7 +604,7 @@ export const createNewLabItemRequest = (
       incoterm_id: 1,
       taxable: false,
       import: false,
-      id_number,
+      //id_number, //Dejo de enviarlo ya que lo configuré de forma automática en zauru
       reference: "LABORATORIO - Solicitud de insumos desde WebApp",
       origin: "LABORATORIO",
       purchase_order_details: insumos.map((x) => {
