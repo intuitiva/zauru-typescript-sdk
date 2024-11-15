@@ -18,6 +18,7 @@ type Props = {
     style?: React.CSSProperties;
     className?: string;
     required?: boolean;
+    autoComplete?: React.HTMLInputAutoCompleteAttribute;
 };
 export declare const TextField: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};
