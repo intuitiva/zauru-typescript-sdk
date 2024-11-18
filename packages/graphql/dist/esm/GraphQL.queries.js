@@ -1024,8 +1024,10 @@ query getInvoiceFormSubmissionsByAgencyId {
         : ""}
         voided: {_eq: false}
       },
-      ${filters?.startDate?.length && filters?.endDate?.length
-        ? `created_at: { _gte: "${filters?.startDate}T00:00:00", _lte: "${filters?.endDate}T00:00:00" },`
+      ${
+    // We need to add 6 hours to the start and end date because the invoice date is in UTC and the database is in UTC+6
+    filters?.startDate?.length && filters?.endDate?.length
+        ? `created_at: { _gte: "${filters?.startDate}T06:00:00", _lte: "${filters?.endDate}T06:00:00" },`
         : ""}
       invoice: {
         agency_id: {_eq: ${agency_id}},
