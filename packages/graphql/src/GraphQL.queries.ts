@@ -389,9 +389,15 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   }
 
   if (config.itemId) {
-    conditions.push(
-      `purchase_order_details: { item_id: { _eq: ${config.itemId} } }`
-    );
+    if (config.itemId.toString().includes(",")) {
+      conditions.push(
+        `purchase_order_details: { item_id: { _in: [${config.itemId}] } }`
+      );
+    } else {
+      conditions.push(
+        `purchase_order_details: { item_id: { _eq: ${config.itemId} } }`
+      );
+    }
   }
 
   if (config.lotItemIdExclusion) {

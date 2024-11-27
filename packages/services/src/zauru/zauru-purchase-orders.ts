@@ -515,7 +515,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     poDetailTagId?: number;
     onlyWithShipmentToMyAgency?: boolean;
     onlyWithLotStocksToMyAgency?: boolean;
-    itemId?: number | string;
+    itemId?: number | string; // Can be a single item or a comma-separated list of items
     payeeCategoryId?: number | string;
     payeeId?: number | string;
     betweenIssueDate?: boolean;
