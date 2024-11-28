@@ -226,8 +226,11 @@ export const SelectField = (props: Props) => {
       handleOptionClick(filteredOptions[highlightedIndex]);
     } else if (e.key === "Backspace" && (value || valueMulti.length > 0)) {
       e.preventDefault();
-      handleClear();
-      setInputValue("");
+      if (!isMulti) {
+        handleClear();
+      } else {
+        setInputValue("");
+      }
       setFilteredOptions(options);
       setIsOpen(true);
     }
