@@ -104,6 +104,7 @@ export type UpdateLoteBody = {
   lot: {
     name?: string;
     description: string;
+    item_id?: number;
   };
 };
 //Modelo para utilizarse en la app

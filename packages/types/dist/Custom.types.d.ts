@@ -78,6 +78,7 @@ export type UpdateLoteBody = {
     lot: {
         name?: string;
         description: string;
+        item_id?: number;
     };
 };
 export type LoteWithPurchaseFormatedSchema = PurchasesDataTableListFormatedSchema & {
