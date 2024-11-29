@@ -174,8 +174,8 @@ type PesadaBody = {
   discount: number;
   netWeight: string;
   weightByBasket: string;
-  probableUtilization: number;
-  lbDiscounted: number;
+  probableUtilization: string;
+  lbDiscounted: string;
 };
 
 export type FooterColumnConfig = {
@@ -226,8 +226,8 @@ export const useGetPesadas = (
           discount,
           netWeight: toFixedIfNeeded(netWeight)?.toString(),
           weightByBasket: toFixedIfNeeded(weightByBasket)?.toString(),
-          probableUtilization,
-          lbDiscounted,
+          probableUtilization: toFixedIfNeeded(probableUtilization)?.toString(),
+          lbDiscounted: toFixedIfNeeded(lbDiscounted)?.toString(),
         };
       }),
     ];
@@ -370,8 +370,8 @@ export const getPesadasByForm = (
       discount,
       netWeight: toFixedIfNeeded(netWeight)?.toString(),
       weightByBasket: toFixedIfNeeded(weightByBasket)?.toString(),
-      probableUtilization,
-      lbDiscounted,
+      probableUtilization: toFixedIfNeeded(probableUtilization)?.toString(),
+      lbDiscounted: toFixedIfNeeded(lbDiscounted)?.toString(),
     });
 
     index++;

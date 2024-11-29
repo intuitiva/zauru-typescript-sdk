@@ -114,8 +114,8 @@ const useGetPesadas = (purchaseOrder, stocks_only_integer = false) => {
                     discount,
                     netWeight: (0, common_1.toFixedIfNeeded)(netWeight)?.toString(),
                     weightByBasket: (0, common_1.toFixedIfNeeded)(weightByBasket)?.toString(),
-                    probableUtilization,
-                    lbDiscounted,
+                    probableUtilization: (0, common_1.toFixedIfNeeded)(probableUtilization)?.toString(),
+                    lbDiscounted: (0, common_1.toFixedIfNeeded)(lbDiscounted)?.toString(),
                 };
             }),
         ];
@@ -236,8 +236,8 @@ const getPesadasByForm = (formInput, stocks_only_integer = false) => {
             discount,
             netWeight: (0, common_1.toFixedIfNeeded)(netWeight)?.toString(),
             weightByBasket: (0, common_1.toFixedIfNeeded)(weightByBasket)?.toString(),
-            probableUtilization,
-            lbDiscounted,
+            probableUtilization: (0, common_1.toFixedIfNeeded)(probableUtilization)?.toString(),
+            lbDiscounted: (0, common_1.toFixedIfNeeded)(lbDiscounted)?.toString(),
         });
         index++;
     }

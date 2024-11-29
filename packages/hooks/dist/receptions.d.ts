@@ -44,8 +44,8 @@ type PesadaBody = {
     discount: number;
     netWeight: string;
     weightByBasket: string;
-    probableUtilization: number;
-    lbDiscounted: number;
+    probableUtilization: string;
+    lbDiscounted: string;
 };
 export type FooterColumnConfig = {
     content: React.ReactNode;
