@@ -42,9 +42,10 @@ const useGetReceptionObject = (RECEPTION_NAME, { online = false, wheres = [] } =
         }
     }, [fetcher, dispatch, RECEPTION_NAME]);
     (0, react_2.useEffect)(() => {
-        const isEmptyData = Array.isArray(objectData?.data)
-            ? objectData?.data.length <= 0
-            : Object.keys(objectData?.data || {}).length <= 0;
+        const isEmptyData = (objectData?.data &&
+            Array.isArray(objectData?.data) &&
+            objectData?.data.length <= 0) ||
+            (objectData?.data && Object.keys(objectData?.data).length <= 0);
         if (isEmptyData || objectData.reFetch || online) {
             try {
                 setData({ ...data, loading: true });

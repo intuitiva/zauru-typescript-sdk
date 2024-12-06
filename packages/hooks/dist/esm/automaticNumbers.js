@@ -10,7 +10,7 @@ const useGetAutomaticNumber = (AUTOMATIC_NUMBER_NAME) => {
     const dispatch = (0, redux_1.useAppDispatch)();
     const objectData = (0, redux_1.useAppSelector)((state) => state.automaticNumbers[AUTOMATIC_NUMBER_NAME]);
     const [data, setData] = (0, react_2.useState)({
-        data: Object.keys(objectData?.data).length
+        data: objectData?.data && Object.keys(objectData?.data).length
             ? objectData?.data
             : {},
         loading: objectData.loading,
@@ -37,7 +37,7 @@ const useGetAutomaticNumber = (AUTOMATIC_NUMBER_NAME) => {
         }
     }, [fetcher, dispatch, AUTOMATIC_NUMBER_NAME]);
     (0, react_2.useEffect)(() => {
-        if (Object.keys(objectData?.data).length <= 0) {
+        if (objectData?.data && Object.keys(objectData?.data).length <= 0) {
             try {
                 setData({ ...data, loading: true });
                 dispatch((0, redux_1.automaticNumberFetchStart)(AUTOMATIC_NUMBER_NAME));

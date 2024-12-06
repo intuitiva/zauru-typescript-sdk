@@ -10,7 +10,7 @@ const useGetTemplateObject = (TEMPLATE_NAME, config = { online: false }) => {
     const dispatch = (0, redux_1.useAppDispatch)();
     const objectData = (0, redux_1.useAppSelector)((state) => state.templates[TEMPLATE_NAME]);
     const [data, setData] = (0, react_2.useState)({
-        data: Object.keys(objectData?.data).length
+        data: objectData?.data && Object.keys(objectData?.data).length
             ? objectData?.data
             : {},
         loading: objectData.loading,
@@ -37,7 +37,8 @@ const useGetTemplateObject = (TEMPLATE_NAME, config = { online: false }) => {
         }
     }, [fetcher, dispatch, TEMPLATE_NAME]);
     (0, react_2.useEffect)(() => {
-        if (Object.keys(objectData?.data).length <= 0 || config?.online) {
+        if ((objectData?.data && Object.keys(objectData?.data).length <= 0) ||
+            config?.online) {
             try {
                 setData({ ...data, loading: true });
                 dispatch((0, redux_1.templateFetchStart)(TEMPLATE_NAME));
