@@ -26,9 +26,10 @@ const useGetTemplateObject = <T>(
   const dispatch = useAppDispatch();
   const objectData = useAppSelector((state) => state.templates[TEMPLATE_NAME]);
   const [data, setData] = useState<ProfileType<T>>({
-    data: Object.keys(objectData?.data).length
-      ? (objectData?.data as T)
-      : ({} as T),
+    data:
+      objectData?.data && Object.keys(objectData?.data).length
+        ? (objectData?.data as T)
+        : ({} as T),
     loading: objectData.loading,
   });
 
@@ -58,7 +59,10 @@ const useGetTemplateObject = <T>(
   }, [fetcher, dispatch, TEMPLATE_NAME]);
 
   useEffect(() => {
-    if (Object.keys(objectData?.data).length <= 0 || config?.online) {
+    if (
+      (objectData?.data && Object.keys(objectData?.data).length <= 0) ||
+      config?.online
+    ) {
       try {
         setData({ ...data, loading: true });
         dispatch(templateFetchStart(TEMPLATE_NAME));

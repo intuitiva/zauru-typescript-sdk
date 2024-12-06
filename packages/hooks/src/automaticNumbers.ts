@@ -23,9 +23,10 @@ export const useGetAutomaticNumber = <T>(
     (state) => state.automaticNumbers[AUTOMATIC_NUMBER_NAME]
   );
   const [data, setData] = useState<ProfileType<T>>({
-    data: Object.keys(objectData?.data).length
-      ? (objectData?.data as T)
-      : ({} as T),
+    data:
+      objectData?.data && Object.keys(objectData?.data).length
+        ? (objectData?.data as T)
+        : ({} as T),
     loading: objectData.loading,
   });
 
@@ -55,7 +56,7 @@ export const useGetAutomaticNumber = <T>(
   }, [fetcher, dispatch, AUTOMATIC_NUMBER_NAME]);
 
   useEffect(() => {
-    if (Object.keys(objectData?.data).length <= 0) {
+    if (objectData?.data && Object.keys(objectData?.data).length <= 0) {
       try {
         setData({ ...data, loading: true });
         dispatch(automaticNumberFetchStart(AUTOMATIC_NUMBER_NAME));

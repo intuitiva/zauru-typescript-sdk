@@ -89,9 +89,11 @@ const useGetReceptionObject = <T>(
   }, [fetcher, dispatch, RECEPTION_NAME]);
 
   useEffect(() => {
-    const isEmptyData = Array.isArray(objectData?.data)
-      ? objectData?.data.length <= 0
-      : Object.keys(objectData?.data || {}).length <= 0;
+    const isEmptyData =
+      (objectData?.data &&
+        Array.isArray(objectData?.data) &&
+        objectData?.data.length <= 0) ||
+      (objectData?.data && Object.keys(objectData?.data).length <= 0);
 
     if (isEmptyData || objectData.reFetch || online) {
       try {
