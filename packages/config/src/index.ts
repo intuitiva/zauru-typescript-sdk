@@ -13,10 +13,6 @@ const rawConfig = {
 };
 
 function getConfigValue(key: keyof typeof rawConfig) {
-  if (!rawConfig[key]) {
-    console.warn(`Valor de configuración vacío para: ${key}`);
-  }
-
   return rawConfig[key];
 }
 
