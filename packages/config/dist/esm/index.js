@@ -14,9 +14,6 @@ const rawConfig = {
     expirationDurationInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS || 60 * 60 * 24,
 };
 function getConfigValue(key) {
-    if (!rawConfig[key]) {
-        console.warn(`Valor de configuración vacío para: ${key}`);
-    }
     return rawConfig[key];
 }
 exports.config = new Proxy(rawConfig, {
