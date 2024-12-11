@@ -629,7 +629,7 @@ export const sortByProperty = (array: any[], property: string) => {
 export async function handlePossibleAxiosErrors<T>(
   action: () => Promise<T>
 ): Promise<AxiosUtilsResponse<T>> {
-  const SECONDS_TO_TIMEOUT = 18;
+  const SECONDS_TO_TIMEOUT = 20;
 
   const timeoutPromise = new Promise((_, reject) =>
     setTimeout(
