@@ -558,7 +558,7 @@ exports.sortByProperty = sortByProperty;
  * @returns A Promise of AxiosUtilsResponse<T>.
  */
 async function handlePossibleAxiosErrors(action) {
-    const SECONDS_TO_TIMEOUT = 18;
+    const SECONDS_TO_TIMEOUT = 20;
     const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error(`Timeout skipped after ${SECONDS_TO_TIMEOUT} seconds`)), SECONDS_TO_TIMEOUT * 1000));
     try {
         const result = await Promise.race([action(), timeoutPromise]);
