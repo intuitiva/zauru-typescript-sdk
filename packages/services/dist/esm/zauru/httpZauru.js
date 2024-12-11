@@ -8,7 +8,7 @@ axiosInstance.interceptors.request.use(function (request) {
     // Do something before request is sent
     console.log(`---------------- EJECUTANDO REQUEST ----------------`);
     console.time(`${request.baseURL}${request.url}`);
-    request.timeout = 220000;
+    request.timeout = 200000;
     return request;
 }, function (error) {
     console.log(chalk.red("---------------- ERROR CON REQUEST (REQUEST INTERCEPTOR) ----------------"));
