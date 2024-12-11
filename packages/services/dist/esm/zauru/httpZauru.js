@@ -7,8 +7,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(function (request) {
     // Do something before request is sent
     console.log(`---------------- EJECUTANDO REQUEST ----------------`);
-    //console.time(`${request.baseURL}${request.url}`);
-    console.log(chalk.green(`${request.baseURL}${request.url}`));
+    console.time(`${request.baseURL}${request.url}`);
     request.timeout = 220000;
     return request;
 }, function (error) {
@@ -20,7 +19,7 @@ axiosInstance.interceptors.request.use(function (request) {
 // Add a response interceptor
 axiosInstance.interceptors.response.use(function (response) {
     // Do something with response data
-    //console.timeEnd(`${response.config.baseURL}${response.config.url}`);
+    console.timeEnd(`${response.config.baseURL}${response.config.url}`);
     return response;
 }, function (error) {
     console.log(chalk.red("---------------- ERROR CON REQUEST (RESPONSE INTERCEPTOR) ----------------"));
