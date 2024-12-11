@@ -12,7 +12,7 @@ axiosInstance.interceptors.request.use(
     console.log("---------------- EJECUTANDO REQUEST GRAPHQL ----------------");
     //console.time(`${request.baseURL}${request.url}`);
     console.log(chalk.green(`${request.baseURL}${request.url}`));
-    request.timeout = 120000;
+    request.timeout = 200000;
 
     return request;
   },

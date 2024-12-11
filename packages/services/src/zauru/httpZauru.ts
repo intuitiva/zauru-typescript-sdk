@@ -11,7 +11,7 @@ axiosInstance.interceptors.request.use(
     // Do something before request is sent
     console.log(`---------------- EJECUTANDO REQUEST ----------------`);
     console.time(`${request.baseURL}${request.url}`);
-    request.timeout = 220000;
+    request.timeout = 200000;
 
     return request;
   },
