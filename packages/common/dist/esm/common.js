@@ -347,11 +347,18 @@ const getFormattedDate = (dateString, withHours = true) => {
     let date;
     if (dateString) {
         // Detectar el formato de la fecha
-        if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(dateString)) {
-            // Formato ISO (UTC)
-            date = new Date(dateString);
-            // Ajustar a la hora local
-            date = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z?$/.test(dateString)) {
+            // Formato ISO (UTC o local)
+            if (dateString.endsWith("Z")) {
+                // ISO con UTC (Z)
+                date = new Date(dateString); // El constructor ya maneja UTC
+            }
+            else {
+                // ISO sin UTC (hora local)
+                date = new Date(dateString);
+                // Ajustar a la hora local
+                date = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+            }
         }
         else if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
             // Formato YYYY-MM-DD
