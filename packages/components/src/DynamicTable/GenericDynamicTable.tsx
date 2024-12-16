@@ -40,6 +40,11 @@ type Props = {
   withoutBg?: boolean;
   orientation?: "horizontal" | "vertical";
   maxRows?: number;
+  confirmDelete?: boolean;
+  addRowButtonHandler?: (
+    tableData: RowDataType[],
+    setTableData: (data: RowDataType[]) => void
+  ) => void;
 };
 
 const GenericDynamicTableErrorComponent = ({ name }: { name: string }) => {
@@ -127,6 +132,8 @@ export const GenericDynamicTable = (props: Props) => {
     withoutBg = false,
     orientation = "horizontal",
     maxRows,
+    confirmDelete = true,
+    addRowButtonHandler,
   } = props;
 
   try {
@@ -346,15 +353,19 @@ export const GenericDynamicTable = (props: Props) => {
             ) => {
               event.preventDefault();
               event.stopPropagation();
-              createModal({
-                title: "¿Está seguro que quiere eliminar este registro?",
-                description:
-                  "Una vez eliminada la información no podrá ser recuperada.",
-              }).then((response) => {
-                if (response === "OK") {
-                  removeRow(rowData.id);
-                }
-              });
+              if (confirmDelete) {
+                createModal({
+                  title: "¿Está seguro que quiere eliminar este registro?",
+                  description:
+                    "Una vez eliminada la información no podrá ser recuperada.",
+                }).then((response) => {
+                  if (response === "OK") {
+                    removeRow(rowData.id);
+                  }
+                });
+              } else {
+                removeRow(rowData.id);
+              }
             }}
             type="button"
           >
@@ -474,7 +485,11 @@ export const GenericDynamicTable = (props: Props) => {
                         ) => {
                           event.preventDefault();
                           event.stopPropagation();
-                          addRow();
+                          if (addRowButtonHandler) {
+                            addRowButtonHandler(tableData, setTableData);
+                          } else {
+                            addRow();
+                          }
                         }}
                         type="button"
                       >

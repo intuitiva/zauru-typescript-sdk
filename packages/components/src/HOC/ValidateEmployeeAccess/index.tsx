@@ -8,10 +8,12 @@ export const ValidateEmployeeAccess = ({
   children,
   permissionVariableName,
   showIfNoPermission = false,
+  noPermissionComponent,
 }: {
   children: React.ReactNode;
   permissionVariableName: string;
   showIfNoPermission?: boolean;
+  noPermissionComponent?: React.ReactNode;
 }) => {
   const { data: employee } = useGetEmployeeProfile();
   const variable_string = useGetSessionAttribute(
@@ -45,6 +47,10 @@ export const ValidateEmployeeAccess = ({
         </div>
       </div>
     );
+  }
+
+  if (noPermissionComponent && !hasPermission) {
+    return <>{noPermissionComponent}</>;
   }
 
   return <>{hasPermission ? children : null}</>;

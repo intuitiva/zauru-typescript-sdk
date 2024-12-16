@@ -98,27 +98,14 @@ export const NavBar = ({
 }: NavBarProps) => {
   const color: ColorInterface = COLORS[selectedColor];
   const [NavBarOpen, setNavBarOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [currentVersion, setCurrentVersion] = useState(version);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
 
   useEffect(() => {
     if (version !== currentVersion) {
       setCurrentVersion(version);
     }
   }, [version, currentVersion]);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
 
   const refreshPage = () => {
     navigate(0);
@@ -167,15 +154,6 @@ export const NavBar = ({
                   <span>Cerrar sesión</span>
                 </div>
               </Link>,
-              <button
-                className={`block w-full text-left px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white`}
-                onClick={toggleDarkMode}
-              >
-                <div className="mx-auto pt-2">
-                  {isDarkMode ? "🌞" : "🌙"}
-                  <span>{isDarkMode ? "Modo Claro" : "Modo Oscuro"}</span>
-                </div>
-              </button>,
             ]}
           />
         )}

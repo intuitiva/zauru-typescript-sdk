@@ -12,11 +12,11 @@ interface LoadingWindowProps {
 }
 
 export const LoadingWindow: React.FC<LoadingWindowProps> = ({
-  loadingItems,
+  loadingItems = [],
   description = "Por favor, espere mientras se carga la página.",
 }) => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
+    <div className="min-h-screen bg-gray-200 flex flex-col justify-center items-center">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
