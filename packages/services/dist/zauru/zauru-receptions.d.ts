@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, DeepPartial, PurchaseOrderGraphQL, ReceptionGraphQL } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, PurchaseOrderGraphQL, ReceptionDetailsGraphQL, ReceptionGraphQL } from "@zauru-sdk/types";
 /**
  * createNewReception
  * @param headers
@@ -7,7 +7,9 @@ import { AxiosUtilsResponse, DeepPartial, PurchaseOrderGraphQL, ReceptionGraphQL
  * @param purchase_order_id
  * @returns
  */
-export declare function createNewReception(headers: any, body: DeepPartial<ReceptionGraphQL>, purchase_order_id: number | string): Promise<AxiosUtilsResponse<any>>;
+export declare function createNewReception(headers: any, body: Partial<ReceptionGraphQL> & {
+    reception_details?: Partial<ReceptionDetailsGraphQL>[];
+}, purchase_order_id: number | string): Promise<AxiosUtilsResponse<any>>;
 /**
  * deleteReception
  * @param headers

@@ -12,12 +12,13 @@ import {
   BasketSchema,
   CreateNewPurchaseOrderBody,
   DataTablesFilterBody,
-  DeepPartial,
   HTMLPurchasesListSchema,
   NewPurchaseOrderResponse,
+  PurchaseOrderDetailsGraphQL,
   PurchaseOrderGraphQL,
   PurchasesListResponseSchema,
   SelectFieldOption,
+  TaggingGraphQL,
   UpdatePurchaseOrderBody,
 } from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
@@ -62,7 +63,10 @@ export const markAsReceivePurchaseOrder = (
  */
 export const createNewPurchaseOrder = (
   headers: any,
-  body: DeepPartial<PurchaseOrderGraphQL>
+  body: Partial<PurchaseOrderGraphQL> & {
+    purchase_order_details?: Partial<PurchaseOrderDetailsGraphQL>[];
+    taggings?: Partial<TaggingGraphQL>[];
+  }
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     let sendBody = {

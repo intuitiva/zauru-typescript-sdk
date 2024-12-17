@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, BasketSchema, CreateNewPurchaseOrderBody, DataTablesFilterBody, DeepPartial, HTMLPurchasesListSchema, NewPurchaseOrderResponse, PurchaseOrderGraphQL, PurchasesListResponseSchema, UpdatePurchaseOrderBody } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, BasketSchema, CreateNewPurchaseOrderBody, DataTablesFilterBody, HTMLPurchasesListSchema, NewPurchaseOrderResponse, PurchaseOrderDetailsGraphQL, PurchaseOrderGraphQL, PurchasesListResponseSchema, TaggingGraphQL, UpdatePurchaseOrderBody } from "@zauru-sdk/types";
 /**
  * markAsReceivePurchaseOrder
  * Esta función sólo se utiliza cuando se van a marcar como recibida toda la órden de compra, se recibe todo lo que se envío
@@ -17,7 +17,10 @@ export declare const markAsReceivePurchaseOrder: (headers: any, body: Partial<Pu
  * @param body
  * @returns
  */
-export declare const createNewPurchaseOrder: (headers: any, body: DeepPartial<PurchaseOrderGraphQL>) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
+export declare const createNewPurchaseOrder: (headers: any, body: Partial<PurchaseOrderGraphQL> & {
+    purchase_order_details?: Partial<PurchaseOrderDetailsGraphQL>[];
+    taggings?: Partial<TaggingGraphQL>[];
+}) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
 /**
  *
  * @param headers

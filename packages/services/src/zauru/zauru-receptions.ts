@@ -6,8 +6,8 @@ import {
 } from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
-  DeepPartial,
   PurchaseOrderGraphQL,
+  ReceptionDetailsGraphQL,
   ReceptionGraphQL,
 } from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
@@ -21,7 +21,9 @@ import { httpZauru } from "./httpZauru.js";
  */
 export async function createNewReception(
   headers: any,
-  body: DeepPartial<ReceptionGraphQL>,
+  body: Partial<ReceptionGraphQL> & {
+    reception_details?: Partial<ReceptionDetailsGraphQL>[];
+  },
   purchase_order_id: number | string
 ) {
   return handlePossibleAxiosErrors(async () => {
