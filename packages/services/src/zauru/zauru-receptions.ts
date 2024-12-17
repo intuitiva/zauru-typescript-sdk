@@ -31,15 +31,10 @@ export async function createNewReception(
     };
     delete sendBody.reception_details;
 
-    const response = await httpZauru<any>(
+    const response = await httpZauru.post(
       `/purchases/purchase_orders/${purchase_order_id}/receptions.json`,
-      {
-        method: "POST",
-        headers,
-        data: {
-          reception: sendBody,
-        },
-      }
+      { reception: sendBody },
+      { headers }
     );
 
     return response.data;
