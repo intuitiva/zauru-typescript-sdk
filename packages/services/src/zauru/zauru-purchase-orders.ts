@@ -76,7 +76,6 @@ export const createNewPurchaseOrder = (
       ],
     } as any;
 
-    delete headers["Content-type"];
     delete sendBody.__rvfInternalFormId;
     delete sendBody.taggings;
     delete sendBody.purchase_order_details;
@@ -87,6 +86,7 @@ export const createNewPurchaseOrder = (
 
     if (sendBody.pdf) {
       if (!(sendBody?.pdf instanceof File) || sendBody.pdf?.size <= 0) {
+        delete headers["Content-type"];
         delete sendBody.pdf;
 
         sendBody = convertToFormData(sendBody);
