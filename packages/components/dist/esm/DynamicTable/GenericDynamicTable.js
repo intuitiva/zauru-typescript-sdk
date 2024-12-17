@@ -68,7 +68,7 @@ const GenericDynamicTableErrorComponent = ({ name }) => {
   />
  */
 export const GenericDynamicTable = (props) => {
-    const { columns, onChange, className, footerRow, defaultValue = [], thCSSProperties, thElementsClassName = "", editable = true, searcheables = [], loading = false, paginated = true, defaultItemsPerPage = 10, itemsPerPageOptions = [10, 50, 100], name, withoutBg = false, orientation = "horizontal", maxRows, } = props;
+    const { columns, onChange, className, footerRow, defaultValue = [], thCSSProperties, thElementsClassName = "", editable = true, searcheables = [], loading = false, paginated = true, defaultItemsPerPage = 10, itemsPerPageOptions = [10, 50, 100], name, withoutBg = false, orientation = "horizontal", maxRows, confirmDelete = true, addRowButtonHandler, } = props;
     try {
         const [tableData, setTableData] = useState(defaultValue);
         const [deletedData, setDeletedData] = useState([]);
@@ -181,14 +181,19 @@ export const GenericDynamicTable = (props) => {
         const renderDeleteButton = (rowData) => (_jsx("td", { className: "align-middle w-16", children: _jsx(WithTooltip, { text: "Eliminar", children: _jsx("button", { className: "bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2", onClick: (event) => {
                         event.preventDefault();
                         event.stopPropagation();
-                        createModal({
-                            title: "¿Está seguro que quiere eliminar este registro?",
-                            description: "Una vez eliminada la información no podrá ser recuperada.",
-                        }).then((response) => {
-                            if (response === "OK") {
-                                removeRow(rowData.id);
-                            }
-                        });
+                        if (confirmDelete) {
+                            createModal({
+                                title: "¿Está seguro que quiere eliminar este registro?",
+                                description: "Una vez eliminada la información no podrá ser recuperada.",
+                            }).then((response) => {
+                                if (response === "OK") {
+                                    removeRow(rowData.id);
+                                }
+                            });
+                        }
+                        else {
+                            removeRow(rowData.id);
+                        }
                     }, type: "button", children: _jsx(TrashSvg, {}) }) }) }));
         const renderRows = () => {
             let mapeable = filteredTableData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -242,7 +247,12 @@ export const GenericDynamicTable = (props) => {
                                     .join(", ")}`, onChange: handleChangeSearch, disabled: loading }) })), _jsxs("table", { className: "w-full", children: [orientation === "horizontal" && _jsx("thead", { children: renderHeader() }), _jsx("tbody", { children: renderRows() }), editable && (_jsx("tfoot", { children: _jsx("tr", { children: _jsx("td", { colSpan: orientation === "horizontal" ? columns.length + 1 : 2, className: "align-middle", children: (!maxRows || tableData.length < maxRows) && (_jsx("button", { className: "bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded", onClick: (event) => {
                                                     event.preventDefault();
                                                     event.stopPropagation();
-                                                    addRow();
+                                                    if (addRowButtonHandler) {
+                                                        addRowButtonHandler(tableData, setTableData);
+                                                    }
+                                                    else {
+                                                        addRow();
+                                                    }
                                                 }, type: "button", children: "+" })) }) }) })), footerRow && (_jsx("tfoot", { className: "border-t-2 border-black", children: _jsxs("tr", { children: [columns.map((column, index) => {
                                                 const footerCell = footerRow.find((fc) => fc.name === column.name);
                                                 return (_jsx("td", { colSpan: orientation === "vertical" ? 2 : 1, className: `align-middle ${footerCell?.className || ""}`, children: footerCell ? footerCell.content : _jsx(_Fragment, {}) }, index));

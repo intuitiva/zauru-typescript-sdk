@@ -12,6 +12,7 @@ import {
   BasketSchema,
   CreateNewPurchaseOrderBody,
   DataTablesFilterBody,
+  DeepPartial,
   HTMLPurchasesListSchema,
   NewPurchaseOrderResponse,
   PurchaseOrderGraphQL,
@@ -61,7 +62,7 @@ export const markAsReceivePurchaseOrder = (
  */
 export const createNewPurchaseOrder = (
   headers: any,
-  body: Partial<PurchaseOrderGraphQL>
+  body: DeepPartial<PurchaseOrderGraphQL>
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     let sendBody = {
@@ -71,7 +72,7 @@ export const createNewPurchaseOrder = (
       ),
       tag_ids: [
         "",
-        ...(body?.taggings?.map((x) => x.tag_id?.toString()) ?? []),
+        ...(body?.taggings?.map((x) => x?.tag_id?.toString()) ?? []),
       ],
     } as any;
 

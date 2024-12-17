@@ -588,7 +588,7 @@ export const createNewLabItemRequest = (
         "laboratory_proyect_id",
       ]);
 
-    const id_number = generateDistinctCode("POLAB");
+    //const id_number = generateDistinctCode("POLAB");
 
     const insumos = JSON.parse(body.insumos) as {
       item_id: number;

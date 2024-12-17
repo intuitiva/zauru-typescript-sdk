@@ -1,5 +1,5 @@
 import { CURRENCY_PREFIX, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, } from "@zauru-sdk/common";
-import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, generateDistinctCode, getLotesWithPurchaseFormated, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
+import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, getLotesWithPurchaseFormated, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia
  * @param headers
@@ -346,7 +346,7 @@ export const createNewLabItemRequest = (headers, session, body) => {
             "lab_agency_id",
             "laboratory_proyect_id",
         ]);
-        const id_number = generateDistinctCode("POLAB");
+        //const id_number = generateDistinctCode("POLAB");
         const insumos = JSON.parse(body.insumos);
         const sendBody = {
             ...body,

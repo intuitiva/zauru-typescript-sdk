@@ -23,6 +23,8 @@ type Props = {
     withoutBg?: boolean;
     orientation?: "horizontal" | "vertical";
     maxRows?: number;
+    confirmDelete?: boolean;
+    addRowButtonHandler?: (tableData: RowDataType[], setTableData: (data: RowDataType[]) => void) => void;
 };
 /**
  *

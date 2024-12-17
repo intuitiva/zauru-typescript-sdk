@@ -1,7 +1,7 @@
 type FooterProps = {
     href: string;
     showConnection?: boolean;
-    selectedColor: "purple" | "pink" | "indigo" | "cyan" | "slate" | "green" | "red" | "sky";
+    selectedColor: "purple" | "pink" | "indigo" | "cyan" | "slate" | "green" | "red" | "sky" | "yellow";
     version?: string;
 };
 export declare const Footer: ({ href, selectedColor, showConnection, version, }: FooterProps) => import("react/jsx-runtime").JSX.Element;

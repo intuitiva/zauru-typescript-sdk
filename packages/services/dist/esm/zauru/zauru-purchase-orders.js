@@ -36,7 +36,7 @@ export const createNewPurchaseOrder = (headers, body) => {
             purchase_order_details_attributes: arrayToObject(body?.purchase_order_details),
             tag_ids: [
                 "",
-                ...(body?.taggings?.map((x) => x.tag_id?.toString()) ?? []),
+                ...(body?.taggings?.map((x) => x?.tag_id?.toString()) ?? []),
             ],
         };
         delete headers["Content-type"];

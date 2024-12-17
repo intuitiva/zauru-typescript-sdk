@@ -11,25 +11,13 @@ const NavItem = ({ name, link, icon, color, specialColor, childrens = [], }) => 
 export const NavBar = ({ title, loggedIn, items, selectedColor, version, }) => {
     const color = COLORS[selectedColor];
     const [NavBarOpen, setNavBarOpen] = useState(false);
-    const [isDarkMode, setIsDarkMode] = useState(false);
     const [currentVersion, setCurrentVersion] = useState(version);
     const navigate = useNavigate();
-    useEffect(() => {
-        if (isDarkMode) {
-            document.documentElement.classList.add("dark");
-        }
-        else {
-            document.documentElement.classList.remove("dark");
-        }
-    }, [isDarkMode]);
     useEffect(() => {
         if (version !== currentVersion) {
             setCurrentVersion(version);
         }
     }, [version, currentVersion]);
-    const toggleDarkMode = () => {
-        setIsDarkMode(!isDarkMode);
-    };
     const refreshPage = () => {
         navigate(0);
     };
@@ -43,7 +31,6 @@ export const NavBar = ({ title, loggedIn, items, selectedColor, version, }) => {
         }) }));
     const options = (_jsxs(_Fragment, { children: [_jsx("ul", { className: "w-full lg:flex lg:items-center", children: renderNavItems(items.filter((item) => item.loggedIn === loggedIn)) }), _jsx("ul", { className: "sm:flex sm:flex-col lg:flex-row ml-auto", children: loggedIn && (_jsx(OptionsDropDownButton, { color: color, options: [
                         _jsx(Link, { className: `block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`, to: "/logout", prefetch: "none", children: _jsxs("div", { className: "mx-auto pt-2", children: [_jsx(LogoutDropDownSvgIcon, {}), _jsx("span", { children: "Cerrar sesi\u00F3n" })] }) }),
-                        _jsx("button", { className: `block w-full text-left px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white`, onClick: toggleDarkMode, children: _jsxs("div", { className: "mx-auto pt-2", children: [isDarkMode ? "🌞" : "🌙", _jsx("span", { children: isDarkMode ? "Modo Claro" : "Modo Oscuro" })] }) }),
                     ] })) })] }));
     return (_jsx("nav", { className: `py-3 ${color.bg600}`, children: _jsxs("div", { className: "flex items-center justify-between ml-5 mr-5", children: [_jsxs("div", { className: "flex justify-between items-center w-full lg:w-auto", children: [_jsx(Link, { className: "text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white", to: "/home", prefetch: "none", children: _jsxs(_Fragment, { children: [_jsx("div", { className: "inline-block mr-2 mb-2 align-middle", children: _jsx("img", { className: "w-auto h-7", src: "/logo.png", alt: "logo-zauru" }) }), title] }) }), version !== currentVersion && (_jsx("button", { className: `ml-2 px-2 py-1 text-xs text-white ${color.bg700} rounded-full hover:${color.bg900} transition-colors duration-200`, onClick: refreshPage, children: "\uD83D\uDD04 Actualizar versi\u00F3n" })), _jsx("button", { className: `rounded lg:hidden focus:outline-none focus:ring focus:${color.ring600} focus:ring-opacity-50`, "aria-label": "Toggle mobile menu", type: "button", onClick: () => setNavBarOpen(!NavBarOpen), children: _jsx(MenuAlt4Svg, { open: NavBarOpen }) })] }), _jsx("div", { className: `lg:hidden fixed top-0 left-0 z-50 w-64 h-full ${color.bg700} dark:bg-gray-900 shadow-lg transform ${NavBarOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out overflow-y-auto`, children: _jsx("div", { className: "p-4", children: options }) }), _jsx("div", { className: "hidden lg:flex lg:items-center w-full lg:w-auto", children: options })] }) }));
 };

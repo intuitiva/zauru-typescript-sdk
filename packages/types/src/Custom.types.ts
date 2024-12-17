@@ -786,3 +786,8 @@ export type GenericDynamicTableColumn = {
   headerClassName?: string;
   cellClassName?: string;
 };
+
+// Utilitario recursivo para hacer todas las propiedades parciales
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
