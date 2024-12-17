@@ -766,5 +766,9 @@ export type GenericDynamicTableColumn = {
 
 // Utilitario recursivo para hacer todas las propiedades parciales
 export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+  [P in keyof T]?: T[P] extends (infer U)[]
+    ? DeepPartial<U>[] // Si es un arreglo, aplica DeepPartial a los elementos.
+    : T[P] extends object
+    ? DeepPartial<T[P]> // Si es un objeto, aplica DeepPartial recursivamente.
+    : T[P]; // Si no es un objeto ni un arreglo, usa el tipo original.
 };
