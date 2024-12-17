@@ -81,15 +81,17 @@ export const createNewPurchaseOrder = (
     delete sendBody.taggings;
     delete sendBody.purchase_order_details;
 
+    sendBody = {
+      purchase_order: sendBody,
+    };
+
     if (sendBody.pdf) {
       if (!(sendBody?.pdf instanceof File) || sendBody.pdf?.size <= 0) {
         delete sendBody.pdf;
+
+        sendBody = convertToFormData(sendBody);
       }
     }
-
-    sendBody = convertToFormData({
-      purchase_order: sendBody,
-    });
 
     const response = await httpZauru.post<PurchaseOrderGraphQL>(
       `/purchases/purchase_orders.json`,

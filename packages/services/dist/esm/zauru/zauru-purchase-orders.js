@@ -43,14 +43,15 @@ export const createNewPurchaseOrder = (headers, body) => {
         delete sendBody.__rvfInternalFormId;
         delete sendBody.taggings;
         delete sendBody.purchase_order_details;
+        sendBody = {
+            purchase_order: sendBody,
+        };
         if (sendBody.pdf) {
             if (!(sendBody?.pdf instanceof File) || sendBody.pdf?.size <= 0) {
                 delete sendBody.pdf;
+                sendBody = convertToFormData(sendBody);
             }
         }
-        sendBody = convertToFormData({
-            purchase_order: sendBody,
-        });
         const response = await httpZauru.post(`/purchases/purchase_orders.json`, sendBody, { headers });
         return response.data;
     });
