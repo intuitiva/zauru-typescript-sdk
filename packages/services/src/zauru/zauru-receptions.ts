@@ -6,8 +6,9 @@ import {
 } from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
-  NewReceptionBody,
+  DeepPartial,
   PurchaseOrderGraphQL,
+  ReceptionGraphQL,
 } from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
 
@@ -20,13 +21,25 @@ import { httpZauru } from "./httpZauru.js";
  */
 export async function createNewReception(
   headers: any,
-  body: NewReceptionBody,
+  body: DeepPartial<ReceptionGraphQL>,
   purchase_order_id: number | string
 ) {
   return handlePossibleAxiosErrors(async () => {
+    const sendBody = {
+      ...body,
+      reception_details_attributes: arrayToObject(body.reception_details),
+    };
+    delete sendBody.reception_details;
+
     const response = await httpZauru<any>(
       `/purchases/purchase_orders/${purchase_order_id}/receptions.json`,
-      { method: "POST", headers, data: body }
+      {
+        method: "POST",
+        headers,
+        data: {
+          reception: sendBody,
+        },
+      }
     );
 
     return response.data;
@@ -56,13 +69,14 @@ export async function deleteReception(
   });
 }
 
+//TODO: PASARLO A UTILS
 /**
  *
  * @param headers
  * @param poId
  * @returns
  */
-export async function createNewPurchaseOrderReception(
+export async function createNewLabPurchaseOrderReception(
   headers: any,
   session: Session,
   body: Partial<PurchaseOrderGraphQL>

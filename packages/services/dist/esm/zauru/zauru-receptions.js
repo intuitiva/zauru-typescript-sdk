@@ -9,7 +9,18 @@ import { httpZauru } from "./httpZauru.js";
  */
 export async function createNewReception(headers, body, purchase_order_id) {
     return handlePossibleAxiosErrors(async () => {
-        const response = await httpZauru(`/purchases/purchase_orders/${purchase_order_id}/receptions.json`, { method: "POST", headers, data: body });
+        const sendBody = {
+            ...body,
+            reception_details_attributes: arrayToObject(body.reception_details),
+        };
+        delete sendBody.reception_details;
+        const response = await httpZauru(`/purchases/purchase_orders/${purchase_order_id}/receptions.json`, {
+            method: "POST",
+            headers,
+            data: {
+                reception: sendBody,
+            },
+        });
         return response.data;
     });
 }
@@ -27,13 +38,14 @@ export async function deleteReception(headers, receptionId, poId) {
         return true;
     });
 }
+//TODO: PASARLO A UTILS
 /**
  *
  * @param headers
  * @param poId
  * @returns
  */
-export async function createNewPurchaseOrderReception(headers, session, body) {
+export async function createNewLabPurchaseOrderReception(headers, session, body) {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = {
             reception: {

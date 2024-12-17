@@ -385,29 +385,6 @@ export type BasketSchema = {
   color: string;
 };
 
-export interface ReceptionDetailsAttributes {
-  [key: string]: {
-    item_id: string | number;
-    purchase_order_detail_id: string | number;
-    lot_delivered_quantity: string[] | number[];
-    lot_name: string[];
-    lot_expire: string[];
-    lot_description: string[];
-  };
-}
-
-export type NewReceptionBody = {
-  reception: {
-    agency_id: string | number;
-    received_at: string;
-    invoice_number?: string;
-    purchase_order_id: string | number;
-    needs_transit: string | boolean;
-    entity_id: string | number;
-    reception_details_attributes: ReceptionDetailsAttributes;
-  };
-};
-
 export type ItemWithPrices = ItemGraphQL & {
   suggested_prices: Array<SuggestedPriceGraphQL>;
 };
