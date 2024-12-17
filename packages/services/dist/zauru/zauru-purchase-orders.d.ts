@@ -12,7 +12,7 @@ export declare const markAsReceivePurchaseOrder: (headers: any, body: Partial<Pu
     fechaVencimiento?: string;
 }) => Promise<AxiosUtilsResponse<boolean>>;
 /**
- *
+ * createNewPurchaseOrder
  * @param headers
  * @param body
  * @returns

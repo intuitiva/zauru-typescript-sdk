@@ -24,7 +24,7 @@ export const markAsReceivePurchaseOrder = (headers, body) => {
     });
 };
 /**
- *
+ * createNewPurchaseOrder
  * @param headers
  * @param body
  * @returns
@@ -43,8 +43,10 @@ export const createNewPurchaseOrder = (headers, body) => {
         delete sendBody.__rvfInternalFormId;
         delete sendBody.taggings;
         delete sendBody.purchase_order_details;
-        if (!(sendBody?.pdf instanceof File) || sendBody.pdf?.size <= 0) {
-            delete sendBody.pdf;
+        if (sendBody.pdf) {
+            if (!(sendBody?.pdf instanceof File) || sendBody.pdf?.size <= 0) {
+                delete sendBody.pdf;
+            }
         }
         sendBody = convertToFormData({
             purchase_order: sendBody,

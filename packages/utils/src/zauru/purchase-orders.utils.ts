@@ -12,7 +12,6 @@ import {
   deleteDelivery,
   deletePurchaseOrder,
   deleteReception,
-  generateDistinctCode,
   getLotesWithPurchaseFormated,
   getPurchaseOrder,
   getPurchasesListDataTables,
