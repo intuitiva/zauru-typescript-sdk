@@ -79,6 +79,18 @@ export const createNewAuthorizedPurchaseOrder = (headers, body, withReceive = tr
     });
 };
 /**
+ * authorizePurchaseOrder
+ * @param headers
+ * @param id
+ * @returns
+ */
+export const authorizePurchaseOrder = (headers, id) => {
+    return handlePossibleAxiosErrors(async () => {
+        await httpZauru.get(`/purchases/purchase_orders/${id}/authorize.json`, { headers });
+        return true;
+    });
+};
+/**
  * receiveLotPurchaseOrder
  * @param headers
  * @param body

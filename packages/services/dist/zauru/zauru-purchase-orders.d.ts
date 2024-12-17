@@ -26,6 +26,13 @@ export declare const createNewPurchaseOrder: (headers: any, body: DeepPartial<Pu
  */
 export declare const createNewAuthorizedPurchaseOrder: (headers: any, body: CreateNewPurchaseOrderBody, withReceive?: boolean) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
 /**
+ * authorizePurchaseOrder
+ * @param headers
+ * @param id
+ * @returns
+ */
+export declare const authorizePurchaseOrder: (headers: any, id: number | string) => Promise<AxiosUtilsResponse<boolean>>;
+/**
  * receiveLotPurchaseOrder
  * @param headers
  * @param body
