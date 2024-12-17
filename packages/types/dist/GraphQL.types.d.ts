@@ -5,10 +5,10 @@ export type ReceptionDetailsGraphQL = {
     purchase_order_detail_id: number;
     quantity: number;
     item_id: number;
-    lot_delivered_quantity: number;
-    lot_description: string;
-    lot_expire: string;
-    lot_name: string;
+    lot_delivered_quantity: number | number[];
+    lot_description: string | string[];
+    lot_expire: string | string[];
+    lot_name: string | string[];
 };
 export type ReceptionGraphQL = {
     id: number;

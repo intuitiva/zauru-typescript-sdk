@@ -14,13 +14,7 @@ export async function createNewReception(headers, body, purchase_order_id) {
             reception_details_attributes: arrayToObject(body.reception_details),
         };
         delete sendBody.reception_details;
-        const response = await httpZauru(`/purchases/purchase_orders/${purchase_order_id}/receptions.json`, {
-            method: "POST",
-            headers,
-            data: {
-                reception: sendBody,
-            },
-        });
+        const response = await httpZauru.post(`/purchases/purchase_orders/${purchase_order_id}/receptions.json`, { reception: sendBody }, { headers });
         return response.data;
     });
 }
