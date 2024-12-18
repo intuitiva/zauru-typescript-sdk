@@ -751,6 +751,7 @@ export type GenericDynamicTableColumn = {
   type: "checkbox" | "textField" | "selectField" | "label";
   integer?: boolean;
   options?: SelectFieldOption[];
+  cell?: (row: RowDataType) => any;
   loadingOptions?: boolean;
   textFieldType?: "number";
   width?: number;
