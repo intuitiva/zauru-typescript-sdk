@@ -19,11 +19,15 @@ import { httpZauru } from "./httpZauru.js";
  * @param purchase_order_id
  * @returns
  */
+export type CreateNewPurchaseOrderReceptionType = Omit<
+  Partial<ReceptionGraphQL>,
+  "reception_details"
+> & {
+  reception_details?: Partial<ReceptionDetailsGraphQL>[];
+};
 export async function createNewReception(
   headers: any,
-  body: Partial<ReceptionGraphQL> & {
-    reception_details?: Partial<ReceptionDetailsGraphQL>[];
-  },
+  body: CreateNewPurchaseOrderReceptionType,
   purchase_order_id: number | string
 ) {
   return handlePossibleAxiosErrors(async () => {

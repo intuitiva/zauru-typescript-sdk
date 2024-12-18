@@ -7,9 +7,10 @@ import { AxiosUtilsResponse, PurchaseOrderGraphQL, ReceptionDetailsGraphQL, Rece
  * @param purchase_order_id
  * @returns
  */
-export declare function createNewReception(headers: any, body: Partial<ReceptionGraphQL> & {
+export type CreateNewPurchaseOrderReceptionType = Omit<Partial<ReceptionGraphQL>, "reception_details"> & {
     reception_details?: Partial<ReceptionDetailsGraphQL>[];
-}, purchase_order_id: number | string): Promise<AxiosUtilsResponse<any>>;
+};
+export declare function createNewReception(headers: any, body: CreateNewPurchaseOrderReceptionType, purchase_order_id: number | string): Promise<AxiosUtilsResponse<any>>;
 /**
  * deleteReception
  * @param headers
