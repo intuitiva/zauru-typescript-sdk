@@ -23,12 +23,6 @@ export const markAsReceivePurchaseOrder = (headers, body) => {
         return true;
     });
 };
-/**
- * createNewPurchaseOrder
- * @param headers
- * @param body
- * @returns
- */
 export const createNewPurchaseOrder = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
         let sendBody = {

@@ -17,10 +17,11 @@ export declare const markAsReceivePurchaseOrder: (headers: any, body: Partial<Pu
  * @param body
  * @returns
  */
-export declare const createNewPurchaseOrder: (headers: any, body: Partial<PurchaseOrderGraphQL> & {
+export type CreateNewPurchaseOrderType = Partial<Omit<PurchaseOrderGraphQL, "taggings" | "purchase_order_details">> & {
     purchase_order_details?: Partial<PurchaseOrderDetailsGraphQL>[];
     taggings?: Partial<TaggingGraphQL>[];
-}) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
+};
+export declare const createNewPurchaseOrder: (headers: any, body: CreateNewPurchaseOrderType) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
 /**
  *
  * @param headers

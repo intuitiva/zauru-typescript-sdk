@@ -61,12 +61,15 @@ export const markAsReceivePurchaseOrder = (
  * @param body
  * @returns
  */
+export type CreateNewPurchaseOrderType = Partial<
+  Omit<PurchaseOrderGraphQL, "taggings" | "purchase_order_details">
+> & {
+  purchase_order_details?: Partial<PurchaseOrderDetailsGraphQL>[];
+  taggings?: Partial<TaggingGraphQL>[];
+};
 export const createNewPurchaseOrder = (
   headers: any,
-  body: Partial<PurchaseOrderGraphQL> & {
-    purchase_order_details?: Partial<PurchaseOrderDetailsGraphQL>[];
-    taggings?: Partial<TaggingGraphQL>[];
-  }
+  body: CreateNewPurchaseOrderType
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     let sendBody = {
