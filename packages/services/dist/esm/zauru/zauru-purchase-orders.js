@@ -321,6 +321,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {})
             excludePayeeCategoryIds: [],
             shipment_reference: undefined,
             withLotStocks: false,
+            excludeVoided: false,
         };
         // Combinar config con los valores por defecto
         const finalConfig = { ...defaultConfig, ...config };
@@ -352,6 +353,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {})
             discountComparisonOperator: finalConfig.discountComparisonOperator,
             discount: finalConfig.discount,
             shipment_reference: finalConfig.shipment_reference,
+            excludeVoided: finalConfig.excludeVoided,
         });
         const graphQLBody = {
             query,

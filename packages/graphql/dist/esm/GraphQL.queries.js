@@ -275,6 +275,9 @@ query getLotStocksByAgencyId {
 exports.getLotStocksByAgencyIdStringQuery = getLotStocksByAgencyIdStringQuery;
 const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) => {
     const conditions = [];
+    if (config.excludeVoided) {
+        conditions.push("voided: { _eq: false }");
+    }
     if (config.agencyId) {
         conditions.push(`agency_id: { _eq: ${config.agencyId} }`);
     }

@@ -566,6 +566,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       | "_gt"
       | "_lt";
     discount?: number;
+    excludeVoided?: boolean;
   } = {}
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
@@ -587,6 +588,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       excludePayeeCategoryIds: [],
       shipment_reference: undefined,
       withLotStocks: false,
+      excludeVoided: false,
     };
 
     // Combinar config con los valores por defecto
@@ -629,6 +631,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
         discountComparisonOperator: finalConfig.discountComparisonOperator,
         discount: finalConfig.discount,
         shipment_reference: finalConfig.shipment_reference,
+        excludeVoided: finalConfig.excludeVoided,
       }
     );
 
