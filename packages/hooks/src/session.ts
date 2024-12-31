@@ -38,15 +38,23 @@ export const useGetSessionAttribute = (
 
   useEffect(() => {
     if (fetcher.state === "idle" && fetcher.data != null) {
-      const receivedData = fetcher.data as { data: string };
-      if (receivedData) {
-        setData(receivedData.data);
-        dispatch(
-          setSessionValue({
-            name: name,
-            data: receivedData.data,
-          })
-        );
+      try {
+        const receivedData = fetcher.data as { data: string };
+        if (receivedData) {
+          setData(receivedData.data);
+          dispatch(
+            setSessionValue({
+              name: name,
+              data: receivedData.data,
+            })
+          );
+        }
+      } catch (ex) {
+        showAlert({
+          type: "error",
+          title: `Ocurrió un error al cargar la variable de configuración: ${name}.`,
+          description: "Error: " + ex,
+        });
       }
     }
   }, [fetcher, dispatch, name]);

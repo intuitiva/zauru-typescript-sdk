@@ -651,7 +651,10 @@ export async function handlePossibleAxiosErrors<T>(
     const result = await Promise.race([action(), timeoutPromise]);
     return { error: false, data: result } as AxiosUtilsResponse<T>;
   } catch (error) {
-    return { error: true, userMsg: error?.toString() } as AxiosUtilsResponse<T>;
+    return {
+      error: true,
+      userMsg: `Error message: ${error?.toString()}`,
+    } as AxiosUtilsResponse<T>;
   }
 }
 
