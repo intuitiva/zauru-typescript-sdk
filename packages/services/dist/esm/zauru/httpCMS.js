@@ -7,8 +7,14 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(function (request) {
     // Do something before request is sent
     console.log("---------------- EJECUTANDO REQUEST CMS ----------------");
-    //console.time(`${request.baseURL}${request.url}`);
-    console.log(chalk.green(`${request.baseURL}${request.url}`));
+    const baseName = `${request.baseURL}${request.url}`;
+    if (performance.getEntriesByName(baseName).length === 0) {
+        console.time(baseName);
+    }
+    else {
+        console.timeEnd(baseName);
+        console.time(baseName);
+    }
     request.timeout = 200000;
     return request;
 }, function (error) {
@@ -20,7 +26,10 @@ axiosInstance.interceptors.request.use(function (request) {
 // Add a response interceptor
 axiosInstance.interceptors.response.use(function (response) {
     // Do something with response data
-    //console.timeEnd(`${response.config.baseURL}${response.config.url}`);
+    const baseName = `${response.config.baseURL}${response.config.url}`;
+    if (performance.getEntriesByName(baseName).length > 0) {
+        console.timeEnd(baseName);
+    }
     return response;
 }, function (error) {
     console.log(chalk.red("---------------- ERROR CON REQUEST CMS ----------------"));
