@@ -11,24 +11,30 @@ function getWindowDimensions() {
 }
 
 export const useWindowDimensions = () => {
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions);
+  try {
+    const [windowDimensions, setWindowDimensions] =
+      useState(getWindowDimensions);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const handleResize = () => {
-        setWindowDimensions(getWindowDimensions());
-      };
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        const handleResize = () => {
+          setWindowDimensions(getWindowDimensions());
+        };
 
-      // Use window load event to ensure accurate window size on initial load
-      window.addEventListener("load", handleResize);
-      window.addEventListener("resize", handleResize);
+        // Use window load event to ensure accurate window size on initial load
+        window.addEventListener("load", handleResize);
+        window.addEventListener("resize", handleResize);
 
-      return () => {
-        window.removeEventListener("load", handleResize);
-        window.removeEventListener("resize", handleResize);
-      };
-    }
-  }, []);
+        return () => {
+          window.removeEventListener("load", handleResize);
+          window.removeEventListener("resize", handleResize);
+        };
+      }
+    }, []);
 
-  return windowDimensions;
+    return windowDimensions;
+  } catch (ex) {
+    console.error(ex);
+    return 1000;
+  }
 };

@@ -47,63 +47,72 @@ const useApiCatalog = <T>(
   CATALOG_NAME: CATALOGS_NAMES | ONLINE_CATALOGS_NAMES,
   otherParams?: { [key: string]: string }
 ): CatalogType<T> => {
-  const fetcher = useFetcher<
-    | {
-        title: string;
-        description: string;
-        type: AlertType;
+  try {
+    const fetcher = useFetcher<
+      | {
+          title: string;
+          description: string;
+          type: AlertType;
+        }
+      | { [key: string]: T[] }
+    >();
+    const [data, setData] = useState<CatalogType<T>>({
+      data: [],
+      loading: true,
+    });
+
+    useEffect(() => {
+      if (fetcher.data?.title) {
+        showAlert({
+          description: fetcher.data?.description?.toString(),
+          title: fetcher.data?.title?.toString(),
+          type: fetcher.data?.type?.toString() as AlertType,
+        });
       }
-    | { [key: string]: T[] }
-  >();
-  const [data, setData] = useState<CatalogType<T>>({
-    data: [],
-    loading: true,
-  });
+    }, [fetcher.data]);
 
-  useEffect(() => {
-    if (fetcher.data?.title) {
-      showAlert({
-        description: fetcher.data?.description?.toString(),
-        title: fetcher.data?.title?.toString(),
-        type: fetcher.data?.type?.toString() as AlertType,
-      });
-    }
-  }, [fetcher.data]);
-
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data != null) {
-      const receivedData = fetcher.data as { [key: string]: T[] };
-      if (receivedData) {
-        setData({ data: receivedData[CATALOG_NAME], loading: false });
+    useEffect(() => {
+      if (fetcher.state === "idle" && fetcher.data != null) {
+        const receivedData = fetcher.data as { [key: string]: T[] };
+        if (receivedData) {
+          setData({ data: receivedData[CATALOG_NAME], loading: false });
+        }
       }
-    }
-  }, [fetcher, CATALOG_NAME]);
+    }, [fetcher, CATALOG_NAME]);
 
-  useEffect(() => {
-    try {
-      setData({ ...data, loading: true });
-      // Convert otherParams to query string
-      const paramsString = otherParams
-        ? Object.entries(otherParams)
-            .map(([key, value]) => `${key}=${value}`)
-            .join("&")
-        : "";
+    useEffect(() => {
+      try {
+        setData({ ...data, loading: true });
+        // Convert otherParams to query string
+        const paramsString = otherParams
+          ? Object.entries(otherParams)
+              .map(([key, value]) => `${key}=${value}`)
+              .join("&")
+          : "";
 
-      const url = `/api/catalogs?catalog=${CATALOG_NAME}${
-        paramsString ? `&${paramsString}` : ""
-      }`;
+        const url = `/api/catalogs?catalog=${CATALOG_NAME}${
+          paramsString ? `&${paramsString}` : ""
+        }`;
 
-      fetcher.load(url);
-    } catch (ex) {
-      showAlert({
-        type: "error",
-        title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
-        description: "Error: " + ex,
-      });
-    }
-  }, []);
+        fetcher.load(url);
+      } catch (ex) {
+        showAlert({
+          type: "error",
+          title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
+          description: "Error: " + ex,
+        });
+      }
+    }, []);
 
-  return data;
+    return data;
+  } catch (ex) {
+    showAlert({
+      type: "error",
+      title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
+      description: "Error: " + ex,
+    });
+    return { data: [] as T[], loading: false };
+  }
 };
 
 /**

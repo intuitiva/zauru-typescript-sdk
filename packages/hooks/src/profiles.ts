@@ -21,65 +21,74 @@ type ProfileType<T> = {
 };
 
 const useGetProfile = <T>(PROFILE_NAME: PROFILE_NAMES): ProfileType<T> => {
-  const fetcher = useFetcher<
-    | {
-        title: string;
-        description: string;
-        type: AlertType;
-      }
-    | { [key: string]: T[] }
-  >();
-  const dispatch = useAppDispatch();
-  const profileData = useAppSelector((state) => state.profiles[PROFILE_NAME]);
-  const [data, setData] = useState<ProfileType<T>>({
-    data: Object.keys(profileData?.data)?.length
-      ? (profileData?.data as T)
-      : ({} as T),
-    loading: profileData?.loading,
-  });
+  try {
+    const fetcher = useFetcher<
+      | {
+          title: string;
+          description: string;
+          type: AlertType;
+        }
+      | { [key: string]: T[] }
+    >();
+    const dispatch = useAppDispatch();
+    const profileData = useAppSelector((state) => state.profiles[PROFILE_NAME]);
+    const [data, setData] = useState<ProfileType<T>>({
+      data: Object.keys(profileData?.data)?.length
+        ? (profileData?.data as T)
+        : ({} as T),
+      loading: profileData?.loading,
+    });
 
-  useEffect(() => {
-    if (fetcher.data?.title) {
-      showAlert({
-        description: fetcher.data?.description?.toString(),
-        title: fetcher.data?.title?.toString(),
-        type: fetcher.data?.type?.toString() as AlertType,
-      });
-    }
-  }, [fetcher.data]);
-
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data != null) {
-      const receivedData = fetcher.data as { [key: string]: T };
-      if (receivedData) {
-        setData({ data: receivedData[PROFILE_NAME], loading: false });
-        dispatch(
-          profileFetchSuccess({
-            name: PROFILE_NAME,
-            data: receivedData[PROFILE_NAME],
-          })
-        );
-      }
-    }
-  }, [fetcher, dispatch, PROFILE_NAME]);
-
-  useEffect(() => {
-    if (Object.keys(profileData?.data).length <= 0) {
-      try {
-        setData({ ...data, loading: true });
-        dispatch(profileFetchStart(PROFILE_NAME));
-        fetcher.load(`/api/profiles?profile=${PROFILE_NAME}`);
-      } catch (ex) {
+    useEffect(() => {
+      if (fetcher.data?.title) {
         showAlert({
-          type: "error",
-          title: `Ocurrió un error al cargar el perfil: ${PROFILE_NAME}.`,
-          description: "Error: " + ex,
+          description: fetcher.data?.description?.toString(),
+          title: fetcher.data?.title?.toString(),
+          type: fetcher.data?.type?.toString() as AlertType,
         });
       }
-    }
-  }, []);
+    }, [fetcher.data]);
 
-  return data;
+    useEffect(() => {
+      if (fetcher.state === "idle" && fetcher.data != null) {
+        const receivedData = fetcher.data as { [key: string]: T };
+        if (receivedData) {
+          setData({ data: receivedData[PROFILE_NAME], loading: false });
+          dispatch(
+            profileFetchSuccess({
+              name: PROFILE_NAME,
+              data: receivedData[PROFILE_NAME],
+            })
+          );
+        }
+      }
+    }, [fetcher, dispatch, PROFILE_NAME]);
+
+    useEffect(() => {
+      if (Object.keys(profileData?.data).length <= 0) {
+        try {
+          setData({ ...data, loading: true });
+          dispatch(profileFetchStart(PROFILE_NAME));
+          fetcher.load(`/api/profiles?profile=${PROFILE_NAME}`);
+        } catch (ex) {
+          showAlert({
+            type: "error",
+            title: `Ocurrió un error al cargar el perfil: ${PROFILE_NAME}.`,
+            description: "Error: " + ex,
+          });
+        }
+      }
+    }, []);
+
+    return data;
+  } catch (ex) {
+    showAlert({
+      type: "error",
+      title: `Ocurrió un error al cargar el perfil: ${PROFILE_NAME}.`,
+      description: "Error: " + ex,
+    });
+    return { data: {} as T, loading: false };
+  }
 };
 
 export const useGetAgencyProfile = (): {

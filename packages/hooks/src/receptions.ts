@@ -39,84 +39,95 @@ const useGetReceptionObject = <T>(
   RECEPTION_NAME: RECEPTION_NAMES,
   { online = false, wheres = [] }: ReduxParamsConfig = {}
 ): ReturnType<T> => {
-  const fetcher = useFetcher<
-    | {
-        title: string;
-        description: string;
-        type: AlertType;
-      }
-    | { [key: string]: T[] }
-  >();
-  const dispatch = useAppDispatch();
-  const objectData = useAppSelector(
-    (state) => state.receptions[RECEPTION_NAME]
-  );
+  try {
+    const fetcher = useFetcher<
+      | {
+          title: string;
+          description: string;
+          type: AlertType;
+        }
+      | { [key: string]: T[] }
+    >();
+    const dispatch = useAppDispatch();
+    const objectData = useAppSelector(
+      (state) => state.receptions[RECEPTION_NAME]
+    );
 
-  const [data, setData] = useState<ReturnType<T>>({
-    data: Array.isArray(objectData?.data)
-      ? objectData?.data.length
+    const [data, setData] = useState<ReturnType<T>>({
+      data: Array.isArray(objectData?.data)
+        ? objectData?.data.length
+          ? (objectData?.data as T)
+          : ([] as unknown as T)
+        : Object.keys(objectData?.data || {}).length
         ? (objectData?.data as T)
-        : ([] as unknown as T)
-      : Object.keys(objectData?.data || {}).length
-      ? (objectData?.data as T)
-      : ({} as T),
-    loading: objectData.loading,
-  });
+        : ({} as T),
+      loading: objectData.loading,
+    });
 
-  useEffect(() => {
-    if (fetcher.data?.title) {
-      showAlert({
-        description: fetcher.data?.description?.toString(),
-        title: fetcher.data?.title?.toString(),
-        type: fetcher.data?.type?.toString() as AlertType,
-      });
-    }
-  }, [fetcher.data]);
-
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data != null) {
-      const receivedData = fetcher.data as { [key: string]: T };
-      if (receivedData) {
-        setData({ data: receivedData[RECEPTION_NAME], loading: false });
-        dispatch(
-          receptionFetchSuccess({
-            name: RECEPTION_NAME,
-            data: receivedData[RECEPTION_NAME],
-          })
-        );
-      }
-    }
-  }, [fetcher, dispatch, RECEPTION_NAME]);
-
-  useEffect(() => {
-    const isEmptyData =
-      (objectData?.data &&
-        Array.isArray(objectData?.data) &&
-        objectData?.data.length <= 0) ||
-      (objectData?.data && Object.keys(objectData?.data).length <= 0);
-
-    if (isEmptyData || objectData.reFetch || online) {
-      try {
-        setData({ ...data, loading: true });
-        dispatch(receptionFetchStart(RECEPTION_NAME));
-        // Convierte cada elemento del array a una cadena codificada para URL
-        const encodedWheres = wheres.map((where) => encodeURIComponent(where));
-        // Une los elementos codificados con '&'
-        const wheresQueryParam = encodedWheres.join("&");
-        fetcher.load(
-          `/api/receptions?object=${RECEPTION_NAME}&wheres=${wheresQueryParam}`
-        );
-      } catch (ex) {
+    useEffect(() => {
+      if (fetcher.data?.title) {
         showAlert({
-          type: "error",
-          title: `Ocurrió un error al cargar el object de receptions: ${RECEPTION_NAME}.`,
-          description: "Error: " + ex,
+          description: fetcher.data?.description?.toString(),
+          title: fetcher.data?.title?.toString(),
+          type: fetcher.data?.type?.toString() as AlertType,
         });
       }
-    }
-  }, []);
+    }, [fetcher.data]);
 
-  return data;
+    useEffect(() => {
+      if (fetcher.state === "idle" && fetcher.data != null) {
+        const receivedData = fetcher.data as { [key: string]: T };
+        if (receivedData) {
+          setData({ data: receivedData[RECEPTION_NAME], loading: false });
+          dispatch(
+            receptionFetchSuccess({
+              name: RECEPTION_NAME,
+              data: receivedData[RECEPTION_NAME],
+            })
+          );
+        }
+      }
+    }, [fetcher, dispatch, RECEPTION_NAME]);
+
+    useEffect(() => {
+      const isEmptyData =
+        (objectData?.data &&
+          Array.isArray(objectData?.data) &&
+          objectData?.data.length <= 0) ||
+        (objectData?.data && Object.keys(objectData?.data).length <= 0);
+
+      if (isEmptyData || objectData.reFetch || online) {
+        try {
+          setData({ ...data, loading: true });
+          dispatch(receptionFetchStart(RECEPTION_NAME));
+          // Convierte cada elemento del array a una cadena codificada para URL
+          const encodedWheres = wheres.map((where) =>
+            encodeURIComponent(where)
+          );
+          // Une los elementos codificados con '&'
+          const wheresQueryParam = encodedWheres.join("&");
+          fetcher.load(
+            `/api/receptions?object=${RECEPTION_NAME}&wheres=${wheresQueryParam}`
+          );
+        } catch (ex) {
+          showAlert({
+            type: "error",
+            title: `Ocurrió un error al cargar el object de receptions: ${RECEPTION_NAME}.`,
+            description: "Error: " + ex,
+          });
+        }
+      }
+    }, []);
+
+    return data;
+  } catch (ex) {
+    showAlert({
+      type: "error",
+      title: `Ocurrió un error al cargar el object de receptions: ${RECEPTION_NAME}.`,
+      description: "Error: " + ex,
+    });
+    return { data: {} as T, loading: false };
+  }
 };
 
 export const useGetProcesses = (
