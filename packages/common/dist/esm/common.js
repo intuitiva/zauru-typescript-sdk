@@ -572,7 +572,10 @@ async function handlePossibleAxiosErrors(action) {
         return { error: false, data: result };
     }
     catch (error) {
-        return { error: true, userMsg: error?.toString() };
+        return {
+            error: true,
+            userMsg: `Error message: ${error?.toString()}`,
+        };
     }
 }
 /**

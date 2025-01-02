@@ -6,49 +6,59 @@ const react_2 = require("react");
 const index_js_1 = require("./components/index.js");
 const redux_1 = require("@zauru-sdk/redux");
 const useApiCatalog = (CATALOG_NAME, otherParams) => {
-    const fetcher = (0, react_1.useFetcher)();
-    const [data, setData] = (0, react_2.useState)({
-        data: [],
-        loading: true,
-    });
-    (0, react_2.useEffect)(() => {
-        if (fetcher.data?.title) {
-            (0, index_js_1.showAlert)({
-                description: fetcher.data?.description?.toString(),
-                title: fetcher.data?.title?.toString(),
-                type: fetcher.data?.type?.toString(),
-            });
-        }
-    }, [fetcher.data]);
-    (0, react_2.useEffect)(() => {
-        if (fetcher.state === "idle" && fetcher.data != null) {
-            const receivedData = fetcher.data;
-            if (receivedData) {
-                setData({ data: receivedData[CATALOG_NAME], loading: false });
+    try {
+        const fetcher = (0, react_1.useFetcher)();
+        const [data, setData] = (0, react_2.useState)({
+            data: [],
+            loading: true,
+        });
+        (0, react_2.useEffect)(() => {
+            if (fetcher.data?.title) {
+                (0, index_js_1.showAlert)({
+                    description: fetcher.data?.description?.toString(),
+                    title: fetcher.data?.title?.toString(),
+                    type: fetcher.data?.type?.toString(),
+                });
             }
-        }
-    }, [fetcher, CATALOG_NAME]);
-    (0, react_2.useEffect)(() => {
-        try {
-            setData({ ...data, loading: true });
-            // Convert otherParams to query string
-            const paramsString = otherParams
-                ? Object.entries(otherParams)
-                    .map(([key, value]) => `${key}=${value}`)
-                    .join("&")
-                : "";
-            const url = `/api/catalogs?catalog=${CATALOG_NAME}${paramsString ? `&${paramsString}` : ""}`;
-            fetcher.load(url);
-        }
-        catch (ex) {
-            (0, index_js_1.showAlert)({
-                type: "error",
-                title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
-                description: "Error: " + ex,
-            });
-        }
-    }, []);
-    return data;
+        }, [fetcher.data]);
+        (0, react_2.useEffect)(() => {
+            if (fetcher.state === "idle" && fetcher.data != null) {
+                const receivedData = fetcher.data;
+                if (receivedData) {
+                    setData({ data: receivedData[CATALOG_NAME], loading: false });
+                }
+            }
+        }, [fetcher, CATALOG_NAME]);
+        (0, react_2.useEffect)(() => {
+            try {
+                setData({ ...data, loading: true });
+                // Convert otherParams to query string
+                const paramsString = otherParams
+                    ? Object.entries(otherParams)
+                        .map(([key, value]) => `${key}=${value}`)
+                        .join("&")
+                    : "";
+                const url = `/api/catalogs?catalog=${CATALOG_NAME}${paramsString ? `&${paramsString}` : ""}`;
+                fetcher.load(url);
+            }
+            catch (ex) {
+                (0, index_js_1.showAlert)({
+                    type: "error",
+                    title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
+                    description: "Error: " + ex,
+                });
+            }
+        }, []);
+        return data;
+    }
+    catch (ex) {
+        (0, index_js_1.showAlert)({
+            type: "error",
+            title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
+            description: "Error: " + ex,
+        });
+        return { data: [], loading: false };
+    }
 };
 /**
  *

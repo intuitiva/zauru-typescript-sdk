@@ -11,21 +11,27 @@ function getWindowDimensions() {
     return 1000;
 }
 const useWindowDimensions = () => {
-    const [windowDimensions, setWindowDimensions] = (0, react_1.useState)(getWindowDimensions);
-    (0, react_1.useEffect)(() => {
-        if (typeof window !== "undefined") {
-            const handleResize = () => {
-                setWindowDimensions(getWindowDimensions());
-            };
-            // Use window load event to ensure accurate window size on initial load
-            window.addEventListener("load", handleResize);
-            window.addEventListener("resize", handleResize);
-            return () => {
-                window.removeEventListener("load", handleResize);
-                window.removeEventListener("resize", handleResize);
-            };
-        }
-    }, []);
-    return windowDimensions;
+    try {
+        const [windowDimensions, setWindowDimensions] = (0, react_1.useState)(getWindowDimensions);
+        (0, react_1.useEffect)(() => {
+            if (typeof window !== "undefined") {
+                const handleResize = () => {
+                    setWindowDimensions(getWindowDimensions());
+                };
+                // Use window load event to ensure accurate window size on initial load
+                window.addEventListener("load", handleResize);
+                window.addEventListener("resize", handleResize);
+                return () => {
+                    window.removeEventListener("load", handleResize);
+                    window.removeEventListener("resize", handleResize);
+                };
+            }
+        }, []);
+        return windowDimensions;
+    }
+    catch (ex) {
+        console.error(ex);
+        return 1000;
+    }
 };
 exports.useWindowDimensions = useWindowDimensions;
