@@ -10,8 +10,7 @@ axiosInstance.interceptors.request.use(
   function (request) {
     // Do something before request is sent
     console.log("---------------- EJECUTANDO REQUEST GRAPHQL ----------------");
-    //console.time(`${request.baseURL}${request.url}`);
-    console.log(chalk.green(`${request.baseURL}${request.url}`));
+    console.time(`${request.baseURL}${request.url}`);
     request.timeout = 200000;
 
     return request;
@@ -30,7 +29,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   function (response) {
     // Do something with response data
-    //console.timeEnd(`${response.config.baseURL}${response.config.url}`);
+    console.timeEnd(`${response.config.baseURL}${response.config.url}`);
     return response;
   },
   function (error) {
