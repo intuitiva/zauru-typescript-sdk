@@ -11,12 +11,7 @@ axiosInstance.interceptors.request.use(
     // Do something before request is sent
     console.log(`---------------- EJECUTANDO REQUEST ----------------`);
     const baseName = `${request.baseURL}${request.url}`;
-    if (performance.getEntriesByName(baseName).length === 0) {
-      console.time(baseName);
-    } else {
-      console.timeEnd(baseName);
-      console.time(baseName);
-    }
+    console.time(baseName);
     request.timeout = 200000;
 
     return request;
@@ -38,9 +33,7 @@ axiosInstance.interceptors.response.use(
   function (response) {
     // Do something with response data
     const baseName = `${response.config.baseURL}${response.config.url}`;
-    if (performance.getEntriesByName(baseName).length > 0) {
-      console.timeEnd(baseName);
-    }
+    console.timeEnd(baseName);
     return response;
   },
   function (error) {
