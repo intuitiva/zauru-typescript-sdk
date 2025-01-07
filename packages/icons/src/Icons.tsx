@@ -545,10 +545,13 @@ export const BigChecklistIcon = () => {
 };
 
 // =============================| label Icons | ==============================================
-export const LoadingBarSpinnerSvg = () => (
+export const LoadingBarSpinnerSvg = (
+  barColor: string = progressBarLightTextColor,
+  spinnerFillColor: string = progressBarSpinnerFillColor
+) => (
   <svg
     role="status"
-    className={`inline w-3 h-3 mr-1 mb-0.5 ${progressBarLightTextColor} animate-spin dark:text-gray-600 ${progressBarSpinnerFillColor} dark:fill-gray-300`}
+    className={`inline w-3 h-3 mr-1 mb-0.5 ${barColor} animate-spin dark:text-gray-600 ${spinnerFillColor} dark:fill-gray-300`}
     viewBox="0 0 100 101"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

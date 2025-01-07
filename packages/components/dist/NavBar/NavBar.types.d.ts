@@ -1,15 +1,17 @@
-export type NavBarItemsSchema = {
+export type NavBarItem = {
     name: string;
     link: string;
     loggedIn: boolean;
     icon?: any;
-    color?: "green";
-    childrens?: Exclude<NavBarItemsSchema, "loggedIn">[];
+    selectedColor?: "green";
+    color?: ColorInterface;
+    childrens?: Exclude<NavBarItem, "loggedIn">[];
+    reduxNotificationBadge?: (state: any) => string | number;
 };
 export type NavBarProps = {
     title: string;
     loggedIn: boolean;
-    items: Array<NavBarItemsSchema>;
+    items: Array<NavBarItem>;
     selectedColor: "pink" | "purple" | "slate" | "green" | "yellow" | "red" | "sky";
     LinkComponent?: any;
     version?: string;
@@ -25,14 +27,6 @@ export type ColorInterface = {
     bg500: string;
     ring600: string;
     ring500: string;
-};
-export type NavItemProps = {
-    name: string;
-    link: string;
-    icon?: any;
-    color: ColorInterface;
-    specialColor?: ColorInterface;
-    childrens?: Exclude<NavItemProps, "index" | "color">[];
 };
 export type EntityNameType = {
     entityName: string;
