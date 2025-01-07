@@ -7,37 +7,41 @@ export const useValidateNotifications = (source: {
   actionData?: any;
   loaderData?: any;
 }) => {
-  const { actionData, fetcher, loaderData } = source;
+  try {
+    const { actionData, fetcher, loaderData } = source;
 
-  useEffect(() => {
-    if (loaderData?.title) {
-      showAlert({
-        description: loaderData?.description?.toString() ?? "",
-        title: loaderData?.title,
-        type: loaderData?.type as any,
-      });
-    }
-  }, [loaderData]);
+    useEffect(() => {
+      if (loaderData?.title) {
+        showAlert({
+          description: loaderData?.description?.toString() ?? "",
+          title: loaderData?.title,
+          type: loaderData?.type as any,
+        });
+      }
+    }, [loaderData]);
 
-  useEffect(() => {
-    if (fetcher?.data?.title && fetcher.state === "idle") {
-      showAlert({
-        description: fetcher.data?.description,
-        title: fetcher.data?.title,
-        type: fetcher.data?.type,
-      });
-    }
-  }, [fetcher?.data, fetcher?.state]);
+    useEffect(() => {
+      if (fetcher?.data?.title && fetcher.state === "idle") {
+        showAlert({
+          description: fetcher.data?.description,
+          title: fetcher.data?.title,
+          type: fetcher.data?.type,
+        });
+      }
+    }, [fetcher?.data, fetcher?.state]);
 
-  useEffect(() => {
-    if (actionData?.title) {
-      showAlert({
-        description: actionData?.description ?? "",
-        title: actionData?.title,
-        type: actionData?.type as any,
-      });
-    }
-  }, [actionData]);
+    useEffect(() => {
+      if (actionData?.title) {
+        showAlert({
+          description: actionData?.description ?? "",
+          title: actionData?.title,
+          type: actionData?.type as any,
+        });
+      }
+    }, [actionData]);
 
-  return null;
+    return null;
+  } catch (error) {
+    console.log("Error in useValidateNotifications", error);
+  }
 };
