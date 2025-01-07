@@ -545,18 +545,19 @@ export const BigChecklistIcon = () => {
 };
 
 // =============================| label Icons | ==============================================
-export const LoadingBarSpinnerSvg = (
-  props: {
-    barColor: string;
-    spinnerFillColor: string;
-  } = {
-    barColor: progressBarLightTextColor,
-    spinnerFillColor: progressBarSpinnerFillColor,
-  }
-) => (
+export const LoadingBarSpinnerSvg = (props?: {
+  barColor?: string;
+  spinnerFillColor?: string;
+  darkBarColor?: string;
+  darkSpinnerFillColor?: string;
+}) => (
   <svg
     role="status"
-    className={`inline w-3 h-3 mr-1 mb-0.5 ${props.barColor} animate-spin dark:text-gray-600 ${props.spinnerFillColor} dark:fill-gray-300`}
+    className={`inline w-3 h-3 mr-1 mb-0.5 ${
+      props?.barColor ?? progressBarLightTextColor
+    } animate-spin ${props?.darkBarColor ?? "dark:text-gray-600"} ${
+      props?.spinnerFillColor ?? progressBarSpinnerFillColor
+    } ${props?.darkSpinnerFillColor ?? "dark:fill-gray-300"}`}
     viewBox="0 0 100 101"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
