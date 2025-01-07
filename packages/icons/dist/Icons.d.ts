@@ -29,7 +29,10 @@ export declare const ChangeDropDownSvgIcon: () => import("react/jsx-runtime").JS
 export declare const LogoutDropDownSvgIcon: () => import("react/jsx-runtime").JSX.Element;
 export declare const NewDropdownSvgIcon: () => import("react/jsx-runtime").JSX.Element;
 export declare const BigChecklistIcon: () => import("react/jsx-runtime").JSX.Element;
-export declare const LoadingBarSpinnerSvg: (barColor?: string, spinnerFillColor?: string) => import("react/jsx-runtime").JSX.Element;
+export declare const LoadingBarSpinnerSvg: (props?: {
+    barColor: string;
+    spinnerFillColor: string;
+}) => import("react/jsx-runtime").JSX.Element;
 export declare const IdeaIconSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const CalendarIconSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const ClockIconSVG: () => import("react/jsx-runtime").JSX.Element;
