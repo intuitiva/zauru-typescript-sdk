@@ -9,11 +9,11 @@ import { COLORS } from "./NavBar.utils.js";
 import type {
   ColorInterface,
   EntityProps,
-  NavBarItemsSchema,
+  NavBarItem,
   NavBarProps,
-  NavItemProps,
 } from "./NavBar.types.js";
 import { Link, useNavigate } from "@remix-run/react";
+import { useAppSelector } from "@zauru-sdk/redux";
 
 const OptionsDropDownButton = ({ color, options, name }: EntityProps) => {
   const [showOptionsMenu, setShowOptionsMenu] = useState(true);
@@ -48,46 +48,67 @@ const NavItem = ({
   name,
   link,
   icon,
-  color,
-  specialColor,
+  selectedColor,
   childrens = [],
-}: NavItemProps) => (
-  <li className="nav-item">
-    {childrens.length > 0 ? (
-      <OptionsDropDownButton
-        name={name}
-        color={color}
-        specialColor={specialColor}
-        options={childrens.map((x, index) => (
-          <Link
-            key={index}
-            to={x.link}
-            className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
-          >
-            {x.name}
-          </Link>
-        ))}
-      />
-    ) : (
-      <div
-        className={`${
-          specialColor ? specialColor.bg700 : color.bg700
-        } container text-white w-full sm:w-auto h-10 text-sm py-1 uppercase shadow hover:shadow-lg outline-none rounded-full focus:outline-none my-auto sm:my-0 sm:mr-1 mb-1 ease-linear transition-all duration-150`}
-      >
-        <Link
-          className="px-3 flex items-center text-xs leading-snug text-white uppercase hover:opacity-75"
-          to={link}
-          prefetch="none"
+  reduxNotificationBadge,
+}: NavBarItem) => {
+  const specialColor: ColorInterface = selectedColor
+    ? COLORS[selectedColor]
+    : COLORS["slate"];
+
+  // Selecciona solo la parte del estado relevante
+  const relevantState = useAppSelector((state) =>
+    reduxNotificationBadge ? reduxNotificationBadge(state) : undefined
+  );
+
+  const [notificationBadge, setNotificationBadge] = useState<
+    undefined | string | number
+  >();
+
+  useEffect(() => {
+    setNotificationBadge(relevantState);
+  }, [relevantState]);
+
+  return (
+    <li className="nav-item relative">
+      {childrens.length > 0 ? (
+        <OptionsDropDownButton
+          name={name}
+          color={specialColor}
+          options={childrens.map((x, index) => (
+            <Link
+              key={index}
+              to={x.link}
+              className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
+            >
+              {x.name}
+            </Link>
+          ))}
+        />
+      ) : (
+        <div
+          className={`${specialColor.bg700} container text-white w-full sm:w-auto h-10 text-sm py-1 uppercase shadow hover:shadow-lg outline-none rounded-full focus:outline-none my-auto sm:my-0 sm:mr-1 mb-1 ease-linear transition-all duration-150`}
         >
-          <div className="mx-auto pt-2">
-            {icon}
-            <span>{name}</span>
-          </div>
-        </Link>
-      </div>
-    )}
-  </li>
-);
+          <Link
+            className="px-3 flex items-center text-xs leading-snug text-white uppercase hover:opacity-75 relative"
+            to={link}
+          >
+            <div className="mx-auto pt-2">
+              {icon}
+              <span>{name}</span>
+            </div>
+            {/* Badge de notificaciones */}
+            {notificationBadge !== undefined && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center w-5 h-5">
+                {notificationBadge}
+              </span>
+            )}
+          </Link>
+        </div>
+      )}
+    </li>
+  );
+};
 
 export const NavBar = ({
   title,
@@ -111,20 +132,19 @@ export const NavBar = ({
     navigate(0);
   };
 
-  const renderNavItems = (items: NavBarItemsSchema[]) => (
+  const renderNavItems = (items: NavBarItem[]) => (
     <div className="flex flex-col lg:flex-row w-full">
       {items.map((item, index) => {
-        const specialColor: ColorInterface | undefined = item.color
-          ? COLORS[item.color]
-          : undefined;
         return (
           <NavItem
             key={index}
             name={item.name}
             link={item.link}
             icon={item.icon}
-            specialColor={specialColor}
+            selectedColor={item.selectedColor}
             color={color}
+            loggedIn={item.loggedIn}
+            reduxNotificationBadge={item.reduxNotificationBadge}
             childrens={item.childrens?.map((x) => {
               return { ...x } as any;
             })}
@@ -147,7 +167,6 @@ export const NavBar = ({
               <Link
                 className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
                 to="/logout"
-                prefetch="none"
               >
                 <div className="mx-auto pt-2">
                   {<LogoutDropDownSvgIcon />}
@@ -168,7 +187,6 @@ export const NavBar = ({
           <Link
             className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
             to={"/home"}
-            prefetch="none"
             children={
               <>
                 <div className="inline-block mr-2 mb-2 align-middle">
