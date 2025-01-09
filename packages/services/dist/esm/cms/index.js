@@ -1,10 +1,9 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getCMSHeaders } from "../common.js";
-import { httpCMSAPI } from "~/zauru/httpCMS.js";
+import { httpCMSAPI } from "../zauru/httpCMS.js";
 /**
  * getCMSGeneralQuery
- * @param headers
- * @param queryKey - clave dinámica para acceder a los datos en la respuesta (ej. 'purchase_orders', 'users')
+ * @param query
  * @returns
  */
 export const getCMSGeneralQuery = async (query) => {
