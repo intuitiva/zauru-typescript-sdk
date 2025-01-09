@@ -298,7 +298,7 @@ export const GenericDynamicTable = (props: Props) => {
             key={`${rowData.id}-${column.name}`}
             className={`align-middle p-1 ${column.cellClassName || ""}`}
           >
-            <div>{defaultVal}</div>
+            <div>{column.cell ? column.cell(rowData) : defaultVal}</div>
           </td>
         );
       }
