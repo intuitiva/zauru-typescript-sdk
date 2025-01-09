@@ -13,7 +13,13 @@ export const getCMSGeneralQuery = async (query) => {
         const response = await httpCMSAPI.post("", {
             query,
         }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors?.map((x) => x.message).join(";"));
+        }
+        if (!response.data.data) {
+            throw new Error("No data found");
+        }
         // Retorna los datos según la clave dinámica proporcionada
-        return response.data;
+        return response.data.data;
     });
 };
