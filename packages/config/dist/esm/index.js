@@ -13,6 +13,7 @@ const rawConfig = {
     zendeskChatKey: process.env.ZENDESK_CHAT_KEY || "",
     cmsAPIBaseURL: process.env.CMS_API_URL || "",
     expirationDurationInSeconds: process.env.EXPIRATION_TIME_IN_SECONDS || 60 * 60 * 24,
+    cmsAPIToken: process.env.CMS_API_TOKEN || "",
 };
 function getConfigValue(key) {
     return rawConfig[key];

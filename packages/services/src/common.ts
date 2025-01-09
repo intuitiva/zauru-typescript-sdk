@@ -20,6 +20,7 @@ import {
 } from "@zauru-sdk/types";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getVariables } from "./zauru/zauru-variables.js";
+import { config } from "@zauru-sdk/config";
 
 /**
  * loginWebApp
@@ -141,6 +142,14 @@ export const getHeaders = async (
   }
 
   return headers;
+};
+
+export const getCMSHeaders = async () => {
+  const token = config.cmsAPIToken;
+  return {
+    Authorization: `users API-Key ${token}`,
+    "Content-Type": "application/json",
+  } as AxiosRequestHeaders;
 };
 
 /**

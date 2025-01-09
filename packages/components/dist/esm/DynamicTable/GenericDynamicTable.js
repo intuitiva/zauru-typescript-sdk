@@ -161,7 +161,7 @@ export const GenericDynamicTable = (props) => {
                 ? column.options?.find((x) => x.value === tempVal)
                 : tempVal;
             if (column.type === "label") {
-                return (_jsx("td", { className: `align-middle p-1 ${column.cellClassName || ""}`, children: _jsx("div", { children: defaultVal }) }, `${rowData.id}-${column.name}`));
+                return (_jsx("td", { className: `align-middle p-1 ${column.cellClassName || ""}`, children: _jsx("div", { children: column.cell ? column.cell(rowData) : defaultVal }) }, `${rowData.id}-${column.name}`));
             }
             const FieldComponent = column.type === "textField"
                 ? TextField

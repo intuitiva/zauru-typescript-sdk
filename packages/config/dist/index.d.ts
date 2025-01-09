@@ -10,4 +10,5 @@ export declare const config: {
     zendeskChatKey: string;
     cmsAPIBaseURL: string;
     expirationDurationInSeconds: string | number;
+    cmsAPIToken: string;
 };

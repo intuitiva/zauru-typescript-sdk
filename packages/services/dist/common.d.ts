@@ -29,6 +29,7 @@ export declare const getHeaders: (cookie: string | null, _session?: Session | nu
 }) => Promise<{
     [key: string]: string;
 }>;
+export declare const getCMSHeaders: () => Promise<AxiosRequestHeaders>;
 /**
  * getGraphQLAPIHeaders
  * @param session
