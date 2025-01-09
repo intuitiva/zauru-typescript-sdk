@@ -2,6 +2,7 @@ export * from "./common.js";
 export * from "./graphql/index.js";
 export * from "./sessions/sessions.js";
 export * from "./sessions/upstash.js";
+export * from "./zauru/httpCMS.js";
 export * from "./zauru/httpGraphQL.js";
 export * from "./zauru/httpOauth.js";
 export * from "./zauru/httpZauru.js";

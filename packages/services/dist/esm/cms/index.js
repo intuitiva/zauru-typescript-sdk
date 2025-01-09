@@ -10,7 +10,7 @@ import { httpCMSAPI } from "~/zauru/httpCMS.js";
 export const getCMSGeneralQuery = async (query) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getCMSHeaders();
-        // Respuesta con clave dinámica basada en queryKey
+        // Respuesta con clave dinámica basada en query
         const response = await httpCMSAPI.post("", {
             query,
         }, { headers });

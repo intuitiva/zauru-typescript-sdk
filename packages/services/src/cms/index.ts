@@ -16,7 +16,7 @@ export const getCMSGeneralQuery = async <T>(
   return handlePossibleAxiosErrors(async () => {
     const headers = await getCMSHeaders();
 
-    // Respuesta con clave dinámica basada en queryKey
+    // Respuesta con clave dinámica basada en query
     const response = await httpCMSAPI.post<any>(
       "",
       {
