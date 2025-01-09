@@ -4,19 +4,17 @@ import { getCMSHeaders } from "../common.js";
 import { httpCMSAPI } from "../zauru/httpCMS.js";
 
 export type CMSGeneralQueryResponse<T> = {
-  [key: string]: {
-    docs: T[];
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-    limit: number;
-    nextPage: number | null;
-    offset: number;
-    page: number;
-    pagingCounter: number;
-    prevPage: number | null;
-    totalDocs: number;
-    totalPages: number;
-  };
+  docs: T[];
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  limit: number;
+  nextPage: number | null;
+  offset: number;
+  page: number;
+  pagingCounter: number;
+  prevPage: number | null;
+  totalDocs: number;
+  totalPages: number;
 };
 
 /**
@@ -26,13 +24,19 @@ export type CMSGeneralQueryResponse<T> = {
  */
 export const getCMSGeneralQuery = async <T>(
   query: string
-): Promise<AxiosUtilsResponse<CMSGeneralQueryResponse<T>>> => {
+): Promise<
+  AxiosUtilsResponse<{
+    [key: string]: CMSGeneralQueryResponse<T>;
+  }>
+> => {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getCMSHeaders();
 
     // Respuesta con clave dinámica basada en query
     const response = await httpCMSAPI.post<{
-      data?: CMSGeneralQueryResponse<T>;
+      data?: {
+        [key: string]: CMSGeneralQueryResponse<T>;
+      };
       errors?: {
         message: string;
         extensions: { path: string; code: string };
