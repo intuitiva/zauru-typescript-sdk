@@ -12,7 +12,7 @@ export const getGeneralQuery = async (session, query, queryKey // Clave dinámic
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         // Respuesta con clave dinámica basada en queryKey
-        const response = await httpGraphQLAPI.post("", {
+        const response = await httpGraphQLAPI.post("/api/graphql", {
             query,
         }, { headers });
         if (response.data.errors) {
