@@ -42,7 +42,7 @@ export const getCMSGeneralQuery = async <T>(
         extensions: { path: string; code: string };
       }[];
     }>(
-      "",
+      "/api/graphql",
       {
         query,
       },

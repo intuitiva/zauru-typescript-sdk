@@ -10,7 +10,7 @@ export const getCMSGeneralQuery = async (query) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getCMSHeaders();
         // Respuesta con clave dinámica basada en query
-        const response = await httpCMSAPI.post("", {
+        const response = await httpCMSAPI.post("/api/graphql", {
             query,
         }, { headers });
         if (response.data.errors) {
