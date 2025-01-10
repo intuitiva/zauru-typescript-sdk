@@ -26,7 +26,7 @@ export const getGeneralQuery = async <T>(
         extensions: { path: string; code: string };
       }[];
     }>(
-      "/api/graphql",
+      "",
       {
         query,
       },
