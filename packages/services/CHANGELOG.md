@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.106](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.105...v2.0.106) (2025-01-10)
+
+
+### Reverts
+
+* Revert "# url" ([4c7e717](https://github.com/intuitiva/zauru-typescript-sdk/commit/4c7e717fcb582c1c102ffef058a41c10e88409bb))
+
+
+
+
+
 ## [2.0.105](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.104...v2.0.105) (2025-01-09)
 
 **Note:** Version bump only for package @zauru-sdk/services
