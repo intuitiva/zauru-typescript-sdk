@@ -2,3 +2,5 @@ node_modules/
 /.yarn
 .yarn/install-state.gz
 *.log
+packages/.DS_Store
+packages/common/.DS_Store
