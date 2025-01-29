@@ -7,16 +7,16 @@ const headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
 };
-const expiresToSeconds = (expires) => {
-    return 3600 * 8;
-};
+//Le quité la expiración porque era muy corta para recepciones,
+//antes se definía algo así: await fetch(`${redisBaseURL}/set/${id}?EX=${expiresToSeconds(expires)}`
+//Estaba en el createData y en el updateData
 // For more info check https://remix.run/docs/en/v1/api/remix#createsessionstorage
 export function createUpstashSessionStorage({ cookie }) {
     return createSessionStorage({
         cookie,
         async createData(data, expires) {
             const id = crypto.randomUUID();
-            await fetch(`${redisBaseURL}/set/${id}?EX=${expiresToSeconds(expires)}`, {
+            await fetch(`${redisBaseURL}/set/${id}`, {
                 method: "post",
                 body: JSON.stringify({ data }),
                 headers,
@@ -36,7 +36,7 @@ export function createUpstashSessionStorage({ cookie }) {
             }
         },
         async updateData(id, data, expires) {
-            await fetch(`${redisBaseURL}/set/${id}?EX=${expiresToSeconds(expires)}`, {
+            await fetch(`${redisBaseURL}/set/${id}`, {
                 method: "post",
                 body: JSON.stringify({ data }),
                 headers,
