@@ -435,6 +435,13 @@ export const useGetInvoicesByLab = (
   data: InvoiceGraphQL[];
 } => useGetReduxCatalog<InvoiceGraphQL>("invoicesByLab", config);
 
+export const useGetInvoicesByCurrentAgency = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: InvoiceGraphQL[];
+} => useGetReduxCatalog<InvoiceGraphQL>("invoicesByCurrentAgency", config);
+
 export const useGetTiposDeMuestra = (
   config?: ReduxParamsConfig
 ): {

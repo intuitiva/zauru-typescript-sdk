@@ -126,6 +126,10 @@ export declare const useGetInvoicesByLab: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: InvoiceGraphQL[];
 };
+export declare const useGetInvoicesByCurrentAgency: (config?: ReduxParamsConfig) => {
+    loading: boolean;
+    data: InvoiceGraphQL[];
+};
 export declare const useGetTiposDeMuestra: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: WebAppRowGraphQL<TipoMuestra>[];

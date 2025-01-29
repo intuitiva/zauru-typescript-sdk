@@ -38,6 +38,7 @@ const initialState = {
     employeesByLab: createLoadingState([]),
     employeesByCurrentAgency: createLoadingState([]),
     invoicesByLab: createLoadingState([]),
+    invoicesByCurrentAgency: createLoadingState([]),
     invoiceForms: createLoadingState([]),
     caseForms: createLoadingState([]),
     allForms: createLoadingState([]),
