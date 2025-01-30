@@ -663,7 +663,7 @@ export type RowDataType = {
 export type GenericDynamicTableColumn = {
     name: string;
     label: string;
-    type: "checkbox" | "textField" | "selectField" | "label";
+    type: "checkbox" | "textField" | "selectField" | "label" | "hidden";
     integer?: boolean;
     options?: SelectFieldOption[];
     cell?: (row: RowDataType) => any;
