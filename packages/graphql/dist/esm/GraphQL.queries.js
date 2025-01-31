@@ -1338,9 +1338,14 @@ query getPaymentTermById {
 }
 `;
 exports.getPaymentTermByIdStringQuery = getPaymentTermByIdStringQuery;
-const getInvoicesByAgencyIdStringQuery = (id) => `
+const getInvoicesByAgencyIdStringQuery = (id, filters) => `
 query getInvoicesByAgencyId {
-  invoices(limit: 1000, where: {agency_id: {_eq: ${id}}, voided: {_eq: false}}, order_by: {id: desc}) {
+  invoices(limit: 1000, 
+  where: {agency_id: {_eq: ${id}}, voided: {_eq: false}
+  ${filters?.tag_id
+    ? `, tagging_invoices: { tag_id: {_eq: ${filters?.tag_id}}}`
+    : ""}
+  }, order_by: {id: desc}) {
     id
     zid
     id_number

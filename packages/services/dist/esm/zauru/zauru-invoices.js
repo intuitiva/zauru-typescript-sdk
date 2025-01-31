@@ -6,11 +6,11 @@ import { httpZauru } from "./httpZauru.js";
 /**
  * getInvoicesByAgencyId
  */
-export async function getInvoicesByAgencyId(session, id) {
+export async function getInvoicesByAgencyId(session, id, filters) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getInvoicesByAgencyIdStringQuery(Number(id ?? 0)),
+            query: getInvoicesByAgencyIdStringQuery(Number(id ?? 0), filters),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

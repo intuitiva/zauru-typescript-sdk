@@ -3,7 +3,9 @@ import { AxiosUtilsResponse, InvoiceGraphQL } from "@zauru-sdk/types";
 /**
  * getInvoicesByAgencyId
  */
-export declare function getInvoicesByAgencyId(session: Session, id: string | null): Promise<AxiosUtilsResponse<InvoiceGraphQL[]>>;
+export declare function getInvoicesByAgencyId(session: Session, id: string | null, filters: {
+    tag_id?: string;
+}): Promise<AxiosUtilsResponse<InvoiceGraphQL[]>>;
 /**
  * createInvoice
  * @param headers

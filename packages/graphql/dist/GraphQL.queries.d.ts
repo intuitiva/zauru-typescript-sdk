@@ -113,6 +113,8 @@ export declare const getPaymentMethodsStringQuery: (config: {
     onlyActives: boolean;
 }) => string;
 export declare const getPaymentTermByIdStringQuery: (id: number) => string;
-export declare const getInvoicesByAgencyIdStringQuery: (id: number) => string;
+export declare const getInvoicesByAgencyIdStringQuery: (id: number, filters: {
+    tag_id?: string;
+}) => string;
 export declare const getCasesByResponsibleIdStringQuery: (responsible_id: number, wheres?: string[]) => string;
 export declare const getPrintTemplatesStringQuery = "\nquery getPrintTemplates {\n    print_templates {\n        id\n        name\n    }\n}\n";

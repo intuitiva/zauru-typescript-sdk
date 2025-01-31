@@ -15,7 +15,10 @@ import { httpZauru } from "./httpZauru.js";
  */
 export async function getInvoicesByAgencyId(
   session: Session,
-  id: string | null
+  id: string | null,
+  filters: {
+    tag_id?: string;
+  }
 ): Promise<AxiosUtilsResponse<InvoiceGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -29,7 +32,7 @@ export async function getInvoicesByAgencyId(
     }>(
       "",
       {
-        query: getInvoicesByAgencyIdStringQuery(Number(id ?? 0)),
+        query: getInvoicesByAgencyIdStringQuery(Number(id ?? 0), filters),
       },
       { headers }
     );

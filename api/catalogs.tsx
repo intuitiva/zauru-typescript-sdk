@@ -101,16 +101,8 @@ export const loader: LoaderFunction = async ({ request }) => {
       break;
 
     case "invoiceFormSubmissions":
-      const agency_id = url.searchParams.get("agency_id");
-      if (!agency_id) {
-        console.warn({
-          description: "No se envió ningún parámetro de agency_id a buscar",
-          title: "Ocurrió un error.",
-          error: true,
-          type: "error",
-        });
-        return Response.json({});
-      }
+      const agency_id =
+        url.searchParams.get("agency_id") ?? session.get("agency_id");
       response = await getInvoiceFormSubmissionsByAgencyId(session, agency_id);
       break;
 
@@ -172,7 +164,12 @@ export const loader: LoaderFunction = async ({ request }) => {
       break;
 
     case "invoicesByCurrentAgency":
-      response = await getInvoicesByAgencyId(session, session.get("agency_id"));
+      const tag_id = url.searchParams.get("tag_id") ?? undefined;
+      response = await getInvoicesByAgencyId(
+        session,
+        session.get("agency_id"),
+        { tag_id }
+      );
       break;
 
     case "payeeCategoriesLabPrices":

@@ -11,7 +11,7 @@ export const getInvoicesByLabAgency = async (headers, session) => {
         const { lab_agency_id } = await getVariablesByName(headers, session, [
             "lab_agency_id",
         ]);
-        const response = await getInvoicesByAgencyId(session, lab_agency_id);
+        const response = await getInvoicesByAgencyId(session, lab_agency_id, {});
         if (response.error) {
             const msg = `Ocurrió un error al consultar las órdenes/facturas por agencia de laboratorio: ${response.userMsg}`;
             console.error(msg);
