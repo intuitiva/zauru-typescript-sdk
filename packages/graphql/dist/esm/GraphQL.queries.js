@@ -1340,9 +1340,15 @@ query getPaymentTermById {
 exports.getPaymentTermByIdStringQuery = getPaymentTermByIdStringQuery;
 const getInvoicesByAgencyIdStringQuery = (id, filters) => `
 query getInvoicesByAgencyId {
-  invoices(limit: 1000, 
-  where: {agency_id: {_eq: ${id}}, voided: {_eq: false}
-  ${filters?.tag_id
+  invoices(
+    limit: 1000, 
+    where: {
+      agency_id: {_eq: ${id}}, 
+      voided: {_eq: false}
+      ${filters?.invoice_id
+    ? `, id: {_eq: ${filters?.invoice_id}}`
+    : ""}
+      ${filters?.tag_id
     ? `, tagging_invoices: { tag_id: {_eq: ${filters?.tag_id}}}`
     : ""}
   }, order_by: {id: desc}) {

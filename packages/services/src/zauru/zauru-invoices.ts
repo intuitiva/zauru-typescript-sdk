@@ -18,6 +18,7 @@ export async function getInvoicesByAgencyId(
   id: string | null,
   filters: {
     tag_id?: string;
+    invoice_id?: string;
   }
 ): Promise<AxiosUtilsResponse<InvoiceGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {

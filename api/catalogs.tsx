@@ -165,10 +165,11 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     case "invoicesByCurrentAgency":
       const tag_id = url.searchParams.get("tag_id") ?? undefined;
+      const invoice_id = url.searchParams.get("invoice_id") ?? undefined;
       response = await getInvoicesByAgencyId(
         session,
         session.get("agency_id"),
-        { tag_id }
+        { tag_id, invoice_id }
       );
       break;
 
