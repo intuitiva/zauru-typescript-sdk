@@ -88,8 +88,8 @@ export const makeInvoiceDetailsWithPrice = (
   return [
     ...invoice_details.map((x) => {
       //Si trae una B al inicio, es un bundleID, de lo contrario, es un item_id
-      const bundle_id = x.item_id?.toString()?.startsWith("B")
-        ? Number(x.item_id.replace("B", ""))
+      const bundle_id = x.item_id?.toString()?.toUpperCase()?.startsWith("B")
+        ? Number(x.item_id.replace("B", "").replace("b", ""))
         : undefined;
       const item_id = !bundle_id ? Number(x.item_id) : undefined;
 
