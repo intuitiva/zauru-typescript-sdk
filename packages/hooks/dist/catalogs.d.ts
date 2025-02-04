@@ -162,7 +162,7 @@ export declare const useGetMyCaseFormSubmissions: (config?: ReduxParamsConfig) =
     loading: boolean;
     data: SubmissionCasesGraphQL[];
 };
-export declare const useGetInvoiceFormSubmissionsByInvoiceId: (invoice_id: number | string) => {
+export declare const useGetInvoiceFormSubmissionsByInvoiceId: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: SubmissionInvoicesGraphQL[];
 };

@@ -296,9 +296,12 @@ const useGetMyCaseFormSubmissions = (config) => {
     };
 };
 exports.useGetMyCaseFormSubmissions = useGetMyCaseFormSubmissions;
-const useGetInvoiceFormSubmissionsByInvoiceId = (invoice_id) => {
+const useGetInvoiceFormSubmissionsByInvoiceId = (config) => {
+    const invoiceId = config?.otherParams?.invoiceId;
+    const withFiles = config?.otherParams?.withFiles;
     const data = useApiCatalog("invoiceFormSubmissionsByInvoiceId", {
-        invoice_id: `${invoice_id}`,
+        invoiceId: `${invoiceId}`,
+        withFiles: `${withFiles}`,
     });
     // Filtrar los registros para obtener sólo los de la versión más alta.
     const groupedByVersion = (data.data || []).reduce((acc, record) => {
