@@ -1565,7 +1565,7 @@ query getPaymentTermById {
 
 export const getInvoicesByAgencyIdStringQuery = (
   id: number,
-  filters: { tag_id?: string, invoice_id?: string }
+  filters: { tag_id?: string; invoice_id?: string }
 ) => `
 query getInvoicesByAgencyId {
   invoices(
@@ -1573,11 +1573,7 @@ query getInvoicesByAgencyId {
     where: {
       agency_id: {_eq: ${id}}, 
       voided: {_eq: false}
-      ${
-        filters?.invoice_id
-          ? `, id: {_eq: ${filters?.invoice_id}}`
-          : ""
-      }
+      ${filters?.invoice_id ? `, id: {_eq: ${filters?.invoice_id}}` : ""}
       ${
         filters?.tag_id
           ? `, tagging_invoices: { tag_id: {_eq: ${filters?.tag_id}}}`
@@ -1623,6 +1619,7 @@ query getInvoicesByAgencyId {
     }
     payee {
       name
+      tin
       payee_category_id
     }
   }
