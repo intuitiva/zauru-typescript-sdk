@@ -611,15 +611,19 @@ export const useGetMyCaseFormSubmissions = (
 };
 
 export const useGetInvoiceFormSubmissionsByInvoiceId = (
-  invoice_id: number | string
+  config?: ReduxParamsConfig
 ): {
   loading: boolean;
   data: SubmissionInvoicesGraphQL[];
 } => {
+  const invoiceId = config?.otherParams?.invoiceId;
+  const withFiles = config?.otherParams?.withFiles;
+
   const data = useApiCatalog<SubmissionInvoicesGraphQL>(
     "invoiceFormSubmissionsByInvoiceId",
     {
-      invoice_id: `${invoice_id}`,
+      invoiceId: `${invoiceId}`,
+      withFiles: `${withFiles}`,
     }
   );
 

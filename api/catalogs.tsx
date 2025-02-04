@@ -290,10 +290,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     case "invoiceFormSubmissionsByInvoiceId": {
       const withFiles = url.searchParams.get("withFiles") === "true";
-      const invoice_id = url.searchParams.get("invoice_id");
-      if (!invoice_id) {
+      const invoiceId = url.searchParams.get("invoiceId");
+      if (!invoiceId) {
         console.warn({
-          description: "No se envió ningún parámetro de invoice_id a buscar",
+          description: "No se envió ningún parámetro de invoiceId a buscar",
           title: "Ocurrió un error.",
           error: true,
           type: "error",
@@ -303,7 +303,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       response = await getInvoiceFormSubmissionsByInvoiceId(
         headers,
         session,
-        invoice_id,
+        invoiceId,
         withFiles
       );
       break;
