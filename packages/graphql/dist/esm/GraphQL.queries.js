@@ -1165,6 +1165,7 @@ query getInvoiceFormSubmissionsByInvoiceId {
           id
           name
           print_var_name
+          field_type
           settings_form_field_options {
               id
               label
