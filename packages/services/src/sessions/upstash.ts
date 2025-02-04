@@ -20,7 +20,7 @@ export function createUpstashSessionStorage({ cookie }: any) {
     cookie,
     async createData(data, expires) {
       const id: string = crypto.randomUUID();
-      await fetch(`${redisBaseURL}/set/${id}`, {
+      await fetch(`${redisBaseURL}/set/${id}?EX=${259200}`, {
         method: "post",
         body: JSON.stringify({ data }),
         headers,
@@ -39,7 +39,7 @@ export function createUpstashSessionStorage({ cookie }: any) {
       }
     },
     async updateData(id, data, expires) {
-      await fetch(`${redisBaseURL}/set/${id}`, {
+      await fetch(`${redisBaseURL}/set/${id}?EX=${259200}`, {
         method: "post",
         body: JSON.stringify({ data }),
         headers,
