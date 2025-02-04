@@ -289,6 +289,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 
     case "invoiceFormSubmissionsByInvoiceId": {
+      const withFiles = url.searchParams.get("withFiles") === "true";
       const invoice_id = url.searchParams.get("invoice_id");
       if (!invoice_id) {
         console.warn({
@@ -300,8 +301,10 @@ export const loader: LoaderFunction = async ({ request }) => {
         return Response.json({});
       }
       response = await getInvoiceFormSubmissionsByInvoiceId(
+        headers,
         session,
-        invoice_id
+        invoice_id,
+        withFiles
       );
       break;
     }

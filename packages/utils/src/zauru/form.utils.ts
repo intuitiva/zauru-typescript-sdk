@@ -262,8 +262,10 @@ export const getMuestrasByInvoiceId = (
       ["lab_muestras_form_zid"]
     );
     const response = await getInvoiceFormSubmissionsByInvoiceId(
+      headers,
       session,
       invoice_id,
+      false,
       { formZid: Number(lab_muestras_form_zid) }
     );
 

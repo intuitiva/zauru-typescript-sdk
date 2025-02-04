@@ -173,7 +173,7 @@ export const getLastMuestra = (headers, session) => {
 export const getMuestrasByInvoiceId = (headers, session, invoice_id) => {
     return handlePossibleAxiosErrors(async () => {
         const { lab_muestras_form_zid } = await getVariablesByName(headers, session, ["lab_muestras_form_zid"]);
-        const response = await getInvoiceFormSubmissionsByInvoiceId(session, invoice_id, { formZid: Number(lab_muestras_form_zid) });
+        const response = await getInvoiceFormSubmissionsByInvoiceId(headers, session, invoice_id, false, { formZid: Number(lab_muestras_form_zid) });
         if (response.error || !response.data) {
             throw new Error(`Ocurrió un error al intentar obtener las muestras de la remisión: ${response.userMsg}`);
         }

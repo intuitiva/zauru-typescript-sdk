@@ -228,7 +228,7 @@ export async function getLastInvoiceFormSubmission(session, filters = {}) {
 /**
  * getInvoiceFormSubmissionsByInvoiceId
  */
-export async function getInvoiceFormSubmissionsByInvoiceId(session, invoice_id, filters = {}) {
+export async function getInvoiceFormSubmissionsByInvoiceId(headersZauru, session, invoice_id, withFiles = false, filters = {}) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
@@ -239,7 +239,32 @@ export async function getInvoiceFormSubmissionsByInvoiceId(session, invoice_id, 
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
         }
-        const registers = response?.data?.data?.submission_invoices;
+        let registers = response?.data?.data?.submission_invoices;
+        if (withFiles) {
+            registers = await Promise.all(registers.map(async (register) => {
+                try {
+                    const responseZauru = await httpZauru.get(`/settings/forms/form_submissions/${register.settings_form_submission.id}.json`, {
+                        headers: headersZauru,
+                    });
+                    register.settings_form_submission.settings_form_submission_values =
+                        register.settings_form_submission.settings_form_submission_values.map((x) => {
+                            if (x.settings_form_field.field_type === "image" ||
+                                x.settings_form_field.field_type === "file" ||
+                                x.settings_form_field.field_type === "pdf") {
+                                x.value = responseZauru.data[x.settings_form_field.print_var_name]
+                                    ?.toString()
+                                    .replace(/\\u0026/g, "&");
+                            }
+                            return x;
+                        });
+                    return register;
+                }
+                catch (error) {
+                    console.error(`Error al obtener el archivo del formulario ${register.settings_form_submission.id}`, error);
+                    return register;
+                }
+            }));
+        }
         // Filtrar los registros para obtener sólo los de la versión más alta.
         const groupedByVersion = registers.reduce((acc, record) => {
             const zid = record.settings_form_submission.zid;
