@@ -2,19 +2,28 @@ import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { createFormSubmission, getInvoiceFormSubmissionsByInvoiceId, getLastInvoiceFormSubmission, getVariablesByName, } from "@zauru-sdk/services";
 export function transformFormSubmitObject(input) {
     const form_submission_values = [];
+    const isJsonArray = (value) => {
+        try {
+            const parsed = JSON.parse(value);
+            return Array.isArray(parsed);
+        }
+        catch (e) {
+            return false;
+        }
+    };
     // Itera sobre las propiedades del objeto
     for (const key in input) {
         // Utiliza una expresión regular para detectar claves que coinciden con el patrón 'word_number'
         const match = key.match(/^(.+?)_(\d+)$/);
-        if (match) {
+        if (match && !key.includes("deleted")) {
             const [, , form_field_id] = match;
             let newObj = {
                 form_field_id,
                 groups_path: "[]",
+                value: "",
             };
             if (input[key] instanceof File) {
                 const fileType = input[key].type;
-                newObj["value"] = "";
                 if (input[key]?.size > 0) {
                     // Verifica si el archivo es una imagen
                     if (fileType.startsWith("image/")) {
@@ -28,6 +37,27 @@ export function transformFormSubmitObject(input) {
                     else {
                         newObj["file"] = input[key];
                     }
+                }
+            }
+            else if (isJsonArray(input[key])) {
+                const tableJsonArray = JSON.parse(input[key]);
+                if (tableJsonArray.length > 0) {
+                    const form_table_values_attributes = [];
+                    tableJsonArray.forEach((x, index) => {
+                        for (const keyTable in x) {
+                            const matchTableId = keyTable.match(/^(.+?)_(\d+)$/);
+                            if (matchTableId) {
+                                const [, , table_header_id] = matchTableId;
+                                form_table_values_attributes.push({
+                                    table_header_id: Number(table_header_id),
+                                    value: x[keyTable],
+                                    row_or_column_number: index + 1,
+                                });
+                            }
+                        }
+                    });
+                    newObj["form_table_values_attributes"] = arrayToObject(form_table_values_attributes);
+                    delete newObj.value;
                 }
             }
             else {
