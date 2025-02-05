@@ -64,17 +64,22 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherPa
                     fetcher.load(`/api/catalogs?catalog=${CATALOG_NAME}${queryString}`);
                 }
                 catch (error) {
-                    console.error(error);
                     // Si hay datos locales, mostramos los datos locales
-                    setData({
-                        data: catalogData?.data || [],
-                        loading: false,
-                    });
-                    (0, index_js_1.showAlert)({
-                        type: "error",
-                        title: "Error al cargar el catálogo",
-                        description: `Error al cargar el catálogo ${CATALOG_NAME}, por favor intente nuevamente. Error: ${error}`,
-                    });
+                    if (hasLocalData) {
+                        console.error("Hubo un error pero hay datos locales en la consulta de", CATALOG_NAME, " Error: ", error);
+                        setData({
+                            data: catalogData?.data || [],
+                            loading: false,
+                        });
+                    }
+                    else {
+                        console.error("Hubo un error y no hay datos locales en la consulta de", CATALOG_NAME, " Error: ", error);
+                        (0, index_js_1.showAlert)({
+                            type: "error",
+                            title: "Error al cargar el catálogo",
+                            description: `Error al cargar el catálogo ${CATALOG_NAME}, por favor intente nuevamente. Error: ${error}`,
+                        });
+                    }
                 }
             }
             else {
@@ -98,30 +103,22 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherPa
                 if (fetcher.data) {
                     const possibleError = fetcher.data;
                     const possibleData = fetcher.data;
-                    // Si es un error "clásico" con description, lo manejamos
-                    if (possibleError?.description) {
-                        // Aquí interpretamos que la API pudo haber respondido algo tipo { description, ... } => error
+                    // Si es un error "clásico", lo manejamos
+                    if (possibleError?.error) {
                         // Pero OJO: si ya teníamos datos locales, no mostramos error "fatal" para no romper el fallback
                         if (hasLocalData) {
-                            // Ya tenemos datos en Redux, así que sólo mostramos el alert informativo,
-                            // pero no borramos lo que hay en data
-                            (0, index_js_1.showAlert)({
-                                type: possibleError.type || "error",
-                                title: possibleError.title || "Error",
-                                description: possibleError.description,
-                            });
-                            // Marcamos loading false pero dejamos intacto `data.data`
-                            setData((prev) => ({ ...prev, loading: false }));
+                            console.log("Hay error en la respuesta pero hay datos locales en la consulta de", CATALOG_NAME);
                         }
                         else {
+                            console.log("Hay error en la respuesta y no hay datos locales en la consulta de", CATALOG_NAME);
                             // No hay datos locales -> mostramos error y no tenemos fallback
                             (0, index_js_1.showAlert)({
                                 type: "error",
                                 title: possibleError.title || "Error",
                                 description: possibleError.description,
                             });
-                            setData((prev) => ({ ...prev, loading: false }));
                         }
+                        setData((prev) => ({ ...prev, loading: false }));
                     }
                     else {
                         // Caso: la respuesta sí es data real
@@ -141,6 +138,7 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherPa
                             // Por alguna razón no llegó el array esperado
                             // Revisamos si hay fallback local
                             if (hasLocalData) {
+                                console.log("Hubo un error en el parseo de la respuesta pero hay datos locales en la consulta de", CATALOG_NAME, " retornó: ", newData);
                                 // No reportar error: usamos lo local
                                 setData((prev) => ({ ...prev, loading: false }));
                             }
@@ -151,6 +149,7 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherPa
                                     title: "Error al recibir el catálogo",
                                     description: `No se obtuvo la propiedad "${CATALOG_NAME}" en la respuesta.`,
                                 });
+                                console.log("Hubo un error en parseo de la respuesta y no hay datos locales en la consulta de", CATALOG_NAME, " retornó: ", newData);
                                 setData((prev) => ({ ...prev, loading: false }));
                             }
                         }
@@ -160,17 +159,18 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherPa
                     // fetcher.state === "idle" pero fetcher.data es null/undefined => seguramente hubo error global
                     if (hasLocalData) {
                         // Fallback a datos locales
-                        setData((prev) => ({ ...prev, loading: false }));
+                        console.log("No hay datos en la respuesta pero hay datos locales en la consulta de", CATALOG_NAME);
                     }
                     else {
                         // Ni API ni local data => error
+                        console.log("No hay datos en la respuesta y no hay datos locales en la consulta de", CATALOG_NAME);
                         (0, index_js_1.showAlert)({
                             type: "error",
                             title: "Error al cargar el catálogo",
                             description: `No se obtuvo respuesta y no hay datos locales para ${CATALOG_NAME}`,
                         });
-                        setData((prev) => ({ ...prev, loading: false }));
                     }
+                    setData((prev) => ({ ...prev, loading: false }));
                 }
             }
             // eslint-disable-next-line react-hooks/exhaustive-deps
