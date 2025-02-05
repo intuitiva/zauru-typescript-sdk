@@ -9,6 +9,7 @@ function useGetTemplateObject(TEMPLATE_NAME, config = {}) {
     try {
         const dispatch = (0, redux_1.useAppDispatch)();
         const fetcher = (0, react_1.useFetcher)();
+        const [fetchTriggered, setFetchTriggered] = (0, react_2.useState)(false);
         // Obtenemos del store lo que ya se tenga
         const objectData = (0, redux_1.useAppSelector)((state) => state.templates[TEMPLATE_NAME]);
         // Verifica si ya tenemos algo en Redux
@@ -32,6 +33,7 @@ function useGetTemplateObject(TEMPLATE_NAME, config = {}) {
                 dispatch((0, redux_1.templateFetchStart)(TEMPLATE_NAME));
                 // Aquí hacemos la llamada a la API a través del fetcher
                 try {
+                    setFetchTriggered(true);
                     fetcher.load(`/api/templates?object=${TEMPLATE_NAME}`);
                 }
                 catch (error) {
@@ -63,6 +65,9 @@ function useGetTemplateObject(TEMPLATE_NAME, config = {}) {
          *    Decidimos si lo que vino es error o data, y procedemos.
          */
         (0, react_2.useEffect)(() => {
+            // Solo ejecuto la lógica si ya disparé al menos un fetch
+            if (!fetchTriggered)
+                return;
             if (fetcher.state === "idle") {
                 if (fetcher.data) {
                     // Podría ser un error o ser la data
@@ -72,12 +77,6 @@ function useGetTemplateObject(TEMPLATE_NAME, config = {}) {
                     if (possibleError.description) {
                         // Ya teníamos datos locales?
                         if (hasLocalData) {
-                            // Mostramos alert, pero NO borramos los datos locales
-                            (0, index_js_1.showAlert)({
-                                type: possibleError.type || "error",
-                                title: possibleError.title || "Error",
-                                description: possibleError.description,
-                            });
                             // Dejamos loading en false, data queda como estaba
                             setData((prev) => ({ ...prev, loading: false }));
                         }

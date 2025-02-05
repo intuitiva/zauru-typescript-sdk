@@ -21,6 +21,7 @@ const redux_1 = require("@zauru-sdk/redux");
 function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherParams } = {}) {
     const dispatch = (0, redux_1.useAppDispatch)();
     const fetcher = (0, react_1.useFetcher)();
+    const [fetchTriggered, setFetchTriggered] = (0, react_2.useState)(false);
     const catalogData = (0, redux_1.useAppSelector)((state) => state.catalogs[CATALOG_NAME]);
     // Verifica si ya tenemos algo en Redux
     const hasLocalData = Boolean(catalogData?.data?.length);
@@ -61,6 +62,7 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherPa
                     : "";
                 // Disparamos la carga a través de fetcher
                 try {
+                    setFetchTriggered(true);
                     fetcher.load(`/api/catalogs?catalog=${CATALOG_NAME}${queryString}`);
                 }
                 catch (error) {
@@ -97,6 +99,9 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherPa
          * y decide qué hacer con la data o error recibidos.
          */
         (0, react_2.useEffect)(() => {
+            // Solo ejecuto la lógica si ya disparé al menos un fetch
+            if (!fetchTriggered)
+                return;
             // Cuando fetcher se pone en "idle", significa que ya terminó la petición.
             if (fetcher.state === "idle") {
                 // Caso: tenemos algo en fetcher.data

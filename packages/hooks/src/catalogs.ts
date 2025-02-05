@@ -71,6 +71,7 @@ export function useGetReduxCatalog<T>(
 ): CatalogType<T> {
   const dispatch = useAppDispatch();
   const fetcher = useFetcher<FetcherErrorType | CatalogsData<T>>();
+  const [fetchTriggered, setFetchTriggered] = useState(false);
 
   const catalogData = useAppSelector((state) => state.catalogs[CATALOG_NAME]);
   // Verifica si ya tenemos algo en Redux
@@ -121,6 +122,7 @@ export function useGetReduxCatalog<T>(
 
         // Disparamos la carga a través de fetcher
         try {
+          setFetchTriggered(true);
           fetcher.load(`/api/catalogs?catalog=${CATALOG_NAME}${queryString}`);
         } catch (error) {
           // Si hay datos locales, mostramos los datos locales
@@ -165,6 +167,8 @@ export function useGetReduxCatalog<T>(
      * y decide qué hacer con la data o error recibidos.
      */
     useEffect(() => {
+      // Solo ejecuto la lógica si ya disparé al menos un fetch
+      if (!fetchTriggered) return;
       // Cuando fetcher se pone en "idle", significa que ya terminó la petición.
       if (fetcher.state === "idle") {
         // Caso: tenemos algo en fetcher.data
