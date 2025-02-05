@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.obtenerFechaActualConZonaHoraria = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.priceToText = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.obtenerFechaActualConZonaHoraria = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
 exports.generateClientUUID = generateClientUUID;
 exports.extractValueBetweenTags = extractValueBetweenTags;
 exports.isJsonArray = isJsonArray;
@@ -467,6 +467,12 @@ const arrayToObject = (arr = [], options) => {
     }, {});
 };
 exports.arrayToObject = arrayToObject;
+const priceToText = (value) => {
+    return Number(value)
+        ?.toFixed(2)
+        ?.replace(/\d(?=(\d{3})+\.)/g, "$&,");
+};
+exports.priceToText = priceToText;
 function convertToFormData(obj) {
     const formData = new FormData();
     function appendFormData(data, root = "") {

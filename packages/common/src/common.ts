@@ -524,6 +524,12 @@ export const arrayToObject = (
   }, {});
 };
 
+export const priceToText = (value: number | string): string => {
+  return Number(value)
+    ?.toFixed(2)
+    ?.replace(/\d(?=(\d{3})+\.)/g, "$&,");
+};
+
 export function convertToFormData(obj: any) {
   const formData = new FormData();
 

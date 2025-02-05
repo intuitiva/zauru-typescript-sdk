@@ -110,6 +110,7 @@ export declare const arrayToObject: (arr?: Array<any>, options?: {
 }) => {
     [key: string]: any;
 };
+export declare const priceToText: (value: number | string) => string;
 export declare function convertToFormData(obj: any): FormData;
 export declare const ZAURU_REGEX: {
     porcentaje: RegExp;
