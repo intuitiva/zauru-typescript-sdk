@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { CATALOGS_NAMES, ONLINE_CATALOGS_NAMES } from "@zauru-sdk/redux";
+import { CATALOGS_NAMES } from "@zauru-sdk/redux";
 import {
   getAgencies,
   getAllForms,

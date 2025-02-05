@@ -26,139 +26,164 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherPa
     const hasLocalData = Boolean(catalogData?.data?.length);
     const [data, setData] = (0, react_2.useState)({
         data: hasLocalData ? catalogData.data : [],
-        loading: false, // Lo controlaremos de forma más manual
+        loading: false,
     });
-    /**
-     * Efecto que decide si llamar o no a la API.
-     *
-     * Lógica:
-     * - Si `online: true`, forzamos el fetch.
-     * - Si `reFetch: true`, también forzamos el fetch.
-     * - Si `online: false` y SÍ tenemos data local, NO hacemos fetch (solo mostramos lo que hay).
-     * - Si `online: false` y NO hay data local, SÍ hacemos fetch (porque no hay nada que mostrar).
-     */
-    (0, react_2.useEffect)(() => {
-        const mustFetch = online || catalogData?.reFetch || !hasLocalData;
-        if (mustFetch) {
-            setData((prev) => ({ ...prev, loading: true }));
-            dispatch((0, redux_1.catalogsFetchStart)(CATALOG_NAME));
-            // Construimos el query para `wheres` y `otherParams`
-            const encodedWheres = (wheres || []).map((where) => encodeURIComponent(where));
-            const wheresQueryParam = encodedWheres.join("&");
-            const paramsString = otherParams
-                ? Object.entries(otherParams)
-                    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-                    .join("&")
-                : "";
-            const queryStringParts = [];
-            if (wheresQueryParam)
-                queryStringParts.push(`wheres=${wheresQueryParam}`);
-            if (paramsString)
-                queryStringParts.push(paramsString);
-            const queryString = queryStringParts.length
-                ? `&${queryStringParts.join("&")}`
-                : "";
-            // Disparamos la carga a través de fetcher
-            fetcher.load(`/api/catalogs?catalog=${CATALOG_NAME}${queryString}`);
-        }
-        else {
-            // Si no vamos a hacer fetch, asegurarnos de que loading esté en false
-            // y mantener lo que ya tengamos en Redux
-            setData({
-                data: catalogData?.data || [],
-                loading: false,
-            });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [online, catalogData?.reFetch, hasLocalData]);
-    /**
-     * Efecto que observa la finalización del fetch (fetcher.state === "idle")
-     * y decide qué hacer con la data o error recibidos.
-     */
-    (0, react_2.useEffect)(() => {
-        // Cuando fetcher se pone en "idle", significa que ya terminó la petición.
-        if (fetcher.state === "idle") {
-            // Caso: tenemos algo en fetcher.data
-            if (fetcher.data) {
-                const possibleError = fetcher.data;
-                const possibleData = fetcher.data;
-                // Si es un error "clásico" con description, lo manejamos
-                if (possibleError?.description) {
-                    // Aquí interpretamos que la API pudo haber respondido algo tipo { description, ... } => error
-                    // Pero OJO: si ya teníamos datos locales, no mostramos error "fatal" para no romper el fallback
-                    if (hasLocalData) {
-                        // Ya tenemos datos en Redux, así que sólo mostramos el alert informativo,
-                        // pero no borramos lo que hay en data
-                        (0, index_js_1.showAlert)({
-                            type: possibleError.type || "error",
-                            title: possibleError.title || "Error",
-                            description: possibleError.description,
-                        });
-                        // Marcamos loading false pero dejamos intacto `data.data`
-                        setData((prev) => ({ ...prev, loading: false }));
-                    }
-                    else {
-                        // No hay datos locales -> mostramos error y no tenemos fallback
-                        (0, index_js_1.showAlert)({
-                            type: "error",
-                            title: possibleError.title || "Error",
-                            description: possibleError.description,
-                        });
-                        setData((prev) => ({ ...prev, loading: false }));
-                    }
+    try {
+        /**
+         * Efecto que decide si llamar o no a la API.
+         *
+         * Lógica:
+         * - Si `online: true`, forzamos el fetch.
+         * - Si `reFetch: true`, también forzamos el fetch.
+         * - Si `online: false` y SÍ tenemos data local, NO hacemos fetch (solo mostramos lo que hay).
+         * - Si `online: false` y NO hay data local, SÍ hacemos fetch (porque no hay nada que mostrar).
+         */
+        (0, react_2.useEffect)(() => {
+            const mustFetch = online || catalogData?.reFetch || !hasLocalData;
+            if (mustFetch) {
+                setData((prev) => ({ ...prev, loading: true }));
+                dispatch((0, redux_1.catalogsFetchStart)(CATALOG_NAME));
+                // Construimos el query para `wheres` y `otherParams`
+                const encodedWheres = (wheres || []).map((where) => encodeURIComponent(where));
+                const wheresQueryParam = encodedWheres.join("&");
+                const paramsString = otherParams
+                    ? Object.entries(otherParams)
+                        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+                        .join("&")
+                    : "";
+                const queryStringParts = [];
+                if (wheresQueryParam)
+                    queryStringParts.push(`wheres=${wheresQueryParam}`);
+                if (paramsString)
+                    queryStringParts.push(paramsString);
+                const queryString = queryStringParts.length
+                    ? `&${queryStringParts.join("&")}`
+                    : "";
+                // Disparamos la carga a través de fetcher
+                try {
+                    fetcher.load(`/api/catalogs?catalog=${CATALOG_NAME}${queryString}`);
                 }
-                else {
-                    // Caso: la respuesta sí es data real
-                    const newData = possibleData[CATALOG_NAME];
-                    if (Array.isArray(newData)) {
-                        // Guardamos en redux y en el state local
-                        dispatch((0, redux_1.catalogsFetchSuccess)({
-                            name: CATALOG_NAME,
-                            data: newData,
-                        }));
-                        setData({
-                            data: newData,
-                            loading: false,
-                        });
-                    }
-                    else {
-                        // Por alguna razón no llegó el array esperado
-                        // Revisamos si hay fallback local
+                catch (error) {
+                    console.error(error);
+                    // Si hay datos locales, mostramos los datos locales
+                    setData({
+                        data: catalogData?.data || [],
+                        loading: false,
+                    });
+                    (0, index_js_1.showAlert)({
+                        type: "error",
+                        title: "Error al cargar el catálogo",
+                        description: `Error al cargar el catálogo ${CATALOG_NAME}, por favor intente nuevamente. Error: ${error}`,
+                    });
+                }
+            }
+            else {
+                // Si no vamos a hacer fetch, asegurarnos de que loading esté en false
+                // y mantener lo que ya tengamos en Redux
+                setData({
+                    data: catalogData?.data || [],
+                    loading: false,
+                });
+            }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [online, catalogData?.reFetch, hasLocalData]);
+        /**
+         * Efecto que observa la finalización del fetch (fetcher.state === "idle")
+         * y decide qué hacer con la data o error recibidos.
+         */
+        (0, react_2.useEffect)(() => {
+            // Cuando fetcher se pone en "idle", significa que ya terminó la petición.
+            if (fetcher.state === "idle") {
+                // Caso: tenemos algo en fetcher.data
+                if (fetcher.data) {
+                    const possibleError = fetcher.data;
+                    const possibleData = fetcher.data;
+                    // Si es un error "clásico" con description, lo manejamos
+                    if (possibleError?.description) {
+                        // Aquí interpretamos que la API pudo haber respondido algo tipo { description, ... } => error
+                        // Pero OJO: si ya teníamos datos locales, no mostramos error "fatal" para no romper el fallback
                         if (hasLocalData) {
-                            // No reportar error: usamos lo local
+                            // Ya tenemos datos en Redux, así que sólo mostramos el alert informativo,
+                            // pero no borramos lo que hay en data
+                            (0, index_js_1.showAlert)({
+                                type: possibleError.type || "error",
+                                title: possibleError.title || "Error",
+                                description: possibleError.description,
+                            });
+                            // Marcamos loading false pero dejamos intacto `data.data`
                             setData((prev) => ({ ...prev, loading: false }));
                         }
                         else {
-                            // No hay nada local -> error
+                            // No hay datos locales -> mostramos error y no tenemos fallback
                             (0, index_js_1.showAlert)({
                                 type: "error",
-                                title: "Error al recibir el catálogo",
-                                description: `No se obtuvo la propiedad "${CATALOG_NAME}" en la respuesta.`,
+                                title: possibleError.title || "Error",
+                                description: possibleError.description,
                             });
                             setData((prev) => ({ ...prev, loading: false }));
                         }
                     }
-                }
-            }
-            else {
-                // fetcher.state === "idle" pero fetcher.data es null/undefined => seguramente hubo error global
-                if (hasLocalData) {
-                    // Fallback a datos locales
-                    setData((prev) => ({ ...prev, loading: false }));
+                    else {
+                        // Caso: la respuesta sí es data real
+                        const newData = possibleData[CATALOG_NAME];
+                        if (Array.isArray(newData)) {
+                            // Guardamos en redux y en el state local
+                            dispatch((0, redux_1.catalogsFetchSuccess)({
+                                name: CATALOG_NAME,
+                                data: newData,
+                            }));
+                            setData({
+                                data: newData,
+                                loading: false,
+                            });
+                        }
+                        else {
+                            // Por alguna razón no llegó el array esperado
+                            // Revisamos si hay fallback local
+                            if (hasLocalData) {
+                                // No reportar error: usamos lo local
+                                setData((prev) => ({ ...prev, loading: false }));
+                            }
+                            else {
+                                // No hay nada local -> error
+                                (0, index_js_1.showAlert)({
+                                    type: "error",
+                                    title: "Error al recibir el catálogo",
+                                    description: `No se obtuvo la propiedad "${CATALOG_NAME}" en la respuesta.`,
+                                });
+                                setData((prev) => ({ ...prev, loading: false }));
+                            }
+                        }
+                    }
                 }
                 else {
-                    // Ni API ni local data => error
-                    (0, index_js_1.showAlert)({
-                        type: "error",
-                        title: "Error al cargar el catálogo",
-                        description: `No se obtuvo respuesta y no hay datos locales para ${CATALOG_NAME}`,
-                    });
-                    setData((prev) => ({ ...prev, loading: false }));
+                    // fetcher.state === "idle" pero fetcher.data es null/undefined => seguramente hubo error global
+                    if (hasLocalData) {
+                        // Fallback a datos locales
+                        setData((prev) => ({ ...prev, loading: false }));
+                    }
+                    else {
+                        // Ni API ni local data => error
+                        (0, index_js_1.showAlert)({
+                            type: "error",
+                            title: "Error al cargar el catálogo",
+                            description: `No se obtuvo respuesta y no hay datos locales para ${CATALOG_NAME}`,
+                        });
+                        setData((prev) => ({ ...prev, loading: false }));
+                    }
                 }
             }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetcher.state]);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [fetcher.state]);
+    }
+    catch (error) {
+        console.error(error);
+        (0, index_js_1.showAlert)({
+            type: "error",
+            title: "Error al cargar el catálogo",
+            description: `Error al cargar el catálogo ${CATALOG_NAME}, por favor intente nuevamente. Error: ${error}`,
+        });
+    }
     return data;
 }
 /**
