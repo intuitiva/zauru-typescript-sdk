@@ -1,5 +1,22 @@
 import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL, PaymentMethodGraphQL } from "@zauru-sdk/types";
-import { ReduxParamsConfig } from "@zauru-sdk/redux";
+import { CATALOGS_NAMES, ReduxParamsConfig } from "@zauru-sdk/redux";
+type CatalogType<T> = {
+    data: T[];
+    loading: boolean;
+};
+/**
+ *
+ * @param CATALOG_NAME
+ * @param param1
+ * @returns
+ *
+ * otherParams usage example:
+ *
+ * otherParams: {
+      includeDiscounts: "true",
+    }
+ */
+export declare function useGetReduxCatalog<T>(CATALOG_NAME: CATALOGS_NAMES, { online, wheres, otherParams }?: ReduxParamsConfig): CatalogType<T>;
 /**
  *
  * ======================= HOOKS
@@ -154,7 +171,7 @@ export declare const useGetCaseForms: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: FormGraphQL[];
 };
-export declare const useGetInvoiceFormSubmissionsByAgencyId: (agency_id: number | string) => {
+export declare const useGetInvoiceFormSubmissionsByAgencyId: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: SubmissionInvoicesGraphQL[];
 };
@@ -166,3 +183,4 @@ export declare const useGetInvoiceFormSubmissionsByInvoiceId: (config?: ReduxPar
     loading: boolean;
     data: SubmissionInvoicesGraphQL[];
 };
+export {};

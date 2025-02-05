@@ -27,10 +27,6 @@ import type {
   PaymentMethodGraphQL,
 } from "@zauru-sdk/types";
 
-export type ONLINE_CATALOGS_NAMES =
-  | "invoiceFormSubmissionsByInvoiceId"
-  | "invoiceFormSubmissionsByAgencyId";
-
 export type CATALOGS_NAMES =
   | "agencies"
   | "suggestedPrices"
@@ -71,7 +67,9 @@ export type CATALOGS_NAMES =
   | "bundlesForLab"
   | "paymentMethods"
   | "employees"
-  | "printTemplates";
+  | "printTemplates"
+  | "invoiceFormSubmissionsByInvoiceId"
+  | "invoiceFormSubmissionsByAgencyId";
 
 type LoadingState<T> = {
   data: T;
@@ -120,6 +118,8 @@ type CatalogState = {
   shipmentsToMyAgency: LoadingState<ShipmentGraphQL[]>;
   paymentMethods: LoadingState<PaymentMethodGraphQL[]>;
   printTemplates: LoadingState<PrintTemplateGraphQL[]>;
+  invoiceFormSubmissionsByInvoiceId: LoadingState<FormSubmissionGraphQL[]>;
+  invoiceFormSubmissionsByAgencyId: LoadingState<FormSubmissionGraphQL[]>;
 };
 
 const createLoadingState = <T>(initialData: T): LoadingState<T> => ({
@@ -169,6 +169,8 @@ const initialState: CatalogState = {
   shipmentsToMyAgency: createLoadingState([]),
   paymentMethods: createLoadingState([]),
   printTemplates: createLoadingState([]),
+  invoiceFormSubmissionsByInvoiceId: createLoadingState([]),
+  invoiceFormSubmissionsByAgencyId: createLoadingState([]),
 };
 
 const catalogsSlice = createSlice({

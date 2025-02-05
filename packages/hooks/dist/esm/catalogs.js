@@ -1,65 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useGetInvoiceFormSubmissionsByInvoiceId = exports.useGetMyCaseFormSubmissions = exports.useGetInvoiceFormSubmissionsByAgencyId = exports.useGetCaseForms = exports.useGetInvoiceForms = exports.useGetAllForms = exports.useGetBitacoraRechazoMasivo = exports.useGetMotivosDeRechazo = exports.useGetTiposDeMuestra = exports.useGetInvoicesByCurrentAgency = exports.useGetInvoicesByLab = exports.useGetShipmentsToMyAgency = exports.useGetEmployees = exports.useGetEmployeesByCurrentAgency = exports.useGetEmployeesByLab = exports.useGetPaymentMethods = exports.useGetPaymentTerms = exports.useGetSuggestedPrices = exports.useGetAgencies = exports.useGetPrintTemplates = exports.useGetPayeesForLab = exports.useGetPayees = exports.useGetClientCategories = exports.useGetProviderCategories = exports.useGetMyCases = exports.useGetProviders = exports.useGetReceptionTypes = exports.useGetCurrencies = exports.useGetBundlesForLab = exports.useGetBundlesRecipForLab = exports.useGetPayeeCategoriesLabPrices = exports.useGetPayeeCategories = exports.useGetTemplates = exports.useGetBookings = exports.useGetItemCategoriesForLab = exports.useGetItemServicesByLab = exports.useGetMyAgencyLotStocks = exports.useGetItemsByLab = exports.useGetItemsByReception = exports.useGetItems = void 0;
+exports.useGetReduxCatalog = useGetReduxCatalog;
 const react_1 = require("@remix-run/react");
 const react_2 = require("react");
 const index_js_1 = require("./components/index.js");
 const redux_1 = require("@zauru-sdk/redux");
-const useApiCatalog = (CATALOG_NAME, otherParams) => {
-    try {
-        const fetcher = (0, react_1.useFetcher)();
-        const [data, setData] = (0, react_2.useState)({
-            data: [],
-            loading: true,
-        });
-        (0, react_2.useEffect)(() => {
-            if (fetcher.data?.title) {
-                (0, index_js_1.showAlert)({
-                    description: fetcher.data?.description?.toString(),
-                    title: fetcher.data?.title?.toString(),
-                    type: fetcher.data?.type?.toString(),
-                });
-            }
-        }, [fetcher.data]);
-        (0, react_2.useEffect)(() => {
-            if (fetcher.state === "idle" && fetcher.data != null) {
-                const receivedData = fetcher.data;
-                if (receivedData) {
-                    setData({ data: receivedData[CATALOG_NAME], loading: false });
-                }
-            }
-        }, [fetcher, CATALOG_NAME]);
-        (0, react_2.useEffect)(() => {
-            try {
-                setData({ ...data, loading: true });
-                // Convert otherParams to query string
-                const paramsString = otherParams
-                    ? Object.entries(otherParams)
-                        .map(([key, value]) => `${key}=${value}`)
-                        .join("&")
-                    : "";
-                const url = `/api/catalogs?catalog=${CATALOG_NAME}${paramsString ? `&${paramsString}` : ""}`;
-                fetcher.load(url);
-            }
-            catch (ex) {
-                (0, index_js_1.showAlert)({
-                    type: "error",
-                    title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
-                    description: "Error: " + ex,
-                });
-            }
-        }, []);
-        return data;
-    }
-    catch (ex) {
-        (0, index_js_1.showAlert)({
-            type: "error",
-            title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
-            description: "Error: " + ex,
-        });
-        return { data: [], loading: false };
-    }
-};
 /**
  *
  * @param CATALOG_NAME
@@ -72,64 +18,149 @@ const useApiCatalog = (CATALOG_NAME, otherParams) => {
       includeDiscounts: "true",
     }
  */
-const useGetReduxCatalog = (CATALOG_NAME, { online = false, wheres = [], otherParams } = {}) => {
-    const fetcher = (0, react_1.useFetcher)();
+function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherParams } = {}) {
     const dispatch = (0, redux_1.useAppDispatch)();
+    const fetcher = (0, react_1.useFetcher)();
     const catalogData = (0, redux_1.useAppSelector)((state) => state.catalogs[CATALOG_NAME]);
+    // Verifica si ya tenemos algo en Redux
+    const hasLocalData = Boolean(catalogData?.data?.length);
     const [data, setData] = (0, react_2.useState)({
-        data: catalogData?.data?.length ? catalogData.data : [],
-        loading: catalogData.loading,
+        data: hasLocalData ? catalogData.data : [],
+        loading: false, // Lo controlaremos de forma más manual
     });
+    /**
+     * Efecto que decide si llamar o no a la API.
+     *
+     * Lógica:
+     * - Si `online: true`, forzamos el fetch.
+     * - Si `reFetch: true`, también forzamos el fetch.
+     * - Si `online: false` y SÍ tenemos data local, NO hacemos fetch (solo mostramos lo que hay).
+     * - Si `online: false` y NO hay data local, SÍ hacemos fetch (porque no hay nada que mostrar).
+     */
     (0, react_2.useEffect)(() => {
-        if (fetcher.data?.description) {
-            (0, index_js_1.showAlert)({
-                description: fetcher.data?.description?.toString(),
-                title: fetcher.data?.title?.toString(),
-                type: fetcher.data?.type?.toString(),
+        const mustFetch = online || catalogData?.reFetch || !hasLocalData;
+        if (mustFetch) {
+            setData((prev) => ({ ...prev, loading: true }));
+            dispatch((0, redux_1.catalogsFetchStart)(CATALOG_NAME));
+            // Construimos el query para `wheres` y `otherParams`
+            const encodedWheres = (wheres || []).map((where) => encodeURIComponent(where));
+            const wheresQueryParam = encodedWheres.join("&");
+            const paramsString = otherParams
+                ? Object.entries(otherParams)
+                    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+                    .join("&")
+                : "";
+            const queryStringParts = [];
+            if (wheresQueryParam)
+                queryStringParts.push(`wheres=${wheresQueryParam}`);
+            if (paramsString)
+                queryStringParts.push(paramsString);
+            const queryString = queryStringParts.length
+                ? `&${queryStringParts.join("&")}`
+                : "";
+            // Disparamos la carga a través de fetcher
+            fetcher.load(`/api/catalogs?catalog=${CATALOG_NAME}${queryString}`);
+        }
+        else {
+            // Si no vamos a hacer fetch, asegurarnos de que loading esté en false
+            // y mantener lo que ya tengamos en Redux
+            setData({
+                data: catalogData?.data || [],
+                loading: false,
             });
         }
-    }, [fetcher.data]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [online, catalogData?.reFetch, hasLocalData]);
+    /**
+     * Efecto que observa la finalización del fetch (fetcher.state === "idle")
+     * y decide qué hacer con la data o error recibidos.
+     */
     (0, react_2.useEffect)(() => {
-        if (fetcher.state === "idle" && fetcher.data != null) {
-            const receivedData = fetcher.data;
-            if (receivedData) {
-                setData({ data: receivedData[CATALOG_NAME], loading: false });
-                dispatch((0, redux_1.catalogsFetchSuccess)({
-                    name: CATALOG_NAME,
-                    data: receivedData[CATALOG_NAME],
-                }));
+        // Cuando fetcher se pone en "idle", significa que ya terminó la petición.
+        if (fetcher.state === "idle") {
+            // Caso: tenemos algo en fetcher.data
+            if (fetcher.data) {
+                const possibleError = fetcher.data;
+                const possibleData = fetcher.data;
+                // Si es un error "clásico" con description, lo manejamos
+                if (possibleError?.description) {
+                    // Aquí interpretamos que la API pudo haber respondido algo tipo { description, ... } => error
+                    // Pero OJO: si ya teníamos datos locales, no mostramos error "fatal" para no romper el fallback
+                    if (hasLocalData) {
+                        // Ya tenemos datos en Redux, así que sólo mostramos el alert informativo,
+                        // pero no borramos lo que hay en data
+                        (0, index_js_1.showAlert)({
+                            type: possibleError.type || "error",
+                            title: possibleError.title || "Error",
+                            description: possibleError.description,
+                        });
+                        // Marcamos loading false pero dejamos intacto `data.data`
+                        setData((prev) => ({ ...prev, loading: false }));
+                    }
+                    else {
+                        // No hay datos locales -> mostramos error y no tenemos fallback
+                        (0, index_js_1.showAlert)({
+                            type: "error",
+                            title: possibleError.title || "Error",
+                            description: possibleError.description,
+                        });
+                        setData((prev) => ({ ...prev, loading: false }));
+                    }
+                }
+                else {
+                    // Caso: la respuesta sí es data real
+                    const newData = possibleData[CATALOG_NAME];
+                    if (Array.isArray(newData)) {
+                        // Guardamos en redux y en el state local
+                        dispatch((0, redux_1.catalogsFetchSuccess)({
+                            name: CATALOG_NAME,
+                            data: newData,
+                        }));
+                        setData({
+                            data: newData,
+                            loading: false,
+                        });
+                    }
+                    else {
+                        // Por alguna razón no llegó el array esperado
+                        // Revisamos si hay fallback local
+                        if (hasLocalData) {
+                            // No reportar error: usamos lo local
+                            setData((prev) => ({ ...prev, loading: false }));
+                        }
+                        else {
+                            // No hay nada local -> error
+                            (0, index_js_1.showAlert)({
+                                type: "error",
+                                title: "Error al recibir el catálogo",
+                                description: `No se obtuvo la propiedad "${CATALOG_NAME}" en la respuesta.`,
+                            });
+                            setData((prev) => ({ ...prev, loading: false }));
+                        }
+                    }
+                }
+            }
+            else {
+                // fetcher.state === "idle" pero fetcher.data es null/undefined => seguramente hubo error global
+                if (hasLocalData) {
+                    // Fallback a datos locales
+                    setData((prev) => ({ ...prev, loading: false }));
+                }
+                else {
+                    // Ni API ni local data => error
+                    (0, index_js_1.showAlert)({
+                        type: "error",
+                        title: "Error al cargar el catálogo",
+                        description: `No se obtuvo respuesta y no hay datos locales para ${CATALOG_NAME}`,
+                    });
+                    setData((prev) => ({ ...prev, loading: false }));
+                }
             }
         }
-    }, [fetcher, dispatch, CATALOG_NAME]);
-    (0, react_2.useEffect)(() => {
-        if (catalogData?.data?.length <= 0 || catalogData?.reFetch || online) {
-            try {
-                setData({ ...data, loading: true });
-                dispatch((0, redux_1.catalogsFetchStart)(CATALOG_NAME));
-                // Convierte cada elemento del array a una cadena codificada para URL
-                const encodedWheres = wheres.map((where) => encodeURIComponent(where));
-                // Une los elementos codificados con '&'
-                const wheresQueryParam = encodedWheres.join("&");
-                // Convert otherParams to query string
-                const paramsString = otherParams
-                    ? Object.entries(otherParams)
-                        .map(([key, value]) => `${key}=${value}`)
-                        .join("&")
-                    : "";
-                fetcher.load(`/api/catalogs?catalog=${CATALOG_NAME}&wheres=${wheresQueryParam}${paramsString ? `&${paramsString}` : ""}`);
-            }
-            catch (ex) {
-                (0, index_js_1.showAlert)({
-                    type: "error",
-                    title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
-                    description: "Error: " + ex,
-                });
-                setData({ ...data, loading: false });
-            }
-        }
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fetcher.state]);
     return data;
-};
+}
 /**
  *
  * ======================= HOOKS
@@ -260,9 +291,12 @@ const useGetCaseForms = (config) => {
     };
 };
 exports.useGetCaseForms = useGetCaseForms;
-const useGetInvoiceFormSubmissionsByAgencyId = (agency_id) => {
-    const data = useApiCatalog("invoiceFormSubmissionsByAgencyId", {
-        agency_id: `${agency_id}`,
+const useGetInvoiceFormSubmissionsByAgencyId = (config) => {
+    const agencyId = config?.otherParams?.agency_id;
+    const data = useGetReduxCatalog("invoiceFormSubmissionsByAgencyId", {
+        otherParams: {
+            agency_id: `${agencyId}`,
+        },
     });
     // Filtrar los registros para obtener sólo los de la versión más alta.
     const groupedByVersion = (data.data || []).reduce((acc, record) => {
@@ -299,9 +333,11 @@ exports.useGetMyCaseFormSubmissions = useGetMyCaseFormSubmissions;
 const useGetInvoiceFormSubmissionsByInvoiceId = (config) => {
     const invoiceId = config?.otherParams?.invoiceId;
     const withFiles = config?.otherParams?.withFiles;
-    const data = useApiCatalog("invoiceFormSubmissionsByInvoiceId", {
-        invoiceId: `${invoiceId}`,
-        withFiles: `${withFiles}`,
+    const data = useGetReduxCatalog("invoiceFormSubmissionsByInvoiceId", {
+        otherParams: {
+            invoiceId: `${invoiceId}`,
+            withFiles: `${withFiles}`,
+        },
     });
     // Filtrar los registros para obtener sólo los de la versión más alta.
     const groupedByVersion = (data.data || []).reduce((acc, record) => {

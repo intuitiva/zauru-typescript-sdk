@@ -30,7 +30,6 @@ import type {
 } from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
-  ONLINE_CATALOGS_NAMES,
   ReduxParamsConfig,
   catalogsFetchStart,
   catalogsFetchSuccess,
@@ -43,76 +42,14 @@ type CatalogType<T> = {
   loading: boolean;
 };
 
-const useApiCatalog = <T>(
-  CATALOG_NAME: CATALOGS_NAMES | ONLINE_CATALOGS_NAMES,
-  otherParams?: { [key: string]: string }
-): CatalogType<T> => {
-  try {
-    const fetcher = useFetcher<
-      | {
-          title: string;
-          description: string;
-          type: AlertType;
-        }
-      | { [key: string]: T[] }
-    >();
-    const [data, setData] = useState<CatalogType<T>>({
-      data: [],
-      loading: true,
-    });
+type FetcherErrorType = {
+  title?: string;
+  description?: string;
+  type?: AlertType;
+};
 
-    useEffect(() => {
-      if (fetcher.data?.title) {
-        showAlert({
-          description: fetcher.data?.description?.toString(),
-          title: fetcher.data?.title?.toString(),
-          type: fetcher.data?.type?.toString() as AlertType,
-        });
-      }
-    }, [fetcher.data]);
-
-    useEffect(() => {
-      if (fetcher.state === "idle" && fetcher.data != null) {
-        const receivedData = fetcher.data as { [key: string]: T[] };
-        if (receivedData) {
-          setData({ data: receivedData[CATALOG_NAME], loading: false });
-        }
-      }
-    }, [fetcher, CATALOG_NAME]);
-
-    useEffect(() => {
-      try {
-        setData({ ...data, loading: true });
-        // Convert otherParams to query string
-        const paramsString = otherParams
-          ? Object.entries(otherParams)
-              .map(([key, value]) => `${key}=${value}`)
-              .join("&")
-          : "";
-
-        const url = `/api/catalogs?catalog=${CATALOG_NAME}${
-          paramsString ? `&${paramsString}` : ""
-        }`;
-
-        fetcher.load(url);
-      } catch (ex) {
-        showAlert({
-          type: "error",
-          title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
-          description: "Error: " + ex,
-        });
-      }
-    }, []);
-
-    return data;
-  } catch (ex) {
-    showAlert({
-      type: "error",
-      title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
-      description: "Error: " + ex,
-    });
-    return { data: [] as T[], loading: false };
-  }
+type CatalogsData<T> = {
+  [key: string]: T[];
 };
 
 /**
@@ -127,85 +64,159 @@ const useApiCatalog = <T>(
       includeDiscounts: "true",
     }
  */
-const useGetReduxCatalog = <T>(
+export function useGetReduxCatalog<T>(
   CATALOG_NAME: CATALOGS_NAMES,
   { online = false, wheres = [], otherParams }: ReduxParamsConfig = {}
-): CatalogType<T> => {
-  const fetcher = useFetcher<
-    | {
-        title: string;
-        description: string;
-        type: AlertType;
-      }
-    | { [key: string]: T[] }
-  >();
+): CatalogType<T> {
   const dispatch = useAppDispatch();
+  const fetcher = useFetcher<FetcherErrorType | CatalogsData<T>>();
+
   const catalogData = useAppSelector((state) => state.catalogs[CATALOG_NAME]);
+  // Verifica si ya tenemos algo en Redux
+  const hasLocalData = Boolean(catalogData?.data?.length);
+
   const [data, setData] = useState<CatalogType<T>>({
-    data: catalogData?.data?.length ? (catalogData.data as T[]) : [],
-    loading: catalogData.loading,
+    data: hasLocalData ? (catalogData.data as T[]) : [],
+    loading: false, // Lo controlaremos de forma más manual
   });
 
+  /**
+   * Efecto que decide si llamar o no a la API.
+   *
+   * Lógica:
+   * - Si `online: true`, forzamos el fetch.
+   * - Si `reFetch: true`, también forzamos el fetch.
+   * - Si `online: false` y SÍ tenemos data local, NO hacemos fetch (solo mostramos lo que hay).
+   * - Si `online: false` y NO hay data local, SÍ hacemos fetch (porque no hay nada que mostrar).
+   */
   useEffect(() => {
-    if (fetcher.data?.description) {
-      showAlert({
-        description: fetcher.data?.description?.toString(),
-        title: fetcher.data?.title?.toString(),
-        type: fetcher.data?.type?.toString() as AlertType,
+    const mustFetch = online || catalogData?.reFetch || !hasLocalData;
+
+    if (mustFetch) {
+      setData((prev) => ({ ...prev, loading: true }));
+      dispatch(catalogsFetchStart(CATALOG_NAME));
+
+      // Construimos el query para `wheres` y `otherParams`
+      const encodedWheres = (wheres || []).map((where) =>
+        encodeURIComponent(where)
+      );
+      const wheresQueryParam = encodedWheres.join("&");
+
+      const paramsString = otherParams
+        ? Object.entries(otherParams)
+            .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+            .join("&")
+        : "";
+
+      const queryStringParts = [];
+      if (wheresQueryParam) queryStringParts.push(`wheres=${wheresQueryParam}`);
+      if (paramsString) queryStringParts.push(paramsString);
+
+      const queryString = queryStringParts.length
+        ? `&${queryStringParts.join("&")}`
+        : "";
+
+      // Disparamos la carga a través de fetcher
+      fetcher.load(`/api/catalogs?catalog=${CATALOG_NAME}${queryString}`);
+    } else {
+      // Si no vamos a hacer fetch, asegurarnos de que loading esté en false
+      // y mantener lo que ya tengamos en Redux
+      setData({
+        data: catalogData?.data || [],
+        loading: false,
       });
     }
-  }, [fetcher.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [online, catalogData?.reFetch, hasLocalData]);
 
+  /**
+   * Efecto que observa la finalización del fetch (fetcher.state === "idle")
+   * y decide qué hacer con la data o error recibidos.
+   */
   useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data != null) {
-      const receivedData = fetcher.data as { [key: string]: T[] };
-      if (receivedData) {
-        setData({ data: receivedData[CATALOG_NAME], loading: false });
-        dispatch(
-          catalogsFetchSuccess({
-            name: CATALOG_NAME,
-            data: receivedData[CATALOG_NAME],
-          })
-        );
+    // Cuando fetcher se pone en "idle", significa que ya terminó la petición.
+    if (fetcher.state === "idle") {
+      // Caso: tenemos algo en fetcher.data
+      if (fetcher.data) {
+        const possibleError = fetcher.data as FetcherErrorType;
+        const possibleData = fetcher.data as CatalogsData<T>;
+
+        // Si es un error "clásico" con description, lo manejamos
+        if (possibleError?.description) {
+          // Aquí interpretamos que la API pudo haber respondido algo tipo { description, ... } => error
+          // Pero OJO: si ya teníamos datos locales, no mostramos error "fatal" para no romper el fallback
+          if (hasLocalData) {
+            // Ya tenemos datos en Redux, así que sólo mostramos el alert informativo,
+            // pero no borramos lo que hay en data
+            showAlert({
+              type: possibleError.type || "error",
+              title: possibleError.title || "Error",
+              description: possibleError.description,
+            });
+            // Marcamos loading false pero dejamos intacto `data.data`
+            setData((prev) => ({ ...prev, loading: false }));
+          } else {
+            // No hay datos locales -> mostramos error y no tenemos fallback
+            showAlert({
+              type: "error",
+              title: possibleError.title || "Error",
+              description: possibleError.description,
+            });
+            setData((prev) => ({ ...prev, loading: false }));
+          }
+        } else {
+          // Caso: la respuesta sí es data real
+          const newData = possibleData[CATALOG_NAME];
+          if (Array.isArray(newData)) {
+            // Guardamos en redux y en el state local
+            dispatch(
+              catalogsFetchSuccess({
+                name: CATALOG_NAME,
+                data: newData,
+              })
+            );
+            setData({
+              data: newData,
+              loading: false,
+            });
+          } else {
+            // Por alguna razón no llegó el array esperado
+            // Revisamos si hay fallback local
+            if (hasLocalData) {
+              // No reportar error: usamos lo local
+              setData((prev) => ({ ...prev, loading: false }));
+            } else {
+              // No hay nada local -> error
+              showAlert({
+                type: "error",
+                title: "Error al recibir el catálogo",
+                description: `No se obtuvo la propiedad "${CATALOG_NAME}" en la respuesta.`,
+              });
+              setData((prev) => ({ ...prev, loading: false }));
+            }
+          }
+        }
+      } else {
+        // fetcher.state === "idle" pero fetcher.data es null/undefined => seguramente hubo error global
+        if (hasLocalData) {
+          // Fallback a datos locales
+          setData((prev) => ({ ...prev, loading: false }));
+        } else {
+          // Ni API ni local data => error
+          showAlert({
+            type: "error",
+            title: "Error al cargar el catálogo",
+            description: `No se obtuvo respuesta y no hay datos locales para ${CATALOG_NAME}`,
+          });
+          setData((prev) => ({ ...prev, loading: false }));
+        }
       }
     }
-  }, [fetcher, dispatch, CATALOG_NAME]);
-
-  useEffect(() => {
-    if (catalogData?.data?.length <= 0 || catalogData?.reFetch || online) {
-      try {
-        setData({ ...data, loading: true });
-        dispatch(catalogsFetchStart(CATALOG_NAME));
-        // Convierte cada elemento del array a una cadena codificada para URL
-        const encodedWheres = wheres.map((where) => encodeURIComponent(where));
-        // Une los elementos codificados con '&'
-        const wheresQueryParam = encodedWheres.join("&");
-
-        // Convert otherParams to query string
-        const paramsString = otherParams
-          ? Object.entries(otherParams)
-              .map(([key, value]) => `${key}=${value}`)
-              .join("&")
-          : "";
-
-        fetcher.load(
-          `/api/catalogs?catalog=${CATALOG_NAME}&wheres=${wheresQueryParam}${
-            paramsString ? `&${paramsString}` : ""
-          }`
-        );
-      } catch (ex) {
-        showAlert({
-          type: "error",
-          title: `Ocurrió un error al cargar el catálogo: ${CATALOG_NAME}.`,
-          description: "Error: " + ex,
-        });
-        setData({ ...data, loading: false });
-      }
-    }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetcher.state]);
 
   return data;
-};
+}
 
 /**
  *
@@ -551,15 +562,19 @@ export const useGetCaseForms = (
 };
 
 export const useGetInvoiceFormSubmissionsByAgencyId = (
-  agency_id: number | string
+  config?: ReduxParamsConfig
 ): {
   loading: boolean;
   data: SubmissionInvoicesGraphQL[];
 } => {
-  const data = useApiCatalog<SubmissionInvoicesGraphQL>(
+  const agencyId = config?.otherParams?.agency_id;
+
+  const data = useGetReduxCatalog<SubmissionInvoicesGraphQL>(
     "invoiceFormSubmissionsByAgencyId",
     {
-      agency_id: `${agency_id}`,
+      otherParams: {
+        agency_id: `${agencyId}`,
+      },
     }
   );
   // Filtrar los registros para obtener sólo los de la versión más alta.
@@ -619,11 +634,13 @@ export const useGetInvoiceFormSubmissionsByInvoiceId = (
   const invoiceId = config?.otherParams?.invoiceId;
   const withFiles = config?.otherParams?.withFiles;
 
-  const data = useApiCatalog<SubmissionInvoicesGraphQL>(
+  const data = useGetReduxCatalog<SubmissionInvoicesGraphQL>(
     "invoiceFormSubmissionsByInvoiceId",
     {
-      invoiceId: `${invoiceId}`,
-      withFiles: `${withFiles}`,
+      otherParams: {
+        invoiceId: `${invoiceId}`,
+        withFiles: `${withFiles}`,
+      },
     }
   );
 

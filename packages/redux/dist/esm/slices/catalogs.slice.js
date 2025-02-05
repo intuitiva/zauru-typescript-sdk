@@ -49,6 +49,8 @@ const initialState = {
     shipmentsToMyAgency: createLoadingState([]),
     paymentMethods: createLoadingState([]),
     printTemplates: createLoadingState([]),
+    invoiceFormSubmissionsByInvoiceId: createLoadingState([]),
+    invoiceFormSubmissionsByAgencyId: createLoadingState([]),
 };
 const catalogsSlice = (0, toolkit_1.createSlice)({
     name: "catalogs",
