@@ -681,6 +681,10 @@ query getEmployees {
     user_id
     email
     seller
+    accountant
+    buyer
+    support_agent
+    inventory_controller
     active
     position
   }
