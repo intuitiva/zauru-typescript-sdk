@@ -119,7 +119,21 @@ export function useGetReduxCatalog<T>(
           : "";
 
         // Disparamos la carga a través de fetcher
-        fetcher.load(`/api/catalogs?catalog=${CATALOG_NAME}${queryString}`);
+        try {
+          fetcher.load(`/api/catalogs?catalog=${CATALOG_NAME}${queryString}`);
+        } catch (error) {
+          console.error(error);
+          // Si hay datos locales, mostramos los datos locales
+          setData({
+            data: catalogData?.data || [],
+            loading: false,
+          });
+          showAlert({
+            type: "error",
+            title: "Error al cargar el catálogo",
+            description: `Error al cargar el catálogo ${CATALOG_NAME}, por favor intente nuevamente. Error: ${error}`,
+          });
+        }
       } else {
         // Si no vamos a hacer fetch, asegurarnos de que loading esté en false
         // y mantener lo que ya tengamos en Redux
