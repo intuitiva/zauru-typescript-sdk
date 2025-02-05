@@ -1,5 +1,7 @@
 import { useFetcher } from "@remix-run/react";
 import {
+  FetcherErrorType,
+  ReduxParamsConfig,
   TEMPLATE_NAMES,
   templateFetchStart,
   templateFetchSuccess,
@@ -14,80 +16,169 @@ type ProfileType<T> = {
   loading: boolean;
 };
 
-type ConfigProps = {
-  online?: boolean;
+// Opcional: si tu backend retorna un objeto con la forma { templateName: ... }
+type TemplateData<T> = {
+  [key: string]: T;
 };
 
-const useGetTemplateObject = <T>(
+function useGetTemplateObject<T>(
   TEMPLATE_NAME: TEMPLATE_NAMES,
-  config: ConfigProps = { online: false }
-): ProfileType<T> => {
+  config: ReduxParamsConfig = {}
+): ProfileType<T> {
   try {
-    const fetcher = useFetcher<any>();
     const dispatch = useAppDispatch();
+    const fetcher = useFetcher<FetcherErrorType | TemplateData<T>>();
+
+    // Obtenemos del store lo que ya se tenga
     const objectData = useAppSelector(
       (state) => state.templates[TEMPLATE_NAME]
     );
+
+    // Verifica si ya tenemos algo en Redux
+    const hasLocalData =
+      objectData?.data && Object.keys(objectData.data).length > 0;
+
+    // Estado local para data y loading
     const [data, setData] = useState<ProfileType<T>>({
-      data:
-        objectData?.data && Object.keys(objectData?.data).length
-          ? (objectData?.data as T)
-          : ({} as T),
-      loading: objectData.loading,
+      data: hasLocalData ? (objectData?.data as T) : ({} as T),
+      loading: false,
     });
 
+    /**
+     * 1) Efecto para decidir si hacemos fetch o no.
+     *    - Si `config.online === true`, forzamos fetch.
+     *    - Si `objectData.reFetch === true`, forzamos fetch (si así lo manejas en redux).
+     *    - Si no tenemos datos locales, forzamos fetch.
+     *    - En caso contrario, mostramos datos locales y no hacemos fetch.
+     */
     useEffect(() => {
-      if (fetcher.data?.title) {
-        showAlert({
-          description: fetcher.data?.description,
-          title: fetcher.data?.title,
-          type: fetcher.data?.type,
-        });
-      }
-    }, [fetcher.data]);
+      const mustFetch = config.online || objectData?.reFetch || !hasLocalData;
 
-    useEffect(() => {
-      if (fetcher.state === "idle" && fetcher.data != null) {
-        const receivedData = fetcher.data as { [key: string]: T };
-        if (receivedData) {
-          setData({ data: receivedData[TEMPLATE_NAME], loading: false });
-          dispatch(
-            templateFetchSuccess({
-              name: TEMPLATE_NAME,
-              data: receivedData[TEMPLATE_NAME],
-            })
-          );
-        }
-      }
-    }, [fetcher, dispatch, TEMPLATE_NAME]);
+      if (mustFetch) {
+        setData((prev) => ({ ...prev, loading: true }));
+        dispatch(templateFetchStart(TEMPLATE_NAME));
 
-    useEffect(() => {
-      if (
-        (objectData?.data && Object.keys(objectData?.data).length <= 0) ||
-        config?.online
-      ) {
+        // Aquí hacemos la llamada a la API a través del fetcher
         try {
-          setData({ ...data, loading: true });
-          dispatch(templateFetchStart(TEMPLATE_NAME));
           fetcher.load(`/api/templates?object=${TEMPLATE_NAME}`);
-        } catch (ex) {
+        } catch (error) {
+          console.error(error);
+          // Si hay datos locales, los conservamos; si no, data queda vacío
+          setData({
+            data: hasLocalData ? (objectData?.data as T) : ({} as T),
+            loading: false,
+          });
           showAlert({
             type: "error",
-            title: `Ocurrió un error al cargar el object de templates: ${TEMPLATE_NAME}.`,
-            description: "Error: " + ex,
+            title: `Error al cargar la plantilla: ${TEMPLATE_NAME}`,
+            description: `Error: ${String(error)}`,
           });
         }
+      } else {
+        // Si NO debemos hacer fetch, aseguramos loading en false
+        // y usamos lo que haya en Redux
+        setData({
+          data: hasLocalData ? (objectData?.data as T) : ({} as T),
+          loading: false,
+        });
       }
-    }, []);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [config.online, objectData?.reFetch, hasLocalData, TEMPLATE_NAME]);
 
+    /**
+     * 2) Efecto para cuando el fetcher termina (fetcher.state === "idle").
+     *    Decidimos si lo que vino es error o data, y procedemos.
+     */
+    useEffect(() => {
+      if (fetcher.state === "idle") {
+        if (fetcher.data) {
+          // Podría ser un error o ser la data
+          const possibleError = fetcher.data as FetcherErrorType;
+          const possibleData = fetcher.data as TemplateData<T>;
+
+          // Si detectamos que es un objeto con 'description', interpretamos error
+          if (possibleError.description) {
+            // Ya teníamos datos locales?
+            if (hasLocalData) {
+              // Mostramos alert, pero NO borramos los datos locales
+              showAlert({
+                type: possibleError.type || "error",
+                title: possibleError.title || "Error",
+                description: possibleError.description,
+              });
+              // Dejamos loading en false, data queda como estaba
+              setData((prev) => ({ ...prev, loading: false }));
+            } else {
+              // No hay datos locales, error fatal
+              showAlert({
+                type: possibleError.type || "error",
+                title: possibleError.title || "Error",
+                description: possibleError.description,
+              });
+              setData({ data: {} as T, loading: false });
+            }
+          } else {
+            // Caso: es data real (ajusta la forma en que tu backend envía la info)
+            const newData = possibleData[TEMPLATE_NAME];
+
+            if (newData) {
+              // Guardamos en redux y en el state local
+              dispatch(
+                templateFetchSuccess({
+                  name: TEMPLATE_NAME,
+                  data: newData,
+                })
+              );
+              setData({ data: newData, loading: false });
+            } else {
+              // No llegó la propiedad esperada en la respuesta
+              if (hasLocalData) {
+                // No reportar error, usamos lo local
+                setData((prev) => ({ ...prev, loading: false }));
+              } else {
+                // No tenemos nada local -> error
+                showAlert({
+                  type: "error",
+                  title: `Error al recibir la plantilla: ${TEMPLATE_NAME}`,
+                  description: `No se encontró "${TEMPLATE_NAME}" en la respuesta de la API.`,
+                });
+                setData((prev) => ({ ...prev, loading: false }));
+              }
+            }
+          }
+        } else {
+          // fetcher.state === "idle" pero fetcher.data = null/undefined
+          // probablemente un error global (red, servidor caído, etc.)
+          if (hasLocalData) {
+            // Fallback a datos locales
+            setData((prev) => ({ ...prev, loading: false }));
+          } else {
+            // Ni API ni local data => error
+            showAlert({
+              type: "error",
+              title: `Error al cargar la plantilla ${TEMPLATE_NAME}`,
+              description: `No se obtuvo respuesta y no hay datos locales.`,
+            });
+            setData({ data: {} as T, loading: false });
+          }
+        }
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fetcher.state]);
+
+    // Retornamos el estado final
     return data;
-  } catch (ex) {
-    return { data: {} as T, loading: false };
+  } catch (err) {
+    console.error(err);
+    return {
+      data: {} as T,
+      loading: false,
+    };
   }
-};
+}
 
 export const useGetReceptionTemplate = (
-  config?: ConfigProps
+  config?: ReduxParamsConfig
 ): {
   loading: boolean;
   data: string;

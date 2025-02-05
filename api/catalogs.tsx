@@ -60,9 +60,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const headers = await getHeaders(cookie, session);
   const url = new URL(request.url);
 
-  const catalog = url.searchParams.get("catalog") as
-    | CATALOGS_NAMES
-    | ONLINE_CATALOGS_NAMES;
+  const catalog = url.searchParams.get("catalog") as CATALOGS_NAMES;
 
   //Wheres personalizados
   const wheresParam = url.searchParams.get("wheres");

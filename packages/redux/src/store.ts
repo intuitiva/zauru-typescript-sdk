@@ -155,3 +155,9 @@ export type ReduxParamsConfig = {
   wheres?: string[];
   otherParams?: { [key: string]: string };
 };
+
+export type FetcherErrorType = {
+  title?: string;
+  description?: string;
+  type?: "error" | "warning" | "info" | "success";
+};

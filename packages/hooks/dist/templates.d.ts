@@ -1,8 +1,5 @@
-type ConfigProps = {
-    online?: boolean;
-};
-export declare const useGetReceptionTemplate: (config?: ConfigProps) => {
+import { ReduxParamsConfig } from "@zauru-sdk/redux";
+export declare const useGetReceptionTemplate: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: string;
 };
-export {};

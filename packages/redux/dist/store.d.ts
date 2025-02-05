@@ -19,4 +19,9 @@ export type ReduxParamsConfig = {
         [key: string]: string;
     };
 };
+export type FetcherErrorType = {
+    title?: string;
+    description?: string;
+    type?: "error" | "warning" | "info" | "success";
+};
 export {};
