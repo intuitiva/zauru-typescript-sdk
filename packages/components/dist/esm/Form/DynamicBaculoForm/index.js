@@ -13,10 +13,34 @@ import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/common";
 import { StaticAlert } from "../../Alerts/index.js";
 import { SubContainer } from "../../Containers/index.js";
 import { LineSeparator } from "../../LineSeparator/index.js";
-export function DynamicBaculoForm(props) {
-    const { form, options = { showDescription: false, showTitle: false }, formName = "", namesStr = "", defaultValues = [], showingRules = [], readOnly = false, } = props;
+import { z } from "zod";
+export const getDynamicBaculoFormSchema = (form, extraFieldValidations = {}) => {
     if (!form) {
-        return (_jsx(StaticAlert, { title: "No se encontr\u00F3 el formulario din\u00E1mico", description: `Ocurrió un error encontrando el formulario para ${formName}, contacte al administrador con este mensaje de error.`, type: "info" }));
+        return z.any();
+    }
+    let fieldValidations = { ...extraFieldValidations };
+    form.settings_form_fields.forEach((field) => {
+        if (field.required) {
+            if (field.field_type === "yes_no") {
+                //se ignora la validación
+            }
+            else {
+                // Si el campo es requerido, se debe tener al menos un carácter
+                fieldValidations = {
+                    ...fieldValidations,
+                    [`${field.form_id}_${field.id}`]: z.coerce
+                        .string()
+                        .min(1, `Este campo es requerido.`),
+                };
+            }
+        }
+    });
+    return z.object(fieldValidations).passthrough(); // Iniciar con un esquema que deja pasar todo.
+};
+export function DynamicBaculoForm(props) {
+    const { form, options = { showDescription: false, showTitle: false }, namesStr = "", defaultValues = [], showingRules = [], readOnly = false, } = props;
+    if (!form) {
+        return (_jsx(StaticAlert, { title: "No se encontr\u00F3 el formulario din\u00E1mico", description: `Ocurrió un error encontrando el formulario, contacte al administrador con este mensaje de error.`, type: "info" }));
     }
     const renderFieldComponent = (field) => {
         const defaultValue = defaultValues?.find((x) => x.settings_form_field.print_var_name === field.print_var_name);
@@ -39,11 +63,11 @@ export function DynamicBaculoForm(props) {
             case "date":
                 return (_jsx(FormDatePicker, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, disabled: readOnly, defaultValue: defaultValue?.value }, field.id));
             case "file":
-                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, disabled: readOnly, defaultValue: defaultValue?.value, download: true }, field.id));
+                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, readOnly: readOnly, defaultValue: defaultValue?.value, download: true }, field.id));
             case "image":
-                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, showAvailableTypes: true, fileTypes: ["png", "jpg", "jpeg"], disabled: readOnly, defaultValue: defaultValue?.value }, field.id));
+                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, showAvailableTypes: true, fileTypes: ["png", "jpg", "jpeg"], readOnly: readOnly, defaultValue: defaultValue?.value }, field.id));
             case "pdf":
-                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, showAvailableTypes: true, fileTypes: ["pdf"], disabled: readOnly, defaultValue: defaultValue?.value, download: true }, field.id));
+                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, showAvailableTypes: true, fileTypes: ["pdf"], readOnly: readOnly, defaultValue: defaultValue?.value, download: true }, field.id));
             case "email":
             case "url":
             case "text":

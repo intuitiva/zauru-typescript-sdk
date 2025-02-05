@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SelectField } from "../Form/SelectField/index.js";
 import { TextField } from "../Form/TextField/index.js";
 import { CheckBox } from "../Form/Checkbox/index.js";
-import { createModal } from "../Modal/index.js";
+import { createItemModal, createModal } from "../Modal/index.js";
 import { Button } from "../Buttons/index.js";
 import {
   GenericDynamicTableColumn,
@@ -17,9 +17,10 @@ import { useFormContext } from "react-hook-form";
 import { ComponentError } from "../Alerts/index.js";
 
 export type FooterColumnConfig = {
-  content: React.ReactNode;
+  content?: React.ReactNode;
   className?: string;
   name?: string;
+  cell?: (rows: RowDataType[]) => React.ReactNode;
 };
 
 type Props = {
@@ -31,26 +32,40 @@ type Props = {
   footerRow?: FooterColumnConfig[];
   thCSSProperties?: React.CSSProperties;
   thElementsClassName?: string;
+  /** Controla si se pueden o no editar los campos (oculta botones y/o deshabilita campos). */
   editable?: boolean;
+  /** Opciones de búsqueda. */
   searcheables?: SelectFieldOption[];
+  /** Activa o desactiva el “skeleton” de carga. */
   loading?: boolean;
+  /** Controla la paginación. */
   paginated?: boolean;
   defaultItemsPerPage?: number;
   itemsPerPageOptions?: number[];
+  /** Quita el color de fondo por defecto a las filas pares. */
   withoutBg?: boolean;
+  /** Orientación de los encabezados (`horizontal` o `vertical`). */
   orientation?: "horizontal" | "vertical";
+  /** Máximo número de filas permitidas al hacer clic en “agregar fila”. */
   maxRows?: number;
+  /** Muestra un diálogo de confirmación antes de eliminar una fila. */
   confirmDelete?: boolean;
+  /** Función personalizada para manejar el botón de “agregar fila”. */
   addRowButtonHandler?: (
     tableData: RowDataType[],
     setTableData: (data: RowDataType[]) => void
   ) => void;
+  /**
+   * Controla si todo el componente se renderiza en modo de solo lectura,
+   * es decir, sin permitir ningún tipo de interacción de edición o eliminación.
+   */
+  readOnly?: boolean;
 };
 
 const GenericDynamicTableErrorComponent = ({ name }: { name: string }) => {
   const {
     formState: { errors },
-  } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
+  } = useFormContext() || { formState: {} };
   const error = errors ? errors[name ?? "-1"] : undefined;
 
   return error ? (
@@ -76,6 +91,23 @@ const GenericDynamicTableErrorComponent = ({ name }: { name: string }) => {
     defaultValue={
       invoiceDetailsDefaultValue ?? [{ id: crypto.randomUUID() }]
     }
+    addRowButtonHandler={async (tableData, setTableData) => {
+      const selectedItem = await createItemModal(ecommerceItems, {
+        itemSize: {
+          width: "150px",
+          height: "150px",
+        },
+      });
+      if (selectedItem) {
+        setTableData([
+          ...tableData,
+          {
+            id: crypto.randomUUID(),
+            code: selectedItem.code,
+          },
+        ]);
+      }
+    }}
     columns={[
       {
         label: "Producto",
@@ -106,11 +138,23 @@ const GenericDynamicTableErrorComponent = ({ name }: { name: string }) => {
       }
     ]}
     footerRow={[
-      { content: "Total", className: "text-left font-bold" },
-      { content: calculateTotal(), className: "text-center" },
-      { content: "", className: "text-center" }
+      {
+        name: "code",
+        content: "Total",
+        className: "text-left font-bold",
+      },
+      {
+        name: "total",
+        className: "text-left font-bold",
+        cell: (rows: any) => {
+          return `${rows.reduce((acc: number, row: any) => {
+            return acc + row.total;
+          }, 0)}`;
+        },
+      },
     ]}
     maxRows={2}
+    readOnly={false}
   />
  */
 export const GenericDynamicTable = (props: Props) => {
@@ -123,6 +167,7 @@ export const GenericDynamicTable = (props: Props) => {
     thCSSProperties,
     thElementsClassName = "",
     editable = true,
+    readOnly = false, // Nuevo prop
     searcheables = [],
     loading = false,
     paginated = true,
@@ -135,6 +180,12 @@ export const GenericDynamicTable = (props: Props) => {
     confirmDelete = true,
     addRowButtonHandler,
   } = props;
+
+  /**
+   * Definimos una variable interna para saber si los campos son
+   * efectivamente editables: solo si `editable` es true y `readOnly` es false.
+   */
+  const isEditable = editable && !readOnly;
 
   try {
     const [tableData, setTableData] = useState<RowDataType[]>(defaultValue);
@@ -149,6 +200,7 @@ export const GenericDynamicTable = (props: Props) => {
       if (defaultValue.length) {
         setTableData(defaultValue);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -157,6 +209,7 @@ export const GenericDynamicTable = (props: Props) => {
 
     useEffect(() => {
       changeFilteredData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tableData, search]);
 
     const totalPages = () => {
@@ -170,11 +223,11 @@ export const GenericDynamicTable = (props: Props) => {
       const defs: { [key: string]: any } = {};
       columns.forEach((x) => {
         defs[`${x.name}`] =
-          x.type == "label" || x.type == "textField"
+          x.type === "label" || x.type === "textField"
             ? ""
-            : x.type == "selectField"
+            : x.type === "selectField"
             ? 0
-            : x.type == "checkbox"
+            : x.type === "checkbox"
             ? false
             : 0;
       });
@@ -187,9 +240,13 @@ export const GenericDynamicTable = (props: Props) => {
     const removeRow = (rowId: string) => {
       const newDeletedData = [...deletedData];
       const deletedItem = tableData?.find((x) => x.id === rowId);
+
+      // Si la fila tenía un "id" no numérico (ej. generamos un UUID al vuelo),
+      // igual se procede a eliminar, aunque no se guarde en "deletedData".
       if (deletedItem && !isNaN(deletedItem.id)) {
         newDeletedData.push(deletedItem);
       }
+
       setDeletedData(newDeletedData);
       setTableData((prevData) => prevData?.filter((x) => x.id !== rowId));
     };
@@ -208,12 +265,16 @@ export const GenericDynamicTable = (props: Props) => {
     };
 
     const renderHeader = () => {
+      const rendereableColumns = columns.filter(
+        (column) => column.type !== "hidden"
+      );
       if (orientation === "horizontal") {
         return (
           <tr style={{ ...thCSSProperties }}>
-            {columns.map((column, index) => {
+            {rendereableColumns.map((column, index) => {
               const ancho =
-                column.width ?? (editable ? 94 : 100) / (columns.length ?? 1);
+                column.width ??
+                (isEditable ? 94 : 100) / (rendereableColumns.length ?? 1);
               return (
                 <th
                   key={index}
@@ -226,7 +287,7 @@ export const GenericDynamicTable = (props: Props) => {
                 </th>
               );
             })}
-            {editable && <th style={{ width: "4%" }}></th>}
+            {isEditable && <th style={{ width: "4%" }}></th>}
           </tr>
         );
       } else {
@@ -235,6 +296,10 @@ export const GenericDynamicTable = (props: Props) => {
     };
 
     const renderRow = (rowData: RowDataType, index: number) => {
+      const rendereableColumns = columns.filter(
+        (column) => column.type !== "hidden"
+      );
+
       if (orientation === "horizontal") {
         return (
           <tr
@@ -243,12 +308,13 @@ export const GenericDynamicTable = (props: Props) => {
               index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : ""
             }
           >
-            {columns.map((column) => renderCell(rowData, column))}
-            {editable && renderDeleteButton(rowData)}
+            {rendereableColumns.map((column) => renderCell(rowData, column))}
+            {isEditable && renderDeleteButton(rowData)}
           </tr>
         );
       } else {
-        return columns.map((column) => (
+        // Orientación vertical
+        return rendereableColumns.map((column) => (
           <tr
             key={`${rowData.id}-${column.name}`}
             className={
@@ -263,8 +329,8 @@ export const GenericDynamicTable = (props: Props) => {
               {column.label}
             </th>
             {renderCell(rowData, column)}
-            {editable &&
-              column === columns[columns.length - 1] &&
+            {isEditable &&
+              column === rendereableColumns[rendereableColumns.length - 1] &&
               renderDeleteButton(rowData)}
           </tr>
         ));
@@ -285,6 +351,11 @@ export const GenericDynamicTable = (props: Props) => {
           </td>
         );
       }
+
+      if (column.type === "hidden") {
+        return <></>;
+      }
+
       const tempVal = rowData[column.name as any];
 
       const defaultVal =
@@ -292,6 +363,23 @@ export const GenericDynamicTable = (props: Props) => {
           ? column.options?.find((x) => x.value === tempVal)
           : tempVal;
 
+      // Solo lectura: en este caso mostramos el valor como label
+      if (readOnly) {
+        return (
+          <td
+            key={`${rowData.id}-${column.name}`}
+            className={`align-middle p-1 ${column.cellClassName || ""}`}
+          >
+            <div>
+              {column.cell
+                ? column.cell(rowData)
+                : defaultVal?.label ?? tempVal}
+            </div>
+          </td>
+        );
+      }
+
+      // Modo normal
       if (column.type === "label") {
         return (
           <td
@@ -303,6 +391,7 @@ export const GenericDynamicTable = (props: Props) => {
         );
       }
 
+      // Determinamos el componente que usaremos según "type"
       const FieldComponent =
         column.type === "textField"
           ? TextField
@@ -327,7 +416,8 @@ export const GenericDynamicTable = (props: Props) => {
               name={`${rowData.id}-${column.name}`}
               type={column.textFieldType}
               integer={!!column.integer}
-              disabled={column.disabled}
+              /** Se deshabilita si la columna lo exige o si la tabla está en modo no editable */
+              disabled={column.disabled || !isEditable}
               isClearable
               onChange={(value: any) => {
                 const sendValue = value?.value ?? value;
@@ -381,6 +471,7 @@ export const GenericDynamicTable = (props: Props) => {
         currentPage * itemsPerPage
       );
 
+      // Si estamos cargando, mostramos celdas skeleton
       if (loading) {
         mapeable = [
           { id: 1 },
@@ -461,14 +552,14 @@ export const GenericDynamicTable = (props: Props) => {
                   .map((x) => x.label)
                   .join(", ")}`}
                 onChange={handleChangeSearch}
-                disabled={loading}
+                disabled={loading || readOnly}
               />
             </div>
           )}
           <table className="w-full">
             {orientation === "horizontal" && <thead>{renderHeader()}</thead>}
             <tbody>{renderRows()}</tbody>
-            {editable && (
+            {isEditable && (
               <tfoot>
                 <tr>
                   <td
@@ -503,23 +594,33 @@ export const GenericDynamicTable = (props: Props) => {
             {footerRow && (
               <tfoot className="border-t-2 border-black">
                 <tr>
-                  {columns.map((column, index) => {
-                    const footerCell = footerRow.find(
-                      (fc) => fc.name === column.name
-                    );
-                    return (
-                      <td
-                        key={index}
-                        colSpan={orientation === "vertical" ? 2 : 1}
-                        className={`align-middle ${
-                          footerCell?.className || ""
-                        }`}
-                      >
-                        {footerCell ? footerCell.content : <></>}
-                      </td>
-                    );
-                  })}
-                  {editable && <td></td>}
+                  {columns
+                    .filter((column) => column.type !== "hidden")
+                    .map((column, index) => {
+                      const footerCell = footerRow.find(
+                        (fc) => fc.name === column.name
+                      );
+                      return (
+                        <td
+                          key={index}
+                          colSpan={orientation === "vertical" ? 2 : 1}
+                          className={`align-middle ${
+                            footerCell?.className || ""
+                          }`}
+                        >
+                          {footerCell ? (
+                            footerCell.cell ? (
+                              footerCell.cell(tableData)
+                            ) : (
+                              footerCell.content
+                            )
+                          ) : (
+                            <></>
+                          )}
+                        </td>
+                      );
+                    })}
+                  {isEditable && <td></td>}
                 </tr>
               </tfoot>
             )}
@@ -529,7 +630,7 @@ export const GenericDynamicTable = (props: Props) => {
               <div className="flex items-center">
                 <Button
                   type="button"
-                  disabled={currentPage === 1}
+                  disabled={currentPage === 1 || readOnly}
                   onClickSave={() =>
                     setCurrentPage((old) => Math.max(old - 1, 1))
                   }
@@ -539,7 +640,7 @@ export const GenericDynamicTable = (props: Props) => {
                 <span className="mx-2">{`Página ${currentPage} de ${totalPages()}`}</span>
                 <Button
                   type="button"
-                  disabled={currentPage === totalPages()}
+                  disabled={currentPage === totalPages() || readOnly}
                   onClickSave={() =>
                     setCurrentPage((old) => Math.min(old + 1, totalPages()))
                   }

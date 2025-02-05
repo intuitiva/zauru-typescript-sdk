@@ -7,7 +7,6 @@ type Props = {
     helpText?: string;
     hint?: string;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    disabled?: boolean;
     readOnly?: boolean;
     fileTypes?: string[];
     showAvailableTypes?: boolean;

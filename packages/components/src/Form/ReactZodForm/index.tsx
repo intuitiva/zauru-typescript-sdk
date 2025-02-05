@@ -44,10 +44,23 @@ export const ReactZodForm = (props: Props) => {
   const handleSubmit: SubmitHandler<FieldValues> = (data, event) => {
     if (onSubmit) {
       onSubmit(data, event);
-    } else {
-      // If no onSubmit is provided, use Remix's submit function
-      submit(event?.target as HTMLFormElement, { method });
+      return;
     }
+
+    const form = event?.target as HTMLFormElement;
+    const nativeEvent = event?.nativeEvent as SubmitEvent;
+
+    // Armamos el FormData a partir del propio <form>
+    const formData = new FormData(form);
+
+    // Detectamos el botón que disparó el submit (submitter),
+    // en caso de que tenga un name/value, lo agregamos al formData
+    const submitter = nativeEvent.submitter;
+    if (submitter instanceof HTMLButtonElement && submitter.name) {
+      formData.append(submitter.name, submitter.value);
+    }
+
+    submit(formData, { method, encType });
   };
 
   return (

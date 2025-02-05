@@ -4,6 +4,7 @@ export declare const COLORS: {
         bg700: string;
         bg600: string;
         bg500: string;
+        bg200: string;
         ring600: string;
         ring500: string;
     };
@@ -12,6 +13,7 @@ export declare const COLORS: {
         bg700: string;
         bg600: string;
         bg500: string;
+        bg200: string;
         ring600: string;
         ring500: string;
     };
@@ -20,6 +22,7 @@ export declare const COLORS: {
         bg700: string;
         bg600: string;
         bg500: string;
+        bg200: string;
         ring600: string;
         ring500: string;
     };
@@ -28,6 +31,7 @@ export declare const COLORS: {
         bg700: string;
         bg600: string;
         bg500: string;
+        bg200: string;
         ring600: string;
         ring500: string;
     };
@@ -36,6 +40,7 @@ export declare const COLORS: {
         bg700: string;
         bg600: string;
         bg500: string;
+        bg200: string;
         ring600: string;
         ring500: string;
     };
@@ -44,6 +49,7 @@ export declare const COLORS: {
         bg700: string;
         bg600: string;
         bg500: string;
+        bg200: string;
         ring600: string;
         ring500: string;
     };
@@ -52,6 +58,7 @@ export declare const COLORS: {
         bg700: string;
         bg600: string;
         bg500: string;
+        bg200: string;
         ring600: string;
         ring500: string;
     };

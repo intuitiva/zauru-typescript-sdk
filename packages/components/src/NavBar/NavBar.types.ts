@@ -3,7 +3,14 @@ export type NavBarItem = {
   link: string;
   loggedIn: boolean;
   icon?: any;
-  selectedColor?: "green";
+  selectedColor?:
+    | "pink"
+    | "purple"
+    | "slate"
+    | "green"
+    | "yellow"
+    | "red"
+    | "sky";
   color?: ColorInterface;
   childrens?: Exclude<NavBarItem, "loggedIn">[];
   reduxNotificationBadge?: (state: any) => string | number;
@@ -35,6 +42,7 @@ export type ColorInterface = {
   bg700: string;
   bg600: string;
   bg500: string;
+  bg200: string;
   ring600: string;
   ring500: string;
 };

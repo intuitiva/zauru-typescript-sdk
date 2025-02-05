@@ -1,6 +1,15 @@
 import { FormGraphQL, FormSubmissionValueGraphQL } from "@zauru-sdk/types";
+import { z } from "zod";
+export declare const getDynamicBaculoFormSchema: (form?: FormGraphQL, extraFieldValidations?: {
+    [key: string]: any;
+}) => z.ZodAny | z.ZodObject<{
+    [x: string]: any;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    [x: string]: any;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    [x: string]: any;
+}, z.ZodTypeAny, "passthrough">>;
 type Props = {
-    formName?: string;
     form?: FormGraphQL;
     options?: {
         showTitle: boolean;

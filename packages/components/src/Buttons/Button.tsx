@@ -43,6 +43,7 @@ export const Button = (props: Props) => {
       bg700: "bg-green-700",
       bg600: "bg-green-600",
       bg500: "bg-green-500",
+      bg200: "bg-green-200",
       ring600: "ring-green-600",
       ring500: "ring-green-500",
     },
@@ -51,6 +52,7 @@ export const Button = (props: Props) => {
       bg700: "bg-indigo-700",
       bg600: "bg-indigo-600",
       bg500: "bg-indigo-500",
+      bg200: "bg-indigo-200",
       ring600: "ring-indigo-600",
       ring500: "ring-indigo-500",
     },
@@ -59,6 +61,7 @@ export const Button = (props: Props) => {
       bg700: "bg-red-700",
       bg600: "bg-red-600",
       bg500: "bg-red-500",
+      bg200: "bg-red-200",
       ring600: "ring-red-600",
       ring500: "ring-red-500",
     },
@@ -67,6 +70,7 @@ export const Button = (props: Props) => {
       bg700: "bg-yellow-700",
       bg600: "bg-yellow-600",
       bg500: "bg-yellow-500",
+      bg200: "bg-yellow-200",
       ring600: "ring-yellow-600",
       ring500: "ring-yellow-500",
     },
@@ -84,9 +88,10 @@ export const Button = (props: Props) => {
 
   const buttonContent = (
     <>
-      <input type="hidden" name="action" value={name} />
       <button
         type={type}
+        name={"action"}
+        value={name}
         disabled={
           loading || disabled || (enableFormErrorsValidation && formHasErrors)
         }

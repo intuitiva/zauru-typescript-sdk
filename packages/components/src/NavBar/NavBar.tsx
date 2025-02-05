@@ -12,7 +12,7 @@ import type {
   NavBarItem,
   NavBarProps,
 } from "./NavBar.types.js";
-import { Link, useNavigate } from "@remix-run/react";
+import { Link, useNavigate, useLocation } from "@remix-run/react";
 import { useAppSelector } from "@zauru-sdk/redux";
 
 const OptionsDropDownButton = ({ color, options, name }: EntityProps) => {
@@ -52,6 +52,9 @@ const NavItem = ({
   childrens = [],
   reduxNotificationBadge,
 }: NavBarItem) => {
+  const location = useLocation();
+  const isActive = location.pathname === link;
+
   const specialColor: ColorInterface = selectedColor
     ? COLORS[selectedColor]
     : COLORS["slate"];
@@ -69,43 +72,51 @@ const NavItem = ({
     setNotificationBadge(relevantState);
   }, [relevantState]);
 
+  // Si este NavItem tiene elementos hijos, renderiza el botón desplegable:
+  if (childrens.length > 0) {
+    return (
+      <OptionsDropDownButton
+        name={name}
+        color={specialColor}
+        options={childrens.map((x, index) => (
+          <Link
+            key={index}
+            to={x.link}
+            className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
+          >
+            {x.name}
+          </Link>
+        ))}
+      />
+    );
+  }
+
+  // Si NO tiene elementos hijos, se renderiza como un ítem simple:
   return (
     <li className="nav-item relative">
-      {childrens.length > 0 ? (
-        <OptionsDropDownButton
-          name={name}
-          color={specialColor}
-          options={childrens.map((x, index) => (
-            <Link
-              key={index}
-              to={x.link}
-              className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
-            >
-              {x.name}
-            </Link>
-          ))}
-        />
-      ) : (
-        <div
-          className={`${specialColor.bg700} container text-white w-full sm:w-auto h-10 text-sm py-1 uppercase shadow hover:shadow-lg outline-none rounded-full focus:outline-none my-auto sm:my-0 sm:mr-1 mb-1 ease-linear transition-all duration-150`}
+      <div
+        // Si está activo, usamos color de fondo más oscuro (bg900)
+        // De lo contrario, usamos el color normal (bg700)
+        className={`${
+          isActive ? specialColor.bg900 : specialColor.bg700
+        } container text-white w-full sm:w-auto h-10 text-sm py-1 uppercase shadow hover:shadow-lg outline-none rounded-full focus:outline-none my-auto sm:my-0 sm:mr-1 mb-1 ease-linear transition-all duration-150`}
+      >
+        <Link
+          className="px-3 flex items-center text-xs leading-snug text-white uppercase hover:opacity-75 relative"
+          to={link}
         >
-          <Link
-            className="px-3 flex items-center text-xs leading-snug text-white uppercase hover:opacity-75 relative"
-            to={link}
-          >
-            <div className="mx-auto pt-2">
-              {icon}
-              <span>{name}</span>
-            </div>
-            {/* Badge de notificaciones */}
-            {notificationBadge !== undefined && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center w-5 h-5">
-                {notificationBadge}
-              </span>
-            )}
-          </Link>
-        </div>
-      )}
+          <div className="mx-auto pt-2">
+            {icon}
+            <span>{name}</span>
+          </div>
+          {/* Badge de notificaciones */}
+          {notificationBadge !== undefined && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center w-5 h-5">
+              {notificationBadge}
+            </span>
+          )}
+        </Link>
+      </div>
     </li>
   );
 };
@@ -165,6 +176,7 @@ export const NavBar = ({
             color={color}
             options={[
               <Link
+                key="cerrar-sesion"
                 className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
                 to="/logout"
               >
@@ -187,19 +199,12 @@ export const NavBar = ({
           <Link
             className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
             to={"/home"}
-            children={
-              <>
-                <div className="inline-block mr-2 mb-2 align-middle">
-                  <img
-                    className="w-auto h-7"
-                    src="/logo.png"
-                    alt="logo-zauru"
-                  />
-                </div>
-                {title}
-              </>
-            }
-          />
+          >
+            <div className="inline-block mr-2 mb-2 align-middle">
+              <img className="w-auto h-7" src="/logo.png" alt="logo-zauru" />
+            </div>
+            {title}
+          </Link>
           {version !== currentVersion && (
             <button
               className={`ml-2 px-2 py-1 text-xs text-white ${color.bg700} rounded-full hover:${color.bg900} transition-colors duration-200`}

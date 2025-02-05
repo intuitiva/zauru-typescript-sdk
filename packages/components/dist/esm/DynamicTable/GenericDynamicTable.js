@@ -12,7 +12,7 @@ import { TrashSvg } from "@zauru-sdk/icons";
 import { useFormContext } from "react-hook-form";
 import { ComponentError } from "../Alerts/index.js";
 const GenericDynamicTableErrorComponent = ({ name }) => {
-    const { formState: { errors }, } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
+    const { formState: { errors }, } = useFormContext() || { formState: {} };
     const error = errors ? errors[name ?? "-1"] : undefined;
     return error ? (_jsxs("p", { className: `mt-2 text-sm text-red-600 dark:text-red-500`, children: [_jsx("span", { className: "font-medium", children: "Oops!" }), " ", error?.message?.toString()] })) : (_jsx(_Fragment, {}));
 };
@@ -30,6 +30,23 @@ const GenericDynamicTableErrorComponent = ({ name }) => {
     defaultValue={
       invoiceDetailsDefaultValue ?? [{ id: crypto.randomUUID() }]
     }
+    addRowButtonHandler={async (tableData, setTableData) => {
+      const selectedItem = await createItemModal(ecommerceItems, {
+        itemSize: {
+          width: "150px",
+          height: "150px",
+        },
+      });
+      if (selectedItem) {
+        setTableData([
+          ...tableData,
+          {
+            id: crypto.randomUUID(),
+            code: selectedItem.code,
+          },
+        ]);
+      }
+    }}
     columns={[
       {
         label: "Producto",
@@ -60,15 +77,33 @@ const GenericDynamicTableErrorComponent = ({ name }) => {
       }
     ]}
     footerRow={[
-      { content: "Total", className: "text-left font-bold" },
-      { content: calculateTotal(), className: "text-center" },
-      { content: "", className: "text-center" }
+      {
+        name: "code",
+        content: "Total",
+        className: "text-left font-bold",
+      },
+      {
+        name: "total",
+        className: "text-left font-bold",
+        cell: (rows: any) => {
+          return `${rows.reduce((acc: number, row: any) => {
+            return acc + row.total;
+          }, 0)}`;
+        },
+      },
     ]}
     maxRows={2}
+    readOnly={false}
   />
  */
 export const GenericDynamicTable = (props) => {
-    const { columns, onChange, className, footerRow, defaultValue = [], thCSSProperties, thElementsClassName = "", editable = true, searcheables = [], loading = false, paginated = true, defaultItemsPerPage = 10, itemsPerPageOptions = [10, 50, 100], name, withoutBg = false, orientation = "horizontal", maxRows, confirmDelete = true, addRowButtonHandler, } = props;
+    const { columns, onChange, className, footerRow, defaultValue = [], thCSSProperties, thElementsClassName = "", editable = true, readOnly = false, // Nuevo prop
+    searcheables = [], loading = false, paginated = true, defaultItemsPerPage = 10, itemsPerPageOptions = [10, 50, 100], name, withoutBg = false, orientation = "horizontal", maxRows, confirmDelete = true, addRowButtonHandler, } = props;
+    /**
+     * Definimos una variable interna para saber si los campos son
+     * efectivamente editables: solo si `editable` es true y `readOnly` es false.
+     */
+    const isEditable = editable && !readOnly;
     try {
         const [tableData, setTableData] = useState(defaultValue);
         const [deletedData, setDeletedData] = useState([]);
@@ -80,12 +115,14 @@ export const GenericDynamicTable = (props) => {
             if (defaultValue.length) {
                 setTableData(defaultValue);
             }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
         useEffect(() => {
             setFilteredTableData(tableData);
         }, [tableData]);
         useEffect(() => {
             changeFilteredData();
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [tableData, search]);
         const totalPages = () => {
             return Math.ceil(filteredTableData.length / itemsPerPage);
@@ -97,11 +134,11 @@ export const GenericDynamicTable = (props) => {
             const defs = {};
             columns.forEach((x) => {
                 defs[`${x.name}`] =
-                    x.type == "label" || x.type == "textField"
+                    x.type === "label" || x.type === "textField"
                         ? ""
-                        : x.type == "selectField"
+                        : x.type === "selectField"
                             ? 0
-                            : x.type == "checkbox"
+                            : x.type === "checkbox"
                                 ? false
                                 : 0;
             });
@@ -113,6 +150,8 @@ export const GenericDynamicTable = (props) => {
         const removeRow = (rowId) => {
             const newDeletedData = [...deletedData];
             const deletedItem = tableData?.find((x) => x.id === rowId);
+            // Si la fila tenía un "id" no numérico (ej. generamos un UUID al vuelo),
+            // igual se procede a eliminar, aunque no se guarde en "deletedData".
             if (deletedItem && !isNaN(deletedItem.id)) {
                 newDeletedData.push(deletedItem);
             }
@@ -132,23 +171,27 @@ export const GenericDynamicTable = (props) => {
             });
         };
         const renderHeader = () => {
+            const rendereableColumns = columns.filter((column) => column.type !== "hidden");
             if (orientation === "horizontal") {
-                return (_jsxs("tr", { style: { ...thCSSProperties }, children: [columns.map((column, index) => {
-                            const ancho = column.width ?? (editable ? 94 : 100) / (columns.length ?? 1);
+                return (_jsxs("tr", { style: { ...thCSSProperties }, children: [rendereableColumns.map((column, index) => {
+                            const ancho = column.width ??
+                                (isEditable ? 94 : 100) / (rendereableColumns.length ?? 1);
                             return (_jsx("th", { className: `text-left align-middle p-2 ${thElementsClassName} ${column.headerClassName || ""}`, style: { width: `${ancho}%` }, children: column.label }, index));
-                        }), editable && _jsx("th", { style: { width: "4%" } })] }));
+                        }), isEditable && _jsx("th", { style: { width: "4%" } })] }));
             }
             else {
                 return null;
             }
         };
         const renderRow = (rowData, index) => {
+            const rendereableColumns = columns.filter((column) => column.type !== "hidden");
             if (orientation === "horizontal") {
-                return (_jsxs("tr", { className: index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "", children: [columns.map((column) => renderCell(rowData, column)), editable && renderDeleteButton(rowData)] }, rowData.id));
+                return (_jsxs("tr", { className: index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "", children: [rendereableColumns.map((column) => renderCell(rowData, column)), isEditable && renderDeleteButton(rowData)] }, rowData.id));
             }
             else {
-                return columns.map((column) => (_jsxs("tr", { className: index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "", children: [_jsx("th", { className: `text-left align-middle p-2 ${thElementsClassName} ${column.headerClassName || ""}`, children: column.label }), renderCell(rowData, column), editable &&
-                            column === columns[columns.length - 1] &&
+                // Orientación vertical
+                return rendereableColumns.map((column) => (_jsxs("tr", { className: index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "", children: [_jsx("th", { className: `text-left align-middle p-2 ${thElementsClassName} ${column.headerClassName || ""}`, children: column.label }), renderCell(rowData, column), isEditable &&
+                            column === rendereableColumns[rendereableColumns.length - 1] &&
                             renderDeleteButton(rowData)] }, `${rowData.id}-${column.name}`)));
             }
         };
@@ -156,13 +199,24 @@ export const GenericDynamicTable = (props) => {
             if (loading) {
                 return (_jsx("td", { className: `align-middle p-1 ${column.cellClassName || ""}`, children: _jsx(LoadingInputSkeleton, {}) }, `${rowData.id}-${column.name}`));
             }
+            if (column.type === "hidden") {
+                return _jsx(_Fragment, {});
+            }
             const tempVal = rowData[column.name];
             const defaultVal = column.type === "selectField"
                 ? column.options?.find((x) => x.value === tempVal)
                 : tempVal;
+            // Solo lectura: en este caso mostramos el valor como label
+            if (readOnly) {
+                return (_jsx("td", { className: `align-middle p-1 ${column.cellClassName || ""}`, children: _jsx("div", { children: column.cell
+                            ? column.cell(rowData)
+                            : defaultVal?.label ?? tempVal }) }, `${rowData.id}-${column.name}`));
+            }
+            // Modo normal
             if (column.type === "label") {
                 return (_jsx("td", { className: `align-middle p-1 ${column.cellClassName || ""}`, children: _jsx("div", { children: column.cell ? column.cell(rowData) : defaultVal }) }, `${rowData.id}-${column.name}`));
             }
+            // Determinamos el componente que usaremos según "type"
             const FieldComponent = column.type === "textField"
                 ? TextField
                 : column.type === "checkbox"
@@ -171,7 +225,9 @@ export const GenericDynamicTable = (props) => {
             const setTableValue = (columnName, newValue) => {
                 handleChange(columnName, newValue, rowData.id);
             };
-            return (_jsx("td", { className: `align-middle p-1 ${column.cellClassName || ""}`, children: column.loadingOptions ? (_jsx(LoadingInputSkeleton, {})) : (_jsx(FieldComponent, { name: `${rowData.id}-${column.name}`, type: column.textFieldType, integer: !!column.integer, disabled: column.disabled, isClearable: true, onChange: (value) => {
+            return (_jsx("td", { className: `align-middle p-1 ${column.cellClassName || ""}`, children: column.loadingOptions ? (_jsx(LoadingInputSkeleton, {})) : (_jsx(FieldComponent, { name: `${rowData.id}-${column.name}`, type: column.textFieldType, integer: !!column.integer, 
+                    /** Se deshabilita si la columna lo exige o si la tabla está en modo no editable */
+                    disabled: column.disabled || !isEditable, isClearable: true, onChange: (value) => {
                         const sendValue = value?.value ?? value;
                         handleChange(column.name, sendValue, rowData.id);
                         column.onChange &&
@@ -197,6 +253,7 @@ export const GenericDynamicTable = (props) => {
                     }, type: "button", children: _jsx(TrashSvg, {}) }) }) }));
         const renderRows = () => {
             let mapeable = filteredTableData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+            // Si estamos cargando, mostramos celdas skeleton
             if (loading) {
                 mapeable = [
                     { id: 1 },
@@ -244,7 +301,7 @@ export const GenericDynamicTable = (props) => {
         };
         return (_jsxs(_Fragment, { children: [name && (_jsxs(_Fragment, { children: [_jsx(GenericDynamicTableErrorComponent, { name: name }), _jsx("input", { name: name, type: "hidden", value: JSON.stringify(tableData), hidden: true }), _jsx("input", { name: `deleted_${name}`, type: "hidden", value: JSON.stringify(deletedData), hidden: true })] })), _jsxs("div", { className: `${className}`, children: [searcheables.length > 0 && (_jsx("div", { children: _jsx(TextField, { className: "mb-2", name: "search", title: `Buscar por: ${searcheables
                                     .map((x) => x.label)
-                                    .join(", ")}`, onChange: handleChangeSearch, disabled: loading }) })), _jsxs("table", { className: "w-full", children: [orientation === "horizontal" && _jsx("thead", { children: renderHeader() }), _jsx("tbody", { children: renderRows() }), editable && (_jsx("tfoot", { children: _jsx("tr", { children: _jsx("td", { colSpan: orientation === "horizontal" ? columns.length + 1 : 2, className: "align-middle", children: (!maxRows || tableData.length < maxRows) && (_jsx("button", { className: "bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded", onClick: (event) => {
+                                    .join(", ")}`, onChange: handleChangeSearch, disabled: loading || readOnly }) })), _jsxs("table", { className: "w-full", children: [orientation === "horizontal" && _jsx("thead", { children: renderHeader() }), _jsx("tbody", { children: renderRows() }), isEditable && (_jsx("tfoot", { children: _jsx("tr", { children: _jsx("td", { colSpan: orientation === "horizontal" ? columns.length + 1 : 2, className: "align-middle", children: (!maxRows || tableData.length < maxRows) && (_jsx("button", { className: "bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded", onClick: (event) => {
                                                     event.preventDefault();
                                                     event.stopPropagation();
                                                     if (addRowButtonHandler) {
@@ -253,10 +310,12 @@ export const GenericDynamicTable = (props) => {
                                                     else {
                                                         addRow();
                                                     }
-                                                }, type: "button", children: "+" })) }) }) })), footerRow && (_jsx("tfoot", { className: "border-t-2 border-black", children: _jsxs("tr", { children: [columns.map((column, index) => {
+                                                }, type: "button", children: "+" })) }) }) })), footerRow && (_jsx("tfoot", { className: "border-t-2 border-black", children: _jsxs("tr", { children: [columns
+                                                .filter((column) => column.type !== "hidden")
+                                                .map((column, index) => {
                                                 const footerCell = footerRow.find((fc) => fc.name === column.name);
-                                                return (_jsx("td", { colSpan: orientation === "vertical" ? 2 : 1, className: `align-middle ${footerCell?.className || ""}`, children: footerCell ? footerCell.content : _jsx(_Fragment, {}) }, index));
-                                            }), editable && _jsx("td", {})] }) }))] }), paginated && totalPages() > 1 && (_jsxs("div", { className: "flex justify-between items-center mt-4", children: [_jsxs("div", { className: "flex items-center", children: [_jsx(Button, { type: "button", disabled: currentPage === 1, onClickSave: () => setCurrentPage((old) => Math.max(old - 1, 1)), children: "Anterior" }), _jsx("span", { className: "mx-2", children: `Página ${currentPage} de ${totalPages()}` }), _jsx(Button, { type: "button", disabled: currentPage === totalPages(), onClickSave: () => setCurrentPage((old) => Math.min(old + 1, totalPages())), children: "Siguiente" })] }), _jsx("div", { children: _jsx("select", { value: itemsPerPage, onChange: (e) => {
+                                                return (_jsx("td", { colSpan: orientation === "vertical" ? 2 : 1, className: `align-middle ${footerCell?.className || ""}`, children: footerCell ? (footerCell.cell ? (footerCell.cell(tableData)) : (footerCell.content)) : (_jsx(_Fragment, {})) }, index));
+                                            }), isEditable && _jsx("td", {})] }) }))] }), paginated && totalPages() > 1 && (_jsxs("div", { className: "flex justify-between items-center mt-4", children: [_jsxs("div", { className: "flex items-center", children: [_jsx(Button, { type: "button", disabled: currentPage === 1 || readOnly, onClickSave: () => setCurrentPage((old) => Math.max(old - 1, 1)), children: "Anterior" }), _jsx("span", { className: "mx-2", children: `Página ${currentPage} de ${totalPages()}` }), _jsx(Button, { type: "button", disabled: currentPage === totalPages() || readOnly, onClickSave: () => setCurrentPage((old) => Math.min(old + 1, totalPages())), children: "Siguiente" })] }), _jsx("div", { children: _jsx("select", { value: itemsPerPage, onChange: (e) => {
                                             setItemsPerPage(Number(e.target.value));
                                             setCurrentPage(1); // resetear la página al cambiar los elementos por página
                                         }, children: itemsPerPageOptions.map((option) => (_jsxs("option", { value: option, children: [option, " elementos por p\u00E1gina"] }, option))) }) })] }))] })] }));

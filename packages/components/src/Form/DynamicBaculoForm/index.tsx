@@ -19,9 +19,36 @@ import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/common";
 import { StaticAlert } from "../../Alerts/index.js";
 import { SubContainer } from "../../Containers/index.js";
 import { LineSeparator } from "../../LineSeparator/index.js";
+import { z } from "zod";
+export const getDynamicBaculoFormSchema = (
+  form?: FormGraphQL,
+  extraFieldValidations: { [key: string]: any } = {}
+) => {
+  if (!form) {
+    return z.any();
+  }
+
+  let fieldValidations = { ...extraFieldValidations };
+  form.settings_form_fields.forEach((field) => {
+    if (field.required) {
+      if (field.field_type === "yes_no") {
+        //se ignora la validación
+      } else {
+        // Si el campo es requerido, se debe tener al menos un carácter
+        fieldValidations = {
+          ...fieldValidations,
+          [`${field.form_id}_${field.id}`]: z.coerce
+            .string()
+            .min(1, `Este campo es requerido.`),
+        };
+      }
+    }
+  });
+
+  return z.object(fieldValidations).passthrough(); // Iniciar con un esquema que deja pasar todo.
+};
 
 type Props = {
-  formName?: string;
   form?: FormGraphQL;
   options?: { showTitle: boolean; showDescription: boolean };
   defaultValues?: FormSubmissionValueGraphQL[];
@@ -34,7 +61,6 @@ export function DynamicBaculoForm(props: Props) {
   const {
     form,
     options = { showDescription: false, showTitle: false },
-    formName = "",
     namesStr = "",
     defaultValues = [],
     showingRules = [],
@@ -45,7 +71,7 @@ export function DynamicBaculoForm(props: Props) {
     return (
       <StaticAlert
         title="No se encontró el formulario dinámico"
-        description={`Ocurrió un error encontrando el formulario para ${formName}, contacte al administrador con este mensaje de error.`}
+        description={`Ocurrió un error encontrando el formulario, contacte al administrador con este mensaje de error.`}
         type="info"
       />
     );
@@ -111,7 +137,7 @@ export function DynamicBaculoForm(props: Props) {
             title={`${field.required ? "*" : ""}${field.name}`}
             name={`${namesStr}${field.form_id}_${field.id}`}
             hint={field.hint}
-            disabled={readOnly}
+            readOnly={readOnly}
             defaultValue={defaultValue?.value}
             download={true}
           />
@@ -125,7 +151,7 @@ export function DynamicBaculoForm(props: Props) {
             hint={field.hint}
             showAvailableTypes
             fileTypes={["png", "jpg", "jpeg"]}
-            disabled={readOnly}
+            readOnly={readOnly}
             defaultValue={defaultValue?.value}
           />
         );
@@ -138,7 +164,7 @@ export function DynamicBaculoForm(props: Props) {
             hint={field.hint}
             showAvailableTypes
             fileTypes={["pdf"]}
-            disabled={readOnly}
+            readOnly={readOnly}
             defaultValue={defaultValue?.value}
             download={true}
           />

@@ -10,8 +10,7 @@ type Props = {
   helpText?: string;
   hint?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  disabled?: boolean;
-  readOnly?: boolean;
+  readOnly?: boolean; // <-- Usamos readOnly en lugar de disabled
   fileTypes?: string[];
   showAvailableTypes?: boolean;
   className?: string;
@@ -28,12 +27,11 @@ export const FileUploadField = (props: Props) => {
     helpText,
     hint,
     onChange,
-    disabled = false,
     readOnly = false,
     fileTypes = [],
     showAvailableTypes = false,
     className,
-    defaultValue = undefined,
+    defaultValue,
     download = false,
     required = false,
   } = props;
@@ -41,42 +39,99 @@ export const FileUploadField = (props: Props) => {
   const {
     register: tempRegister,
     formState: { errors },
-  } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
-  const error = errors ? errors[props.name ?? "-1"] : undefined;
-  const register = tempRegister
-    ? tempRegister(props.name ?? "-1", { required })
-    : undefined; // Solo usar register si está disponible
+  } = useFormContext() || { formState: {} };
+
+  const error = errors ? errors[name] : undefined;
+  const register = tempRegister ? tempRegister(name, { required }) : undefined;
 
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
-  if (typeof defaultValue == "string") {
+  // Para mostrar en el hint los tipos de archivo permitidos (opcional)
+  let hintMessage = hint;
+  if (showAvailableTypes && fileTypes.length > 0) {
+    hintMessage = `${hint || ""} Archivos permitidos: ${fileTypes.join(", ")}`;
+  }
+
+  // Clases de estilo basadas en si hay error (color rojo) o no (gris),
+  // pero ahora ignoramos el "disabled" y nos centramos en "readOnly".
+  const color = error ? "red" : "gray";
+  const isReadOnly = readOnly;
+  // En modo readOnly, puedes poner un fondo distinto, o dejarlo en blanco
+  const bgColor = isReadOnly ? "bg-gray-100" : `bg-${color}-50`;
+  const textColor = isReadOnly ? "text-gray-700" : `text-${color}-900`;
+  const borderColor = error ? "border-red-500" : `border-${color}-500`;
+
+  /**
+   * onChange normal del input.
+   * Sólo se llama cuando readOnly es false (porque si es true ni renderizamos el input).
+   */
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange && onChange(event);
+    // Si usas register, la parte interna de react-hook-form también se encargará
+    // del cambio, no necesitas llamarlo manualmente.
+  };
+
+  /**
+   * Para el "preview" cuando `defaultValue` es string:
+   * - Si `download` es true, mostramos un icono de descarga.
+   * - Si `download` es false, mostramos la imagen en miniatura.
+   * El click abre la URL en nueva ventana.
+   */
+  function renderPreview(defaultValue: string) {
     if (download) {
+      // Botón de descarga
       return (
         <div
           role="button"
           tabIndex={0}
-          onClick={() => {
-            window.open(defaultValue, "_blank");
-          }}
+          onClick={() => window.open(defaultValue, "_blank")}
           onKeyDown={(event) => {
-            // Permite que el evento se active con la tecla Enter
             if (event.key === "Enter") {
               window.open(defaultValue, "_blank");
             }
           }}
+          className="inline-flex items-center cursor-pointer"
         >
-          {title && (
-            <label
-              htmlFor={name}
-              className="block mb-1 text-sm font-medium text-gray-700"
-            >
-              {title}
-            </label>
-          )}{" "}
           <DownloadIconSVG />
+          <span className="ml-1 text-blue-600 underline">
+            Descargar archivo
+          </span>
+        </div>
+      );
+    } else {
+      // Vista previa como imagen
+      return (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => window.open(defaultValue, "_blank")}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              window.open(defaultValue, "_blank");
+            }
+          }}
+          className="inline-block cursor-pointer"
+        >
+          <img
+            src={defaultValue}
+            alt={name}
+            className="h-48 w-48 inline mr-1 pb-1"
+            style={{
+              objectFit: "contain",
+              backgroundColor: "transparent",
+            }}
+          />
         </div>
       );
     }
+  }
+
+  /**
+   * 1) Si readOnly = true:
+   *    - Si defaultValue es string -> Sólo mostramos el preview (descarga/imagen).
+   *    - Si no hay defaultValue (o es File) -> mostramos "nada" o un texto de "Sin archivo".
+   */
+  if (readOnly) {
     return (
       <div className={`col-span-6 sm:col-span-3 ${className}`}>
         {title && (
@@ -85,69 +140,25 @@ export const FileUploadField = (props: Props) => {
             className={`block mb-1 text-sm font-medium text-gray-700`}
           >
             {title}
-            {required && <span className="text-red-500">*</span>}
           </label>
-        )}{" "}
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={() => {
-            if (register) {
-              register.onChange({
-                target: {
-                  value: defaultValue,
-                },
-              });
-            }
-            window.open(defaultValue, "_blank");
-          }}
-          onKeyDown={(event) => {
-            // Permite que el evento se active con la tecla Enter
-            if (event.key === "Enter") {
-              if (register) {
-                register.onChange({
-                  target: {
-                    value: defaultValue,
-                  },
-                });
-              }
-              window.open(defaultValue, "_blank");
-            }
-          }}
-        >
-          <img
-            src={defaultValue}
-            alt={name}
-            className={`h-48 w-48 inline mr-1 pb-1`}
-            style={{
-              stroke: "currentColor",
-              strokeWidth: 2,
-              strokeLinecap: "round",
-              strokeLinejoin: "round",
-              fill: "none",
-              backgroundColor: "transparent",
-            }}
-          />
-        </div>
+        )}
+
+        {typeof defaultValue === "string" && defaultValue ? (
+          renderPreview(defaultValue)
+        ) : (
+          <div className="text-sm italic text-gray-400">
+            No hay archivo disponible
+          </div>
+        )}
       </div>
     );
   }
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange && onChange(event);
-  };
-
-  let hintMessage = hint;
-  if (showAvailableTypes && fileTypes.length > 0) {
-    hintMessage = `${hint} Archivos permitidos: ${fileTypes.join(", ")}`;
-  }
-
-  const color = error ? "red" : "gray";
-  const isReadOnly = disabled || readOnly;
-  const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
-  const textColor = isReadOnly ? "text-gray-500" : `text-${color}-900`;
-  const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-500`;
-
+  /**
+   * 2) readOnly = false:
+   *    - Si hay defaultValue y es string, mostramos la vista previa + el input
+   *    - Si no hay defaultValue (o no es string) mostramos solo el input
+   */
   return (
     <div className={`col-span-6 sm:col-span-3 ${className}`}>
       {title && (
@@ -156,19 +167,28 @@ export const FileUploadField = (props: Props) => {
           className={`block mb-1 text-sm font-medium text-${color}-700`}
         >
           {title}
+          {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
+
+      {/* Mostrar la vista previa si defaultValue es string */}
+      {typeof defaultValue === "string" && defaultValue && (
+        <div className="mb-2">{renderPreview(defaultValue)}</div>
+      )}
+
+      {/* Input para cambiar/cargar archivo */}
       <div className="flex relative items-center">
         <input
           type="file"
-          name={name}
           id={id ?? name}
-          disabled={disabled}
-          readOnly={readOnly}
           accept={fileTypes.map((ft) => `.${ft}`).join(", ")}
-          onChange={handleInputChange}
           className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
+          {...(register ?? {})}
+          name={name}
+          onChange={handleInputChange}
         />
+
+        {/* Botón de ayuda con tooltip */}
         {helpText && (
           <div className="flex items-center relative ml-3">
             <div
@@ -186,11 +206,14 @@ export const FileUploadField = (props: Props) => {
           </div>
         )}
       </div>
+
+      {/* Mensaje de error */}
       {error && (
-        <p className={`mt-2 text-sm text-${color}-600`}>
+        <p className={`mt-2 text-sm text-red-600`}>
           <span className="font-medium">Oops!</span> {error.message?.toString()}
         </p>
       )}
+      {/* Hint (si no hay error) */}
       {!error && hintMessage && (
         <p className={`mt-2 italic text-sm text-${color}-500`}>{hintMessage}</p>
       )}

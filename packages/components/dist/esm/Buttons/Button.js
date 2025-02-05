@@ -11,6 +11,7 @@ export const Button = (props) => {
             bg700: "bg-green-700",
             bg600: "bg-green-600",
             bg500: "bg-green-500",
+            bg200: "bg-green-200",
             ring600: "ring-green-600",
             ring500: "ring-green-500",
         },
@@ -19,6 +20,7 @@ export const Button = (props) => {
             bg700: "bg-indigo-700",
             bg600: "bg-indigo-600",
             bg500: "bg-indigo-500",
+            bg200: "bg-indigo-200",
             ring600: "ring-indigo-600",
             ring500: "ring-indigo-500",
         },
@@ -27,6 +29,7 @@ export const Button = (props) => {
             bg700: "bg-red-700",
             bg600: "bg-red-600",
             bg500: "bg-red-500",
+            bg200: "bg-red-200",
             ring600: "ring-red-600",
             ring500: "ring-red-500",
         },
@@ -35,6 +38,7 @@ export const Button = (props) => {
             bg700: "bg-yellow-700",
             bg600: "bg-yellow-600",
             bg500: "bg-yellow-500",
+            bg200: "bg-yellow-200",
             ring600: "ring-yellow-600",
             ring500: "ring-yellow-500",
         },
@@ -46,13 +50,13 @@ export const Button = (props) => {
             .map((error) => error?.message?.toString())
             .join(", ")
         : "";
-    const buttonContent = (_jsxs(_Fragment, { children: [_jsx("input", { type: "hidden", name: "action", value: name }), _jsx("button", { type: type, disabled: loading || disabled || (enableFormErrorsValidation && formHasErrors), onClick: onClickSave, className: `ml-2 ${loading || disabled || (enableFormErrorsValidation && formHasErrors)
-                    ? " bg-opacity-25 "
-                    : ""} ${loading
-                    ? " cursor-progress"
-                    : `${disabled || (enableFormErrorsValidation && formHasErrors)
-                        ? ""
-                        : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside })] }));
+    const buttonContent = (_jsx(_Fragment, { children: _jsx("button", { type: type, name: "action", value: name, disabled: loading || disabled || (enableFormErrorsValidation && formHasErrors), onClick: onClickSave, className: `ml-2 ${loading || disabled || (enableFormErrorsValidation && formHasErrors)
+                ? " bg-opacity-25 "
+                : ""} ${loading
+                ? " cursor-progress"
+                : `${disabled || (enableFormErrorsValidation && formHasErrors)
+                    ? ""
+                    : `hover:${color.bg700}`}`} inline-flex justify-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: loading ? loadingText : inside }) }));
     return (_jsxs(_Fragment, { children: [(enableFormErrorsValidation && formHasErrors && errorMessage) ||
                 (enableFormErrorsDescriptions && errorMessage) ? (_jsx("div", { className: "flex flex-col items-end mb-2", children: _jsx("div", { className: "p-2 bg-red-100 border border-red-400 text-red-700 rounded-md shadow-sm", children: _jsx("p", { className: "text-sm", children: errorMessage }) }) })) : null, buttonContent] }));
 };
