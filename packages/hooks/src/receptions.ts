@@ -14,19 +14,12 @@ import {
   PayeeGraphQL,
   PurchaseOrderGraphQL,
   WebAppRowGraphQL,
-  GenericDynamicTableColumn,
   QueueFormReceptionWebAppTable,
   RejectionWebAppTableObject,
   PurchaseOrderGeneralInfo,
-  BasketSchema,
 } from "@zauru-sdk/types";
 import { useEffect, useMemo, useState } from "react";
 import { AlertType, showAlert } from "./index.js";
-import {
-  getBasketsSchema,
-  reduceAdd,
-  toFixedIfNeeded,
-} from "@zauru-sdk/common";
 
 type ReturnType<T> = {
   data: T;

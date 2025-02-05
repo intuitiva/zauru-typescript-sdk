@@ -11,22 +11,22 @@ import {
 import { useEffect, useState } from "react";
 import { showAlert } from "./index.js";
 
-type ProfileType<T> = {
+type ReturnType<T> = {
   data: T;
   loading: boolean;
 };
 
-type TemplateData<T> = {
+type ObjectHookData<T> = {
   [key: string]: T;
 };
 
 function useGetTemplateObject<T>(
   TEMPLATE_NAME: TEMPLATE_NAMES,
   config: ReduxParamsConfig = {}
-): ProfileType<T> {
+): ReturnType<T> {
   try {
     const dispatch = useAppDispatch();
-    const fetcher = useFetcher<FetcherErrorType | TemplateData<T>>();
+    const fetcher = useFetcher<FetcherErrorType | ObjectHookData<T>>();
 
     // Obtenemos del store lo que ya se tenga
     const objectData = useAppSelector(
@@ -38,7 +38,7 @@ function useGetTemplateObject<T>(
       objectData?.data && Object.keys(objectData.data).length > 0;
 
     // Estado local para data y loading
-    const [data, setData] = useState<ProfileType<T>>({
+    const [data, setData] = useState<ReturnType<T>>({
       data: hasLocalData ? (objectData?.data as T) : ({} as T),
       loading: false,
     });
@@ -93,7 +93,7 @@ function useGetTemplateObject<T>(
         if (fetcher.data) {
           // Podría ser un error o ser la data
           const possibleError = fetcher.data as FetcherErrorType;
-          const possibleData = fetcher.data as TemplateData<T>;
+          const possibleData = fetcher.data as ObjectHookData<T>;
 
           // Si detectamos que es un objeto con 'description', interpretamos error
           if (possibleError.description) {
