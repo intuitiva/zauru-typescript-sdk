@@ -16,7 +16,6 @@ type ProfileType<T> = {
   loading: boolean;
 };
 
-// Opcional: si tu backend retorna un objeto con la forma { templateName: ... }
 type TemplateData<T> = {
   [key: string]: T;
 };
