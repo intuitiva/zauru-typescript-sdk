@@ -1,7 +1,8 @@
 import { createCookie } from "@remix-run/node";
-import { createUpstashSessionStorage } from "./upstash.js";
-
-export const MAX_AGE_SESSION_COOKIE = 60 * 60 * 5; //5 hours
+import {
+  createUpstashSessionStorage,
+  MAX_AGE_SESSION_COOKIE,
+} from "./upstash.js";
 
 const sessionCookie = createCookie("_rj_session", {
   secrets: ["r3m1xr0ck1"],

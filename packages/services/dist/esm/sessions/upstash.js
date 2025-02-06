@@ -1,16 +1,13 @@
 import { createSessionStorage } from "@remix-run/node";
 import crypto from "crypto";
 import { config } from "@zauru-sdk/config";
+export const MAX_AGE_SESSION_COOKIE = 60 * 60 * 5; //5 hours
 const redisBaseURL = config.redisBaseURL;
 const headers = {
     Authorization: `Bearer ${config.redisToken}`,
     Accept: "application/json",
     "Content-Type": "application/json",
 };
-//Le quité la expiración porque era muy corta para recepciones,
-//antes se definía algo así: await fetch(`${redisBaseURL}/set/${id}?EX=${expiresToSeconds(expires)}`
-//Estaba en el createData y en el updateData
-//Ahora lo manejo en el maxAge de la cookie <- lo actualizo en cada request
 // For more info check https://remix.run/docs/en/v1/api/remix#createsessionstorage
 export function createUpstashSessionStorage({ cookie }) {
     return createSessionStorage({
@@ -18,7 +15,7 @@ export function createUpstashSessionStorage({ cookie }) {
         async createData(data, expires) {
             try {
                 const id = crypto.randomUUID();
-                await fetch(`${redisBaseURL}/set/${id}`, {
+                await fetch(`${redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
                     method: "post",
                     body: JSON.stringify({ data }),
                     headers,
@@ -45,7 +42,7 @@ export function createUpstashSessionStorage({ cookie }) {
         },
         async updateData(id, data, expires) {
             try {
-                await fetch(`${redisBaseURL}/set/${id}`, {
+                await fetch(`${redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
                     method: "post",
                     body: JSON.stringify({ data }),
                     headers,

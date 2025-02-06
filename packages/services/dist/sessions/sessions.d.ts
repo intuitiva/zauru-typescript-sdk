@@ -1,3 +1,2 @@
-export declare const MAX_AGE_SESSION_COOKIE: number;
 declare const getSession: (cookieHeader?: string | null, options?: import("cookie").CookieParseOptions) => Promise<import("@remix-run/node").Session<import("@remix-run/node").SessionData, import("@remix-run/node").SessionData>>, commitSession: (session: import("@remix-run/node").Session<import("@remix-run/node").SessionData, import("@remix-run/node").SessionData>, options?: import("cookie").CookieSerializeOptions) => Promise<string>, destroySession: (session: import("@remix-run/node").Session<import("@remix-run/node").SessionData, import("@remix-run/node").SessionData>, options?: import("cookie").CookieSerializeOptions) => Promise<string>;
 export { getSession, commitSession, destroySession };
