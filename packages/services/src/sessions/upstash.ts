@@ -1,7 +1,7 @@
 import { createSessionStorage } from "@remix-run/node";
 import crypto from "crypto";
 import { config } from "@zauru-sdk/config";
-import { httpUpstash } from "../zauru/httpUpstash.js";
+import fetch from "node-fetch";
 
 export const MAX_AGE_SESSION_COOKIE = 60 * 60 * 16; //16 hours
 
@@ -11,25 +11,25 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export async function fetchWithRetriesAxios(
+export async function fetchWithRetries(
   url: string,
   config = {},
   retries = 3,
   backoff = 200
 ) {
   try {
-    const response = await httpUpstash.request({ url, ...config });
+    const response = await fetch(url, config);
     return response;
   } catch (error) {
     if (retries > 0) {
       console.warn(
-        `=> Axios request falló (${url}), reintentando en ${backoff}ms... (${retries} intentos restantes)`,
+        `=> Node Fetch request falló (${url}), reintentando en ${backoff}ms... (${retries} intentos restantes)`,
         `Error message: ${
           error instanceof Error ? error.message : String(error)
         }`
       );
       await new Promise((resolve) => setTimeout(resolve, backoff));
-      return fetchWithRetriesAxios(url, config, retries - 1, backoff * 2);
+      return fetchWithRetries(url, config, retries - 1, backoff * 2);
     } else {
       throw error;
     }
@@ -43,11 +43,11 @@ export function createUpstashSessionStorage({ cookie }: any) {
     async createData(data, expires) {
       try {
         const id: string = crypto.randomUUID();
-        await fetchWithRetriesAxios(
+        await fetchWithRetries(
           `${config.redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`,
           {
             method: "post",
-            data,
+            body: JSON.stringify({ data }),
             headers,
           }
         );
@@ -59,7 +59,7 @@ export function createUpstashSessionStorage({ cookie }: any) {
     },
     async readData(id) {
       try {
-        const response = await fetchWithRetriesAxios(
+        const response = await fetchWithRetries(
           `${config.redisBaseURL}/get/${id}`,
           {
             headers,
@@ -73,11 +73,11 @@ export function createUpstashSessionStorage({ cookie }: any) {
     },
     async updateData(id, data, expires) {
       try {
-        await fetchWithRetriesAxios(
+        await fetchWithRetries(
           `${config.redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`,
           {
             method: "post",
-            data,
+            body: JSON.stringify({ data }),
             headers,
           }
         );
@@ -87,7 +87,7 @@ export function createUpstashSessionStorage({ cookie }: any) {
     },
     async deleteData(id) {
       try {
-        await fetchWithRetriesAxios(`${config.redisBaseURL}/del/${id}`, {
+        await fetchWithRetries(`${config.redisBaseURL}/del/${id}`, {
           method: "post",
           headers,
         });
