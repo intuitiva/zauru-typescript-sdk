@@ -1,7 +1,7 @@
 import { createSessionStorage } from "@remix-run/node";
 import crypto from "crypto";
 import { config } from "@zauru-sdk/config";
-import fetch from "node-fetch";
+import axios from "axios";
 
 const redisBaseURL = config.redisBaseURL;
 
@@ -22,11 +22,14 @@ export async function fetchWithRetries(
   backoff = 200
 ) {
   try {
-    return await fetch(url, config);
+    return await axios.request({
+      url,
+      ...config,
+    });
   } catch (error) {
     if (retries > 0) {
       console.warn(
-        `=> Node Fetch request falló (${url}), reintentando en ${backoff}ms... (${retries} intentos restantes)`,
+        `=> Axios request falló (${url}), reintentando en ${backoff}ms... (${retries} intentos restantes)`,
         `Error message: ${
           error instanceof Error ? error.message : String(error)
         }`
@@ -35,7 +38,7 @@ export async function fetchWithRetries(
       return fetchWithRetries(url, config, retries - 1, backoff * 2);
     } else {
       console.error(
-        `=> Node Fetch request falló (${url}), no se pudo recuperar.`,
+        `=> Axios request falló (${url}), no se pudo recuperar.`,
         `Error message: ${
           error instanceof Error ? error.message : String(error)
         }`
@@ -50,25 +53,25 @@ export function createUpstashSessionStorage({ cookie }: any) {
   return createSessionStorage({
     cookie,
     async createData(data, expires) {
-      const id: string = crypto.randomUUID();
+      const id: string = `$${crypto.randomUUID()}`;
       await fetchWithRetries(
         `${redisBaseURL}/set/${id}?EX=${
           expires ? expiresToSeconds(expires) : 60 * 60 * 8
         }`,
         {
           method: "post",
-          body: JSON.stringify({ data }),
+          data: { data },
           headers,
         }
       );
       return id;
     },
     async readData(id) {
-      const response = await fetch(`${redisBaseURL}/get/${id}`, {
+      const response = await fetchWithRetries(`${redisBaseURL}/get/${id}`, {
         headers,
       });
       try {
-        const { result } = (await response.json()) as any;
+        const { result } = response?.data;
         return JSON.parse(result)?.data;
       } catch (error) {
         console.error("Error al leer la sesión: ", error);
@@ -82,7 +85,7 @@ export function createUpstashSessionStorage({ cookie }: any) {
         }`,
         {
           method: "post",
-          body: JSON.stringify({ data }),
+          data: { data },
           headers,
         }
       );
