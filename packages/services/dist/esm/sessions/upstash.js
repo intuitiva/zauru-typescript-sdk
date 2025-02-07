@@ -48,8 +48,7 @@ export function createUpstashSessionStorage({ cookie }) {
                 const response = await fetchWithRetriesAxios(`/get/${id}`, {
                     headers,
                 });
-                const { result } = (await response.json());
-                return JSON.parse(result).data;
+                return response;
             }
             catch (error) {
                 console.error("Error al leer la sesión", error);
