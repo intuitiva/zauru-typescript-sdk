@@ -41,11 +41,14 @@ export function createUpstashSessionStorage({ cookie }: any) {
     async createData(data, expires) {
       try {
         const id: string = crypto.randomUUID();
-        await fetchWithRetriesAxios(`/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
-          method: "post",
-          body: JSON.stringify({ data }),
-          headers,
-        });
+        await fetchWithRetriesAxios(
+          `${config.redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`,
+          {
+            method: "post",
+            body: JSON.stringify({ data }),
+            headers,
+          }
+        );
         return id;
       } catch (error) {
         console.error("Error al crear la sesión", error);
@@ -54,9 +57,12 @@ export function createUpstashSessionStorage({ cookie }: any) {
     },
     async readData(id) {
       try {
-        const response = await fetchWithRetriesAxios(`/get/${id}`, {
-          headers,
-        });
+        const response = await fetchWithRetriesAxios(
+          `${config.redisBaseURL}/get/${id}`,
+          {
+            headers,
+          }
+        );
         return response;
       } catch (error) {
         console.error("Error al leer la sesión", error);
@@ -65,18 +71,21 @@ export function createUpstashSessionStorage({ cookie }: any) {
     },
     async updateData(id, data, expires) {
       try {
-        await fetchWithRetriesAxios(`/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
-          method: "post",
-          body: JSON.stringify({ data }),
-          headers,
-        });
+        await fetchWithRetriesAxios(
+          `${config.redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`,
+          {
+            method: "post",
+            body: JSON.stringify({ data }),
+            headers,
+          }
+        );
       } catch (error) {
         console.error("Error al actualizar la sesión", error);
       }
     },
     async deleteData(id) {
       try {
-        await fetchWithRetriesAxios(`/del/${id}`, {
+        await fetchWithRetriesAxios(`${config.redisBaseURL}/del/${id}`, {
           method: "post",
           headers,
         });

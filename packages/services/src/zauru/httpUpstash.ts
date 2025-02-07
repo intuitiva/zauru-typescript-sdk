@@ -7,7 +7,6 @@ const httpAgent = new http.Agent({ keepAlive: true });
 const httpsAgent = new https.Agent({ keepAlive: true });
 
 export const httpUpstash = axios.create({
-  baseURL: `${config.redisBaseURL}`,
   httpAgent,
   httpsAgent,
   timeout: 5000,

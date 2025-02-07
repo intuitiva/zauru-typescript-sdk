@@ -31,7 +31,7 @@ export function createUpstashSessionStorage({ cookie }) {
         async createData(data, expires) {
             try {
                 const id = crypto.randomUUID();
-                await fetchWithRetriesAxios(`/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
+                await fetchWithRetriesAxios(`${config.redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
                     method: "post",
                     body: JSON.stringify({ data }),
                     headers,
@@ -45,7 +45,7 @@ export function createUpstashSessionStorage({ cookie }) {
         },
         async readData(id) {
             try {
-                const response = await fetchWithRetriesAxios(`/get/${id}`, {
+                const response = await fetchWithRetriesAxios(`${config.redisBaseURL}/get/${id}`, {
                     headers,
                 });
                 return response;
@@ -57,7 +57,7 @@ export function createUpstashSessionStorage({ cookie }) {
         },
         async updateData(id, data, expires) {
             try {
-                await fetchWithRetriesAxios(`/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
+                await fetchWithRetriesAxios(`${config.redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
                     method: "post",
                     body: JSON.stringify({ data }),
                     headers,
@@ -69,7 +69,7 @@ export function createUpstashSessionStorage({ cookie }) {
         },
         async deleteData(id) {
             try {
-                await fetchWithRetriesAxios(`/del/${id}`, {
+                await fetchWithRetriesAxios(`${config.redisBaseURL}/del/${id}`, {
                     method: "post",
                     headers,
                 });
