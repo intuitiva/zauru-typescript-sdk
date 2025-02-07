@@ -1,7 +1,7 @@
 import { createSessionStorage } from "@remix-run/node";
 import crypto from "crypto";
 import { config } from "@zauru-sdk/config";
-import { httpUpstash } from "~/zauru/httpUpstash.js";
+import { httpUpstash } from "../zauru/httpUpstash.js";
 export const MAX_AGE_SESSION_COOKIE = 60 * 60 * 16; //16 hours
 const headers = {
     Authorization: `Bearer ${config.redisToken}`,
