@@ -48,7 +48,8 @@ export function createUpstashSessionStorage({ cookie }) {
                 const response = await fetchWithRetries(`${config.redisBaseURL}/get/${id}`, {
                     headers,
                 });
-                return response;
+                const { result } = (await response.json());
+                return JSON.parse(result).data;
             }
             catch (error) {
                 console.error("Error al leer la sesión", error);
