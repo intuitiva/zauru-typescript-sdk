@@ -11,7 +11,7 @@ const headers = {
 export async function fetchWithRetriesAxios(url, config = {}, retries = 3, backoff = 200) {
     try {
         const response = await httpUpstash.request({ url, ...config });
-        return response.data;
+        return response;
     }
     catch (error) {
         if (retries > 0) {

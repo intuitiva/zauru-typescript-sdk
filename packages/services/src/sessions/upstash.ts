@@ -19,7 +19,7 @@ export async function fetchWithRetriesAxios(
 ) {
   try {
     const response = await httpUpstash.request({ url, ...config });
-    return response.data;
+    return response;
   } catch (error) {
     if (retries > 0) {
       console.warn(
