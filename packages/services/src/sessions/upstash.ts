@@ -2,7 +2,7 @@ import { createSessionStorage } from "@remix-run/node";
 import crypto from "crypto";
 import { config } from "@zauru-sdk/config";
 
-export const MAX_AGE_SESSION_COOKIE = 60 * 60 * 5; //5 hours
+export const MAX_AGE_SESSION_COOKIE = 60 * 60 * 16; //16 hours
 
 const redisBaseURL = config.redisBaseURL;
 
