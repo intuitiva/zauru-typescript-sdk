@@ -15,7 +15,7 @@ export async function fetchWithRetriesAxios(url, config = {}, retries = 3, backo
     }
     catch (error) {
         if (retries > 0) {
-            console.warn(`Axios request falló, reintentando en ${backoff}ms... (${retries} intentos restantes)`);
+            console.warn(`=> Axios request falló, reintentando en ${backoff}ms... (${retries} intentos restantes)`);
             await new Promise((resolve) => setTimeout(resolve, backoff));
             return fetchWithRetriesAxios(url, config, retries - 1, backoff * 2);
         }
