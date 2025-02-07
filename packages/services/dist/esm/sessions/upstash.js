@@ -49,7 +49,7 @@ export function createUpstashSessionStorage({ cookie }) {
                     headers,
                 });
                 const { result } = (await response.json());
-                return JSON.parse(result).data;
+                return JSON.parse(result)?.data;
             }
             catch (error) {
                 console.error("Error al leer la sesión", error);
