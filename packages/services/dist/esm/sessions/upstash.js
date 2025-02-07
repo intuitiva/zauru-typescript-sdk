@@ -33,7 +33,7 @@ export function createUpstashSessionStorage({ cookie }) {
                 const id = crypto.randomUUID();
                 await fetchWithRetriesAxios(`${config.redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
                     method: "post",
-                    body: data,
+                    data,
                     headers,
                 });
                 return id;
@@ -59,7 +59,7 @@ export function createUpstashSessionStorage({ cookie }) {
             try {
                 await fetchWithRetriesAxios(`${config.redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
                     method: "post",
-                    body: data,
+                    data,
                     headers,
                 });
             }

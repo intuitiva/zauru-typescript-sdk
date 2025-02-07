@@ -45,7 +45,7 @@ export function createUpstashSessionStorage({ cookie }: any) {
           `${config.redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`,
           {
             method: "post",
-            body: data,
+            data,
             headers,
           }
         );
@@ -75,7 +75,7 @@ export function createUpstashSessionStorage({ cookie }: any) {
           `${config.redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`,
           {
             method: "post",
-            body: data,
+            data,
             headers,
           }
         );
