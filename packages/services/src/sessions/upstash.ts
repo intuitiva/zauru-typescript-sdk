@@ -12,6 +12,31 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+async function fetchWithRetries(
+  url: string,
+  options = {},
+  retries = 3,
+  backoff = 200
+) {
+  try {
+    const res = await fetch(url, options);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    return res;
+  } catch (err) {
+    if (retries > 0) {
+      console.warn(
+        `Fetch falló, reintentando en ${backoff}ms... (${retries} intentos restantes)`
+      );
+      await new Promise((resolve) => setTimeout(resolve, backoff));
+      return fetchWithRetries(url, options, retries - 1, backoff * 2);
+    } else {
+      throw err;
+    }
+  }
+}
+
 // For more info check https://remix.run/docs/en/v1/api/remix#createsessionstorage
 export function createUpstashSessionStorage({ cookie }: any) {
   return createSessionStorage({
@@ -19,11 +44,14 @@ export function createUpstashSessionStorage({ cookie }: any) {
     async createData(data, expires) {
       try {
         const id: string = crypto.randomUUID();
-        await fetch(`${redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
-          method: "post",
-          body: JSON.stringify({ data }),
-          headers,
-        });
+        await fetchWithRetries(
+          `${redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`,
+          {
+            method: "post",
+            body: JSON.stringify({ data }),
+            headers,
+          }
+        );
         return id;
       } catch (error) {
         console.error("Error al crear la sesión", error);
@@ -32,7 +60,7 @@ export function createUpstashSessionStorage({ cookie }: any) {
     },
     async readData(id) {
       try {
-        const response = await fetch(`${redisBaseURL}/get/${id}`, {
+        const response = await fetchWithRetries(`${redisBaseURL}/get/${id}`, {
           headers,
         });
         const { result } = (await response.json()) as any;
@@ -44,18 +72,21 @@ export function createUpstashSessionStorage({ cookie }: any) {
     },
     async updateData(id, data, expires) {
       try {
-        await fetch(`${redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
-          method: "post",
-          body: JSON.stringify({ data }),
-          headers,
-        });
+        await fetchWithRetries(
+          `${redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`,
+          {
+            method: "post",
+            body: JSON.stringify({ data }),
+            headers,
+          }
+        );
       } catch (error) {
         console.error("Error al actualizar la sesión", error);
       }
     },
     async deleteData(id) {
       try {
-        await fetch(`${redisBaseURL}/del/${id}`, {
+        await fetchWithRetries(`${redisBaseURL}/del/${id}`, {
           method: "post",
           headers,
         });
