@@ -8,6 +8,25 @@ const headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
 };
+async function fetchWithRetries(url, options = {}, retries = 3, backoff = 200) {
+    try {
+        const res = await fetch(url, options);
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res;
+    }
+    catch (err) {
+        if (retries > 0) {
+            console.warn(`Fetch falló, reintentando en ${backoff}ms... (${retries} intentos restantes)`);
+            await new Promise((resolve) => setTimeout(resolve, backoff));
+            return fetchWithRetries(url, options, retries - 1, backoff * 2);
+        }
+        else {
+            throw err;
+        }
+    }
+}
 // For more info check https://remix.run/docs/en/v1/api/remix#createsessionstorage
 export function createUpstashSessionStorage({ cookie }) {
     return createSessionStorage({
@@ -15,7 +34,7 @@ export function createUpstashSessionStorage({ cookie }) {
         async createData(data, expires) {
             try {
                 const id = crypto.randomUUID();
-                await fetch(`${redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
+                await fetchWithRetries(`${redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
                     method: "post",
                     body: JSON.stringify({ data }),
                     headers,
@@ -29,7 +48,7 @@ export function createUpstashSessionStorage({ cookie }) {
         },
         async readData(id) {
             try {
-                const response = await fetch(`${redisBaseURL}/get/${id}`, {
+                const response = await fetchWithRetries(`${redisBaseURL}/get/${id}`, {
                     headers,
                 });
                 const { result } = (await response.json());
@@ -42,7 +61,7 @@ export function createUpstashSessionStorage({ cookie }) {
         },
         async updateData(id, data, expires) {
             try {
-                await fetch(`${redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
+                await fetchWithRetries(`${redisBaseURL}/set/${id}?EX=${MAX_AGE_SESSION_COOKIE}`, {
                     method: "post",
                     body: JSON.stringify({ data }),
                     headers,
@@ -54,7 +73,7 @@ export function createUpstashSessionStorage({ cookie }) {
         },
         async deleteData(id) {
             try {
-                await fetch(`${redisBaseURL}/del/${id}`, {
+                await fetchWithRetries(`${redisBaseURL}/del/${id}`, {
                     method: "post",
                     headers,
                 });
