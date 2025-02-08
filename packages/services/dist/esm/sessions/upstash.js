@@ -7,32 +7,16 @@ const headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
 };
-const expiresToSeconds = (expires) => {
-    return Math.floor((expires.getTime() - new Date().getTime()) / 1000);
-};
-export async function fetchWithRetries(url, config = {}, retries = 3, backoff = 200) {
-    try {
-        return await fetch(url, config);
-    }
-    catch (error) {
-        if (retries > 0) {
-            console.warn(`=> Node Fetch request falló (${url}), reintentando en ${backoff}ms... (${retries} intentos restantes)`, `Error message: ${error instanceof Error ? error.message : String(error)}`);
-            await new Promise((resolve) => setTimeout(resolve, backoff));
-            return fetchWithRetries(url, config, retries - 1, backoff * 2);
-        }
-        else {
-            console.error(`=> Node Fetch request falló (${url}), no se pudo recuperar.`, `Error message: ${error instanceof Error ? error.message : String(error)}`);
-            return null;
-        }
-    }
-}
+//Le quité la expiración porque era muy corta para recepciones,
+//antes se definía algo así: await fetch(`${redisBaseURL}/set/${id}?EX=${expiresToSeconds(expires)}`
+//Estaba en el createData y en el updateData
 // For more info check https://remix.run/docs/en/v1/api/remix#createsessionstorage
 export function createUpstashSessionStorage({ cookie }) {
     return createSessionStorage({
         cookie,
         async createData(data, expires) {
             const id = crypto.randomUUID();
-            await fetchWithRetries(`${redisBaseURL}/set/${id}?EX=${expires ? expiresToSeconds(expires) : 60 * 60 * 8}`, {
+            await fetch(`${redisBaseURL}/set/${id}?EX=${259200}`, {
                 method: "post",
                 body: JSON.stringify({ data }),
                 headers,
@@ -45,22 +29,21 @@ export function createUpstashSessionStorage({ cookie }) {
             });
             try {
                 const { result } = (await response.json());
-                return JSON.parse(result)?.data;
+                return JSON.parse(result).data;
             }
             catch (error) {
-                console.error("Error al leer la sesión: ", error);
-                return {};
+                return null;
             }
         },
         async updateData(id, data, expires) {
-            await fetchWithRetries(`${redisBaseURL}/set/${id}?EX=${expires ? expiresToSeconds(expires) : 60 * 60 * 8}`, {
+            await fetch(`${redisBaseURL}/set/${id}?EX=${259200}`, {
                 method: "post",
                 body: JSON.stringify({ data }),
                 headers,
             });
         },
         async deleteData(id) {
-            await fetchWithRetries(`${redisBaseURL}/del/${id}`, {
+            await fetch(`${redisBaseURL}/del/${id}`, {
                 method: "post",
                 headers,
             });
