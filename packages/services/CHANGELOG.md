@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.142](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.141...v2.0.142) (2025-02-08)
+
+
+### Reverts
+
+* Revert "# Pasando a axios" ([a080cd8](https://github.com/intuitiva/zauru-typescript-sdk/commit/a080cd8fd08a8fea8a3d8f7ae5495488f643efa1))
+* Revert "# Nuevo formateo de ID session" ([5ac24da](https://github.com/intuitiva/zauru-typescript-sdk/commit/5ac24dac67ee1da2a8c8809b4f56bb1ca584e400))
+
+
+
+
+
 ## [2.0.141](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.140...v2.0.141) (2025-02-07)
 
 **Note:** Version bump only for package @zauru-sdk/services
