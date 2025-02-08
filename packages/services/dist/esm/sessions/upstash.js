@@ -1,7 +1,6 @@
 import { createSessionStorage } from "@remix-run/node";
 import crypto from "crypto";
 import { config } from "@zauru-sdk/config";
-import fetch from "node-fetch";
 const redisBaseURL = config.redisBaseURL;
 const headers = {
     Authorization: `Bearer ${config.redisToken}`,
@@ -46,10 +45,11 @@ export function createUpstashSessionStorage({ cookie }) {
             });
             try {
                 const { result } = (await response.json());
-                return JSON.parse(result).data;
+                return JSON.parse(result)?.data;
             }
             catch (error) {
-                return null;
+                console.error("Error al leer la sesión: ", error);
+                return {};
             }
         },
         async updateData(id, data, expires) {

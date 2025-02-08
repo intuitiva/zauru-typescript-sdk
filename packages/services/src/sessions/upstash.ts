@@ -1,7 +1,6 @@
 import { createSessionStorage } from "@remix-run/node";
 import crypto from "crypto";
 import { config } from "@zauru-sdk/config";
-import fetch from "node-fetch";
 
 const redisBaseURL = config.redisBaseURL;
 
