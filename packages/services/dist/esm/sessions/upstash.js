@@ -1,6 +1,7 @@
 import { createSessionStorage } from "@remix-run/node";
 import crypto from "crypto";
 import { config } from "@zauru-sdk/config";
+import axios from "axios";
 const redisBaseURL = config.redisBaseURL;
 const headers = {
     Authorization: `Bearer ${config.redisToken}`,
@@ -10,43 +11,60 @@ const headers = {
 const expiresToSeconds = (expires) => {
     return Math.floor((expires.getTime() - new Date().getTime()) / 1000);
 };
-//Le quité la expiración porque era muy corta para recepciones,
-//antes se definía algo así: await fetch(`${redisBaseURL}/set/${id}?EX=${expiresToSeconds(expires)}`
-//Estaba en el createData y en el updateData
+export async function fetchWithRetries(url, config = {}, retries = 3, backoff = 200) {
+    try {
+        return await axios.request({
+            url,
+            ...config,
+        });
+    }
+    catch (error) {
+        if (retries > 0) {
+            console.warn(`=> Axios request falló (${url}), reintentando en ${backoff}ms... (${retries} intentos restantes)`, `Error message: ${error instanceof Error ? error.message : String(error)}`);
+            await new Promise((resolve) => setTimeout(resolve, backoff));
+            return fetchWithRetries(url, config, retries - 1, backoff * 2);
+        }
+        else {
+            console.error(`=> Axios request falló (${url}), no se pudo recuperar.`, `Error message: ${error instanceof Error ? error.message : String(error)}`);
+            return null;
+        }
+    }
+}
 // For more info check https://remix.run/docs/en/v1/api/remix#createsessionstorage
 export function createUpstashSessionStorage({ cookie }) {
     return createSessionStorage({
         cookie,
         async createData(data, expires) {
-            const id = crypto.randomUUID();
-            await fetch(`${redisBaseURL}/set/${id}?EX=${expires ? expiresToSeconds(expires) : 60 * 60 * 8}`, {
+            const id = `${data?.selectedEntity}-${data?.employee_id}-${crypto.randomUUID()}`;
+            await fetchWithRetries(`${redisBaseURL}/set/${id}?EX=${expires ? expiresToSeconds(expires) : 60 * 60 * 8}`, {
                 method: "post",
-                body: JSON.stringify({ data }),
+                data: { data },
                 headers,
             });
             return id;
         },
         async readData(id) {
-            const response = await fetch(`${redisBaseURL}/get/${id}`, {
+            const response = await fetchWithRetries(`${redisBaseURL}/get/${id}`, {
                 headers,
             });
             try {
-                const { result } = (await response.json());
-                return JSON.parse(result).data;
+                const { result } = response?.data;
+                return JSON.parse(result)?.data;
             }
             catch (error) {
-                return null;
+                console.error("Error al leer la sesión: ", error);
+                return {};
             }
         },
         async updateData(id, data, expires) {
-            await fetch(`${redisBaseURL}/set/${id}?EX=${expires ? expiresToSeconds(expires) : 60 * 60 * 8}`, {
+            await fetchWithRetries(`${redisBaseURL}/set/${id}?EX=${expires ? expiresToSeconds(expires) : 60 * 60 * 8}`, {
                 method: "post",
-                body: JSON.stringify({ data }),
+                data: { data },
                 headers,
             });
         },
         async deleteData(id) {
-            await fetch(`${redisBaseURL}/del/${id}`, {
+            await fetchWithRetries(`${redisBaseURL}/del/${id}`, {
                 method: "post",
                 headers,
             });

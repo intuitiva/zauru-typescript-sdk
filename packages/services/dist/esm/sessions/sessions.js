@@ -5,7 +5,8 @@ const sessionCookie = createCookie("_rj_session", {
     path: "/",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     httpOnly: true,
-    maxAge: 60 * 60 * 8,
+    maxAge: 60 * 60 * 24,
+    //expires,
     secure: process.env.NODE_ENV === "production",
 });
 const { getSession, commitSession, destroySession } = createUpstashSessionStorage({ cookie: sessionCookie });
