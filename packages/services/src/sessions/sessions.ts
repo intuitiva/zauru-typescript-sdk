@@ -6,8 +6,7 @@ const sessionCookie = createCookie("_rj_session", {
   path: "/",
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   httpOnly: true,
-  maxAge: 60 * 60 * 24,
-  //expires,
+  maxAge: 60 * 60 * 8,
   secure: process.env.NODE_ENV === "production",
 });
 
