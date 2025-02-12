@@ -10,10 +10,6 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-const expiresToSeconds = (expires: Date) => {
-  return Math.floor((expires.getTime() - new Date().getTime()) / 1000);
-};
-
 //Le quité la expiración porque era muy corta para recepciones,
 //antes se definía algo así: await fetch(`${redisBaseURL}/set/${id}?EX=${expiresToSeconds(expires)}`
 //Estaba en el createData y en el updateData
@@ -24,16 +20,11 @@ export function createUpstashSessionStorage({ cookie }: any) {
     cookie,
     async createData(data, expires) {
       const id: string = crypto.randomUUID();
-      await fetch(
-        `${redisBaseURL}/set/${id}?EX=${
-          expires ? expiresToSeconds(expires) : 60 * 60 * 8
-        }`,
-        {
-          method: "post",
-          body: JSON.stringify({ data }),
-          headers,
-        }
-      );
+      await fetch(`${redisBaseURL}/set/${id}?EX=${259200}`, {
+        method: "post",
+        body: JSON.stringify({ data }),
+        headers,
+      });
       return id;
     },
     async readData(id) {
@@ -48,16 +39,11 @@ export function createUpstashSessionStorage({ cookie }: any) {
       }
     },
     async updateData(id, data, expires) {
-      await fetch(
-        `${redisBaseURL}/set/${id}?EX=${
-          expires ? expiresToSeconds(expires) : 60 * 60 * 8
-        }`,
-        {
-          method: "post",
-          body: JSON.stringify({ data }),
-          headers,
-        }
-      );
+      await fetch(`${redisBaseURL}/set/${id}?EX=${259200}`, {
+        method: "post",
+        body: JSON.stringify({ data }),
+        headers,
+      });
     },
     async deleteData(id) {
       await fetch(`${redisBaseURL}/del/${id}`, {
