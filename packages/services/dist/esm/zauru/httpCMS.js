@@ -6,14 +6,13 @@ const axiosInstance = axios.create({
 });
 axiosInstance.interceptors.request.use(function (request) {
     // Do something before request is sent
-    console.log("---------------- EJECUTANDO REQUEST CMS ----------------");
     const baseName = `${request.baseURL}${request.url}`;
-    console.time(baseName);
+    console.log(chalk.green(baseName));
     request.timeout = 200000;
     return request;
 }, function (error) {
     console.log(chalk.red("---------------- ERROR CON REQUEST CMS ----------------"));
-    console.log(`${error}`);
+    console.error(`${error}`);
     // Do something with request error
     return Promise.reject(error);
 });
@@ -21,7 +20,6 @@ axiosInstance.interceptors.request.use(function (request) {
 axiosInstance.interceptors.response.use(function (response) {
     // Do something with response data
     const baseName = `${response.config.baseURL}${response.config.url}`;
-    console.timeEnd(baseName);
     return response;
 }, function (error) {
     console.log(chalk.red("---------------- ERROR CON REQUEST CMS ----------------"));
