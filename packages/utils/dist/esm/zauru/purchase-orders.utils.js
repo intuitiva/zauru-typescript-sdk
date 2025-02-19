@@ -181,7 +181,7 @@ export const updateOchAndDis = async (headers, data, purchase_id) => {
     return handlePossibleAxiosErrors(async () => {
         const body = {
             purchase_order: {
-                discount: data?.discount,
+                discount: Number(data?.discount),
             },
         };
         if (data.other_charges) {

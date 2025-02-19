@@ -327,7 +327,7 @@ export const updateOchAndDis = async (
   return handlePossibleAxiosErrors(async () => {
     const body = {
       purchase_order: {
-        discount: data?.discount,
+        discount: Number(data?.discount),
       },
     } as UpdatePurchaseOrderBody;
 
