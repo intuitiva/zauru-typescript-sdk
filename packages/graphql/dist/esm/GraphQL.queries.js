@@ -290,6 +290,9 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
     if (config.shipment_reference) {
         conditions.push(`shipment_reference: { _eq: "${config.shipment_reference}" }`);
     }
+    if (config.agencyNameIlike) {
+        conditions.push(`agency: { name: { _ilike: "%${config.agencyNameIlike}%" } }`);
+    }
     if (config.payeeId || config.payeeCategoryId) {
         const payeeConditions = [];
         if (config.payeeId) {

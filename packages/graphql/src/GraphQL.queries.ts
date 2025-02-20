@@ -345,6 +345,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     payeeCategoryIds?: number[];
     excludePayeeCategoryIds?: number[];
     shipment_reference?: string;
+    agencyNameIlike?: string;
     discountComparisonOperator?:
       | "_eq"
       | "_neq"
@@ -377,6 +378,12 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   if (config.shipment_reference) {
     conditions.push(
       `shipment_reference: { _eq: "${config.shipment_reference}" }`
+    );
+  }
+
+  if (config.agencyNameIlike) {
+    conditions.push(
+      `agency: { name: { _ilike: "%${config.agencyNameIlike}%" } }`
     );
   }
 

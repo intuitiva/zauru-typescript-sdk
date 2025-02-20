@@ -40,6 +40,7 @@ export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: strin
     payeeCategoryIds?: number[];
     excludePayeeCategoryIds?: number[];
     shipment_reference?: string;
+    agencyNameIlike?: string;
     discountComparisonOperator?: "_eq" | "_neq" | "_gte" | "_lte" | "_gt" | "_lt";
     discount?: number;
     excludeVoided?: boolean;
