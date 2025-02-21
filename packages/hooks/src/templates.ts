@@ -52,7 +52,7 @@ function useGetTemplateObject<T>(
      *    - En caso contrario, mostramos datos locales y no hacemos fetch.
      */
     useEffect(() => {
-      const mustFetch = config.online || objectData?.reFetch || !hasLocalData;
+      const mustFetch = config.online || !hasLocalData;
 
       if (mustFetch) {
         setData((prev) => ({ ...prev, loading: true }));
@@ -84,7 +84,7 @@ function useGetTemplateObject<T>(
         });
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [config.online, objectData?.reFetch, hasLocalData, TEMPLATE_NAME]);
+    }, [config.online, hasLocalData, TEMPLATE_NAME]);
 
     /**
      * 2) Efecto para cuando el fetcher termina (fetcher.state === "idle").

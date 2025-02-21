@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useAppDispatch = exports.useAppSelector = exports.store = exports.cleanLocalStorage = exports.LOCAL_STORAGE_REDUX_NAME = void 0;
+exports.useAppDispatch = exports.useAppSelector = exports.createReduxStore = exports.cleanLocalStorage = exports.LOCAL_STORAGE_REDUX_NAME = void 0;
 const react_redux_1 = require("react-redux");
 const toolkit_1 = require("@reduxjs/toolkit");
 const catalogs_slice_js_1 = __importDefault(require("./slices/catalogs.slice.js"));
@@ -16,6 +16,17 @@ const automaticNumbers_slice_js_1 = __importDefault(require("./slices/automaticN
 const tables_slice_js_1 = __importDefault(require("./slices/tables.slice.js"));
 const formValidation_slice_js_1 = __importDefault(require("./slices/formValidation.slice.js"));
 exports.LOCAL_STORAGE_REDUX_NAME = "___redux__state__v3.1.2";
+const staticReducers = {
+    catalogs: catalogs_slice_js_1.default,
+    profiles: profile_slice_js_1.default,
+    webappTables: webapp_tables_slice_js_1.default,
+    receptions: reception_slice_js_1.default,
+    session: session_slice_js_1.default,
+    templates: templates_slice_js_1.default,
+    automaticNumbers: automaticNumbers_slice_js_1.default,
+    tables: tables_slice_js_1.default,
+    formValidation: formValidation_slice_js_1.default,
+};
 const persistanceLocalStorageMiddleware = (store) => (next) => (action) => {
     const result = next(action);
     if (!(typeof document === "undefined")) {
@@ -41,27 +52,27 @@ const cleanLocalStorage = (whitelist = {}) => {
     const state = JSON.parse(savedState ?? "{}");
     try {
         //delete all cookies
-        // const deleteAllCookies = () => {
-        //   const cookies = document.cookie.split(";");
-        //   for (const cookie of cookies) {
-        //     const eqPos = cookie.indexOf("=");
-        //     const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
-        //     document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-        //   }
-        // };
-        // deleteAllCookies();
-        // //delete caché
-        // caches.keys().then((names) => {
-        //   for (const name of names) {
-        //     caches.delete(name);
-        //   }
-        // });
+        const deleteAllCookies = () => {
+            const cookies = document.cookie.split(";");
+            for (const cookie of cookies) {
+                const eqPos = cookie.indexOf("=");
+                const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            }
+        };
+        deleteAllCookies();
+        //delete caché
+        caches.keys().then((names) => {
+            for (const name of names) {
+                caches.delete(name);
+            }
+        });
         //unregister service workers
-        // navigator.serviceWorker.getRegistrations().then((registrations) => {
-        //   for (const registration of registrations) {
-        //     registration.unregister();
-        //   }
-        // });
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+            for (const registration of registrations) {
+                registration.unregister();
+            }
+        });
         // Limpiar todo el localStorage
         localStorage.clear();
     }
@@ -112,20 +123,21 @@ const cleanLocalStorage = (whitelist = {}) => {
     }
 };
 exports.cleanLocalStorage = cleanLocalStorage;
-exports.store = (0, toolkit_1.configureStore)({
-    reducer: {
-        catalogs: catalogs_slice_js_1.default,
-        profiles: profile_slice_js_1.default,
-        webappTables: webapp_tables_slice_js_1.default,
-        receptions: reception_slice_js_1.default,
-        session: session_slice_js_1.default,
-        templates: templates_slice_js_1.default,
-        automaticNumbers: automaticNumbers_slice_js_1.default,
-        tables: tables_slice_js_1.default,
-        formValidation: formValidation_slice_js_1.default,
-    },
-    preloadedState,
-    middleware: (getDefaultMiddleware) => new toolkit_1.Tuple(persistanceLocalStorageMiddleware),
-});
+// Función que crea la store combinando reducers estáticos y opcionales
+const createReduxStore = (extraReducers = {}) => {
+    const rootReducer = (0, toolkit_1.combineReducers)({
+        ...staticReducers,
+        ...extraReducers,
+    });
+    const store = (0, toolkit_1.configureStore)({
+        reducer: rootReducer,
+        preloadedState,
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(persistanceLocalStorageMiddleware),
+    });
+    // Almacenamos los reducers inyectados para poder inyectar más tarde si se requiere
+    store.asyncReducers = { ...extraReducers };
+    return store;
+};
+exports.createReduxStore = createReduxStore;
 exports.useAppSelector = react_redux_1.useSelector;
 exports.useAppDispatch = react_redux_1.useDispatch;

@@ -1,7 +1,7 @@
 import type { TypedUseSelectorHook } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
 import type { MiddlewareAPI } from "@reduxjs/toolkit";
-import { Tuple, configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import catalogsReducer from "./slices/catalogs.slice.js";
 import profilesReducer from "./slices/profile.slice.js";
 import webappTablesReducer from "./slices/webapp-tables.slice.js";
@@ -13,6 +13,18 @@ import tableReducer from "./slices/tables.slice.js";
 import formValidationReducer from "./slices/formValidation.slice.js";
 
 export const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v3.1.2";
+
+const staticReducers = {
+  catalogs: catalogsReducer,
+  profiles: profilesReducer,
+  webappTables: webappTablesReducer,
+  receptions: receptionsReducer,
+  session: sessionReducer,
+  templates: templateReducer,
+  automaticNumbers: automaticNumberReducer,
+  tables: tableReducer,
+  formValidation: formValidationReducer,
+};
 
 const persistanceLocalStorageMiddleware =
   (store: MiddlewareAPI) => (next: (action: any) => any) => (action: any) => {
@@ -99,7 +111,7 @@ export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
         if (state.hasOwnProperty(reducerName)) {
           const key = reducerName as keyof RootState;
           const reducerState = state[key];
-          const whitelistKey = whitelist[key as any];
+          const whitelistKey = whitelist[key as keyof Whitelist];
 
           if (whitelistKey && whitelistKey.length > 0) {
             newState[key] = newState[key] ? { ...newState[key] } : ({} as any);
@@ -128,25 +140,30 @@ export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
   }
 };
 
-export const store = configureStore({
-  reducer: {
-    catalogs: catalogsReducer,
-    profiles: profilesReducer,
-    webappTables: webappTablesReducer,
-    receptions: receptionsReducer,
-    session: sessionReducer,
-    templates: templateReducer,
-    automaticNumbers: automaticNumberReducer,
-    tables: tableReducer,
-    formValidation: formValidationReducer,
-  } as any,
-  preloadedState,
-  middleware: (getDefaultMiddleware) =>
-    new Tuple(persistanceLocalStorageMiddleware),
-});
+// Función que crea la store combinando reducers estáticos y opcionales
+export const createReduxStore = (extraReducers: Record<string, any> = {}) => {
+  const rootReducer = combineReducers({
+    ...staticReducers,
+    ...extraReducers,
+  });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+  const store = configureStore({
+    reducer: rootReducer,
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(persistanceLocalStorageMiddleware),
+  });
+
+  // Almacenamos los reducers inyectados para poder inyectar más tarde si se requiere
+  (store as any).asyncReducers = { ...extraReducers };
+
+  return store;
+};
+
+export type RootState = ReturnType<
+  ReturnType<typeof createReduxStore>["getState"]
+>;
+export type AppDispatch = ReturnType<typeof createReduxStore>["dispatch"];
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useAppDispatch: () => AppDispatch = useDispatch;
 
@@ -157,6 +174,7 @@ export type ReduxParamsConfig = {
 };
 
 export type FetcherErrorType = {
+  error?: boolean;
   title?: string;
   description?: string;
   type?: "error" | "warning" | "info" | "success";
