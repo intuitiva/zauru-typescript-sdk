@@ -48,30 +48,30 @@ export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
   const state = JSON.parse(savedState ?? "{}") as RootState;
   try {
     //delete all cookies
-    // const deleteAllCookies = () => {
-    //   const cookies = document.cookie.split(";");
-    //   for (const cookie of cookies) {
-    //     const eqPos = cookie.indexOf("=");
-    //     const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
-    //     document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    //   }
-    // };
+    const deleteAllCookies = () => {
+      const cookies = document.cookie.split(";");
+      for (const cookie of cookies) {
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+    };
 
-    // deleteAllCookies();
+    deleteAllCookies();
 
-    // //delete caché
-    // caches.keys().then((names) => {
-    //   for (const name of names) {
-    //     caches.delete(name);
-    //   }
-    // });
+    //delete caché
+    caches.keys().then((names) => {
+      for (const name of names) {
+        caches.delete(name);
+      }
+    });
 
     //unregister service workers
-    // navigator.serviceWorker.getRegistrations().then((registrations) => {
-    //   for (const registration of registrations) {
-    //     registration.unregister();
-    //   }
-    // });
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const registration of registrations) {
+        registration.unregister();
+      }
+    });
 
     // Limpiar todo el localStorage
     localStorage.clear();
