@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.152](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.151...v2.0.152) (2025-02-22)
+
+**Note:** Version bump only for package @zauru-sdk/common
+
+
+
+
+
 ## [2.0.118](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.117...v2.0.118) (2025-02-05)
 
 **Note:** Version bump only for package @zauru-sdk/common
