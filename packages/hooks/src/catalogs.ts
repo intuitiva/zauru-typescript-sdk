@@ -27,6 +27,7 @@ import type {
   WebAppRowGraphQL,
   PrintTemplateGraphQL,
   PaymentMethodGraphQL,
+  CCPorcentajeRechazo,
 } from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
@@ -528,6 +529,17 @@ export const useGetMotivosDeRechazo = (
   data: WebAppRowGraphQL<MotivoRechazo>[];
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<MotivoRechazo>>("motivosRechazo", config);
+
+export const useGetCCPorcentajesDeRechazo = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: WebAppRowGraphQL<CCPorcentajeRechazo>[];
+} =>
+  useGetReduxCatalog<WebAppRowGraphQL<CCPorcentajeRechazo>>(
+    "ccPorcentajesDeRechazo",
+    config
+  );
 
 export const useGetBitacoraRechazoMasivo = (
   config?: ReduxParamsConfig
