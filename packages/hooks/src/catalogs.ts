@@ -1,6 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { showAlert } from "./components/index.js";
+import { AlertType, showAlert } from "./components/index.js";
 import type {
   AgencyGraphQL,
   BitacoraPOMassive,
@@ -30,7 +30,6 @@ import type {
 } from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
-  FetcherErrorType,
   ReduxParamsConfig,
   catalogsFetchStart,
   catalogsFetchSuccess,
@@ -41,6 +40,13 @@ import {
 type CatalogType<T> = {
   data: T[];
   loading: boolean;
+};
+
+type FetcherErrorType = {
+  error?: boolean;
+  title?: string;
+  description?: string;
+  type?: AlertType;
 };
 
 type CatalogsData<T> = {
@@ -128,7 +134,7 @@ export function useGetReduxCatalog<T>(
               error
             );
             setData({
-              data: (catalogData?.data || []) as T[],
+              data: catalogData?.data || [],
               loading: false,
             });
           } else {
@@ -149,7 +155,7 @@ export function useGetReduxCatalog<T>(
         // Si no vamos a hacer fetch, asegurarnos de que loading esté en false
         // y mantener lo que ya tengamos en Redux
         setData({
-          data: (catalogData?.data || []) as T[],
+          data: catalogData?.data || [],
           loading: false,
         });
       }

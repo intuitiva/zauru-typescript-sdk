@@ -70,7 +70,7 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherPa
                     if (hasLocalData) {
                         console.error("Hubo un error pero hay datos locales en la consulta de", CATALOG_NAME, " Error: ", error);
                         setData({
-                            data: (catalogData?.data || []),
+                            data: catalogData?.data || [],
                             loading: false,
                         });
                     }
@@ -88,7 +88,7 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, wheres = [], otherPa
                 // Si no vamos a hacer fetch, asegurarnos de que loading esté en false
                 // y mantener lo que ya tengamos en Redux
                 setData({
-                    data: (catalogData?.data || []),
+                    data: catalogData?.data || [],
                     loading: false,
                 });
             }

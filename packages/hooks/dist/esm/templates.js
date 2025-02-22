@@ -27,7 +27,7 @@ function useGetTemplateObject(TEMPLATE_NAME, config = {}) {
          *    - En caso contrario, mostramos datos locales y no hacemos fetch.
          */
         (0, react_2.useEffect)(() => {
-            const mustFetch = config.online || !hasLocalData;
+            const mustFetch = config.online || objectData?.reFetch || !hasLocalData;
             if (mustFetch) {
                 setData((prev) => ({ ...prev, loading: true }));
                 dispatch((0, redux_1.templateFetchStart)(TEMPLATE_NAME));
@@ -59,7 +59,7 @@ function useGetTemplateObject(TEMPLATE_NAME, config = {}) {
                 });
             }
             // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [config.online, hasLocalData, TEMPLATE_NAME]);
+        }, [config.online, objectData?.reFetch, hasLocalData, TEMPLATE_NAME]);
         /**
          * 2) Efecto para cuando el fetcher termina (fetcher.state === "idle").
          *    Decidimos si lo que vino es error o data, y procedemos.
