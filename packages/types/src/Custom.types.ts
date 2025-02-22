@@ -211,7 +211,7 @@ export type MotivoRechazo = {
 
 export type CCPorcentajeRechazo = {
   id?: number;
-  item_id: string;
+  item_id: number;
   porcentaje: number;
 };
 
