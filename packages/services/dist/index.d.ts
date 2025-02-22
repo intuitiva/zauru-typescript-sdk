@@ -38,3 +38,4 @@ export * from "./zauru/zauru-tags.js";
 export * from "./zauru/zauru-templates.js";
 export * from "./zauru/zauru-web-app-tables.js";
 export * from "./zauru/zauru-variables.js";
+export * from "./zauru/zauru-cc-porcentajes-rechazo.js";

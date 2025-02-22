@@ -13,6 +13,7 @@ import {
   getInvoiceFormSubmissionsByInvoiceId,
   getItems,
   getMotivosRechazo,
+  getCCPorcentajesDeRechazo,
   getMyAgencyLotStocks,
   getMyCaseFormSubmissions,
   getPayeeCategories,
@@ -212,6 +213,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
       case "motivosRechazo":
         response = await getMotivosRechazo(headers, session);
+        break;
+
+      case "ccPorcentajesDeRechazo":
+        response = await getCCPorcentajesDeRechazo(headers, session);
         break;
 
       case "itemsByReception":

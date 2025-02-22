@@ -209,6 +209,12 @@ export type MotivoRechazo = {
   relatedItems?: number[];
 };
 
+export type CCPorcentajeRechazo = {
+  id?: number;
+  item_id: string;
+  porcentaje: number;
+};
+
 export type RegisterMotivosRechazoBody = {
   Canastas?: string;
   Razon_primaria: string;

@@ -19,6 +19,7 @@ const initialState = {
     shipments: createLoadingState([]),
     bookings: createLoadingState([]),
     motivosRechazo: createLoadingState([]),
+    ccPorcentajesDeRechazo: createLoadingState([]),
     bitacoraRechazoMasivo: createLoadingState([]),
     items: createLoadingState([]),
     itemsByReception: createLoadingState([]),
