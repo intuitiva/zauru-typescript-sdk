@@ -14,7 +14,7 @@ const session_slice_js_1 = __importDefault(require("./slices/session.slice.js"))
 const templates_slice_js_1 = __importDefault(require("./slices/templates.slice.js"));
 const automaticNumbers_slice_js_1 = __importDefault(require("./slices/automaticNumbers.slice.js"));
 const tables_slice_js_1 = __importDefault(require("./slices/tables.slice.js"));
-const formValidation_slice_js_1 = __importDefault(require("./slices/formValidation.slice.js"));
+const formsSavedData_slice_js_1 = __importDefault(require("./slices/formsSavedData.slice.js"));
 exports.LOCAL_STORAGE_REDUX_NAME = "___redux__state__v3.1.2";
 const persistanceLocalStorageMiddleware = (store) => (next) => (action) => {
     const result = next(action);
@@ -79,7 +79,7 @@ const cleanLocalStorage = (whitelist = {}) => {
                 templates: (0, templates_slice_js_1.default)(undefined, { type: "" }),
                 automaticNumbers: (0, automaticNumbers_slice_js_1.default)(undefined, { type: "" }),
                 tables: (0, tables_slice_js_1.default)(undefined, { type: "" }),
-                formValidation: (0, formValidation_slice_js_1.default)(undefined, { type: "" }),
+                formSavedData: (0, formsSavedData_slice_js_1.default)(undefined, { type: "" }),
             };
             const newState = { ...initialState };
             for (const reducerName in whitelist) {
@@ -122,7 +122,7 @@ exports.store = (0, toolkit_1.configureStore)({
         templates: templates_slice_js_1.default,
         automaticNumbers: automaticNumbers_slice_js_1.default,
         tables: tables_slice_js_1.default,
-        formValidation: formValidation_slice_js_1.default,
+        formSavedData: formsSavedData_slice_js_1.default,
     },
     preloadedState,
     middleware: (getDefaultMiddleware) => new toolkit_1.Tuple(persistanceLocalStorageMiddleware),

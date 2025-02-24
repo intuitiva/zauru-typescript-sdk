@@ -10,7 +10,7 @@ import sessionReducer from "./slices/session.slice.js";
 import templateReducer from "./slices/templates.slice.js";
 import automaticNumberReducer from "./slices/automaticNumbers.slice.js";
 import tableReducer from "./slices/tables.slice.js";
-import formValidationReducer from "./slices/formValidation.slice.js";
+import formSavedDataReducer from "./slices/formsSavedData.slice.js";
 
 export const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v3.1.2";
 
@@ -90,7 +90,7 @@ export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
         templates: templateReducer(undefined, { type: "" }),
         automaticNumbers: automaticNumberReducer(undefined, { type: "" }),
         tables: tableReducer(undefined, { type: "" }),
-        formValidation: formValidationReducer(undefined, { type: "" }),
+        formSavedData: formSavedDataReducer(undefined, { type: "" }),
       };
 
       const newState: RootState = { ...initialState };
@@ -138,7 +138,7 @@ export const store = configureStore({
     templates: templateReducer,
     automaticNumbers: automaticNumberReducer,
     tables: tableReducer,
-    formValidation: formValidationReducer,
+    formSavedData: formSavedDataReducer,
   } as any,
   preloadedState,
   middleware: (getDefaultMiddleware) =>
