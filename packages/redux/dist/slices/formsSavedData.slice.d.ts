@@ -1,8 +1,6 @@
 export type FormSavedData = {
-    formSavedData: {
-        [key: string]: {
-            [key: string]: any;
-        };
+    [key: string]: {
+        [key: string]: any;
     };
 };
 export declare const setFormFieldSavedData: import("@reduxjs/toolkit").ActionCreatorWithPayload<{

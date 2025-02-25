@@ -1,17 +1,13 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export type FormSavedData = {
-  formSavedData: {
-    [key: string]: {
-      //formName
-      [key: string]: any; //fieldName and value
-    };
+  [key: string]: {
+    //formName
+    [key: string]: any; //fieldName and value
   };
 };
 
-const initialState: FormSavedData = {
-  formSavedData: {},
-};
+const initialState: FormSavedData = {};
 
 const formSavedDataSlice = createSlice({
   name: "formSavedData",

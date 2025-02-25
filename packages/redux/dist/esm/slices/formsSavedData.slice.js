@@ -2,9 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setFormFieldSavedData = void 0;
 const toolkit_1 = require("@reduxjs/toolkit");
-const initialState = {
-    formSavedData: {},
-};
+const initialState = {};
 const formSavedDataSlice = (0, toolkit_1.createSlice)({
     name: "formSavedData",
     initialState,
