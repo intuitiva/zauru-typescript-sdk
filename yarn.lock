@@ -1436,7 +1436,7 @@ __metadata:
     "@zauru-sdk/hooks": "npm:^2.0.158"
     "@zauru-sdk/icons": "npm:^2.0.99"
     "@zauru-sdk/types": "npm:^2.0.154"
-    "@zauru-sdk/utils": "npm:^2.0.154"
+    "@zauru-sdk/utils": "npm:^2.0.159"
     framer-motion: "npm:^11.7.0"
     jsonwebtoken: "npm:^9.0.2"
     postcss: "npm:^8.4.35"
@@ -1461,7 +1461,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/graphql@npm:^2.0.150, @zauru-sdk/graphql@workspace:packages/graphql":
+"@zauru-sdk/graphql@npm:^2.0.159, @zauru-sdk/graphql@workspace:packages/graphql":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/graphql@workspace:packages/graphql"
   dependencies:
@@ -1516,14 +1516,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/services@npm:^2.0.154, @zauru-sdk/services@workspace:packages/services":
+"@zauru-sdk/services@npm:^2.0.159, @zauru-sdk/services@workspace:packages/services":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/services@workspace:packages/services"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
     "@zauru-sdk/common": "npm:^2.0.154"
     "@zauru-sdk/config": "npm:^2.0.100"
-    "@zauru-sdk/graphql": "npm:^2.0.150"
+    "@zauru-sdk/graphql": "npm:^2.0.159"
     "@zauru-sdk/types": "npm:^2.0.154"
     axios: "npm:^1.6.7"
     chalk: "npm:5.3.0"
@@ -1539,15 +1539,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/utils@npm:^2.0.154, @zauru-sdk/utils@workspace:packages/utils":
+"@zauru-sdk/utils@npm:^2.0.159, @zauru-sdk/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/utils@workspace:packages/utils"
   dependencies:
     "@remix-run/node": "npm:^2.8.1"
     "@zauru-sdk/common": "npm:^2.0.154"
     "@zauru-sdk/config": "npm:^2.0.100"
-    "@zauru-sdk/graphql": "npm:^2.0.150"
-    "@zauru-sdk/services": "npm:^2.0.154"
+    "@zauru-sdk/graphql": "npm:^2.0.159"
+    "@zauru-sdk/services": "npm:^2.0.159"
     "@zauru-sdk/types": "npm:^2.0.154"
     typescript: "npm:^5.1.6"
   languageName: unknown
