@@ -17,10 +17,10 @@ const formSavedDataSlice = createSlice({
       state,
       action: PayloadAction<{ formName: string; name: string; value: any }>
     ) => {
-      if (!state.formSavedData[action.payload.formName]) {
-        state.formSavedData[action.payload.formName] = {};
+      if (!state[action.payload.formName]) {
+        state[action.payload.formName] = {};
       }
-      state.formSavedData[action.payload.formName][action.payload.name] =
+      state[action.payload.formName][action.payload.name] =
         action.payload.value;
     },
   },
