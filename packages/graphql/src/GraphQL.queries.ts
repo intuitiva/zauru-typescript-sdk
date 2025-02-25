@@ -535,6 +535,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
         other_charges
         consolidate_id
         shipment_reference
+        reference
         ${purchaseOrderDetails}
         ${lots}
         ${webAppRows}
