@@ -10,6 +10,9 @@ const formSavedDataSlice = (0, toolkit_1.createSlice)({
     initialState,
     reducers: {
         setFormFieldSavedData: (state, action) => {
+            if (!state.formSavedData[action.payload.formName]) {
+                state.formSavedData[action.payload.formName] = {};
+            }
             state.formSavedData[action.payload.formName][action.payload.name] =
                 action.payload.value;
         },

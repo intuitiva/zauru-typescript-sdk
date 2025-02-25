@@ -21,6 +21,9 @@ const formSavedDataSlice = createSlice({
       state,
       action: PayloadAction<{ formName: string; name: string; value: any }>
     ) => {
+      if (!state.formSavedData[action.payload.formName]) {
+        state.formSavedData[action.payload.formName] = {};
+      }
       state.formSavedData[action.payload.formName][action.payload.name] =
         action.payload.value;
     },
