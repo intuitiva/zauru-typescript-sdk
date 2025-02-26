@@ -26,6 +26,7 @@ export async function getShipments(session, config) {
             delivered: config.delivered,
             shipped: config.shipped,
             returned: config.returned,
+            withPurchaseOrdersByShipmentReference: config.withPurchaseOrdersByShipmentReference,
         });
         const response = await httpGraphQLAPI.post("", {
             query,

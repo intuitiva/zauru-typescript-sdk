@@ -166,6 +166,7 @@ export const getShipmentsStringQuery = ({
   id_number,
   id_number_not_empty = false,
   withMovementLots = false,
+  withPurchaseOrdersByShipmentReference = false,
   limit = 1000,
   id,
   wheres,
@@ -182,6 +183,7 @@ export const getShipmentsStringQuery = ({
   id_number?: string;
   id_number_not_empty?: boolean;
   withMovementLots?: boolean;
+  withPurchaseOrdersByShipmentReference?: boolean;
   limit?: number;
   id?: number;
   wheres?: string[];
@@ -249,7 +251,24 @@ export const getShipmentsStringQuery = ({
         }`
     : "";
 
-  return `query getLast100Shipments {
+  const purchaseOrdersByShipmentReference =
+    withPurchaseOrdersByShipmentReference
+      ? `purchase_orders_by_shipment_reference {
+          id
+          id_number
+          created_at
+          reference
+          purchase_order_details {
+            item_id
+            id
+            reference
+            booked_quantity
+            delivered_quantity
+          }
+        }`
+      : "";
+
+  return `query getShipments {
     shipments(
       limit: ${limit}, 
       order_by: {id: desc}, 
@@ -283,6 +302,7 @@ export const getShipmentsStringQuery = ({
       returned
       returned_at
       returner_id
+      ${purchaseOrdersByShipmentReference}
       movements {
         id
         booked_quantity

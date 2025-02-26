@@ -194,6 +194,7 @@ export type PurchaseOrderGraphQL = {
       };
     };
   };
+  purchase_orders_by_shipment_reference: PurchaseOrderGraphQL[];
   purchase_order_details: PurchaseOrderDetailsGraphQL[];
   lots: LotGraphQL[];
   receptions: ReceptionGraphQL[];

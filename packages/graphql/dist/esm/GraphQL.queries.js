@@ -152,7 +152,7 @@ query getPurchaseOrder($id: bigint) @cached {
 }
 `;
 exports.getPurchaseOrderStringQuery = getPurchaseOrderStringQuery;
-const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null = false, id_number, id_number_not_empty = false, withMovementLots = false, limit = 1000, id, wheres, memoILike, }) => {
+const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null = false, id_number, id_number_not_empty = false, withMovementLots = false, withPurchaseOrdersByShipmentReference = false, limit = 1000, id, wheres, memoILike, }) => {
     let conditions = [];
     if (suffix) {
         conditions.push(`id_number: {_ilike: "%${suffix}%"}`);
@@ -200,7 +200,22 @@ const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided,
           description
         }`
         : "";
-    return `query getLast100Shipments {
+    const purchaseOrdersByShipmentReference = withPurchaseOrdersByShipmentReference
+        ? `purchase_orders_by_shipment_reference {
+          id
+          id_number
+          created_at
+          reference
+          purchase_order_details {
+            item_id
+            id
+            reference
+            booked_quantity
+            delivered_quantity
+          }
+        }`
+        : "";
+    return `query getShipments {
     shipments(
       limit: ${limit}, 
       order_by: {id: desc}, 
@@ -232,6 +247,7 @@ const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided,
       returned
       returned_at
       returner_id
+      ${purchaseOrdersByShipmentReference}
       movements {
         id
         booked_quantity

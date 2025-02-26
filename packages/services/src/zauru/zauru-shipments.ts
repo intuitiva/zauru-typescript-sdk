@@ -24,6 +24,7 @@ export async function getShipments(
     delivered?: boolean;
     shipped?: boolean;
     returned?: boolean;
+    withPurchaseOrdersByShipmentReference?: boolean;
   }
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
@@ -46,6 +47,8 @@ export async function getShipments(
       delivered: config.delivered,
       shipped: config.shipped,
       returned: config.returned,
+      withPurchaseOrdersByShipmentReference:
+        config.withPurchaseOrdersByShipmentReference,
     });
 
     const response = await httpGraphQLAPI.post<{
