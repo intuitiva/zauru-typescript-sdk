@@ -350,6 +350,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   config: {
     agencyId?: number | string;
     itemId?: number | string;
+    reference?: string;
     payeeCategoryId?: number | string;
     payeeId?: number | string;
     consolidateIdFilter?: boolean;
@@ -429,6 +430,14 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
       conditions.push(
         `purchase_order_details: { item_id: { _eq: ${config.itemId} } }`
       );
+    }
+  }
+
+  if (config.reference) {
+    if (config.reference.toString().includes(",")) {
+      conditions.push(`reference: { _in: [${config.reference}] }`);
+    } else {
+      conditions.push(`reference: { _eq: "${config.reference}" }`);
     }
   }
 

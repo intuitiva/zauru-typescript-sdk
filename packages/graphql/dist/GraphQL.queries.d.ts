@@ -26,6 +26,7 @@ export declare const getLotStocksByAgencyIdStringQuery: (agency_id: number) => s
 export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: string, endDate: string, config: {
     agencyId?: number | string;
     itemId?: number | string;
+    reference?: string;
     payeeCategoryId?: number | string;
     payeeId?: number | string;
     consolidateIdFilter?: boolean;

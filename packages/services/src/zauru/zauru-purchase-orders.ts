@@ -548,6 +548,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     onlyWithShipmentToMyAgency?: boolean;
     onlyWithLotStocksToMyAgency?: boolean;
     itemId?: number | string; // Can be a single item or a comma-separated list of items
+    reference?: string; // Can be a single reference or a comma-separated list of references
     payeeCategoryId?: number | string;
     payeeId?: number | string;
     betweenIssueDate?: boolean;
@@ -633,6 +634,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
         shipment_reference: finalConfig.shipment_reference,
         excludeVoided: finalConfig.excludeVoided,
         agencyNameIlike: finalConfig.agencyNameIlike,
+        reference: finalConfig.reference,
       }
     );
 

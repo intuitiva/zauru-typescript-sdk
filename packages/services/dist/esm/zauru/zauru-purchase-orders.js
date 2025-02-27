@@ -354,6 +354,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {})
             shipment_reference: finalConfig.shipment_reference,
             excludeVoided: finalConfig.excludeVoided,
             agencyNameIlike: finalConfig.agencyNameIlike,
+            reference: finalConfig.reference,
         });
         const graphQLBody = {
             query,

@@ -327,6 +327,14 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
             conditions.push(`purchase_order_details: { item_id: { _eq: ${config.itemId} } }`);
         }
     }
+    if (config.reference) {
+        if (config.reference.toString().includes(",")) {
+            conditions.push(`reference: { _in: [${config.reference}] }`);
+        }
+        else {
+            conditions.push(`reference: { _eq: "${config.reference}" }`);
+        }
+    }
     if (config.lotItemIdExclusion) {
         conditions.push(`lots: { item_id: { _neq: ${config.lotItemIdExclusion} } }`);
     }
