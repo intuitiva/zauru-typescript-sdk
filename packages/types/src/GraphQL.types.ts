@@ -145,6 +145,7 @@ export type ShipmentGraphQL = {
   returner_id: number;
   memo: string;
   movements: MovementGraphQL[];
+  purchase_orders_by_shipment_reference: PurchaseOrderGraphQL[];
 };
 
 export type ShipmentPurchaseOrderGraphQL = {
@@ -194,7 +195,6 @@ export type PurchaseOrderGraphQL = {
       };
     };
   };
-  purchase_orders_by_shipment_reference: PurchaseOrderGraphQL[];
   purchase_order_details: PurchaseOrderDetailsGraphQL[];
   lots: LotGraphQL[];
   receptions: ReceptionGraphQL[];
