@@ -5,7 +5,12 @@ import { AxiosUtilsResponse, PayeeCategoryGraphQL, PayeeGraphQL } from "@zauru-s
  * @param headers
  * @returns
  */
-export declare function getPayees(session: Session): Promise<AxiosUtilsResponse<PayeeGraphQL[]>>;
+export declare function getPayees(session: Session, filters?: {
+    id_number?: string;
+    name?: string;
+    vendor?: boolean;
+    tin?: string;
+}): Promise<AxiosUtilsResponse<PayeeGraphQL[]>>;
 /**
  * getProviders
  * @param headers

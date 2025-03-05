@@ -605,18 +605,49 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   `;
 };
 
-export const getPayeesStringQuery = `
-query getPayees {
-    payees {
-        id
-        id_number
-        name
-        tin
-        vendor
-        address_line_1
-    }
-}
-`;
+export const getPayeesStringQuery = (filters?: {
+  id_number?: string;
+  name?: string;
+  vendor?: boolean;
+  tin?: string;
+}) => {
+  const conditions = [];
+
+  if (filters?.id_number) {
+    conditions.push(`id_number: { _ilike: "%${filters.id_number}%" }`);
+  }
+
+  if (filters?.name) {
+    conditions.push(`name: { _ilike: "%${filters.name}%" }`);
+  }
+
+  if (filters?.vendor !== undefined) {
+    conditions.push(`vendor: { _eq: ${filters.vendor} }`);
+  }
+
+  if (filters?.tin) {
+    conditions.push(`tin: { _eq: "${filters.tin}" }`);
+  }
+
+  const whereClause = conditions.length
+    ? `where: { ${conditions.join(", ")} }`
+    : "";
+
+  return `query getPayees {
+            payees (
+              order_by: { id: desc },
+              ${whereClause}
+            ) {
+                id
+                id_number
+                name
+                tin
+                vendor
+                address_line_1
+            }
+        }
+  `;
+};
 
 export const getProvidersStringQuery = `
 query getProviders {

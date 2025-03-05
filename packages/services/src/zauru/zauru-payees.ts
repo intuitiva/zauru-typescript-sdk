@@ -25,16 +25,32 @@ import { httpZauru } from "./httpZauru.js";
  * @returns
  */
 export async function getPayees(
-  session: Session
+  session: Session,
+  filters?: {
+    id_number?: string;
+    name?: string;
+    vendor?: boolean;
+    tin?: string;
+  }
 ): Promise<AxiosUtilsResponse<PayeeGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
+
+    const defaultFilters = {
+      id_number: undefined,
+      name: undefined,
+      vendor: undefined,
+      tin: undefined,
+    };
+
+    const finalFilters = { ...defaultFilters, ...filters };
+
     const response = await httpGraphQLAPI.post<{
       data: { payees: PayeeGraphQL[] };
     }>(
       ``,
       {
-        query: getPayeesStringQuery,
+        query: getPayeesStringQuery(finalFilters),
       },
       {
         headers,

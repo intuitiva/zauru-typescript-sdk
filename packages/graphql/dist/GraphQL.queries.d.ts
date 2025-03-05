@@ -50,7 +50,12 @@ export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: strin
     discount?: number;
     excludeVoided?: boolean;
 }) => string;
-export declare const getPayeesStringQuery = "\nquery getPayees {\n    payees {\n        id\n        id_number\n        name\n        tin\n        vendor\n        address_line_1\n    }\n}\n";
+export declare const getPayeesStringQuery: (filters?: {
+    id_number?: string;
+    name?: string;
+    vendor?: boolean;
+    tin?: string;
+}) => string;
 export declare const getProvidersStringQuery = "\nquery getProviders {\n    payees (where: {vendor: {_eq: true}}) {\n        id\n        id_number\n        name\n        tin\n        address_line_1\n    }\n}\n";
 export declare const getAgenciesStringQuery = "\nquery getAgencies {\n  agencies {\n    id\n    name\n    address_line_2\n  }\n}\n";
 export declare const getWebAppRowStringQuery: (id: number) => string;

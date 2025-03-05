@@ -8,11 +8,18 @@ import { httpZauru } from "./httpZauru.js";
  * @param headers
  * @returns
  */
-export async function getPayees(session) {
+export async function getPayees(session, filters) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
+        const defaultFilters = {
+            id_number: undefined,
+            name: undefined,
+            vendor: undefined,
+            tin: undefined,
+        };
+        const finalFilters = { ...defaultFilters, ...filters };
         const response = await httpGraphQLAPI.post(``, {
-            query: getPayeesStringQuery,
+            query: getPayeesStringQuery(finalFilters),
         }, {
             headers,
         });
