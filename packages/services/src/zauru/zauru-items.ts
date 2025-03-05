@@ -395,7 +395,7 @@ export async function deleteItemCategory(
 }
 
 /**
- * updatePayee
+ * updateItemCategory
  * @param session
  * @param headers
  * @returns
