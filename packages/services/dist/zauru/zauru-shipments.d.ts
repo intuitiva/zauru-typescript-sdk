@@ -17,6 +17,7 @@ export declare function getShipments(session: Session, config: {
     shipped?: boolean;
     returned?: boolean;
     withPurchaseOrdersByShipmentReference?: boolean;
+    limit?: number;
 }): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>>;
 /**
  * receiveShipment_booking

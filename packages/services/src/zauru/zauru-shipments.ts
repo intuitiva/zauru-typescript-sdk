@@ -25,30 +25,20 @@ export async function getShipments(
     shipped?: boolean;
     returned?: boolean;
     withPurchaseOrdersByShipmentReference?: boolean;
+    limit?: number;
   }
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
     const query = getShipmentsStringQuery({
+      ...config,
       agency_to_id: config.agency_to_id
         ? Number(config.agency_to_id)
         : undefined,
       agency_from_id: config.agency_from_id
         ? Number(config.agency_from_id)
         : undefined,
-      suffix: config.suffix,
-      id_number: config.id_number,
-      id_number_not_null: config.id_number_not_null,
-      id_number_not_empty: config.id_number_not_empty,
-      withMovementLots: config.withMovementLots,
-      memoILike: config.memoILike,
-      voided: config.voided,
-      delivered: config.delivered,
-      shipped: config.shipped,
-      returned: config.returned,
-      withPurchaseOrdersByShipmentReference:
-        config.withPurchaseOrdersByShipmentReference,
     });
 
     const response = await httpGraphQLAPI.post<{
