@@ -209,6 +209,18 @@ export type TagGraphQL = {
   description: string;
 };
 
+export type SerialGraphQL = {
+  id: number;
+  id_number: string;
+  name: string;
+  description: string;
+  item_id: number;
+  entity_id: number;
+  agency_id: number;
+  agency_future_id: number;
+  created_at: string;
+};
+
 export type DocumentAutomaticNumberGraphQL = {
   id: number;
   active: boolean;

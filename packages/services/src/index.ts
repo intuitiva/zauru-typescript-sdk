@@ -36,6 +36,7 @@ export * from "./zauru/zauru-print-templates.js";
 export * from "./zauru/zauru-purchase-orders.js";
 export * from "./zauru/zauru-profiles.js";
 export * from "./zauru/zauru-receptions.js";
+export * from "./zauru/zauru-serial-numbers.js";
 export * from "./zauru/zauru-shipments.js";
 export * from "./zauru/zauru-suggested-prices.js";
 export * from "./zauru/zauru-tags.js";
