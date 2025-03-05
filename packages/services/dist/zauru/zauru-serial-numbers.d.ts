@@ -1,7 +1,16 @@
 import { AxiosUtilsResponse, SerialGraphQL } from "@zauru-sdk/types";
+import { Session } from "@remix-run/node";
 /**
- * createSerial
+ * getSerials
+ */
+export declare function getSerials(session: Session, filters?: {
+    name?: string;
+}): Promise<AxiosUtilsResponse<SerialGraphQL[]>>;
+/**
+ * createSupportSerialAttended
  * @param headers
  * @param body
  */
-export declare function createSerial(headers: any, body: Partial<SerialGraphQL>): Promise<AxiosUtilsResponse<SerialGraphQL>>;
+export declare function createSupportSerialAttended(headers: any, body: Partial<SerialGraphQL> & {
+    payee_id: number;
+}): Promise<AxiosUtilsResponse<SerialGraphQL>>;

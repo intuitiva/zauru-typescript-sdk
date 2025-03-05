@@ -23,6 +23,9 @@ export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, s
 }) => string;
 export declare const getLotsByNameStringQuery: (name: string, entity_id: number) => string;
 export declare const getLotStocksByAgencyIdStringQuery: (agency_id: number) => string;
+export declare const getSerialsStringQuery: (filters: {
+    name?: string;
+}) => string;
 export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: string, endDate: string, config: {
     agencyId?: number | string;
     itemId?: number | string;

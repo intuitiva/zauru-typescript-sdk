@@ -344,6 +344,37 @@ query getLotStocksByAgencyId {
 }
 `;
 
+export const getSerialsStringQuery = (filters: { name?: string }) => {
+  const conditions = [];
+
+  if (filters.name) {
+    conditions.push(`name: {_ilike: "%${filters.name}%"}`);
+  }
+
+  const whereClause = conditions.length
+    ? `where: { ${conditions.join(", ")} }`
+    : "";
+
+  return `
+    query getSerials {
+      serials (
+        order_by: { id: desc },
+        ${whereClause}
+      ) {
+        id
+        id_number
+        name
+        description
+        item_id
+        entity_id
+        agency_id
+        agency_future_id
+        created_at
+      }
+    }
+    `;
+};
+
 export const getPurchaseOrdersBetweenDatesStringQuery = (
   startDate: string,
   endDate: string,
