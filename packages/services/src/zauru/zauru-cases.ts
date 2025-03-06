@@ -1,9 +1,10 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { AxiosUtilsResponse, CaseGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getCasesStringQuery } from "@zauru-sdk/graphql";
+import { httpZauru } from "./httpZauru.js";
 
 /**
  * getCasesByResponsibleId
@@ -46,5 +47,83 @@ export async function getCasesByResponsibleId(
     const registers = response?.data?.data?.cases;
 
     return registers;
+  });
+}
+
+/**
+ * createCase
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function createCase(
+  headers: any,
+  body: Partial<CaseGraphQL>
+): Promise<AxiosUtilsResponse<CaseGraphQL>> {
+  return handlePossibleAxiosErrors(async () => {
+    const sendBody = {
+      ...body,
+      case_supplies_attributes: arrayToObject(body.case_supplies),
+      tag_ids: ["", ...(body.taggings?.map((x) => x.tag_id) ?? [])],
+    } as any;
+
+    if (sendBody.deleted_case_supplies) delete sendBody.deleted_case_supplies;
+    if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
+    if (sendBody.case_supplies) delete sendBody.case_supplies;
+    if (sendBody.taggings) delete sendBody.taggings;
+
+    const response = await httpZauru.post<CaseGraphQL>(
+      `/support/cases.json`,
+      { case: sendBody },
+      { headers }
+    );
+
+    return response.data;
+  });
+}
+
+/**
+ * updateCase
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function updateCase(
+  headers: any,
+  body: Partial<CaseGraphQL>
+): Promise<AxiosUtilsResponse<CaseGraphQL>> {
+  return handlePossibleAxiosErrors(async () => {
+    const sendBody = {
+      ...body,
+      case_supplies_attributes: arrayToObject(body.case_supplies),
+    } as any;
+    if (sendBody.deleted_case_supplies) delete sendBody.deleted_case_supplies;
+    if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
+    if (sendBody.case_supplies) delete sendBody.case_supplies;
+
+    const response = await httpZauru.patch<CaseGraphQL>(
+      `/support/cases/${body.id}.json`,
+      { case: sendBody },
+      { headers }
+    );
+
+    return response.data;
+  });
+}
+
+/**
+ * deleteCase
+ * @param headers
+ * @param body
+ */
+export async function deleteCase(
+  headers: any,
+  id: string | number
+): Promise<AxiosUtilsResponse<boolean>> {
+  return handlePossibleAxiosErrors(async () => {
+    await httpZauru.delete<any>(`/support/cases/${id}.json`, {
+      headers,
+    });
+    return true;
   });
 }

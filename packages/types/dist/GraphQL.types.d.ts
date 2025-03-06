@@ -101,7 +101,7 @@ export type TaggingGraphQL = {
     id: number;
     tag_id: number;
     taggeable_id: number;
-    taggeable_type: string;
+    taggeable_type: "Case" | "CreditNote" | "PurchaseOrder" | "Discharge" | "Payee" | "Charge" | "Item" | "Bundle";
 };
 export type PurchaseOrderGraphQL = {
     id: number;
@@ -493,6 +493,9 @@ export type CaseSupplyGraphQL = {
     id: number;
     quantity: number;
     item_id: number;
+    unit_price: number;
+    reference: string;
+    _destroy?: boolean;
 };
 export type CaseGraphQL = {
     id: number;
@@ -516,6 +519,7 @@ export type CaseGraphQL = {
     client_id: number;
     case_supplies: CaseSupplyGraphQL[];
     case_invoices: CaseInvoiceGraphQL[];
+    taggings: TaggingGraphQL[];
 };
 export type OauthProfile = {
     id: number;
