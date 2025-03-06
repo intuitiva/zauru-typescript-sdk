@@ -1776,6 +1776,9 @@ export const getCasesStringQuery = (filters?: {
         courtesy
         client {
           name
+          tin
+          email
+          phone
           address_line_1
         }
         case_invoices {
