@@ -624,6 +624,7 @@ export type CaseGraphQL = {
   seller_id: number;
   closer_id: number;
   client_id: number;
+  agency_id: number;
   case_supplies: CaseSupplyGraphQL[];
   case_invoices: CaseInvoiceGraphQL[];
   taggings: TaggingGraphQL[];
