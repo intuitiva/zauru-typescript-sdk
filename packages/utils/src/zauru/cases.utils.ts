@@ -11,14 +11,14 @@ import { AxiosUtilsResponse, CaseGraphQL } from "@zauru-sdk/types";
  */
 export const getMyCases = async (
   session: Session,
-  wheres: string[] = []
+  filters?: {
+    responsible_id?: number;
+    closed?: boolean;
+    client_id?: number;
+  }
 ): Promise<AxiosUtilsResponse<CaseGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
-    const response = await getCasesByResponsibleId(
-      session,
-      session.get("employee_id"),
-      wheres
-    );
+    const response = await getCasesByResponsibleId(session, filters);
 
     if (response.error) {
       throw new Error(

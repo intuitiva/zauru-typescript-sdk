@@ -128,5 +128,9 @@ export declare const getInvoicesByAgencyIdStringQuery: (id: number, filters: {
     tag_id?: string;
     invoice_id?: string;
 }) => string;
-export declare const getCasesByResponsibleIdStringQuery: (responsible_id: number, wheres?: string[]) => string;
+export declare const getCasesStringQuery: (filters?: {
+    responsible_id?: number;
+    client_id?: number;
+    closed?: boolean;
+}) => string;
 export declare const getPrintTemplatesStringQuery = "\nquery getPrintTemplates {\n    print_templates {\n        id\n        name\n    }\n}\n";

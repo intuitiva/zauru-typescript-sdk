@@ -1,15 +1,19 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getCasesByResponsibleIdStringQuery } from "@zauru-sdk/graphql";
+import { getCasesStringQuery } from "@zauru-sdk/graphql";
 /**
  * getCasesByResponsibleId
  */
-export async function getCasesByResponsibleId(session, responsible_id, wheres = []) {
+export async function getCasesByResponsibleId(session, filters) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
+        const initialFilters = {
+            ...(filters ? filters : {}),
+        };
+        const query = getCasesStringQuery(initialFilters);
         const response = await httpGraphQLAPI.post("", {
-            query: getCasesByResponsibleIdStringQuery(Number(responsible_id), wheres),
+            query,
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

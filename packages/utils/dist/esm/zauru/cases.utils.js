@@ -6,9 +6,9 @@ import { getCasesByResponsibleId } from "@zauru-sdk/services";
  * @param session
  * @returns
  */
-export const getMyCases = async (session, wheres = []) => {
+export const getMyCases = async (session, filters) => {
     return handlePossibleAxiosErrors(async () => {
-        const response = await getCasesByResponsibleId(session, session.get("employee_id"), wheres);
+        const response = await getCasesByResponsibleId(session, filters);
         if (response.error) {
             throw new Error(`Ocurrió un error al consultar los casos asignados a este usuario: ${response.userMsg}`);
         }

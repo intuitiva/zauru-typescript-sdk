@@ -1730,16 +1730,32 @@ query getInvoicesByAgencyId {
 }
 `;
 
-export const getCasesByResponsibleIdStringQuery = (
-  responsible_id: number,
-  wheres: string[] = []
-) => {
-  const additionalWheres = wheres.join(",");
-  return `
-    query getCasesByResponsibleId {
-      cases(where: {responsible_id: {_eq: ${responsible_id}}${
-    additionalWheres.length > 0 ? "," : ""
-  }${additionalWheres}}, order_by: {id: desc}) {
+export const getCasesStringQuery = (filters?: {
+  responsible_id?: number;
+  client_id?: number;
+  closed?: boolean;
+}) => {
+  const conditions = [];
+
+  if (filters?.responsible_id) {
+    conditions.push(`responsible_id: {_eq: ${filters.responsible_id}}`);
+  }
+
+  if (filters?.client_id) {
+    conditions.push(`client_id: {_eq: ${filters.client_id}}`);
+  }
+
+  if (filters?.closed !== undefined) {
+    conditions.push(`closed: {_eq: ${filters.closed}}`);
+  }
+
+  const whereClause = conditions.length
+    ? `where: { ${conditions.join(", ")} },`
+    : "";
+
+  return `query getCases {
+    cases (${whereClause} order_by: {id: desc}) 
+      {
         id
         id_number
         serial_id
@@ -1771,10 +1787,11 @@ export const getCasesByResponsibleIdStringQuery = (
         case_supplies {
           id
           item_id
+          quantity
         }
-      }
     }
-  `;
+  }
+`;
 };
 
 export const getPrintTemplatesStringQuery = `

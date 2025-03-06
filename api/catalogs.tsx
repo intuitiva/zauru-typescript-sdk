@@ -196,7 +196,9 @@ export const loader: LoaderFunction = async ({ request }) => {
         break;
 
       case "myCases":
-        response = await getMyCases(session, wheresArray);
+        response = await getMyCases(session, {
+          responsible_id: Number(session.get("employee_id")),
+        });
         break;
 
       case "myCaseFormSubmissions":

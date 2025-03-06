@@ -3,18 +3,27 @@ import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { AxiosUtilsResponse, CaseGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getCasesByResponsibleIdStringQuery } from "@zauru-sdk/graphql";
+import { getCasesStringQuery } from "@zauru-sdk/graphql";
 
 /**
  * getCasesByResponsibleId
  */
 export async function getCasesByResponsibleId(
   session: Session,
-  responsible_id: number | string,
-  wheres: string[] = []
+  filters?: {
+    responsible_id?: number;
+    closed?: boolean;
+    client_id?: number;
+  }
 ): Promise<AxiosUtilsResponse<CaseGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
+
+    const initialFilters = {
+      ...(filters ? filters : {}),
+    };
+
+    const query = getCasesStringQuery(initialFilters);
 
     const response = await httpGraphQLAPI.post<{
       data: { cases: CaseGraphQL[] };
@@ -25,10 +34,7 @@ export async function getCasesByResponsibleId(
     }>(
       "",
       {
-        query: getCasesByResponsibleIdStringQuery(
-          Number(responsible_id),
-          wheres
-        ),
+        query,
       },
       { headers }
     );
