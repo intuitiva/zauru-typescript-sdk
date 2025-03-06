@@ -67,7 +67,7 @@ export declare function createItemCategory(headers: any, body: Partial<ItemCateg
  */
 export declare function deleteItemCategory(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
 /**
- * updatePayee
+ * updateItemCategory
  * @param session
  * @param headers
  * @returns

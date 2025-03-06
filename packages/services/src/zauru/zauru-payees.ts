@@ -334,8 +334,12 @@ export async function createPayee(
   body: Partial<PayeeGraphQL>
 ): Promise<AxiosUtilsResponse<boolean>> {
   return handlePossibleAxiosErrors(async () => {
-    await httpZauru.post<any>("/settings/payees", { payee: body }, { headers });
-    return true;
+    const response = await httpZauru.post<any>(
+      "/settings/payees",
+      { payee: body },
+      { headers }
+    );
+    return response.data;
   });
 }
 

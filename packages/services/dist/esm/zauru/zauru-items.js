@@ -207,7 +207,7 @@ export async function deleteItemCategory(headers, id) {
     });
 }
 /**
- * updatePayee
+ * updateItemCategory
  * @param session
  * @param headers
  * @returns

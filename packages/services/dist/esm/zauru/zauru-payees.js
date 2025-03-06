@@ -175,8 +175,8 @@ export async function getClientCategories(session) {
  */
 export async function createPayee(headers, body) {
     return handlePossibleAxiosErrors(async () => {
-        await httpZauru.post("/settings/payees", { payee: body }, { headers });
-        return true;
+        const response = await httpZauru.post("/settings/payees", { payee: body }, { headers });
+        return response.data;
     });
 }
 /**
