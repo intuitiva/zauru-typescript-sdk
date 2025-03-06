@@ -74,7 +74,7 @@ export declare function getClientCategories(session: Session): Promise<AxiosUtil
  * @param headers
  * @returns
  */
-export declare function createPayee(headers: any, body: Partial<PayeeGraphQL>): Promise<AxiosUtilsResponse<boolean>>;
+export declare function createPayee(headers: any, body: Partial<PayeeGraphQL>): Promise<AxiosUtilsResponse<PayeeGraphQL>>;
 /**
  * deletePayee
  * @param headers

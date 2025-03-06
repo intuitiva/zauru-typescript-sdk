@@ -332,9 +332,9 @@ export async function getClientCategories(
 export async function createPayee(
   headers: any,
   body: Partial<PayeeGraphQL>
-): Promise<AxiosUtilsResponse<boolean>> {
+): Promise<AxiosUtilsResponse<PayeeGraphQL>> {
   return handlePossibleAxiosErrors(async () => {
-    const response = await httpZauru.post<any>(
+    const response = await httpZauru.post<PayeeGraphQL>(
       "/settings/payees",
       { payee: body },
       { headers }
