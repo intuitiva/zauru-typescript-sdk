@@ -34,17 +34,22 @@ export const ExitSvg = () => (
   </svg>
 );
 
-export const EyeSvg = () => (
+export const EyeSvg: React.FC<
+  {
+    size?: number;
+  } & React.SVGProps<SVGSVGElement>
+> = ({ size = 24, className = "", color = "currentColor", ...props }) => (
   <svg
-    className="h-6 w-6 text-blue-900 mt-2"
-    width="24"
-    height="24"
+    className={`text-blue-900 mt-2 ${className}`}
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     strokeWidth="2"
     stroke="currentColor"
     fill="none"
     strokeLinecap="round"
     strokeLinejoin="round"
+    {...props}
   >
     <path stroke="none" d="M0 0h24v24H0z" />
     <circle cx="12" cy="12" r="2" />
@@ -53,11 +58,15 @@ export const EyeSvg = () => (
   </svg>
 );
 
-export const PencilSvg = () => (
+export const PencilSvg: React.FC<
+  {
+    size?: number;
+  } & React.SVGProps<SVGSVGElement>
+> = ({ size = 24, className = "", color = "currentColor", ...props }) => (
   <svg
-    className="h-6 w-6 text-blue-900"
-    width="24"
-    height="24"
+    className={`text-blue-900 ${className}`}
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     strokeWidth="2"
     stroke="currentColor"
@@ -71,9 +80,15 @@ export const PencilSvg = () => (
   </svg>
 );
 
-export const TrashSvg = () => (
+export const TrashSvg: React.FC<
+  {
+    size?: number;
+  } & React.SVGProps<SVGSVGElement>
+> = ({ size = 24, className = "", color = "currentColor", ...props }) => (
   <svg
-    className="h-6 w-6 text-blue-900"
+    className={`text-blue-900 ${className}`}
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"

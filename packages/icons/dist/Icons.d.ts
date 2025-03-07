@@ -2,9 +2,15 @@ export declare const MenuAlt4Svg: (props?: {
     open: boolean;
 }) => import("react/jsx-runtime").JSX.Element;
 export declare const ExitSvg: () => import("react/jsx-runtime").JSX.Element;
-export declare const EyeSvg: () => import("react/jsx-runtime").JSX.Element;
-export declare const PencilSvg: () => import("react/jsx-runtime").JSX.Element;
-export declare const TrashSvg: () => import("react/jsx-runtime").JSX.Element;
+export declare const EyeSvg: React.FC<{
+    size?: number;
+} & React.SVGProps<SVGSVGElement>>;
+export declare const PencilSvg: React.FC<{
+    size?: number;
+} & React.SVGProps<SVGSVGElement>>;
+export declare const TrashSvg: React.FC<{
+    size?: number;
+} & React.SVGProps<SVGSVGElement>>;
 export declare const PdfDownloadSvg: () => import("react/jsx-runtime").JSX.Element;
 export declare const SearchSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const PlusSvg: () => import("react/jsx-runtime").JSX.Element;
