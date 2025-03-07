@@ -1811,7 +1811,9 @@ export const getCasesStringQuery = (filters?: {
   }
 
   if (filters?.tag_id) {
-    conditions.push(`taggings: {tag_id: {_eq: ${filters.tag_id}}}`);
+    conditions.push(
+      `taggings: {tag_id: {_eq: ${filters.tag_id}}, taggeable_type: {_eq: "Case"}}`
+    );
   }
 
   const whereClause = conditions.length
