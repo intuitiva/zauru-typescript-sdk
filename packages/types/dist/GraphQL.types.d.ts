@@ -495,6 +495,7 @@ export type CaseSupplyGraphQL = {
     quantity: number;
     item_id: number;
     unit_price: number;
+    price: number;
     reference: string;
     _destroy?: boolean;
 };

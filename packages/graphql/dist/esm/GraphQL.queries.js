@@ -1603,6 +1603,8 @@ const getCasesStringQuery = (filters) => {
           id
           item_id
           quantity
+          unit_price
+          price
         }
         submission_cases {
           id

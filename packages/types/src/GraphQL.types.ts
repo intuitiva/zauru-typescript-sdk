@@ -600,6 +600,7 @@ export type CaseSupplyGraphQL = {
   quantity: number;
   item_id: number;
   unit_price: number;
+  price: number;
   reference: string;
   //campos del sistema
   _destroy?: boolean;

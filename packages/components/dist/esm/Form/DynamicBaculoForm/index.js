@@ -1,4 +1,4 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { TextField } from "../TextField/index.js";
 import { TripleFieldContainer } from "../FieldContainer/index.js";
 import { DoubleFieldContainer } from "../FieldContainer/index.js";
@@ -56,8 +56,12 @@ export function DynamicBaculoForm(props) {
                 }) ?? [];
                 return (_jsx(SubContainer, { title: field.name, children: _jsx(GenericDynamicTable, { name: "fixed_columns_table", columns: columns }) }, field.id));
             }
-            case "zauru_data":
-                return (_jsx(TextField, { title: `${field.required ? "*" : ""}${field.name}`, hint: field.hint, defaultValue: defaultValue?.value ?? field.default_value, disabled: true }, field.id));
+            case "zauru_data": {
+                if (field.required) {
+                    return (_jsx(TextField, { title: `${field.required ? "*" : ""}${field.name}`, hint: field.hint, defaultValue: defaultValue?.value ?? field.default_value, disabled: true }, field.id));
+                }
+                return _jsx(_Fragment, {});
+            }
             case "hour":
                 return (_jsx(FormTimePicker, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, disabled: readOnly, defaultValue: defaultValue?.value }, field.id));
             case "date":
