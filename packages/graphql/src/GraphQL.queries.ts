@@ -1882,6 +1882,7 @@ export const getCasesStringQuery = (filters?: {
           quantity
           unit_price
           price
+          serial_id
         }
         submission_cases {
           id
