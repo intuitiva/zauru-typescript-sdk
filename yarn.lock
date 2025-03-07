@@ -1433,8 +1433,8 @@ __metadata:
     "@types/react-dom": "npm:^18.2.7"
     "@types/styled-components": "npm:^5.1.34"
     "@zauru-sdk/common": "npm:^2.0.187"
-    "@zauru-sdk/hooks": "npm:^2.0.187"
-    "@zauru-sdk/icons": "npm:^2.0.99"
+    "@zauru-sdk/hooks": "npm:^2.0.188"
+    "@zauru-sdk/icons": "npm:^2.0.188"
     "@zauru-sdk/types": "npm:^2.0.187"
     "@zauru-sdk/utils": "npm:^2.0.187"
     framer-motion: "npm:^11.7.0"
@@ -1469,7 +1469,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/hooks@npm:^2.0.187, @zauru-sdk/hooks@workspace:packages/hooks":
+"@zauru-sdk/hooks@npm:^2.0.188, @zauru-sdk/hooks@workspace:packages/hooks":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/hooks@workspace:packages/hooks"
   dependencies:
@@ -1477,7 +1477,7 @@ __metadata:
     "@types/react": "npm:^18.2.20"
     "@types/react-dom": "npm:^18.2.7"
     "@zauru-sdk/common": "npm:^2.0.187"
-    "@zauru-sdk/icons": "npm:^2.0.99"
+    "@zauru-sdk/icons": "npm:^2.0.188"
     "@zauru-sdk/redux": "npm:^2.0.187"
     "@zauru-sdk/types": "npm:^2.0.187"
     react: "npm:^18.2.0"
@@ -1487,7 +1487,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/icons@npm:^2.0.99, @zauru-sdk/icons@workspace:packages/icons":
+"@zauru-sdk/icons@npm:^2.0.188, @zauru-sdk/icons@workspace:packages/icons":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/icons@workspace:packages/icons"
   dependencies:
