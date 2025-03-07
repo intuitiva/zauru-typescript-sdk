@@ -383,6 +383,7 @@ export type SubmissionCasesGraphQL = {
     form_submission_id: number;
     settings_form_submission: FormSubmissionGraphQL;
     case: CaseGraphQL;
+    created_at: string;
 };
 export type FormGraphQL = {
     id: number;
@@ -523,6 +524,7 @@ export type CaseGraphQL = {
     payment_term_id: number;
     case_supplies: CaseSupplyGraphQL[];
     case_invoices: CaseInvoiceGraphQL[];
+    submission_cases: SubmissionCasesGraphQL[];
     taggings: TaggingGraphQL[];
 };
 export type OauthProfile = {
