@@ -4,6 +4,7 @@ import { AxiosUtilsResponse, CaseGraphQL } from "@zauru-sdk/types";
  * getCases
  */
 export declare function getCases(session: Session, filters?: {
+    id?: number;
     responsible_id?: number;
     closed?: boolean;
     client_id?: number;

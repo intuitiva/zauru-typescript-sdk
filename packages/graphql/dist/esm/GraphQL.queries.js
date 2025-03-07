@@ -750,23 +750,33 @@ query getEmployeeProfile {
 }
 `;
 exports.getEmployeeProfileStringQuery = getEmployeeProfileStringQuery;
-exports.getEmployeesStringQuery = `
+const getEmployeesStringQuery = (filters) => {
+    const conditions = [];
+    if (filters?.id) {
+        conditions.push(`id: {_eq: ${filters.id}}`);
+    }
+    const whereClause = conditions.length
+        ? `where: { ${conditions.join(", ")} },`
+        : "";
+    return `
 query getEmployees {
-  employees {
-    name
-    id
-    user_id
-    email
-    seller
-    accountant
-    buyer
-    support_agent
-    inventory_controller
-    active
-    position
+    employees (${whereClause} order_by: {id: desc}) {
+      name
+      id
+      user_id
+      email
+      seller
+      accountant
+      buyer
+      support_agent
+      inventory_controller
+      active
+      position
+    }
   }
-}
-`;
+  `;
+};
+exports.getEmployeesStringQuery = getEmployeesStringQuery;
 const getEmployeesByAgencyIdStringQuery = (id) => `
 query getEmployeesByAgencyId {
   employees(where: {agency_id: {_eq: ${id}}}) {
@@ -1535,6 +1545,9 @@ query getInvoicesByAgencyId {
 exports.getInvoicesByAgencyIdStringQuery = getInvoicesByAgencyIdStringQuery;
 const getCasesStringQuery = (filters) => {
     const conditions = [];
+    if (filters?.id) {
+        conditions.push(`id: {_eq: ${filters.id}}`);
+    }
     if (filters?.responsible_id) {
         conditions.push(`responsible_id: {_eq: ${filters.responsible_id}}`);
     }

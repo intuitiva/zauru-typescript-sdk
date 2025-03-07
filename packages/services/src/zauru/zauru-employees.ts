@@ -9,10 +9,19 @@ import {
 } from "@zauru-sdk/graphql";
 
 export async function getEmployees(
-  session: Session
+  session: Session,
+  filters?: {
+    id?: number;
+  }
 ): Promise<AxiosUtilsResponse<EmployeeGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
+
+    const initialFilters = {
+      ...(filters ? filters : {}),
+    };
+
+    const query = getEmployeesStringQuery(initialFilters);
 
     const response = await httpGraphQLAPI.post<{
       data: { employees: EmployeeGraphQL[] };
@@ -23,7 +32,7 @@ export async function getEmployees(
     }>(
       "",
       {
-        query: getEmployeesStringQuery,
+        query,
       },
       { headers }
     );

@@ -73,7 +73,9 @@ export declare const getItemsStringQuery = "\nquery getItems {\n  items (where: 
 export declare const getItemsBySuperCategoryStringQuery: (id: number, agency_id: number) => string;
 export declare const getConsolidatesBetweenDatesStringQuery: (startDate: string, endDate: string) => string;
 export declare const getEmployeeProfileStringQuery: (id: number) => string;
-export declare const getEmployeesStringQuery = "\nquery getEmployees {\n  employees {\n    name\n    id\n    user_id\n    email\n    seller\n    accountant\n    buyer\n    support_agent\n    inventory_controller\n    active\n    position\n  }\n}\n";
+export declare const getEmployeesStringQuery: (filters?: {
+    id?: number;
+}) => string;
 export declare const getEmployeesByAgencyIdStringQuery: (id: number) => string;
 export declare const getBundlesByItemCategoryIdStringQuery: (id: number) => string;
 export declare const getBundleByNameStringQuery: (name: string) => string;
@@ -132,6 +134,7 @@ export declare const getInvoicesByAgencyIdStringQuery: (id: number, filters: {
     invoice_id?: string;
 }) => string;
 export declare const getCasesStringQuery: (filters?: {
+    id?: number;
     responsible_id?: number;
     client_id?: number;
     closed?: boolean;

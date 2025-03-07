@@ -2,11 +2,15 @@ import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getEmployeesByAgencyIdStringQuery, getEmployeesStringQuery, } from "@zauru-sdk/graphql";
-export async function getEmployees(session) {
+export async function getEmployees(session, filters) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
+        const initialFilters = {
+            ...(filters ? filters : {}),
+        };
+        const query = getEmployeesStringQuery(initialFilters);
         const response = await httpGraphQLAPI.post("", {
-            query: getEmployeesStringQuery,
+            query,
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

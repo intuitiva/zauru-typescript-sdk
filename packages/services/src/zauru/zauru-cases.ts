@@ -12,6 +12,7 @@ import { httpZauru } from "./httpZauru.js";
 export async function getCases(
   session: Session,
   filters?: {
+    id?: number;
     responsible_id?: number;
     closed?: boolean;
     client_id?: number;

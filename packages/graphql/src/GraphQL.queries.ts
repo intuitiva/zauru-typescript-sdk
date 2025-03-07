@@ -914,23 +914,35 @@ query getEmployeeProfile {
 }
 `;
 
-export const getEmployeesStringQuery = `
-query getEmployees {
-  employees {
-    name
-    id
-    user_id
-    email
-    seller
-    accountant
-    buyer
-    support_agent
-    inventory_controller
-    active
-    position
+export const getEmployeesStringQuery = (filters?: { id?: number }) => {
+  const conditions = [];
+
+  if (filters?.id) {
+    conditions.push(`id: {_eq: ${filters.id}}`);
   }
-}
-`;
+
+  const whereClause = conditions.length
+    ? `where: { ${conditions.join(", ")} },`
+    : "";
+
+  return `
+query getEmployees {
+    employees (${whereClause} order_by: {id: desc}) {
+      name
+      id
+      user_id
+      email
+      seller
+      accountant
+      buyer
+      support_agent
+      inventory_controller
+      active
+      position
+    }
+  }
+  `;
+};
 
 export const getEmployeesByAgencyIdStringQuery = (id: number) => `
 query getEmployeesByAgencyId {
@@ -1791,6 +1803,7 @@ query getInvoicesByAgencyId {
 `;
 
 export const getCasesStringQuery = (filters?: {
+  id?: number;
   responsible_id?: number;
   client_id?: number;
   closed?: boolean;
@@ -1798,6 +1811,10 @@ export const getCasesStringQuery = (filters?: {
   limit?: number;
 }) => {
   const conditions = [];
+
+  if (filters?.id) {
+    conditions.push(`id: {_eq: ${filters.id}}`);
+  }
 
   if (filters?.responsible_id) {
     conditions.push(`responsible_id: {_eq: ${filters.responsible_id}}`);
