@@ -1551,7 +1551,7 @@ const getCasesStringQuery = (filters) => {
         ? `where: { ${conditions.join(", ")} },`
         : "";
     return `query getCases {
-    cases (${whereClause} order_by: {id: desc}) 
+    cases (${whereClause} order_by: {id: desc}, limit: ${filters?.limit || 1000}) 
       {
         id
         id_number

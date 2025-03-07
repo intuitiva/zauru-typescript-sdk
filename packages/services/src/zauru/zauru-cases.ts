@@ -16,6 +16,7 @@ export async function getCases(
     closed?: boolean;
     client_id?: number;
     tag_id?: string;
+    limit?: number;
   }
 ): Promise<AxiosUtilsResponse<CaseGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {

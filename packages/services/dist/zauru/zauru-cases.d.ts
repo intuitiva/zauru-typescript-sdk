@@ -8,6 +8,7 @@ export declare function getCases(session: Session, filters?: {
     closed?: boolean;
     client_id?: number;
     tag_id?: string;
+    limit?: number;
 }): Promise<AxiosUtilsResponse<CaseGraphQL[]>>;
 /**
  * createCase
