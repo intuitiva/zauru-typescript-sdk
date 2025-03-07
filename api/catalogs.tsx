@@ -196,7 +196,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         response = await getBitacorasPOMassive(headers, session);
         break;
 
-      case "myCases": {
+      case "cases": {
         const tag_id = url.searchParams.get("tag_id") ?? undefined;
         const assignedToMe = url.searchParams.get("assignedToMe") === "true";
         response = await getCases(session, {

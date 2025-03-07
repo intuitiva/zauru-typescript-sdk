@@ -83,7 +83,7 @@ export declare const useGetProviders: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: PayeeGraphQL[];
 };
-export declare const useGetMyCases: (config?: ReduxParamsConfig) => {
+export declare const useGetCases: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: CaseGraphQL[];
 };

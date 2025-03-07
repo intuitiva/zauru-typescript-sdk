@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useGetInvoiceFormSubmissionsByInvoiceId = exports.useGetCaseFormSubmissionsByCaseId = exports.useGetMyCaseFormSubmissions = exports.useGetInvoiceFormSubmissionsByAgencyId = exports.useGetCaseForms = exports.useGetInvoiceForms = exports.useGetAllForms = exports.useGetBitacoraRechazoMasivo = exports.useGetCCPorcentajesDeRechazo = exports.useGetMotivosDeRechazo = exports.useGetTiposDeMuestra = exports.useGetInvoicesByCurrentAgency = exports.useGetInvoicesByLab = exports.useGetShipmentsToMyAgency = exports.useGetEmployees = exports.useGetEmployeesByCurrentAgency = exports.useGetEmployeesByLab = exports.useGetPaymentMethods = exports.useGetPaymentTerms = exports.useGetSuggestedPrices = exports.useGetAgencies = exports.useGetPrintTemplates = exports.useGetPayeesForLab = exports.useGetPayees = exports.useGetClientCategories = exports.useGetProviderCategories = exports.useGetMyCases = exports.useGetProviders = exports.useGetReceptionTypes = exports.useGetCurrencies = exports.useGetBundlesForLab = exports.useGetBundlesRecipForLab = exports.useGetPayeeCategoriesLabPrices = exports.useGetPayeeCategories = exports.useGetTemplates = exports.useGetBookings = exports.useGetItemCategoriesForLab = exports.useGetItemServicesByLab = exports.useGetMyAgencyLotStocks = exports.useGetItemsByLab = exports.useGetItemsByReception = exports.useGetItems = void 0;
+exports.useGetInvoiceFormSubmissionsByInvoiceId = exports.useGetCaseFormSubmissionsByCaseId = exports.useGetMyCaseFormSubmissions = exports.useGetInvoiceFormSubmissionsByAgencyId = exports.useGetCaseForms = exports.useGetInvoiceForms = exports.useGetAllForms = exports.useGetBitacoraRechazoMasivo = exports.useGetCCPorcentajesDeRechazo = exports.useGetMotivosDeRechazo = exports.useGetTiposDeMuestra = exports.useGetInvoicesByCurrentAgency = exports.useGetInvoicesByLab = exports.useGetShipmentsToMyAgency = exports.useGetEmployees = exports.useGetEmployeesByCurrentAgency = exports.useGetEmployeesByLab = exports.useGetPaymentMethods = exports.useGetPaymentTerms = exports.useGetSuggestedPrices = exports.useGetAgencies = exports.useGetPrintTemplates = exports.useGetPayeesForLab = exports.useGetPayees = exports.useGetClientCategories = exports.useGetProviderCategories = exports.useGetCases = exports.useGetProviders = exports.useGetReceptionTypes = exports.useGetCurrencies = exports.useGetBundlesForLab = exports.useGetBundlesRecipForLab = exports.useGetPayeeCategoriesLabPrices = exports.useGetPayeeCategories = exports.useGetTemplates = exports.useGetBookings = exports.useGetItemCategoriesForLab = exports.useGetItemServicesByLab = exports.useGetMyAgencyLotStocks = exports.useGetItemsByLab = exports.useGetItemsByReception = exports.useGetItems = void 0;
 exports.useGetReduxCatalog = useGetReduxCatalog;
 const react_1 = require("@remix-run/react");
 const react_2 = require("react");
@@ -232,8 +232,8 @@ const useGetReceptionTypes = (config) => useGetReduxCatalog("receptionTypes", co
 exports.useGetReceptionTypes = useGetReceptionTypes;
 const useGetProviders = (config) => useGetReduxCatalog("providers", config);
 exports.useGetProviders = useGetProviders;
-const useGetMyCases = (config) => useGetReduxCatalog("myCases", config);
-exports.useGetMyCases = useGetMyCases;
+const useGetCases = (config) => useGetReduxCatalog("cases", config);
+exports.useGetCases = useGetCases;
 const useGetProviderCategories = (config) => useGetReduxCatalog("providerCategories", config);
 exports.useGetProviderCategories = useGetProviderCategories;
 const useGetClientCategories = (config) => useGetReduxCatalog("clientCategories", config);

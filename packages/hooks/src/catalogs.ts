@@ -402,12 +402,12 @@ export const useGetProviders = (
   data: PayeeGraphQL[];
 } => useGetReduxCatalog<PayeeGraphQL>("providers", config);
 
-export const useGetMyCases = (
+export const useGetCases = (
   config?: ReduxParamsConfig
 ): {
   loading: boolean;
   data: CaseGraphQL[];
-} => useGetReduxCatalog<CaseGraphQL>("myCases", config);
+} => useGetReduxCatalog<CaseGraphQL>("cases", config);
 
 export const useGetProviderCategories = (
   config?: ReduxParamsConfig

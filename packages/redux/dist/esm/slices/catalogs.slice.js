@@ -44,7 +44,7 @@ const initialState = {
     caseForms: createLoadingState([]),
     allForms: createLoadingState([]),
     invoiceFormSubmissions: createLoadingState([]),
-    myCases: createLoadingState([]),
+    cases: createLoadingState([]),
     myCaseFormSubmissions: createLoadingState([]),
     myAgencyLotStocks: createLoadingState([]),
     shipmentsToMyAgency: createLoadingState([]),

@@ -1,5 +1,5 @@
 import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, FormSubmissionGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, CCPorcentajeRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL, PaymentMethodGraphQL } from "@zauru-sdk/types";
-export type CATALOGS_NAMES = "agencies" | "suggestedPrices" | "providers" | "providerCategories" | "receptionTypes" | "tiposDeMuestra" | "motivosRechazo" | "ccPorcentajesDeRechazo" | "bitacoraRechazoMasivo" | "items" | "itemsByReception" | "itemsByLab" | "itemServicesByLab" | "itemCategoriesForLab" | "payees" | "payeesForLab" | "payeeCategoriesLabPrices" | "payeeCategories" | "clientCategories" | "bundlesRecipForLab" | "currencies" | "paymentTerms" | "employeesByLab" | "employeesByCurrentAgency" | "invoicesByLab" | "invoicesByCurrentAgency" | "invoiceForms" | "caseForms" | "invoiceFormSubmissions" | "myCases" | "myCaseFormSubmissions" | "allForms" | "shipmentsToMyAgency" | "myAgencyLotStocks" | "shipments" | "bookings" | "templates" | "bundlesForLab" | "paymentMethods" | "employees" | "printTemplates" | "caseFormSubmissionsByCaseId" | "invoiceFormSubmissionsByInvoiceId" | "invoiceFormSubmissionsByAgencyId";
+export type CATALOGS_NAMES = "agencies" | "suggestedPrices" | "providers" | "providerCategories" | "receptionTypes" | "tiposDeMuestra" | "motivosRechazo" | "ccPorcentajesDeRechazo" | "bitacoraRechazoMasivo" | "items" | "itemsByReception" | "itemsByLab" | "itemServicesByLab" | "itemCategoriesForLab" | "payees" | "payeesForLab" | "payeeCategoriesLabPrices" | "payeeCategories" | "clientCategories" | "bundlesRecipForLab" | "currencies" | "paymentTerms" | "employeesByLab" | "employeesByCurrentAgency" | "invoicesByLab" | "invoicesByCurrentAgency" | "invoiceForms" | "caseForms" | "invoiceFormSubmissions" | "cases" | "myCaseFormSubmissions" | "allForms" | "shipmentsToMyAgency" | "myAgencyLotStocks" | "shipments" | "bookings" | "templates" | "bundlesForLab" | "paymentMethods" | "employees" | "printTemplates" | "caseFormSubmissionsByCaseId" | "invoiceFormSubmissionsByInvoiceId" | "invoiceFormSubmissionsByAgencyId";
 type LoadingState<T> = {
     data: T;
     loading: boolean;
@@ -41,7 +41,7 @@ type CatalogState = {
     caseForms: LoadingState<FormGraphQL[]>;
     allForms: LoadingState<FormGraphQL[]>;
     invoiceFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;
-    myCases: LoadingState<CaseGraphQL[]>;
+    cases: LoadingState<CaseGraphQL[]>;
     myCaseFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;
     myAgencyLotStocks: LoadingState<LotStockGraphQL[]>;
     shipmentsToMyAgency: LoadingState<ShipmentGraphQL[]>;
