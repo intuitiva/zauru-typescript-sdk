@@ -30,3 +30,10 @@ export declare function updateCase(headers: any, body: Partial<CaseGraphQL>): Pr
  * @param body
  */
 export declare function deleteCase(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
+/**
+ * closeCase
+ * @param headers
+ * @param id
+ * @returns
+ */
+export declare function closeCase(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;

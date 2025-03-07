@@ -83,3 +83,15 @@ export async function deleteCase(headers, id) {
         return true;
     });
 }
+/**
+ * closeCase
+ * @param headers
+ * @param id
+ * @returns
+ */
+export async function closeCase(headers, id) {
+    return handlePossibleAxiosErrors(async () => {
+        await httpZauru.get(`/support/cases/${id}/close.json`, { headers });
+        return true;
+    });
+}

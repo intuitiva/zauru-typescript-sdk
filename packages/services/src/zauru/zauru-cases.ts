@@ -129,3 +129,19 @@ export async function deleteCase(
     return true;
   });
 }
+
+/**
+ * closeCase
+ * @param headers
+ * @param id
+ * @returns
+ */
+export async function closeCase(
+  headers: any,
+  id: string | number
+): Promise<AxiosUtilsResponse<boolean>> {
+  return handlePossibleAxiosErrors(async () => {
+    await httpZauru.get<any>(`/support/cases/${id}/close.json`, { headers });
+    return true;
+  });
+}

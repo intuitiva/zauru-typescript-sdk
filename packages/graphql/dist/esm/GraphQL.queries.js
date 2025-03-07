@@ -1571,6 +1571,7 @@ const getCasesStringQuery = (filters) => {
         client_id
         warranty
         courtesy
+        total
         client {
           name
           tin
