@@ -1589,6 +1589,17 @@ const getCasesStringQuery = (filters) => {
           item_id
           quantity
         }
+        submission_cases {
+          id
+          settings_form_submission {
+            zid
+            voided
+            settings_form {
+              id
+              zid
+            }
+          }
+        }
     }
   }
 `;
