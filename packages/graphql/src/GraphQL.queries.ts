@@ -1845,6 +1845,7 @@ export const getCasesStringQuery = (filters?: {
         warranty
         courtesy
         total
+        responsible_id
         client {
           name
           tin
