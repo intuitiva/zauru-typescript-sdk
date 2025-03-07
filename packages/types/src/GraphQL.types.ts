@@ -619,6 +619,7 @@ export type CaseGraphQL = {
   warranty: boolean;
   courtesy: boolean;
   memo: string;
+  total: number;
   closed: boolean;
   closed_at: string;
   seller_id: number;
