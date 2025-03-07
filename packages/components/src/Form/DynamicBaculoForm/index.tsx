@@ -98,16 +98,20 @@ export function DynamicBaculoForm(props: Props) {
           </SubContainer>
         );
       }
-      case "zauru_data":
-        return (
-          <TextField
-            key={field.id}
-            title={`${field.required ? "*" : ""}${field.name}`}
-            hint={field.hint}
-            defaultValue={defaultValue?.value ?? field.default_value}
-            disabled={true}
-          />
-        );
+      case "zauru_data": {
+        if (field.required) {
+          return (
+            <TextField
+              key={field.id}
+              title={`${field.required ? "*" : ""}${field.name}`}
+              hint={field.hint}
+              defaultValue={defaultValue?.value ?? field.default_value}
+              disabled={true}
+            />
+          );
+        }
+        return <></>;
+      }
       case "hour":
         return (
           <FormTimePicker
