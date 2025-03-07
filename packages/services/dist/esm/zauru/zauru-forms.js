@@ -1,7 +1,7 @@
 import { arrayToObject, convertToFormData, handlePossibleAxiosErrors, } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getAllFormsStringQuery, getFormByNameStringQuery, getFormSubmissionByIdStringQuery, getFormsByDocumentTypeStringQuery, getFormsStringQuery, getInvoiceFormSubmissionsByAgencyIdStringQuery, getInvoiceFormSubmissionsByInvoiceIdStringQuery, getLastInvoiceFormSubmissionStringQuery, getMyCaseFormSubmissionsStringQuery, } from "@zauru-sdk/graphql";
+import { getAllFormsStringQuery, getCaseFormSubmissionsByCaseIdStringQuery, getFormByNameStringQuery, getFormSubmissionByIdStringQuery, getFormsByDocumentTypeStringQuery, getFormsStringQuery, getInvoiceFormSubmissionsByAgencyIdStringQuery, getInvoiceFormSubmissionsByInvoiceIdStringQuery, getLastInvoiceFormSubmissionStringQuery, getMyCaseFormSubmissionsStringQuery, } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 /**
  * getForms
@@ -231,15 +231,65 @@ export async function getLastInvoiceFormSubmission(session, filters = {}) {
 export async function getInvoiceFormSubmissionsByInvoiceId(headersZauru, session, invoice_id, withFiles = false, filters = {}) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
-        const response = await httpGraphQLAPI.post("", {
-            query: getInvoiceFormSubmissionsByInvoiceIdStringQuery(Number(invoice_id), {
-                formZid: filters?.formZid,
-            }),
-        }, { headers });
+        const query = getInvoiceFormSubmissionsByInvoiceIdStringQuery(Number(invoice_id), {
+            formZid: filters?.formZid,
+        });
+        const response = await httpGraphQLAPI.post("", { query }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
         }
         let registers = response?.data?.data?.submission_invoices;
+        if (withFiles) {
+            registers = await Promise.all(registers.map(async (register) => {
+                try {
+                    const responseZauru = await httpZauru.get(`/settings/forms/form_submissions/${register.settings_form_submission.id}.json`, {
+                        headers: headersZauru,
+                    });
+                    register.settings_form_submission.settings_form_submission_values =
+                        register.settings_form_submission.settings_form_submission_values.map((x) => {
+                            if (x.settings_form_field.field_type === "image" ||
+                                x.settings_form_field.field_type === "file" ||
+                                x.settings_form_field.field_type === "pdf") {
+                                x.value = responseZauru.data[x.settings_form_field.print_var_name]
+                                    ?.toString()
+                                    .replace(/\\u0026/g, "&");
+                            }
+                            return x;
+                        });
+                    return register;
+                }
+                catch (error) {
+                    console.error(`Error al obtener el archivo del formulario ${register.settings_form_submission.id}`, error);
+                    return register;
+                }
+            }));
+        }
+        // Filtrar los registros para obtener sólo los de la versión más alta.
+        const groupedByVersion = registers.reduce((acc, record) => {
+            const zid = record.settings_form_submission.zid;
+            if (!acc[zid]) {
+                acc[zid] = record;
+            }
+            return acc;
+        }, {});
+        const latestVersionRecords = Object.values(groupedByVersion).reverse();
+        return latestVersionRecords;
+    });
+}
+/**
+ * getCaseFormSubmissionsByCaseId
+ */
+export async function getCaseFormSubmissionsByCaseId(headersZauru, session, case_id, withFiles = false, filters = {}) {
+    return handlePossibleAxiosErrors(async () => {
+        const headers = await getGraphQLAPIHeaders(session);
+        const query = getCaseFormSubmissionsByCaseIdStringQuery(Number(case_id), {
+            formZid: filters?.formZid,
+        });
+        const response = await httpGraphQLAPI.post("", { query }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
+        let registers = response?.data?.data?.submission_cases;
         if (withFiles) {
             registers = await Promise.all(registers.map(async (register) => {
                 try {

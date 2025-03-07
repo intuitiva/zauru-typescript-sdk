@@ -70,6 +70,7 @@ export type CATALOGS_NAMES =
   | "paymentMethods"
   | "employees"
   | "printTemplates"
+  | "caseFormSubmissionsByCaseId"
   | "invoiceFormSubmissionsByInvoiceId"
   | "invoiceFormSubmissionsByAgencyId";
 
@@ -123,6 +124,7 @@ type CatalogState = {
   printTemplates: LoadingState<PrintTemplateGraphQL[]>;
   invoiceFormSubmissionsByInvoiceId: LoadingState<FormSubmissionGraphQL[]>;
   invoiceFormSubmissionsByAgencyId: LoadingState<FormSubmissionGraphQL[]>;
+  caseFormSubmissionsByCaseId: LoadingState<FormSubmissionGraphQL[]>;
 };
 
 const createLoadingState = <T>(initialData: T): LoadingState<T> => ({
@@ -175,6 +177,7 @@ const initialState: CatalogState = {
   printTemplates: createLoadingState([]),
   invoiceFormSubmissionsByInvoiceId: createLoadingState([]),
   invoiceFormSubmissionsByAgencyId: createLoadingState([]),
+  caseFormSubmissionsByCaseId: createLoadingState([]),
 };
 
 const catalogsSlice = createSlice({

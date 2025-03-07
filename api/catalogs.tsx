@@ -29,6 +29,7 @@ import {
   getSuggestedPrices,
   getInvoicesByAgencyId,
   getCases,
+  getCaseFormSubmissionsByCaseId,
 } from "@zauru-sdk/services";
 import { AxiosUtilsResponse } from "@zauru-sdk/types";
 import {
@@ -321,6 +322,27 @@ export const loader: LoaderFunction = async ({ request }) => {
           headers,
           session,
           invoiceId,
+          withFiles
+        );
+        break;
+      }
+
+      case "caseFormSubmissionsByCaseId": {
+        const withFiles = url.searchParams.get("withFiles") === "true";
+        const caseId = url.searchParams.get("caseId");
+        if (!caseId) {
+          console.warn({
+            description: "No se envió ningún parámetro de caseId a buscar",
+            title: "Ocurrió un error.",
+            error: true,
+            type: "error",
+          });
+          return Response.json({});
+        }
+        response = await getCaseFormSubmissionsByCaseId(
+          headers,
+          session,
+          caseId,
           withFiles
         );
         break;

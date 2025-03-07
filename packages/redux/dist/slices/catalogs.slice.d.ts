@@ -1,5 +1,5 @@
 import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, FormSubmissionGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, CCPorcentajeRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL, PaymentMethodGraphQL } from "@zauru-sdk/types";
-export type CATALOGS_NAMES = "agencies" | "suggestedPrices" | "providers" | "providerCategories" | "receptionTypes" | "tiposDeMuestra" | "motivosRechazo" | "ccPorcentajesDeRechazo" | "bitacoraRechazoMasivo" | "items" | "itemsByReception" | "itemsByLab" | "itemServicesByLab" | "itemCategoriesForLab" | "payees" | "payeesForLab" | "payeeCategoriesLabPrices" | "payeeCategories" | "clientCategories" | "bundlesRecipForLab" | "currencies" | "paymentTerms" | "employeesByLab" | "employeesByCurrentAgency" | "invoicesByLab" | "invoicesByCurrentAgency" | "invoiceForms" | "caseForms" | "invoiceFormSubmissions" | "myCases" | "myCaseFormSubmissions" | "allForms" | "shipmentsToMyAgency" | "myAgencyLotStocks" | "shipments" | "bookings" | "templates" | "bundlesForLab" | "paymentMethods" | "employees" | "printTemplates" | "invoiceFormSubmissionsByInvoiceId" | "invoiceFormSubmissionsByAgencyId";
+export type CATALOGS_NAMES = "agencies" | "suggestedPrices" | "providers" | "providerCategories" | "receptionTypes" | "tiposDeMuestra" | "motivosRechazo" | "ccPorcentajesDeRechazo" | "bitacoraRechazoMasivo" | "items" | "itemsByReception" | "itemsByLab" | "itemServicesByLab" | "itemCategoriesForLab" | "payees" | "payeesForLab" | "payeeCategoriesLabPrices" | "payeeCategories" | "clientCategories" | "bundlesRecipForLab" | "currencies" | "paymentTerms" | "employeesByLab" | "employeesByCurrentAgency" | "invoicesByLab" | "invoicesByCurrentAgency" | "invoiceForms" | "caseForms" | "invoiceFormSubmissions" | "myCases" | "myCaseFormSubmissions" | "allForms" | "shipmentsToMyAgency" | "myAgencyLotStocks" | "shipments" | "bookings" | "templates" | "bundlesForLab" | "paymentMethods" | "employees" | "printTemplates" | "caseFormSubmissionsByCaseId" | "invoiceFormSubmissionsByInvoiceId" | "invoiceFormSubmissionsByAgencyId";
 type LoadingState<T> = {
     data: T;
     loading: boolean;
@@ -49,6 +49,7 @@ type CatalogState = {
     printTemplates: LoadingState<PrintTemplateGraphQL[]>;
     invoiceFormSubmissionsByInvoiceId: LoadingState<FormSubmissionGraphQL[]>;
     invoiceFormSubmissionsByAgencyId: LoadingState<FormSubmissionGraphQL[]>;
+    caseFormSubmissionsByCaseId: LoadingState<FormSubmissionGraphQL[]>;
 };
 export declare const catalogsFetchStart: import("@reduxjs/toolkit").ActionCreatorWithPayload<CATALOGS_NAMES, "catalogs/catalogsFetchStart">, catalogsFetchSuccess: import("@reduxjs/toolkit").ActionCreatorWithPayload<{
     name: CATALOGS_NAMES;

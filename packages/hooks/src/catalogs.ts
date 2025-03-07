@@ -697,6 +697,44 @@ export const useGetMyCaseFormSubmissions = (
   };
 };
 
+export const useGetCaseFormSubmissionsByCaseId = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: SubmissionCasesGraphQL[];
+} => {
+  const caseId = config?.otherParams?.caseId;
+  const withFiles = config?.otherParams?.withFiles;
+
+  const data = useGetReduxCatalog<SubmissionCasesGraphQL>(
+    "caseFormSubmissionsByCaseId",
+    {
+      otherParams: {
+        caseId: `${caseId}`,
+        withFiles: `${withFiles}`,
+      },
+    }
+  );
+
+  // Filtrar los registros para obtener sólo los de la versión más alta.
+  const groupedByVersion = (data.data || []).reduce((acc, record) => {
+    const zid = record.settings_form_submission.zid;
+
+    if (!acc[zid]) {
+      acc[zid] = record;
+    }
+
+    return acc;
+  }, {} as { [key: string]: SubmissionCasesGraphQL });
+
+  const latestVersionRecords = Object.values(groupedByVersion);
+
+  return {
+    loading: data.loading,
+    data: latestVersionRecords,
+  };
+};
+
 export const useGetInvoiceFormSubmissionsByInvoiceId = (
   config?: ReduxParamsConfig
 ): {

@@ -52,6 +52,7 @@ const initialState = {
     printTemplates: createLoadingState([]),
     invoiceFormSubmissionsByInvoiceId: createLoadingState([]),
     invoiceFormSubmissionsByAgencyId: createLoadingState([]),
+    caseFormSubmissionsByCaseId: createLoadingState([]),
 };
 const catalogsSlice = (0, toolkit_1.createSlice)({
     name: "catalogs",

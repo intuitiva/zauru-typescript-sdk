@@ -1422,6 +1422,66 @@ query getLastInvoiceFormSubmission {
 }
 `;
 
+export const getCaseFormSubmissionsByCaseIdStringQuery = (
+  case_id: number,
+  filters: { formZid?: number } = {}
+) => `
+query getCaseFormSubmissionsByCaseId {
+  submission_cases(
+      where: {
+        case_id: {_eq: ${case_id}},
+        settings_form_submission: {
+          ${
+            filters?.formZid
+              ? `settings_form: {zid: {_eq: ${filters?.formZid}}},`
+              : ""
+          }
+          voided: {_eq: false}
+        }
+      },
+        order_by: {id: desc}
+    ) {
+    id
+    case_id
+    form_submission_id
+    created_at
+    settings_form_submission {
+      id
+      zid
+      reference
+      created_at
+      version
+      id_number
+      settings_form_submission_values {
+        id
+        form_field_id
+        value
+        settings_form_field {
+          id
+          name
+          print_var_name
+          field_type
+          settings_form_field_options {
+              id
+              label
+              position
+              value
+          }
+        }
+      }
+      settings_form {
+        id
+        name
+        zid
+        description
+        created_at
+        version
+      }
+    }
+  }
+}
+`;
+
 export const getInvoiceFormSubmissionsByInvoiceIdStringQuery = (
   invoice_id: number,
   filters: { formZid?: number } = {}

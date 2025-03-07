@@ -104,6 +104,9 @@ export declare const getInvoiceFormSubmissionsByAgencyIdStringQuery: (agency_id:
 export declare const getLastInvoiceFormSubmissionStringQuery: (filters?: {
     formZid?: number;
 }) => string;
+export declare const getCaseFormSubmissionsByCaseIdStringQuery: (case_id: number, filters?: {
+    formZid?: number;
+}) => string;
 export declare const getInvoiceFormSubmissionsByInvoiceIdStringQuery: (invoice_id: number, filters?: {
     formZid?: number;
 }) => string;

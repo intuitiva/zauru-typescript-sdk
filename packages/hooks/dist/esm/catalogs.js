@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useGetInvoiceFormSubmissionsByInvoiceId = exports.useGetMyCaseFormSubmissions = exports.useGetInvoiceFormSubmissionsByAgencyId = exports.useGetCaseForms = exports.useGetInvoiceForms = exports.useGetAllForms = exports.useGetBitacoraRechazoMasivo = exports.useGetCCPorcentajesDeRechazo = exports.useGetMotivosDeRechazo = exports.useGetTiposDeMuestra = exports.useGetInvoicesByCurrentAgency = exports.useGetInvoicesByLab = exports.useGetShipmentsToMyAgency = exports.useGetEmployees = exports.useGetEmployeesByCurrentAgency = exports.useGetEmployeesByLab = exports.useGetPaymentMethods = exports.useGetPaymentTerms = exports.useGetSuggestedPrices = exports.useGetAgencies = exports.useGetPrintTemplates = exports.useGetPayeesForLab = exports.useGetPayees = exports.useGetClientCategories = exports.useGetProviderCategories = exports.useGetMyCases = exports.useGetProviders = exports.useGetReceptionTypes = exports.useGetCurrencies = exports.useGetBundlesForLab = exports.useGetBundlesRecipForLab = exports.useGetPayeeCategoriesLabPrices = exports.useGetPayeeCategories = exports.useGetTemplates = exports.useGetBookings = exports.useGetItemCategoriesForLab = exports.useGetItemServicesByLab = exports.useGetMyAgencyLotStocks = exports.useGetItemsByLab = exports.useGetItemsByReception = exports.useGetItems = void 0;
+exports.useGetInvoiceFormSubmissionsByInvoiceId = exports.useGetCaseFormSubmissionsByCaseId = exports.useGetMyCaseFormSubmissions = exports.useGetInvoiceFormSubmissionsByAgencyId = exports.useGetCaseForms = exports.useGetInvoiceForms = exports.useGetAllForms = exports.useGetBitacoraRechazoMasivo = exports.useGetCCPorcentajesDeRechazo = exports.useGetMotivosDeRechazo = exports.useGetTiposDeMuestra = exports.useGetInvoicesByCurrentAgency = exports.useGetInvoicesByLab = exports.useGetShipmentsToMyAgency = exports.useGetEmployees = exports.useGetEmployeesByCurrentAgency = exports.useGetEmployeesByLab = exports.useGetPaymentMethods = exports.useGetPaymentTerms = exports.useGetSuggestedPrices = exports.useGetAgencies = exports.useGetPrintTemplates = exports.useGetPayeesForLab = exports.useGetPayees = exports.useGetClientCategories = exports.useGetProviderCategories = exports.useGetMyCases = exports.useGetProviders = exports.useGetReceptionTypes = exports.useGetCurrencies = exports.useGetBundlesForLab = exports.useGetBundlesRecipForLab = exports.useGetPayeeCategoriesLabPrices = exports.useGetPayeeCategories = exports.useGetTemplates = exports.useGetBookings = exports.useGetItemCategoriesForLab = exports.useGetItemServicesByLab = exports.useGetMyAgencyLotStocks = exports.useGetItemsByLab = exports.useGetItemsByReception = exports.useGetItems = void 0;
 exports.useGetReduxCatalog = useGetReduxCatalog;
 const react_1 = require("@remix-run/react");
 const react_2 = require("react");
@@ -362,6 +362,30 @@ const useGetMyCaseFormSubmissions = (config) => {
     };
 };
 exports.useGetMyCaseFormSubmissions = useGetMyCaseFormSubmissions;
+const useGetCaseFormSubmissionsByCaseId = (config) => {
+    const caseId = config?.otherParams?.caseId;
+    const withFiles = config?.otherParams?.withFiles;
+    const data = useGetReduxCatalog("caseFormSubmissionsByCaseId", {
+        otherParams: {
+            caseId: `${caseId}`,
+            withFiles: `${withFiles}`,
+        },
+    });
+    // Filtrar los registros para obtener sólo los de la versión más alta.
+    const groupedByVersion = (data.data || []).reduce((acc, record) => {
+        const zid = record.settings_form_submission.zid;
+        if (!acc[zid]) {
+            acc[zid] = record;
+        }
+        return acc;
+    }, {});
+    const latestVersionRecords = Object.values(groupedByVersion);
+    return {
+        loading: data.loading,
+        data: latestVersionRecords,
+    };
+};
+exports.useGetCaseFormSubmissionsByCaseId = useGetCaseFormSubmissionsByCaseId;
 const useGetInvoiceFormSubmissionsByInvoiceId = (config) => {
     const invoiceId = config?.otherParams?.invoiceId;
     const withFiles = config?.otherParams?.withFiles;

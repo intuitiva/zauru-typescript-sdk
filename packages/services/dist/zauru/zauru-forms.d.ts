@@ -63,6 +63,12 @@ export declare function getLastInvoiceFormSubmission(session: Session, filters?:
 export declare function getInvoiceFormSubmissionsByInvoiceId(headersZauru: any, session: Session, invoice_id: string, withFiles?: boolean, filters?: {
     formZid?: number;
 }): Promise<AxiosUtilsResponse<SubmissionInvoicesGraphQL[]>>;
+/**
+ * getCaseFormSubmissionsByCaseId
+ */
+export declare function getCaseFormSubmissionsByCaseId(headersZauru: any, session: Session, case_id: string, withFiles?: boolean, filters?: {
+    formZid?: number;
+}): Promise<AxiosUtilsResponse<SubmissionCasesGraphQL[]>>;
 export declare const getFormSubmissionAPIZauru: (headers: any, id: number | string) => Promise<AxiosUtilsResponse<any>>;
 /**
  * createForm
