@@ -4,9 +4,9 @@ import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getCasesStringQuery } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 /**
- * getCasesByResponsibleId
+ * getCases
  */
-export async function getCasesByResponsibleId(session, filters) {
+export async function getCases(session, filters) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const initialFilters = {

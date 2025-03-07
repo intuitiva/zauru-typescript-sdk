@@ -7,14 +7,15 @@ import { getCasesStringQuery } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 
 /**
- * getCasesByResponsibleId
+ * getCases
  */
-export async function getCasesByResponsibleId(
+export async function getCases(
   session: Session,
   filters?: {
     responsible_id?: number;
     closed?: boolean;
     client_id?: number;
+    tag_id?: string;
   }
 ): Promise<AxiosUtilsResponse<CaseGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {

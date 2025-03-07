@@ -1734,6 +1734,7 @@ export const getCasesStringQuery = (filters?: {
   responsible_id?: number;
   client_id?: number;
   closed?: boolean;
+  tag_id?: string;
 }) => {
   const conditions = [];
 
@@ -1747,6 +1748,10 @@ export const getCasesStringQuery = (filters?: {
 
   if (filters?.closed !== undefined) {
     conditions.push(`closed: {_eq: ${filters.closed}}`);
+  }
+
+  if (filters?.tag_id) {
+    conditions.push(`taggings: {tag_id: {_eq: ${filters.tag_id}}}`);
   }
 
   const whereClause = conditions.length

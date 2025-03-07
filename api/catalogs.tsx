@@ -28,6 +28,7 @@ import {
   getSession,
   getSuggestedPrices,
   getInvoicesByAgencyId,
+  getCases,
 } from "@zauru-sdk/services";
 import { AxiosUtilsResponse } from "@zauru-sdk/types";
 import {
@@ -43,7 +44,6 @@ import {
   getItemsByLabCategory,
   getItemsByReceptionCategory,
   getLabItemCategories,
-  getMyCases,
   getReceptionTypes,
   getShipmentsToMyAgency,
   getTemplates,
@@ -195,12 +195,17 @@ export const loader: LoaderFunction = async ({ request }) => {
         response = await getBitacorasPOMassive(headers, session);
         break;
 
-      case "myCases":
-        response = await getMyCases(session, {
-          responsible_id: Number(session.get("employee_id")),
+      case "myCases": {
+        const tag_id = url.searchParams.get("tag_id") ?? undefined;
+        const assignedToMe = url.searchParams.get("assignedToMe") === "true";
+        response = await getCases(session, {
+          tag_id,
+          ...(assignedToMe
+            ? { responsible_id: Number(session.get("employee_id")) }
+            : {}),
         });
         break;
-
+      }
       case "myCaseFormSubmissions":
         response = await getMyCaseFormSubmissions(headers, session);
         break;

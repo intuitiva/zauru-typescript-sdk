@@ -132,5 +132,6 @@ export declare const getCasesStringQuery: (filters?: {
     responsible_id?: number;
     client_id?: number;
     closed?: boolean;
+    tag_id?: string;
 }) => string;
 export declare const getPrintTemplatesStringQuery = "\nquery getPrintTemplates {\n    print_templates {\n        id\n        name\n    }\n}\n";
