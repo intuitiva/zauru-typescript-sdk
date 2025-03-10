@@ -38,3 +38,24 @@ export declare function deleteCase(headers: any, id: string | number): Promise<A
  * @returns
  */
 export declare function closeCase(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
+/**
+ * createPOSCase
+ * @param headers
+ * @param body
+ * @returns
+ */
+export declare function createPOSCase(headers: any, body: Partial<CaseGraphQL>): Promise<AxiosUtilsResponse<CaseGraphQL>>;
+/**
+ * updatePOSCase
+ * @param headers
+ * @param body
+ * @returns
+ */
+export declare function updatePOSCase(headers: any, body: Partial<CaseGraphQL>): Promise<AxiosUtilsResponse<CaseGraphQL>>;
+/**
+ * closePOSCase
+ * @param headers
+ * @param id
+ * @returns
+ */
+export declare function closePOSCase(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;

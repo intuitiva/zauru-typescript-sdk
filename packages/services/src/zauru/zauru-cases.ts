@@ -146,3 +146,84 @@ export async function closeCase(
     return true;
   });
 }
+
+//==============================================
+//======= ENDPOINTS DE POS/CASES
+//==============================================
+
+/**
+ * createPOSCase
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function createPOSCase(
+  headers: any,
+  body: Partial<CaseGraphQL>
+): Promise<AxiosUtilsResponse<CaseGraphQL>> {
+  return handlePossibleAxiosErrors(async () => {
+    const sendBody = {
+      ...body,
+      case_supplies_attributes: arrayToObject(body.case_supplies),
+      tag_ids: ["", ...(body.taggings?.map((x) => x.tag_id) ?? [])],
+    } as any;
+
+    if (sendBody.deleted_case_supplies) delete sendBody.deleted_case_supplies;
+    if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
+    if (sendBody.case_supplies) delete sendBody.case_supplies;
+    if (sendBody.taggings) delete sendBody.taggings;
+
+    const response = await httpZauru.post<CaseGraphQL>(
+      `/pos/cases.json`,
+      { case: sendBody },
+      { headers }
+    );
+
+    return response.data;
+  });
+}
+
+/**
+ * updatePOSCase
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function updatePOSCase(
+  headers: any,
+  body: Partial<CaseGraphQL>
+): Promise<AxiosUtilsResponse<CaseGraphQL>> {
+  return handlePossibleAxiosErrors(async () => {
+    const sendBody = {
+      ...body,
+      case_supplies_attributes: arrayToObject(body.case_supplies),
+    } as any;
+    if (sendBody.deleted_case_supplies) delete sendBody.deleted_case_supplies;
+    if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
+    if (sendBody.case_supplies) delete sendBody.case_supplies;
+
+    const response = await httpZauru.patch<CaseGraphQL>(
+      `/pos/cases/${body.id}.json`,
+      { case: sendBody },
+      { headers }
+    );
+
+    return response.data;
+  });
+}
+
+/**
+ * closePOSCase
+ * @param headers
+ * @param id
+ * @returns
+ */
+export async function closePOSCase(
+  headers: any,
+  id: string | number
+): Promise<AxiosUtilsResponse<boolean>> {
+  return handlePossibleAxiosErrors(async () => {
+    await httpZauru.get<any>(`/pos/cases/${id}/close.json`, { headers });
+    return true;
+  });
+}

@@ -95,3 +95,65 @@ export async function closeCase(headers, id) {
         return true;
     });
 }
+//==============================================
+//======= ENDPOINTS DE POS/CASES
+//==============================================
+/**
+ * createPOSCase
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function createPOSCase(headers, body) {
+    return handlePossibleAxiosErrors(async () => {
+        const sendBody = {
+            ...body,
+            case_supplies_attributes: arrayToObject(body.case_supplies),
+            tag_ids: ["", ...(body.taggings?.map((x) => x.tag_id) ?? [])],
+        };
+        if (sendBody.deleted_case_supplies)
+            delete sendBody.deleted_case_supplies;
+        if (sendBody.__rvfInternalFormId)
+            delete sendBody.__rvfInternalFormId;
+        if (sendBody.case_supplies)
+            delete sendBody.case_supplies;
+        if (sendBody.taggings)
+            delete sendBody.taggings;
+        const response = await httpZauru.post(`/pos/cases.json`, { case: sendBody }, { headers });
+        return response.data;
+    });
+}
+/**
+ * updatePOSCase
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function updatePOSCase(headers, body) {
+    return handlePossibleAxiosErrors(async () => {
+        const sendBody = {
+            ...body,
+            case_supplies_attributes: arrayToObject(body.case_supplies),
+        };
+        if (sendBody.deleted_case_supplies)
+            delete sendBody.deleted_case_supplies;
+        if (sendBody.__rvfInternalFormId)
+            delete sendBody.__rvfInternalFormId;
+        if (sendBody.case_supplies)
+            delete sendBody.case_supplies;
+        const response = await httpZauru.patch(`/pos/cases/${body.id}.json`, { case: sendBody }, { headers });
+        return response.data;
+    });
+}
+/**
+ * closePOSCase
+ * @param headers
+ * @param id
+ * @returns
+ */
+export async function closePOSCase(headers, id) {
+    return handlePossibleAxiosErrors(async () => {
+        await httpZauru.get(`/pos/cases/${id}/close.json`, { headers });
+        return true;
+    });
+}
