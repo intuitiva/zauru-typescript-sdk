@@ -15,20 +15,25 @@ const { getSession, commitSession, destroySession } =
   createUpstashSessionStorage({ cookie: sessionCookie });
 
 const getRefreshSession = async (request: Request, session: Session) => {
-  const cookie = request.headers.get("Cookie");
-  const currentSession = await getSession(cookie);
+  try {
+    const cookie = request.headers.get("Cookie");
+    const currentSession = await getSession(cookie);
 
-  if (!currentSession) {
+    if (!currentSession) {
+      return null;
+    }
+
+    return await commitSession(session, {
+      maxAge: 60 * 60 * 24,
+      path: "/",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+  } catch (error) {
+    console.error("Ocurrio un error al refrescar la session", error);
     return null;
   }
-
-  return await commitSession(session, {
-    maxAge: 60 * 60 * 24,
-    path: "/",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-  });
 };
 
 export { getSession, commitSession, destroySession, getRefreshSession };
