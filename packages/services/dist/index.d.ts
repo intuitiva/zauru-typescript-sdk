@@ -1,4 +1,5 @@
 export * from "./common.js";
+export * from "./redis/redisQueue.js";
 export * from "./graphql/index.js";
 export * from "./cms/index.js";
 export * from "./sessions/sessions.js";

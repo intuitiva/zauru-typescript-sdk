@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@remix-run/node": "^2.8.1",
+    "@upstash/redis": "^1.34.5",
     "@zauru-sdk/common": "^2.0.187",
     "@zauru-sdk/config": "^2.0.100",
     "@zauru-sdk/graphql": "^2.0.187",
