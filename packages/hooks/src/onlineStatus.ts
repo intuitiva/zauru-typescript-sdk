@@ -3,11 +3,8 @@ import { useState, useEffect } from "react";
 // Hook personalizado para verificar el estado de conexión
 export const useIsOnline = () => {
   try {
-    // Verificar si estamos en el entorno del servidor o del cliente
-    const isServer = typeof window === "undefined";
-
     // Estado local para almacenar si la aplicación está en línea o no
-    const [isOnline, setIsOnline] = useState(!isServer && navigator.onLine);
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
 
     // Función para manejar el cambio de estado de conexión
     const handleConnectionChange = () => {
@@ -15,11 +12,6 @@ export const useIsOnline = () => {
     };
 
     useEffect(() => {
-      if (isServer) {
-        // Si estamos en el servidor, no añadir los event listeners
-        return;
-      }
-
       // Añadir event listeners
       window.addEventListener("online", handleConnectionChange);
       window.addEventListener("offline", handleConnectionChange);
@@ -29,7 +21,7 @@ export const useIsOnline = () => {
         window.removeEventListener("online", handleConnectionChange);
         window.removeEventListener("offline", handleConnectionChange);
       };
-    }, [isServer]);
+    }, []);
 
     return isOnline;
   } catch (ex) {
