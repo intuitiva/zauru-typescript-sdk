@@ -152,7 +152,7 @@ query getPurchaseOrder($id: bigint) @cached {
 }
 `;
 exports.getPurchaseOrderStringQuery = getPurchaseOrderStringQuery;
-const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null = false, id_number, id_number_not_empty = false, withMovementLots = false, withPurchaseOrdersByShipmentReference = false, limit = 1000, id, wheres, memoILike, }) => {
+const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null = false, id_number, id_number_not_empty = false, withMovementLots = false, withPurchaseOrdersByShipmentReference = false, limit = 1000, id, wheres, memoILike, plannedShippingDateRange, plannedDeliveryDateRange, }) => {
     let conditions = [];
     if (suffix) {
         conditions.push(`id_number: {_ilike: "%${suffix}%"}`);
@@ -192,6 +192,12 @@ const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided,
     }
     if (returned !== undefined) {
         conditions.push(`returned: {_eq: ${returned}}`);
+    }
+    if (plannedShippingDateRange) {
+        conditions.push(`planned_shipping: {_gte: "${plannedShippingDateRange.startDate}", _lte: "${plannedShippingDateRange.endDate}"}`);
+    }
+    if (plannedDeliveryDateRange) {
+        conditions.push(`planned_delivery: {_gte: "${plannedDeliveryDateRange.startDate}", _lte: "${plannedDeliveryDateRange.endDate}"}`);
     }
     const movementLots = withMovementLots
         ? `lot {

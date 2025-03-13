@@ -18,6 +18,14 @@ export declare function getShipments(session: Session, config: {
     returned?: boolean;
     withPurchaseOrdersByShipmentReference?: boolean;
     limit?: number;
+    plannedShippingDateRange?: {
+        startDate: string;
+        endDate: string;
+    };
+    plannedDeliveryDateRange?: {
+        startDate: string;
+        endDate: string;
+    };
 }): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>>;
 /**
  * receiveShipment_booking

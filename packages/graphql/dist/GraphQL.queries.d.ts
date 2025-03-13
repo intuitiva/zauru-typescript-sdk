@@ -3,7 +3,7 @@ export declare const getPurchaseOrderByIdNumberStringQuery: (id_number: string) 
 export declare const getPurchaseOrderStringQuery: (id: number, config?: {
     withLotStocks: boolean;
 }) => string;
-export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null, id_number, id_number_not_empty, withMovementLots, withPurchaseOrdersByShipmentReference, limit, id, wheres, memoILike, }: {
+export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null, id_number, id_number_not_empty, withMovementLots, withPurchaseOrdersByShipmentReference, limit, id, wheres, memoILike, plannedShippingDateRange, plannedDeliveryDateRange, }: {
     agency_to_id?: number;
     agency_from_id?: number;
     suffix?: string;
@@ -20,6 +20,14 @@ export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, s
     id?: number;
     wheres?: string[];
     memoILike?: string;
+    plannedShippingDateRange?: {
+        startDate: string;
+        endDate: string;
+    };
+    plannedDeliveryDateRange?: {
+        startDate: string;
+        endDate: string;
+    };
 }) => string;
 export declare const getLotsByNameStringQuery: (name: string, entity_id: number) => string;
 export declare const getLotStocksByAgencyIdStringQuery: (agency_id: number) => string;

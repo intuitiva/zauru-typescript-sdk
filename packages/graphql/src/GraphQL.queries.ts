@@ -171,6 +171,8 @@ export const getShipmentsStringQuery = ({
   id,
   wheres,
   memoILike,
+  plannedShippingDateRange,
+  plannedDeliveryDateRange,
 }: {
   agency_to_id?: number;
   agency_from_id?: number;
@@ -188,6 +190,14 @@ export const getShipmentsStringQuery = ({
   id?: number;
   wheres?: string[];
   memoILike?: string;
+  plannedShippingDateRange?: {
+    startDate: string;
+    endDate: string;
+  };
+  plannedDeliveryDateRange?: {
+    startDate: string;
+    endDate: string;
+  };
 }) => {
   let conditions = [];
 
@@ -241,6 +251,18 @@ export const getShipmentsStringQuery = ({
 
   if (returned !== undefined) {
     conditions.push(`returned: {_eq: ${returned}}`);
+  }
+
+  if (plannedShippingDateRange) {
+    conditions.push(
+      `planned_shipping: {_gte: "${plannedShippingDateRange.startDate}", _lte: "${plannedShippingDateRange.endDate}"}`
+    );
+  }
+
+  if (plannedDeliveryDateRange) {
+    conditions.push(
+      `planned_delivery: {_gte: "${plannedDeliveryDateRange.startDate}", _lte: "${plannedDeliveryDateRange.endDate}"}`
+    );
   }
 
   const movementLots = withMovementLots

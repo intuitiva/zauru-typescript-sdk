@@ -26,6 +26,14 @@ export async function getShipments(
     returned?: boolean;
     withPurchaseOrdersByShipmentReference?: boolean;
     limit?: number;
+    plannedShippingDateRange?: {
+      startDate: string;
+      endDate: string;
+    };
+    plannedDeliveryDateRange?: {
+      startDate: string;
+      endDate: string;
+    };
   }
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
