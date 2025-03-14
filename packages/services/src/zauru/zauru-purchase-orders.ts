@@ -10,7 +10,6 @@ import {
 import {
   AxiosUtilsResponse,
   BasketSchema,
-  CreateNewPurchaseOrderBody,
   DataTablesFilterBody,
   HTMLPurchasesListSchema,
   NewPurchaseOrderResponse,
@@ -66,6 +65,7 @@ export type CreateNewPurchaseOrderType = Partial<
 > & {
   purchase_order_details?: Partial<PurchaseOrderDetailsGraphQL>[];
   taggings?: Partial<TaggingGraphQL>[];
+  force_preauthorized?: boolean;
 };
 export const createNewPurchaseOrder = (
   headers: any,
@@ -118,7 +118,7 @@ export const createNewPurchaseOrder = (
  */
 export const createNewAuthorizedPurchaseOrder = (
   headers: any,
-  body: CreateNewPurchaseOrderBody,
+  body: CreateNewPurchaseOrderType,
   withReceive: boolean = true
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
