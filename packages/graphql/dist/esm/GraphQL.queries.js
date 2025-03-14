@@ -193,10 +193,12 @@ const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided,
     if (returned !== undefined) {
         conditions.push(`returned: {_eq: ${returned}}`);
     }
-    if (plannedShippingDateRange) {
+    if (plannedShippingDateRange?.startDate &&
+        plannedShippingDateRange?.endDate) {
         conditions.push(`planned_shipping: {_gte: "${plannedShippingDateRange.startDate}", _lte: "${plannedShippingDateRange.endDate}"}`);
     }
-    if (plannedDeliveryDateRange) {
+    if (plannedDeliveryDateRange?.startDate &&
+        plannedDeliveryDateRange?.endDate) {
         conditions.push(`planned_delivery: {_gte: "${plannedDeliveryDateRange.startDate}", _lte: "${plannedDeliveryDateRange.endDate}"}`);
     }
     const movementLots = withMovementLots
