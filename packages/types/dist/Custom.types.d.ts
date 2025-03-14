@@ -276,6 +276,7 @@ export type ExtendedPurchaseOrderBody = {
     payee_info?: string;
     tag_ids: string[];
     purchase_order_details: Partial<PurchaseOrderDetailsGraphQL>[];
+    force_preauthorized?: boolean;
 };
 export type CreateNewPurchaseOrderBody = Omit<Partial<PurchaseOrderGraphQL>, "purchase_order_details"> & ExtendedPurchaseOrderBody;
 export type SelectFieldOption = {
