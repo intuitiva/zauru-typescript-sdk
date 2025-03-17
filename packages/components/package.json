@@ -22,6 +22,7 @@
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",
     "@types/jsonwebtoken": "^9.0.2",
+    "@types/rails__activestorage": "^7.1.1",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@types/styled-components": "^5.1.34",
@@ -31,6 +32,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
+    "@rails/activestorage": "^8.0.200",
     "@reduxjs/toolkit": "^2.2.1",
     "@remix-run/react": "^2.8.1",
     "@zauru-sdk/common": "^2.0.197",

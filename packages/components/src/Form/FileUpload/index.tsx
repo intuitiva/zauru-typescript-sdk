@@ -1,5 +1,5 @@
 import { DownloadIconSVG, IdeaIconSVG } from "@zauru-sdk/icons";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
   helpText?: string;
   hint?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  readOnly?: boolean; // <-- Usamos readOnly en lugar de disabled
+  readOnly?: boolean;
   fileTypes?: string[];
   showAvailableTypes?: boolean;
   className?: string;
@@ -38,6 +38,7 @@ export const FileUploadField = (props: Props) => {
 
   const {
     register: tempRegister,
+    setValue,
     formState: { errors },
   } = useFormContext() || { formState: {} };
 
@@ -45,50 +46,116 @@ export const FileUploadField = (props: Props) => {
   const register = tempRegister ? tempRegister(name, { required }) : undefined;
 
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+  const [fileDeleted, setFileDeleted] = useState<boolean>(false);
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Para mostrar en el hint los tipos de archivo permitidos (opcional)
+  useEffect(() => {
+    return () => {
+      if (previewSrc) {
+        URL.revokeObjectURL(previewSrc);
+      }
+    };
+  }, [previewSrc]);
+
   let hintMessage = hint;
   if (showAvailableTypes && fileTypes.length > 0) {
     hintMessage = `${hint || ""} Archivos permitidos: ${fileTypes.join(", ")}`;
   }
 
-  // Clases de estilo basadas en si hay error (color rojo) o no (gris),
-  // pero ahora ignoramos el "disabled" y nos centramos en "readOnly".
   const color = error ? "red" : "gray";
   const isReadOnly = readOnly;
-  // En modo readOnly, puedes poner un fondo distinto, o dejarlo en blanco
   const bgColor = isReadOnly ? "bg-gray-100" : `bg-${color}-50`;
   const textColor = isReadOnly ? "text-gray-700" : `text-${color}-900`;
   const borderColor = error ? "border-red-500" : `border-${color}-500`;
 
   /**
-   * onChange normal del input.
-   * Sólo se llama cuando readOnly es false (porque si es true ni renderizamos el input).
+   * Función que se dispara cuando el usuario selecciona un archivo.
+   * Además de actualizar la vista previa, inicia la subida directa a AWS.
    */
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange && onChange(event);
-    // Si usas register, la parte interna de react-hook-form también se encargará
-    // del cambio, no necesitas llamarlo manualmente.
+    setFileDeleted(false);
+
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+
+      // Actualizamos la vista previa para imágenes
+      if (file && file.type.startsWith("image/")) {
+        const objectUrl = URL.createObjectURL(file);
+        setPreviewSrc(objectUrl);
+      } else {
+        setPreviewSrc(null);
+      }
+
+      // Importamos dinámicamente DirectUpload solo en el cliente
+      import("@rails/activestorage")
+        .then(({ DirectUpload }) => {
+          const uploadUrl =
+            "https://zauru.herokuapp.com/rails/active_storage/direct_uploads";
+
+          // Inicializamos el progreso y activamos el estado de subida
+          setUploading(true);
+          setUploadProgress(0);
+
+          const directUpload = new DirectUpload(file, uploadUrl, {
+            directUploadWillStoreFileWithXHR: (xhr: XMLHttpRequest) => {
+              xhr.upload.addEventListener("progress", (event) => {
+                if (event.lengthComputable) {
+                  const progress = Math.round(
+                    (event.loaded / event.total) * 100
+                  );
+                  setUploadProgress(progress);
+                }
+              });
+            },
+          });
+
+          directUpload.create((error, blob) => {
+            setUploading(false);
+            if (error) {
+              console.error("Error al subir el archivo:", error);
+              // Manejo de error según tus necesidades
+            } else {
+              // blob.signed_id es el identificador que debes enviar a tu API
+              console.log("Archivo subido exitosamente. Blob:", blob);
+              setValue(name, blob.signed_id);
+            }
+          });
+        })
+        .catch((err) => console.error("Error al cargar DirectUpload:", err));
+    }
   };
 
   /**
-   * Para el "preview" cuando `defaultValue` es string:
-   * - Si `download` es true, mostramos un icono de descarga.
-   * - Si `download` es false, mostramos la imagen en miniatura.
-   * El click abre la URL en nueva ventana.
+   * Función para eliminar el archivo. Además de limpiar la vista previa,
+   * limpia el input y el valor del campo en el formulario.
    */
-  function renderPreview(defaultValue: string) {
+  const deleteFile = () => {
+    setPreviewSrc(null);
+    setFileDeleted(true);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setValue(name, "");
+  };
+
+  /**
+   * Renderiza la vista previa del archivo.
+   * - Si `download` es true, muestra un botón para descargar.
+   * - Si no, muestra la imagen en miniatura.
+   */
+  function renderPreview(src: string) {
     if (download) {
-      // Botón de descarga
       return (
         <div
           role="button"
           tabIndex={0}
-          onClick={() => window.open(defaultValue, "_blank")}
+          onClick={() => window.open(src, "_blank")}
           onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              window.open(defaultValue, "_blank");
-            }
+            if (event.key === "Enter") window.open(src, "_blank");
           }}
           className="inline-flex items-center cursor-pointer"
         >
@@ -99,27 +166,21 @@ export const FileUploadField = (props: Props) => {
         </div>
       );
     } else {
-      // Vista previa como imagen
       return (
         <div
           role="button"
           tabIndex={0}
-          onClick={() => window.open(defaultValue, "_blank")}
+          onClick={() => window.open(src, "_blank")}
           onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              window.open(defaultValue, "_blank");
-            }
+            if (event.key === "Enter") window.open(src, "_blank");
           }}
           className="inline-block cursor-pointer"
         >
           <img
-            src={defaultValue}
+            src={src}
             alt={name}
             className="h-48 w-48 inline mr-1 pb-1"
-            style={{
-              objectFit: "contain",
-              backgroundColor: "transparent",
-            }}
+            style={{ objectFit: "contain", backgroundColor: "transparent" }}
           />
         </div>
       );
@@ -127,9 +188,9 @@ export const FileUploadField = (props: Props) => {
   }
 
   /**
-   * 1) Si readOnly = true:
-   *    - Si defaultValue es string -> Sólo mostramos el preview (descarga/imagen).
-   *    - Si no hay defaultValue (o es File) -> mostramos "nada" o un texto de "Sin archivo".
+   * 1) Modo readOnly:
+   *    - Si defaultValue es string, se muestra el preview (descarga/imagen).
+   *    - Si no hay defaultValue (o es File), se muestra "Sin archivo".
    */
   if (readOnly) {
     return (
@@ -137,12 +198,11 @@ export const FileUploadField = (props: Props) => {
         {title && (
           <label
             htmlFor={name}
-            className={`block mb-1 text-sm font-medium text-gray-700`}
+            className="block mb-1 text-sm font-medium text-gray-700"
           >
             {title}
           </label>
         )}
-
         {typeof defaultValue === "string" && defaultValue ? (
           renderPreview(defaultValue)
         ) : (
@@ -155,9 +215,10 @@ export const FileUploadField = (props: Props) => {
   }
 
   /**
-   * 2) readOnly = false:
-   *    - Si hay defaultValue y es string, mostramos la vista previa + el input
-   *    - Si no hay defaultValue (o no es string) mostramos solo el input
+   * 2) Modo editable (readOnly = false):
+   *    - Si se ha seleccionado una imagen o existe defaultValue y no se ha eliminado,
+   *      se muestra la vista previa generada junto con un botón para eliminar el archivo.
+   *    - Si se elimina el archivo o no hay ninguno, se muestra el input para cargar uno.
    */
   return (
     <div className={`col-span-6 sm:col-span-3 ${className}`}>
@@ -171,12 +232,34 @@ export const FileUploadField = (props: Props) => {
         </label>
       )}
 
-      {/* Mostrar la vista previa si defaultValue es string */}
-      {typeof defaultValue === "string" && defaultValue && (
-        <div className="mb-2">{renderPreview(defaultValue)}</div>
-      )}
+      {!fileDeleted &&
+        (previewSrc ? (
+          <div className="mb-2 flex items-center">
+            {renderPreview(previewSrc)}
+            <button
+              type="button"
+              onClick={deleteFile}
+              className="ml-2 text-red-600 underline text-sm"
+            >
+              Eliminar archivo
+            </button>
+          </div>
+        ) : (
+          typeof defaultValue === "string" &&
+          defaultValue && (
+            <div className="mb-2 flex items-center">
+              {renderPreview(defaultValue)}
+              <button
+                type="button"
+                onClick={deleteFile}
+                className="ml-2 text-red-600 underline text-sm"
+              >
+                Eliminar archivo
+              </button>
+            </div>
+          )
+        ))}
 
-      {/* Input para cambiar/cargar archivo */}
       <div className="flex relative items-center">
         <input
           type="file"
@@ -184,11 +267,11 @@ export const FileUploadField = (props: Props) => {
           accept={fileTypes.map((ft) => `.${ft}`).join(", ")}
           className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
           {...(register ?? {})}
+          ref={fileInputRef}
           name={name}
           onChange={handleInputChange}
         />
 
-        {/* Botón de ayuda con tooltip */}
         {helpText && (
           <div className="flex items-center relative ml-3">
             <div
@@ -207,13 +290,25 @@ export const FileUploadField = (props: Props) => {
         )}
       </div>
 
-      {/* Mensaje de error */}
+      {uploading && (
+        <div className="mt-2">
+          <progress
+            value={uploadProgress}
+            max="100"
+            className="w-full"
+          ></progress>
+          <p className="text-sm text-blue-600 mt-1">
+            Subiendo archivo: {uploadProgress}%
+          </p>
+        </div>
+      )}
+
       {error && (
-        <p className={`mt-2 text-sm text-red-600`}>
-          <span className="font-medium">Oops!</span> {error.message?.toString()}
+        <p className="mt-2 text-sm text-red-600">
+          <span className="font-medium">¡Oops!</span>{" "}
+          {error.message?.toString()}
         </p>
       )}
-      {/* Hint (si no hay error) */}
       {!error && hintMessage && (
         <p className={`mt-2 italic text-sm text-${color}-500`}>{hintMessage}</p>
       )}

@@ -147,7 +147,7 @@ export declare const sortByProperty: (array: any[], property: string) => any[];
  * @param action A function that returns a Promise of type T.
  * @returns A Promise of AxiosUtilsResponse<T>.
  */
-export declare function handlePossibleAxiosErrors<T>(action: () => Promise<T>): Promise<AxiosUtilsResponse<T>>;
+export declare function handlePossibleAxiosErrors<T>(action: () => Promise<T>, timeout?: number): Promise<AxiosUtilsResponse<T>>;
 /**
  * createPostgresUrl
  * @param host

@@ -570,9 +570,8 @@ exports.sortByProperty = sortByProperty;
  * @param action A function that returns a Promise of type T.
  * @returns A Promise of AxiosUtilsResponse<T>.
  */
-async function handlePossibleAxiosErrors(action) {
-    const SECONDS_TO_TIMEOUT = 20;
-    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error(`Timeout skipped after ${SECONDS_TO_TIMEOUT} seconds`)), SECONDS_TO_TIMEOUT * 1000));
+async function handlePossibleAxiosErrors(action, timeout = 25) {
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error(`Timeout skipped after ${timeout} seconds`)), timeout * 1000));
     try {
         const result = await Promise.race([action(), timeoutPromise]);
         return { error: false, data: result };

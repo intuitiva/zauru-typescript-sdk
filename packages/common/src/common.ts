@@ -639,17 +639,13 @@ export const sortByProperty = (array: any[], property: string) => {
  * @returns A Promise of AxiosUtilsResponse<T>.
  */
 export async function handlePossibleAxiosErrors<T>(
-  action: () => Promise<T>
+  action: () => Promise<T>,
+  timeout: number = 25
 ): Promise<AxiosUtilsResponse<T>> {
-  const SECONDS_TO_TIMEOUT = 20;
-
   const timeoutPromise = new Promise((_, reject) =>
     setTimeout(
-      () =>
-        reject(
-          new Error(`Timeout skipped after ${SECONDS_TO_TIMEOUT} seconds`)
-        ),
-      SECONDS_TO_TIMEOUT * 1000
+      () => reject(new Error(`Timeout skipped after ${timeout} seconds`)),
+      timeout * 1000
     )
   );
 
