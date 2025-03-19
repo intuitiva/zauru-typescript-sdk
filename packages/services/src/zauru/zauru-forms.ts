@@ -495,9 +495,22 @@ export async function getInvoiceFormSubmissionsByInvoiceId(
 
     let registers = response?.data?.data?.submission_invoices;
 
+    // Filtrar los registros para obtener sólo los de la versión más alta.
+    const groupedByVersion = registers.reduce((acc, record) => {
+      const zid = record.settings_form_submission.zid;
+
+      if (!acc[zid]) {
+        acc[zid] = record;
+      }
+
+      return acc;
+    }, {} as { [key: string]: SubmissionInvoicesGraphQL });
+
+    let latestVersionRecords = Object.values(groupedByVersion).reverse();
+
     if (withFiles) {
-      registers = await Promise.all(
-        registers.map(async (register) => {
+      latestVersionRecords = await Promise.all(
+        latestVersionRecords.map(async (register) => {
           try {
             const responseZauru = await httpZauru.get(
               `/settings/forms/form_submissions/${register.settings_form_submission.id}.json`,
@@ -536,19 +549,6 @@ export async function getInvoiceFormSubmissionsByInvoiceId(
         })
       );
     }
-
-    // Filtrar los registros para obtener sólo los de la versión más alta.
-    const groupedByVersion = registers.reduce((acc, record) => {
-      const zid = record.settings_form_submission.zid;
-
-      if (!acc[zid]) {
-        acc[zid] = record;
-      }
-
-      return acc;
-    }, {} as { [key: string]: SubmissionInvoicesGraphQL });
-
-    const latestVersionRecords = Object.values(groupedByVersion).reverse();
 
     return latestVersionRecords;
   });
@@ -585,9 +585,22 @@ export async function getCaseFormSubmissionsByCaseId(
 
     let registers = response?.data?.data?.submission_cases;
 
+    // Filtrar los registros para obtener sólo los de la versión más alta.
+    const groupedByVersion = registers.reduce((acc, record) => {
+      const zid = record.settings_form_submission.zid;
+
+      if (!acc[zid]) {
+        acc[zid] = record;
+      }
+
+      return acc;
+    }, {} as { [key: string]: SubmissionCasesGraphQL });
+
+    let latestVersionRecords = Object.values(groupedByVersion).reverse();
+
     if (withFiles) {
-      registers = await Promise.all(
-        registers.map(async (register) => {
+      latestVersionRecords = await Promise.all(
+        latestVersionRecords.map(async (register) => {
           try {
             const responseZauru = await httpZauru.get(
               `/settings/forms/form_submissions/${register.settings_form_submission.id}.json`,
@@ -626,19 +639,6 @@ export async function getCaseFormSubmissionsByCaseId(
         })
       );
     }
-
-    // Filtrar los registros para obtener sólo los de la versión más alta.
-    const groupedByVersion = registers.reduce((acc, record) => {
-      const zid = record.settings_form_submission.zid;
-
-      if (!acc[zid]) {
-        acc[zid] = record;
-      }
-
-      return acc;
-    }, {} as { [key: string]: SubmissionCasesGraphQL });
-
-    const latestVersionRecords = Object.values(groupedByVersion).reverse();
 
     return latestVersionRecords;
   });
