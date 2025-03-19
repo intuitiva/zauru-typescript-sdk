@@ -95,6 +95,20 @@ export async function closeCase(headers, id) {
         return true;
     });
 }
+/**
+ * sendCaseEmail
+ * @param headers
+ * @param id
+ * @returns
+ */
+export async function sendCaseEmail(headers, id) {
+    return handlePossibleAxiosErrors(async () => {
+        await httpZauru.get(`/support/cases/${id}/send_email.json`, {
+            headers,
+        });
+        return true;
+    });
+}
 //==============================================
 //======= ENDPOINTS DE POS/CASES
 //==============================================

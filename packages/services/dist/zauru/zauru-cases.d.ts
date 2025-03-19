@@ -39,6 +39,13 @@ export declare function deleteCase(headers: any, id: string | number): Promise<A
  */
 export declare function closeCase(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
 /**
+ * sendCaseEmail
+ * @param headers
+ * @param id
+ * @returns
+ */
+export declare function sendCaseEmail(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
+/**
  * createPOSCase
  * @param headers
  * @param body
