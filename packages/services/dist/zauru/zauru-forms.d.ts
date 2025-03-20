@@ -108,3 +108,15 @@ export declare function updateSubmissionInvoiceFormSubmission(headers: any, body
  * @param body
  */
 export declare function deleteFormSubmission(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
+/**
+ * sendFormSubmissionEmail
+ * @param headers
+ * @param id
+ * @param body
+ */
+export declare function sendFormSubmissionEmail(headers: any, id: string | number, body: {
+    recipient_email: string;
+    recipient_name: string;
+    email_subject: string;
+    email_body: string;
+}): Promise<AxiosUtilsResponse<boolean>>;

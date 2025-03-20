@@ -432,3 +432,15 @@ export async function deleteFormSubmission(headers, id) {
         return true;
     });
 }
+/**
+ * sendFormSubmissionEmail
+ * @param headers
+ * @param id
+ * @param body
+ */
+export async function sendFormSubmissionEmail(headers, id, body) {
+    return handlePossibleAxiosErrors(async () => {
+        await httpZauru.post(`/settings/forms/form_submissions/${id}/send_email.json`, body, { headers });
+        return true;
+    });
+}

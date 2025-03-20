@@ -804,3 +804,29 @@ export async function deleteFormSubmission(
     return true;
   });
 }
+
+/**
+ * sendFormSubmissionEmail
+ * @param headers
+ * @param id
+ * @param body
+ */
+export async function sendFormSubmissionEmail(
+  headers: any,
+  id: string | number,
+  body: {
+    recipient_email: string;
+    recipient_name: string;
+    email_subject: string;
+    email_body: string;
+  }
+) {
+  return handlePossibleAxiosErrors(async () => {
+    await httpZauru.post<any>(
+      `/settings/forms/form_submissions/${id}/send_email.json`,
+      body,
+      { headers }
+    );
+    return true;
+  });
+}
