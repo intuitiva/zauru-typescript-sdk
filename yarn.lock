@@ -1464,6 +1464,7 @@ __metadata:
     "@zauru-sdk/icons": "npm:^2.0.188"
     "@zauru-sdk/types": "npm:^2.0.197"
     "@zauru-sdk/utils": "npm:^2.0.200"
+    browser-image-compression: "npm:^2.0.2"
     framer-motion: "npm:^11.7.0"
     jsonwebtoken: "npm:^9.0.2"
     postcss: "npm:^8.4.35"
@@ -1933,6 +1934,15 @@ __metadata:
   dependencies:
     fill-range: "npm:^7.1.1"
   checksum: 10c0/7c6dfd30c338d2997ba77500539227b9d1f85e388a5f43220865201e407e076783d0881f2d297b9f80951b4c957fcf0b51c1d2d24227631643c3f7c284b0aa04
+  languageName: node
+  linkType: hard
+
+"browser-image-compression@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "browser-image-compression@npm:2.0.2"
+  dependencies:
+    uzip: "npm:0.20201231.0"
+  checksum: 10c0/32be07f8849f2de501a71f6dd07e691c085fc7a2055456eb120fe5d765e3fcf7de00696915a8d614527d4df10f34c31526304b7d18aae036bb1c58d801e3fcbd
   languageName: node
   linkType: hard
 
@@ -6952,6 +6962,13 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 10c0/eab18c27fe4ab9fb9709a5d5f40119b45f2ec8314f8d4cf12ce27e4c6f4ffa4a6321dc7db6c515068fa373c075b49691ba969f0010bf37f44c37ca40cd6bf7fe
+  languageName: node
+  linkType: hard
+
+"uzip@npm:0.20201231.0":
+  version: 0.20201231.0
+  resolution: "uzip@npm:0.20201231.0"
+  checksum: 10c0/44b261b20ac7e4d71e7099d7a7c4885626044be61cd246e76cf548fa444a4a37c301d1a683679168bc29c91d2ec81d62b8c1c75217a26b37f6ce35223866c2d2
   languageName: node
   linkType: hard
 

@@ -14,6 +14,8 @@ type Props = {
     defaultValue?: string | File;
     download?: boolean;
     required?: boolean;
+    optimizeImages?: boolean;
+    zauruBaseURL?: string;
 };
 export declare const FileUploadField: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

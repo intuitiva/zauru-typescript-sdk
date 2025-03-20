@@ -1,6 +1,10 @@
 import { DownloadIconSVG, IdeaIconSVG } from "@zauru-sdk/icons";
 import React, { useState, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
+/*
+import imageCompression from "browser-image-compression";
+import type { Options } from "browser-image-compression";
+*/
 
 type Props = {
   id?: string;
@@ -17,6 +21,8 @@ type Props = {
   defaultValue?: string | File;
   download?: boolean;
   required?: boolean;
+  optimizeImages?: boolean;
+  zauruBaseURL?: string;
 };
 
 export const FileUploadField = (props: Props) => {
@@ -34,6 +40,8 @@ export const FileUploadField = (props: Props) => {
     defaultValue,
     download = false,
     required = false,
+    optimizeImages = true,
+    zauruBaseURL = "https://zauru.herokuapp.com",
   } = props;
 
   const {
@@ -73,30 +81,62 @@ export const FileUploadField = (props: Props) => {
 
   /**
    * Función que se dispara cuando el usuario selecciona un archivo.
-   * Además de actualizar la vista previa, inicia la subida directa a AWS.
+   * Si optimizeImages está activo y se trata de una imagen, la convierte a WebP
+   * usando la librería browser-image-compression.
    */
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange && onChange(event);
-    setFileDeleted(false);
-
+  const handleInputChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
+      let file = event.target.files[0];
 
-      // Actualizamos la vista previa para imágenes
-      if (file && file.type.startsWith("image/")) {
+      // Si se activa la optimización y es imagen, se convierte a WebP
+      if (file && file.type.startsWith("image/") && optimizeImages) {
+        try {
+          /*
+           const options: Options = {
+             fileType: "image/webp", // Especificamos el formato WebP
+             initialQuality: 0.7, // Calidad inicial (puedes ajustar este valor)
+             maxSizeMB: 1, // Tamaño máximo (opcional)
+             maxWidthOrHeight: 1920, // Dimensión máxima (opcional)
+             useWebWorker: true,
+           };
+          // Después de la compresión, renombramos el archivo:
+          const compressedFile = await imageCompression(file, options);
+          const newFile = new File(
+            [compressedFile],
+            file.name.replace(/\.[^.]+$/, ".webp"),
+            {
+              type: file.type,
+            }
+          );
+          file = newFile;
+          */
+          console.log("Archivo convertido:", file.name, file.type);
+          const objectUrl = URL.createObjectURL(file);
+          setPreviewSrc(objectUrl);
+        } catch (error) {
+          console.error("Error al convertir la imagen a WebP:", error);
+          const objectUrl = URL.createObjectURL(file);
+          setPreviewSrc(objectUrl);
+        }
+      } else if (file && file.type.startsWith("image/")) {
         const objectUrl = URL.createObjectURL(file);
         setPreviewSrc(objectUrl);
       } else {
         setPreviewSrc(null);
       }
 
+      // Actualizamos el input para que contenga el archivo convertido
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      event.target.files = dataTransfer.files;
+
       // Importamos dinámicamente DirectUpload solo en el cliente
       import("@rails/activestorage")
         .then(({ DirectUpload }) => {
-          const uploadUrl =
-            "https://zauru.herokuapp.com/rails/active_storage/direct_uploads";
+          const uploadUrl = `${zauruBaseURL}/api/direct_uploads`;
 
-          // Inicializamos el progreso y activamos el estado de subida
           setUploading(true);
           setUploadProgress(0);
 
@@ -117,16 +157,39 @@ export const FileUploadField = (props: Props) => {
             setUploading(false);
             if (error) {
               console.error("Error al subir el archivo:", error);
-              // Manejo de error según tus necesidades
             } else {
-              // blob.signed_id es el identificador que debes enviar a tu API
-              console.log("Archivo subido exitosamente. Blob:", blob);
               setValue(name, blob.signed_id);
+              setValue(`${name}_file_type`, blob.content_type);
+
+              // Input hidden para el signed_id
+              const hiddenField = document.createElement("input");
+              hiddenField.setAttribute("type", "hidden");
+              hiddenField.setAttribute("value", blob.signed_id);
+              hiddenField.setAttribute("name", name);
+              // Input hidden para el content_type
+              const typeHiddenField = document.createElement("input");
+              typeHiddenField.setAttribute("type", "hidden");
+              typeHiddenField.setAttribute("value", blob.content_type);
+              typeHiddenField.setAttribute("name", `${name}_file_type`);
+
+              const formElement = document.querySelector("form");
+              if (formElement) {
+                formElement.appendChild(hiddenField);
+                formElement.appendChild(typeHiddenField);
+              }
+
+              // Removemos el atributo "name" del input file para evitar enviar el archivo
+              if (fileInputRef.current) {
+                fileInputRef.current.removeAttribute("name");
+              }
             }
           });
         })
         .catch((err) => console.error("Error al cargar DirectUpload:", err));
     }
+
+    onChange && onChange(event);
+    setFileDeleted(false);
   };
 
   /**

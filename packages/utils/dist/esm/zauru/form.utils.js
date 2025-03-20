@@ -22,24 +22,32 @@ export function transformFormSubmitObject(input) {
                 groups_path: "[]",
                 value: "",
             };
-            if (input[key] instanceof File) {
-                const fileType = input[key].type;
-                if (input[key]?.size > 0) {
-                    // Verifica si el archivo es una imagen
+            // Verifica si se ha enviado un archivo (tipo File o signed_id acompañado de file_type)
+            if (input[key] instanceof File ||
+                (typeof input[key] === "string" && input[`${key}_file_type`])) {
+                if ((input[key] instanceof File && input[key]?.size > 0) ||
+                    (typeof input[key] === "string" && input[`${key}_file_type`])) {
+                    // Determina el tipo usando ya sea el file original o el file_type enviado
+                    const fileType = input[key] instanceof File
+                        ? input[key].type
+                        : input[`${key}_file_type`];
+                    // Si es imagen
                     if (fileType.startsWith("image/")) {
                         newObj["image"] = input[key];
                     }
-                    // Verifica si el archivo es un PDF
+                    // Si es PDF
                     else if (fileType === "application/pdf") {
                         newObj["pdf"] = input[key];
                     }
-                    // Cualquier otro tipo de archivo
+                    // Para otros tipos de archivo
                     else {
                         newObj["file"] = input[key];
                     }
+                    delete newObj.value;
                 }
             }
             else if (isJsonArray(input[key])) {
+                // Manejo de JSON array (para tablas, etc.)
                 const tableJsonArray = JSON.parse(input[key]);
                 if (tableJsonArray.length > 0) {
                     const form_table_values_attributes = [];
@@ -61,6 +69,7 @@ export function transformFormSubmitObject(input) {
                 }
             }
             else {
+                // Para otros valores simples
                 newObj["value"] = input[key];
             }
             form_submission_values.push(newObj);
