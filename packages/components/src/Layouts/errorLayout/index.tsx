@@ -28,21 +28,14 @@ export const ErrorLayout = ({
         <div className="w-full max-w-2xl flex flex-col items-center">
           <p className="text-2xl text-gray-300 mb-8 text-center">
             {isRouteErrorResponse(error)
-              ? `Error en request: ${error.status}: ${error.statusText} - PATH: ${error.data.path} - MESSAGE: ${error.data.message}`
+              ? `Error ${error.status}: ${error.statusText}`
               : error instanceof Error
-              ? `Error: ${error.message} - NAME: ${
-                  error.name
-                } - STACK: ${error.stack?.slice(0, 100)} - CAUSE: ${
-                  error.cause
-                }`
-              : `Ha ocurrido un error inesperado: ${error}`}
+              ? error.message
+              : "Ha ocurrido un error inesperado"}
           </p>
           {from && (
             <p className="text-lg text-gray-400 mb-4 text-center">
-              {isRootLevel
-                ? "(*) Error lanzado desde: "
-                : "Error lanzado desde: "}
-              {from}
+              Error lanzado desde: {from}
             </p>
           )}
           {parentError && (

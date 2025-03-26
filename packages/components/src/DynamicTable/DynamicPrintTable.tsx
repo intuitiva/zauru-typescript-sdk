@@ -17,7 +17,6 @@ export type FormatedItem = {
 
 type Props = {
   name: string;
-  formName?: string;
   className?: string;
   items: FormatedItem[];
   onChange?: (tableState?: TableStateItem[]) => void;
@@ -233,8 +232,7 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
     return tableData?.map((rowData, rowIndex) => renderRow(rowData, rowIndex));
   };
 
-  const error = formValidations[props.formName ?? "-1"][props.name];
-  const borderColor = error ? "border-red-500" : "border-transparent";
+  const borderColor = "border-transparent";
 
   useEffect(() => {
     if (!isInitialItemAdded && items?.length > 0) {
@@ -248,7 +246,6 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
       className={`${className} ${borderColor} border-2`}
       style={{ overflowX: "auto" }}
     >
-      {!!error && <div className="text-red-500 text-sm mb-2">{error}</div>}
       <table className="w-full">
         <thead>{renderHeader()}</thead>
         <tbody>{renderRows()}</tbody>

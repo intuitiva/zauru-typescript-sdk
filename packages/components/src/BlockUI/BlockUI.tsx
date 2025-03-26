@@ -16,12 +16,11 @@ export const BlockUI = (props: Props) => {
   return (
     <div>
       <div className="relative">
-        <div className="absolute bg-gray-100 bg-opacity-20 z-10 h-full w-full flex items-center justify-center">
+        <div className="absolute bg-gray-100 bg-opacity-80 z-10 h-full w-full flex items-center justify-center">
           <div className="flex items-center">
             <span className="text-3xl mr-4">{loadingText}</span>
-            {/* <!-- loading icon --> */}
             <svg
-              className="animate-spin h-5 w-5 text-gray-600"
+              className="animate-spin h-36 w-36 text-gray-600"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -40,7 +39,6 @@ export const BlockUI = (props: Props) => {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-            {/* <!-- end loading icon --> */}
           </div>
         </div>
         {children}

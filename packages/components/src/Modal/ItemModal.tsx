@@ -6,7 +6,7 @@ type Item = {
   item_id: string;
   name: string;
   code: string;
-  unitPrice: number;
+  unit_price: number;
   stock: number;
   currencyPrefix: string;
   imageUrl: string;
@@ -34,6 +34,36 @@ type ItemModalProps = {
    * - "card": Tarjeta más grande y ancha, útil para pantallas táctiles (tablet).
    */
   categoryViewMode?: "text" | "card";
+};
+
+const ExpandableText: React.FC<{ text: string; threshold?: number }> = ({
+  text,
+  threshold = 30,
+}) => {
+  const [expanded, setExpanded] = useState(false);
+  const toggleExpanded = (e: React.MouseEvent<HTMLSpanElement>) => {
+    e.stopPropagation();
+    setExpanded(!expanded);
+  };
+
+  if (text.length <= threshold) {
+    return <span>{text}</span>;
+  }
+
+  return (
+    <span onClick={toggleExpanded} style={{ cursor: "pointer" }}>
+      {expanded ? (
+        <span className="text-base font-semibold">
+          {text} <span className="ml-1">&#9650;</span>
+        </span>
+      ) : (
+        <span className="text-sm font-semibold">
+          {text.substring(0, threshold)}...{" "}
+          <span className="ml-1">&#9660;</span>
+        </span>
+      )}
+    </span>
+  );
 };
 
 const ItemSelectionModal: React.FC<ItemModalProps> = ({
@@ -84,7 +114,7 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
     setSelectedItem(item);
     setQuantity(1);
     // Si el ítem tiene precio flexible, inicializamos el customPrice con su precio actual
-    setCustomPrice(item.flexiblePrice ? item.unitPrice : null);
+    setCustomPrice(item.flexiblePrice ? item.unit_price : null);
 
     // Forzar scroll a la parte superior del contenido, ya que antes se iniciaba el scroll desde donde se había quedado.
     if (modalContentRef.current) {
@@ -97,14 +127,14 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
       // (5) Devolver el precio correcto
       const finalPrice = selectedItem.flexiblePrice
         ? // si el precio es flexible, tomar lo que el usuario haya ingresado (o fallback al precio original)
-          customPrice ?? selectedItem.unitPrice
+          customPrice ?? selectedItem.unit_price
         : // si NO es flexible, solo usamos el precio que ya tenía
-          selectedItem.unitPrice;
+          selectedItem.unit_price;
 
       onClose({
         ...selectedItem,
         quantity,
-        unitPrice: finalPrice,
+        unit_price: finalPrice,
       });
     }
   };
@@ -178,7 +208,7 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
                 No se encontraron resultados.
               </p>
             ) : (
-              filteredList.map((category) => {
+              filteredList.map((category, index) => {
                 const isExpanded = expandedCategories[category.name];
 
                 // Estilos condicionales para "text" vs. "card"
@@ -188,7 +218,7 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
                     : "text-lg font-semibold mb-2 cursor-pointer flex justify-between items-center hover:text-blue-600";
 
                 return (
-                  <div key={category.name} className="mb-4">
+                  <div key={index} className="mb-4">
                     {/* Cabecera de la categoría (texto o card) */}
                     <div
                       className={categoryContainerClasses}
@@ -223,7 +253,7 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
 
                           return (
                             <div
-                              key={item.code}
+                              key={item.item_id}
                               onClick={() => handleItemClick(item)}
                               className={`border rounded-lg shadow-lg hover:shadow-xl cursor-pointer relative ${
                                 isPackage ? "bg-yellow-50" : ""
@@ -244,9 +274,10 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
                                     : "bg-white bg-opacity-80"
                                 }`}
                               >
-                                <h4 className="font-semibold text-sm text-center">
-                                  {item.name}
-                                </h4>
+                                <ExpandableText
+                                  text={item.name}
+                                  threshold={30}
+                                />
                               </div>
                               <div
                                 className={`absolute bottom-0 left-0 p-2 rounded ${
@@ -327,7 +358,7 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
                   -
                 </button>
                 <input
-                  className="w-16 text-center border rounded text-lg"
+                  className="w-20 text-center border rounded text-lg"
                   type="number"
                   min={1}
                   value={quantity}
@@ -366,7 +397,7 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
                     -
                   </button>
                   <input
-                    className="w-16 text-center border rounded text-lg"
+                    className="w-24 text-center border rounded text-lg"
                     type="number"
                     min={0}
                     value={customPrice ?? 0}

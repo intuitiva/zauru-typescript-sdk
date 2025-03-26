@@ -78,8 +78,6 @@ export const Button = (props: Props) => {
 
   const color: ColorInterface = COLORS[selectedColor];
 
-  const inside = children ?? title;
-
   const errorMessage = formHasErrors
     ? Object.values(formErrors)
         .map((error) => error?.message?.toString())
@@ -87,36 +85,34 @@ export const Button = (props: Props) => {
     : "";
 
   const buttonContent = (
-    <>
-      <button
-        type={type}
-        name={"action"}
-        value={name}
-        disabled={
-          loading || disabled || (enableFormErrorsValidation && formHasErrors)
-        }
-        onClick={onClickSave}
-        className={`ml-2 ${
-          loading || disabled || (enableFormErrorsValidation && formHasErrors)
-            ? " bg-opacity-25 "
-            : ""
-        } ${
-          loading
-            ? " cursor-progress"
-            : `${
-                disabled || (enableFormErrorsValidation && formHasErrors)
-                  ? ""
-                  : `hover:${color.bg700}`
-              }`
-        } inline-flex justify-center rounded-md border border-transparent ${
-          color.bg600
-        } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
-          color.ring500
-        } focus:ring-offset-2 ${className}`}
-      >
-        {loading ? loadingText : inside}
-      </button>
-    </>
+    <button
+      type={type}
+      name={"action"}
+      value={name}
+      disabled={
+        loading || disabled || (enableFormErrorsValidation && formHasErrors)
+      }
+      onClick={onClickSave}
+      className={`${
+        loading || disabled || (enableFormErrorsValidation && formHasErrors)
+          ? " bg-opacity-25 "
+          : ""
+      } ${
+        loading
+          ? " cursor-progress"
+          : `${
+              disabled || (enableFormErrorsValidation && formHasErrors)
+                ? ""
+                : `hover:${color.bg700}`
+            }`
+      } inline-flex justify-center rounded-md border border-transparent ${
+        color.bg600
+      } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
+        color.ring500
+      } focus:ring-offset-2 ${className}`}
+    >
+      {loading ? children ?? loadingText : children ?? title}
+    </button>
   );
 
   return (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface LoadingItem {
@@ -15,6 +15,16 @@ export const LoadingWindow: React.FC<LoadingWindowProps> = ({
   loadingItems = [],
   description = "Por favor, espere mientras se carga la página.",
 }) => {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col justify-center items-center">
       <motion.div

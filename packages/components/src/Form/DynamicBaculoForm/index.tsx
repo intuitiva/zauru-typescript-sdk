@@ -1,6 +1,4 @@
 import { TextField } from "../TextField/index.js";
-import { TripleFieldContainer } from "../FieldContainer/index.js";
-import { DoubleFieldContainer } from "../FieldContainer/index.js";
 import { YesNo } from "../YesNo/index.js";
 import { TextArea } from "../TextArea/index.js";
 import { SelectField } from "../SelectField/index.js";
@@ -20,6 +18,7 @@ import { StaticAlert } from "../../Alerts/index.js";
 import { SubContainer } from "../../Containers/index.js";
 import { LineSeparator } from "../../LineSeparator/index.js";
 import { z } from "zod";
+
 export const getDynamicBaculoFormSchema = (
   form?: FormGraphQL,
   extraFieldValidations: { [key: string]: any } = {}
@@ -55,6 +54,8 @@ type Props = {
   namesStr?: string;
   showingRules?: { name: string; show: boolean }[];
   readOnly?: boolean;
+  zauruBaseURL?: string;
+  setProcessing?: (processing: boolean) => void;
 };
 
 export function DynamicBaculoForm(props: Props) {
@@ -65,6 +66,8 @@ export function DynamicBaculoForm(props: Props) {
     defaultValues = [],
     showingRules = [],
     readOnly = false,
+    zauruBaseURL = "",
+    setProcessing,
   } = props;
 
   if (!form) {
@@ -81,7 +84,29 @@ export function DynamicBaculoForm(props: Props) {
     const defaultValue = defaultValues?.find(
       (x) => x.settings_form_field.print_var_name === field.print_var_name
     );
+
+    if (
+      field.print_var_name?.toLowerCase() === "firma_cliente" &&
+      field.field_type === "image"
+    ) {
+      return (
+        <FileUploadField
+          key={field.id}
+          title={`FIRMA: ${field.required ? "*" : ""}${field.name}`}
+          name={`${namesStr}${field.form_id}_${field.id}`}
+          hint={field.hint}
+          readOnly={readOnly}
+          defaultValue={defaultValue?.value}
+          zauruBaseURL={zauruBaseURL}
+          setProcessing={setProcessing}
+          signature
+        />
+      );
+    }
+
     switch (field.field_type) {
+      case "zauru_data":
+        return null;
       case "fixed_rows_table":
       case "fixed_columns_table": {
         const columns: GenericDynamicTableColumn[] =
@@ -97,20 +122,6 @@ export function DynamicBaculoForm(props: Props) {
             <GenericDynamicTable name="fixed_columns_table" columns={columns} />
           </SubContainer>
         );
-      }
-      case "zauru_data": {
-        if (field.required) {
-          return (
-            <TextField
-              key={field.id}
-              title={`${field.required ? "*" : ""}${field.name}`}
-              hint={field.hint}
-              defaultValue={defaultValue?.value ?? field.default_value}
-              disabled={true}
-            />
-          );
-        }
-        return <></>;
       }
       case "hour":
         return (
@@ -144,6 +155,8 @@ export function DynamicBaculoForm(props: Props) {
             readOnly={readOnly}
             defaultValue={defaultValue?.value}
             download={true}
+            zauruBaseURL={zauruBaseURL}
+            setProcessing={setProcessing}
           />
         );
       case "image":
@@ -157,6 +170,8 @@ export function DynamicBaculoForm(props: Props) {
             fileTypes={["png", "jpg", "jpeg"]}
             readOnly={readOnly}
             defaultValue={defaultValue?.value}
+            zauruBaseURL={zauruBaseURL}
+            setProcessing={setProcessing}
           />
         );
       case "pdf":
@@ -171,6 +186,8 @@ export function DynamicBaculoForm(props: Props) {
             readOnly={readOnly}
             defaultValue={defaultValue?.value}
             download={true}
+            zauruBaseURL={zauruBaseURL}
+            setProcessing={setProcessing}
           />
         );
       case "email":
@@ -324,60 +341,32 @@ export function DynamicBaculoForm(props: Props) {
 
   const renderFields = () => {
     const fields = form.settings_form_fields;
-    const fieldGroups: JSX.Element[] = [];
-    let tempGroup: JSX.Element[] = [];
+    return (
+      <div className="flex flex-wrap gap-4 items-stretch">
+        {fields.map((field) => {
+          const rule = showingRules.find((x) => x.name === field.name);
+          if (rule && !rule.show) return null;
 
-    fields.forEach((field, i) => {
-      const rule = showingRules.find((x) => x.name === field.name);
-      if (!(rule && !rule.show)) {
-        const renderedField = renderFieldComponent(field);
-        if (renderedField === null) {
-          return;
-        }
-        tempGroup.push(renderedField);
+          const renderedField = renderFieldComponent(field);
+          if (!renderedField) return null;
 
-        const isLastField = i === fields.length - 1;
-        const isSectionField = field.field_type === "section";
+          const isSectionField = field.field_type === "section";
 
-        if (isSectionField) {
-          tempGroup.pop();
-          if (tempGroup.length === 1) {
-            fieldGroups.push(tempGroup[0]);
-          } else if (tempGroup.length === 2) {
-            fieldGroups.push(
-              <DoubleFieldContainer key={i}>{tempGroup}</DoubleFieldContainer>
-            );
-          } else if (tempGroup.length === 3) {
-            fieldGroups.push(
-              <TripleFieldContainer key={i}>{tempGroup}</TripleFieldContainer>
-            );
-          }
-          fieldGroups.push(renderedField);
-          tempGroup = [];
-        } else if (isLastField) {
-          if (tempGroup.length === 1) {
-            fieldGroups.push(tempGroup[0]);
-          } else if (tempGroup.length === 2) {
-            fieldGroups.push(
-              <DoubleFieldContainer key={i}>{tempGroup}</DoubleFieldContainer>
-            );
-          } else if (tempGroup.length === 3) {
-            fieldGroups.push(
-              <TripleFieldContainer key={i}>{tempGroup}</TripleFieldContainer>
-            );
-          }
-          tempGroup = [];
-        } else if (tempGroup.length === 3) {
-          // Si hay 3 elementos en el grupo temporal y el siguiente campo no es 'section', se agrega a fieldGroups
-          fieldGroups.push(
-            <TripleFieldContainer key={i}>{tempGroup}</TripleFieldContainer>
+          return (
+            <div
+              key={field.id}
+              className={
+                isSectionField
+                  ? "w-full"
+                  : "flex flex-col h-full flex-grow min-w-[250px] max-w-full sm:max-w-[48%] lg:max-w-[24%]"
+              }
+            >
+              {renderedField}
+            </div>
           );
-          tempGroup = [];
-        }
-      }
-    });
-
-    return fieldGroups;
+        })}
+      </div>
+    );
   };
 
   return (

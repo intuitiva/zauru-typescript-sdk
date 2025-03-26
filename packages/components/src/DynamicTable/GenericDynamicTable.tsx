@@ -566,7 +566,7 @@ export const GenericDynamicTable = (props: Props) => {
                     colSpan={
                       orientation === "horizontal" ? columns.length + 1 : 2
                     }
-                    className="align-middle"
+                    className="align-middle text-right"
                   >
                     {(!maxRows || tableData.length < maxRows) && (
                       <button

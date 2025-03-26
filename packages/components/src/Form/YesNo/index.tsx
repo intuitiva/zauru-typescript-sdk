@@ -4,7 +4,6 @@ import { useFormContext } from "react-hook-form";
 type Props = {
   id?: string;
   name: string;
-  formName?: string;
   title?: string;
   defaultValue?: boolean;
   helpText?: string;
