@@ -1,7 +1,7 @@
 import { DownloadIconSVG, IdeaIconSVG } from "@zauru-sdk/icons";
 import React, { useState, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
-import imageCompression, { Options } from "browser-image-compression";
+//import imageCompression, { Options } from "browser-image-compression";
 
 type Props = {
   id?: string;
@@ -150,6 +150,8 @@ export const FileUploadField = (props: Props) => {
     event?: React.ChangeEvent<HTMLInputElement>
   ) => {
     let processedFile = file;
+
+    /*
     if (file && file.type.startsWith("image/") && optimizeImages) {
       try {
         setOptimizing(true);
@@ -179,7 +181,10 @@ export const FileUploadField = (props: Props) => {
         const objectUrl = URL.createObjectURL(file);
         setPreviewSrc(objectUrl);
       }
-    } else if (file && file.type.startsWith("image/")) {
+    } else 
+    */
+
+    if (file && file.type.startsWith("image/")) {
       const objectUrl = URL.createObjectURL(file);
       setPreviewSrc(objectUrl);
     } else {

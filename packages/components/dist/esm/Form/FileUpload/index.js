@@ -2,7 +2,6 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
 import { DownloadIconSVG, IdeaIconSVG } from "@zauru-sdk/icons";
 import { useState, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
-import imageCompression from "browser-image-compression";
 export const FileUploadField = (props) => {
     const { id, name, title, helpText, hint, onChange, readOnly = false, fileTypes = [], showAvailableTypes = false, className, defaultValue, download = false, required = false, optimizeImages = true, zauruBaseURL = "https://zauru.herokuapp.com", setProcessing, signature = false, } = props;
     const { register: tempRegister, setValue, formState: { errors }, } = useFormContext() || { formState: {} };
@@ -99,34 +98,39 @@ export const FileUploadField = (props) => {
     const borderColor = error ? "border-red-500" : `border-${color}-500`;
     const processFile = async (file, event) => {
         let processedFile = file;
+        /*
         if (file && file.type.startsWith("image/") && optimizeImages) {
-            try {
-                setOptimizing(true);
-                setOptimizationProgress(0);
-                const options = {
-                    fileType: "image/webp",
-                    initialQuality: 0.7,
-                    maxSizeMB: 1,
-                    maxWidthOrHeight: 1920,
-                    useWebWorker: true,
-                    onProgress: (progress) => {
-                        setOptimizationProgress(progress);
-                    },
-                };
-                const compressedFile = await imageCompression(file, options);
-                setOptimizing(false);
-                processedFile = new File([compressedFile], file.name.replace(/\.[^.]+$/, ".webp"), { type: "image/webp" });
-                const objectUrl = URL.createObjectURL(processedFile);
-                setPreviewSrc(objectUrl);
-            }
-            catch (error) {
-                console.error("Error al convertir la imagen a WebP:", error);
-                setOptimizing(false);
-                const objectUrl = URL.createObjectURL(file);
-                setPreviewSrc(objectUrl);
-            }
-        }
-        else if (file && file.type.startsWith("image/")) {
+          try {
+            setOptimizing(true);
+            setOptimizationProgress(0);
+            const options: Options = {
+              fileType: "image/webp",
+              initialQuality: 0.7,
+              maxSizeMB: 1,
+              maxWidthOrHeight: 1920,
+              useWebWorker: true,
+              onProgress: (progress: number) => {
+                setOptimizationProgress(progress);
+              },
+            };
+            const compressedFile = await imageCompression(file, options);
+            setOptimizing(false);
+            processedFile = new File(
+              [compressedFile],
+              file.name.replace(/\.[^.]+$/, ".webp"),
+              { type: "image/webp" }
+            );
+            const objectUrl = URL.createObjectURL(processedFile);
+            setPreviewSrc(objectUrl);
+          } catch (error) {
+            console.error("Error al convertir la imagen a WebP:", error);
+            setOptimizing(false);
+            const objectUrl = URL.createObjectURL(file);
+            setPreviewSrc(objectUrl);
+          }
+        } else
+        */
+        if (file && file.type.startsWith("image/")) {
             const objectUrl = URL.createObjectURL(file);
             setPreviewSrc(objectUrl);
         }
