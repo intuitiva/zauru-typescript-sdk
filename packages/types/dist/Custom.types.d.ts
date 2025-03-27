@@ -179,6 +179,7 @@ export type AuthorizationUpdateDiscountPO = {
     tercerMotivoRechazo: string;
     otrosMotivosRechazo: string;
     observaciones: string;
+    agency_from_id: number;
 };
 export type RegisterMotivosRechazoBody = {
     Canastas?: string;
