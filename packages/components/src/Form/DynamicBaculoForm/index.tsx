@@ -342,7 +342,7 @@ export function DynamicBaculoForm(props: Props) {
   const renderFields = () => {
     const fields = form.settings_form_fields;
     return (
-      <div className="flex flex-wrap gap-4 items-stretch">
+      <div className="flex flex-wrap gap-4 items-stretch space-y-4">
         {fields.map((field) => {
           const rule = showingRules.find((x) => x.name === field.name);
           if (rule && !rule.show) return null;

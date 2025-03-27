@@ -9,7 +9,7 @@ type Props = {
   //Cargando...
   loading?: boolean;
   loadingText?: string;
-  selectedColor?: "indigo" | "green" | "red" | "yellow";
+  selectedColor?: "indigo" | "green" | "red" | "yellow" | "gray";
   children?: React.ReactNode;
   className?: string;
   disabled?: boolean;
@@ -73,6 +73,15 @@ export const Button = (props: Props) => {
       bg200: "bg-yellow-200",
       ring600: "ring-yellow-600",
       ring500: "ring-yellow-500",
+    },
+    gray: {
+      bg900: "bg-gray-900",
+      bg700: "bg-gray-700",
+      bg600: "bg-gray-600",
+      bg500: "bg-gray-500",
+      bg200: "bg-gray-200",
+      ring600: "ring-gray-600",
+      ring500: "ring-gray-500",
     },
   };
 

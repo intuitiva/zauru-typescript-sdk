@@ -11,7 +11,6 @@ import {
 } from "@zauru-sdk/types";
 import { generateClientUUID } from "@zauru-sdk/common";
 import { LoadingInputSkeleton } from "../Skeletons/index.js";
-import { WithTooltip } from "../WithTooltip/index.js";
 import { TrashSvg } from "@zauru-sdk/icons";
 import { useFormContext } from "react-hook-form";
 import { ComponentError } from "../Alerts/index.js";
@@ -435,33 +434,30 @@ export const GenericDynamicTable = (props: Props) => {
 
     const renderDeleteButton = (rowData: RowDataType) => (
       <td className="align-middle w-16">
-        <WithTooltip text="Eliminar">
-          <button
-            className="bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2"
-            onClick={(
-              event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-            ) => {
-              event.preventDefault();
-              event.stopPropagation();
-              if (confirmDelete) {
-                createModal({
-                  title: "¿Está seguro que quiere eliminar este registro?",
-                  description:
-                    "Una vez eliminada la información no podrá ser recuperada.",
-                }).then((response) => {
-                  if (response === "OK") {
-                    removeRow(rowData.id);
-                  }
-                });
-              } else {
-                removeRow(rowData.id);
-              }
-            }}
-            type="button"
-          >
-            <TrashSvg />
-          </button>
-        </WithTooltip>
+        <button
+          title="Eliminar"
+          type="button"
+          className="bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2"
+          onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (confirmDelete) {
+              createModal({
+                title: "¿Está seguro que quiere eliminar este registro?",
+                description:
+                  "Una vez eliminada la información no podrá ser recuperada.",
+              }).then((response) => {
+                if (response === "OK") {
+                  removeRow(rowData.id);
+                }
+              });
+            } else {
+              removeRow(rowData.id);
+            }
+          }}
+        >
+          <TrashSvg />
+        </button>
       </td>
     );
 
