@@ -11,10 +11,12 @@ export async function getSerials(session, filters) {
         const headers = await getGraphQLAPIHeaders(session);
         const defaultFilters = {};
         const finalFilters = { ...defaultFilters, ...filters };
+        const query = getSerialsStringQuery(finalFilters);
         const response = await httpGraphQLAPI.post("", {
-            query: getSerialsStringQuery(finalFilters),
+            query,
         }, { headers });
         if (response.data.errors) {
+            console.error("ERROR en getSerials CON QUERY: ", query, response.data.errors);
             throw new Error(response.data.errors.map((x) => x.message).join(";"));
         }
         const registers = response?.data?.data?.serials;

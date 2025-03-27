@@ -20,6 +20,8 @@ export async function getSerials(
 
     const finalFilters = { ...defaultFilters, ...filters };
 
+    const query = getSerialsStringQuery(finalFilters);
+
     const response = await httpGraphQLAPI.post<{
       data: { serials: SerialGraphQL[] };
       errors?: {
@@ -29,12 +31,17 @@ export async function getSerials(
     }>(
       "",
       {
-        query: getSerialsStringQuery(finalFilters),
+        query,
       },
       { headers }
     );
 
     if (response.data.errors) {
+      console.error(
+        "ERROR en getSerials CON QUERY: ",
+        query,
+        response.data.errors
+      );
       throw new Error(response.data.errors.map((x) => x.message).join(";"));
     }
 
