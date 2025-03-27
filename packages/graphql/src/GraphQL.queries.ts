@@ -1845,7 +1845,11 @@ export const getCasesStringQuery = (
     tag_id?: string;
     limit?: number;
   },
-  includes?: { includeSerial?: boolean }
+  includes?: {
+    includeSerial?: boolean;
+    includeResponsible?: boolean;
+    includeSeller?: boolean;
+  }
 ) => {
   const conditions = [];
 
@@ -1889,6 +1893,22 @@ export const getCasesStringQuery = (
         agency_id
         agency_future_id
         created_at
+      }`);
+  }
+
+  if (includes?.includeResponsible) {
+    joins.push(`
+      responsible {
+        id
+        name]
+      }`);
+  }
+
+  if (includes?.includeSeller) {
+    joins.push(`
+      seller {
+        id
+        name
       }`);
   }
 

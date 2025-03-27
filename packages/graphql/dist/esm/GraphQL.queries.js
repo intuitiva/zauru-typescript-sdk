@@ -1588,6 +1588,20 @@ const getCasesStringQuery = (filters, includes) => {
         created_at
       }`);
     }
+    if (includes?.includeResponsible) {
+        joins.push(`
+      responsible {
+        id
+        name]
+      }`);
+    }
+    if (includes?.includeSeller) {
+        joins.push(`
+      seller {
+        id
+        name
+      }`);
+    }
     return `query getCases {
     cases (${whereClause} order_by: {id: desc}, limit: ${filters?.limit || 1000}) 
       {

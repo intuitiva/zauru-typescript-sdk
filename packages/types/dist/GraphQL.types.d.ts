@@ -507,7 +507,6 @@ export type CaseGraphQL = {
     serial_id: number;
     critical: boolean;
     date: string;
-    client: PayeeGraphQL;
     closing_expected_at: string;
     contact_method_id: number;
     symptom: string;
@@ -529,6 +528,9 @@ export type CaseGraphQL = {
     submission_cases: SubmissionCasesGraphQL[];
     taggings: TaggingGraphQL[];
     serial: SerialGraphQL;
+    responsible: EmployeeGraphQL;
+    client: PayeeGraphQL;
+    seller: EmployeeGraphQL;
 };
 export type OauthProfile = {
     id: number;

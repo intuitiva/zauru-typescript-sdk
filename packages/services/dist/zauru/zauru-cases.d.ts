@@ -16,6 +16,8 @@ export declare function getCases(session: Session, filters?: {
     limit?: number;
 }, includes?: {
     includeSerial?: boolean;
+    includeResponsible?: boolean;
+    includeSeller?: boolean;
 }): Promise<AxiosUtilsResponse<CaseGraphQL[]>>;
 /**
  * createCase

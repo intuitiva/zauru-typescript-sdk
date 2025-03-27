@@ -151,5 +151,7 @@ export declare const getCasesStringQuery: (filters?: {
     limit?: number;
 }, includes?: {
     includeSerial?: boolean;
+    includeResponsible?: boolean;
+    includeSeller?: boolean;
 }) => string;
 export declare const getPrintTemplatesStringQuery = "\nquery getPrintTemplates {\n    print_templates {\n        id\n        name\n    }\n}\n";

@@ -23,7 +23,11 @@ export async function getCases(
     tag_id?: string;
     limit?: number;
   },
-  includes?: { includeSerial?: boolean }
+  includes?: {
+    includeSerial?: boolean;
+    includeResponsible?: boolean;
+    includeSeller?: boolean;
+  }
 ): Promise<AxiosUtilsResponse<CaseGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
