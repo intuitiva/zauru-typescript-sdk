@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/common",
-  "version": "2.0.198",
+  "version": "2.0.203",
   "description": "Funciones de uso común en el desarrollo de webapps en Zauru",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@remix-run/node": "^2.8.1",
-    "@zauru-sdk/types": "^2.0.197",
+    "@zauru-sdk/types": "^2.0.203",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.45"
   },
