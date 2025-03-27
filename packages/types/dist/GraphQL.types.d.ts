@@ -506,6 +506,7 @@ export type CaseGraphQL = {
     reference: string;
     serial_id: number;
     critical: boolean;
+    taxable: boolean;
     date: string;
     closing_expected_at: string;
     contact_method_id: number;
