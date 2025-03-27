@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/services",
-  "version": "2.0.204",
+  "version": "2.0.205",
   "description": "Servicios de consulta a Zauru",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
