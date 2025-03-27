@@ -26,6 +26,7 @@ import type {
   WebAppRowGraphQL,
   PrintTemplateGraphQL,
   PaymentMethodGraphQL,
+  AuthorizationUpdateDiscountPO,
 } from "@zauru-sdk/types";
 
 export type CATALOGS_NAMES =
@@ -37,6 +38,7 @@ export type CATALOGS_NAMES =
   | "tiposDeMuestra"
   | "motivosRechazo"
   | "ccPorcentajesDeRechazo"
+  | "authorizationUpdateDiscountPO"
   | "bitacoraRechazoMasivo"
   | "items"
   | "itemsByReception"
@@ -97,6 +99,9 @@ type CatalogState = {
   bookings: LoadingState<ShipmentGraphQL[]>;
   motivosRechazo: LoadingState<WebAppRowGraphQL<MotivoRechazo>[]>;
   ccPorcentajesDeRechazo: LoadingState<WebAppRowGraphQL<CCPorcentajeRechazo>[]>;
+  authorizationUpdateDiscountPO: LoadingState<
+    WebAppRowGraphQL<AuthorizationUpdateDiscountPO>[]
+  >;
   bitacoraRechazoMasivo: LoadingState<WebAppRowGraphQL<BitacoraPOMassive>[]>;
   items: LoadingState<ItemGraphQL[]>;
   itemsByReception: LoadingState<ItemGraphQL[]>;
@@ -145,6 +150,7 @@ const initialState: CatalogState = {
   bookings: createLoadingState([]),
   motivosRechazo: createLoadingState([]),
   ccPorcentajesDeRechazo: createLoadingState([]),
+  authorizationUpdateDiscountPO: createLoadingState([]),
   bitacoraRechazoMasivo: createLoadingState([]),
   items: createLoadingState([]),
   itemsByReception: createLoadingState([]),

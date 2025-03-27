@@ -215,6 +215,16 @@ export type CCPorcentajeRechazo = {
   porcentaje: number;
 };
 
+export type AuthorizationUpdateDiscountPO = {
+  id?: number;
+  discount: number;
+  primerMotivoRechazo: string;
+  segundoMotivoRechazo: string;
+  tercerMotivoRechazo: string;
+  otrosMotivosRechazo: string;
+  observaciones: string;
+};
+
 export type RegisterMotivosRechazoBody = {
   Canastas?: string;
   Razon_primaria: string;

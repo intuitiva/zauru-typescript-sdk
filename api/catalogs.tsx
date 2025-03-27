@@ -227,6 +227,10 @@ export const loader: LoaderFunction = async ({ request }) => {
         response = await getCCPorcentajesDeRechazo(headers, session);
         break;
 
+      case "authorizationUpdateDiscountPO":
+        response = await getAuthorizationUpdateDiscountPO(headers, session);
+        break;
+
       case "itemsByReception":
         response = await getItemsByReceptionCategory(headers, session);
         break;

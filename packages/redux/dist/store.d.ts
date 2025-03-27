@@ -1,6 +1,6 @@
 import type { TypedUseSelectorHook } from "react-redux";
 import { Tuple } from "@reduxjs/toolkit";
-export declare const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v5";
+export declare const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v5.1";
 type Whitelist = {
     [K in keyof RootState]?: string[];
 };

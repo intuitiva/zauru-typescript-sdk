@@ -28,6 +28,7 @@ import type {
   PrintTemplateGraphQL,
   PaymentMethodGraphQL,
   CCPorcentajeRechazo,
+  AuthorizationUpdateDiscountPO,
 } from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
@@ -538,6 +539,17 @@ export const useGetCCPorcentajesDeRechazo = (
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<CCPorcentajeRechazo>>(
     "ccPorcentajesDeRechazo",
+    config
+  );
+
+export const useGetAuthorizationsUpdateDiscountPO = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: WebAppRowGraphQL<AuthorizationUpdateDiscountPO>[];
+} =>
+  useGetReduxCatalog<WebAppRowGraphQL<AuthorizationUpdateDiscountPO>>(
+    "authorizationUpdateDiscountPO",
     config
   );
 
