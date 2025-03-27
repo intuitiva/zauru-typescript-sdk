@@ -7,7 +7,6 @@ import { createModal } from "../Modal/index.js";
 import { Button } from "../Buttons/index.js";
 import { generateClientUUID } from "@zauru-sdk/common";
 import { LoadingInputSkeleton } from "../Skeletons/index.js";
-import { WithTooltip } from "../WithTooltip/index.js";
 import { TrashSvg } from "@zauru-sdk/icons";
 import { useFormContext } from "react-hook-form";
 import { ComponentError } from "../Alerts/index.js";
@@ -234,23 +233,23 @@ export const GenericDynamicTable = (props) => {
                             column.onChange(rowData, sendValue, setTableValue);
                     }, defaultValue: defaultVal, options: column.options ?? [] }, `${rowData.id}-${column.name}`)) }, `${rowData.id}-${column.name}`));
         };
-        const renderDeleteButton = (rowData) => (_jsx("td", { className: "align-middle w-16", children: _jsx(WithTooltip, { text: "Eliminar", children: _jsx("button", { className: "bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2", onClick: (event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        if (confirmDelete) {
-                            createModal({
-                                title: "¿Está seguro que quiere eliminar este registro?",
-                                description: "Una vez eliminada la información no podrá ser recuperada.",
-                            }).then((response) => {
-                                if (response === "OK") {
-                                    removeRow(rowData.id);
-                                }
-                            });
-                        }
-                        else {
-                            removeRow(rowData.id);
-                        }
-                    }, type: "button", children: _jsx(TrashSvg, {}) }) }) }));
+        const renderDeleteButton = (rowData) => (_jsx("td", { className: "align-middle w-16", children: _jsx("button", { title: "Eliminar", type: "button", className: "bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2", onClick: (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (confirmDelete) {
+                        createModal({
+                            title: "¿Está seguro que quiere eliminar este registro?",
+                            description: "Una vez eliminada la información no podrá ser recuperada.",
+                        }).then((response) => {
+                            if (response === "OK") {
+                                removeRow(rowData.id);
+                            }
+                        });
+                    }
+                    else {
+                        removeRow(rowData.id);
+                    }
+                }, children: _jsx(TrashSvg, {}) }) }));
         const renderRows = () => {
             let mapeable = filteredTableData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
             // Si estamos cargando, mostramos celdas skeleton

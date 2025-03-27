@@ -115,7 +115,7 @@ export function DynamicBaculoForm(props) {
     };
     const renderFields = () => {
         const fields = form.settings_form_fields;
-        return (_jsx("div", { className: "flex flex-wrap gap-4 items-stretch", children: fields.map((field) => {
+        return (_jsx("div", { className: "flex flex-wrap gap-4 items-stretch space-y-4", children: fields.map((field) => {
                 const rule = showingRules.find((x) => x.name === field.name);
                 if (rule && !rule.show)
                     return null;

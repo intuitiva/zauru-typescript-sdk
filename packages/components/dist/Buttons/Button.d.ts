@@ -5,7 +5,7 @@ type Props = {
     onClickSave?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     loading?: boolean;
     loadingText?: string;
-    selectedColor?: "indigo" | "green" | "red" | "yellow";
+    selectedColor?: "indigo" | "green" | "red" | "yellow" | "gray";
     children?: React.ReactNode;
     className?: string;
     disabled?: boolean;

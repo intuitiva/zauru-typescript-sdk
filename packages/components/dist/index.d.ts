@@ -19,8 +19,6 @@ export * from "./Tab/index.js";
 export * from "./Table/index.js";
 export * from "./TaskList/index.js";
 export * from "./Titles/index.js";
-export * from "./Tooltip/index.js";
-export * from "./WithTooltip/index.js";
 export * from "./Wizards/index.js";
 export * from "./Zendesk/index.js";
 export * from "./HOC/ValidateEmployeeAccess/index.js";
