@@ -405,6 +405,7 @@ export const getSerialsStringQuery = (filters: {
         agency_id
         agency_future_id
         created_at
+      }
     }
     `;
 };
