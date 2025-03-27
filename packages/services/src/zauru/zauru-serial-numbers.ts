@@ -11,14 +11,12 @@ import { getSerialsStringQuery } from "@zauru-sdk/graphql";
  */
 export async function getSerials(
   session: Session,
-  filters?: { name?: string }
+  filters?: { name?: string; id?: number | string }
 ): Promise<AxiosUtilsResponse<SerialGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
-    const defaultFilters = {
-      name: undefined,
-    };
+    const defaultFilters = {};
 
     const finalFilters = { ...defaultFilters, ...filters };
 

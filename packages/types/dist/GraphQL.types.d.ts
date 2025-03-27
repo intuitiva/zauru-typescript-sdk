@@ -528,6 +528,7 @@ export type CaseGraphQL = {
     case_invoices: CaseInvoiceGraphQL[];
     submission_cases: SubmissionCasesGraphQL[];
     taggings: TaggingGraphQL[];
+    serial: SerialGraphQL;
 };
 export type OauthProfile = {
     id: number;

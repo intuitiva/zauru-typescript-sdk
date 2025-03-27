@@ -9,9 +9,7 @@ import { getSerialsStringQuery } from "@zauru-sdk/graphql";
 export async function getSerials(session, filters) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
-        const defaultFilters = {
-            name: undefined,
-        };
+        const defaultFilters = {};
         const finalFilters = { ...defaultFilters, ...filters };
         const response = await httpGraphQLAPI.post("", {
             query: getSerialsStringQuery(finalFilters),

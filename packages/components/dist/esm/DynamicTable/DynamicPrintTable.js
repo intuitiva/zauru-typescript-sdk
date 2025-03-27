@@ -108,24 +108,23 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }) => {
     const renderRows = () => {
         return tableData?.map((rowData, rowIndex) => renderRow(rowData, rowIndex));
     };
-    const error = formValidations[props.formName ?? "-1"][props.name];
-    const borderColor = error ? "border-red-500" : "border-transparent";
+    const borderColor = "border-transparent";
     useEffect(() => {
         if (!isInitialItemAdded && items?.length > 0) {
             insertItems([items[0]]);
             setIsInitialItemAdded(true);
         }
     }, [isInitialItemAdded, items, insertItems]);
-    return (_jsxs("div", { className: `${className} ${borderColor} border-2`, style: { overflowX: "auto" }, children: [!!error && _jsx("div", { className: "text-red-500 text-sm mb-2", children: error }), _jsxs("table", { className: "w-full", children: [_jsx("thead", { children: renderHeader() }), _jsx("tbody", { children: renderRows() }), _jsx("tfoot", { children: _jsxs("tr", { children: [_jsx("td", { className: "align-middle", children: _jsx("button", { className: "bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded", onClick: (event) => {
-                                            event.preventDefault();
-                                            event.stopPropagation();
-                                            addRow();
-                                        }, type: "button", children: "+" }) }), _jsxs("td", { colSpan: 2, children: ["Total de etiquetas a imprimir:", " ", tableData?.reduce((sum, x) => {
-                                            const val = React.isValidElement(x[1])
-                                                ? x[1]?.props?.defaultValue
-                                                : undefined;
-                                            if (!sum)
-                                                return val;
-                                            return sum + val;
-                                        }, 0)] })] }) })] })] }));
+    return (_jsx("div", { className: `${className} ${borderColor} border-2`, style: { overflowX: "auto" }, children: _jsxs("table", { className: "w-full", children: [_jsx("thead", { children: renderHeader() }), _jsx("tbody", { children: renderRows() }), _jsx("tfoot", { children: _jsxs("tr", { children: [_jsx("td", { className: "align-middle", children: _jsx("button", { className: "bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded", onClick: (event) => {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        addRow();
+                                    }, type: "button", children: "+" }) }), _jsxs("td", { colSpan: 2, children: ["Total de etiquetas a imprimir:", " ", tableData?.reduce((sum, x) => {
+                                        const val = React.isValidElement(x[1])
+                                            ? x[1]?.props?.defaultValue
+                                            : undefined;
+                                        if (!sum)
+                                            return val;
+                                        return sum + val;
+                                    }, 0)] })] }) })] }) }));
 };

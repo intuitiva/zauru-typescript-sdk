@@ -33,6 +33,7 @@ export declare const getLotsByNameStringQuery: (name: string, entity_id: number)
 export declare const getLotStocksByAgencyIdStringQuery: (agency_id: number) => string;
 export declare const getSerialsStringQuery: (filters: {
     name?: string;
+    id?: number | string;
 }) => string;
 export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: string, endDate: string, config: {
     agencyId?: number | string;
@@ -148,5 +149,7 @@ export declare const getCasesStringQuery: (filters?: {
     closed?: boolean;
     tag_id?: string;
     limit?: number;
+}, includes?: {
+    includeSerial?: boolean;
 }) => string;
 export declare const getPrintTemplatesStringQuery = "\nquery getPrintTemplates {\n    print_templates {\n        id\n        name\n    }\n}\n";

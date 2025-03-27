@@ -22,6 +22,8 @@ type Props = {
         show: boolean;
     }[];
     readOnly?: boolean;
+    zauruBaseURL?: string;
+    setProcessing?: (processing: boolean) => void;
 };
 export declare function DynamicBaculoForm(props: Props): import("react/jsx-runtime").JSX.Element;
 export {};

@@ -1,7 +1,5 @@
-import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { TextField } from "../TextField/index.js";
-import { TripleFieldContainer } from "../FieldContainer/index.js";
-import { DoubleFieldContainer } from "../FieldContainer/index.js";
 import { YesNo } from "../YesNo/index.js";
 import { TextArea } from "../TextArea/index.js";
 import { SelectField } from "../SelectField/index.js";
@@ -38,13 +36,19 @@ export const getDynamicBaculoFormSchema = (form, extraFieldValidations = {}) => 
     return z.object(fieldValidations).passthrough(); // Iniciar con un esquema que deja pasar todo.
 };
 export function DynamicBaculoForm(props) {
-    const { form, options = { showDescription: false, showTitle: false }, namesStr = "", defaultValues = [], showingRules = [], readOnly = false, } = props;
+    const { form, options = { showDescription: false, showTitle: false }, namesStr = "", defaultValues = [], showingRules = [], readOnly = false, zauruBaseURL = "", setProcessing, } = props;
     if (!form) {
         return (_jsx(StaticAlert, { title: "No se encontr\u00F3 el formulario din\u00E1mico", description: `Ocurrió un error encontrando el formulario, contacte al administrador con este mensaje de error.`, type: "info" }));
     }
     const renderFieldComponent = (field) => {
         const defaultValue = defaultValues?.find((x) => x.settings_form_field.print_var_name === field.print_var_name);
+        if (field.print_var_name?.toLowerCase() === "firma_cliente" &&
+            field.field_type === "image") {
+            return (_jsx(FileUploadField, { title: `FIRMA: ${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, readOnly: readOnly, defaultValue: defaultValue?.value, zauruBaseURL: zauruBaseURL, setProcessing: setProcessing, signature: true }, field.id));
+        }
         switch (field.field_type) {
+            case "zauru_data":
+                return null;
             case "fixed_rows_table":
             case "fixed_columns_table": {
                 const columns = field.settings_form_field_table_headers?.map((x) => {
@@ -56,22 +60,16 @@ export function DynamicBaculoForm(props) {
                 }) ?? [];
                 return (_jsx(SubContainer, { title: field.name, children: _jsx(GenericDynamicTable, { name: "fixed_columns_table", columns: columns }) }, field.id));
             }
-            case "zauru_data": {
-                if (field.required) {
-                    return (_jsx(TextField, { title: `${field.required ? "*" : ""}${field.name}`, hint: field.hint, defaultValue: defaultValue?.value ?? field.default_value, disabled: true }, field.id));
-                }
-                return _jsx(_Fragment, {});
-            }
             case "hour":
                 return (_jsx(FormTimePicker, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, disabled: readOnly, defaultValue: defaultValue?.value }, field.id));
             case "date":
                 return (_jsx(FormDatePicker, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, disabled: readOnly, defaultValue: defaultValue?.value }, field.id));
             case "file":
-                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, readOnly: readOnly, defaultValue: defaultValue?.value, download: true }, field.id));
+                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, readOnly: readOnly, defaultValue: defaultValue?.value, download: true, zauruBaseURL: zauruBaseURL, setProcessing: setProcessing }, field.id));
             case "image":
-                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, showAvailableTypes: true, fileTypes: ["png", "jpg", "jpeg"], readOnly: readOnly, defaultValue: defaultValue?.value }, field.id));
+                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, showAvailableTypes: true, fileTypes: ["png", "jpg", "jpeg"], readOnly: readOnly, defaultValue: defaultValue?.value, zauruBaseURL: zauruBaseURL, setProcessing: setProcessing }, field.id));
             case "pdf":
-                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, showAvailableTypes: true, fileTypes: ["pdf"], readOnly: readOnly, defaultValue: defaultValue?.value, download: true }, field.id));
+                return (_jsx(FileUploadField, { title: `${field.required ? "*" : ""}${field.name}`, name: `${namesStr}${field.form_id}_${field.id}`, hint: field.hint, showAvailableTypes: true, fileTypes: ["pdf"], readOnly: readOnly, defaultValue: defaultValue?.value, download: true, zauruBaseURL: zauruBaseURL, setProcessing: setProcessing }, field.id));
             case "email":
             case "url":
             case "text":
@@ -117,52 +115,18 @@ export function DynamicBaculoForm(props) {
     };
     const renderFields = () => {
         const fields = form.settings_form_fields;
-        const fieldGroups = [];
-        let tempGroup = [];
-        fields.forEach((field, i) => {
-            const rule = showingRules.find((x) => x.name === field.name);
-            if (!(rule && !rule.show)) {
+        return (_jsx("div", { className: "flex flex-wrap gap-4 items-stretch", children: fields.map((field) => {
+                const rule = showingRules.find((x) => x.name === field.name);
+                if (rule && !rule.show)
+                    return null;
                 const renderedField = renderFieldComponent(field);
-                if (renderedField === null) {
-                    return;
-                }
-                tempGroup.push(renderedField);
-                const isLastField = i === fields.length - 1;
+                if (!renderedField)
+                    return null;
                 const isSectionField = field.field_type === "section";
-                if (isSectionField) {
-                    tempGroup.pop();
-                    if (tempGroup.length === 1) {
-                        fieldGroups.push(tempGroup[0]);
-                    }
-                    else if (tempGroup.length === 2) {
-                        fieldGroups.push(_jsx(DoubleFieldContainer, { children: tempGroup }, i));
-                    }
-                    else if (tempGroup.length === 3) {
-                        fieldGroups.push(_jsx(TripleFieldContainer, { children: tempGroup }, i));
-                    }
-                    fieldGroups.push(renderedField);
-                    tempGroup = [];
-                }
-                else if (isLastField) {
-                    if (tempGroup.length === 1) {
-                        fieldGroups.push(tempGroup[0]);
-                    }
-                    else if (tempGroup.length === 2) {
-                        fieldGroups.push(_jsx(DoubleFieldContainer, { children: tempGroup }, i));
-                    }
-                    else if (tempGroup.length === 3) {
-                        fieldGroups.push(_jsx(TripleFieldContainer, { children: tempGroup }, i));
-                    }
-                    tempGroup = [];
-                }
-                else if (tempGroup.length === 3) {
-                    // Si hay 3 elementos en el grupo temporal y el siguiente campo no es 'section', se agrega a fieldGroups
-                    fieldGroups.push(_jsx(TripleFieldContainer, { children: tempGroup }, i));
-                    tempGroup = [];
-                }
-            }
-        });
-        return fieldGroups;
+                return (_jsx("div", { className: isSectionField
+                        ? "w-full"
+                        : "flex flex-col h-full flex-grow min-w-[250px] max-w-full sm:max-w-[48%] lg:max-w-[24%]", children: renderedField }, field.id));
+            }) }));
     };
     return (_jsx(SubContainer, { title: options?.showTitle ? form.name : undefined, description: options?.showDescription ? form.description : undefined, children: renderFields() }));
 }

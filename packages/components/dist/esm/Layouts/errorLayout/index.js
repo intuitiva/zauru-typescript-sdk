@@ -6,12 +6,10 @@ export const ErrorLayout = ({ from, isRootLevel = true, error: parentError, }) =
         const error = useRouteError();
         const [showDetails, setShowDetails] = useState(!!parentError);
         const baseError = (_jsxs("div", { className: "min-h-screen flex flex-col items-center justify-center p-4", children: [_jsx("img", { src: "/logo.png", alt: "Zauru Logo", className: "mb-8 h-20" }), _jsx("h1", { className: "text-5xl font-extrabold text-red-500 mb-6", children: "\u00A1Ups!" }), _jsxs("div", { className: "w-full max-w-2xl flex flex-col items-center", children: [_jsx("p", { className: "text-2xl text-gray-300 mb-8 text-center", children: isRouteErrorResponse(error)
-                                ? `Error en request: ${error.status}: ${error.statusText} - PATH: ${error.data.path} - MESSAGE: ${error.data.message}`
+                                ? `Error ${error.status}: ${error.statusText}`
                                 : error instanceof Error
-                                    ? `Error: ${error.message} - NAME: ${error.name} - STACK: ${error.stack?.slice(0, 100)} - CAUSE: ${error.cause}`
-                                    : `Ha ocurrido un error inesperado: ${error}` }), from && (_jsxs("p", { className: "text-lg text-gray-400 mb-4 text-center", children: [isRootLevel
-                                    ? "(*) Error lanzado desde: "
-                                    : "Error lanzado desde: ", from] })), parentError && (_jsxs("div", { className: "mb-4 text-center", children: [_jsx("button", { onClick: () => setShowDetails(!showDetails), className: "text-blue-400 hover:text-blue-300 transition duration-300", children: showDetails ? "Ocultar detalles" : "Ver más detalles" }), showDetails && (_jsx("p", { className: "mt-2 text-gray-400 text-sm", children: parentError instanceof Error
+                                    ? error.message
+                                    : "Ha ocurrido un error inesperado" }), from && (_jsxs("p", { className: "text-lg text-gray-400 mb-4 text-center", children: ["Error lanzado desde: ", from] })), parentError && (_jsxs("div", { className: "mb-4 text-center", children: [_jsx("button", { onClick: () => setShowDetails(!showDetails), className: "text-blue-400 hover:text-blue-300 transition duration-300", children: showDetails ? "Ocultar detalles" : "Ver más detalles" }), showDetails && (_jsx("p", { className: "mt-2 text-gray-400 text-sm", children: parentError instanceof Error
                                         ? parentError.message
                                         : String(parentError) }))] }))] }), _jsx(Link, { to: "/", className: "bg-blue-600 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-300 transform hover:scale-105", children: "Regresar al inicio" }), _jsx("div", { className: "mt-12 text-gray-500 text-center", children: _jsx("p", { children: "Si el problema persiste, por favor contacta a soporte." }) })] }));
         if (!isRootLevel) {

@@ -5,14 +5,18 @@ import { getCasesStringQuery } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 /**
  * getCases
+ * @param session
+ * @param filters
+ * @param includes (optional) Example: ["case_supplies { id }"]
+ * @returns
  */
-export async function getCases(session, filters) {
+export async function getCases(session, filters, includes) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const initialFilters = {
             ...(filters ? filters : {}),
         };
-        const query = getCasesStringQuery(initialFilters);
+        const query = getCasesStringQuery(initialFilters, includes);
         const response = await httpGraphQLAPI.post("", {
             query,
         }, { headers });

@@ -5,6 +5,7 @@ import { Session } from "@remix-run/node";
  */
 export declare function getSerials(session: Session, filters?: {
     name?: string;
+    id?: number | string;
 }): Promise<AxiosUtilsResponse<SerialGraphQL[]>>;
 /**
  * createSupportSerialAttended

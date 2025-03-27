@@ -1,6 +1,17 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useRef } from "react";
 import { createRoot } from "react-dom/client";
+const ExpandableText = ({ text, threshold = 30, }) => {
+    const [expanded, setExpanded] = useState(false);
+    const toggleExpanded = (e) => {
+        e.stopPropagation();
+        setExpanded(!expanded);
+    };
+    if (text.length <= threshold) {
+        return _jsx("span", { children: text });
+    }
+    return (_jsx("span", { onClick: toggleExpanded, style: { cursor: "pointer" }, children: expanded ? (_jsxs("span", { className: "text-base font-semibold", children: [text, " ", _jsx("span", { className: "ml-1", children: "\u25B2" })] })) : (_jsxs("span", { className: "text-sm font-semibold", children: [text.substring(0, threshold), "...", " ", _jsx("span", { className: "ml-1", children: "\u25BC" })] })) }));
+};
 const ItemSelectionModal = ({ itemList, onClose, config, categoryViewMode = "text", }) => {
     const defaultConfig = {
         itemSize: {
@@ -32,7 +43,7 @@ const ItemSelectionModal = ({ itemList, onClose, config, categoryViewMode = "tex
         setSelectedItem(item);
         setQuantity(1);
         // Si el ítem tiene precio flexible, inicializamos el customPrice con su precio actual
-        setCustomPrice(item.flexiblePrice ? item.unitPrice : null);
+        setCustomPrice(item.flexiblePrice ? item.unit_price : null);
         // Forzar scroll a la parte superior del contenido, ya que antes se iniciaba el scroll desde donde se había quedado.
         if (modalContentRef.current) {
             modalContentRef.current.scrollTo({ top: 0, behavior: "smooth" });
@@ -43,13 +54,13 @@ const ItemSelectionModal = ({ itemList, onClose, config, categoryViewMode = "tex
             // (5) Devolver el precio correcto
             const finalPrice = selectedItem.flexiblePrice
                 ? // si el precio es flexible, tomar lo que el usuario haya ingresado (o fallback al precio original)
-                    customPrice ?? selectedItem.unitPrice
+                    customPrice ?? selectedItem.unit_price
                 : // si NO es flexible, solo usamos el precio que ya tenía
-                    selectedItem.unitPrice;
+                    selectedItem.unit_price;
             onClose({
                 ...selectedItem,
                 quantity,
-                unitPrice: finalPrice,
+                unit_price: finalPrice,
             });
         }
     };
@@ -67,7 +78,7 @@ const ItemSelectionModal = ({ itemList, onClose, config, categoryViewMode = "tex
                 /* ==============================
                    PASO 1: SELECCIONAR ÍTEM
                    ============================== */
-                _jsxs(_Fragment, { children: [_jsxs("div", { className: "relative mb-4", children: [_jsx("input", { type: "text", placeholder: "Buscar por nombre o categor\u00EDa...", value: searchTerm, onChange: (e) => setSearchTerm(e.target.value), className: "p-2 border rounded-lg w-full" }), searchTerm && (_jsx("button", { className: "absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-800", onClick: () => setSearchTerm(""), children: "\u00D7" }))] }), filteredList.length === 0 ? (_jsx("p", { className: "text-gray-500 text-center", children: "No se encontraron resultados." })) : (filteredList.map((category) => {
+                _jsxs(_Fragment, { children: [_jsxs("div", { className: "relative mb-4", children: [_jsx("input", { type: "text", placeholder: "Buscar por nombre o categor\u00EDa...", value: searchTerm, onChange: (e) => setSearchTerm(e.target.value), className: "p-2 border rounded-lg w-full" }), searchTerm && (_jsx("button", { className: "absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-800", onClick: () => setSearchTerm(""), children: "\u00D7" }))] }), filteredList.length === 0 ? (_jsx("p", { className: "text-gray-500 text-center", children: "No se encontraron resultados." })) : (filteredList.map((category, index) => {
                             const isExpanded = expandedCategories[category.name];
                             // Estilos condicionales para "text" vs. "card"
                             const categoryContainerClasses = categoryViewMode === "card"
@@ -86,23 +97,23 @@ const ItemSelectionModal = ({ itemList, onClose, config, categoryViewMode = "tex
                                                     height: defaultConfig.itemSize.height,
                                                 }, children: [_jsx("div", { className: `p-2 rounded absolute top-0 left-0 right-0 ${isPackage
                                                             ? "bg-yellow-300 text-black"
-                                                            : "bg-white bg-opacity-80"}`, children: _jsx("h4", { className: "font-semibold text-sm text-center", children: item.name }) }), _jsx("div", { className: `absolute bottom-0 left-0 p-2 rounded ${isPackage
+                                                            : "bg-white bg-opacity-80"}`, children: _jsx(ExpandableText, { text: item.name, threshold: 30 }) }), _jsx("div", { className: `absolute bottom-0 left-0 p-2 rounded ${isPackage
                                                             ? "bg-yellow-300"
                                                             : "bg-white bg-opacity-80"}`, children: _jsxs("span", { className: "text-xs font-normal", children: ["Stock: ", item.stock] }) }), _jsx("div", { className: `absolute bottom-0 right-0 p-2 rounded ${isPackage
                                                             ? "bg-yellow-300"
-                                                            : "bg-white bg-opacity-80"}`, children: _jsxs("span", { className: "text-xs font-normal", children: [item.currencyPrefix, item.priceText] }) })] }, item.code));
-                                        }) }))] }, category.name));
+                                                            : "bg-white bg-opacity-80"}`, children: _jsxs("span", { className: "text-xs font-normal", children: [item.currencyPrefix, item.priceText] }) })] }, item.item_id));
+                                        }) }))] }, index));
                         }))] })) : (
                 /* ==============================
                    PASO 2: CONFIRMAR SELECCIÓN
                    ============================== */
-                _jsxs("div", { className: "flex flex-col items-center justify-center", children: [_jsx("img", { src: selectedItem.imageUrl, alt: selectedItem.name, className: "w-40 h-40 object-cover rounded mb-4 shadow-md" }), _jsx("p", { className: "mb-2 text-xl font-bold", children: selectedItem.name }), _jsxs("p", { className: "mb-2 text-base font-semibold text-gray-700", children: ["Stock disponible:", _jsx("span", { className: "ml-1 font-normal text-gray-800", children: selectedItem.stock })] }), !selectedItem.flexiblePrice && (_jsxs("p", { className: "mb-4 text-base font-semibold text-gray-700", children: ["Precio unitario:", _jsxs("span", { className: "ml-1 font-normal text-gray-800", children: [selectedItem.currencyPrefix, selectedItem.priceText] })] })), _jsxs("div", { className: "mb-4 w-full max-w-sm flex flex-col items-center", children: [_jsx("p", { className: "text-base font-semibold text-gray-700 mb-2", children: "Seleccionar cantidad" }), _jsxs("div", { className: "flex items-center space-x-4", children: [_jsx("button", { className: "bg-gray-300 rounded-full w-12 h-12 flex justify-center items-center text-2xl font-bold hover:bg-gray-400", onClick: () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1)), children: "-" }), _jsx("input", { className: "w-16 text-center border rounded text-lg", type: "number", min: 1, value: quantity, onChange: (e) => {
+                _jsxs("div", { className: "flex flex-col items-center justify-center", children: [_jsx("img", { src: selectedItem.imageUrl, alt: selectedItem.name, className: "w-40 h-40 object-cover rounded mb-4 shadow-md" }), _jsx("p", { className: "mb-2 text-xl font-bold", children: selectedItem.name }), _jsxs("p", { className: "mb-2 text-base font-semibold text-gray-700", children: ["Stock disponible:", _jsx("span", { className: "ml-1 font-normal text-gray-800", children: selectedItem.stock })] }), !selectedItem.flexiblePrice && (_jsxs("p", { className: "mb-4 text-base font-semibold text-gray-700", children: ["Precio unitario:", _jsxs("span", { className: "ml-1 font-normal text-gray-800", children: [selectedItem.currencyPrefix, selectedItem.priceText] })] })), _jsxs("div", { className: "mb-4 w-full max-w-sm flex flex-col items-center", children: [_jsx("p", { className: "text-base font-semibold text-gray-700 mb-2", children: "Seleccionar cantidad" }), _jsxs("div", { className: "flex items-center space-x-4", children: [_jsx("button", { className: "bg-gray-300 rounded-full w-12 h-12 flex justify-center items-center text-2xl font-bold hover:bg-gray-400", onClick: () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1)), children: "-" }), _jsx("input", { className: "w-20 text-center border rounded text-lg", type: "number", min: 1, value: quantity, onChange: (e) => {
                                                 const val = parseInt(e.target.value, 10);
                                                 setQuantity(isNaN(val) || val < 1 ? 1 : val);
                                             } }), _jsx("button", { className: "bg-gray-300 rounded-full w-12 h-12 flex justify-center items-center text-2xl font-bold hover:bg-gray-400", onClick: () => setQuantity((prev) => prev + 1), children: "+" })] })] }), selectedItem.flexiblePrice && (_jsxs("div", { className: "mb-4 w-full max-w-sm flex flex-col items-center", children: [_jsx("p", { className: "text-base font-semibold text-gray-700 mb-2", children: "Seleccionar precio" }), _jsxs("div", { className: "flex items-center space-x-4", children: [_jsx("button", { className: "bg-gray-300 rounded-full w-12 h-12 flex justify-center items-center text-2xl font-bold hover:bg-gray-400", onClick: () => setCustomPrice((prev) => {
                                                 const newVal = (prev ?? 0) - 1;
                                                 return newVal < 0 ? 0 : newVal;
-                                            }), children: "-" }), _jsx("input", { className: "w-16 text-center border rounded text-lg", type: "number", min: 0, value: customPrice ?? 0, onChange: (e) => {
+                                            }), children: "-" }), _jsx("input", { className: "w-24 text-center border rounded text-lg", type: "number", min: 0, value: customPrice ?? 0, onChange: (e) => {
                                                 const val = parseInt(e.target.value, 10);
                                                 setCustomPrice(isNaN(val) || val < 0 ? 0 : val);
                                             } }), _jsx("button", { className: "bg-gray-300 rounded-full w-12 h-12 flex justify-center items-center text-2xl font-bold hover:bg-gray-400", onClick: () => setCustomPrice((prev) => (prev == null ? 1 : prev + 1)), children: "+" })] })] })), _jsxs("div", { className: "flex space-x-4 mt-6", children: [_jsx("button", { className: "bg-gray-300 px-4 py-2 rounded hover:bg-gray-400", onClick: handleCancelQuantity, children: "Volver" }), _jsx("button", { className: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700", onClick: handleConfirmQuantity, children: "Confirmar" })] })] }))] }) }));

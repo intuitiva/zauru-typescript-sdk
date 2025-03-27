@@ -302,6 +302,9 @@ const getSerialsStringQuery = (filters) => {
     if (filters.name) {
         conditions.push(`name: {_ilike: "%${filters.name}%"}`);
     }
+    if (filters.id) {
+        conditions.push(`id: {_eq: ${filters.id}}`);
+    }
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} }`
         : "";
@@ -320,7 +323,6 @@ const getSerialsStringQuery = (filters) => {
         agency_id
         agency_future_id
         created_at
-      }
     }
     `;
 };
@@ -1551,7 +1553,7 @@ query getInvoicesByAgencyId {
 }
 `;
 exports.getInvoicesByAgencyIdStringQuery = getInvoicesByAgencyIdStringQuery;
-const getCasesStringQuery = (filters) => {
+const getCasesStringQuery = (filters, includes) => {
     const conditions = [];
     if (filters?.id) {
         conditions.push(`id: {_eq: ${filters.id}}`);
@@ -1571,6 +1573,21 @@ const getCasesStringQuery = (filters) => {
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} },`
         : "";
+    const joins = [];
+    if (includes?.includeSerial) {
+        joins.push(`
+      serial {                 
+        id
+        id_number
+        name
+        description
+        item_id
+        entity_id
+        agency_id
+        agency_future_id
+        created_at
+      }`);
+    }
     return `query getCases {
     cases (${whereClause} order_by: {id: desc}, limit: ${filters?.limit || 1000}) 
       {
@@ -1594,6 +1611,7 @@ const getCasesStringQuery = (filters) => {
         courtesy
         total
         responsible_id
+        ${joins?.join("\n") || ""}
         client {
           name
           tin

@@ -2,7 +2,6 @@ import React from "react";
 type Props = {
     id?: string;
     name: string;
-    formName?: string;
     title?: string;
     helpText?: string;
     hint?: string;
@@ -16,6 +15,8 @@ type Props = {
     required?: boolean;
     optimizeImages?: boolean;
     zauruBaseURL?: string;
+    setProcessing?: (processing: boolean) => void;
+    signature?: boolean;
 };
 export declare const FileUploadField: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

@@ -1,7 +1,6 @@
 type Props = {
     id?: string;
     name: string;
-    formName?: string;
     title?: string;
     hint?: string;
     helpText?: string;

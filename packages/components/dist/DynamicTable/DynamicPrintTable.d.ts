@@ -10,7 +10,6 @@ export type FormatedItem = {
 };
 type Props = {
     name: string;
-    formName?: string;
     className?: string;
     items: FormatedItem[];
     onChange?: (tableState?: TableStateItem[]) => void;

@@ -2,6 +2,10 @@ import type { Session } from "@remix-run/node";
 import { AxiosUtilsResponse, CaseGraphQL } from "@zauru-sdk/types";
 /**
  * getCases
+ * @param session
+ * @param filters
+ * @param includes (optional) Example: ["case_supplies { id }"]
+ * @returns
  */
 export declare function getCases(session: Session, filters?: {
     id?: number;
@@ -10,6 +14,8 @@ export declare function getCases(session: Session, filters?: {
     client_id?: number;
     tag_id?: string;
     limit?: number;
+}, includes?: {
+    includeSerial?: boolean;
 }): Promise<AxiosUtilsResponse<CaseGraphQL[]>>;
 /**
  * createCase

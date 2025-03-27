@@ -2,7 +2,7 @@ type Item = {
     item_id: string;
     name: string;
     code: string;
-    unitPrice: number;
+    unit_price: number;
     stock: number;
     currencyPrefix: string;
     imageUrl: string;

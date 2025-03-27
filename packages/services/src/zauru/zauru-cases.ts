@@ -8,6 +8,10 @@ import { httpZauru } from "./httpZauru.js";
 
 /**
  * getCases
+ * @param session
+ * @param filters
+ * @param includes (optional) Example: ["case_supplies { id }"]
+ * @returns
  */
 export async function getCases(
   session: Session,
@@ -18,7 +22,8 @@ export async function getCases(
     client_id?: number;
     tag_id?: string;
     limit?: number;
-  }
+  },
+  includes?: { includeSerial?: boolean }
 ): Promise<AxiosUtilsResponse<CaseGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -27,7 +32,7 @@ export async function getCases(
       ...(filters ? filters : {}),
     };
 
-    const query = getCasesStringQuery(initialFilters);
+    const query = getCasesStringQuery(initialFilters, includes);
 
     const response = await httpGraphQLAPI.post<{
       data: { cases: CaseGraphQL[] };
