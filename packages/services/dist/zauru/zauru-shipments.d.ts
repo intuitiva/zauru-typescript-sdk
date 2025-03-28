@@ -34,6 +34,7 @@ export declare function getShipments(session: Session, config: {
  * @returns
  */
 export declare function receiveShipment_booking(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
+export declare function receiveTransit(headers: any, body: ShipmentGraphQL): Promise<AxiosUtilsResponse<boolean>>;
 /**
  * despacharShipment_booking
  * Esta función cambia el atributo 'shipment' de los envíos a 'true', lo que indica que el envío está en tránsito.

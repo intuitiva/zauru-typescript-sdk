@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { AxiosUtilsResponse, ShipmentGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
@@ -84,18 +84,35 @@ export async function receiveShipment_booking(
   id: string | number
 ): Promise<AxiosUtilsResponse<boolean>> {
   return handlePossibleAxiosErrors(async () => {
-    const response = await httpZauru.get<any>(
-      `/inventories/bookings/${id}/deliver.json`,
-      { headers }
-    );
+    await httpZauru.get<any>(`/inventories/bookings/${id}/deliver.json`, {
+      headers,
+    });
 
-    if (!response.data) {
-      throw new Error(
-        `Sin respuesta de: /inventories/bookings/${id}/deliver.json - ${JSON.stringify(
-          response
-        )}`
-      );
-    }
+    return true;
+  });
+}
+
+export async function receiveTransit(
+  headers: any,
+  body: ShipmentGraphQL
+): Promise<AxiosUtilsResponse<boolean>> {
+  return handlePossibleAxiosErrors(async () => {
+    const sendBody: any = {
+      shipment: {
+        ...body,
+        movements_attributes: arrayToObject(body.movements),
+      },
+    };
+
+    delete sendBody.shipment.movements;
+
+    await httpZauru.put<any>(
+      `/inventories/transits/${body.id}.json`,
+      sendBody,
+      {
+        headers,
+      }
+    );
 
     return true;
   });

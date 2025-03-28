@@ -1,4 +1,4 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getShipmentsStringQuery } from "@zauru-sdk/graphql";
@@ -36,10 +36,24 @@ export async function getShipments(session, config) {
  */
 export async function receiveShipment_booking(headers, id) {
     return handlePossibleAxiosErrors(async () => {
-        const response = await httpZauru.get(`/inventories/bookings/${id}/deliver.json`, { headers });
-        if (!response.data) {
-            throw new Error(`Sin respuesta de: /inventories/bookings/${id}/deliver.json - ${JSON.stringify(response)}`);
-        }
+        await httpZauru.get(`/inventories/bookings/${id}/deliver.json`, {
+            headers,
+        });
+        return true;
+    });
+}
+export async function receiveTransit(headers, body) {
+    return handlePossibleAxiosErrors(async () => {
+        const sendBody = {
+            shipment: {
+                ...body,
+                movements_attributes: arrayToObject(body.movements),
+            },
+        };
+        delete sendBody.shipment.movements;
+        await httpZauru.put(`/inventories/transits/${body.id}.json`, sendBody, {
+            headers,
+        });
         return true;
     });
 }
