@@ -224,6 +224,7 @@ export type AuthorizationUpdateDiscountPO = {
   otrosMotivosRechazo: string;
   observaciones: string;
   agency_from_id: number;
+  employee_id: number;
 };
 
 export type RegisterMotivosRechazoBody = {
