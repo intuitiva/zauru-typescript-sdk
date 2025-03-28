@@ -12,6 +12,7 @@ import { httpZauru } from "./httpZauru.js";
 export async function getShipments(
   session: Session,
   config: {
+    id?: string | number;
     agency_to_id?: string | number;
     agency_from_id?: string | number;
     suffix?: string;

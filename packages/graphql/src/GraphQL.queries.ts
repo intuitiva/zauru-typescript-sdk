@@ -187,7 +187,7 @@ export const getShipmentsStringQuery = ({
   withMovementLots?: boolean;
   withPurchaseOrdersByShipmentReference?: boolean;
   limit?: number;
-  id?: number;
+  id?: number | string;
   wheres?: string[];
   memoILike?: string;
   plannedShippingDateRange?: {

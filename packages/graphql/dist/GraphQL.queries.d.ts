@@ -17,7 +17,7 @@ export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, s
     withMovementLots?: boolean;
     withPurchaseOrdersByShipmentReference?: boolean;
     limit?: number;
-    id?: number;
+    id?: number | string;
     wheres?: string[];
     memoILike?: string;
     plannedShippingDateRange?: {
