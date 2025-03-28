@@ -91,7 +91,9 @@ export async function receiveShipment_booking(
 
     if (!response.data) {
       throw new Error(
-        "Sin respuesta de: /inventories/bookings/id/deliver.json"
+        `Sin respuesta de: /inventories/bookings/${id}/deliver.json - ${JSON.stringify(
+          response
+        )}`
       );
     }
 

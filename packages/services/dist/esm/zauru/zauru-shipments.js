@@ -38,7 +38,7 @@ export async function receiveShipment_booking(headers, id) {
     return handlePossibleAxiosErrors(async () => {
         const response = await httpZauru.get(`/inventories/bookings/${id}/deliver.json`, { headers });
         if (!response.data) {
-            throw new Error("Sin respuesta de: /inventories/bookings/id/deliver.json");
+            throw new Error(`Sin respuesta de: /inventories/bookings/${id}/deliver.json - ${JSON.stringify(response)}`);
         }
         return true;
     });
