@@ -95,7 +95,7 @@ export async function receiveShipment_booking(
 
 export async function receiveTransit(
   headers: any,
-  body: ShipmentGraphQL
+  body: Partial<ShipmentGraphQL>
 ): Promise<AxiosUtilsResponse<boolean>> {
   return handlePossibleAxiosErrors(async () => {
     const sendBody: any = {
