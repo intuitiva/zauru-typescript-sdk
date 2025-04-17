@@ -452,9 +452,12 @@ export const shallowUpdatePurchaseOrder = (
   body: Partial<PurchaseOrderGraphQL>
 ): Promise<AxiosUtilsResponse<any>> => {
   return handlePossibleAxiosErrors(async () => {
-    const response = await httpZauru.put<any>(
-      `/purchases/closed_purchase_orders/${body.id}/shallow_edit.json`,
-      body,
+    const id = body.id;
+    delete body.id;
+
+    const response = await httpZauru.patch<any>(
+      `/purchases/closed_purchase_orders/${id}/shallow_update.json`,
+      { purchase_order: body },
       { headers }
     );
 

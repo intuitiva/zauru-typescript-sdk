@@ -262,7 +262,9 @@ export const updateReceivedPurchaseOrder = (headers, body, purchase_order_id) =>
  */
 export const shallowUpdatePurchaseOrder = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
-        const response = await httpZauru.put(`/purchases/closed_purchase_orders/${body.id}/shallow_edit.json`, body, { headers });
+        const id = body.id;
+        delete body.id;
+        const response = await httpZauru.patch(`/purchases/closed_purchase_orders/${id}/shallow_update.json`, { purchase_order: body }, { headers });
         return response.data;
     });
 };

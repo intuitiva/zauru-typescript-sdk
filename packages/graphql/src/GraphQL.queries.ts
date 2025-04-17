@@ -524,7 +524,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     );
   }
 
-  if (!config.id_number) {
+  if (!config.id_number && !config.ids?.length) {
     conditions.push(
       config.betweenIssueDate
         ? `issue_date: { _gte: "${startDate}", _lte: "${endDate}" }`

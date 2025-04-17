@@ -383,7 +383,7 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
     if (config.poDetailTagId) {
         conditions.push(`purchase_order_details: { tag_id: { _eq: ${config.poDetailTagId} } }`);
     }
-    if (!config.id_number) {
+    if (!config.id_number && !config.ids?.length) {
         conditions.push(config.betweenIssueDate
             ? `issue_date: { _gte: "${startDate}", _lte: "${endDate}" }`
             : `created_at: { _gte: "${startDate}", _lte: "${endDate}"}`);
