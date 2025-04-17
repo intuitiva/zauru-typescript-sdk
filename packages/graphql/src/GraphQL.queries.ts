@@ -414,6 +414,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   startDate: string,
   endDate: string,
   config: {
+    ids?: number[] | string[];
     agencyId?: number | string;
     itemId?: number | string;
     reference?: string;
@@ -445,6 +446,10 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   }
 ) => {
   const conditions = [];
+
+  if (config.ids && config.ids.length > 0) {
+    conditions.push(`id: { _in: [${config.ids.join(",")}] }`);
+  }
 
   if (config.excludeVoided) {
     conditions.push("voided: { _eq: false }");

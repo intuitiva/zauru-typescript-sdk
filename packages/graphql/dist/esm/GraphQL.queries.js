@@ -330,6 +330,9 @@ const getSerialsStringQuery = (filters) => {
 exports.getSerialsStringQuery = getSerialsStringQuery;
 const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) => {
     const conditions = [];
+    if (config.ids && config.ids.length > 0) {
+        conditions.push(`id: { _in: [${config.ids.join(",")}] }`);
+    }
     if (config.excludeVoided) {
         conditions.push("voided: { _eq: false }");
     }

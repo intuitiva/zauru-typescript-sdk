@@ -36,6 +36,7 @@ export declare const getSerialsStringQuery: (filters: {
     id?: number | string;
 }) => string;
 export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: string, endDate: string, config: {
+    ids?: number[] | string[];
     agencyId?: number | string;
     itemId?: number | string;
     reference?: string;

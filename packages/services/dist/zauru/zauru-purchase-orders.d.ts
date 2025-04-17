@@ -114,6 +114,13 @@ export declare const updatePurchaseOrder: (headers: any, body: UpdatePurchaseOrd
  */
 export declare const updateReceivedPurchaseOrder: (headers: any, body: UpdatePurchaseOrderBody, purchase_order_id: number) => Promise<AxiosUtilsResponse<any>>;
 /**
+ * shallowUpdatePurchaseOrder
+ * @param headers
+ * @param body
+ * @returns
+ */
+export declare const shallowUpdatePurchaseOrder: (headers: any, body: Partial<PurchaseOrderGraphQL>) => Promise<AxiosUtilsResponse<any>>;
+/**
  * getLast100Receptions
  * @param headers
  * @returns
@@ -136,6 +143,7 @@ export declare const getGraphQLPurchaseOrderBetweenDates: (session: Session, dat
     startDate: string;
     endDate: string;
 }, config?: {
+    ids?: number[] | string[];
     agencyFilter?: boolean;
     agencyId?: number | string;
     id_number?: string;

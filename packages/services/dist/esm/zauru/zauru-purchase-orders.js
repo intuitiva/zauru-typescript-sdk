@@ -255,6 +255,18 @@ export const updateReceivedPurchaseOrder = (headers, body, purchase_order_id) =>
     });
 };
 /**
+ * shallowUpdatePurchaseOrder
+ * @param headers
+ * @param body
+ * @returns
+ */
+export const shallowUpdatePurchaseOrder = (headers, body) => {
+    return handlePossibleAxiosErrors(async () => {
+        const response = await httpZauru.put(`/purchases/closed_purchase_orders/${body.id}/shallow_edit.json`, body, { headers });
+        return response.data;
+    });
+};
+/**
  * getLast100Receptions
  * @param headers
  * @returns
@@ -334,27 +346,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {})
             agencyId: finalConfig.agencyFilter
                 ? agency_id ?? session.get("agency_id")
                 : undefined,
-            consolidateIdFilter: finalConfig.consolidateIdFilter,
-            lotItemIdExclusion: finalConfig.lotItemIdExclusion,
-            poDetailTagId: finalConfig.poDetailTagId,
-            withLotStocks: finalConfig.withLotStocks,
-            itemId: finalConfig.itemId,
-            payeeCategoryId: finalConfig.payeeCategoryId,
-            betweenIssueDate: finalConfig.betweenIssueDate,
-            payeeId: finalConfig.payeeId,
-            id_number: finalConfig.id_number,
-            withPODetails: finalConfig.withPODetails,
-            withLots: finalConfig.withLots,
-            withShipmentPurchaseOrders: finalConfig.withShipmentPurchaseOrders,
-            withWebAppRows: finalConfig.withWebAppRows,
-            payeeCategoryIds: finalConfig.payeeCategoryIds,
-            excludePayeeCategoryIds: finalConfig.excludePayeeCategoryIds,
-            discountComparisonOperator: finalConfig.discountComparisonOperator,
-            discount: finalConfig.discount,
-            shipment_reference: finalConfig.shipment_reference,
-            excludeVoided: finalConfig.excludeVoided,
-            agencyNameIlike: finalConfig.agencyNameIlike,
-            reference: finalConfig.reference,
+            ...finalConfig,
         });
         const graphQLBody = {
             query,
