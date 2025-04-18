@@ -411,6 +411,7 @@ export type POHistoryMassive = {
     finalizada?: boolean;
     originalOtherCharges: number;
     originalDiscount: number;
+    revertida?: boolean;
 };
 export type BitacoraPOMassive = {
     accion: string;
