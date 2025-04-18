@@ -488,6 +488,7 @@ export type BitacoraPOMassive = {
   fechaCreacion: string;
   observations: string;
   replace: boolean;
+  desprocesar?: boolean;
 };
 
 //Modelo con el cuál responde el backend

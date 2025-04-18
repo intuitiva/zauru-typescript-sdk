@@ -427,6 +427,7 @@ export type BitacoraPOMassive = {
     fechaCreacion: string;
     observations: string;
     replace: boolean;
+    desprocesar?: boolean;
 };
 export type ConsolidatedHistory = {
     creadoPor: string;
