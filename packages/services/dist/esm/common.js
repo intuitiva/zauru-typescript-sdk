@@ -106,15 +106,20 @@ async function getGraphQLToken(session) {
     return handlePossibleAxiosErrors(async () => {
         const token = (await session.get("graphqlToken"));
         const headers = (await getHeaders(null, session));
-        const tokenHasExpired = token &&
-            token.expires &&
-            new Date(new Date().getTime() - 3 * 60 * 60 * 1000) >=
-                new Date(token.expires);
-        //Si no hay token, es la primera vez que se recibe, lo voy a traer de zauru
-        if (!token || tokenHasExpired) {
-            tokenHasExpired
-                ? console.log(chalk.yellow(`=============== ⚠️ EL TOKEN GRAPHQL ESTÁ EXPIRADO ⚠️ ====================`))
-                : console.log(chalk.yellow(`=============== ⚠️ NO HAY UN TOKEN GRAPHQL GUARDADO ⚠️ ====================`));
+        // Check if token is missing or within one day of expiration
+        const now = Date.now();
+        let tokenHasExpired = true;
+        if (token && token.expires) {
+            const expiresAt = Date.parse(token.expires);
+            if (!isNaN(expiresAt)) {
+                const oneDayMs = 24 * 60 * 60 * 1000;
+                // Refresh if already expired or expires within the next 24 hours
+                tokenHasExpired = expiresAt <= now + oneDayMs;
+            }
+        }
+        // If there's no valid token or it's expiring soon, fetch a new one
+        if (tokenHasExpired) {
+            console.log(chalk.yellow(`=============== ⚠️ EL TOKEN GRAPHQL ESTÁ EXPIRADO O NO EXISTE ⚠️ ====================`));
             const responseToken = await httpZauru.get("/apps/graphql.json", {
                 headers,
             });
@@ -127,7 +132,7 @@ async function getGraphQLToken(session) {
             console.log(chalk.red(`=============== ❗ NO HAY INFORMACIÓN OBTENIDA DEL REQUEST A ZAURU - GET_TOKEN ❗ ====================`));
             throw new Error("No viene información en la solicitud de getGraphQLToken a Zauru");
         }
-        //Si ya está guardado un token en la sesión y aún no a expirado.
+        // Return the existing valid token
         return token;
     });
 }
