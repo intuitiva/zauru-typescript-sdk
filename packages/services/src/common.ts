@@ -164,13 +164,19 @@ async function getGraphQLToken(
     const token = (await session.get("graphqlToken")) as GraphQLToken;
     const headers = (await getHeaders(null, session)) as any;
 
-    const tokenHasExpired =
-      !token ||
-      (token.expires &&
-        new Date(new Date().getTime() - 3 * 60 * 60 * 1000) >=
-          new Date(token.expires));
+    // Check if token is missing or within one day of expiration
+    const now = Date.now();
+    let tokenHasExpired = true;
+    if (token && token.expires) {
+      const expiresAt = Date.parse(token.expires);
+      if (!isNaN(expiresAt)) {
+        const oneDayMs = 24 * 60 * 60 * 1000;
+        // Refresh if already expired or expires within the next 24 hours
+        tokenHasExpired = expiresAt <= now + oneDayMs;
+      }
+    }
 
-    //Si no hay token, es la primera vez que se recibe, o está expirado, lo voy a traer de zauru
+    // If there's no valid token or it's expiring soon, fetch a new one
     if (tokenHasExpired) {
       console.log(
         chalk.yellow(
@@ -206,7 +212,7 @@ async function getGraphQLToken(
       );
     }
 
-    //Si ya está guardado un token en la sesión y aún no a expirado.
+    // Return the existing valid token
     return token;
   });
 }
