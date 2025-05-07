@@ -165,24 +165,18 @@ async function getGraphQLToken(
     const headers = (await getHeaders(null, session)) as any;
 
     const tokenHasExpired =
-      token &&
-      token.expires &&
-      new Date(new Date().getTime() - 3 * 60 * 60 * 1000) >=
-        new Date(token.expires);
+      !token ||
+      (token.expires &&
+        new Date(new Date().getTime() - 3 * 60 * 60 * 1000) >=
+          new Date(token.expires));
 
-    //Si no hay token, es la primera vez que se recibe, lo voy a traer de zauru
-    if (!token || tokenHasExpired) {
-      tokenHasExpired
-        ? console.log(
-            chalk.yellow(
-              `=============== ⚠️ EL TOKEN GRAPHQL ESTÁ EXPIRADO ⚠️ ====================`
-            )
-          )
-        : console.log(
-            chalk.yellow(
-              `=============== ⚠️ NO HAY UN TOKEN GRAPHQL GUARDADO ⚠️ ====================`
-            )
-          );
+    //Si no hay token, es la primera vez que se recibe, o está expirado, lo voy a traer de zauru
+    if (tokenHasExpired) {
+      console.log(
+        chalk.yellow(
+          `=============== ⚠️ EL TOKEN GRAPHQL ESTÁ EXPIRADO O NO EXISTE ⚠️ ====================`
+        )
+      );
 
       const responseToken = await httpZauru.get<GraphQLToken>(
         "/apps/graphql.json",
