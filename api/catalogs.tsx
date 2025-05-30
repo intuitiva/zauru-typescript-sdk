@@ -31,6 +31,7 @@ import {
   getCases,
   getCaseFormSubmissionsByCaseId,
   getAuthorizationUpdateDiscountPO,
+  get4pinosSolicitudEliminacionPO,
 } from "@zauru-sdk/services";
 import { AxiosUtilsResponse } from "@zauru-sdk/types";
 import {
@@ -226,6 +227,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
       case "ccPorcentajesDeRechazo":
         response = await getCCPorcentajesDeRechazo(headers, session);
+        break;
+
+      case "solicitudesEliminacionPO":
+        response = await get4pinosSolicitudEliminacionPO(headers, session);
         break;
 
       case "authorizationUpdateDiscountPO":
