@@ -60,7 +60,8 @@ export async function getWebAppRow<T>(
  */
 export async function getWebAppTableRegisters<T>(
   session: Session,
-  webapp_table_id: string
+  webapp_table_id: string,
+  limit?: number
 ): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -74,7 +75,10 @@ export async function getWebAppTableRegisters<T>(
     }>(
       "",
       {
-        query: getWebAppRowsByWebAppTableIdStringQuery(Number(webapp_table_id)),
+        query: getWebAppRowsByWebAppTableIdStringQuery(
+          Number(webapp_table_id),
+          limit
+        ),
       },
       { headers }
     );

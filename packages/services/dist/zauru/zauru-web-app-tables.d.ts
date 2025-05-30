@@ -12,7 +12,7 @@ export declare function getWebAppRow<T>(session: Session, id: number): Promise<A
  * @param webapp_table_id web app table id
  * @returns
  */
-export declare function getWebAppTableRegisters<T>(session: Session, webapp_table_id: string): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>>;
+export declare function getWebAppTableRegisters<T>(session: Session, webapp_table_id: string, limit?: number): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>>;
 /**
  * deleteWebAppTableRegister Function for delete a web app table register
  * @param headers

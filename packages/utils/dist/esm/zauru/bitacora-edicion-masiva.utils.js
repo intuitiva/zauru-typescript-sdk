@@ -26,7 +26,7 @@ export const getBitacorasPOMassive = (headers, session) => {
         const { bitacora_ediciones_masivas_web_app_table_id } = await getVariablesByName(headers, session, [
             "bitacora_ediciones_masivas_web_app_table_id",
         ]);
-        const response = await getWebAppTableRegisters(session, bitacora_ediciones_masivas_web_app_table_id);
+        const response = await getWebAppTableRegisters(session, bitacora_ediciones_masivas_web_app_table_id, 1000);
         if (response.error || !response.data) {
             throw new Error(response.userMsg);
         }

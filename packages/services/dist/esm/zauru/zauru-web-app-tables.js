@@ -26,11 +26,11 @@ export async function getWebAppRow(session, id) {
  * @param webapp_table_id web app table id
  * @returns
  */
-export async function getWebAppTableRegisters(session, webapp_table_id) {
+export async function getWebAppTableRegisters(session, webapp_table_id, limit) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getWebAppRowsByWebAppTableIdStringQuery(Number(webapp_table_id)),
+            query: getWebAppRowsByWebAppTableIdStringQuery(Number(webapp_table_id), limit),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

@@ -1,17 +1,41 @@
+const env = process.env.APP_ENV || process.env.NODE_ENV || "development";
+
 const rawConfig = {
   redisBaseURL: process.env.UPSTASH_REDIS_REST_URL || "",
   redisToken: process.env.UPSTASH_REDIS_REST_TOKEN || "",
-  oauthBaseURL: process.env.ZAURU_OAUTH_URL || "",
-  zauruBaseURL: process.env.ZAURU_URL || "",
+  oauthBaseURL:
+    env === "production"
+      ? process.env.ZAURU_OAUTH_URL
+      : env === "staging"
+      ? process.env.ZAURU_OAUTH_URL_STAGING
+      : process.env.ZAURU_OAUTH_URL_DEV,
+  zauruBaseURL:
+    env === "production"
+      ? process.env.ZAURU_URL
+      : env === "staging"
+      ? process.env.ZAURU_URL_STAGING
+      : process.env.ZAURU_URL_DEV,
   oauthClientID: process.env.ZAURU_OAUTH_CLIENT_ID || "",
-  graphqlAPIBaseURL: process.env.GRAPHQL_API_URL || "",
-  zendeskJWTKey: process.env.ZENDESK_JWT_KEY || "",
-  zendeskJWTSecret: process.env.ZENDESK_JWT_SECRET || "",
-  zendeskChatKey: process.env.ZENDESK_CHAT_KEY || "",
-  cmsAPIBaseURL: process.env.CMS_API_URL || "",
+  graphqlAPIBaseURL:
+    env === "production"
+      ? process.env.GRAPHQL_API_URL
+      : env === "staging"
+      ? process.env.GRAPHQL_API_URL_STAGING
+      : process.env.GRAPHQL_API_URL_DEV,
+  cmsAPIBaseURL:
+    env === "production"
+      ? process.env.CMS_API_URL
+      : env === "staging"
+      ? process.env.CMS_API_URL_STAGING
+      : process.env.CMS_API_URL_DEV,
+  cmsAPIToken:
+    env === "production"
+      ? process.env.CMS_API_TOKEN
+      : env === "staging"
+      ? process.env.CMS_API_TOKEN_STAGING
+      : process.env.CMS_API_TOKEN_DEV,
   expirationDurationInSeconds:
     process.env.EXPIRATION_TIME_IN_SECONDS || 60 * 60 * 24,
-  cmsAPIToken: process.env.CMS_API_TOKEN || "",
 };
 
 function getConfigValue(key: keyof typeof rawConfig) {

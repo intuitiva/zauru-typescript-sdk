@@ -1,14 +1,11 @@
 export declare const config: {
     redisBaseURL: string;
     redisToken: string;
-    oauthBaseURL: string;
-    zauruBaseURL: string;
+    oauthBaseURL: string | undefined;
+    zauruBaseURL: string | undefined;
     oauthClientID: string;
-    graphqlAPIBaseURL: string;
-    zendeskJWTKey: string;
-    zendeskJWTSecret: string;
-    zendeskChatKey: string;
-    cmsAPIBaseURL: string;
+    graphqlAPIBaseURL: string | undefined;
+    cmsAPIBaseURL: string | undefined;
+    cmsAPIToken: string | undefined;
     expirationDurationInSeconds: string | number;
-    cmsAPIToken: string;
 };

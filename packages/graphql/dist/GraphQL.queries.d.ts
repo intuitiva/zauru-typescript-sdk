@@ -69,7 +69,7 @@ export declare const getPayeesStringQuery: (filters?: {
 export declare const getProvidersStringQuery = "\nquery getProviders {\n    payees (where: {vendor: {_eq: true}}) {\n        id\n        id_number\n        name\n        tin\n        address_line_1\n    }\n}\n";
 export declare const getAgenciesStringQuery = "\nquery getAgencies {\n  agencies {\n    id\n    name\n    address_line_2\n  }\n}\n";
 export declare const getWebAppRowStringQuery: (id: number) => string;
-export declare const getWebAppRowsByWebAppTableIdStringQuery: (webapp_table_id: number) => string;
+export declare const getWebAppRowsByWebAppTableIdStringQuery: (webapp_table_id: number, limit?: number) => string;
 export declare const getPayeeCategoryByIdStringQuery: (id: number) => string;
 export declare const getPayeeCategoriesByNotesMatchStringQuery: (match: string) => string;
 export declare const getPayeeCategoriesStringQuery = "\nquery getPayeeCategories {\n  payee_categories {\n    id\n    name\n    notes\n    payees_count\n    price_list_id\n  }\n}\n";

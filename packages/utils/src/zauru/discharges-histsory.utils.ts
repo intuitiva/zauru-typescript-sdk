@@ -32,7 +32,8 @@ export const getDischargeHistories = (
 
     const response = await getWebAppTableRegisters<DischargeHistory>(
       session,
-      discharge_history_web_app_table_id
+      discharge_history_web_app_table_id,
+      1000
     );
 
     if (response.error) {

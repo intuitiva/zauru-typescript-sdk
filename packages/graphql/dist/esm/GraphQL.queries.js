@@ -543,24 +543,28 @@ query getWebAppRow {
 }
 `;
 exports.getWebAppRowStringQuery = getWebAppRowStringQuery;
-const getWebAppRowsByWebAppTableIdStringQuery = (webapp_table_id) => `
-query getWebAppRowsByWebAppTableId {
-  webapp_rows (
-    where: {
-      webapp_table_id: {
-        _eq: ${webapp_table_id} 
-      }
-    },
-    order_by: { 
-      id: desc 
+const getWebAppRowsByWebAppTableIdStringQuery = (webapp_table_id, limit) => {
+    const conditions = [];
+    if (webapp_table_id) {
+        conditions.push(`webapp_table_id: {_eq: ${webapp_table_id}}`);
     }
-  ) {
-    id
-    data
-    created_at
-  }
-}
+    const whereClause = conditions.length
+        ? `where: { ${conditions.join(", ")} }`
+        : "";
+    const limitClause = limit ? `limit: ${limit}` : "";
+    const orderByClause = `order_by: { id: desc }`;
+    return `
+    query getWebAppRowsByWebAppTableId {
+      webapp_rows (${[whereClause, orderByClause, limitClause]
+        .filter(Boolean)
+        .join(", ")}) {
+        id
+        data
+        created_at
+      }
+    }
 `;
+};
 exports.getWebAppRowsByWebAppTableIdStringQuery = getWebAppRowsByWebAppTableIdStringQuery;
 const getPayeeCategoryByIdStringQuery = (id) => `
 query getPayeeCategoryById {
