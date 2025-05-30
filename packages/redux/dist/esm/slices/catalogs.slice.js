@@ -20,6 +20,7 @@ const initialState = {
     bookings: createLoadingState([]),
     motivosRechazo: createLoadingState([]),
     ccPorcentajesDeRechazo: createLoadingState([]),
+    solicitudesEliminacionPO: createLoadingState([]),
     authorizationUpdateDiscountPO: createLoadingState([]),
     bitacoraRechazoMasivo: createLoadingState([]),
     items: createLoadingState([]),

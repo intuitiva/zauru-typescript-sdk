@@ -8,6 +8,7 @@ export * from "./zauru/httpCMS.js";
 export * from "./zauru/httpGraphQL.js";
 export * from "./zauru/httpOauth.js";
 export * from "./zauru/httpZauru.js";
+export * from "./zauru/4pinos-solicitud-eliminacion-po.js";
 export * from "./zauru/zauru-agencies.js";
 export * from "./zauru/zauru-automatic-numbers.js";
 export * from "./zauru/zauru-bookings.js";

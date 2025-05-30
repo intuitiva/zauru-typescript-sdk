@@ -28,6 +28,7 @@ import type {
   PrintTemplateGraphQL,
   PaymentMethodGraphQL,
   CCPorcentajeRechazo,
+  SolicitudEliminacionPO,
   AuthorizationUpdateDiscountPO,
 } from "@zauru-sdk/types";
 import {
@@ -539,6 +540,17 @@ export const useGetCCPorcentajesDeRechazo = (
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<CCPorcentajeRechazo>>(
     "ccPorcentajesDeRechazo",
+    config
+  );
+
+export const useGet4pinosSolicitudEliminacionPO = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: WebAppRowGraphQL<SolicitudEliminacionPO>[];
+} =>
+  useGetReduxCatalog<WebAppRowGraphQL<SolicitudEliminacionPO>>(
+    "solicitudesEliminacionPO",
     config
   );
 

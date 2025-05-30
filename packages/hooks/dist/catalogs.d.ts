@@ -1,4 +1,4 @@
-import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL, PaymentMethodGraphQL, CCPorcentajeRechazo, AuthorizationUpdateDiscountPO } from "@zauru-sdk/types";
+import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL, PaymentMethodGraphQL, CCPorcentajeRechazo, SolicitudEliminacionPO, AuthorizationUpdateDiscountPO } from "@zauru-sdk/types";
 import { CATALOGS_NAMES, ReduxParamsConfig } from "@zauru-sdk/redux";
 type CatalogType<T> = {
     data: T[];
@@ -158,6 +158,10 @@ export declare const useGetMotivosDeRechazo: (config?: ReduxParamsConfig) => {
 export declare const useGetCCPorcentajesDeRechazo: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: WebAppRowGraphQL<CCPorcentajeRechazo>[];
+};
+export declare const useGet4pinosSolicitudEliminacionPO: (config?: ReduxParamsConfig) => {
+    loading: boolean;
+    data: WebAppRowGraphQL<SolicitudEliminacionPO>[];
 };
 export declare const useGetAuthorizationsUpdateDiscountPO: (config?: ReduxParamsConfig) => {
     loading: boolean;

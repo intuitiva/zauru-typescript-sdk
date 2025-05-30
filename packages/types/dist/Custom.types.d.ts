@@ -171,6 +171,15 @@ export type CCPorcentajeRechazo = {
     item_id: number;
     porcentaje: number;
 };
+export type SolicitudEliminacionPO = {
+    purchase_order_id_number: string;
+    purchase_order_id: number;
+    employee_id: number;
+    employee_name: string;
+    description: string;
+    action_description: string;
+    status: string;
+};
 export type AuthorizationUpdateDiscountPO = {
     id?: number;
     discount: number;

@@ -15,6 +15,7 @@ import type {
   LotStockGraphQL,
   MotivoRechazo,
   CCPorcentajeRechazo,
+  SolicitudEliminacionPO,
   PayeeCategoryGraphQL,
   PayeeGraphQL,
   PaymentTermGraphQL,
@@ -38,6 +39,7 @@ export type CATALOGS_NAMES =
   | "tiposDeMuestra"
   | "motivosRechazo"
   | "ccPorcentajesDeRechazo"
+  | "solicitudesEliminacionPO"
   | "authorizationUpdateDiscountPO"
   | "bitacoraRechazoMasivo"
   | "items"
@@ -99,6 +101,9 @@ type CatalogState = {
   bookings: LoadingState<ShipmentGraphQL[]>;
   motivosRechazo: LoadingState<WebAppRowGraphQL<MotivoRechazo>[]>;
   ccPorcentajesDeRechazo: LoadingState<WebAppRowGraphQL<CCPorcentajeRechazo>[]>;
+  solicitudesEliminacionPO: LoadingState<
+    WebAppRowGraphQL<SolicitudEliminacionPO>[]
+  >;
   authorizationUpdateDiscountPO: LoadingState<
     WebAppRowGraphQL<AuthorizationUpdateDiscountPO>[]
   >;
@@ -150,6 +155,7 @@ const initialState: CatalogState = {
   bookings: createLoadingState([]),
   motivosRechazo: createLoadingState([]),
   ccPorcentajesDeRechazo: createLoadingState([]),
+  solicitudesEliminacionPO: createLoadingState([]),
   authorizationUpdateDiscountPO: createLoadingState([]),
   bitacoraRechazoMasivo: createLoadingState([]),
   items: createLoadingState([]),
