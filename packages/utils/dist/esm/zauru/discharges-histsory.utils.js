@@ -9,7 +9,7 @@ import { createWebAppTableRegister, getVariablesByName, getWebAppTableRegisters,
 export const getDischargeHistories = (headers, session) => {
     return handlePossibleAxiosErrors(async () => {
         const { discharge_history_web_app_table_id } = await getVariablesByName(headers, session, ["discharge_history_web_app_table_id"]);
-        const response = await getWebAppTableRegisters(session, discharge_history_web_app_table_id);
+        const response = await getWebAppTableRegisters(session, discharge_history_web_app_table_id, 1000);
         if (response.error) {
             throw new Error(`Ocurrió un error al consultar el historial de discharges: ${response.userMsg}`);
         }

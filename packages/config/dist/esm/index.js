@@ -15,7 +15,11 @@ const rawConfig = {
         : env === "staging"
             ? process.env.ZAURU_URL_STAGING
             : process.env.ZAURU_URL_DEV,
-    oauthClientID: process.env.ZAURU_OAUTH_CLIENT_ID || "",
+    oauthClientID: env === "production"
+        ? process.env.ZAURU_OAUTH_CLIENT_ID
+        : env === "staging"
+            ? process.env.ZAURU_OAUTH_CLIENT_ID_STAGING
+            : process.env.ZAURU_OAUTH_CLIENT_ID_DEV,
     graphqlAPIBaseURL: env === "production"
         ? process.env.GRAPHQL_API_URL
         : env === "staging"
