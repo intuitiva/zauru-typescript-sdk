@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   DropDownArrowSvgIcon,
   LogoutDropDownSvgIcon,
@@ -165,32 +165,43 @@ export const NavBar = ({
     </div>
   );
 
-  const options = (
-    <>
-      <ul className="w-full lg:flex lg:items-center">
-        {renderNavItems(items.filter((item) => item.loggedIn === loggedIn))}
-      </ul>
-      <ul className="sm:flex sm:flex-col lg:flex-row ml-auto">
-        {loggedIn && (
-          <OptionsDropDownButton
-            color={color}
-            options={[
-              <Link
-                key="cerrar-sesion"
-                className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
-                to="/logout"
-              >
-                <div className="mx-auto pt-2">
-                  {<LogoutDropDownSvgIcon />}
-                  <span>Cerrar sesión</span>
-                </div>
-              </Link>,
-            ]}
-          />
-        )}
-      </ul>
-    </>
+  const hiddenItemsChange = useMemo(
+    () => items.filter((item) => item.hide === true),
+    [items]
   );
+
+  const options = useMemo(() => {
+    return (
+      <>
+        <ul className="w-full lg:flex lg:items-center">
+          {renderNavItems(
+            items
+              .filter((item) => item.loggedIn === loggedIn)
+              .filter((item) => item.hide !== true)
+          )}
+        </ul>
+        <ul className="sm:flex sm:flex-col lg:flex-row ml-auto">
+          {loggedIn && (
+            <OptionsDropDownButton
+              color={color}
+              options={[
+                <Link
+                  key="cerrar-sesion"
+                  className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
+                  to="/logout"
+                >
+                  <div className="mx-auto pt-2">
+                    {<LogoutDropDownSvgIcon />}
+                    <span>Cerrar sesión</span>
+                  </div>
+                </Link>,
+              ]}
+            />
+          )}
+        </ul>
+      </>
+    );
+  }, [items, loggedIn, hiddenItemsChange]);
 
   return (
     <nav className={`py-3 ${color.bg600}`}>
