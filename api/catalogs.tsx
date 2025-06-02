@@ -32,6 +32,7 @@ import {
   getCaseFormSubmissionsByCaseId,
   getAuthorizationUpdateDiscountPO,
   get4pinosSolicitudEliminacionPO,
+  get4pinosPoDiscountHistory,
 } from "@zauru-sdk/services";
 import { AxiosUtilsResponse } from "@zauru-sdk/types";
 import {
@@ -231,6 +232,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
       case "solicitudesEliminacionPO":
         response = await get4pinosSolicitudEliminacionPO(headers, session);
+        break;
+
+      case "poDiscountHistory":
+        response = await get4pinosPoDiscountHistory(headers, session);
         break;
 
       case "authorizationUpdateDiscountPO":

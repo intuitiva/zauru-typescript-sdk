@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { DropDownArrowSvgIcon, LogoutDropDownSvgIcon, MenuAlt4Svg, OpcionButtonSvgIcon, } from "@zauru-sdk/icons";
 import { COLORS } from "./NavBar.utils.js";
 import { Link, useNavigate, useLocation } from "@remix-run/react";
@@ -48,8 +48,13 @@ export const NavBar = ({ title, loggedIn, items, selectedColor, version, }) => {
                     return { ...x };
                 }) }, index));
         }) }));
-    const options = (_jsxs(_Fragment, { children: [_jsx("ul", { className: "w-full lg:flex lg:items-center", children: renderNavItems(items.filter((item) => item.loggedIn === loggedIn)) }), _jsx("ul", { className: "sm:flex sm:flex-col lg:flex-row ml-auto", children: loggedIn && (_jsx(OptionsDropDownButton, { color: color, options: [
-                        _jsx(Link, { className: `block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`, to: "/logout", children: _jsxs("div", { className: "mx-auto pt-2", children: [_jsx(LogoutDropDownSvgIcon, {}), _jsx("span", { children: "Cerrar sesi\u00F3n" })] }) }, "cerrar-sesion"),
-                    ] })) })] }));
+    const hiddenItemsChange = useMemo(() => items.filter((item) => item.hide === true), [items]);
+    const options = useMemo(() => {
+        return (_jsxs(_Fragment, { children: [_jsx("ul", { className: "w-full lg:flex lg:items-center", children: renderNavItems(items
+                        .filter((item) => item.loggedIn === loggedIn)
+                        .filter((item) => item.hide !== true)) }), _jsx("ul", { className: "sm:flex sm:flex-col lg:flex-row ml-auto", children: loggedIn && (_jsx(OptionsDropDownButton, { color: color, options: [
+                            _jsx(Link, { className: `block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`, to: "/logout", children: _jsxs("div", { className: "mx-auto pt-2", children: [_jsx(LogoutDropDownSvgIcon, {}), _jsx("span", { children: "Cerrar sesi\u00F3n" })] }) }, "cerrar-sesion"),
+                        ] })) })] }));
+    }, [items, loggedIn, hiddenItemsChange]);
     return (_jsx("nav", { className: `py-3 ${color.bg600}`, children: _jsxs("div", { className: "flex items-center justify-between ml-5 mr-5", children: [_jsxs("div", { className: "flex justify-between items-center w-full lg:w-auto", children: [_jsxs(Link, { className: "text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white", to: "/home", children: [_jsx("div", { className: "inline-block mr-2 mb-2 align-middle", children: _jsx("img", { className: "w-auto h-7", src: "/logo.png", alt: "logo-zauru" }) }), title] }), version !== currentVersion && (_jsx("button", { className: `ml-2 px-2 py-1 text-xs text-white ${color.bg700} rounded-full hover:${color.bg900} transition-colors duration-200`, onClick: refreshPage, children: "\uD83D\uDD04 Actualizar versi\u00F3n" })), _jsx("button", { className: `rounded lg:hidden focus:outline-none focus:ring focus:${color.ring600} focus:ring-opacity-50`, "aria-label": "Toggle mobile menu", type: "button", onClick: () => setNavBarOpen(!NavBarOpen), children: _jsx(MenuAlt4Svg, { open: NavBarOpen }) })] }), _jsx("div", { className: `lg:hidden fixed top-0 left-0 z-50 w-64 h-full ${color.bg700} dark:bg-gray-900 shadow-lg transform ${NavBarOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out overflow-y-auto`, children: _jsx("div", { className: "p-4", children: options }) }), _jsx("div", { className: "hidden lg:flex lg:items-center w-full lg:w-auto", children: options })] }) }));
 };

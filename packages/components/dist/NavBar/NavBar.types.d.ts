@@ -7,6 +7,7 @@ export type NavBarItem = {
     color?: ColorInterface;
     childrens?: Exclude<NavBarItem, "loggedIn">[];
     reduxNotificationBadge?: (state: any) => string | number;
+    hide?: boolean;
 };
 export type NavBarProps = {
     title: string;

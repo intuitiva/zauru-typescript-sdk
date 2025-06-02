@@ -30,6 +30,7 @@ import type {
   CCPorcentajeRechazo,
   SolicitudEliminacionPO,
   AuthorizationUpdateDiscountPO,
+  PoDiscountHistory,
 } from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
@@ -551,6 +552,17 @@ export const useGet4pinosSolicitudEliminacionPO = (
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<SolicitudEliminacionPO>>(
     "solicitudesEliminacionPO",
+    config
+  );
+
+export const useGet4pinosPoDiscountHistory = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: WebAppRowGraphQL<PoDiscountHistory>[];
+} =>
+  useGetReduxCatalog<WebAppRowGraphQL<PoDiscountHistory>>(
+    "poDiscountHistory",
     config
   );
 

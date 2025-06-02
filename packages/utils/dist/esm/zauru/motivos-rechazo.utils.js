@@ -4,10 +4,10 @@ export const formatearMotivoDeRechazo = (entity) => {
     return { id: entity.id, name: entity.data.Nombre };
 };
 /**
- * Post saveBitacoraPOMassive from the web app table.
+ * Post saveRechazoCanastas from the web app table.
  * @param headers Request headers.
  * @param session Session object.
- * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
+ * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<WebAppTableUpdateResponse>[]>.
  */
 export const saveRechazoCanastas = (headers, session, body) => {
     return handlePossibleAxiosErrors(async () => {

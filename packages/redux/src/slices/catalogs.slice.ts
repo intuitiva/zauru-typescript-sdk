@@ -28,6 +28,7 @@ import type {
   PrintTemplateGraphQL,
   PaymentMethodGraphQL,
   AuthorizationUpdateDiscountPO,
+  PoDiscountHistory,
 } from "@zauru-sdk/types";
 
 export type CATALOGS_NAMES =
@@ -40,6 +41,7 @@ export type CATALOGS_NAMES =
   | "motivosRechazo"
   | "ccPorcentajesDeRechazo"
   | "solicitudesEliminacionPO"
+  | "poDiscountHistory"
   | "authorizationUpdateDiscountPO"
   | "bitacoraRechazoMasivo"
   | "items"
@@ -104,6 +106,7 @@ type CatalogState = {
   solicitudesEliminacionPO: LoadingState<
     WebAppRowGraphQL<SolicitudEliminacionPO>[]
   >;
+  poDiscountHistory: LoadingState<WebAppRowGraphQL<PoDiscountHistory>[]>;
   authorizationUpdateDiscountPO: LoadingState<
     WebAppRowGraphQL<AuthorizationUpdateDiscountPO>[]
   >;
@@ -156,6 +159,7 @@ const initialState: CatalogState = {
   motivosRechazo: createLoadingState([]),
   ccPorcentajesDeRechazo: createLoadingState([]),
   solicitudesEliminacionPO: createLoadingState([]),
+  poDiscountHistory: createLoadingState([]),
   authorizationUpdateDiscountPO: createLoadingState([]),
   bitacoraRechazoMasivo: createLoadingState([]),
   items: createLoadingState([]),

@@ -180,6 +180,18 @@ export type SolicitudEliminacionPO = {
     action_description: string;
     status: string;
 };
+export type PoDiscountHistory = {
+    purchase_order_id: number;
+    purchase_order_id_number: string;
+    discounts: {
+        discount: number;
+        description: string;
+        agency_id: number;
+        employee_id: number;
+        employee_name: string;
+        created_at: string;
+    }[];
+};
 export type AuthorizationUpdateDiscountPO = {
     id?: number;
     discount: number;

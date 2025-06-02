@@ -21,6 +21,7 @@ const initialState = {
     motivosRechazo: createLoadingState([]),
     ccPorcentajesDeRechazo: createLoadingState([]),
     solicitudesEliminacionPO: createLoadingState([]),
+    poDiscountHistory: createLoadingState([]),
     authorizationUpdateDiscountPO: createLoadingState([]),
     bitacoraRechazoMasivo: createLoadingState([]),
     items: createLoadingState([]),
