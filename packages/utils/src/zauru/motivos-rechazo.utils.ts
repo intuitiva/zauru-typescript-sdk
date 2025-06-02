@@ -19,10 +19,10 @@ export const formatearMotivoDeRechazo = (
 };
 
 /**
- * Post saveBitacoraPOMassive from the web app table.
+ * Post saveRechazoCanastas from the web app table.
  * @param headers Request headers.
  * @param session Session object.
- * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
+ * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<WebAppTableUpdateResponse>[]>.
  */
 export const saveRechazoCanastas = (
   headers: any,
