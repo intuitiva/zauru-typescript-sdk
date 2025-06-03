@@ -34,7 +34,9 @@ export const LoadingWindow: React.FC<LoadingWindowProps> = ({
         className="text-center flex flex-col items-center"
       >
         <img src="/logo.png" alt="Zauru Logo" className="mb-8 h-20" />
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">Cargando...</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">
+          {loadingItems.some((x) => x.loading) ? "Cargando..." : "Cargado"}
+        </h1>
         <p className="text-gray-600 mb-4">{description}</p>
         {loadingItems && (
           <ul className="text-left mb-4">
@@ -75,28 +77,34 @@ export const LoadingWindow: React.FC<LoadingWindowProps> = ({
             ))}
           </ul>
         )}
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="mt-8"
-        >
-          <svg
-            className="w-12 h-12 text-blue-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <motion.path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            />
-          </svg>
-        </motion.div>
       </motion.div>
+      <div className="flex flex-col items-center">
+        {loadingItems.some((x) => x.loading) ? (
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="mt-8"
+          >
+            <svg
+              className="w-12 h-12 text-blue-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <motion.path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              />
+            </svg>
+          </motion.div>
+        ) : (
+          <span className="text-green-500">✅</span>
+        )}
+      </div>
     </div>
   );
 };

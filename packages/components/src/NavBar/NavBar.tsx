@@ -127,6 +127,7 @@ export const NavBar = ({
   items,
   selectedColor,
   version,
+  reloadCatalogsOption,
 }: NavBarProps) => {
   const color: ColorInterface = COLORS[selectedColor];
   const [NavBarOpen, setNavBarOpen] = useState(false);
@@ -185,6 +186,33 @@ export const NavBar = ({
             <OptionsDropDownButton
               color={color}
               options={[
+                reloadCatalogsOption && (
+                  <Link
+                    key="recargar-catalogos"
+                    className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
+                    to="/reload-catalogs"
+                  >
+                    <div className="mx-auto pt-2">
+                      <svg
+                        className={`h-5 w-5 mr-1`}
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        viewBox="0 0 24 24"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M20.5 8c-1.392-3.179-4.823-5-8.522-5C7.299 3 3.453 6.552 3 11.1" />
+                        <path d="M16.489 8.4h3.97A.54.54 0 0 0 21 7.86V3.9M3.5 16c1.392 3.179 4.823 5 8.522 5 4.679 0 8.525-3.552 8.978-8.1" />
+                        <path d="M7.511 15.6h-3.97a.54.54 0 0 0-.541.54v3.96" />
+                      </svg>
+                      <span>Recargar catálogos</span>
+                    </div>
+                  </Link>
+                ),
                 <Link
                   key="cerrar-sesion"
                   className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}

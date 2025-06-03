@@ -31,6 +31,7 @@ export type NavBarProps = {
     | "sky";
   LinkComponent?: any;
   version?: string;
+  reloadCatalogsOption?: boolean;
 };
 
 export type NavBarStateProps = {
