@@ -198,6 +198,7 @@ export type PurchaseOrderGraphQL = {
   shipment_reference: string;
   webapp_table_rowables?: {
     webapp_rows?: {
+      id: number;
       webapp_table_id: number;
       data?: {
         [key: string]: any;
@@ -259,6 +260,7 @@ export type PayeeGraphQL = {
 export type WebAppRowGraphQL<T> = {
   id: number;
   data: T;
+  webapp_table_id: number;
   created_at: string;
 };
 
