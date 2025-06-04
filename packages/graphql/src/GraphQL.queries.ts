@@ -596,6 +596,8 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   const webAppRows = config.withWebAppRows
     ? `webapp_table_rowables {
             webapp_rows {
+                id
+                webapp_table_id
                 data
             }
         }`
