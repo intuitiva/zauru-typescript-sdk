@@ -138,7 +138,7 @@ export type PurchaseOrderGraphQL = {
                 [key: string]: any;
             };
         };
-    };
+    }[];
     purchase_order_details: PurchaseOrderDetailsGraphQL[];
     lots: LotGraphQL[];
     receptions: ReceptionGraphQL[];
