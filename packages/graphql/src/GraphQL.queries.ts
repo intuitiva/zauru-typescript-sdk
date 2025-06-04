@@ -103,6 +103,7 @@ query getPurchaseOrder($id: bigint) @cached {
     shipment_reference
     webapp_table_rowables {
         webapp_rows {
+            webapp_table_id
             data
         }
     }
