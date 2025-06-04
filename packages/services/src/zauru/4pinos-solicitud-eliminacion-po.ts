@@ -71,7 +71,8 @@ export async function create4pinosSolicitudEliminacionPO(
     const response = await createWebAppTableRegister<SolicitudEliminacionPO>(
       headers,
       solicitud_eliminacion_po_webapp_table_id,
-      body
+      body,
+      { temp_purchase_order_id: body.purchase_order_id }
     );
     return response;
   });

@@ -16,6 +16,7 @@ export type NavBarProps = {
     selectedColor: "pink" | "purple" | "slate" | "green" | "yellow" | "red" | "sky";
     LinkComponent?: any;
     version?: string;
+    reloadCatalogsOption?: boolean;
 };
 export type NavBarStateProps = {
     NavBarOpen: boolean;

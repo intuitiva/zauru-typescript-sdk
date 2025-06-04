@@ -129,7 +129,7 @@ export async function createWebAppTableRegister<T>(
   headers: any,
   id_web_app_table: string,
   body: T,
-  extraBody?: { temp_purchase_order_id: string }
+  extraBody?: { temp_purchase_order_id: string | number }
 ): Promise<WebAppTableUpdateResponse> {
   const requestBody = {
     webapp_row: { data: body },

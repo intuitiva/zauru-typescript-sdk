@@ -27,7 +27,7 @@ export async function create4pinosSolicitudEliminacionPO(headers, session, body)
         const { solicitud_eliminacion_po_webapp_table_id } = await getVariablesByName(headers, session, [
             "solicitud_eliminacion_po_webapp_table_id",
         ]);
-        const response = await createWebAppTableRegister(headers, solicitud_eliminacion_po_webapp_table_id, body);
+        const response = await createWebAppTableRegister(headers, solicitud_eliminacion_po_webapp_table_id, body, { temp_purchase_order_id: body.purchase_order_id });
         return response;
     });
 }
