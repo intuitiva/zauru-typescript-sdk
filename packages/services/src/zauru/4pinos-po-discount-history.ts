@@ -72,7 +72,7 @@ export async function create4pinosPoDiscountHistory(
       headers,
       historial_porcentajes_de_rechazo_webapp_table_id,
       body,
-      { temp_purchase_order_id: body.purchase_order_id }
+      { temp_purchase_order_id: `${body.purchase_order_id}` }
     );
     return response;
   });
