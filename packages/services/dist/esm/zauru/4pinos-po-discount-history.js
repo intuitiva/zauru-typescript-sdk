@@ -27,7 +27,7 @@ export async function create4pinosPoDiscountHistory(headers, session, body) {
         const { historial_porcentajes_de_rechazo_webapp_table_id } = await getVariablesByName(headers, session, [
             "historial_porcentajes_de_rechazo_webapp_table_id",
         ]);
-        const response = await createWebAppTableRegister(headers, historial_porcentajes_de_rechazo_webapp_table_id, body, { temp_purchase_order_id: body.purchase_order_id });
+        const response = await createWebAppTableRegister(headers, historial_porcentajes_de_rechazo_webapp_table_id, body, { temp_purchase_order_id: `${body.purchase_order_id}` });
         return response;
     });
 }
