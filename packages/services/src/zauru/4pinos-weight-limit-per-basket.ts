@@ -21,7 +21,7 @@ export async function get4pinosWeightLimitPerBasket(
   return handlePossibleAxiosErrors(async () => {
     const { peso_maximo_por_canasta_webapp_table_id } =
       await getVariablesByName(headers, session, [
-        "peso_maximo_por_cesta_webapp_table_id",
+        "peso_maximo_por_canasta_webapp_table_id",
       ]);
 
     const response = await getWebAppTableRegisters<PesoMaximoPorCanasta>(
