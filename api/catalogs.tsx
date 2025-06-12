@@ -33,6 +33,7 @@ import {
   getAuthorizationUpdateDiscountPO,
   get4pinosSolicitudEliminacionPO,
   get4pinosPoDiscountHistory,
+  get4pinosWeightLimitPerBasket,
 } from "@zauru-sdk/services";
 import { AxiosUtilsResponse } from "@zauru-sdk/types";
 import {
@@ -232,6 +233,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
       case "solicitudesEliminacionPO":
         response = await get4pinosSolicitudEliminacionPO(headers, session);
+        break;
+
+      case "pesoMaximoPorCanasta":
+        response = await get4pinosWeightLimitPerBasket(headers, session);
         break;
 
       case "poDiscountHistory":
