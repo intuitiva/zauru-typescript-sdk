@@ -61,7 +61,7 @@ export async function delete4pinosWeightLimitPerBasket(
 export async function create4pinosWeightLimitPerBasket(
   headers: any,
   session: Session,
-  body: PesoMaximoPorCanasta & { purchase_order_id: number }
+  body: PesoMaximoPorCanasta
 ): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> {
   return handlePossibleAxiosErrors(async () => {
     const { peso_maximo_por_canasta_webapp_table_id } =
@@ -71,8 +71,7 @@ export async function create4pinosWeightLimitPerBasket(
     const response = await createWebAppTableRegister<PesoMaximoPorCanasta>(
       headers,
       peso_maximo_por_canasta_webapp_table_id,
-      body,
-      { temp_purchase_order_id: `${body.purchase_order_id}` }
+      body
     );
     return response;
   });

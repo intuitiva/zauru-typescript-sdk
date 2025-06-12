@@ -27,7 +27,7 @@ export async function create4pinosWeightLimitPerBasket(headers, session, body) {
         const { peso_maximo_por_canasta_webapp_table_id } = await getVariablesByName(headers, session, [
             "peso_maximo_por_canasta_webapp_table_id",
         ]);
-        const response = await createWebAppTableRegister(headers, peso_maximo_por_canasta_webapp_table_id, body, { temp_purchase_order_id: `${body.purchase_order_id}` });
+        const response = await createWebAppTableRegister(headers, peso_maximo_por_canasta_webapp_table_id, body);
         return response;
     });
 }
