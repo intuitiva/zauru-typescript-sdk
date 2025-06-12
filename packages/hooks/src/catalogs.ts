@@ -31,6 +31,7 @@ import type {
   SolicitudEliminacionPO,
   AuthorizationUpdateDiscountPO,
   PoDiscountHistory,
+  PesoMaximoPorCanasta,
 } from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
@@ -552,6 +553,17 @@ export const useGet4pinosSolicitudEliminacionPO = (
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<SolicitudEliminacionPO>>(
     "solicitudesEliminacionPO",
+    config
+  );
+
+export const useGet4pinosWeightLimitPerBasket = (
+  config?: ReduxParamsConfig
+): {
+  loading: boolean;
+  data: WebAppRowGraphQL<PesoMaximoPorCanasta>[];
+} =>
+  useGetReduxCatalog<WebAppRowGraphQL<PesoMaximoPorCanasta>>(
+    "pesoMaximoPorCanasta",
     config
   );
 

@@ -180,6 +180,10 @@ export type SolicitudEliminacionPO = {
     action_description: string;
     status: string;
 };
+export type PesoMaximoPorCanasta = {
+    item_id: number;
+    weight_limit: number;
+};
 export type PoDiscountHistory = {
     purchase_order_id: number;
     purchase_order_id_number: string;

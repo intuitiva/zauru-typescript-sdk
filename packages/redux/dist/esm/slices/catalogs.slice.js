@@ -24,6 +24,7 @@ const initialState = {
     poDiscountHistory: createLoadingState([]),
     authorizationUpdateDiscountPO: createLoadingState([]),
     bitacoraRechazoMasivo: createLoadingState([]),
+    pesoMaximoPorCanasta: createLoadingState([]),
     items: createLoadingState([]),
     itemsByReception: createLoadingState([]),
     payees: createLoadingState([]),

@@ -15,6 +15,7 @@ export * from "./zauru/httpZauru.js";
 
 export * from "./zauru/4pinos-solicitud-eliminacion-po.js";
 export * from "./zauru/4pinos-po-discount-history.js";
+export * from "./zauru/4pinos-weight-limit-per-basket.js";
 
 export * from "./zauru/zauru-agencies.js";
 export * from "./zauru/zauru-automatic-numbers.js";

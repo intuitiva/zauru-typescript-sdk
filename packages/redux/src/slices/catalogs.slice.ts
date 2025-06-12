@@ -16,6 +16,7 @@ import type {
   MotivoRechazo,
   CCPorcentajeRechazo,
   SolicitudEliminacionPO,
+  PesoMaximoPorCanasta,
   PayeeCategoryGraphQL,
   PayeeGraphQL,
   PaymentTermGraphQL,
@@ -44,6 +45,7 @@ export type CATALOGS_NAMES =
   | "poDiscountHistory"
   | "authorizationUpdateDiscountPO"
   | "bitacoraRechazoMasivo"
+  | "pesoMaximoPorCanasta"
   | "items"
   | "itemsByReception"
   | "itemsByLab"
@@ -111,6 +113,7 @@ type CatalogState = {
     WebAppRowGraphQL<AuthorizationUpdateDiscountPO>[]
   >;
   bitacoraRechazoMasivo: LoadingState<WebAppRowGraphQL<BitacoraPOMassive>[]>;
+  pesoMaximoPorCanasta: LoadingState<WebAppRowGraphQL<PesoMaximoPorCanasta>[]>;
   items: LoadingState<ItemGraphQL[]>;
   itemsByReception: LoadingState<ItemGraphQL[]>;
   itemsByLab: LoadingState<ItemGraphQL[]>;
@@ -162,6 +165,7 @@ const initialState: CatalogState = {
   poDiscountHistory: createLoadingState([]),
   authorizationUpdateDiscountPO: createLoadingState([]),
   bitacoraRechazoMasivo: createLoadingState([]),
+  pesoMaximoPorCanasta: createLoadingState([]),
   items: createLoadingState([]),
   itemsByReception: createLoadingState([]),
   payees: createLoadingState([]),
