@@ -15,7 +15,7 @@ const templates_slice_js_1 = __importDefault(require("./slices/templates.slice.j
 const automaticNumbers_slice_js_1 = __importDefault(require("./slices/automaticNumbers.slice.js"));
 const tables_slice_js_1 = __importDefault(require("./slices/tables.slice.js"));
 const formsSavedData_slice_js_1 = __importDefault(require("./slices/formsSavedData.slice.js"));
-exports.LOCAL_STORAGE_REDUX_NAME = "___redux__state__v5.1";
+exports.LOCAL_STORAGE_REDUX_NAME = "___redux__state__v6.0";
 const persistanceLocalStorageMiddleware = (store) => (next) => (action) => {
     const result = next(action);
     if (!(typeof document === "undefined")) {
