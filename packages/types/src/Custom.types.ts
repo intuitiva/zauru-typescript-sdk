@@ -240,6 +240,7 @@ export type PoDiscountHistory = {
     employee_id: number;
     employee_name: string;
     created_at: string;
+    type: string;
   }[];
 };
 
