@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.232...v2.1.0) (2025-06-18)
+
+
+### Features
+
+* agregando tipo type al history de porcentajes 4pinos ([c84c7bb](https://github.com/intuitiva/zauru-typescript-sdk/commit/c84c7bbd405230a17d17289876abceab0ad10bf6))
+
+
+
+
+
 ## [2.0.229](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.0.228...v2.0.229) (2025-06-12)
 
 **Note:** Version bump only for package @zauru-sdk/types
