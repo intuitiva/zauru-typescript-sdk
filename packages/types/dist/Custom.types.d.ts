@@ -194,7 +194,7 @@ export type PoDiscountHistory = {
         employee_id: number;
         employee_name: string;
         created_at: string;
-        type: string;
+        type: "rechazo_recepcion_automatico_base" | "rechazo_recepcion_manual" | "rechazo_recepcion_manual_actualizacion" | "rechazo_cc_operativo_manual" | "rechazo_cc_operativo_manual_elotin_peso" | "rechazo_cc_operativo_manual_elotin_cantidad" | "rechazo_cc_admin_manual_reemplazo" | "rechazo_cc_admin_manual_actualizacion" | "rechazo_cc_admin_manual_descuento_masivo_reemplazo" | "rechazo_cc_admin_manual_descuento_masivo_actualizacion";
     }[];
 };
 export type AuthorizationUpdateDiscountPO = {
