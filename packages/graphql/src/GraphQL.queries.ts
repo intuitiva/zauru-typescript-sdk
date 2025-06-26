@@ -690,6 +690,11 @@ export const getPayeesStringQuery = (filters?: {
                 tin
                 vendor
                 address_line_1
+                payee_category_id
+                payee_category {
+                  id
+                  name
+                }
             }
         }
   `;

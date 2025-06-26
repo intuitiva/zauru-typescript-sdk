@@ -1,5 +1,12 @@
 import type { ColorInterface } from "../NavBar/NavBar.types.js";
 import { useFormContext } from "react-hook-form";
+import { useState, useRef, useEffect } from "react";
+
+type DropdownOption = {
+  label: string;
+  value: string;
+  onClick: () => void;
+};
 
 type Props = {
   type?: "reset" | "button" | "submit" | undefined;
@@ -15,6 +22,9 @@ type Props = {
   disabled?: boolean;
   enableFormErrorsValidation?: boolean;
   enableFormErrorsDescriptions?: boolean;
+  // Nuevas props para dropdown
+  dropdownOptions?: DropdownOption[];
+  dropdownTitle?: string;
 };
 
 export const Button = (props: Props) => {
@@ -31,7 +41,12 @@ export const Button = (props: Props) => {
     disabled = false,
     enableFormErrorsValidation = false,
     enableFormErrorsDescriptions = false,
+    dropdownOptions = [],
+    dropdownTitle,
   } = props;
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const formContext = useFormContext();
   const formHasErrors = formContext ? !formContext.formState.isValid : false;
@@ -93,35 +108,123 @@ export const Button = (props: Props) => {
         .join(", ")
     : "";
 
-  const buttonContent = (
-    <button
-      type={type}
-      name={"action"}
-      value={name}
-      disabled={
-        loading || disabled || (enableFormErrorsValidation && formHasErrors)
+  // Manejar click fuera del dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
       }
-      onClick={onClickSave}
-      className={`${
-        loading || disabled || (enableFormErrorsValidation && formHasErrors)
-          ? " bg-opacity-25 "
-          : ""
-      } ${
-        loading
-          ? " cursor-progress"
-          : `${
-              disabled || (enableFormErrorsValidation && formHasErrors)
-                ? ""
-                : `hover:${color.bg700}`
-            }`
-      } inline-flex justify-center rounded-md border border-transparent ${
-        color.bg600
-      } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
-        color.ring500
-      } focus:ring-offset-2 ${className}`}
-    >
-      {loading ? children ?? loadingText : children ?? title}
-    </button>
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const isButtonDisabled =
+    loading || disabled || (enableFormErrorsValidation && formHasErrors);
+  const hasDropdown = dropdownOptions.length > 0;
+
+  // Si no hay opciones de dropdown, comportamiento normal
+  if (!hasDropdown) {
+    const buttonContent = (
+      <button
+        type={type}
+        name={"action"}
+        value={name}
+        disabled={isButtonDisabled}
+        onClick={onClickSave}
+        className={`${isButtonDisabled ? " bg-opacity-25 " : ""} ${
+          loading
+            ? " cursor-progress"
+            : `${isButtonDisabled ? "" : `hover:${color.bg700}`}`
+        } inline-flex justify-center rounded-md border border-transparent ${
+          color.bg600
+        } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
+          color.ring500
+        } focus:ring-offset-2 ${className}`}
+      >
+        {loading ? children ?? loadingText : children ?? title}
+      </button>
+    );
+
+    return (
+      <>
+        {(enableFormErrorsValidation && formHasErrors && errorMessage) ||
+        (enableFormErrorsDescriptions && errorMessage) ? (
+          <div className="flex flex-col items-end mb-2">
+            <div className="p-2 bg-red-100 border border-red-400 text-red-700 rounded-md shadow-sm">
+              <p className="text-sm">{errorMessage}</p>
+            </div>
+          </div>
+        ) : null}
+        {buttonContent}
+      </>
+    );
+  }
+
+  // Comportamiento con dropdown
+  const dropdownContent = (
+    <div className="relative inline-block text-left" ref={dropdownRef}>
+      <div>
+        <button
+          type="button"
+          disabled={isButtonDisabled}
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          className={`${isButtonDisabled ? " bg-opacity-25 " : ""} ${
+            loading
+              ? " cursor-progress"
+              : `${isButtonDisabled ? "" : `hover:${color.bg700}`}`
+          } inline-flex justify-center items-center rounded-md border border-transparent ${
+            color.bg600
+          } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
+            color.ring500
+          } focus:ring-offset-2 ${className}`}
+        >
+          {loading
+            ? children ?? loadingText
+            : children ?? dropdownTitle ?? title}
+          <svg
+            className={`ml-2 -mr-1 h-4 w-4 transition-transform ${
+              isDropdownOpen ? "rotate-180" : ""
+            }`}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+
+      {isDropdownOpen && (
+        <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="py-1">
+            {dropdownOptions.map((option, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => {
+                  option.onClick();
+                  setIsDropdownOpen(false);
+                }}
+                className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 text-left"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 
   return (
@@ -134,7 +237,7 @@ export const Button = (props: Props) => {
           </div>
         </div>
       ) : null}
-      {buttonContent}
+      {dropdownContent}
     </>
   );
 };

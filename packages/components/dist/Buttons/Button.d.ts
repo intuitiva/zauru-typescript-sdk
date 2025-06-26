@@ -1,3 +1,8 @@
+type DropdownOption = {
+    label: string;
+    value: string;
+    onClick: () => void;
+};
 type Props = {
     type?: "reset" | "button" | "submit" | undefined;
     title?: string;
@@ -11,6 +16,8 @@ type Props = {
     disabled?: boolean;
     enableFormErrorsValidation?: boolean;
     enableFormErrorsDescriptions?: boolean;
+    dropdownOptions?: DropdownOption[];
+    dropdownTitle?: string;
 };
 export declare const Button: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

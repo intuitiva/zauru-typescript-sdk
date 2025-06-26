@@ -255,6 +255,7 @@ export type PayeeGraphQL = {
   currency_id: number;
   allowed_payment_terms: AllowedPaymentTermGraphQL[];
   address_line_1: string;
+  payee_category: PayeeCategoryGraphQL;
 };
 
 export type WebAppRowGraphQL<T> = {
