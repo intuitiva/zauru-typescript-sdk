@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.1.1...v2.2.0) (2025-06-26)
+
+
+### Features
+
+* updating payee relations ([f133cbd](https://github.com/intuitiva/zauru-typescript-sdk/commit/f133cbdbd633330571fe99b1c775fbb900c1caba))
+
+
+
+
+
 ## [2.1.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.1.0...v2.1.1) (2025-06-18)
 
 
