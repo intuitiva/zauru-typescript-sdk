@@ -26,9 +26,9 @@ export const Container = (props: Props) => {
     <>
       <div className={`mx-2 ${className}`}>
         {rightContent && (
-          <div className="flex justify-between items-center">
-            <div>{titleInfo}</div>
-            <div>{rightContent}</div>
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+            <div className="max-w-3xl">{titleInfo}</div>
+            <div className="flex-shrink-0">{rightContent}</div>
           </div>
         )}
         {!rightContent && titleInfo}
