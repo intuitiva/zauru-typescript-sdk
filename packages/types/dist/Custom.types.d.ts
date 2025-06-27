@@ -207,6 +207,9 @@ export type AuthorizationUpdateDiscountPO = {
     observaciones: string;
     agency_from_id: number;
     employee_id: number;
+    id_number: string;
+    item_name?: string;
+    item_id?: number;
 };
 export type RegisterMotivosRechazoBody = {
     Canastas?: string;
