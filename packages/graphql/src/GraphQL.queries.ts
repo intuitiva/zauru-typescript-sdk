@@ -84,9 +84,11 @@ export const getPurchaseOrderStringQuery = (
   config: {
     withLotStocks: boolean;
     withPayee: boolean;
+    withReceptions: boolean;
   } = {
     withLotStocks: false,
     withPayee: false,
+    withReceptions: true,
   }
 ) => {
   const lotStocks = config.withLotStocks
@@ -116,6 +118,24 @@ export const getPurchaseOrderStringQuery = (
       }`
     : "";
 
+  const receptions = config.withReceptions
+    ? `receptions {
+        id
+        received
+        voided
+        agency_id
+        entity_id
+        reception_details {
+          purchase_order_detail_id
+          item_id
+          lot_delivered_quantity
+          lot_description
+          lot_expire
+          lot_name
+        }
+    }`
+    : "";
+
   return `
 query getPurchaseOrder($id: bigint) @cached {
   purchase_orders(where: {id: {_eq: ${id}}}) {
@@ -138,6 +158,7 @@ query getPurchaseOrder($id: bigint) @cached {
     other_charges
     shipment_reference
     ${payee}
+    ${receptions}
     webapp_table_rowables {
         webapp_rows {
             id
@@ -160,21 +181,6 @@ query getPurchaseOrder($id: bigint) @cached {
       name
       description
       ${lotStocks}
-    }
-    receptions {
-        id
-        received
-        voided
-        agency_id
-        entity_id
-        reception_details {
-          purchase_order_detail_id
-          item_id
-          lot_delivered_quantity
-          lot_description
-          lot_expire
-          lot_name
-        }
     }
     shipment_purchase_orders {
         shipment_id

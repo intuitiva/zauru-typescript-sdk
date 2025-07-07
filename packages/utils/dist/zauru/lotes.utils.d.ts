@@ -1,5 +1,4 @@
 import type { Session } from "@remix-run/node";
-import { BasketSchema } from "@zauru-sdk/types";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes de rechazo
  * @param headers
@@ -17,7 +16,7 @@ export declare const getLoteDescription: (headers: any, session: Session, lote_i
     lote: import("@zauru-sdk/types").LoteDescription;
     purchase_order: import("@zauru-sdk/types").PurchasesDataTableListFormatedSchema;
     purchase: (import("@zauru-sdk/types").PurchaseOrderGraphQL & {
-        baskets_memo: BasketSchema[];
+        baskets_memo: import("@zauru-sdk/types").BasketSchema[];
         baskets_memo_quantity: number;
     }) | undefined;
 }>;

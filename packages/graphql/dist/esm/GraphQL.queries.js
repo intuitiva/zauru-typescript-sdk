@@ -82,7 +82,54 @@ query getPurchaseOrderByIdNumber {
 }
 `;
 exports.getPurchaseOrderByIdNumberStringQuery = getPurchaseOrderByIdNumberStringQuery;
-const getPurchaseOrderStringQuery = (id, config = { withLotStocks: false }) => `
+const getPurchaseOrderStringQuery = (id, config = {
+    withLotStocks: false,
+    withPayee: false,
+    withReceptions: true,
+}) => {
+    const lotStocks = config.withLotStocks
+        ? `lot_stocks {
+        id
+        available
+        incoming
+        outgoing
+        agency_id
+      }`
+        : "";
+    const payee = config.withPayee
+        ? `payee {
+        id
+        name
+        id_number
+        email
+        phone
+        tin
+        active
+        payee_category_id
+        payee_category {
+          id
+          name
+        }
+      }`
+        : "";
+    const receptions = config.withReceptions
+        ? `receptions {
+        id
+        received
+        voided
+        agency_id
+        entity_id
+        reception_details {
+          purchase_order_detail_id
+          item_id
+          lot_delivered_quantity
+          lot_description
+          lot_expire
+          lot_name
+        }
+    }`
+        : "";
+    return `
 query getPurchaseOrder($id: bigint) @cached {
   purchase_orders(where: {id: {_eq: ${id}}}) {
     id
@@ -103,6 +150,8 @@ query getPurchaseOrder($id: bigint) @cached {
     delivery_date
     other_charges
     shipment_reference
+    ${payee}
+    ${receptions}
     webapp_table_rowables {
         webapp_rows {
             id
@@ -124,30 +173,7 @@ query getPurchaseOrder($id: bigint) @cached {
       id
       name
       description
-      ${config.withLotStocks
-    ? `lot_stocks {
-              id
-              available
-              incoming
-              outgoing
-              agency_id
-            }`
-    : ""}
-    }
-    receptions {
-        id
-        received
-        voided
-        agency_id
-        entity_id
-        reception_details {
-          purchase_order_detail_id
-          item_id
-          lot_delivered_quantity
-          lot_description
-          lot_expire
-          lot_name
-        }
+      ${lotStocks}
     }
     shipment_purchase_orders {
         shipment_id
@@ -155,6 +181,7 @@ query getPurchaseOrder($id: bigint) @cached {
   }
 }
 `;
+};
 exports.getPurchaseOrderStringQuery = getPurchaseOrderStringQuery;
 const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null = false, id_number, id_number_not_empty = false, withMovementLots = false, withPurchaseOrdersByShipmentReference = false, limit = 1000, id, wheres, memoILike, plannedShippingDateRange, plannedDeliveryDateRange, }) => {
     let conditions = [];

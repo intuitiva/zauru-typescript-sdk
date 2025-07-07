@@ -509,8 +509,14 @@ export const getLast100Receptions = (
 export const getPurchaseOrder = (
   session: Session,
   poId: string | number,
-  config: { withLotStocksToMyAgency: boolean } = {
+  config: {
+    withLotStocksToMyAgency: boolean;
+    withPayee: boolean;
+    withReceptions: boolean;
+  } = {
     withLotStocksToMyAgency: false,
+    withPayee: false,
+    withReceptions: true,
   }
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
@@ -527,6 +533,8 @@ export const getPurchaseOrder = (
       {
         query: getPurchaseOrderStringQuery(Number(poId), {
           withLotStocks: config.withLotStocksToMyAgency,
+          withPayee: config.withPayee,
+          withReceptions: config.withReceptions,
         }),
       },
       { headers }

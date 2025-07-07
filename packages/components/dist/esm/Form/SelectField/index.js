@@ -1,8 +1,9 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { IdeaIconSVG } from "@zauru-sdk/icons";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback, } from "react";
 import { LoadingInputSkeleton } from "../../Skeletons/index.js";
 import { useFormContext } from "react-hook-form";
+import isEqual from "lodash/isEqual";
 export const SelectField = (props) => {
     const { id, name, title, defaultValue, defaultValueMulti = [], helpText, hint, options, onChange, onChangeMulti, isClearable = false, disabled = false, readOnly = false, isMulti = false, loading = false, className = "", onInputChange, required = false, } = props;
     const [value, setValue] = useState(defaultValue || null);
@@ -16,6 +17,20 @@ export const SelectField = (props) => {
     const optionsRef = useRef(null);
     const [isTabPressed, setIsTabPressed] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
+    // Use refs to store stable references to callbacks
+    const onChangeRef = useRef(onChange);
+    const onChangeMultiRef = useRef(onChangeMulti);
+    const onInputChangeRef = useRef(onInputChange);
+    // Update refs when callbacks change
+    useEffect(() => {
+        onChangeRef.current = onChange;
+    }, [onChange]);
+    useEffect(() => {
+        onChangeMultiRef.current = onChangeMulti;
+    }, [onChangeMulti]);
+    useEffect(() => {
+        onInputChangeRef.current = onInputChange;
+    }, [onInputChange]);
     const { register: tempRegister, formState: { errors }, setValue: setFormValue, } = useFormContext() || { formState: {} };
     const error = errors ? errors[props.name ?? "-1"] : undefined;
     const register = tempRegister
@@ -28,6 +43,18 @@ export const SelectField = (props) => {
     const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
     const textColor = isReadOnly ? "text-gray-500" : `text-${color}-900`;
     const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-200`;
+    // Sincronizar estado interno cuando cambien las props
+    useEffect(() => {
+        if (defaultValue && (!value || value.value !== defaultValue.value)) {
+            setValue(defaultValue);
+            setInputValue(defaultValue.label);
+        }
+    }, [defaultValue]);
+    useEffect(() => {
+        if (!isEqual(defaultValueMulti, valueMulti)) {
+            setValueMulti(defaultValueMulti);
+        }
+    }, [defaultValueMulti]);
     useEffect(() => {
         setFilteredOptions(options);
     }, [options]);
@@ -43,7 +70,7 @@ export const SelectField = (props) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-    const handleSetSingleValue = (value) => {
+    const handleSetSingleValue = useCallback((value) => {
         if (value) {
             setValue(value);
             setInputValue(value.label);
@@ -58,9 +85,9 @@ export const SelectField = (props) => {
                 setFormValue(name || "", "");
             }
         }
-        onChange && onChange(value ?? null);
-    };
-    const handleAddMultiValue = (value) => {
+        onChangeRef.current && onChangeRef.current(value ?? null);
+    }, [name, setFormValue]);
+    const handleAddMultiValue = useCallback((value) => {
         if (value) {
             const existValue = options.some((v) => v.value === value.value);
             const noEstaYaSeleccionado = !valueMulti.some((v) => v.value === value.value);
@@ -70,7 +97,7 @@ export const SelectField = (props) => {
                 if (setFormValue) {
                     setFormValue(name || "", newValue.map((v) => v.value));
                 }
-                onChangeMulti && onChangeMulti(newValue);
+                onChangeMultiRef.current && onChangeMultiRef.current(newValue);
             }
         }
         else {
@@ -79,28 +106,28 @@ export const SelectField = (props) => {
                 setFormValue(name || "", []);
             }
             setInputValue("");
-            onChangeMulti && onChangeMulti([]);
+            onChangeMultiRef.current && onChangeMultiRef.current([]);
         }
-    };
-    const handleRemoveMultiValue = (value) => {
+    }, [options, valueMulti, name, setFormValue]);
+    const handleRemoveMultiValue = useCallback((value) => {
         const newValue = valueMulti.filter((v) => v.value !== value.value);
         setValueMulti(newValue);
         if (setFormValue) {
             setFormValue(name || "", newValue.map((v) => v.value));
         }
-        onChangeMulti && onChangeMulti(newValue);
-    };
-    const handleInputChange = (e) => {
+        onChangeMultiRef.current && onChangeMultiRef.current(newValue);
+    }, [valueMulti, name, setFormValue]);
+    const handleInputChange = useCallback((e) => {
         const newValue = e.target.value;
         if (register) {
             register.onChange(e);
         }
         setInputValue(newValue);
-        onInputChange && onInputChange(newValue);
+        onInputChangeRef.current && onInputChangeRef.current(newValue);
         setIsSearching(true);
         setFilteredOptions(options.filter((option) => option.label.toLowerCase().includes(newValue.toLowerCase())));
-    };
-    const handleOptionClick = (option) => {
+    }, [register, options]);
+    const handleOptionClick = useCallback((option) => {
         if (isMulti) {
             handleAddMultiValue(option);
         }
@@ -111,16 +138,16 @@ export const SelectField = (props) => {
         setIsSearching(false);
         setFilteredOptions(options);
         setIsOpen(false);
-    };
-    const handleClear = () => {
+    }, [isMulti, handleAddMultiValue, handleSetSingleValue, options]);
+    const handleClear = useCallback(() => {
         if (isMulti) {
             handleAddMultiValue();
         }
         else {
             handleSetSingleValue();
         }
-    };
-    const handleBlur = () => {
+    }, [isMulti, handleAddMultiValue, handleSetSingleValue]);
+    const handleBlur = useCallback(() => {
         setTimeout(() => {
             if (isTabPressed && highlightedIndex >= 0) {
                 handleOptionClick(filteredOptions[highlightedIndex]);
@@ -133,8 +160,24 @@ export const SelectField = (props) => {
             setIsSearching(false);
             setIsOpen(false);
         }, 200);
-    };
-    const handleKeyDown = (e) => {
+    }, [
+        isTabPressed,
+        highlightedIndex,
+        filteredOptions,
+        isSearching,
+        handleOptionClick,
+    ]);
+    const scrollToHighlightedOption = useCallback(() => {
+        if (optionsRef.current && optionsRef.current.children[highlightedIndex]) {
+            const highlightedOption = optionsRef.current.children[highlightedIndex];
+            highlightedOption.scrollIntoView({
+                block: "center",
+                inline: "center",
+                behavior: "smooth",
+            });
+        }
+    }, [highlightedIndex]);
+    const handleKeyDown = useCallback((e) => {
         if (e.key === "Tab") {
             setIsTabPressed(true);
         }
@@ -152,24 +195,36 @@ export const SelectField = (props) => {
             e.preventDefault();
             handleOptionClick(filteredOptions[highlightedIndex]);
         }
-        else if (e.key === "Backspace" && (value || valueMulti.length > 0)) {
+        else if (e.key === "Backspace" &&
+            inputValue === "" &&
+            (value || valueMulti.length > 0)) {
+            // Solo borrar selecciones cuando el input esté vacío
             e.preventDefault();
-            handleClear();
-            setInputValue("");
+            if (isMulti && valueMulti.length > 0) {
+                // En modo multi, borrar la última selección
+                const lastIndex = valueMulti.length - 1;
+                handleRemoveMultiValue(valueMulti[lastIndex]);
+            }
+            else {
+                // En modo single, borrar la selección
+                handleClear();
+            }
             setFilteredOptions(options);
             setIsOpen(true);
         }
-    };
-    const scrollToHighlightedOption = () => {
-        if (optionsRef.current && optionsRef.current.children[highlightedIndex]) {
-            const highlightedOption = optionsRef.current.children[highlightedIndex];
-            highlightedOption.scrollIntoView({
-                block: "center",
-                inline: "center",
-                behavior: "smooth",
-            });
-        }
-    };
+    }, [
+        filteredOptions,
+        scrollToHighlightedOption,
+        highlightedIndex,
+        handleOptionClick,
+        inputValue,
+        value,
+        valueMulti,
+        handleClear,
+        handleRemoveMultiValue,
+        isMulti,
+        options,
+    ]);
     if (loading) {
         return (_jsxs(_Fragment, { children: [title && (_jsx("label", { htmlFor: error ? `${name}-error` : `${name}-success`, className: `block text-sm font-medium text-${color}-700 dark:text-${color}-500`, children: title })), _jsx(LoadingInputSkeleton, {}), helpText && (_jsx("p", { className: `mt-2 italic text-sm text-${color}-500 dark:text-${color}-400`, children: helpText }))] }));
     }

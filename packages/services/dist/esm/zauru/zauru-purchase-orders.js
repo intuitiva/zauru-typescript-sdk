@@ -293,12 +293,16 @@ export const getLast100Receptions = (session, agency_id) => {
  */
 export const getPurchaseOrder = (session, poId, config = {
     withLotStocksToMyAgency: false,
+    withPayee: false,
+    withReceptions: true,
 }) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
             query: getPurchaseOrderStringQuery(Number(poId), {
                 withLotStocks: config.withLotStocksToMyAgency,
+                withPayee: config.withPayee,
+                withReceptions: config.withReceptions,
             }),
         }, { headers });
         if (response.data.errors) {

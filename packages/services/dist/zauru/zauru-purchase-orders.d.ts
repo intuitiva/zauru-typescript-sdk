@@ -133,6 +133,8 @@ export declare const getLast100Receptions: (session: Session, agency_id?: number
  */
 export declare const getPurchaseOrder: (session: Session, poId: string | number, config?: {
     withLotStocksToMyAgency: boolean;
+    withPayee: boolean;
+    withReceptions: boolean;
 }) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
 /**
  * getGraphQLPurchaseOrderBetweenDates

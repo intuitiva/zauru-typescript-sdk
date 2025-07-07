@@ -2,6 +2,8 @@ export declare const getLast100ReceptionsStringQuery: (agency_id: number) => str
 export declare const getPurchaseOrderByIdNumberStringQuery: (id_number: string) => string;
 export declare const getPurchaseOrderStringQuery: (id: number, config?: {
     withLotStocks: boolean;
+    withPayee: boolean;
+    withReceptions: boolean;
 }) => string;
 export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null, id_number, id_number_not_empty, withMovementLots, withPurchaseOrdersByShipmentReference, limit, id, wheres, memoILike, plannedShippingDateRange, plannedDeliveryDateRange, }: {
     agency_to_id?: number;
