@@ -9,7 +9,6 @@ import React, {
 } from "react";
 import { LoadingInputSkeleton } from "../../Skeletons/index.js";
 import { useFormContext } from "react-hook-form";
-import isEqual from "lodash/isEqual";
 
 type Props = {
   id?: string;
@@ -31,6 +30,19 @@ type Props = {
   hint?: string;
   className?: string;
   required?: boolean;
+};
+
+// Simple comparison helper to check if two SelectFieldOption arrays contain the
+// same values (order-insensitive). We only compare the `value` of each option
+// because it uniquely identifies a SelectFieldOption.
+const areOptionArraysEqual = (
+  a: SelectFieldOption[] = [],
+  b: SelectFieldOption[] = []
+): boolean => {
+  if (a.length !== b.length) return false;
+  const aValues = a.map((v) => v.value).sort();
+  const bValues = b.map((v) => v.value).sort();
+  return aValues.every((val, idx) => val === bValues[idx]);
 };
 
 export const SelectField = (props: Props) => {
@@ -115,7 +127,7 @@ export const SelectField = (props: Props) => {
   }, [defaultValue]);
 
   useEffect(() => {
-    if (!isEqual(defaultValueMulti, valueMulti)) {
+    if (!areOptionArraysEqual(defaultValueMulti, valueMulti)) {
       setValueMulti(defaultValueMulti);
     }
   }, [defaultValueMulti]);

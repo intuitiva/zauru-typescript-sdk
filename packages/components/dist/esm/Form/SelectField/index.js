@@ -3,7 +3,16 @@ import { IdeaIconSVG } from "@zauru-sdk/icons";
 import { useEffect, useState, useRef, useCallback, } from "react";
 import { LoadingInputSkeleton } from "../../Skeletons/index.js";
 import { useFormContext } from "react-hook-form";
-import isEqual from "lodash/isEqual";
+// Simple comparison helper to check if two SelectFieldOption arrays contain the
+// same values (order-insensitive). We only compare the `value` of each option
+// because it uniquely identifies a SelectFieldOption.
+const areOptionArraysEqual = (a = [], b = []) => {
+    if (a.length !== b.length)
+        return false;
+    const aValues = a.map((v) => v.value).sort();
+    const bValues = b.map((v) => v.value).sort();
+    return aValues.every((val, idx) => val === bValues[idx]);
+};
 export const SelectField = (props) => {
     const { id, name, title, defaultValue, defaultValueMulti = [], helpText, hint, options, onChange, onChangeMulti, isClearable = false, disabled = false, readOnly = false, isMulti = false, loading = false, className = "", onInputChange, required = false, } = props;
     const [value, setValue] = useState(defaultValue || null);
@@ -51,7 +60,7 @@ export const SelectField = (props) => {
         }
     }, [defaultValue]);
     useEffect(() => {
-        if (!isEqual(defaultValueMulti, valueMulti)) {
+        if (!areOptionArraysEqual(defaultValueMulti, valueMulti)) {
             setValueMulti(defaultValueMulti);
         }
     }, [defaultValueMulti]);
