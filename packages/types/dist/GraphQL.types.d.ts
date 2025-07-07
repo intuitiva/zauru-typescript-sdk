@@ -145,6 +145,7 @@ export type PurchaseOrderGraphQL = {
     receptions: ReceptionGraphQL[];
     shipment_purchase_orders: ShipmentPurchaseOrderGraphQL[];
     taggings: TaggingGraphQL[];
+    payee: PayeeGraphQL;
 };
 export type TagGraphQL = {
     id: number;
