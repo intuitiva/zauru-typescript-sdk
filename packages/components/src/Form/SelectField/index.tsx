@@ -1,8 +1,15 @@
 import { IdeaIconSVG } from "@zauru-sdk/icons";
 import { SelectFieldOption } from "@zauru-sdk/types";
-import React, { useEffect, useState, useRef, KeyboardEvent } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  KeyboardEvent,
+  useCallback,
+} from "react";
 import { LoadingInputSkeleton } from "../../Skeletons/index.js";
 import { useFormContext } from "react-hook-form";
+import isEqual from "lodash/isEqual";
 
 type Props = {
   id?: string;
@@ -62,6 +69,25 @@ export const SelectField = (props: Props) => {
   const optionsRef = useRef<HTMLUListElement>(null);
   const [isTabPressed, setIsTabPressed] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  // Use refs to store stable references to callbacks
+  const onChangeRef = useRef(onChange);
+  const onChangeMultiRef = useRef(onChangeMulti);
+  const onInputChangeRef = useRef(onInputChange);
+
+  // Update refs when callbacks change
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  useEffect(() => {
+    onChangeMultiRef.current = onChangeMulti;
+  }, [onChangeMulti]);
+
+  useEffect(() => {
+    onInputChangeRef.current = onInputChange;
+  }, [onInputChange]);
+
   const {
     register: tempRegister,
     formState: { errors },
@@ -79,6 +105,20 @@ export const SelectField = (props: Props) => {
   const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
   const textColor = isReadOnly ? "text-gray-500" : `text-${color}-900`;
   const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-200`;
+
+  // Sincronizar estado interno cuando cambien las props
+  useEffect(() => {
+    if (defaultValue && (!value || value.value !== defaultValue.value)) {
+      setValue(defaultValue);
+      setInputValue(defaultValue.label);
+    }
+  }, [defaultValue]);
+
+  useEffect(() => {
+    if (!isEqual(defaultValueMulti, valueMulti)) {
+      setValueMulti(defaultValueMulti);
+    }
+  }, [defaultValueMulti]);
 
   useEffect(() => {
     setFilteredOptions(options);
@@ -100,98 +140,113 @@ export const SelectField = (props: Props) => {
     };
   }, []);
 
-  const handleSetSingleValue = (value?: SelectFieldOption) => {
-    if (value) {
-      setValue(value);
-      setInputValue(value.label);
-      if (setFormValue) {
-        setFormValue(name || "", value.value);
-      }
-    } else {
-      setValue(null);
-      setInputValue("");
-      if (setFormValue) {
-        setFormValue(name || "", "");
-      }
-    }
-    onChange && onChange(value ?? null);
-  };
-
-  const handleAddMultiValue = (value?: SelectFieldOption) => {
-    if (value) {
-      const existValue = options.some((v) => v.value === value.value);
-      const noEstaYaSeleccionado = !valueMulti.some(
-        (v) => v.value === value.value
-      );
-      if (existValue && noEstaYaSeleccionado) {
-        const newValue = [...valueMulti, value];
-        setValueMulti(newValue);
+  const handleSetSingleValue = useCallback(
+    (value?: SelectFieldOption) => {
+      if (value) {
+        setValue(value);
+        setInputValue(value.label);
         if (setFormValue) {
-          setFormValue(
-            name || "",
-            newValue.map((v) => v.value)
-          );
+          setFormValue(name || "", value.value);
         }
-        onChangeMulti && onChangeMulti(newValue);
+      } else {
+        setValue(null);
+        setInputValue("");
+        if (setFormValue) {
+          setFormValue(name || "", "");
+        }
       }
-    } else {
-      setValueMulti([]);
+      onChangeRef.current && onChangeRef.current(value ?? null);
+    },
+    [name, setFormValue]
+  );
+
+  const handleAddMultiValue = useCallback(
+    (value?: SelectFieldOption) => {
+      if (value) {
+        const existValue = options.some((v) => v.value === value.value);
+        const noEstaYaSeleccionado = !valueMulti.some(
+          (v) => v.value === value.value
+        );
+        if (existValue && noEstaYaSeleccionado) {
+          const newValue = [...valueMulti, value];
+          setValueMulti(newValue);
+          if (setFormValue) {
+            setFormValue(
+              name || "",
+              newValue.map((v) => v.value)
+            );
+          }
+          onChangeMultiRef.current && onChangeMultiRef.current(newValue);
+        }
+      } else {
+        setValueMulti([]);
+        if (setFormValue) {
+          setFormValue(name || "", []);
+        }
+        setInputValue("");
+        onChangeMultiRef.current && onChangeMultiRef.current([]);
+      }
+    },
+    [options, valueMulti, name, setFormValue]
+  );
+
+  const handleRemoveMultiValue = useCallback(
+    (value: SelectFieldOption) => {
+      const newValue = valueMulti.filter((v) => v.value !== value.value);
+      setValueMulti(newValue);
       if (setFormValue) {
-        setFormValue(name || "", []);
+        setFormValue(
+          name || "",
+          newValue.map((v) => v.value)
+        );
       }
-      setInputValue("");
-      onChangeMulti && onChangeMulti([]);
-    }
-  };
+      onChangeMultiRef.current && onChangeMultiRef.current(newValue);
+    },
+    [valueMulti, name, setFormValue]
+  );
 
-  const handleRemoveMultiValue = (value: SelectFieldOption) => {
-    const newValue = valueMulti.filter((v) => v.value !== value.value);
-    setValueMulti(newValue);
-    if (setFormValue) {
-      setFormValue(
-        name || "",
-        newValue.map((v) => v.value)
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      if (register) {
+        register.onChange(e);
+      }
+      setInputValue(newValue);
+      onInputChangeRef.current && onInputChangeRef.current(newValue);
+      setIsSearching(true);
+      setFilteredOptions(
+        options.filter((option) =>
+          option.label.toLowerCase().includes(newValue.toLowerCase())
+        )
       );
-    }
-    onChangeMulti && onChangeMulti(newValue);
-  };
+    },
+    [register, options]
+  );
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    if (register) {
-      register.onChange(e);
-    }
-    setInputValue(newValue);
-    onInputChange && onInputChange(newValue);
-    setIsSearching(true);
-    setFilteredOptions(
-      options.filter((option) =>
-        option.label.toLowerCase().includes(newValue.toLowerCase())
-      )
-    );
-  };
+  const handleOptionClick = useCallback(
+    (option: SelectFieldOption) => {
+      if (isMulti) {
+        handleAddMultiValue(option);
+      } else {
+        handleSetSingleValue(option);
+      }
+      setHighlightedIndex(-1);
+      setIsSearching(false);
+      setFilteredOptions(options);
+      setIsOpen(false);
+    },
+    [isMulti, handleAddMultiValue, handleSetSingleValue, options]
+  );
 
-  const handleOptionClick = (option: SelectFieldOption) => {
-    if (isMulti) {
-      handleAddMultiValue(option);
-    } else {
-      handleSetSingleValue(option);
-    }
-    setHighlightedIndex(-1);
-    setIsSearching(false);
-    setFilteredOptions(options);
-    setIsOpen(false);
-  };
-
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     if (isMulti) {
       handleAddMultiValue();
     } else {
       handleSetSingleValue();
     }
-  };
+  }, [isMulti, handleAddMultiValue, handleSetSingleValue]);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     setTimeout(() => {
       if (isTabPressed && highlightedIndex >= 0) {
         handleOptionClick(filteredOptions[highlightedIndex]);
@@ -204,36 +259,15 @@ export const SelectField = (props: Props) => {
       setIsSearching(false);
       setIsOpen(false);
     }, 200);
-  };
+  }, [
+    isTabPressed,
+    highlightedIndex,
+    filteredOptions,
+    isSearching,
+    handleOptionClick,
+  ]);
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Tab") {
-      setIsTabPressed(true);
-    } else if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setHighlightedIndex((prevIndex) =>
-        prevIndex < filteredOptions.length - 1 ? prevIndex + 1 : 0
-      );
-      scrollToHighlightedOption();
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setHighlightedIndex((prevIndex) =>
-        prevIndex > 0 ? prevIndex - 1 : filteredOptions.length - 1
-      );
-      scrollToHighlightedOption();
-    } else if (e.key === "Enter" && highlightedIndex !== -1) {
-      e.preventDefault();
-      handleOptionClick(filteredOptions[highlightedIndex]);
-    } else if (e.key === "Backspace" && (value || valueMulti.length > 0)) {
-      e.preventDefault();
-      handleClear();
-      setInputValue("");
-      setFilteredOptions(options);
-      setIsOpen(true);
-    }
-  };
-
-  const scrollToHighlightedOption = () => {
+  const scrollToHighlightedOption = useCallback(() => {
     if (optionsRef.current && optionsRef.current.children[highlightedIndex]) {
       const highlightedOption = optionsRef.current.children[
         highlightedIndex
@@ -244,7 +278,60 @@ export const SelectField = (props: Props) => {
         behavior: "smooth",
       });
     }
-  };
+  }, [highlightedIndex]);
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Tab") {
+        setIsTabPressed(true);
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setHighlightedIndex((prevIndex) =>
+          prevIndex < filteredOptions.length - 1 ? prevIndex + 1 : 0
+        );
+        scrollToHighlightedOption();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setHighlightedIndex((prevIndex) =>
+          prevIndex > 0 ? prevIndex - 1 : filteredOptions.length - 1
+        );
+        scrollToHighlightedOption();
+      } else if (e.key === "Enter" && highlightedIndex !== -1) {
+        e.preventDefault();
+        handleOptionClick(filteredOptions[highlightedIndex]);
+      } else if (
+        e.key === "Backspace" &&
+        inputValue === "" &&
+        (value || valueMulti.length > 0)
+      ) {
+        // Solo borrar selecciones cuando el input esté vacío
+        e.preventDefault();
+        if (isMulti && valueMulti.length > 0) {
+          // En modo multi, borrar la última selección
+          const lastIndex = valueMulti.length - 1;
+          handleRemoveMultiValue(valueMulti[lastIndex]);
+        } else {
+          // En modo single, borrar la selección
+          handleClear();
+        }
+        setFilteredOptions(options);
+        setIsOpen(true);
+      }
+    },
+    [
+      filteredOptions,
+      scrollToHighlightedOption,
+      highlightedIndex,
+      handleOptionClick,
+      inputValue,
+      value,
+      valueMulti,
+      handleClear,
+      handleRemoveMultiValue,
+      isMulti,
+      options,
+    ]
+  );
 
   if (loading) {
     return (

@@ -81,8 +81,42 @@ query getPurchaseOrderByIdNumber {
 
 export const getPurchaseOrderStringQuery = (
   id: number,
-  config: { withLotStocks: boolean } = { withLotStocks: false }
-) => `
+  config: {
+    withLotStocks: boolean;
+    withPayee: boolean;
+  } = {
+    withLotStocks: false,
+    withPayee: false,
+  }
+) => {
+  const lotStocks = config.withLotStocks
+    ? `lot_stocks {
+        id
+        available
+        incoming
+        outgoing
+        agency_id
+      }`
+    : "";
+
+  const payee = config.withPayee
+    ? `payee {
+        id
+        name
+        id_number
+        email
+        phone
+        tin
+        active
+        payee_category_id
+        payee_category {
+          id
+          name
+        }
+      }`
+    : "";
+
+  return `
 query getPurchaseOrder($id: bigint) @cached {
   purchase_orders(where: {id: {_eq: ${id}}}) {
     id
@@ -103,6 +137,7 @@ query getPurchaseOrder($id: bigint) @cached {
     delivery_date
     other_charges
     shipment_reference
+    ${payee}
     webapp_table_rowables {
         webapp_rows {
             id
@@ -124,17 +159,7 @@ query getPurchaseOrder($id: bigint) @cached {
       id
       name
       description
-      ${
-        config.withLotStocks
-          ? `lot_stocks {
-              id
-              available
-              incoming
-              outgoing
-              agency_id
-            }`
-          : ""
-      }
+      ${lotStocks}
     }
     receptions {
         id
@@ -157,6 +182,7 @@ query getPurchaseOrder($id: bigint) @cached {
   }
 }
 `;
+};
 
 export const getShipmentsStringQuery = ({
   agency_to_id,
