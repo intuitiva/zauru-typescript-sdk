@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.3.1...v2.4.0) (2025-07-07)
+
+
+### Features
+
+* build ([b22e345](https://github.com/intuitiva/zauru-typescript-sdk/commit/b22e345387b87bd77a43d45924875e806ac62aa3))
+* getPurchaseOrderStringQuery ([ddac075](https://github.com/intuitiva/zauru-typescript-sdk/commit/ddac07589aa19f82ab009b9c027952a2f07412a4))
+
+
+
+
+
 # [2.2.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.1.1...v2.2.0) (2025-06-26)
 
 
