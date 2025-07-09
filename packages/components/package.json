@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/components",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "Componentes reutilizables en las WebApps de Zauru.",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
@@ -39,7 +39,7 @@
     "@zauru-sdk/hooks": "^2.8.0",
     "@zauru-sdk/icons": "^2.0.188",
     "@zauru-sdk/types": "^2.7.0",
-    "@zauru-sdk/utils": "^2.8.0",
+    "@zauru-sdk/utils": "^2.9.0",
     "browser-image-compression": "^2.0.2",
     "framer-motion": "^11.7.0",
     "jsonwebtoken": "^9.0.2",

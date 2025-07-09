@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.8.0...v2.9.0) (2025-07-09)
+
+
+### Features
+
+* updating sessions ([ba08941](https://github.com/intuitiva/zauru-typescript-sdk/commit/ba089410e8ae6a394c788fa9abe123da3a74a9a7))
+
+
+
+
+
 # [2.8.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.7.0...v2.8.0) (2025-07-09)
 
 
