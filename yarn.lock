@@ -1460,10 +1460,10 @@ __metadata:
     "@types/react-dom": "npm:^18.2.7"
     "@types/styled-components": "npm:^5.1.34"
     "@zauru-sdk/common": "npm:^2.7.0"
-    "@zauru-sdk/hooks": "npm:^2.7.0"
+    "@zauru-sdk/hooks": "npm:^2.8.0"
     "@zauru-sdk/icons": "npm:^2.0.188"
     "@zauru-sdk/types": "npm:^2.7.0"
-    "@zauru-sdk/utils": "npm:^2.7.0"
+    "@zauru-sdk/utils": "npm:^2.8.0"
     browser-image-compression: "npm:^2.0.2"
     framer-motion: "npm:^11.7.0"
     jsonwebtoken: "npm:^9.0.2"
@@ -1497,7 +1497,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/hooks@npm:^2.7.0, @zauru-sdk/hooks@workspace:packages/hooks":
+"@zauru-sdk/hooks@npm:^2.8.0, @zauru-sdk/hooks@workspace:packages/hooks":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/hooks@workspace:packages/hooks"
   dependencies:
@@ -1506,7 +1506,7 @@ __metadata:
     "@types/react-dom": "npm:^18.2.7"
     "@zauru-sdk/common": "npm:^2.7.0"
     "@zauru-sdk/icons": "npm:^2.0.188"
-    "@zauru-sdk/redux": "npm:^2.7.0"
+    "@zauru-sdk/redux": "npm:^2.8.0"
     "@zauru-sdk/types": "npm:^2.7.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -1528,7 +1528,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/redux@npm:^2.7.0, @zauru-sdk/redux@workspace:packages/redux":
+"@zauru-sdk/redux@npm:^2.8.0, @zauru-sdk/redux@workspace:packages/redux":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/redux@workspace:packages/redux"
   dependencies:
@@ -1544,7 +1544,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/services@npm:^2.7.0, @zauru-sdk/services@workspace:packages/services":
+"@zauru-sdk/services@npm:^2.8.0, @zauru-sdk/services@workspace:packages/services":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/services@workspace:packages/services"
   dependencies:
@@ -1568,7 +1568,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zauru-sdk/utils@npm:^2.7.0, @zauru-sdk/utils@workspace:packages/utils":
+"@zauru-sdk/utils@npm:^2.8.0, @zauru-sdk/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@zauru-sdk/utils@workspace:packages/utils"
   dependencies:
@@ -1576,7 +1576,7 @@ __metadata:
     "@zauru-sdk/common": "npm:^2.7.0"
     "@zauru-sdk/config": "npm:^2.0.220"
     "@zauru-sdk/graphql": "npm:^2.4.0"
-    "@zauru-sdk/services": "npm:^2.7.0"
+    "@zauru-sdk/services": "npm:^2.8.0"
     "@zauru-sdk/types": "npm:^2.7.0"
     typescript: "npm:^5.1.6"
   languageName: unknown
