@@ -35,7 +35,8 @@ export function createUpstashSessionStorage({ cookie }) {
     return createSessionStorage({
         cookie,
         async createData(data, expires) {
-            const id = `${data?.selectedEntity}-${data?.employee_id}-${crypto.randomUUID()}`;
+            const id = `${data?.selectedEntity ?? "api"}-${data?.username}-${crypto.randomUUID()}`;
+            console.log("Creando sesión --->: ", id);
             await fetchWithRetries(`${redisBaseURL}/set/${id}?EX=${expires ? expiresToSeconds(expires) : 60 * 60 * 8}`, {
                 method: "post",
                 data: { data },

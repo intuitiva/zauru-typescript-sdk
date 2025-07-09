@@ -1,5 +1,5 @@
 import { ItemAssociatedLots, NewPurchaseOrderResponse, PurchaseOrderGeneralInfo, PurchaseOrderGraphQL, RejectionWebAppTableObject, ShipmentGraphQL, WebAppRowGraphQL } from "@zauru-sdk/types";
-export type ApiResponseFor4pinosReceptions = {
+type ApiResponseFor4pinosReceptions = {
     apiCall: number;
     authorizedPO?: PurchaseOrderGraphQL;
     shipment?: ShipmentGraphQL;
