@@ -193,7 +193,13 @@ async function getGraphQLToken(
 
       if (responseToken.data) {
         session.set("graphqlToken", responseToken.data);
-        await commitSession(session);
+        await commitSession(session, {
+          maxAge: 60 * 60 * 24,
+          path: "/",
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+        });
         console.log(
           chalk.green(
             `=============== ✅ TOKEN GRAPHQL GUARDADO EN SESION Y DEVUELTO ✅ ====================`

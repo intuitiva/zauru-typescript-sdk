@@ -10,14 +10,14 @@ const sessionCookie = createCookie("_rj_session", {
     secure: process.env.NODE_ENV === "production",
 });
 const { getSession, commitSession, destroySession } = createUpstashSessionStorage({ cookie: sessionCookie });
-const getRefreshSession = async (request, session) => {
+const getRefreshSession = async (request) => {
     try {
         const cookie = request.headers.get("Cookie");
         const currentSession = await getSession(cookie);
         if (!currentSession) {
             return null;
         }
-        return await commitSession(session, {
+        return await commitSession(currentSession, {
             maxAge: 60 * 60 * 24,
             path: "/",
             sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
