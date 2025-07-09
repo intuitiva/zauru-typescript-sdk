@@ -215,7 +215,9 @@ export async function getVariablesByName(headers, session, names) {
         if (response.error) {
             throw new Error(`${response.userMsg} - ${response.msg}`);
         }
-        session.set("variables", response.data);
+        session.set("variables", response.data?.map((x) => {
+            return { id: x.id, name: x.name, value: x.value };
+        }));
         await commitSession(session);
         variables = response.data ?? [];
     }

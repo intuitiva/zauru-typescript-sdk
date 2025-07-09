@@ -20,7 +20,6 @@ __exportStar(require("./automaticNumbers.js"), exports);
 __exportStar(require("./catalogs.js"), exports);
 __exportStar(require("./onlineStatus.js"), exports);
 __exportStar(require("./profiles.js"), exports);
-__exportStar(require("./receptions.js"), exports);
 __exportStar(require("./session.js"), exports);
 __exportStar(require("./templates.js"), exports);
 __exportStar(require("./useWindowDimensions.js"), exports);

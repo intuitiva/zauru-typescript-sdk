@@ -722,26 +722,6 @@ export type RejectionWebAppTableObject = {
 
 export type ReceptionType = { Codigo: string; Nombre: string };
 
-export type ApiResponseFor4pinosReceptions = {
-  apiCall: number;
-  authorizedPO: PurchaseOrderGraphQL;
-  shipment: ShipmentGraphQL;
-  qcShipment: ShipmentGraphQL;
-};
-
-export type QueueFormReceptionWebAppTable = {
-  creadoPor: string;
-  fechaCreacion: string;
-  formSubmited: any;
-  estado: string;
-  agency_id: number;
-  apiResponses?: ApiResponseFor4pinosReceptions;
-  description: string;
-  timeStamp?: number;
-  username?: string;
-  token?: string;
-};
-
 export type QueueShipmentsForm = {
   creadoPor: string;
   fechaCreacion: string;
