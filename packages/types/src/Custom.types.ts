@@ -738,6 +738,8 @@ export type QueueFormReceptionWebAppTable = {
   apiResponses?: ApiResponseFor4pinosReceptions;
   description: string;
   timeStamp?: number;
+  username?: string;
+  token?: string;
 };
 
 export type QueueShipmentsForm = {
