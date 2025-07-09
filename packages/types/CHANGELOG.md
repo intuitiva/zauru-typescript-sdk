@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.5.0...v2.6.0) (2025-07-09)
+
+
+### Features
+
+* adding token, username to queue type ([738fb4b](https://github.com/intuitiva/zauru-typescript-sdk/commit/738fb4b52d58bdb7c7c3a3312d63ba6d50bb4d41))
+
+
+
+
+
 # [2.5.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.4.0...v2.5.0) (2025-07-07)
 
 
