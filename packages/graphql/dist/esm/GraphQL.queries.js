@@ -167,6 +167,7 @@ query getPurchaseOrder($id: bigint) @cached {
       delivered_quantity
       item {
         name
+        stocks_only_integer
       }
     }
     lots(where: {active: {_eq: true}}) {
