@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.10.0...v2.11.0) (2025-07-28)
+
+
+### Features
+
+* only to my agency lots ([b4b2320](https://github.com/intuitiva/zauru-typescript-sdk/commit/b4b2320c390bdd4f851aee70fbd7e18be1fd5d99))
+
+
+
+
+
 # [2.10.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.9.0...v2.10.0) (2025-07-21)
 
 
