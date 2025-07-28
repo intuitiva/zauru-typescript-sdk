@@ -547,9 +547,12 @@ export const getPurchaseOrder = (
     const tempResponse = response.data?.data?.purchase_orders[0];
 
     if (config.withLotStocksToMyAgency) {
-      tempResponse.lots[0].lot_stocks = tempResponse.lots[0].lot_stocks.filter(
-        (x) => x.agency_id === Number(session.get("agency_id"))
-      );
+      tempResponse.lots = tempResponse.lots.map((x) => {
+        x.lot_stocks = x.lot_stocks.filter(
+          (y) => y.agency_id === Number(session.get("agency_id"))
+        );
+        return x;
+      });
     }
 
     return tempResponse;
