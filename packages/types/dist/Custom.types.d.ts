@@ -457,6 +457,11 @@ export type BitacoraPOMassive = {
     observations: string;
     replace: boolean;
     desprocesar?: boolean;
+    lbsBuenas?: number;
+    lbsMalas?: number;
+    calculated_discount_from_lbs?: number;
+    manual_override?: boolean;
+    manual_discount?: number;
 };
 export type ConsolidatedHistory = {
     creadoPor: string;
