@@ -521,6 +521,7 @@ export type BitacoraPOMassive = {
   discount?: number | string;
   other_charges?: number | string;
   payeeCategoryId?: number | string;
+  purchaseOrderId?: string;
   itemId?: number | string;
   fechaDesde?: string;
   fechaHasta?: string;
