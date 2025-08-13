@@ -105,6 +105,7 @@ export type TaggingGraphQL = {
 };
 export type PurchaseOrderGraphQL = {
     id: number;
+    zid: number;
     created_at: string;
     due: string;
     id_number: string;
@@ -245,6 +246,7 @@ export type ItemGraphQL = {
     purchasable: boolean;
     weight: number;
     pays_vat: boolean;
+    reorder_point: number;
     stocks: StockGraphQL[];
     item_category: ItemCategoryGraphQL;
 };

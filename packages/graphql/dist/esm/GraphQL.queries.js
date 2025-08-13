@@ -493,6 +493,7 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
         ${whereClause}
       ) {
         id
+        zid
         created_at
         due
         id_number
@@ -728,11 +729,12 @@ const getItemsByCategoryStringQuery = (id) => `
 query getItemsByCategory {
   item_categories (where: {id: {_eq: ${id} }}) {
         items (where: {active: {_eq: true }}) {
-            id,
-            name,
-            stocks_only_integer,
+            id
+            name
+            stocks_only_integer
             code
             product_type
+            reorder_point
         }
   }
 }
@@ -741,9 +743,10 @@ exports.getItemsByCategoryStringQuery = getItemsByCategoryStringQuery;
 exports.getItemsStringQuery = `
 query getItems {
   items (where: {active: {_eq: true }}) {
-        id,
-        name,
+        id
+        name
         code
+        reorder_point
     }
 }
 `;
@@ -752,14 +755,15 @@ query getItemsBySuperCategory {
   item_super_categories (where: {id: {_eq: ${id} }}, order_by: {id: desc}) {
       item_categories {
         items (where: {active: {_eq: true }}) {
-            id,
-            name,
-            stocks_only_integer,
-            code,
-            item_category_id,
-            measurement_unit,
+            id
+            name
+            stocks_only_integer
+            code
+            item_category_id
+            measurement_unit
             description
             product_type
+            reorder_point
             stocks(where: {agency_id: {_eq: ${agency_id}}}, order_by: {id: desc}) {
               available
               id
@@ -887,6 +891,7 @@ query getItemByName {
       stocks_only_integer
       code
       product_type
+      reorder_point
   }
 }
 `;
