@@ -922,7 +922,7 @@ query getItemCategoryById {
 export const getItemsByCategoryStringQuery = (id: number) => `
 query getItemsByCategory {
   item_categories (where: {id: {_eq: ${id} }}) {
-        items (where: {active: {_eq: true }}) {
+        items (where: {active: {_eq: true }}, order_by: {reorder_point: asc}) {
             id
             name
             stocks_only_integer
