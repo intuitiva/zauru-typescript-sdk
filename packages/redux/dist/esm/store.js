@@ -50,12 +50,12 @@ const cleanLocalStorage = (whitelist = {}) => {
         //   }
         // };
         // deleteAllCookies();
-        // //delete caché
-        // caches.keys().then((names) => {
-        //   for (const name of names) {
-        //     caches.delete(name);
-        //   }
-        // });
+        //delete caché
+        caches.keys().then((names) => {
+            for (const name of names) {
+                caches.delete(name);
+            }
+        });
         //unregister service workers
         // navigator.serviceWorker.getRegistrations().then((registrations) => {
         //   for (const registration of registrations) {

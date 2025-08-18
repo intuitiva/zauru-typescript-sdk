@@ -59,12 +59,12 @@ export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
 
     // deleteAllCookies();
 
-    // //delete caché
-    // caches.keys().then((names) => {
-    //   for (const name of names) {
-    //     caches.delete(name);
-    //   }
-    // });
+    //delete caché
+    caches.keys().then((names) => {
+      for (const name of names) {
+        caches.delete(name);
+      }
+    });
 
     //unregister service workers
     // navigator.serviceWorker.getRegistrations().then((registrations) => {
