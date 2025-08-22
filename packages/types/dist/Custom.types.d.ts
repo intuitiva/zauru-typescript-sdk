@@ -272,6 +272,7 @@ export type UpdatePurchaseOrderBody = {
         discount?: number;
         other_charges?: number;
         payee_id?: number | string;
+        reference?: string;
         purchase_order_details_attributes?: {
             [key: string]: {
                 id?: string | number;
