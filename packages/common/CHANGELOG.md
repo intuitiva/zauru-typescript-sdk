@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.16.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.15.1...v2.16.0) (2025-08-25)
+
+
+### Features
+
+* actualizando memo recursos ([0c2cf6a](https://github.com/intuitiva/zauru-typescript-sdk/commit/0c2cf6a5d615c2e550130cccb8ce536f5c91b9c0))
+
+
+
+
+
 ## [2.15.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.15.0...v2.15.1) (2025-08-22)
 
 **Note:** Version bump only for package @zauru-sdk/common
