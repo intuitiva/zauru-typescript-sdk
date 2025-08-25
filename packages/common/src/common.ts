@@ -18,7 +18,7 @@ export const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[] = [
 moment.locale("es");
 
 // Helper function to parse JSON memo safely
-const parseJsonMemo = (memo?: string): JsonMemoType => {
+export const parseJsonMemo = (memo?: string): JsonMemoType => {
   if (!memo) return {};
   try {
     return JSON.parse(memo);

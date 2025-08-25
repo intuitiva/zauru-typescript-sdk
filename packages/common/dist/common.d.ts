@@ -1,6 +1,7 @@
 import "moment-timezone";
-import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption } from "@zauru-sdk/types";
+import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption, JsonMemoType } from "@zauru-sdk/types";
 export declare const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[];
+export declare const parseJsonMemo: (memo?: string) => JsonMemoType;
 /**
  * Obtener el objeto de canastas en base al memo
  * @param memo
