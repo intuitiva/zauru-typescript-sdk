@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/common",
-  "version": "2.16.0",
+  "version": "2.16.1",
   "description": "Funciones de uso común en el desarrollo de webapps en Zauru",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
