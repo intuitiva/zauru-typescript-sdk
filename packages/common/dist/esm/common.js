@@ -29,16 +29,30 @@ exports.DESTINOS_MUESTRA_OPTIONS = [
     { label: "Residuos de plaguicidas", value: "residuos_de_plaguicidas" },
 ];
 moment_1.default.locale("es");
+// Helper function to parse JSON memo safely
+const parseJsonMemo = (memo) => {
+    if (!memo)
+        return {};
+    try {
+        return JSON.parse(memo);
+    }
+    catch (error) {
+        console.log("Error parsing memo JSON:", error);
+        return {
+            qualityControlBaskets: memo.split(","),
+        };
+    }
+};
 /**
- * Obtener el objeto de canastas en base al string de canastas
- * @param basketsString
+ * Obtener el objeto de canastas en base al memo
+ * @param memo
  * @returns
  */
-const getBasketsSchema = (basketsString) => {
+const getBasketsSchema = (memo) => {
     //Sacar conteo de canastas y su descripción de colores
-    //ejemplo: vienen en un campo así: 8-53311-VERDE,3-53315-ROSADA,4-53313-ROJA
-    const splitedText = basketsString.split(",");
-    const baskets = splitedText.map((splited) => {
+    //ejemplo: vienen en un campo así: ["8-53311-VERDE","3-53315-ROSADA","4-53313-ROJA"]
+    const jsonMemo = parseJsonMemo(memo);
+    const baskets = jsonMemo.qualityControlBaskets?.map((splited) => {
         const values = splited.split("-");
         return {
             total: Number(values[0]) ?? 0,
@@ -46,7 +60,7 @@ const getBasketsSchema = (basketsString) => {
             color: values[2] ?? "Sin Canasta",
         };
     });
-    return baskets;
+    return baskets ?? [];
 };
 exports.getBasketsSchema = getBasketsSchema;
 function generateClientUUID() {

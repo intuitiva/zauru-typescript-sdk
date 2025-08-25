@@ -2,11 +2,11 @@ import "moment-timezone";
 import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption } from "@zauru-sdk/types";
 export declare const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[];
 /**
- * Obtener el objeto de canastas en base al string de canastas
- * @param basketsString
+ * Obtener el objeto de canastas en base al memo
+ * @param memo
  * @returns
  */
-export declare const getBasketsSchema: (basketsString: string) => BasketSchema[];
+export declare const getBasketsSchema: (memo: string) => BasketSchema[];
 export declare function generateClientUUID(): string;
 /**
  * extractValueBetweenTags

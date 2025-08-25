@@ -802,3 +802,11 @@ export type GenericDynamicTableColumn = {
   headerClassName?: string;
   cellClassName?: string;
 };
+
+export type JsonMemoType = {
+  additionalInfo?: string;
+  qualityControlBaskets?: string[];
+  elotinUnitsPerPound?: string;
+  originalNetWeight?: number;
+  originalNetWeightLines?: Array<{ weight: number }>;
+};

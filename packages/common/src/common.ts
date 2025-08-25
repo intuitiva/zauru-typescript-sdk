@@ -6,6 +6,7 @@ import type {
   BasketSchema,
   SelectFieldOption,
   MonthsType,
+  JsonMemoType,
 } from "@zauru-sdk/types";
 import { MONTHS } from "@zauru-sdk/types";
 
@@ -16,16 +17,29 @@ export const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[] = [
 
 moment.locale("es");
 
+// Helper function to parse JSON memo safely
+const parseJsonMemo = (memo?: string): JsonMemoType => {
+  if (!memo) return {};
+  try {
+    return JSON.parse(memo);
+  } catch (error) {
+    console.log("Error parsing memo JSON:", error);
+    return {
+      qualityControlBaskets: memo.split(","),
+    };
+  }
+};
+
 /**
- * Obtener el objeto de canastas en base al string de canastas
- * @param basketsString
+ * Obtener el objeto de canastas en base al memo
+ * @param memo
  * @returns
  */
-export const getBasketsSchema = (basketsString: string): BasketSchema[] => {
+export const getBasketsSchema = (memo: string): BasketSchema[] => {
   //Sacar conteo de canastas y su descripción de colores
-  //ejemplo: vienen en un campo así: 8-53311-VERDE,3-53315-ROSADA,4-53313-ROJA
-  const splitedText = basketsString.split(",");
-  const baskets = splitedText.map((splited: string) => {
+  //ejemplo: vienen en un campo así: ["8-53311-VERDE","3-53315-ROSADA","4-53313-ROJA"]
+  const jsonMemo = parseJsonMemo(memo);
+  const baskets = jsonMemo.qualityControlBaskets?.map((splited: string) => {
     const values = splited.split("-");
     return {
       total: Number(values[0]) ?? 0,
@@ -34,7 +48,7 @@ export const getBasketsSchema = (basketsString: string): BasketSchema[] => {
     } as BasketSchema;
   });
 
-  return baskets;
+  return baskets ?? [];
 };
 
 export function generateClientUUID() {
