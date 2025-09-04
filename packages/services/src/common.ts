@@ -61,7 +61,19 @@ export const loginWebApp = async (
       username: userInfo?.username ?? "",
     });
 
-    const res_emp = await getEmployeeInfo(userInfo?.employee_id ?? 0, headers);
+    if (!userInfo?.employee_id) {
+      throw new Error(
+        "El usuario `" +
+          userInfo?.username +
+          "` no tiene un empleado asignado en la entidad: `" +
+          userInfo?.selected_entity +
+          " - " +
+          userInfo?.selected_entity_name +
+          "` por favor contacte con su administrador."
+      );
+    }
+
+    const res_emp = await getEmployeeInfo(userInfo?.employee_id, headers);
     if (res_emp.error) {
       throw new Error(res_emp.userMsg);
     }
