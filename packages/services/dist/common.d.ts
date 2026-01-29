@@ -2,6 +2,14 @@ import { Session } from "@remix-run/node";
 import { AxiosRequestHeaders } from "axios";
 import { EmployeeGraphQL, OauthProfile, ProfileResponse, AgencyGraphQL, VariableGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
 /**
+ * nativeLogin
+ * @param session
+ * @param codeValue
+ * @param cookie
+ * @returns
+ */
+export declare const nativeLogin: (session: Session, codeValue: string) => Promise<AxiosUtilsResponse<OauthProfile>>;
+/**
  * loginWebApp
  * @param session
  * @param codeValue

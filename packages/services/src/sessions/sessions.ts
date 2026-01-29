@@ -1,4 +1,4 @@
-import { createCookie, Session } from "@remix-run/node";
+import { createCookie } from "@remix-run/node";
 import { createUpstashSessionStorage } from "./upstash.js";
 
 const sessionCookie = createCookie("_rj_session", {

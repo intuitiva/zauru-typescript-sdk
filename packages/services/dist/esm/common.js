@@ -7,6 +7,30 @@ import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getVariables } from "./zauru/zauru-variables.js";
 import { config } from "@zauru-sdk/config";
 /**
+ * nativeLogin
+ * @param session
+ * @param codeValue
+ * @param cookie
+ * @returns
+ */
+export const nativeLogin = async (session, codeValue) => {
+    return handlePossibleAxiosErrors(async () => {
+        const userInfoResponse = await getOauthUserInfo(codeValue ?? "");
+        if (userInfoResponse.error || !userInfoResponse.data) {
+            throw new Error(userInfoResponse.userMsg ??
+                "Error al obtener la información del usuario en Oauth.");
+        }
+        const userInfo = userInfoResponse.data;
+        session.set("username", userInfo?.username);
+        session.set("token", userInfo?.api_key);
+        session.set("code", codeValue);
+        session.set("name", userInfo?.name);
+        session.set("email", userInfo?.email);
+        session.set("employee_id", userInfo?.employee_id);
+        return userInfo;
+    });
+};
+/**
  * loginWebApp
  * @param session
  * @param codeValue
@@ -16,8 +40,9 @@ import { config } from "@zauru-sdk/config";
 export const loginWebApp = async (session, codeValue, cookie) => {
     return handlePossibleAxiosErrors(async () => {
         const userInfoResponse = await getOauthUserInfo(codeValue ?? "");
-        if (userInfoResponse.error) {
-            throw new Error(userInfoResponse.userMsg);
+        if (userInfoResponse.error || !userInfoResponse.data) {
+            throw new Error(userInfoResponse.userMsg ??
+                "Error al obtener la información del usuario en Oauth.");
         }
         const userInfo = userInfoResponse.data;
         session.set("username", userInfo?.username);

@@ -23,6 +23,38 @@ import { getVariables } from "./zauru/zauru-variables.js";
 import { config } from "@zauru-sdk/config";
 
 /**
+ * nativeLogin
+ * @param session
+ * @param codeValue
+ * @param cookie
+ * @returns
+ */
+export const nativeLogin = async (
+  session: Session,
+  codeValue: string,
+): Promise<AxiosUtilsResponse<OauthProfile>> => {
+  return handlePossibleAxiosErrors(async () => {
+    const userInfoResponse = await getOauthUserInfo(codeValue ?? "");
+    if (userInfoResponse.error || !userInfoResponse.data) {
+      throw new Error(
+        userInfoResponse.userMsg ??
+          "Error al obtener la información del usuario en Oauth.",
+      );
+    }
+
+    const userInfo = userInfoResponse.data;
+    session.set("username", userInfo?.username);
+    session.set("token", userInfo?.api_key);
+    session.set("code", codeValue);
+    session.set("name", userInfo?.name);
+    session.set("email", userInfo?.email);
+    session.set("employee_id", userInfo?.employee_id);
+
+    return userInfo;
+  });
+};
+
+/**
  * loginWebApp
  * @param session
  * @param codeValue
@@ -32,7 +64,7 @@ import { config } from "@zauru-sdk/config";
 export const loginWebApp = async (
   session: Session,
   codeValue: string,
-  cookie: string
+  cookie: string,
 ): Promise<
   AxiosUtilsResponse<{
     headers: any;
@@ -44,8 +76,11 @@ export const loginWebApp = async (
 > => {
   return handlePossibleAxiosErrors(async () => {
     const userInfoResponse = await getOauthUserInfo(codeValue ?? "");
-    if (userInfoResponse.error) {
-      throw new Error(userInfoResponse.userMsg);
+    if (userInfoResponse.error || !userInfoResponse.data) {
+      throw new Error(
+        userInfoResponse.userMsg ??
+          "Error al obtener la información del usuario en Oauth.",
+      );
     }
 
     const userInfo = userInfoResponse.data;
@@ -69,7 +104,7 @@ export const loginWebApp = async (
           userInfo?.selected_entity +
           " - " +
           userInfo?.selected_entity_name +
-          "` por favor contacte con su administrador."
+          "` por favor contacte con su administrador.",
       );
     }
 
@@ -94,12 +129,12 @@ export const loginWebApp = async (
     }
 
     const membership = profileInfo?.memberships?.filter(
-      (member: any) => member?.entity?.id === empInfo?.entity_id
+      (member: any) => member?.entity?.id === empInfo?.entity_id,
     );
 
     if (!membership) {
       throw new Error(
-        "No se encontró una suscripción para este usuario en la entidad asignada."
+        "No se encontró una suscripción para este usuario en la entidad asignada.",
       );
     }
 
@@ -132,7 +167,7 @@ export const getHeaders = async (
   cookie: string | null,
   _session?: Session | null,
   config?: { token: string; username: string } | null,
-  extraConfig?: { withOutContentType: string }
+  extraConfig?: { withOutContentType: string },
 ) => {
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Session and Header Info<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   const session = _session ?? (await getSession(cookie));
@@ -170,7 +205,7 @@ export const getCMSHeaders = async () => {
  * @returns
  */
 async function getGraphQLToken(
-  session: Session
+  session: Session,
 ): Promise<AxiosUtilsResponse<GraphQLToken>> {
   return handlePossibleAxiosErrors(async () => {
     const token = (await session.get("graphqlToken")) as GraphQLToken;
@@ -192,15 +227,15 @@ async function getGraphQLToken(
     if (tokenHasExpired) {
       console.log(
         chalk.yellow(
-          `=============== ⚠️ EL TOKEN GRAPHQL ESTÁ EXPIRADO O NO EXISTE ⚠️ ====================`
-        )
+          `=============== ⚠️ EL TOKEN GRAPHQL ESTÁ EXPIRADO O NO EXISTE ⚠️ ====================`,
+        ),
       );
 
       const responseToken = await httpZauru.get<GraphQLToken>(
         "/apps/graphql.json",
         {
           headers,
-        }
+        },
       );
 
       if (responseToken.data) {
@@ -214,19 +249,19 @@ async function getGraphQLToken(
         });
         console.log(
           chalk.green(
-            `=============== ✅ TOKEN GRAPHQL GUARDADO EN SESION Y DEVUELTO ✅ ====================`
-          )
+            `=============== ✅ TOKEN GRAPHQL GUARDADO EN SESION Y DEVUELTO ✅ ====================`,
+          ),
         );
         return responseToken.data;
       }
 
       console.log(
         chalk.red(
-          `=============== ❗ NO HAY INFORMACIÓN OBTENIDA DEL REQUEST A ZAURU - GET_TOKEN ❗ ====================`
-        )
+          `=============== ❗ NO HAY INFORMACIÓN OBTENIDA DEL REQUEST A ZAURU - GET_TOKEN ❗ ====================`,
+        ),
       );
       throw new Error(
-        "No viene información en la solicitud de getGraphQLToken a Zauru"
+        "No viene información en la solicitud de getGraphQLToken a Zauru",
       );
     }
 
@@ -246,8 +281,8 @@ export const getGraphQLAPIHeaders = async (session: Session) => {
   if (error) {
     console.log(
       chalk.red(
-        `=============== ❗ OCURRIÓ UN ERROR DEL REQUEST A ZAURU - GET_TOKEN ❗ ==================== ${userMsg}`
-      )
+        `=============== ❗ OCURRIÓ UN ERROR DEL REQUEST A ZAURU - GET_TOKEN ❗ ==================== ${userMsg}`,
+      ),
     );
     return {
       Authorization: `Bearer token_no_existe`,
@@ -264,7 +299,7 @@ export const getGraphQLAPIHeaders = async (session: Session) => {
 export type SessionMessage = { id: string; title: string; message: string };
 export const saveSessionMessage = async (
   session: Session,
-  info: SessionMessage
+  info: SessionMessage,
 ): Promise<void> => {
   const updateTasks = (session.get("sessionMessages") ??
     []) as SessionMessage[];
@@ -274,7 +309,7 @@ export const saveSessionMessage = async (
 
 export const deleteSessionMessage = async (
   session: Session,
-  id: string
+  id: string,
 ): Promise<boolean> => {
   let updateTasks = session.get("sessionMessages") as Array<SessionMessage>;
   if (
@@ -324,7 +359,7 @@ export function generateDistinctCode(prefix: string) {
 export async function getVariablesByName(
   headers: any,
   session: Session,
-  names: Array<string>
+  names: Array<string>,
 ): Promise<{ [key: string]: string }> {
   //variables
   let variables: VariableGraphQL[] = [];
@@ -345,14 +380,14 @@ export async function getVariablesByName(
       "variables",
       response.data?.map((x) => {
         return { id: x.id, name: x.name, value: x.value };
-      })
+      }),
     );
     await commitSession(session);
     variables = response.data ?? [];
   }
 
   const filtrados = variables.filter((value: VariableGraphQL) =>
-    names.includes(value.name)
+    names.includes(value.name),
   );
 
   const returnObject: { [key: string]: string } = {};
@@ -368,7 +403,7 @@ export async function getVariablesByName(
       .filter((variable) => !Object.keys(returnObject).includes(variable))
       .join(",");
     throw new Error(
-      `No se encontraron las variables: ${noEncontradas} pruebe cerrar e iniciar sesión nuevamente para continuar.`
+      `No se encontraron las variables: ${noEncontradas} pruebe cerrar e iniciar sesión nuevamente para continuar.`,
     );
   }
 
@@ -378,7 +413,7 @@ export async function getVariablesByName(
 export async function getVariablesSchemaByName(
   headers: any,
   session: Session,
-  names: Array<string>
+  names: Array<string>,
 ): Promise<VariableGraphQL[]> {
   //variables
   let variables: VariableGraphQL[] = [];
@@ -401,7 +436,7 @@ export async function getVariablesSchemaByName(
   }
 
   const filtrados = variables.filter((value: VariableGraphQL) =>
-    names.includes(value.name)
+    names.includes(value.name),
   );
 
   return filtrados;
@@ -415,7 +450,7 @@ export async function getVariablesSchemaByName(
  */
 export async function actualizarVariables(
   headers: any,
-  session: Session
+  session: Session,
 ): Promise<void> {
   // Intentamos obtener las variables desde el servidor
   const response = await getVariables(headers);
