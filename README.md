@@ -15,6 +15,10 @@ Para construir todos los paquetes, ejecuta:
 ```bash
 npx lerna run build
 
+npm login
+
+npm config set //registry.npmjs.org/:_authToken "TU_TOKEN_AQUI"
+
 npx lerna publish
 ```
 

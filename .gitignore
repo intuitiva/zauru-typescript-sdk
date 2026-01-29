@@ -4,3 +4,4 @@ node_modules/
 *.log
 packages/.DS_Store
 packages/common/.DS_Store
+.npmrc
