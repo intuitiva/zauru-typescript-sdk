@@ -353,7 +353,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (session, dates, config = {})
         }
         const query = getPurchaseOrdersBetweenDatesStringQuery(formatDateToUTC(dates.startDate), formatDateToUTC(dates.endDate), {
             agencyId: finalConfig.agencyFilter
-                ? agency_id ?? session.get("agency_id")
+                ? (agency_id ?? session.get("agency_id"))
                 : undefined,
             ...finalConfig,
         });

@@ -386,7 +386,12 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
     if (config.payeeId || config.payeeCategoryId) {
         const payeeConditions = [];
         if (config.payeeId) {
-            payeeConditions.push(`id: { _eq: ${config.payeeId} }`);
+            if (config.payeeId.toString().includes(",")) {
+                payeeConditions.push(`id: { _in: [${config.payeeId}] }`);
+            }
+            else {
+                payeeConditions.push(`id: { _eq: ${config.payeeId} }`);
+            }
         }
         if (config.payeeCategoryId) {
             payeeConditions.push(`payee_category: { id: { _eq: ${config.payeeCategoryId} } }`);
