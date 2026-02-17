@@ -40,7 +40,7 @@ import {
  */
 export const markAsReceivePurchaseOrder = (
   headers: any,
-  body: Partial<PurchaseOrderGraphQL> & { fechaVencimiento?: string }
+  body: Partial<PurchaseOrderGraphQL> & { fechaVencimiento?: string },
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = { ...body };
@@ -69,13 +69,13 @@ export type CreateNewPurchaseOrderType = Partial<
 };
 export const createNewPurchaseOrder = (
   headers: any,
-  body: CreateNewPurchaseOrderType
+  body: CreateNewPurchaseOrderType,
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     let sendBody = {
       ...body,
       purchase_order_details_attributes: arrayToObject(
-        body?.purchase_order_details
+        body?.purchase_order_details,
       ),
       tag_ids: [
         "",
@@ -103,7 +103,7 @@ export const createNewPurchaseOrder = (
     const response = await httpZauru.post<PurchaseOrderGraphQL>(
       `/purchases/purchase_orders.json`,
       sendBody,
-      { headers }
+      { headers },
     );
 
     return response.data;
@@ -119,25 +119,25 @@ export const createNewPurchaseOrder = (
 export const createNewAuthorizedPurchaseOrder = (
   headers: any,
   body: CreateNewPurchaseOrderType,
-  withReceive: boolean = true
+  withReceive: boolean = true,
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
       ...body,
       purchase_order_details_attributes: arrayToObject(
-        body?.purchase_order_details
+        body?.purchase_order_details,
       ),
     } as any;
 
     const response = await httpZauru.post<PurchaseOrderGraphQL>(
       `/purchases/purchase_orders.json`,
       { purchase_order: sendBody },
-      { headers }
+      { headers },
     );
 
     await httpZauru.get<any>(
       `/purchases/purchase_orders/${response.data.id}/authorize.json`,
-      { headers }
+      { headers },
     );
 
     if (withReceive) {
@@ -160,12 +160,12 @@ export const createNewAuthorizedPurchaseOrder = (
  */
 export const authorizePurchaseOrder = (
   headers: any,
-  id: number | string
+  id: number | string,
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     await httpZauru.get<any>(
       `/purchases/purchase_orders/${id}/authorize.json`,
-      { headers }
+      { headers },
     );
     return true;
   });
@@ -179,7 +179,7 @@ export const authorizePurchaseOrder = (
  */
 export const receiveLotPurchaseOrder = (
   headers: any,
-  body: PurchaseOrderGraphQL & { fechaVencimiento: string }
+  body: PurchaseOrderGraphQL & { fechaVencimiento: string },
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
@@ -198,13 +198,13 @@ export const receiveLotPurchaseOrder = (
             lot_expire: [body.fechaVencimiento],
           } as any;
           return newDetail;
-        })
+        }),
       ),
     };
     await httpZauru.patch<any>(
       `/purchases/purchase_orders/${body.id}/receive_action`,
       { purchase_order: sendBody },
-      { headers }
+      { headers },
     );
     return true;
   });
@@ -218,7 +218,7 @@ export const receiveLotPurchaseOrder = (
  */
 export const receivePurchaseOrder = (
   headers: any,
-  body: PurchaseOrderGraphQL
+  body: PurchaseOrderGraphQL,
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
@@ -235,13 +235,13 @@ export const receivePurchaseOrder = (
             item_id: x.item_id,
           } as any;
           return newDetail;
-        })
+        }),
       ),
     };
     await httpZauru.patch<any>(
       `/purchases/purchase_orders/${body.id}/receive_action`,
       { purchase_order: sendBody },
-      { headers }
+      { headers },
     );
     return true;
   });
@@ -253,12 +253,12 @@ export const receivePurchaseOrder = (
  * @returns
  */
 export const getNewPurchaseOrderInfo = (
-  headers: any
+  headers: any,
 ): Promise<AxiosUtilsResponse<NewPurchaseOrderResponse>> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru.get<NewPurchaseOrderResponse>(
       "/purchases/purchase_orders/new.json",
-      { headers }
+      { headers },
     );
 
     const purchasersList: SelectFieldOption[] = [];
@@ -282,7 +282,7 @@ export const getNewPurchaseOrderInfo = (
  */
 export const getPurchasesListDataTables = (
   headers: any,
-  body: DataTablesFilterBody
+  body: DataTablesFilterBody,
 ): Promise<
   AxiosUtilsResponse<PurchasesListResponseSchema<HTMLPurchasesListSchema>>
 > => {
@@ -311,7 +311,7 @@ export const getPurchasesList = (
     payeeCategory?: string | number;
     agency_id?: string | number;
   } = {},
-  config?: { fromProduction?: boolean }
+  config?: { fromProduction?: boolean },
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
     //Si quiere obtener los de producción, obtengo primero su agencia producción
@@ -319,7 +319,7 @@ export const getPurchasesList = (
       const { production_agency_id: temp_production_agency_id } =
         await getVariablesByName(headers, session, ["production_agency_id"]);
       const hashProductionAgencyId = JSON.parse(
-        temp_production_agency_id ?? "{}"
+        temp_production_agency_id ?? "{}",
       );
       const production_agency_id =
         hashProductionAgencyId[session.get("agency_id")];
@@ -331,7 +331,7 @@ export const getPurchasesList = (
       {
         headers,
         params,
-      }
+      },
     );
 
     return response.data;
@@ -345,7 +345,7 @@ export const getPurchasesList = (
  */
 export const getPurchase = (
   headers: any,
-  purchase_order_id: number | string
+  purchase_order_id: number | string,
 ): Promise<
   AxiosUtilsResponse<
     PurchaseOrderGraphQL & {
@@ -357,7 +357,7 @@ export const getPurchase = (
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru<PurchaseOrderGraphQL>(
       `/purchases/purchase_orders/${purchase_order_id}.json`,
-      { method: "GET", headers }
+      { method: "GET", headers },
     );
 
     const baskets_memo = getBasketsSchema(response.data.memo);
@@ -383,12 +383,12 @@ export const getPurchase = (
 export const enablePurchase = (
   headers: any,
   purchase_order_id: number,
-  reception_id: number
+  reception_id: number,
 ): Promise<AxiosUtilsResponse<any>> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru.get<any>(
       `/purchases/receptions/${reception_id}/rebound.json?purchase_order_id=${purchase_order_id}`,
-      { headers }
+      { headers },
     );
 
     return response.data;
@@ -405,13 +405,13 @@ export const enablePurchase = (
 export const updatePurchaseOrder = (
   headers: any,
   body: UpdatePurchaseOrderBody,
-  purchase_order_id: number
+  purchase_order_id: number,
 ): Promise<AxiosUtilsResponse<any>> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru.patch<any>(
       `/purchases/purchase_orders/${purchase_order_id}.json`,
       body,
-      { headers }
+      { headers },
     );
 
     return response.data;
@@ -428,13 +428,13 @@ export const updatePurchaseOrder = (
 export const updateReceivedPurchaseOrder = (
   headers: any,
   body: UpdatePurchaseOrderBody,
-  purchase_order_id: number
+  purchase_order_id: number,
 ): Promise<AxiosUtilsResponse<any>> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru.patch<any>(
       `/purchases/purchase_orders/${purchase_order_id}/update_received.json`,
       body,
-      { headers }
+      { headers },
     );
 
     return response.data;
@@ -449,7 +449,7 @@ export const updateReceivedPurchaseOrder = (
  */
 export const shallowUpdatePurchaseOrder = (
   headers: any,
-  body: Partial<PurchaseOrderGraphQL>
+  body: Partial<PurchaseOrderGraphQL>,
 ): Promise<AxiosUtilsResponse<any>> => {
   return handlePossibleAxiosErrors(async () => {
     const id = body.id;
@@ -458,7 +458,7 @@ export const shallowUpdatePurchaseOrder = (
     const response = await httpZauru.patch<any>(
       `/purchases/closed_purchase_orders/${id}/shallow_update.json`,
       { purchase_order: body },
-      { headers }
+      { headers },
     );
 
     return response.data;
@@ -472,7 +472,7 @@ export const shallowUpdatePurchaseOrder = (
  */
 export const getLast100Receptions = (
   session: Session,
-  agency_id?: number | string
+  agency_id?: number | string,
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -490,7 +490,7 @@ export const getLast100Receptions = (
       {
         query: getLast100ReceptionsStringQuery(Number(agencyId)),
       },
-      { headers }
+      { headers },
     );
 
     if (response.data.errors) {
@@ -517,7 +517,7 @@ export const getPurchaseOrder = (
     withLotStocksToMyAgency: false,
     withPayee: false,
     withReceptions: true,
-  }
+  },
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -537,7 +537,7 @@ export const getPurchaseOrder = (
           withReceptions: config.withReceptions,
         }),
       },
-      { headers }
+      { headers },
     );
 
     if (response.data.errors) {
@@ -549,7 +549,7 @@ export const getPurchaseOrder = (
     if (config.withLotStocksToMyAgency) {
       tempResponse.lots = tempResponse.lots.map((x) => {
         x.lot_stocks = x.lot_stocks.filter(
-          (y) => y.agency_id === Number(session.get("agency_id"))
+          (y) => y.agency_id === Number(session.get("agency_id")),
         );
         return x;
       });
@@ -586,7 +586,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     itemId?: number | string; // Can be a single item or a comma-separated list of items
     reference?: string; // Can be a single reference or a comma-separated list of references
     payeeCategoryId?: number | string;
-    payeeId?: number | string;
+    payeeId?: number | string; // Can be a single payee or a comma-separated list of payees
     betweenIssueDate?: boolean;
     withPODetails?: boolean;
     withLots?: boolean;
@@ -605,7 +605,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       | "_lt";
     discount?: number;
     excludeVoided?: boolean;
-  } = {}
+  } = {},
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -637,7 +637,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       const { production_agency_id } = await getVariablesByName(
         headers,
         session,
-        ["production_agency_id"]
+        ["production_agency_id"],
       );
       const hashAgencyId = JSON.parse(production_agency_id ?? "{}");
       agency_id = hashAgencyId[session.get("agency_id")];
@@ -648,10 +648,10 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       formatDateToUTC(dates.endDate),
       {
         agencyId: finalConfig.agencyFilter
-          ? agency_id ?? session.get("agency_id")
+          ? (agency_id ?? session.get("agency_id"))
           : undefined,
         ...finalConfig,
-      }
+      },
     );
 
     const graphQLBody = {
@@ -680,8 +680,9 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     ) {
       responseData = response.data?.data?.purchase_orders.filter((x) =>
         x.shipment_purchase_orders.some(
-          (y) => y.shipment.agency_to_id?.toString() == session.get("agency_id")
-        )
+          (y) =>
+            y.shipment.agency_to_id?.toString() == session.get("agency_id"),
+        ),
       );
     }
 
@@ -693,7 +694,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       responseData = responseData.map((x) => {
         x.lots = x.lots.map((y) => {
           y.lot_stocks = y.lot_stocks.filter(
-            (z) => z.agency_id == session.get("agency_id")
+            (z) => z.agency_id == session.get("agency_id"),
           );
           return y;
         });
@@ -725,12 +726,12 @@ export const getGraphQLPurchaseOrderBetweenDates = (
  */
 export const deletePurchaseOrder = (
   headers: any,
-  id: string | number
+  id: string | number,
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     await httpZauru.delete(
       `/purchases/purchase_orders/${id}.json?destroy=true`,
-      { headers }
+      { headers },
     );
 
     return true;
@@ -745,7 +746,7 @@ export const deletePurchaseOrder = (
  */
 export const getPurchasesOrderByIdNumber = (
   session: Session,
-  id_number: string
+  id_number: string,
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -761,7 +762,7 @@ export const getPurchasesOrderByIdNumber = (
       {
         query: getPurchaseOrderByIdNumberStringQuery(id_number),
       },
-      { headers }
+      { headers },
     );
 
     if (response.data.errors) {

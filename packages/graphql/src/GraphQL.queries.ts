@@ -89,7 +89,7 @@ export const getPurchaseOrderStringQuery = (
     withLotStocks: false,
     withPayee: false,
     withReceptions: true,
-  }
+  },
 ) => {
   const lotStocks = config.withLotStocks
     ? `lot_stocks {
@@ -295,7 +295,7 @@ export const getShipmentsStringQuery = ({
     plannedShippingDateRange?.endDate
   ) {
     conditions.push(
-      `planned_shipping: {_gte: "${plannedShippingDateRange.startDate}", _lte: "${plannedShippingDateRange.endDate}"}`
+      `planned_shipping: {_gte: "${plannedShippingDateRange.startDate}", _lte: "${plannedShippingDateRange.endDate}"}`,
     );
   }
 
@@ -304,7 +304,7 @@ export const getShipmentsStringQuery = ({
     plannedDeliveryDateRange?.endDate
   ) {
     conditions.push(
-      `planned_delivery: {_gte: "${plannedDeliveryDateRange.startDate}", _lte: "${plannedDeliveryDateRange.endDate}"}`
+      `planned_delivery: {_gte: "${plannedDeliveryDateRange.startDate}", _lte: "${plannedDeliveryDateRange.endDate}"}`,
     );
   }
 
@@ -480,7 +480,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
       | "_lt";
     discount?: number;
     excludeVoided?: boolean;
-  }
+  },
 ) => {
   const conditions = [];
 
@@ -506,24 +506,28 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
 
   if (config.shipment_reference) {
     conditions.push(
-      `shipment_reference: { _eq: "${config.shipment_reference}" }`
+      `shipment_reference: { _eq: "${config.shipment_reference}" }`,
     );
   }
 
   if (config.agencyNameIlike) {
     conditions.push(
-      `agency: { name: { _ilike: "%${config.agencyNameIlike}%" } }`
+      `agency: { name: { _ilike: "%${config.agencyNameIlike}%" } }`,
     );
   }
 
   if (config.payeeId || config.payeeCategoryId) {
     const payeeConditions = [];
     if (config.payeeId) {
-      payeeConditions.push(`id: { _eq: ${config.payeeId} }`);
+      if (config.payeeId.toString().includes(",")) {
+        payeeConditions.push(`id: { _in: [${config.payeeId}] }`);
+      } else {
+        payeeConditions.push(`id: { _eq: ${config.payeeId} }`);
+      }
     }
     if (config.payeeCategoryId) {
       payeeConditions.push(
-        `payee_category: { id: { _eq: ${config.payeeCategoryId} } }`
+        `payee_category: { id: { _eq: ${config.payeeCategoryId} } }`,
       );
     }
     conditions.push(`payee: { ${payeeConditions.join(", ")} }`);
@@ -532,11 +536,11 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   if (config.itemId) {
     if (config.itemId.toString().includes(",")) {
       conditions.push(
-        `purchase_order_details: { item_id: { _in: [${config.itemId}] } }`
+        `purchase_order_details: { item_id: { _in: [${config.itemId}] } }`,
       );
     } else {
       conditions.push(
-        `purchase_order_details: { item_id: { _eq: ${config.itemId} } }`
+        `purchase_order_details: { item_id: { _eq: ${config.itemId} } }`,
       );
     }
   }
@@ -551,13 +555,13 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
 
   if (config.lotItemIdExclusion) {
     conditions.push(
-      `lots: { item_id: { _neq: ${config.lotItemIdExclusion} } }`
+      `lots: { item_id: { _neq: ${config.lotItemIdExclusion} } }`,
     );
   }
 
   if (config.poDetailTagId) {
     conditions.push(
-      `purchase_order_details: { tag_id: { _eq: ${config.poDetailTagId} } }`
+      `purchase_order_details: { tag_id: { _eq: ${config.poDetailTagId} } }`,
     );
   }
 
@@ -565,15 +569,15 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     conditions.push(
       config.betweenIssueDate
         ? `issue_date: { _gte: "${startDate}", _lte: "${endDate}" }`
-        : `created_at: { _gte: "${startDate}", _lte: "${endDate}"}`
+        : `created_at: { _gte: "${startDate}", _lte: "${endDate}"}`,
     );
   }
 
   if (config.payeeCategoryIds && config.payeeCategoryIds.length > 0) {
     conditions.push(
       `payee: { payee_category: { id: { _in: [${config.payeeCategoryIds.join(
-        ","
-      )}] } } }`
+        ",",
+      )}] } } }`,
     );
   }
 
@@ -583,14 +587,14 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   ) {
     conditions.push(
       `payee: { payee_category: { id: { _nin: [${config.excludePayeeCategoryIds.join(
-        ","
-      )}] } } }`
+        ",",
+      )}] } } }`,
     );
   }
 
   if (!!config.discountComparisonOperator && !!config.discount) {
     conditions.push(
-      `discount: { ${config.discountComparisonOperator}: ${config.discount} }`
+      `discount: { ${config.discountComparisonOperator}: ${config.discount} }`,
     );
   }
 
@@ -768,7 +772,7 @@ query getWebAppRow {
 
 export const getWebAppRowsByWebAppTableIdStringQuery = (
   webapp_table_id: number,
-  limit?: number
+  limit?: number,
 ) => {
   const conditions = [];
 
@@ -947,7 +951,7 @@ query getItems {
 
 export const getItemsBySuperCategoryStringQuery = (
   id: number,
-  agency_id: number
+  agency_id: number,
 ) => `
 query getItemsBySuperCategory {
   item_super_categories (where: {id: {_eq: ${id} }}, order_by: {id: desc}) {
@@ -976,7 +980,7 @@ query getItemsBySuperCategory {
 
 export const getConsolidatesBetweenDatesStringQuery = (
   startDate: string,
-  endDate: string
+  endDate: string,
 ) => `
 query getConsolidatesBetweenDates {
   consolidates (order_by: {id: desc}, where: {created_at: {_gte: "${startDate}", _lte: "${endDate}"}}) {
@@ -1101,7 +1105,7 @@ query getItemByName {
 `;
 
 export const getAllFormsStringQuery = (
-  config: { withSubmissions: boolean } = { withSubmissions: false }
+  config: { withSubmissions: boolean } = { withSubmissions: false },
 ) => `
 query getAllForms {
   settings_forms (
@@ -1231,7 +1235,7 @@ query getForms {
 
 export const getFormsByDocumentTypeStringQuery = (
   document_type: string,
-  filters: { formZid?: number } = {}
+  filters: { formZid?: number } = {},
 ) => `
 query getFormsByDocumentType {
   settings_forms (
@@ -1276,7 +1280,7 @@ query getFormsByDocumentType {
 
 export const getMyCaseFormSubmissionsStringQuery = (
   responsible_id: number,
-  filters: { formZid?: number; caseId?: number } = {}
+  filters: { formZid?: number; caseId?: number } = {},
 ) => `
 query getMyCaseFormSubmissions {
   submission_cases (
@@ -1397,7 +1401,7 @@ export const getInvoiceFormSubmissionsByAgencyIdStringQuery = (
     startDate?: string;
     endDate?: string;
     formZid?: number | string;
-  }
+  },
 ) => {
   return `
 query getInvoiceFormSubmissionsByAgencyId {
@@ -1437,14 +1441,14 @@ query getInvoiceFormSubmissionsByAgencyId {
         ${
           filters?.item_ids?.length
             ? `invoice_details: {item_id: {_in: [${filters?.item_ids?.join(
-                ","
+                ",",
               )}]}}`
             : ""
         }
         ${
           filters?.bundle_ids?.length
             ? `invoice_details: {bundle_id: {_in: [${filters?.bundle_ids?.join(
-                ","
+                ",",
               )}]}}`
             : ""
         }
@@ -1508,7 +1512,7 @@ query getInvoiceFormSubmissionsByAgencyId {
 };
 
 export const getLastInvoiceFormSubmissionStringQuery = (
-  filters: { formZid?: number } = {}
+  filters: { formZid?: number } = {},
 ) => `
 query getLastInvoiceFormSubmission {
   submission_invoices(
@@ -1535,7 +1539,7 @@ query getLastInvoiceFormSubmission {
 
 export const getCaseFormSubmissionsByCaseIdStringQuery = (
   case_id: number,
-  filters: { formZid?: number } = {}
+  filters: { formZid?: number } = {},
 ) => `
 query getCaseFormSubmissionsByCaseId {
   submission_cases(
@@ -1595,7 +1599,7 @@ query getCaseFormSubmissionsByCaseId {
 
 export const getInvoiceFormSubmissionsByInvoiceIdStringQuery = (
   invoice_id: number,
-  filters: { formZid?: number } = {}
+  filters: { formZid?: number } = {},
 ) => `
 query getInvoiceFormSubmissionsByInvoiceId {
   submission_invoices(
@@ -1678,13 +1682,13 @@ export const getSuggestedPricesStringQuery = (
     withItems: false,
     withItemCategories: false,
     onlyCurrent: false,
-  }
+  },
 ) => {
   const conditions = [];
 
   if (config.item_super_category_id) {
     conditions.push(
-      `item: { item_category: { item_super_category_id: { _eq: ${config.item_super_category_id} } } }`
+      `item: { item_category: { item_super_category_id: { _eq: ${config.item_super_category_id} } } }`,
     );
   }
 
@@ -1751,7 +1755,7 @@ export const getPaymentTermsStringQuery = (
     includeAllowedDiscounts: false,
     includeAllowedPaymentTerms: false,
     onlyActives: true,
-  }
+  },
 ) => {
   const conditions = [];
 
@@ -1840,7 +1844,7 @@ query getPaymentTermById {
 
 export const getInvoicesByAgencyIdStringQuery = (
   id: number,
-  filters: { tag_id?: string; invoice_id?: string }
+  filters: { tag_id?: string; invoice_id?: string },
 ) => `
 query getInvoicesByAgencyId {
   invoices(
@@ -1914,7 +1918,7 @@ export const getCasesStringQuery = (
     includeSerial?: boolean;
     includeResponsible?: boolean;
     includeSeller?: boolean;
-  }
+  },
 ) => {
   const conditions = [];
 
@@ -1936,7 +1940,7 @@ export const getCasesStringQuery = (
 
   if (filters?.tag_id) {
     conditions.push(
-      `taggings: {tag_id: {_eq: ${filters.tag_id}}, taggeable_type: {_eq: "Case"}}`
+      `taggings: {tag_id: {_eq: ${filters.tag_id}}, taggeable_type: {_eq: "Case"}}`,
     );
   }
 
@@ -1979,8 +1983,8 @@ export const getCasesStringQuery = (
 
   return `query getCases {
     cases (${whereClause} order_by: {id: desc}, limit: ${
-    filters?.limit || 1000
-  }) 
+      filters?.limit || 1000
+    }) 
       {
         id
         id_number
