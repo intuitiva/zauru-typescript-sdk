@@ -27,6 +27,7 @@ export const nativeLogin = async (session, codeValue) => {
         session.set("name", userInfo?.name);
         session.set("email", userInfo?.email);
         session.set("employee_id", userInfo?.employee_id);
+        session.set("selected_entity", userInfo?.selected_entity);
         return userInfo;
     });
 };
