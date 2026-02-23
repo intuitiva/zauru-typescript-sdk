@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.19.1...v2.20.0) (2026-02-23)
+
+
+### Features
+
+* adding selected_entity to login ([8b3c496](https://github.com/intuitiva/zauru-typescript-sdk/commit/8b3c496f7c60955e0d86472d32e4f3ebc23ec2d1))
+
+
+
+
+
 ## [2.19.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.19.0...v2.19.1) (2026-02-17)
 
 **Note:** Version bump only for package @zauru-sdk/services
