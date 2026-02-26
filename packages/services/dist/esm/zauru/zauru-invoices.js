@@ -145,7 +145,7 @@ export async function createInvoicePOS(headers, body) {
             delete sendBody.invoice_details;
         if (sendBody.tagging_invoices)
             delete sendBody.tagging_invoices;
-        const response = await httpZauru.post(`/pos/orders.json`, { invoice: sendBody }, { headers });
+        const response = await httpZauru.post(`/pos/sale_orders.json`, { invoice: sendBody }, { headers });
         return response.data;
     });
 }
@@ -167,7 +167,7 @@ export async function updateInvoicePOS(headers, body) {
             delete sendBody.__rvfInternalFormId;
         if (sendBody.invoice_details)
             delete sendBody.invoice_details;
-        const response = await httpZauru.patch(`/pos/orders/${body.id}.json`, { invoice: sendBody }, { headers });
+        const response = await httpZauru.patch(`/pos/sale_orders/${body.id}.json`, { invoice: sendBody }, { headers });
         return response.data;
     });
 }
@@ -178,7 +178,7 @@ export async function updateInvoicePOS(headers, body) {
  */
 export async function deleteInvoicePOS(headers, id) {
     return handlePossibleAxiosErrors(async () => {
-        await httpZauru.get(`/pos/orders/${id}/void`, {
+        await httpZauru.get(`/pos/sale_orders/${id}/void`, {
             headers,
         });
         return true;
