@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.20.0...v2.21.0) (2026-02-26)
+
+
+### Features
+
+* adding pos endpoints ([3ae4d47](https://github.com/intuitiva/zauru-typescript-sdk/commit/3ae4d4767800d1d2a55654ffa71e4f53d5970375))
+
+
+
+
+
 # [2.20.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.19.1...v2.20.0) (2026-02-23)
 
 
