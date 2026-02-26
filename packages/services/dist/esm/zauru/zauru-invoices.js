@@ -118,3 +118,69 @@ export async function deleteInvoiceOrder(headers, id) {
         return true;
     });
 }
+/**
+ * REGISTROS DE POS
+ */
+/**
+ * createInvoicePOS
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function createInvoicePOS(headers, body) {
+    return handlePossibleAxiosErrors(async () => {
+        const sendBody = {
+            ...body,
+            issued: true, //(true) - Esto lo hace una factura
+            invoice_details_attributes: arrayToObject(body.invoice_details),
+            tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+            taxable: 1,
+            pos: true,
+        };
+        if (sendBody.deleted_invoice_details)
+            delete sendBody.deleted_invoice_details;
+        if (sendBody.__rvfInternalFormId)
+            delete sendBody.__rvfInternalFormId;
+        if (sendBody.invoice_details)
+            delete sendBody.invoice_details;
+        if (sendBody.tagging_invoices)
+            delete sendBody.tagging_invoices;
+        const response = await httpZauru.post(`/pos/orders.json`, { invoice: sendBody }, { headers });
+        return response.data;
+    });
+}
+/**
+ * updateInvoicePOS
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function updateInvoicePOS(headers, body) {
+    return handlePossibleAxiosErrors(async () => {
+        const sendBody = {
+            ...body,
+            invoice_details_attributes: arrayToObject(body.invoice_details),
+        };
+        if (sendBody.deleted_invoice_details)
+            delete sendBody.deleted_invoice_details;
+        if (sendBody.__rvfInternalFormId)
+            delete sendBody.__rvfInternalFormId;
+        if (sendBody.invoice_details)
+            delete sendBody.invoice_details;
+        const response = await httpZauru.patch(`/pos/orders/${body.id}.json`, { invoice: sendBody }, { headers });
+        return response.data;
+    });
+}
+/**
+ * deleteInvoicePOS
+ * @param headers
+ * @param body
+ */
+export async function deleteInvoicePOS(headers, id) {
+    return handlePossibleAxiosErrors(async () => {
+        await httpZauru.get(`/pos/orders/${id}/void`, {
+            headers,
+        });
+        return true;
+    });
+}

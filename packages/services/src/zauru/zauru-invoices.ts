@@ -19,7 +19,7 @@ export async function getInvoicesByAgencyId(
   filters: {
     tag_id?: string;
     invoice_id?: string;
-  }
+  },
 ): Promise<AxiosUtilsResponse<InvoiceGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -35,7 +35,7 @@ export async function getInvoicesByAgencyId(
       {
         query: getInvoicesByAgencyIdStringQuery(Number(id ?? 0), filters),
       },
-      { headers }
+      { headers },
     );
 
     if (response.data.errors) {
@@ -44,15 +44,18 @@ export async function getInvoicesByAgencyId(
 
     // Filtrar los registros para obtener sólo los de la versión más alta.
     const registers = response?.data?.data?.invoices.map((x) => {
-      const groupedByVersion = x.submission_invoices?.reduce((acc, record) => {
-        const zid = record.settings_form_submission?.zid;
+      const groupedByVersion = x.submission_invoices?.reduce(
+        (acc, record) => {
+          const zid = record.settings_form_submission?.zid;
 
-        if (!acc[zid]) {
-          acc[zid] = record;
-        }
+          if (!acc[zid]) {
+            acc[zid] = record;
+          }
 
-        return acc;
-      }, {} as { [key: string]: SubmissionInvoicesGraphQL });
+          return acc;
+        },
+        {} as { [key: string]: SubmissionInvoicesGraphQL },
+      );
 
       x.submission_invoices = Object.values(groupedByVersion)?.reverse() ?? [];
 
@@ -72,7 +75,7 @@ export async function getInvoicesByAgencyId(
 export async function createInvoice(
   headers: any,
   body: Partial<InvoiceGraphQL>,
-  sujetaAImpuestos: boolean = true
+  sujetaAImpuestos: boolean = true,
 ): Promise<AxiosUtilsResponse<InvoiceGraphQL>> {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
@@ -91,7 +94,7 @@ export async function createInvoice(
     const response = await httpZauru.post<InvoiceGraphQL>(
       `/sales/unpaid_invoices.json`,
       { invoice: sendBody },
-      { headers }
+      { headers },
     );
 
     return response.data;
@@ -107,7 +110,7 @@ export async function createInvoice(
 export async function createInvoiceOrder(
   headers: any,
   body: Partial<InvoiceGraphQL>,
-  esFactura: boolean = false
+  esFactura: boolean = false,
 ): Promise<AxiosUtilsResponse<InvoiceGraphQL>> {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
@@ -127,7 +130,7 @@ export async function createInvoiceOrder(
     const response = await httpZauru.post<InvoiceGraphQL>(
       `/sales/orders.json`,
       { invoice: sendBody },
-      { headers }
+      { headers },
     );
 
     return response.data;
@@ -142,7 +145,7 @@ export async function createInvoiceOrder(
  */
 export async function updateInvoiceOrder(
   headers: any,
-  body: Partial<InvoiceGraphQL>
+  body: Partial<InvoiceGraphQL>,
 ): Promise<AxiosUtilsResponse<InvoiceGraphQL>> {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
@@ -157,7 +160,7 @@ export async function updateInvoiceOrder(
     const response = await httpZauru.patch<InvoiceGraphQL>(
       `/sales/orders/${body.id}.json`,
       { invoice: sendBody },
-      { headers }
+      { headers },
     );
 
     return response.data;
@@ -171,10 +174,97 @@ export async function updateInvoiceOrder(
  */
 export async function deleteInvoiceOrder(
   headers: any,
-  id: string | number
+  id: string | number,
 ): Promise<AxiosUtilsResponse<boolean>> {
   return handlePossibleAxiosErrors(async () => {
     await httpZauru.get<any>(`/sales/orders/${id}/void`, {
+      headers,
+    });
+    return true;
+  });
+}
+
+/**
+ * REGISTROS DE POS
+ */
+
+/**
+ * createInvoicePOS
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function createInvoicePOS(
+  headers: any,
+  body: Partial<InvoiceGraphQL>,
+): Promise<AxiosUtilsResponse<InvoiceGraphQL>> {
+  return handlePossibleAxiosErrors(async () => {
+    const sendBody = {
+      ...body,
+      issued: true, //(true) - Esto lo hace una factura
+      invoice_details_attributes: arrayToObject(body.invoice_details),
+      tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+      taxable: 1,
+      pos: true,
+    } as any;
+
+    if (sendBody.deleted_invoice_details)
+      delete sendBody.deleted_invoice_details;
+    if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
+    if (sendBody.invoice_details) delete sendBody.invoice_details;
+    if (sendBody.tagging_invoices) delete sendBody.tagging_invoices;
+
+    const response = await httpZauru.post<InvoiceGraphQL>(
+      `/pos/orders.json`,
+      { invoice: sendBody },
+      { headers },
+    );
+
+    return response.data;
+  });
+}
+
+/**
+ * updateInvoicePOS
+ * @param headers
+ * @param body
+ * @returns
+ */
+export async function updateInvoicePOS(
+  headers: any,
+  body: Partial<InvoiceGraphQL>,
+): Promise<AxiosUtilsResponse<InvoiceGraphQL>> {
+  return handlePossibleAxiosErrors(async () => {
+    const sendBody = {
+      ...body,
+      invoice_details_attributes: arrayToObject(body.invoice_details),
+    } as any;
+    if (sendBody.deleted_invoice_details)
+      delete sendBody.deleted_invoice_details;
+    if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
+    if (sendBody.invoice_details) delete sendBody.invoice_details;
+
+    const response = await httpZauru.patch<InvoiceGraphQL>(
+      `/pos/orders/${body.id}.json`,
+      { invoice: sendBody },
+      { headers },
+    );
+
+    return response.data;
+  });
+}
+
+/**
+ * deleteInvoicePOS
+ * @param headers
+ * @param body
+ */
+export async function deleteInvoicePOS(
+  headers: any,
+  id: string | number,
+): Promise<AxiosUtilsResponse<boolean>> {
+  return handlePossibleAxiosErrors(async () => {
+    await httpZauru.get<any>(`/pos/orders/${id}/void`, {
       headers,
     });
     return true;

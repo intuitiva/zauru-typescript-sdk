@@ -34,3 +34,26 @@ export declare function updateInvoiceOrder(headers: any, body: Partial<InvoiceGr
  * @param body
  */
 export declare function deleteInvoiceOrder(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
+/**
+ * REGISTROS DE POS
+ */
+/**
+ * createInvoicePOS
+ * @param headers
+ * @param body
+ * @returns
+ */
+export declare function createInvoicePOS(headers: any, body: Partial<InvoiceGraphQL>): Promise<AxiosUtilsResponse<InvoiceGraphQL>>;
+/**
+ * updateInvoicePOS
+ * @param headers
+ * @param body
+ * @returns
+ */
+export declare function updateInvoicePOS(headers: any, body: Partial<InvoiceGraphQL>): Promise<AxiosUtilsResponse<InvoiceGraphQL>>;
+/**
+ * deleteInvoicePOS
+ * @param headers
+ * @param body
+ */
+export declare function deleteInvoicePOS(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
