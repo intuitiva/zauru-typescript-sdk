@@ -145,7 +145,7 @@ export async function createInvoicePOS(headers, body) {
             delete sendBody.invoice_details;
         if (sendBody.tagging_invoices)
             delete sendBody.tagging_invoices;
-        const response = await httpZauru.post(`/pos/sale_orders.json`, { invoice: sendBody }, { headers });
+        const response = await httpZauru.post(`/pos/invoices.json`, { invoice: sendBody }, { headers });
         return response.data;
     });
 }
@@ -155,22 +155,31 @@ export async function createInvoicePOS(headers, body) {
  * @param body
  * @returns
  */
-export async function updateInvoicePOS(headers, body) {
-    return handlePossibleAxiosErrors(async () => {
-        const sendBody = {
-            ...body,
-            invoice_details_attributes: arrayToObject(body.invoice_details),
-        };
-        if (sendBody.deleted_invoice_details)
-            delete sendBody.deleted_invoice_details;
-        if (sendBody.__rvfInternalFormId)
-            delete sendBody.__rvfInternalFormId;
-        if (sendBody.invoice_details)
-            delete sendBody.invoice_details;
-        const response = await httpZauru.patch(`/pos/sale_orders/${body.id}.json`, { invoice: sendBody }, { headers });
-        return response.data;
-    });
+/*
+export async function updateInvoicePOS(
+  headers: any,
+  body: Partial<InvoiceGraphQL>,
+): Promise<AxiosUtilsResponse<InvoiceGraphQL>> {
+  return handlePossibleAxiosErrors(async () => {
+    const sendBody = {
+      ...body,
+      invoice_details_attributes: arrayToObject(body.invoice_details),
+    } as any;
+    if (sendBody.deleted_invoice_details)
+      delete sendBody.deleted_invoice_details;
+    if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
+    if (sendBody.invoice_details) delete sendBody.invoice_details;
+
+    const response = await httpZauru.patch<InvoiceGraphQL>(
+      `/pos/invoices/${body.id}.json`,
+      { invoice: sendBody },
+      { headers },
+    );
+
+    return response.data;
+  });
 }
+  */
 /**
  * deleteInvoicePOS
  * @param headers
@@ -178,7 +187,7 @@ export async function updateInvoicePOS(headers, body) {
  */
 export async function deleteInvoicePOS(headers, id) {
     return handlePossibleAxiosErrors(async () => {
-        await httpZauru.get(`/pos/sale_orders/${id}/void`, {
+        await httpZauru.delete(`/pos/invoices/${id}`, {
             headers,
         });
         return true;

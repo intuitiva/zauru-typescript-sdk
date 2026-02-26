@@ -50,7 +50,6 @@ export declare function createInvoicePOS(headers: any, body: Partial<InvoiceGrap
  * @param body
  * @returns
  */
-export declare function updateInvoicePOS(headers: any, body: Partial<InvoiceGraphQL>): Promise<AxiosUtilsResponse<InvoiceGraphQL>>;
 /**
  * deleteInvoicePOS
  * @param headers

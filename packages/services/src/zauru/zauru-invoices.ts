@@ -215,7 +215,7 @@ export async function createInvoicePOS(
     if (sendBody.tagging_invoices) delete sendBody.tagging_invoices;
 
     const response = await httpZauru.post<InvoiceGraphQL>(
-      `/pos/sale_orders.json`,
+      `/pos/invoices.json`,
       { invoice: sendBody },
       { headers },
     );
@@ -230,6 +230,7 @@ export async function createInvoicePOS(
  * @param body
  * @returns
  */
+/*
 export async function updateInvoicePOS(
   headers: any,
   body: Partial<InvoiceGraphQL>,
@@ -245,7 +246,7 @@ export async function updateInvoicePOS(
     if (sendBody.invoice_details) delete sendBody.invoice_details;
 
     const response = await httpZauru.patch<InvoiceGraphQL>(
-      `/pos/sale_orders/${body.id}.json`,
+      `/pos/invoices/${body.id}.json`,
       { invoice: sendBody },
       { headers },
     );
@@ -253,6 +254,7 @@ export async function updateInvoicePOS(
     return response.data;
   });
 }
+  */
 
 /**
  * deleteInvoicePOS
@@ -264,7 +266,7 @@ export async function deleteInvoicePOS(
   id: string | number,
 ): Promise<AxiosUtilsResponse<boolean>> {
   return handlePossibleAxiosErrors(async () => {
-    await httpZauru.get<any>(`/pos/sale_orders/${id}/void`, {
+    await httpZauru.delete<any>(`/pos/invoices/${id}`, {
       headers,
     });
     return true;
