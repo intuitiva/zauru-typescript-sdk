@@ -8,4 +8,5 @@ export declare const config: {
     cmsAPIBaseURL: string | undefined;
     cmsAPIToken: string | undefined;
     expirationDurationInSeconds: string | number;
+    debugHTTP: boolean;
 };

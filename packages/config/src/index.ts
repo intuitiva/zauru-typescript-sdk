@@ -49,6 +49,8 @@ const rawConfig = {
         : process.env.CMS_API_TOKEN_DEV,
   expirationDurationInSeconds:
     process.env.EXPIRATION_TIME_IN_SECONDS || 60 * 60 * 24,
+  debugHTTP:
+    process.env.DEBUG_HTTP === "true" || process.env.VITE_DEBUG_HTTP === "true",
 };
 
 function getConfigValue(key: keyof typeof rawConfig) {
