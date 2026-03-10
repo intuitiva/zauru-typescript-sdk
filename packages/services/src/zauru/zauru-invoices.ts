@@ -225,38 +225,6 @@ export async function createInvoicePOS(
 }
 
 /**
- * updateInvoicePOS
- * @param headers
- * @param body
- * @returns
- */
-/*
-export async function updateInvoicePOS(
-  headers: any,
-  body: Partial<InvoiceGraphQL>,
-): Promise<AxiosUtilsResponse<InvoiceGraphQL>> {
-  return handlePossibleAxiosErrors(async () => {
-    const sendBody = {
-      ...body,
-      invoice_details_attributes: arrayToObject(body.invoice_details),
-    } as any;
-    if (sendBody.deleted_invoice_details)
-      delete sendBody.deleted_invoice_details;
-    if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
-    if (sendBody.invoice_details) delete sendBody.invoice_details;
-
-    const response = await httpZauru.patch<InvoiceGraphQL>(
-      `/pos/invoices/${body.id}.json`,
-      { invoice: sendBody },
-      { headers },
-    );
-
-    return response.data;
-  });
-}
-  */
-
-/**
  * deleteInvoicePOS
  * @param headers
  * @param body
