@@ -45,12 +45,6 @@ export declare function deleteInvoiceOrder(headers: any, id: string | number): P
  */
 export declare function createInvoicePOS(headers: any, body: Partial<InvoiceGraphQL>): Promise<AxiosUtilsResponse<InvoiceGraphQL>>;
 /**
- * updateInvoicePOS
- * @param headers
- * @param body
- * @returns
- */
-/**
  * deleteInvoicePOS
  * @param headers
  * @param body

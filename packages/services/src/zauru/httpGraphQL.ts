@@ -16,6 +16,9 @@ axiosInstance.interceptors.request.use(
 
     if (config.debugHTTP) {
       console.log(
+        chalk.cyan(`[DEBUG] REQUEST METHOD: ${request.method?.toUpperCase()}`),
+      );
+      console.log(
         chalk.cyan("[DEBUG] REQUEST BODY:"),
         JSON.stringify(request.data, null, 2),
       );

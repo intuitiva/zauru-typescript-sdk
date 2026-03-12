@@ -11,6 +11,7 @@ axiosInstance.interceptors.request.use(function (request) {
     request.timeout = 200000;
     request.metadata = { startTime: Date.now() };
     if (config.debugHTTP) {
+        console.log(chalk.cyan(`[DEBUG] REQUEST METHOD: ${request.method?.toUpperCase()}`));
         console.log(chalk.cyan("[DEBUG] REQUEST BODY:"), JSON.stringify(request.data, null, 2));
     }
     return request;
