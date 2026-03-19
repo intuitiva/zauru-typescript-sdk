@@ -1,35 +1,47 @@
-export const getLast100ReceptionsStringQuery = (agency_id: number) => `
-query getLast100Receptions {
-  purchase_orders(limit: 100, order_by: {created_at: desc}, where: {voided: {_eq: false}, agency_id: {_eq: ${agency_id}}}) {
-    id
-    created_at
-    due
-    id_number
-    memo
-    payee_id
-    issue_date
-    discount
-    other_charges
-    authorized
-    received
-    transport_type
-    shipment_reference
-    purchase_order_details {
-      item_id
-      id
-      reference
-      booked_quantity
-      delivered_quantity
+export const getLast100ReceptionsStringQuery = (agency_id?: number) => {
+  return `
+    query getLast100Receptions {
+      purchase_orders(
+        limit: 100, 
+        order_by: {
+          created_at: desc
+        }, 
+        where: {
+          voided: {_eq: false}, 
+          agency_id: {_eq: ${agency_id}}
+        }
+        ) {
+        id
+        created_at
+        due
+        id_number
+        memo
+        payee_id
+        issue_date
+        discount
+        other_charges
+        authorized
+        received
+        transport_type
+        shipment_reference
+        reference
+        purchase_order_details {
+          item_id
+          id
+          reference
+          booked_quantity
+          delivered_quantity
+        }
+        lots(where: {active: {_eq: true}}) {
+          id
+          name
+          description
+          item_id
+        }
+      }
     }
-    lots(where: {active: {_eq: true}}) {
-      id
-      name
-      description
-      item_id
-    }
-  }
-}
-`;
+    `;
+};
 
 export const getPurchaseOrderByIdNumberStringQuery = (id_number: string) => `
 query getPurchaseOrderByIdNumber {
