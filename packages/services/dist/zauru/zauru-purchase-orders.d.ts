@@ -127,6 +127,12 @@ export declare const shallowUpdatePurchaseOrder: (headers: any, body: Partial<Pu
  */
 export declare const getLast100Receptions: (session: Session, agency_id?: number | string) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
 /**
+ * getLast100Receptions
+ * @param headers
+ * @returns
+ */
+export declare const getLast100ReceptionsOnMyAgency: (session: Session, agency_id?: number | string) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
+/**
  * getPurchaseOrder
  * @param headers
  * @returns

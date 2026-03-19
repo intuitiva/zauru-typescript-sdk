@@ -1,4 +1,4 @@
-export declare const getLast100ReceptionsStringQuery: (agency_id: number) => string;
+export declare const getLast100ReceptionsStringQuery: (agency_id?: number | string) => string;
 export declare const getPurchaseOrderByIdNumberStringQuery: (id_number: string) => string;
 export declare const getPurchaseOrderStringQuery: (id: number, config?: {
     withLotStocks: boolean;

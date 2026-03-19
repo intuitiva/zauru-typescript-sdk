@@ -1,4 +1,12 @@
-export const getLast100ReceptionsStringQuery = (agency_id?: number) => {
+export const getLast100ReceptionsStringQuery = (
+  agency_id?: number | string,
+) => {
+  const conditions = ["voided: {_eq: false}"];
+
+  if (agency_id) {
+    conditions.push(`agency_id: {_eq: ${agency_id}}`);
+  }
+
   return `
     query getLast100Receptions {
       purchase_orders(
@@ -7,8 +15,7 @@ export const getLast100ReceptionsStringQuery = (agency_id?: number) => {
           created_at: desc
         }, 
         where: {
-          voided: {_eq: false}, 
-          agency_id: {_eq: ${agency_id}}
+          ${conditions.join(", ")}
         }
         ) {
         id

@@ -276,6 +276,23 @@ export const shallowUpdatePurchaseOrder = (headers, body) => {
 export const getLast100Receptions = (session, agency_id) => {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
+        const response = await httpGraphQLAPI.post("", {
+            query: getLast100ReceptionsStringQuery(agency_id),
+        }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
+        return response.data?.data?.purchase_orders;
+    });
+};
+/**
+ * getLast100Receptions
+ * @param headers
+ * @returns
+ */
+export const getLast100ReceptionsOnMyAgency = (session, agency_id) => {
+    return handlePossibleAxiosErrors(async () => {
+        const headers = await getGraphQLAPIHeaders(session);
         const agencyId = agency_id ?? Number(session.get("agency_id"));
         const response = await httpGraphQLAPI.post("", {
             query: getLast100ReceptionsStringQuery(Number(agencyId)),

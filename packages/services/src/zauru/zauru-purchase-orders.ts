@@ -477,6 +477,40 @@ export const getLast100Receptions = (
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
+    const response = await httpGraphQLAPI.post<{
+      data: { purchase_orders: PurchaseOrderGraphQL[] };
+      errors?: {
+        message: string;
+        extensions: { path: string; code: string };
+      }[];
+    }>(
+      "",
+      {
+        query: getLast100ReceptionsStringQuery(agency_id),
+      },
+      { headers },
+    );
+
+    if (response.data.errors) {
+      throw new Error(response.data.errors.map((x) => x.message).join(";"));
+    }
+
+    return response.data?.data?.purchase_orders;
+  });
+};
+
+/**
+ * getLast100Receptions
+ * @param headers
+ * @returns
+ */
+export const getLast100ReceptionsOnMyAgency = (
+  session: Session,
+  agency_id?: number | string,
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
+  return handlePossibleAxiosErrors(async () => {
+    const headers = await getGraphQLAPIHeaders(session);
+
     const agencyId = agency_id ?? Number(session.get("agency_id"));
 
     const response = await httpGraphQLAPI.post<{
