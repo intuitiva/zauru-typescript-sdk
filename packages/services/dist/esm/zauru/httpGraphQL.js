@@ -12,7 +12,30 @@ axiosInstance.interceptors.request.use(function (request) {
     request.metadata = { startTime: Date.now() };
     if (config.debugHTTP) {
         console.log(chalk.cyan(`[DEBUG] REQUEST METHOD: ${request.method?.toUpperCase()}`));
-        console.log(chalk.cyan("[DEBUG] REQUEST BODY:"), JSON.stringify(request.data, null, 2));
+        let _bodyType;
+        let _bodyLog;
+        if (typeof FormData !== "undefined" && request.data instanceof FormData) {
+            _bodyType = "multipart/form-data";
+            const _entries = {};
+            request.data.forEach((value, key) => {
+                _entries[key] =
+                    value instanceof Blob
+                        ? `[Blob/File: ${value.name ?? "unnamed"}]`
+                        : value;
+            });
+            _bodyLog = JSON.stringify(_entries, null, 2);
+        }
+        else if (typeof URLSearchParams !== "undefined" &&
+            request.data instanceof URLSearchParams) {
+            _bodyType = "application/x-www-form-urlencoded";
+            _bodyLog = request.data.toString();
+        }
+        else {
+            _bodyType = "application/json";
+            _bodyLog = JSON.stringify(request.data, null, 2);
+        }
+        console.log(chalk.cyan(`[DEBUG] REQUEST CONTENT TYPE: ${_bodyType}`));
+        console.log(chalk.cyan("[DEBUG] REQUEST BODY:"), _bodyLog);
     }
     return request;
 }, function (error) {
