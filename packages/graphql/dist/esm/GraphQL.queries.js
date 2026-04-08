@@ -201,23 +201,24 @@ query getPurchaseOrder($id: bigint) @cached {
 exports.getPurchaseOrderStringQuery = getPurchaseOrderStringQuery;
 const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null = false, id_number, id_number_not_empty = false, withMovementLots = false, withPurchaseOrdersByShipmentReference = false, limit = 1000, id, wheres, memoILike, plannedShippingDateRange, plannedDeliveryDateRange, }) => {
     let conditions = [];
-    if (suffix) {
-        conditions.push(`id_number: {_ilike: "%${suffix}%"}`);
-    }
     if (agency_to_id) {
         conditions.push(`agency_to_id: {_eq: ${agency_to_id}}`);
     }
     if (agency_from_id) {
         conditions.push(`agency_from_id: {_eq: ${agency_from_id}}`);
     }
-    if (id_number) {
-        conditions.push(`id_number: {_eq: "${id_number}"}`);
-    }
-    if (id_number_not_empty) {
-        conditions.push(`id_number: {_neq: ""}`);
-    }
-    if (id_number_not_null) {
-        conditions.push(`id_number: {_is_null: false}`);
+    // Merge all id_number conditions into a single object to avoid duplicate keys
+    const idNumberConditions = [];
+    if (suffix)
+        idNumberConditions.push(`_ilike: "%${suffix}%"`);
+    if (id_number)
+        idNumberConditions.push(`_eq: "${id_number}"`);
+    if (id_number_not_empty)
+        idNumberConditions.push(`_neq: ""`);
+    if (id_number_not_null)
+        idNumberConditions.push(`_is_null: false`);
+    if (idNumberConditions.length > 0) {
+        conditions.push(`id_number: { ${idNumberConditions.join(", ")} }`);
     }
     if (id) {
         conditions.push(`id: {_eq: ${id}}`);
@@ -398,7 +399,8 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
     if (config.agencyNameIlike) {
         conditions.push(`agency: { name: { _ilike: "%${config.agencyNameIlike}%" } }`);
     }
-    if (config.payeeId || config.payeeCategoryId) {
+    // Merge all payee conditions to avoid duplicate keys
+    {
         const payeeConditions = [];
         if (config.payeeId) {
             if (config.payeeId.toString().includes(",")) {
@@ -408,18 +410,39 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
                 payeeConditions.push(`id: { _eq: ${config.payeeId} }`);
             }
         }
+        const payeeCategoryIdConditions = [];
         if (config.payeeCategoryId) {
-            payeeConditions.push(`payee_category: { id: { _eq: ${config.payeeCategoryId} } }`);
+            payeeCategoryIdConditions.push(`_eq: ${config.payeeCategoryId}`);
         }
-        conditions.push(`payee: { ${payeeConditions.join(", ")} }`);
+        if (config.payeeCategoryIds && config.payeeCategoryIds.length > 0) {
+            payeeCategoryIdConditions.push(`_in: [${config.payeeCategoryIds.join(",")}]`);
+        }
+        if (config.excludePayeeCategoryIds &&
+            config.excludePayeeCategoryIds.length > 0) {
+            payeeCategoryIdConditions.push(`_nin: [${config.excludePayeeCategoryIds.join(",")}]`);
+        }
+        if (payeeCategoryIdConditions.length > 0) {
+            payeeConditions.push(`payee_category: { id: { ${payeeCategoryIdConditions.join(", ")} } }`);
+        }
+        if (payeeConditions.length > 0) {
+            conditions.push(`payee: { ${payeeConditions.join(", ")} }`);
+        }
     }
+    // Merge all purchase_order_details conditions to avoid duplicate keys
+    const purchaseOrderDetailsConditions = [];
     if (config.itemId) {
         if (config.itemId.toString().includes(",")) {
-            conditions.push(`purchase_order_details: { item_id: { _in: [${config.itemId}] } }`);
+            purchaseOrderDetailsConditions.push(`item_id: { _in: [${config.itemId}] }`);
         }
         else {
-            conditions.push(`purchase_order_details: { item_id: { _eq: ${config.itemId} } }`);
+            purchaseOrderDetailsConditions.push(`item_id: { _eq: ${config.itemId} }`);
         }
+    }
+    if (config.poDetailTagId) {
+        purchaseOrderDetailsConditions.push(`tag_id: { _eq: ${config.poDetailTagId} }`);
+    }
+    if (purchaseOrderDetailsConditions.length > 0) {
+        conditions.push(`purchase_order_details: { ${purchaseOrderDetailsConditions.join(", ")} }`);
     }
     if (config.reference) {
         if (config.reference.toString().includes(",")) {
@@ -432,20 +455,10 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
     if (config.lotItemIdExclusion) {
         conditions.push(`lots: { item_id: { _neq: ${config.lotItemIdExclusion} } }`);
     }
-    if (config.poDetailTagId) {
-        conditions.push(`purchase_order_details: { tag_id: { _eq: ${config.poDetailTagId} } }`);
-    }
     if (!config.id_number && !config.ids?.length) {
         conditions.push(config.betweenIssueDate
             ? `issue_date: { _gte: "${startDate}", _lte: "${endDate}" }`
             : `created_at: { _gte: "${startDate}", _lte: "${endDate}"}`);
-    }
-    if (config.payeeCategoryIds && config.payeeCategoryIds.length > 0) {
-        conditions.push(`payee: { payee_category: { id: { _in: [${config.payeeCategoryIds.join(",")}] } } }`);
-    }
-    if (config.excludePayeeCategoryIds &&
-        config.excludePayeeCategoryIds.length > 0) {
-        conditions.push(`payee: { payee_category: { id: { _nin: [${config.excludePayeeCategoryIds.join(",")}] } } }`);
     }
     if (!!config.discountComparisonOperator && !!config.discount) {
         conditions.push(`discount: { ${config.discountComparisonOperator}: ${config.discount} }`);
@@ -1218,11 +1231,17 @@ query getInvoiceFormSubmissionsByAgencyId {
                 id_number: { _ilike: "%${filters?.payee_id_number_search}%"} 
               },`
         : ""}
-        ${filters?.item_ids?.length
-        ? `invoice_details: {item_id: {_in: [${filters?.item_ids?.join(",")}]}}`
-        : ""}
-        ${filters?.bundle_ids?.length
-        ? `invoice_details: {bundle_id: {_in: [${filters?.bundle_ids?.join(",")}]}}`
+        ${filters?.item_ids?.length || filters?.bundle_ids?.length
+        ? `invoice_details: {${[
+            filters?.item_ids?.length
+                ? `item_id: {_in: [${filters?.item_ids?.join(",")}]}`
+                : "",
+            filters?.bundle_ids?.length
+                ? `bundle_id: {_in: [${filters?.bundle_ids?.join(",")}]}`
+                : "",
+        ]
+            .filter(Boolean)
+            .join(", ")}}`
         : ""}
         voided: {_eq: false}
       }
