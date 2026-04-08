@@ -11,12 +11,16 @@ export async function getShipments(session, config) {
         const headers = await getGraphQLAPIHeaders(session);
         const query = getShipmentsStringQuery({
             ...config,
-            agency_to_id: config.agency_to_id
-                ? Number(config.agency_to_id)
-                : undefined,
-            agency_from_id: config.agency_from_id
-                ? Number(config.agency_from_id)
-                : undefined,
+            agency_to_id: Array.isArray(config.agency_to_id)
+                ? config.agency_to_id.map(Number)
+                : config.agency_to_id
+                    ? Number(config.agency_to_id)
+                    : undefined,
+            agency_from_id: Array.isArray(config.agency_from_id)
+                ? config.agency_from_id.map(Number)
+                : config.agency_from_id
+                    ? Number(config.agency_from_id)
+                    : undefined,
         });
         const response = await httpGraphQLAPI.post("", {
             query,

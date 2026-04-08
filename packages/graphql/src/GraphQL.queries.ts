@@ -230,8 +230,8 @@ export const getShipmentsStringQuery = ({
   plannedShippingDateRange,
   plannedDeliveryDateRange,
 }: {
-  agency_to_id?: number;
-  agency_from_id?: number;
+  agency_to_id?: number | number[];
+  agency_from_id?: number | number[];
   suffix?: string;
   id_number_not_null?: boolean;
   voided?: boolean;
@@ -258,11 +258,19 @@ export const getShipmentsStringQuery = ({
   let conditions = [];
 
   if (agency_to_id) {
-    conditions.push(`agency_to_id: {_eq: ${agency_to_id}}`);
+    if (Array.isArray(agency_to_id)) {
+      conditions.push(`agency_to_id: {_in: [${agency_to_id.join(", ")}]}`);
+    } else {
+      conditions.push(`agency_to_id: {_eq: ${agency_to_id}}`);
+    }
   }
 
   if (agency_from_id) {
-    conditions.push(`agency_from_id: {_eq: ${agency_from_id}}`);
+    if (Array.isArray(agency_from_id)) {
+      conditions.push(`agency_from_id: {_in: [${agency_from_id.join(", ")}]}`);
+    } else {
+      conditions.push(`agency_from_id: {_eq: ${agency_from_id}}`);
+    }
   }
 
   // Merge all id_number conditions into a single object to avoid duplicate keys

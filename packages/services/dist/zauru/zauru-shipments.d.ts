@@ -5,8 +5,8 @@ import { AxiosUtilsResponse, ShipmentGraphQL } from "@zauru-sdk/types";
  */
 export declare function getShipments(session: Session, config: {
     id?: string | number;
-    agency_to_id?: string | number;
-    agency_from_id?: string | number;
+    agency_to_id?: string | number | number[];
+    agency_from_id?: string | number | number[];
     suffix?: string;
     id_number?: string;
     id_number_not_null?: boolean;

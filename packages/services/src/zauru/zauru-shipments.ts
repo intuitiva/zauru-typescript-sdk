@@ -13,8 +13,8 @@ export async function getShipments(
   session: Session,
   config: {
     id?: string | number;
-    agency_to_id?: string | number;
-    agency_from_id?: string | number;
+    agency_to_id?: string | number | number[];
+    agency_from_id?: string | number | number[];
     suffix?: string;
     id_number?: string;
     id_number_not_null?: boolean;
@@ -35,19 +35,23 @@ export async function getShipments(
       startDate: string;
       endDate: string;
     };
-  }
+  },
 ): Promise<AxiosUtilsResponse<ShipmentGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
 
     const query = getShipmentsStringQuery({
       ...config,
-      agency_to_id: config.agency_to_id
-        ? Number(config.agency_to_id)
-        : undefined,
-      agency_from_id: config.agency_from_id
-        ? Number(config.agency_from_id)
-        : undefined,
+      agency_to_id: Array.isArray(config.agency_to_id)
+        ? config.agency_to_id.map(Number)
+        : config.agency_to_id
+          ? Number(config.agency_to_id)
+          : undefined,
+      agency_from_id: Array.isArray(config.agency_from_id)
+        ? config.agency_from_id.map(Number)
+        : config.agency_from_id
+          ? Number(config.agency_from_id)
+          : undefined,
     });
 
     const response = await httpGraphQLAPI.post<{
@@ -61,7 +65,7 @@ export async function getShipments(
       {
         query,
       },
-      { headers }
+      { headers },
     );
 
     if (response.data.errors) {
@@ -82,7 +86,7 @@ export async function getShipments(
  */
 export async function receiveShipment_booking(
   headers: any,
-  id: string | number
+  id: string | number,
 ): Promise<AxiosUtilsResponse<boolean>> {
   return handlePossibleAxiosErrors(async () => {
     await httpZauru.get<any>(`/inventories/bookings/${id}/deliver.json`, {
@@ -95,7 +99,7 @@ export async function receiveShipment_booking(
 
 export async function receiveTransit(
   headers: any,
-  body: Partial<ShipmentGraphQL>
+  body: Partial<ShipmentGraphQL>,
 ): Promise<AxiosUtilsResponse<boolean>> {
   return handlePossibleAxiosErrors(async () => {
     const sendBody: any = {
@@ -112,7 +116,7 @@ export async function receiveTransit(
       sendBody,
       {
         headers,
-      }
+      },
     );
 
     return true;
@@ -129,7 +133,7 @@ export async function receiveTransit(
  */
 export async function despacharShipment_booking(
   headers: any,
-  id: string | number
+  id: string | number,
 ): Promise<AxiosUtilsResponse<boolean>> {
   return handlePossibleAxiosErrors(async () => {
     await httpZauru.get<any>(`/inventories/bookings/${id}/ship`, { headers });
@@ -147,14 +151,14 @@ export async function despacharShipment_booking(
  */
 export async function deleteShipment_booking(
   headers: any,
-  id: string | number
+  id: string | number,
 ): Promise<AxiosUtilsResponse<boolean>> {
   return handlePossibleAxiosErrors(async () => {
     await httpZauru.delete<any>(
       `/inventories/bookings/${id}.json?destroy=true`,
       {
         headers,
-      }
+      },
     );
     return true;
   });

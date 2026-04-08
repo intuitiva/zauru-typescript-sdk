@@ -202,10 +202,20 @@ exports.getPurchaseOrderStringQuery = getPurchaseOrderStringQuery;
 const getShipmentsStringQuery = ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null = false, id_number, id_number_not_empty = false, withMovementLots = false, withPurchaseOrdersByShipmentReference = false, limit = 1000, id, wheres, memoILike, plannedShippingDateRange, plannedDeliveryDateRange, }) => {
     let conditions = [];
     if (agency_to_id) {
-        conditions.push(`agency_to_id: {_eq: ${agency_to_id}}`);
+        if (Array.isArray(agency_to_id)) {
+            conditions.push(`agency_to_id: {_in: [${agency_to_id.join(", ")}]}`);
+        }
+        else {
+            conditions.push(`agency_to_id: {_eq: ${agency_to_id}}`);
+        }
     }
     if (agency_from_id) {
-        conditions.push(`agency_from_id: {_eq: ${agency_from_id}}`);
+        if (Array.isArray(agency_from_id)) {
+            conditions.push(`agency_from_id: {_in: [${agency_from_id.join(", ")}]}`);
+        }
+        else {
+            conditions.push(`agency_from_id: {_eq: ${agency_from_id}}`);
+        }
     }
     // Merge all id_number conditions into a single object to avoid duplicate keys
     const idNumberConditions = [];
