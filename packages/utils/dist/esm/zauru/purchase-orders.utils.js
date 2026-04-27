@@ -165,7 +165,7 @@ export const updatePurchaseItemPrice = async (headers, data, purchase_id) => {
             },
         };
         const responseUpdate = await updateReceivedPurchaseOrder(headers, body, purchase_id);
-        if (responseUpdate.error) {
+        if (responseUpdate.error || responseUpdate.data === null) {
             throw new Error(responseUpdate.userMsg);
         }
         return true;
@@ -187,7 +187,10 @@ export const updateOchAndDis = async (headers, data, purchase_id) => {
         if (data.other_charges) {
             body.purchase_order.other_charges = Number(data.other_charges);
         }
-        await updateReceivedPurchaseOrder(headers, body, purchase_id);
+        const responseUpdate = await updateReceivedPurchaseOrder(headers, body, purchase_id);
+        if (responseUpdate.error || responseUpdate.data === null) {
+            throw new Error(responseUpdate.userMsg);
+        }
         return true;
     });
 };
@@ -272,7 +275,10 @@ export const updatePurchaseOrderReception = async (headers, data, purchase_id) =
                 purchase_order_details_attributes: data.purchase_order_details_attributes,
             },
         };
-        await updateReceivedPurchaseOrder(headers, body, purchase_id);
+        const responseUpdate = await updateReceivedPurchaseOrder(headers, body, purchase_id);
+        if (responseUpdate.error || responseUpdate.data === null) {
+            throw new Error(responseUpdate.userMsg);
+        }
         return true;
     });
 };
@@ -372,7 +378,8 @@ export const createNewLabItemRequest = (headers, session, body) => {
         };
         const response = await createNewPurchaseOrder(headers, sendBody);
         if (!response.data || response.error) {
-            throw new Error("Ocurrió un error al crear la recepción de insumos: " + response.userMsg);
+            throw new Error("Ocurrió un error al crear la recepción de insumos: " +
+                response.userMsg);
         }
         return response.data;
     });

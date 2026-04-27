@@ -45,7 +45,7 @@ export const getPurchasesDataTableListFormated = async (
     perPage: string | null;
     search: string | null;
     from_production_agency_id?: boolean;
-  }
+  },
 ): Promise<
   AxiosUtilsResponse<
     PurchasesListResponseSchema<LoteWithPurchaseFormatedSchema>
@@ -63,7 +63,7 @@ export const getPurchasesDataTableListFormated = async (
       "production_agency_id",
     ]);
     const hashProductionAgencyId = JSON.parse(
-      temp_production_agency_id ?? "{}"
+      temp_production_agency_id ?? "{}",
     );
     const production_agency_id =
       hashProductionAgencyId[session.get("agency_id")];
@@ -79,7 +79,7 @@ export const getPurchasesDataTableListFormated = async (
       params?.perPage ? Number(params?.perPage) : 10,
       params?.search ?? "",
       tag_id,
-      agency_id
+      agency_id,
     );
 
     if (ordersDataTablesResponse.error) {
@@ -95,7 +95,7 @@ export const getPurchasesDataTableListFormated = async (
       Number(basket_id),
       ordersDataTables?.orders ?? {},
       ordersDataTables?.desde,
-      ordersDataTables?.hasta
+      ordersDataTables?.hasta,
     );
 
     if (lotesResponse.error) {
@@ -128,7 +128,7 @@ const getOrdersDataTables = async (
   perPage?: number,
   search?: string,
   tag_id?: string,
-  agency_id?: string
+  agency_id?: string,
 ): Promise<
   AxiosUtilsResponse<{
     orders: ObjectKeyString<PurchasesDataTableListFormatedSchema>;
@@ -152,12 +152,12 @@ const getOrdersDataTables = async (
     //Voy por las ordenes y las ordeno por fecha de recepción
     const ordersDataTablesResponse = await getPurchasesListDataTables(
       headers,
-      body
+      body,
     );
     const ordersDataTables = ordersDataTablesResponse.data;
     const orders = ordersDataTables?.data.sort(
       (a: HTMLPurchasesListSchema, b: HTMLPurchasesListSchema) =>
-        getNewDateByFormat(a.rd).getTime() - getNewDateByFormat(b.rd).getTime()
+        getNewDateByFormat(a.rd).getTime() - getNewDateByFormat(b.rd).getTime(),
     );
 
     const purchaseOrders: ObjectKeyString<PurchasesDataTableListFormatedSchema> =
@@ -174,7 +174,7 @@ const getOrdersDataTables = async (
       const id_number = value.i.substring(id_n_i_pos + 1, id_n_f_pos);
       const purchase_id = value.DT_RowId.replace(
         "purchases-purchase-order-",
-        ""
+        "",
       );
 
       purchaseOrders[id_number] = {
@@ -217,7 +217,7 @@ export const getPurchaseOrderDataTables = async (
   headers: any,
   search: string,
   tag_id?: string,
-  agency_id?: string
+  agency_id?: string,
 ): Promise<PurchasesDataTableListFormatedSchema> => {
   const body: DataTablesFilterBody = {
     order: { "0": { column: "1", dir: "desc" } },
@@ -231,13 +231,13 @@ export const getPurchaseOrderDataTables = async (
   //Voy por las ordenes y las ordeno por fecha de recepción
   const ordersDataTablesResponse = await getPurchasesListDataTables(
     headers,
-    body
+    body,
   );
 
   const ordersDataTables = ordersDataTablesResponse.data;
 
   const getPurchaseOrderFormated = (
-    value: HTMLPurchasesListSchema
+    value: HTMLPurchasesListSchema,
   ): PurchasesDataTableListFormatedSchema => {
     const id_i_pos = value.z.indexOf("purchase_orders/") + 16;
     const id_f_pos = value.z.indexOf('">');
@@ -267,11 +267,11 @@ export const getPurchaseOrderDataTables = async (
 
   !ordersDataTables?.data?.length &&
     console.log(
-      "========== NO SE ENCONTRO NINGUNA ORDEN DE COMPRA ==========="
+      "========== NO SE ENCONTRO NINGUNA ORDEN DE COMPRA ===========",
     );
 
   const purchaseOrderDataTable = getPurchaseOrderFormated(
-    ordersDataTables?.data[0] as HTMLPurchasesListSchema
+    ordersDataTables?.data[0] as HTMLPurchasesListSchema,
   );
 
   return purchaseOrderDataTable;
@@ -291,7 +291,7 @@ export const updatePurchaseItemPrice = async (
       { unit_cost: number; item_id: number; id: number }
     >;
   },
-  purchase_id: number
+  purchase_id: number,
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const body = {
@@ -303,9 +303,10 @@ export const updatePurchaseItemPrice = async (
     const responseUpdate = await updateReceivedPurchaseOrder(
       headers,
       body,
-      purchase_id
+      purchase_id,
     );
-    if (responseUpdate.error) {
+
+    if (responseUpdate.error || responseUpdate.data === null) {
       throw new Error(responseUpdate.userMsg);
     }
 
@@ -322,7 +323,7 @@ export const updatePurchaseItemPrice = async (
 export const updateOchAndDis = async (
   headers: any,
   data: { discount?: number | string; other_charges?: number | string },
-  purchase_id: number
+  purchase_id: number,
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const body = {
@@ -335,7 +336,15 @@ export const updateOchAndDis = async (
       body.purchase_order.other_charges = Number(data.other_charges);
     }
 
-    await updateReceivedPurchaseOrder(headers, body, purchase_id);
+    const responseUpdate = await updateReceivedPurchaseOrder(
+      headers,
+      body,
+      purchase_id,
+    );
+
+    if (responseUpdate.error || responseUpdate.data === null) {
+      throw new Error(responseUpdate.userMsg);
+    }
 
     return true;
   });
@@ -357,13 +366,13 @@ export const getOrderIDS = async (
     item?: string;
     desde?: string;
     hasta?: string;
-  }
+  },
 ): Promise<AxiosUtilsResponse<number[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { recepciones_tag_id: tag_id } = await getVariablesByName(
       headers,
       session,
-      ["recepciones_tag_id", "recepciones_basket_item_id"]
+      ["recepciones_tag_id", "recepciones_basket_item_id"],
     );
 
     const body: DataTablesFilterBody = {
@@ -383,14 +392,14 @@ export const getOrderIDS = async (
     //Voy por las ordenes y las ordeno por fecha de recepción
     const ordersDataTablesResponse = await getPurchasesListDataTables(
       headers,
-      body
+      body,
     );
 
     const ordersDataTables = ordersDataTablesResponse.data;
 
     return (
       ordersDataTables?.data?.map((x) =>
-        Number(x.DT_RowId.replace("purchases-purchase-order-", ""))
+        Number(x.DT_RowId.replace("purchases-purchase-order-", "")),
       ) ?? []
     );
   });
@@ -403,7 +412,7 @@ export const getOrderIDS = async (
 export const deletePurchaseOrderProcess = async (
   headers: any,
   session: Session,
-  id: string | number
+  id: string | number,
 ) => {
   return handlePossibleAxiosErrors(async () => {
     const {
@@ -422,7 +431,7 @@ export const deletePurchaseOrderProcess = async (
         const responseDeleteReception = await deleteReception(
           headers,
           reception.id,
-          purchaseOrder.id
+          purchaseOrder.id,
         );
 
         if (responseDeleteReception.error || !responseDeleteReception.data) {
@@ -435,7 +444,7 @@ export const deletePurchaseOrderProcess = async (
     for (const ship of purchaseOrder.shipment_purchase_orders) {
       const responseDeleteShip = await deleteDelivery(
         headers,
-        ship.shipment_id
+        ship.shipment_id,
       );
 
       if (responseDeleteShip.error || !responseDeleteShip.data) {
@@ -473,7 +482,7 @@ export const updatePurchaseOrderReception = async (
       { item_id: number; id: number }
     >;
   },
-  purchase_id: number
+  purchase_id: number,
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const body = {
@@ -483,7 +492,15 @@ export const updatePurchaseOrderReception = async (
           data.purchase_order_details_attributes,
       },
     } as UpdatePurchaseOrderBody;
-    await updateReceivedPurchaseOrder(headers, body, purchase_id);
+    const responseUpdate = await updateReceivedPurchaseOrder(
+      headers,
+      body,
+      purchase_id,
+    );
+
+    if (responseUpdate.error || responseUpdate.data === null) {
+      throw new Error(responseUpdate.userMsg);
+    }
 
     return true;
   });
@@ -506,7 +523,7 @@ export type TaskSchema = {
 export const commitTask = async (
   session: Session,
   ordenes: Array<number>,
-  timeStamp: number
+  timeStamp: number,
 ) => {
   const newTask = {
     timeStamp,
@@ -551,7 +568,7 @@ export const commitEndTask = async (session: Session, timeStamp: number) => {
  */
 export const deleteTask = async (
   session: Session,
-  timeStamp: number
+  timeStamp: number,
 ): Promise<boolean> => {
   let updateTasks = session.get("updateTasks") as Array<TaskSchema>;
   if (
@@ -577,7 +594,7 @@ export const deleteTask = async (
 export const createNewLabItemRequest = (
   headers: any,
   session: Session,
-  body: Partial<PurchaseOrderGraphQL> & { [key: string]: any }
+  body: Partial<PurchaseOrderGraphQL> & { [key: string]: any },
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     const { lab_charge_term_default_id, lab_agency_id, laboratory_proyect_id } =
@@ -621,7 +638,8 @@ export const createNewLabItemRequest = (
 
     if (!response.data || response.error) {
       throw new Error(
-        "Ocurrió un error al crear la recepción de insumos: " + response.userMsg
+        "Ocurrió un error al crear la recepción de insumos: " +
+          response.userMsg,
       );
     }
 
