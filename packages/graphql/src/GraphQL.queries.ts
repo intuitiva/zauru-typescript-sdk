@@ -480,7 +480,6 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     payeeId?: number | string;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
-    poDetailTagId?: number;
     withLotStocks?: boolean;
     betweenIssueDate?: boolean;
     id_number?: string;
@@ -586,11 +585,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
       purchaseOrderDetailsConditions.push(`item_id: { _eq: ${config.itemId} }`);
     }
   }
-  if (config.poDetailTagId) {
-    purchaseOrderDetailsConditions.push(
-      `tag_id: { _eq: ${config.poDetailTagId} }`,
-    );
-  }
+
   if (purchaseOrderDetailsConditions.length > 0) {
     conditions.push(
       `purchase_order_details: { ${purchaseOrderDetailsConditions.join(", ")} }`,
