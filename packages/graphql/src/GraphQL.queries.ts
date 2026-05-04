@@ -501,6 +501,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
       | "_lt";
     discount?: number;
     excludeVoided?: boolean;
+    tagId?: number | string;
   },
 ) => {
   const conditions = [];
@@ -622,6 +623,10 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     conditions.push(
       `discount: { ${config.discountComparisonOperator}: ${config.discount} }`,
     );
+  }
+
+  if (config.tagId) {
+    conditions.push(`taggings: { tag_id: { _eq: ${config.tagId} } }`);
   }
 
   const whereClause = conditions.length

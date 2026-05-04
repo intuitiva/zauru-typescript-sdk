@@ -61,6 +61,7 @@ export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: strin
     discountComparisonOperator?: "_eq" | "_neq" | "_gte" | "_lte" | "_gt" | "_lt";
     discount?: number;
     excludeVoided?: boolean;
+    tagId?: number | string;
 }) => string;
 export declare const getPayeesStringQuery: (filters?: {
     id_number?: string;

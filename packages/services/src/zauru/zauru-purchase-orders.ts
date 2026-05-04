@@ -639,6 +639,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       | "_lt";
     discount?: number;
     excludeVoided?: boolean;
+    tagId?: number;
   } = {},
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
   return handlePossibleAxiosErrors(async () => {

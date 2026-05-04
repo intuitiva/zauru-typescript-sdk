@@ -179,6 +179,7 @@ export declare const getGraphQLPurchaseOrderBetweenDates: (session: Session, dat
     discountComparisonOperator?: "_eq" | "_neq" | "_gte" | "_lte" | "_gt" | "_lt";
     discount?: number;
     excludeVoided?: boolean;
+    tagId?: number;
 }) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
 /**
  * deletePurchaseOrder

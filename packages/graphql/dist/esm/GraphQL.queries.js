@@ -473,6 +473,9 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
     if (!!config.discountComparisonOperator && !!config.discount) {
         conditions.push(`discount: { ${config.discountComparisonOperator}: ${config.discount} }`);
     }
+    if (config.tagId) {
+        conditions.push(`taggings: { tag_id: { _eq: ${config.tagId} } }`);
+    }
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} }`
         : "";
