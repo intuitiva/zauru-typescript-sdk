@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.26.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.25.4...v2.26.0) (2026-05-04)
+
+
+### Features
+
+* adding tag_id filter ([1d173eb](https://github.com/intuitiva/zauru-typescript-sdk/commit/1d173ebac729104c7d52c37eb3db2a99254c0f0e))
+
+
+
+
+
 ## [2.25.3](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.25.2...v2.25.3) (2026-04-08)
 
 **Note:** Version bump only for package @zauru-sdk/services
