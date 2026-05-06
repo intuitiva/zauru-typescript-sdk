@@ -127,15 +127,15 @@ export async function deleteInvoiceOrder(headers, id) {
  * @param body
  * @returns
  */
-export async function createInvoicePOS(headers, body) {
+export async function createInvoicePOS(headers, body, sujetaAImpuestos = true) {
     return handlePossibleAxiosErrors(async () => {
         const sendBody = {
             ...body,
-            issued: true, //(true) - Esto lo hace una factura
+            taxable: sujetaAImpuestos, //(true) - Esto lo hace una factura
+            issued: true,
+            pos: true,
             invoice_details_attributes: arrayToObject(body.invoice_details),
             tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
-            taxable: 1,
-            pos: true,
         };
         if (sendBody.deleted_invoice_details)
             delete sendBody.deleted_invoice_details;

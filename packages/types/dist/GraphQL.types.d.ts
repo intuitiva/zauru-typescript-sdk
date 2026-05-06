@@ -325,6 +325,9 @@ export type InvoiceGraphQL = {
     payment_term_id: number;
     issued: boolean;
     agency_id: number;
+    needs_delivery: boolean;
+    taxable: boolean;
+    voided: boolean;
     invoice_details: InvoiceDetailsGraphQL[];
     payee: PayeeGraphQL;
     submission_invoices: SubmissionInvoicesGraphQL[];
