@@ -212,7 +212,10 @@ export async function createInvoicePOS(
       issued: true,
       pos: true,
       invoice_details_attributes: arrayToObject(body.invoice_details),
-      tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+      tag_ids: [
+        "",
+        ...(body.tagging_invoices?.map((x) => `${x.tag_id}`) ?? []),
+      ],
     } as any;
 
     if (sendBody.deleted_invoice_details)
