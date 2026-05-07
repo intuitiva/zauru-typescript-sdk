@@ -81,7 +81,10 @@ export async function createInvoice(
     const sendBody = {
       ...body,
       invoice_details_attributes: arrayToObject(body.invoice_details),
-      tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+      tag_ids: [
+        "",
+        ...(body.tagging_invoices?.map((x) => `${x.tag_id}`) ?? []),
+      ],
       taxable: sujetaAImpuestos,
     } as any;
 
@@ -117,7 +120,10 @@ export async function createInvoiceOrder(
       ...body,
       issued: esFactura, //(false) - Esto lo hace una órden y no una factura
       invoice_details_attributes: arrayToObject(body.invoice_details),
-      tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+      tag_ids: [
+        "",
+        ...(body.tagging_invoices?.map((x) => `${x.tag_id}`) ?? []),
+      ],
       taxable: esFactura ? 1 : 0,
     } as any;
 

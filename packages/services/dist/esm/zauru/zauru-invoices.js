@@ -41,7 +41,10 @@ export async function createInvoice(headers, body, sujetaAImpuestos = true) {
         const sendBody = {
             ...body,
             invoice_details_attributes: arrayToObject(body.invoice_details),
-            tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+            tag_ids: [
+                "",
+                ...(body.tagging_invoices?.map((x) => `${x.tag_id}`) ?? []),
+            ],
             taxable: sujetaAImpuestos,
         };
         if (sendBody.deleted_invoice_details)
@@ -68,7 +71,10 @@ export async function createInvoiceOrder(headers, body, esFactura = false) {
             ...body,
             issued: esFactura, //(false) - Esto lo hace una órden y no una factura
             invoice_details_attributes: arrayToObject(body.invoice_details),
-            tag_ids: ["", ...(body.tagging_invoices?.map((x) => x.tag_id) ?? [])],
+            tag_ids: [
+                "",
+                ...(body.tagging_invoices?.map((x) => `${x.tag_id}`) ?? []),
+            ],
             taxable: esFactura ? 1 : 0,
         };
         if (sendBody.deleted_invoice_details)
