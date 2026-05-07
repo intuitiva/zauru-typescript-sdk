@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.28.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.27.0...v2.28.0) (2026-05-07)
+
+
+### Features
+
+* changing tag id to string ([829dffb](https://github.com/intuitiva/zauru-typescript-sdk/commit/829dffb6314cfd890c03fabcbc49004c04c85842))
+
+
+
+
+
 # [2.27.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.26.3...v2.27.0) (2026-05-06)
 
 
