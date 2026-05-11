@@ -718,6 +718,23 @@ export type TipoMuestra = {
   description: string;
 };
 
+export type Programacion = {
+  id_number: string;
+  payee_id: number;
+  item_id: number;
+  variedad: string;
+  variedad_name: string;
+  fecha_siembra: string;
+  lugar: string;
+  cantidad_medida: string;
+  unidad_medida: string;
+  procentaje_entrega_cosecha: number;
+  observaciones: string;
+  fecha_cosecha_inicio: string;
+  fecha_cosecha_fin: string;
+  prestamo_maximo_pos_gtq: number;
+};
+
 export type RejectionWebAppTableObject = {
   webapp_table: {
     [key: string]: string;
@@ -797,7 +814,7 @@ export type GenericDynamicTableColumn = {
   onChange?: (
     row: RowDataType,
     value: any,
-    setTableValue: (columnName: string, newValue: any) => void
+    setTableValue: (columnName: string, newValue: any) => void,
   ) => void;
   headerClassName?: string;
   cellClassName?: string;
