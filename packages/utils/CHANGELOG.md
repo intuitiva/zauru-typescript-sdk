@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.30.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.29.0...v2.30.0) (2026-05-11)
+
+
+### Features
+
+* programaciones-webapp-table ([03d3385](https://github.com/intuitiva/zauru-typescript-sdk/commit/03d338571e65f0a5d415949be06c41aeebc58aff))
+
+
+
+
+
 # [2.29.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.28.0...v2.29.0) (2026-05-07)
 
 **Note:** Version bump only for package @zauru-sdk/utils
