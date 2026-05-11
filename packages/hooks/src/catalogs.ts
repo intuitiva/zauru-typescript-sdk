@@ -70,10 +70,20 @@ type CatalogsData<T> = {
  * otherParams: {
       includeDiscounts: "true",
     }
+ *
+ * staleWhileRevalidate: true — if Redux already has data, show it at once and
+ * refetch in the background; on success data is replaced silently, on error the
+ * cache is kept. When there is no cached data, behavior matches a normal load
+ * (loading true until the first response).
  */
 export function useGetReduxCatalog<T>(
   CATALOG_NAME: CATALOGS_NAMES,
-  { online = false, wheres = [], otherParams }: ReduxParamsConfig = {},
+  {
+    online = false,
+    staleWhileRevalidate = false,
+    wheres = [],
+    otherParams,
+  }: ReduxParamsConfig = {},
 ): CatalogType<T> {
   const dispatch = useAppDispatch();
   const fetcher = useFetcher<FetcherErrorType | CatalogsData<T>>();
@@ -95,15 +105,30 @@ export function useGetReduxCatalog<T>(
      * Lógica:
      * - Si `online: true`, forzamos el fetch.
      * - Si `reFetch: true`, también forzamos el fetch.
-     * - Si `online: false` y SÍ tenemos data local, NO hacemos fetch (solo mostramos lo que hay).
-     * - Si `online: false` y NO hay data local, SÍ hacemos fetch (porque no hay nada que mostrar).
+     * - Si `staleWhileRevalidate: true` y hay data en Redux, forzamos fetch en segundo plano
+     *   sin poner `loading: true` (se muestra la caché hasta que llegue respuesta o falle).
+     * - Si `online: false` y SÍ tenemos data local y no aplica lo anterior, NO hacemos fetch.
+     * - Si no hay data local, SÍ hacemos fetch (porque no hay nada que mostrar).
      */
     useEffect(() => {
-      const mustFetch = online || catalogData?.reFetch || !hasLocalData;
+      const revalidateInBackground =
+        Boolean(staleWhileRevalidate) && hasLocalData;
+      const mustFetch =
+        online ||
+        catalogData?.reFetch ||
+        !hasLocalData ||
+        revalidateInBackground;
 
       if (mustFetch) {
-        setData((prev) => ({ ...prev, loading: true }));
-        dispatch(catalogsFetchStart(CATALOG_NAME));
+        if (revalidateInBackground) {
+          setData({
+            data: (catalogData?.data as T[]) || [],
+            loading: false,
+          });
+        } else {
+          setData((prev) => ({ ...prev, loading: true }));
+          dispatch(catalogsFetchStart(CATALOG_NAME));
+        }
 
         // Construimos el query para `wheres` y `otherParams`
         const encodedWheres = (wheres || []).map((where) =>
@@ -166,7 +191,7 @@ export function useGetReduxCatalog<T>(
         });
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [online, catalogData?.reFetch, hasLocalData]);
+    }, [online, staleWhileRevalidate, catalogData?.reFetch, hasLocalData]);
 
     /**
      * Efecto que observa la finalización del fetch (fetcher.state === "idle")

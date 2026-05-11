@@ -15,8 +15,13 @@ type CatalogType<T> = {
  * otherParams: {
       includeDiscounts: "true",
     }
+ *
+ * staleWhileRevalidate: true — if Redux already has data, show it at once and
+ * refetch in the background; on success data is replaced silently, on error the
+ * cache is kept. When there is no cached data, behavior matches a normal load
+ * (loading true until the first response).
  */
-export declare function useGetReduxCatalog<T>(CATALOG_NAME: CATALOGS_NAMES, { online, wheres, otherParams }?: ReduxParamsConfig): CatalogType<T>;
+export declare function useGetReduxCatalog<T>(CATALOG_NAME: CATALOGS_NAMES, { online, staleWhileRevalidate, wheres, otherParams, }?: ReduxParamsConfig): CatalogType<T>;
 /**
  *
  * ======================= HOOKS

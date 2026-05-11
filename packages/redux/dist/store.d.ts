@@ -14,6 +14,12 @@ export declare const useAppSelector: TypedUseSelectorHook<RootState>;
 export declare const useAppDispatch: () => AppDispatch;
 export type ReduxParamsConfig = {
     online?: boolean;
+    /**
+     * When true and Redux already has rows for this catalog, the hook returns cached
+     * data immediately (loading stays false) and refreshes in the background. A
+     * successful fetch replaces Redux and local state; failures keep the cached data.
+     */
+    staleWhileRevalidate?: boolean;
     wheres?: string[];
     otherParams?: {
         [key: string]: string;
