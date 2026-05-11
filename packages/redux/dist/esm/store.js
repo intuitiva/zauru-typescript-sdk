@@ -23,12 +23,42 @@ const persistanceLocalStorageMiddleware = (store) => (next) => (action) => {
     }
     return result;
 };
+const buildSliceInitialStates = () => ({
+    catalogs: (0, catalogs_slice_js_1.default)(undefined, { type: "@@INIT" }),
+    profiles: (0, profile_slice_js_1.default)(undefined, { type: "@@INIT" }),
+    webappTables: (0, webapp_tables_slice_js_1.default)(undefined, { type: "@@INIT" }),
+    receptions: (0, reception_slice_js_1.default)(undefined, { type: "@@INIT" }),
+    session: (0, session_slice_js_1.default)(undefined, { type: "@@INIT" }),
+    templates: (0, templates_slice_js_1.default)(undefined, { type: "@@INIT" }),
+    automaticNumbers: (0, automaticNumbers_slice_js_1.default)(undefined, { type: "@@INIT" }),
+    tables: (0, tables_slice_js_1.default)(undefined, { type: "@@INIT" }),
+    formSavedData: (0, formsSavedData_slice_js_1.default)(undefined, { type: "@@INIT" }),
+});
+const isPlainObject = (value) => typeof value === "object" && value !== null && !Array.isArray(value);
 const preloadedState = (() => {
     try {
         if (!(typeof document === "undefined")) {
             const savedState = localStorage.getItem(exports.LOCAL_STORAGE_REDUX_NAME);
             if (savedState) {
-                return JSON.parse(savedState);
+                const parsed = JSON.parse(savedState);
+                // Merge each slice's defaults with the persisted state so that catalogs
+                // (or other entries) added in newer versions of the app are not missing
+                // when the user has an older snapshot in localStorage. Without this
+                // merge, `state.catalogs[NEW_CATALOG]` would be undefined and any
+                // reducer that mutates it (e.g. catalogsFetchStart) would throw.
+                const initialStates = buildSliceInitialStates();
+                const merged = {};
+                for (const sliceName of Object.keys(initialStates)) {
+                    const sliceInitial = initialStates[sliceName];
+                    const persistedSlice = parsed?.[sliceName];
+                    if (isPlainObject(sliceInitial) && isPlainObject(persistedSlice)) {
+                        merged[sliceName] = { ...sliceInitial, ...persistedSlice };
+                    }
+                    else {
+                        merged[sliceName] = persistedSlice ?? sliceInitial;
+                    }
+                }
+                return merged;
             }
         }
     }
@@ -70,17 +100,7 @@ const cleanLocalStorage = (whitelist = {}) => {
     }
     try {
         if (!(typeof document === "undefined") && Object.keys(state)?.length > 0) {
-            const initialState = {
-                catalogs: (0, catalogs_slice_js_1.default)(undefined, { type: "" }),
-                profiles: (0, profile_slice_js_1.default)(undefined, { type: "" }),
-                webappTables: (0, webapp_tables_slice_js_1.default)(undefined, { type: "" }),
-                receptions: (0, reception_slice_js_1.default)(undefined, { type: "" }),
-                session: (0, session_slice_js_1.default)(undefined, { type: "" }),
-                templates: (0, templates_slice_js_1.default)(undefined, { type: "" }),
-                automaticNumbers: (0, automaticNumbers_slice_js_1.default)(undefined, { type: "" }),
-                tables: (0, tables_slice_js_1.default)(undefined, { type: "" }),
-                formSavedData: (0, formsSavedData_slice_js_1.default)(undefined, { type: "" }),
-            };
+            const initialState = buildSliceInitialStates();
             const newState = { ...initialState };
             for (const reducerName in whitelist) {
                 if (state.hasOwnProperty(reducerName)) {

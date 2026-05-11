@@ -59,20 +59,31 @@ const initialState = {
     invoiceFormSubmissionsByAgencyId: createLoadingState([]),
     caseFormSubmissionsByCaseId: createLoadingState([]),
 };
+const ensureCatalogEntry = (state, name) => {
+    if (!state[name]) {
+        state[name] = {
+            data: [],
+            loading: false,
+            reFetch: false,
+        };
+    }
+    return state[name];
+};
 const catalogsSlice = (0, toolkit_1.createSlice)({
     name: "catalogs",
     initialState,
     reducers: {
         catalogsSetReFetch: (state, action) => {
-            state[action.payload].reFetch = true;
+            ensureCatalogEntry(state, action.payload).reFetch = true;
         },
         catalogsFetchStart: (state, action) => {
-            state[action.payload].loading = true;
+            ensureCatalogEntry(state, action.payload).loading = true;
         },
         catalogsFetchSuccess: (state, action) => {
-            state[action.payload.name].data = action.payload.data;
-            state[action.payload.name].loading = false;
-            state[action.payload.name].reFetch = false;
+            const entry = ensureCatalogEntry(state, action.payload.name);
+            entry.data = action.payload.data;
+            entry.loading = false;
+            entry.reFetch = false;
         },
     },
 });

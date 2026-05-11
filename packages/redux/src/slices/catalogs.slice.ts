@@ -204,23 +204,38 @@ const initialState: CatalogState = {
   caseFormSubmissionsByCaseId: createLoadingState([]),
 };
 
+const ensureCatalogEntry = (
+  state: CatalogState,
+  name: CATALOGS_NAMES,
+): LoadingState<any[]> => {
+  if (!state[name]) {
+    (state as Record<CATALOGS_NAMES, LoadingState<any[]>>)[name] = {
+      data: [],
+      loading: false,
+      reFetch: false,
+    };
+  }
+  return (state as Record<CATALOGS_NAMES, LoadingState<any[]>>)[name];
+};
+
 const catalogsSlice = createSlice({
   name: "catalogs",
   initialState,
   reducers: {
     catalogsSetReFetch: (state, action: PayloadAction<CATALOGS_NAMES>) => {
-      state[action.payload].reFetch = true;
+      ensureCatalogEntry(state, action.payload).reFetch = true;
     },
     catalogsFetchStart: (state, action: PayloadAction<CATALOGS_NAMES>) => {
-      state[action.payload].loading = true;
+      ensureCatalogEntry(state, action.payload).loading = true;
     },
     catalogsFetchSuccess: (
       state,
       action: PayloadAction<{ name: CATALOGS_NAMES; data: any[] }>,
     ) => {
-      state[action.payload.name].data = action.payload.data;
-      state[action.payload.name].loading = false;
-      state[action.payload.name].reFetch = false;
+      const entry = ensureCatalogEntry(state, action.payload.name);
+      entry.data = action.payload.data;
+      entry.loading = false;
+      entry.reFetch = false;
     },
   },
 });
