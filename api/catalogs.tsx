@@ -53,6 +53,7 @@ import {
   getShipmentsToMyAgency,
   getTemplates,
   getTipoMuestras,
+  getProgramaciones,
 } from "@zauru-sdk/utils";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -110,7 +111,7 @@ export const loader: LoaderFunction = async ({ request }) => {
           url.searchParams.get("agency_id") ?? session.get("agency_id");
         response = await getInvoiceFormSubmissionsByAgencyId(
           session,
-          agency_id
+          agency_id,
         );
         break;
 
@@ -177,14 +178,14 @@ export const loader: LoaderFunction = async ({ request }) => {
         response = await getInvoicesByAgencyId(
           session,
           session.get("agency_id"),
-          { tag_id, invoice_id }
+          { tag_id, invoice_id },
         );
         break;
 
       case "payeeCategoriesLabPrices":
         response = await getPayeeCategoriesByNotesMatch(
           session,
-          TEXT_PAYEE_CATEGORY_NOTES_FOR_PRICE
+          TEXT_PAYEE_CATEGORY_NOTES_FOR_PRICE,
         );
         break;
 
@@ -229,6 +230,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
       case "ccPorcentajesDeRechazo":
         response = await getCCPorcentajesDeRechazo(headers, session);
+        break;
+
+      case "programaciones4pinos":
+        response = await getProgramaciones(headers, session);
         break;
 
       case "solicitudesEliminacionPO":
@@ -321,7 +326,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         }
         response = await getInvoiceFormSubmissionsByAgencyId(
           session,
-          agency_id
+          agency_id,
         );
         break;
       }
@@ -342,7 +347,7 @@ export const loader: LoaderFunction = async ({ request }) => {
           headers,
           session,
           invoiceId,
-          withFiles
+          withFiles,
         );
         break;
       }
@@ -363,7 +368,7 @@ export const loader: LoaderFunction = async ({ request }) => {
           headers,
           session,
           caseId,
-          withFiles
+          withFiles,
         );
         break;
       }

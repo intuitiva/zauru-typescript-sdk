@@ -18,6 +18,7 @@ const initialState = {
     templates: createLoadingState([]),
     shipments: createLoadingState([]),
     bookings: createLoadingState([]),
+    programaciones4pinos: createLoadingState([]),
     motivosRechazo: createLoadingState([]),
     ccPorcentajesDeRechazo: createLoadingState([]),
     solicitudesEliminacionPO: createLoadingState([]),

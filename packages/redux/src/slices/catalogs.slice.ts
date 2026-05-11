@@ -30,6 +30,7 @@ import type {
   PaymentMethodGraphQL,
   AuthorizationUpdateDiscountPO,
   PoDiscountHistory,
+  Programacion,
 } from "@zauru-sdk/types";
 
 export type CATALOGS_NAMES =
@@ -39,6 +40,7 @@ export type CATALOGS_NAMES =
   | "providerCategories"
   | "receptionTypes"
   | "tiposDeMuestra"
+  | "programaciones4pinos"
   | "motivosRechazo"
   | "ccPorcentajesDeRechazo"
   | "solicitudesEliminacionPO"
@@ -103,6 +105,7 @@ type CatalogState = {
   templates: LoadingState<WebAppRowGraphQL<Template>[]>;
   shipments: LoadingState<ShipmentGraphQL[]>;
   bookings: LoadingState<ShipmentGraphQL[]>;
+  programaciones4pinos: LoadingState<WebAppRowGraphQL<Programacion>[]>;
   motivosRechazo: LoadingState<WebAppRowGraphQL<MotivoRechazo>[]>;
   ccPorcentajesDeRechazo: LoadingState<WebAppRowGraphQL<CCPorcentajeRechazo>[]>;
   solicitudesEliminacionPO: LoadingState<
@@ -159,6 +162,7 @@ const initialState: CatalogState = {
   templates: createLoadingState([]),
   shipments: createLoadingState([]),
   bookings: createLoadingState([]),
+  programaciones4pinos: createLoadingState([]),
   motivosRechazo: createLoadingState([]),
   ccPorcentajesDeRechazo: createLoadingState([]),
   solicitudesEliminacionPO: createLoadingState([]),
@@ -212,7 +216,7 @@ const catalogsSlice = createSlice({
     },
     catalogsFetchSuccess: (
       state,
-      action: PayloadAction<{ name: CATALOGS_NAMES; data: any[] }>
+      action: PayloadAction<{ name: CATALOGS_NAMES; data: any[] }>,
     ) => {
       state[action.payload.name].data = action.payload.data;
       state[action.payload.name].loading = false;

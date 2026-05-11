@@ -22,3 +22,4 @@ export * from "./zauru/templates.utils.js";
 export * from "./zauru/tiposMuestra.utils.js";
 export * from "./zauru/webapp-tables.utils.js";
 export * from "./zauru/4pinos-po-discount-history.utils.js";
+export * from "./zauru/programaciones.utils.js";

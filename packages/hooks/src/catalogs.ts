@@ -32,6 +32,7 @@ import type {
   AuthorizationUpdateDiscountPO,
   PoDiscountHistory,
   PesoMaximoPorCanasta,
+  Programacion,
 } from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
@@ -72,7 +73,7 @@ type CatalogsData<T> = {
  */
 export function useGetReduxCatalog<T>(
   CATALOG_NAME: CATALOGS_NAMES,
-  { online = false, wheres = [], otherParams }: ReduxParamsConfig = {}
+  { online = false, wheres = [], otherParams }: ReduxParamsConfig = {},
 ): CatalogType<T> {
   const dispatch = useAppDispatch();
   const fetcher = useFetcher<FetcherErrorType | CatalogsData<T>>();
@@ -106,7 +107,7 @@ export function useGetReduxCatalog<T>(
 
         // Construimos el query para `wheres` y `otherParams`
         const encodedWheres = (wheres || []).map((where) =>
-          encodeURIComponent(where)
+          encodeURIComponent(where),
         );
         const wheresQueryParam = encodedWheres.join("&");
 
@@ -136,7 +137,7 @@ export function useGetReduxCatalog<T>(
               "Hubo un error pero hay datos locales en la consulta de",
               CATALOG_NAME,
               " Error: ",
-              error
+              error,
             );
             setData({
               data: catalogData?.data || [],
@@ -147,7 +148,7 @@ export function useGetReduxCatalog<T>(
               "Hubo un error y no hay datos locales en la consulta de",
               CATALOG_NAME,
               " Error: ",
-              error
+              error,
             );
             showAlert({
               type: "error",
@@ -187,12 +188,12 @@ export function useGetReduxCatalog<T>(
             if (hasLocalData) {
               console.log(
                 "Hay error en la respuesta pero hay datos locales en la consulta de",
-                CATALOG_NAME
+                CATALOG_NAME,
               );
             } else {
               console.log(
                 "Hay error en la respuesta y no hay datos locales en la consulta de",
-                CATALOG_NAME
+                CATALOG_NAME,
               );
               // No hay datos locales -> mostramos error y no tenemos fallback
               showAlert({
@@ -211,7 +212,7 @@ export function useGetReduxCatalog<T>(
                 catalogsFetchSuccess({
                   name: CATALOG_NAME,
                   data: newData,
-                })
+                }),
               );
               setData({
                 data: newData,
@@ -225,7 +226,7 @@ export function useGetReduxCatalog<T>(
                   "Hubo un error en el parseo de la respuesta pero hay datos locales en la consulta de",
                   CATALOG_NAME,
                   " retornó: ",
-                  newData
+                  newData,
                 );
                 // No reportar error: usamos lo local
                 setData((prev) => ({ ...prev, loading: false }));
@@ -240,7 +241,7 @@ export function useGetReduxCatalog<T>(
                   "Hubo un error en parseo de la respuesta y no hay datos locales en la consulta de",
                   CATALOG_NAME,
                   " retornó: ",
-                  newData
+                  newData,
                 );
                 setData((prev) => ({ ...prev, loading: false }));
               }
@@ -252,13 +253,13 @@ export function useGetReduxCatalog<T>(
             // Fallback a datos locales
             console.log(
               "No hay datos en la respuesta pero hay datos locales en la consulta de",
-              CATALOG_NAME
+              CATALOG_NAME,
             );
           } else {
             // Ni API ni local data => error
             console.log(
               "No hay datos en la respuesta y no hay datos locales en la consulta de",
-              CATALOG_NAME
+              CATALOG_NAME,
             );
             showAlert({
               type: "error",
@@ -288,63 +289,63 @@ export function useGetReduxCatalog<T>(
  * ======================= HOOKS
  */
 export const useGetItems = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: ItemGraphQL[];
 } => useGetReduxCatalog<ItemGraphQL>("items", config);
 
 export const useGetItemsByReception = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: ItemGraphQL[];
 } => useGetReduxCatalog<ItemGraphQL>("itemsByReception", config);
 
 export const useGetItemsByLab = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: ItemGraphQL[];
 } => useGetReduxCatalog<ItemGraphQL>("itemsByLab", config);
 
 export const useGetMyAgencyLotStocks = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: LotStockGraphQL[];
 } => useGetReduxCatalog<LotStockGraphQL>("myAgencyLotStocks", config);
 
 export const useGetItemServicesByLab = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: ItemGraphQL[];
 } => useGetReduxCatalog<ItemGraphQL>("itemServicesByLab", config);
 
 export const useGetItemCategoriesForLab = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: ItemCategoryGraphQL[];
 } => useGetReduxCatalog<ItemCategoryGraphQL>("itemCategoriesForLab", config);
 
 export const useGetBookings = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: ShipmentGraphQL[];
 } => useGetReduxCatalog<ShipmentGraphQL>("bookings", config);
 
 export const useGetTemplates = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: WebAppRowGraphQL<Template>[];
 } => useGetReduxCatalog<WebAppRowGraphQL<Template>>("templates", config);
 
 export const useGetPayeeCategories = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: PayeeCategoryGraphQL[];
@@ -353,13 +354,13 @@ export const useGetPayeeCategories = (
 export const useGetPayeeCategoriesLabPrices = (
   config: {
     withPriceListIdNull: boolean;
-  } = { withPriceListIdNull: false }
+  } = { withPriceListIdNull: false },
 ): {
   loading: boolean;
   data: PayeeCategoryGraphQL[];
 } => {
   const data = useGetReduxCatalog<PayeeCategoryGraphQL>(
-    "payeeCategoriesLabPrices"
+    "payeeCategoriesLabPrices",
   );
 
   let tempData = data.data;
@@ -371,28 +372,28 @@ export const useGetPayeeCategoriesLabPrices = (
 };
 
 export const useGetBundlesRecipForLab = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: BundleGraphQL[];
 } => useGetReduxCatalog<BundleGraphQL>("bundlesRecipForLab", config);
 
 export const useGetBundlesForLab = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: BundleGraphQL[];
 } => useGetReduxCatalog<BundleGraphQL>("bundlesForLab", config);
 
 export const useGetCurrencies = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: CurrencyGraphQL[];
 } => useGetReduxCatalog<CurrencyGraphQL>("currencies", config);
 
 export const useGetReceptionTypes = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: WebAppRowGraphQL<ReceptionType>[];
@@ -400,126 +401,126 @@ export const useGetReceptionTypes = (
   useGetReduxCatalog<WebAppRowGraphQL<ReceptionType>>("receptionTypes", config);
 
 export const useGetProviders = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: PayeeGraphQL[];
 } => useGetReduxCatalog<PayeeGraphQL>("providers", config);
 
 export const useGetCases = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: CaseGraphQL[];
 } => useGetReduxCatalog<CaseGraphQL>("cases", config);
 
 export const useGetProviderCategories = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: PayeeCategoryGraphQL[];
 } => useGetReduxCatalog<PayeeCategoryGraphQL>("providerCategories", config);
 
 export const useGetClientCategories = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: PayeeCategoryGraphQL[];
 } => useGetReduxCatalog<PayeeCategoryGraphQL>("clientCategories", config);
 
 export const useGetPayees = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: PayeeGraphQL[];
 } => useGetReduxCatalog<PayeeGraphQL>("payees", config);
 
 export const useGetPayeesForLab = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: PayeeGraphQL[];
 } => useGetReduxCatalog<PayeeGraphQL>("payeesForLab", config);
 
 export const useGetPrintTemplates = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: PrintTemplateGraphQL[];
 } => useGetReduxCatalog<PrintTemplateGraphQL>("printTemplates", config);
 
 export const useGetAgencies = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: AgencyGraphQL[];
 } => useGetReduxCatalog<AgencyGraphQL>("agencies", config);
 
 export const useGetSuggestedPrices = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: SuggestedPriceGraphQL[];
 } => useGetReduxCatalog<SuggestedPriceGraphQL>("suggestedPrices", config);
 
 export const useGetPaymentTerms = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: PaymentTermGraphQL[];
 } => useGetReduxCatalog<PaymentTermGraphQL>("paymentTerms", config);
 
 export const useGetPaymentMethods = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: PaymentMethodGraphQL[];
 } => useGetReduxCatalog<PaymentMethodGraphQL>("paymentMethods", config);
 
 export const useGetEmployeesByLab = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: EmployeeGraphQL[];
 } => useGetReduxCatalog<EmployeeGraphQL>("employeesByLab", config);
 
 export const useGetEmployeesByCurrentAgency = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: EmployeeGraphQL[];
 } => useGetReduxCatalog<EmployeeGraphQL>("employeesByCurrentAgency", config);
 
 export const useGetEmployees = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: EmployeeGraphQL[];
 } => useGetReduxCatalog<EmployeeGraphQL>("employees", config);
 
 export const useGetShipmentsToMyAgency = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: ShipmentGraphQL[];
 } => useGetReduxCatalog<ShipmentGraphQL>("shipmentsToMyAgency", config);
 
 export const useGetInvoicesByLab = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: InvoiceGraphQL[];
 } => useGetReduxCatalog<InvoiceGraphQL>("invoicesByLab", config);
 
 export const useGetInvoicesByCurrentAgency = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: InvoiceGraphQL[];
 } => useGetReduxCatalog<InvoiceGraphQL>("invoicesByCurrentAgency", config);
 
 export const useGetTiposDeMuestra = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: WebAppRowGraphQL<TipoMuestra>[];
@@ -527,7 +528,7 @@ export const useGetTiposDeMuestra = (
   useGetReduxCatalog<WebAppRowGraphQL<TipoMuestra>>("tiposDeMuestra", config);
 
 export const useGetMotivosDeRechazo = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: WebAppRowGraphQL<MotivoRechazo>[];
@@ -535,73 +536,84 @@ export const useGetMotivosDeRechazo = (
   useGetReduxCatalog<WebAppRowGraphQL<MotivoRechazo>>("motivosRechazo", config);
 
 export const useGetCCPorcentajesDeRechazo = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: WebAppRowGraphQL<CCPorcentajeRechazo>[];
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<CCPorcentajeRechazo>>(
     "ccPorcentajesDeRechazo",
-    config
+    config,
+  );
+
+export const useGetProgramaciones = (
+  config?: ReduxParamsConfig,
+): {
+  loading: boolean;
+  data: WebAppRowGraphQL<Programacion>[];
+} =>
+  useGetReduxCatalog<WebAppRowGraphQL<Programacion>>(
+    "programaciones4pinos",
+    config,
   );
 
 export const useGet4pinosSolicitudEliminacionPO = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: WebAppRowGraphQL<SolicitudEliminacionPO>[];
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<SolicitudEliminacionPO>>(
     "solicitudesEliminacionPO",
-    config
+    config,
   );
 
 export const useGet4pinosWeightLimitPerBasket = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: WebAppRowGraphQL<PesoMaximoPorCanasta>[];
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<PesoMaximoPorCanasta>>(
     "pesoMaximoPorCanasta",
-    config
+    config,
   );
 
 export const useGet4pinosPoDiscountHistory = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: WebAppRowGraphQL<PoDiscountHistory>[];
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<PoDiscountHistory>>(
     "poDiscountHistory",
-    config
+    config,
   );
 
 export const useGetAuthorizationsUpdateDiscountPO = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: WebAppRowGraphQL<AuthorizationUpdateDiscountPO>[];
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<AuthorizationUpdateDiscountPO>>(
     "authorizationUpdateDiscountPO",
-    config
+    config,
   );
 
 export const useGetBitacoraRechazoMasivo = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: WebAppRowGraphQL<BitacoraPOMassive>[];
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<BitacoraPOMassive>>(
     "bitacoraRechazoMasivo",
-    config
+    config,
   );
 
 export const useGetAllForms = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: FormGraphQL[];
@@ -609,15 +621,18 @@ export const useGetAllForms = (
   const data = useGetReduxCatalog<FormGraphQL>("allForms", config);
 
   // Filtrar los registros para obtener sólo los de la versión más alta.
-  const groupedByVersion = (data.data || []).reduce((acc, record) => {
-    const zid = record.zid;
+  const groupedByVersion = (data.data || []).reduce(
+    (acc, record) => {
+      const zid = record.zid;
 
-    if (!acc[zid]) {
-      acc[zid] = record;
-    }
+      if (!acc[zid]) {
+        acc[zid] = record;
+      }
 
-    return acc;
-  }, {} as { [key: string]: FormGraphQL });
+      return acc;
+    },
+    {} as { [key: string]: FormGraphQL },
+  );
 
   const latestVersionRecords = Object.values(groupedByVersion);
 
@@ -628,7 +643,7 @@ export const useGetAllForms = (
 };
 
 export const useGetInvoiceForms = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: FormGraphQL[];
@@ -636,15 +651,18 @@ export const useGetInvoiceForms = (
   const data = useGetReduxCatalog<FormGraphQL>("invoiceForms", config);
 
   // Filtrar los registros para obtener sólo los de la versión más alta.
-  const groupedByVersion = (data.data || []).reduce((acc, record) => {
-    const zid = record.zid;
+  const groupedByVersion = (data.data || []).reduce(
+    (acc, record) => {
+      const zid = record.zid;
 
-    if (!acc[zid]) {
-      acc[zid] = record;
-    }
+      if (!acc[zid]) {
+        acc[zid] = record;
+      }
 
-    return acc;
-  }, {} as { [key: string]: FormGraphQL });
+      return acc;
+    },
+    {} as { [key: string]: FormGraphQL },
+  );
 
   const latestVersionRecords = Object.values(groupedByVersion);
 
@@ -655,7 +673,7 @@ export const useGetInvoiceForms = (
 };
 
 export const useGetCaseForms = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: FormGraphQL[];
@@ -663,15 +681,18 @@ export const useGetCaseForms = (
   const data = useGetReduxCatalog<FormGraphQL>("caseForms", config);
 
   // Filtrar los registros para obtener sólo el primero de cada zid.
-  const firstRecordByZid = (data.data || []).reduce((acc, record) => {
-    const zid = record.zid;
+  const firstRecordByZid = (data.data || []).reduce(
+    (acc, record) => {
+      const zid = record.zid;
 
-    if (!acc[zid]) {
-      acc[zid] = record;
-    }
+      if (!acc[zid]) {
+        acc[zid] = record;
+      }
 
-    return acc;
-  }, {} as { [key: string]: FormGraphQL });
+      return acc;
+    },
+    {} as { [key: string]: FormGraphQL },
+  );
 
   const firstRecords = Object.values(firstRecordByZid);
 
@@ -682,7 +703,7 @@ export const useGetCaseForms = (
 };
 
 export const useGetInvoiceFormSubmissionsByAgencyId = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: SubmissionInvoicesGraphQL[];
@@ -695,18 +716,21 @@ export const useGetInvoiceFormSubmissionsByAgencyId = (
       otherParams: {
         agency_id: `${agencyId}`,
       },
-    }
+    },
   );
   // Filtrar los registros para obtener sólo los de la versión más alta.
-  const groupedByVersion = (data.data || []).reduce((acc, record) => {
-    const zid = record.settings_form_submission.zid;
+  const groupedByVersion = (data.data || []).reduce(
+    (acc, record) => {
+      const zid = record.settings_form_submission.zid;
 
-    if (!acc[zid]) {
-      acc[zid] = record;
-    }
+      if (!acc[zid]) {
+        acc[zid] = record;
+      }
 
-    return acc;
-  }, {} as { [key: string]: SubmissionInvoicesGraphQL });
+      return acc;
+    },
+    {} as { [key: string]: SubmissionInvoicesGraphQL },
+  );
 
   const latestVersionRecords = Object.values(groupedByVersion);
 
@@ -717,25 +741,28 @@ export const useGetInvoiceFormSubmissionsByAgencyId = (
 };
 
 export const useGetMyCaseFormSubmissions = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: SubmissionCasesGraphQL[];
 } => {
   const data = useGetReduxCatalog<SubmissionCasesGraphQL>(
     "myCaseFormSubmissions",
-    config
+    config,
   );
   // Filtrar los registros para obtener sólo los de la versión más alta.
-  const groupedByVersion = (data.data || []).reduce((acc, record) => {
-    const zid = record.settings_form_submission.zid;
+  const groupedByVersion = (data.data || []).reduce(
+    (acc, record) => {
+      const zid = record.settings_form_submission.zid;
 
-    if (!acc[zid]) {
-      acc[zid] = record;
-    }
+      if (!acc[zid]) {
+        acc[zid] = record;
+      }
 
-    return acc;
-  }, {} as { [key: string]: SubmissionCasesGraphQL });
+      return acc;
+    },
+    {} as { [key: string]: SubmissionCasesGraphQL },
+  );
 
   const latestVersionRecords = Object.values(groupedByVersion);
 
@@ -746,7 +773,7 @@ export const useGetMyCaseFormSubmissions = (
 };
 
 export const useGetCaseFormSubmissionsByCaseId = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: SubmissionCasesGraphQL[];
@@ -761,19 +788,22 @@ export const useGetCaseFormSubmissionsByCaseId = (
         caseId: `${caseId}`,
         withFiles: `${withFiles}`,
       },
-    }
+    },
   );
 
   // Filtrar los registros para obtener sólo los de la versión más alta.
-  const groupedByVersion = (data.data || []).reduce((acc, record) => {
-    const zid = record.settings_form_submission.zid;
+  const groupedByVersion = (data.data || []).reduce(
+    (acc, record) => {
+      const zid = record.settings_form_submission.zid;
 
-    if (!acc[zid]) {
-      acc[zid] = record;
-    }
+      if (!acc[zid]) {
+        acc[zid] = record;
+      }
 
-    return acc;
-  }, {} as { [key: string]: SubmissionCasesGraphQL });
+      return acc;
+    },
+    {} as { [key: string]: SubmissionCasesGraphQL },
+  );
 
   const latestVersionRecords = Object.values(groupedByVersion);
 
@@ -784,7 +814,7 @@ export const useGetCaseFormSubmissionsByCaseId = (
 };
 
 export const useGetInvoiceFormSubmissionsByInvoiceId = (
-  config?: ReduxParamsConfig
+  config?: ReduxParamsConfig,
 ): {
   loading: boolean;
   data: SubmissionInvoicesGraphQL[];
@@ -799,19 +829,22 @@ export const useGetInvoiceFormSubmissionsByInvoiceId = (
         invoiceId: `${invoiceId}`,
         withFiles: `${withFiles}`,
       },
-    }
+    },
   );
 
   // Filtrar los registros para obtener sólo los de la versión más alta.
-  const groupedByVersion = (data.data || []).reduce((acc, record) => {
-    const zid = record.settings_form_submission.zid;
+  const groupedByVersion = (data.data || []).reduce(
+    (acc, record) => {
+      const zid = record.settings_form_submission.zid;
 
-    if (!acc[zid]) {
-      acc[zid] = record;
-    }
+      if (!acc[zid]) {
+        acc[zid] = record;
+      }
 
-    return acc;
-  }, {} as { [key: string]: SubmissionInvoicesGraphQL });
+      return acc;
+    },
+    {} as { [key: string]: SubmissionInvoicesGraphQL },
+  );
 
   const latestVersionRecords = Object.values(groupedByVersion);
 
