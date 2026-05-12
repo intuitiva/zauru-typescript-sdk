@@ -463,6 +463,35 @@ export type WebAppTableCreateBody = {
   rows_type: string[];
 };
 
+export type WebAppRowAssociationItem = {
+  id: number;
+  rowable_type: string;
+  rowable_id: number;
+};
+
+export type WebAppRowAssociateBody = {
+  temp_purchase_order_id?: number | string;
+  temp_invoice_id?: number | string;
+  temp_shipment_id?: number | string;
+  temp_employee_id?: number | string;
+};
+
+export type WebAppRowAssociateResponse = {
+  webapp_row_id: number;
+  associations: WebAppRowAssociationItem[];
+  newly_created: WebAppRowAssociationItem[];
+};
+
+export type WebAppRowDissociateBody = WebAppRowAssociateBody & {
+  all?: boolean;
+};
+
+export type WebAppRowDissociateResponse = {
+  webapp_row_id: number;
+  removed_count: number;
+  associations: WebAppRowAssociationItem[];
+};
+
 export type GraphQLToken = {
   status: number;
   message: string;

@@ -1,6 +1,7 @@
 import type { Session } from "@remix-run/node";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
+  associateWebAppTableRegister,
   createWebAppTableRegister,
   deleteWebAppTableRegister,
   getVariablesByName,
@@ -8,9 +9,10 @@ import {
   updateWebAppTableRegister,
 } from "@zauru-sdk/services";
 import {
-  WebAppRowGraphQL,
-  Programacion,
   AxiosUtilsResponse,
+  Programacion,
+  WebAppRowAssociateResponse,
+  WebAppRowGraphQL,
   WebAppTableUpdateResponse,
 } from "@zauru-sdk/types";
 
@@ -99,6 +101,38 @@ export const deleteProgramacion = (
       programaciones_webapp_table_id,
       Number(id),
     );
+    return response;
+  });
+};
+
+/**
+ * Associate a PurchaseOrder to an existing programacion.
+ * @param headers Request headers.
+ * @param session Session object.
+ * @param id ID of the programacion (webapp row) to associate to.
+ * @param purchase_order_id ID of the PurchaseOrder to associate.
+ * @returns A Promise of AxiosUtilsResponse<WebAppRowAssociateResponse>.
+ */
+export const associatePurchaseOrderToProgramacion = (
+  headers: any,
+  session: Session,
+  id: string,
+  purchase_order_id: number | string,
+): Promise<AxiosUtilsResponse<WebAppRowAssociateResponse>> => {
+  return handlePossibleAxiosErrors(async () => {
+    const { programaciones_webapp_table_id } = await getVariablesByName(
+      headers,
+      session,
+      ["programaciones_webapp_table_id"],
+    );
+
+    const response = await associateWebAppTableRegister(
+      headers,
+      programaciones_webapp_table_id,
+      Number(id),
+      { temp_purchase_order_id: purchase_order_id },
+    );
+
     return response;
   });
 };

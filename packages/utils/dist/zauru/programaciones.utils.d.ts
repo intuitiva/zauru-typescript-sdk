@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { WebAppRowGraphQL, Programacion, AxiosUtilsResponse, WebAppTableUpdateResponse } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, Programacion, WebAppRowAssociateResponse, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 /**
  * Get programaciones from the web app table.
  * @param headers Request headers.
@@ -23,6 +23,15 @@ export declare const createProgramacion: (headers: any, session: Session, body: 
  * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
 export declare const deleteProgramacion: (headers: any, session: Session, id: string) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+/**
+ * Associate a PurchaseOrder to an existing programacion.
+ * @param headers Request headers.
+ * @param session Session object.
+ * @param id ID of the programacion (webapp row) to associate to.
+ * @param purchase_order_id ID of the PurchaseOrder to associate.
+ * @returns A Promise of AxiosUtilsResponse<WebAppRowAssociateResponse>.
+ */
+export declare const associatePurchaseOrderToProgramacion: (headers: any, session: Session, id: string, purchase_order_id: number | string) => Promise<AxiosUtilsResponse<WebAppRowAssociateResponse>>;
 /**
  * Update a programacion in the web app table.
  * @param headers Request headers.

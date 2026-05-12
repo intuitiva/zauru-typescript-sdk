@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, RejectionWebAppTableObject, WebAppRowGraphQL, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, RejectionWebAppTableObject, WebAppRowAssociateBody, WebAppRowAssociateResponse, WebAppRowDissociateBody, WebAppRowDissociateResponse, WebAppRowGraphQL, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 /**
  * getWebAppRow
  * @param headers
@@ -39,6 +39,17 @@ export declare function createWebAppTableRegister<T>(headers: any, id_web_app_ta
  * @returns
  */
 export declare function updateWebAppTableRegister<T>(headers: any, id_web_app_table: string, id_register: number | string, body: Partial<T>): Promise<WebAppTableUpdateResponse>;
+/**
+ * associateWebAppTableRegister — links one or more rowables to an existing row
+ * POST /apps/webapp_tables/:webapp_table_id/webapp_rows/:id/associate.json
+ */
+export declare function associateWebAppTableRegister(headers: any, id_web_app_table: string, id_register: number | string, body: WebAppRowAssociateBody): Promise<WebAppRowAssociateResponse>;
+/**
+ * dissociateWebAppTableRegister — removes rowable associations from an existing row.
+ * Pass specific temp_* ids to remove only those, or { all: true } to remove all.
+ * DELETE /apps/webapp_tables/:webapp_table_id/webapp_rows/:id/dissociate.json
+ */
+export declare function dissociateWebAppTableRegister(headers: any, id_web_app_table: string, id_register: number | string, body: WebAppRowDissociateBody): Promise<WebAppRowDissociateResponse>;
 /**
  *
  * @param headers

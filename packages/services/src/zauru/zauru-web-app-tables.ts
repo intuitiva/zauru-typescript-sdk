@@ -4,6 +4,10 @@ import {
   AxiosUtilsResponse,
   MotivoRechazo,
   RejectionWebAppTableObject,
+  WebAppRowAssociateBody,
+  WebAppRowAssociateResponse,
+  WebAppRowDissociateBody,
+  WebAppRowDissociateResponse,
   WebAppRowGraphQL,
   WebAppTableBody,
   WebAppTableCreateBody,
@@ -167,6 +171,51 @@ export async function updateWebAppTableRegister<T>(
       method: "PATCH",
       headers: headers,
       data: requestBody,
+    }
+  );
+
+  return response.data;
+}
+
+/**
+ * associateWebAppTableRegister — links one or more rowables to an existing row
+ * POST /apps/webapp_tables/:webapp_table_id/webapp_rows/:id/associate.json
+ */
+export async function associateWebAppTableRegister(
+  headers: any,
+  id_web_app_table: string,
+  id_register: number | string,
+  body: WebAppRowAssociateBody
+): Promise<WebAppRowAssociateResponse> {
+  const response = await httpZauru<WebAppRowAssociateResponse>(
+    `/apps/webapp_tables/${id_web_app_table}/webapp_rows/${id_register}/associate.json`,
+    {
+      method: "POST",
+      headers: headers,
+      data: body,
+    }
+  );
+
+  return response.data;
+}
+
+/**
+ * dissociateWebAppTableRegister — removes rowable associations from an existing row.
+ * Pass specific temp_* ids to remove only those, or { all: true } to remove all.
+ * DELETE /apps/webapp_tables/:webapp_table_id/webapp_rows/:id/dissociate.json
+ */
+export async function dissociateWebAppTableRegister(
+  headers: any,
+  id_web_app_table: string,
+  id_register: number | string,
+  body: WebAppRowDissociateBody
+): Promise<WebAppRowDissociateResponse> {
+  const response = await httpZauru<WebAppRowDissociateResponse>(
+    `/apps/webapp_tables/${id_web_app_table}/webapp_rows/${id_register}/dissociate.json`,
+    {
+      method: "DELETE",
+      headers: headers,
+      data: body,
     }
   );
 
