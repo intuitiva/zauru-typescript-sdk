@@ -25,7 +25,7 @@ import formSavedDataReducer from "./slices/formsSavedData.slice.js";
  * private mode, Safari, or nearly full disks can lower the effective cap. Other
  * apps on the same origin share the same quota.
  */
-export const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v6.0";
+export const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v7.0";
 
 function isQuotaExceededError(error: unknown): boolean {
   if (error instanceof DOMException && error.name === "QuotaExceededError") {
@@ -44,21 +44,18 @@ function persistReduxStateToLocalStorage(state: RootState): void {
     return;
   }
   try {
-    localStorage.setItem(
-      LOCAL_STORAGE_REDUX_NAME,
-      JSON.stringify(state)
-    );
+    localStorage.setItem(LOCAL_STORAGE_REDUX_NAME, JSON.stringify(state));
   } catch (error) {
     if (isQuotaExceededError(error)) {
       console.warn(
         "[@zauru-sdk/redux] localStorage quota exceeded; Redux state was not persisted.",
-        { key: LOCAL_STORAGE_REDUX_NAME, error }
+        { key: LOCAL_STORAGE_REDUX_NAME, error },
       );
       return;
     }
     console.error(
       "[@zauru-sdk/redux] Failed to persist Redux state to localStorage.",
-      error
+      error,
     );
   }
 }
@@ -195,12 +192,12 @@ export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
     if (isQuotaExceededError(e)) {
       console.warn(
         "[@zauru-sdk/redux] localStorage quota exceeded while saving after cleanLocalStorage.",
-        { key: LOCAL_STORAGE_REDUX_NAME, error: e }
+        { key: LOCAL_STORAGE_REDUX_NAME, error: e },
       );
     } else {
       console.error(
         "Ocurrió un error al clonar y eliminar el viejo localStorage",
-        e
+        e,
       );
     }
   }
