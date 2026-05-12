@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.33.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.32.4...v2.33.0) (2026-05-12)
+
+
+### Features
+
+* update redux version ([b239b9f](https://github.com/intuitiva/zauru-typescript-sdk/commit/b239b9f0606280261f29afc566858f2dc4bdaac4))
+
+
+
+
+
 ## [2.32.4](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.32.3...v2.32.4) (2026-05-12)
 
 **Note:** Version bump only for package @zauru-sdk/redux
