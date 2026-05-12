@@ -12,17 +12,61 @@ import automaticNumberReducer from "./slices/automaticNumbers.slice.js";
 import tableReducer from "./slices/tables.slice.js";
 import formSavedDataReducer from "./slices/formsSavedData.slice.js";
 
+/**
+ * Full Redux snapshot key in `localStorage`. Written by
+ * `persistanceLocalStorageMiddleware` after every action.
+ *
+ * **QuotaExceededError:** Browsers cap `localStorage` per origin (often ~5MiB,
+ * not standardized). `setItem` throws `QuotaExceededError` when the new value
+ * plus existing data for that origin exceeds the cap.
+ *
+ * **Why only some tenants/devices:** Serialized state grows with cached
+ * catalogs (items, invoices, forms, etc.). Heavy tenants hit the limit sooner;
+ * private mode, Safari, or nearly full disks can lower the effective cap. Other
+ * apps on the same origin share the same quota.
+ */
 export const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v6.0";
+
+function isQuotaExceededError(error: unknown): boolean {
+  if (error instanceof DOMException && error.name === "QuotaExceededError") {
+    return true;
+  }
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "name" in error &&
+    (error as { name?: string }).name === "QuotaExceededError"
+  );
+}
+
+function persistReduxStateToLocalStorage(state: RootState): void {
+  if (typeof document === "undefined") {
+    return;
+  }
+  try {
+    localStorage.setItem(
+      LOCAL_STORAGE_REDUX_NAME,
+      JSON.stringify(state)
+    );
+  } catch (error) {
+    if (isQuotaExceededError(error)) {
+      console.warn(
+        "[@zauru-sdk/redux] localStorage quota exceeded; Redux state was not persisted.",
+        { key: LOCAL_STORAGE_REDUX_NAME, error }
+      );
+      return;
+    }
+    console.error(
+      "[@zauru-sdk/redux] Failed to persist Redux state to localStorage.",
+      error
+    );
+  }
+}
 
 const persistanceLocalStorageMiddleware =
   (store: MiddlewareAPI) => (next: (action: any) => any) => (action: any) => {
     const result = next(action);
-    if (!(typeof document === "undefined")) {
-      localStorage.setItem(
-        LOCAL_STORAGE_REDUX_NAME,
-        JSON.stringify(store.getState() as RootState)
-      );
-    }
+    persistReduxStateToLocalStorage(store.getState() as RootState);
     return result;
   };
 
@@ -145,12 +189,20 @@ export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
       }
 
       // Guarda el nuevo estado en el almacenamiento local
-      localStorage.setItem(LOCAL_STORAGE_REDUX_NAME, JSON.stringify(newState));
+      persistReduxStateToLocalStorage(newState);
     }
   } catch (e) {
-    console.error(
-      "Ocurrió un error al clonar y eliminar el viejo localStorage"
-    );
+    if (isQuotaExceededError(e)) {
+      console.warn(
+        "[@zauru-sdk/redux] localStorage quota exceeded while saving after cleanLocalStorage.",
+        { key: LOCAL_STORAGE_REDUX_NAME, error: e }
+      );
+    } else {
+      console.error(
+        "Ocurrió un error al clonar y eliminar el viejo localStorage",
+        e
+      );
+    }
   }
 };
 

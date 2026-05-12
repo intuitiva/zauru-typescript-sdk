@@ -1,5 +1,18 @@
 import type { TypedUseSelectorHook } from "react-redux";
 import { Tuple } from "@reduxjs/toolkit";
+/**
+ * Full Redux snapshot key in `localStorage`. Written by
+ * `persistanceLocalStorageMiddleware` after every action.
+ *
+ * **QuotaExceededError:** Browsers cap `localStorage` per origin (often ~5MiB,
+ * not standardized). `setItem` throws `QuotaExceededError` when the new value
+ * plus existing data for that origin exceeds the cap.
+ *
+ * **Why only some tenants/devices:** Serialized state grows with cached
+ * catalogs (items, invoices, forms, etc.). Heavy tenants hit the limit sooner;
+ * private mode, Safari, or nearly full disks can lower the effective cap. Other
+ * apps on the same origin share the same quota.
+ */
 export declare const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v6.0";
 type Whitelist = {
     [K in keyof RootState]?: string[];
