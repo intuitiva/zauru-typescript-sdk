@@ -762,6 +762,7 @@ export type Programacion = {
   fecha_cosecha_inicio: string;
   fecha_cosecha_fin: string;
   prestamo_maximo_pos_gtq: number;
+  purchase_orders: Partial<PurchaseOrderGraphQL>[];
 };
 
 export type RejectionWebAppTableObject = {
