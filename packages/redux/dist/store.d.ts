@@ -13,7 +13,7 @@ import { Tuple } from "@reduxjs/toolkit";
  * private mode, Safari, or nearly full disks can lower the effective cap. Other
  * apps on the same origin share the same quota.
  */
-export declare const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v6.0";
+export declare const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v7.0";
 type Whitelist = {
     [K in keyof RootState]?: string[];
 };

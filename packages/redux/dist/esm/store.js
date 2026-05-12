@@ -28,7 +28,7 @@ const formsSavedData_slice_js_1 = __importDefault(require("./slices/formsSavedDa
  * private mode, Safari, or nearly full disks can lower the effective cap. Other
  * apps on the same origin share the same quota.
  */
-exports.LOCAL_STORAGE_REDUX_NAME = "___redux__state__v6.0";
+exports.LOCAL_STORAGE_REDUX_NAME = "___redux__state__v7.0";
 function isQuotaExceededError(error) {
     if (error instanceof DOMException && error.name === "QuotaExceededError") {
         return true;
