@@ -1,0 +1,86 @@
+{
+  "name": "@appocus/ui",
+  "version": "0.1.0",
+  "description": "Shadcn UI primitives, theme provider, themed toaster, login form and not-found component for Appocus apps. Tailwind v4 source files are scanned by consumers via the `@source` directive.",
+  "main": "./dist/esm/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "npm run build:esm",
+    "build:esm": "tsc -p tsconfig.esm.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": {
+    "name": "Oscar Cuellar",
+    "email": "usackoka@gmail.com"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@appocus/config": "*",
+    "@hookform/resolvers": "*",
+    "@radix-ui/react-alert-dialog": "*",
+    "@radix-ui/react-avatar": "*",
+    "@radix-ui/react-collapsible": "*",
+    "@radix-ui/react-dialog": "*",
+    "@radix-ui/react-dropdown-menu": "*",
+    "@radix-ui/react-label": "*",
+    "@radix-ui/react-popover": "*",
+    "@radix-ui/react-select": "*",
+    "@radix-ui/react-separator": "*",
+    "@radix-ui/react-slot": "*",
+    "@radix-ui/react-tooltip": "*",
+    "class-variance-authority": "*",
+    "clsx": "*",
+    "cmdk": "*",
+    "lucide-react": "*",
+    "next-themes": "*",
+    "radix-ui": "*",
+    "react": "^18.2.0 || ^19.0.0",
+    "react-day-picker": "*",
+    "react-dom": "^18.2.0 || ^19.0.0",
+    "react-hook-form": "*",
+    "react-router": "^7.0.0",
+    "sonner": "^1.0.0 || ^2.0.0",
+    "tailwind-merge": "*"
+  },
+  "peerDependenciesMeta": {
+    "@hookform/resolvers": { "optional": true },
+    "react-hook-form": { "optional": true }
+  },
+  "devDependencies": {
+    "@appocus/config": "workspace:^",
+    "@radix-ui/react-alert-dialog": "^1.1.15",
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-collapsible": "^1.1.12",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-popover": "^1.1.15",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-separator": "^1.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "lucide-react": "^0.563.0",
+    "next-themes": "^0.4.6",
+    "radix-ui": "^1.4.3",
+    "react": "^19.0.0",
+    "react-day-picker": "^9.13.0",
+    "react-dom": "^19.0.0",
+    "react-router": "^7.10.1",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.4.0",
+    "typescript": "^5.1.6"
+  }
+}

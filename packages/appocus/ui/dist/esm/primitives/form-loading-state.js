@@ -1,0 +1,6 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { Skeleton } from "./skeleton.js";
+import { Card, CardContent, CardHeader } from "./card.js";
+export function FormLoadingState({ title = "Cargando...", description = "Obteniendo información", fieldsCount = 6, }) {
+    return (_jsxs("div", { className: "flex flex-1 flex-col gap-6 p-4 md:p-6 animate-pulse", children: [_jsxs("div", { className: "flex items-center gap-4", children: [_jsx(Skeleton, { className: "h-10 w-10 rounded-md" }), _jsxs("div", { className: "flex-1 space-y-2", children: [_jsx(Skeleton, { className: "h-7 w-48" }), _jsx(Skeleton, { className: "h-4 w-64" })] })] }), _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsx(Skeleton, { className: "h-6 w-40" }) }), _jsxs(CardContent, { className: "space-y-6", children: [_jsx("div", { className: "grid grid-cols-1 gap-6 md:grid-cols-2", children: Array.from({ length: fieldsCount }).map((_, i) => (_jsxs("div", { className: "space-y-2", children: [_jsx(Skeleton, { className: "h-4 w-24" }), _jsx(Skeleton, { className: "h-10 w-full" })] }, i))) }), _jsxs("div", { className: "space-y-2", children: [_jsx(Skeleton, { className: "h-4 w-32" }), _jsx(Skeleton, { className: "h-24 w-full" })] }), _jsx("div", { className: "flex justify-end pt-4", children: _jsx(Skeleton, { className: "h-10 w-32" }) })] })] })] }));
+}

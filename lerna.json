@@ -1,9 +1,7 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "5.0.3",
-  "packages": [
-    "packages/webapp/*"
-  ],
+  "version": "independent",
+  "packages": ["packages/webapp/*", "packages/appocus/*"],
   "npmClient": "pnpm",
   "command": {
     "publish": {

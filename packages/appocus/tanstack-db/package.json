@@ -1,0 +1,38 @@
+{
+  "name": "@appocus/tanstack-db",
+  "version": "0.1.0",
+  "description": "Generic helpers for Appocus apps built on TanStack DB + Electric SQL + Drizzle: browser SQLite persistence singleton, committed-txid handshake, and result sanitizers.",
+  "main": "./dist/esm/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "npm run build:esm",
+    "build:esm": "tsc -p tsconfig.esm.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": {
+    "name": "Oscar Cuellar",
+    "email": "usackoka@gmail.com"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@tanstack/browser-db-sqlite-persistence": "*",
+    "drizzle-orm": "*"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/browser-db-sqlite-persistence": { "optional": true }
+  },
+  "devDependencies": {
+    "@tanstack/browser-db-sqlite-persistence": "^0.1.4",
+    "@types/node": "^22",
+    "drizzle-orm": "^0.45.1",
+    "typescript": "^5.1.6"
+  }
+}
