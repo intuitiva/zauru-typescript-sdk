@@ -193,3 +193,5 @@ pnpm unlink @zauru-sdk/webapp-config
 - La configuración de workspaces está en [`pnpm-workspace.yaml`](pnpm-workspace.yaml).
 - En la raíz hay un [`.npmrc`](.npmrc) con `public-hoist-pattern` para tipos, **registry** y **`@zauru-sdk:registry`** apuntando a `https://registry.npmjs.org/`.
 - Los tokens npm no deben versionarse: usa `~/.npmrc` o variables de entorno en CI. El archivo **`.npmrc.local`** no lo carga npm/pnpm por defecto (solo si lo enlazas tú o copias el token a `~/.npmrc`).
+
+npx lerna run build --scope '@appocus/*'
