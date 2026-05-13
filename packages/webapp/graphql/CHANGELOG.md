@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/v5.0.1...v5.0.2) (2026-05-13)
+
+
+### Bug Fixes
+
+* **publish:** explicit npmjs registry, lerna flags, and workspace protocol sync ([fd57ef3](https://github.com/intuitiva/zauru-typescript-sdk/commit/fd57ef30ffb91021e54bc9e078be794a4f4acfe5))
+
+
+
+
+
 ## [5.0.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/v5.0.0...v5.0.1) (2026-05-13)
 
 **Note:** Version bump only for package @zauru-sdk/webapp-graphql
