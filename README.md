@@ -4,12 +4,20 @@ Monorepo de paquetes del SDK de Zauru para TypeScript. Usa [**pnpm workspaces**]
 
 ## Requisitos
 
-- **Node.js** 18+ (recomendado LTS).
-- **pnpm** 9 (el repo fija la versión con `packageManager` en la raíz). Con [Corepack](https://nodejs.org/api/corepack.html):
+- **Node.js** 18+ (recomendado LTS; ver `engines` en el `package.json` de la raíz).
+- **pnpm** 9 o superior. No fijamos una versión exacta en el repo: instala o activa **siempre la última** pnpm estable antes de instalar o publicar.
+
+  Con [Corepack](https://nodejs.org/api/corepack.html) (recomendado):
 
   ```bash
   corepack enable
-  corepack prepare pnpm@9.15.9 --activate
+  corepack prepare pnpm@latest --activate
+  ```
+
+  O con npm global:
+
+  ```bash
+  npm install -g pnpm@latest
   ```
 
 ## Instalación
