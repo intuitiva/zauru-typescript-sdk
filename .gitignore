@@ -8,3 +8,4 @@ packages/common/.DS_Store
 .npmrc.local
 packages/webapp/common/.DS_Store
 .npmrc
+.DS_Store
