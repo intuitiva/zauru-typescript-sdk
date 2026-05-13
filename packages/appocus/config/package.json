@@ -1,6 +1,6 @@
 {
   "name": "@appocus/config",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Shared types and React context for Appocus white-label configuration (branding, assets, OAuth window names, PWA metadata, base copy).",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
