@@ -18,8 +18,8 @@ importers:
         specifier: ^2.8.1
         version: 2.12.1(typescript@5.6.2)
       '@zauru-sdk/webapp-types':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../types
       moment:
         specifier: ^2.30.1
         version: 2.30.1
@@ -49,23 +49,23 @@ importers:
         specifier: ^2.8.1
         version: 2.12.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)
       '@zauru-sdk/webapp-common':
-        specifier: ^3.0.0
-        version: 3.0.0(typescript@5.6.2)
+        specifier: workspace:^
+        version: link:../common
       '@zauru-sdk/webapp-hooks':
-        specifier: ^3.0.0
-        version: 3.0.0(@types/react@18.3.9)(redux@5.0.1)(typescript@5.6.2)
+        specifier: workspace:^
+        version: link:../hooks
       '@zauru-sdk/webapp-icons':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../icons
       '@zauru-sdk/webapp-redux':
-        specifier: ^3.0.0
-        version: 3.0.0(@types/react@18.3.9)(redux@5.0.1)
+        specifier: workspace:^
+        version: link:../redux
       '@zauru-sdk/webapp-types':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../types
       '@zauru-sdk/webapp-utils':
-        specifier: ^3.0.0
-        version: 3.0.0(typescript@5.6.2)
+        specifier: workspace:^
+        version: link:../utils
       browser-image-compression:
         specifier: ^2.0.2
         version: 2.0.2
@@ -149,17 +149,17 @@ importers:
         specifier: ^2.8.1
         version: 2.12.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)
       '@zauru-sdk/webapp-common':
-        specifier: ^3.0.0
-        version: 3.0.0(typescript@5.6.2)
+        specifier: workspace:^
+        version: link:../common
       '@zauru-sdk/webapp-icons':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../icons
       '@zauru-sdk/webapp-redux':
-        specifier: ^3.0.0
-        version: 3.0.0(@types/react@18.3.9)(redux@5.0.1)
+        specifier: workspace:^
+        version: link:../redux
       '@zauru-sdk/webapp-types':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../types
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -208,8 +208,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.7(react-redux@9.1.2(@types/react@18.3.9)(react@18.3.1)(redux@5.0.1))(react@18.3.1)
       '@zauru-sdk/webapp-types':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../types
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -242,17 +242,17 @@ importers:
         specifier: ^1.34.5
         version: 1.34.5
       '@zauru-sdk/webapp-common':
-        specifier: ^3.0.0
-        version: 3.0.0(typescript@5.6.2)
+        specifier: workspace:^
+        version: link:../common
       '@zauru-sdk/webapp-config':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../config
       '@zauru-sdk/webapp-graphql':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../graphql
       '@zauru-sdk/webapp-types':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../types
       axios:
         specifier: ^1.6.7
         version: 1.7.7
@@ -279,20 +279,20 @@ importers:
         specifier: ^2.8.1
         version: 2.12.1(typescript@5.6.2)
       '@zauru-sdk/webapp-common':
-        specifier: ^3.0.0
-        version: 3.0.0(typescript@5.6.2)
+        specifier: workspace:^
+        version: link:../common
       '@zauru-sdk/webapp-config':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../config
       '@zauru-sdk/webapp-graphql':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../graphql
       '@zauru-sdk/webapp-services':
-        specifier: ^3.0.0
-        version: 3.0.0(typescript@5.6.2)
+        specifier: workspace:^
+        version: link:../services
       '@zauru-sdk/webapp-types':
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: workspace:^
+        version: link:../types
       moment:
         specifier: ^2.30.1
         version: 2.30.1
@@ -933,33 +933,6 @@ packages:
   '@yarnpkg/parsers@3.0.0-rc.46':
     resolution: {integrity: sha512-aiATs7pSutzda/rq8fnuPwTglyVwjM22bNnK2ZgjrpAjQHSSl3lztd2f9evst1W/qnC58DRz7T7QndUDumAR4Q==}
     engines: {node: '>=14.15.0'}
-
-  '@zauru-sdk/webapp-common@3.0.0':
-    resolution: {integrity: sha512-717t3QGjV9iObonmeHbKwhz22+VKpeRTlzaAbOHJKdgh7eLyV9ZXUYtcR8NpQDrpz+AnLb0nNdNWnL1NISt+tw==}
-
-  '@zauru-sdk/webapp-config@3.0.0':
-    resolution: {integrity: sha512-5yZXxBy3WQ36uR3xVQPsNulhYHEwZQ8/i9XPFrdiUh7xYsK6jvPr25TmdDohxFs83mxEgYXkF8M4uakAbavZOg==}
-
-  '@zauru-sdk/webapp-graphql@3.0.0':
-    resolution: {integrity: sha512-g6yp2PC6Azh/t0KVNaBQs3jmg8kuc7b/YW1hPq4kBte8T2/kVHdZMp5+0YOXgMgWCxnZEsuM1QLlIauzLT82zA==}
-
-  '@zauru-sdk/webapp-hooks@3.0.0':
-    resolution: {integrity: sha512-KwtZewUzgbkqMyggI2yCA6kG+u8I8EGOVOakDaNjLLd1KBXRpCSzM7EgveIKnAUB8Sa9VjEPTYaY/geN58V+CA==}
-
-  '@zauru-sdk/webapp-icons@3.0.0':
-    resolution: {integrity: sha512-taSbAQnqIJEtO21qOc/Vy8vaAi9Ir9xCHGFY2FvVPOCzTa7YHrOnvdIzf2kpLxCLSTxLFuj4Rii0ZvEdSqcfUQ==}
-
-  '@zauru-sdk/webapp-redux@3.0.0':
-    resolution: {integrity: sha512-092JG5IQVyup+K7IeuB8KLFXTc9zpZAJcpiBpGveAHVLeQPeBclj066+FyWX2KFoVtVigEk+cM3tFQXiFZrW0g==}
-
-  '@zauru-sdk/webapp-services@3.0.0':
-    resolution: {integrity: sha512-qPjeJi6LVnhqlxsyXM3sQs4Wze/VQDmZBXVkGkWwiNb34CYCN/NvubbkfdAN3q+NOd2oXJutOaxyLyxmkYfO9A==}
-
-  '@zauru-sdk/webapp-types@3.0.0':
-    resolution: {integrity: sha512-wOd7e/+mTK4K5PQIvsxMmC81k+10fKT6R4ufboVZmpEyHYHq2R5Aboszg3fHWMZQrd2b89IBXaGDMx4vLp1JxQ==}
-
-  '@zauru-sdk/webapp-utils@3.0.0':
-    resolution: {integrity: sha512-4p3PrK4ITuPkcdOCvoIiCYSgbYXjdSaMvUfF1eGjnY50+K1towOrDQutHQR0dy44YIkas50m0MVfcPjG6BwvHg==}
 
   '@zkochan/js-yaml@0.0.7':
     resolution: {integrity: sha512-nrUSn7hzt7J6JWgWGz78ZYI8wj+gdIJdk0Ynjpp8l+trkn58Uqsf6RYrYkEK+3X18EX+TNdtJI0WxAtc+L84SQ==}
@@ -4277,80 +4250,6 @@ snapshots:
     dependencies:
       js-yaml: 3.14.1
       tslib: 2.7.0
-
-  '@zauru-sdk/webapp-common@3.0.0(typescript@5.6.2)':
-    dependencies:
-      '@remix-run/node': 2.12.1(typescript@5.6.2)
-      '@zauru-sdk/webapp-types': 3.0.0
-      moment: 2.30.1
-      moment-timezone: 0.5.45
-    transitivePeerDependencies:
-      - typescript
-
-  '@zauru-sdk/webapp-config@3.0.0': {}
-
-  '@zauru-sdk/webapp-graphql@3.0.0': {}
-
-  '@zauru-sdk/webapp-hooks@3.0.0(@types/react@18.3.9)(redux@5.0.1)(typescript@5.6.2)':
-    dependencies:
-      '@remix-run/react': 2.12.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.2)
-      '@zauru-sdk/webapp-common': 3.0.0(typescript@5.6.2)
-      '@zauru-sdk/webapp-icons': 3.0.0
-      '@zauru-sdk/webapp-redux': 3.0.0(@types/react@18.3.9)(redux@5.0.1)
-      '@zauru-sdk/webapp-types': 3.0.0
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-    transitivePeerDependencies:
-      - '@types/react'
-      - redux
-      - supports-color
-      - typescript
-
-  '@zauru-sdk/webapp-icons@3.0.0':
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  '@zauru-sdk/webapp-redux@3.0.0(@types/react@18.3.9)(redux@5.0.1)':
-    dependencies:
-      '@reduxjs/toolkit': 2.2.7(react-redux@9.1.2(@types/react@18.3.9)(react@18.3.1)(redux@5.0.1))(react@18.3.1)
-      '@zauru-sdk/webapp-types': 3.0.0
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-redux: 9.1.2(@types/react@18.3.9)(react@18.3.1)(redux@5.0.1)
-      react-select: 5.8.1(@types/react@18.3.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-    transitivePeerDependencies:
-      - '@types/react'
-      - redux
-      - supports-color
-
-  '@zauru-sdk/webapp-services@3.0.0(typescript@5.6.2)':
-    dependencies:
-      '@remix-run/node': 2.12.1(typescript@5.6.2)
-      '@upstash/redis': 1.34.5
-      '@zauru-sdk/webapp-common': 3.0.0(typescript@5.6.2)
-      '@zauru-sdk/webapp-config': 3.0.0
-      '@zauru-sdk/webapp-graphql': 3.0.0
-      '@zauru-sdk/webapp-types': 3.0.0
-      axios: 1.7.7
-      chalk: 5.3.0
-    transitivePeerDependencies:
-      - debug
-      - typescript
-
-  '@zauru-sdk/webapp-types@3.0.0': {}
-
-  '@zauru-sdk/webapp-utils@3.0.0(typescript@5.6.2)':
-    dependencies:
-      '@remix-run/node': 2.12.1(typescript@5.6.2)
-      '@zauru-sdk/webapp-common': 3.0.0(typescript@5.6.2)
-      '@zauru-sdk/webapp-config': 3.0.0
-      '@zauru-sdk/webapp-graphql': 3.0.0
-      '@zauru-sdk/webapp-services': 3.0.0(typescript@5.6.2)
-      '@zauru-sdk/webapp-types': 3.0.0
-    transitivePeerDependencies:
-      - debug
-      - typescript
 
   '@zkochan/js-yaml@0.0.7':
     dependencies:

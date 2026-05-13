@@ -82,6 +82,8 @@ El flujo sigue siendo el de siempre: **Lerna** lee los commits convencionales (`
 
 Lerna te propondrá la nueva versión en función de los commits desde el último release. Si solo cambió un subconjunto de paquetes, puedes usar las opciones de Lerna (`--force-publish`, etc.) según tu política; el comportamiento por defecto es el mismo ecosistema que ya tenías con Yarn + Lerna.
 
+**Importante (pnpm):** las dependencias **entre** paquetes `@zauru-sdk/webapp-*` deben usar el protocolo **`workspace:^`** en cada `package.json`. Así, cuando Lerna sube la versión y ejecuta `pnpm install --lockfile-only`, pnpm enlaza contra los workspaces locales y **no** intenta bajar del registry una versión que aún no está publicada (evita `ERR_PNPM_NO_MATCHING_VERSION`). Al publicar, pnpm reescribe esas referencias en el `package.json` del tarball con el rango semver correcto para los consumidores.
+
 ## Añadir una nueva librería al monorepo
 
 1. Crea una carpeta bajo `packages/webapp/<nombre-corto>/` (por ejemplo `packages/webapp/my-feature/`).
@@ -108,7 +110,7 @@ Lerna te propondrá la nueva versión en función de los commits desde el últim
 
 3. Declara en `dependencies` / `devDependencies` **todas** las dependencias que importes (pnpm no “adivina” dependencias transitivas como a veces hacía la instalación clásica con hoisting plano).
 
-4. Referencia otros paquetes del monorepo con el mismo prefijo, por ejemplo `"@zauru-sdk/webapp-types": "workspace:^"` o `"^3.0.0"` alineado con la versión actual del monorepo.
+4. Referencia otros paquetes de este monorepo siempre con **`"workspace:^"`** (p. ej. `"@zauru-sdk/webapp-types": "workspace:^"`). No uses solo `^x.y.z` hacia otro paquete del mismo repo: en `lerna publish` pnpm intentaría resolverlo en npm antes de que exista la release.
 
 5. No hace falta tocar `pnpm-workspace.yaml` si el paquete cae bajo el glob `packages/webapp/*`.
 

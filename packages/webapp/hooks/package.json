@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/webapp-hooks",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Hooks reutilizables dentro de las webapps de Zauru.",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
@@ -26,10 +26,10 @@
   },
   "dependencies": {
     "@remix-run/react": "^2.8.1",
-    "@zauru-sdk/webapp-common": "^3.0.0",
-    "@zauru-sdk/webapp-icons": "^3.0.0",
-    "@zauru-sdk/webapp-redux": "^3.0.0",
-    "@zauru-sdk/webapp-types": "^3.0.0",
+    "@zauru-sdk/webapp-common": "workspace:^",
+    "@zauru-sdk/webapp-icons": "workspace:^",
+    "@zauru-sdk/webapp-redux": "workspace:^",
+    "@zauru-sdk/webapp-types": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
