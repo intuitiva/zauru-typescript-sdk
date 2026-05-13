@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.33.0...v4.0.0) (2026-05-13)
+
+
+* feat!: move packages to packages/webapp and rename to @zauru-sdk/webapp-* ([64ca702](https://github.com/intuitiva/zauru-typescript-sdk/commit/64ca702ba340e15a9e6585ca856130f649ac2ef3))
+
+
+### BREAKING CHANGES
+
+* Published package names are now @zauru-sdk/webapp-<name>
+(e.g. @zauru-sdk/webapp-services). Workspace layout is packages/webapp/*.
+Monorepo version set to 3.0.0.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+
+
+
+
 ## [2.32.3](https://github.com/intuitiva/zauru-typescript-sdk/compare/v2.32.2...v2.32.3) (2026-05-12)
 
 **Note:** Version bump only for package @zauru-sdk/services
