@@ -31,11 +31,12 @@
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
-    "@zauru-sdk/webapp-config": "workspace:^",
-    "@zauru-sdk/webapp-services": "workspace:^",
+    "@zauru-sdk/webapp-config": "^5.0.3",
+    "@zauru-sdk/webapp-services": "^5.0.3",
     "react": "^19.0.0",
     "react-router": "^7.10.1",
     "sonner": "^2.0.7",
     "typescript": "^5.1.6"
-  }
+  },
+  "gitHead": "9c14d098c631176b83b33bc69bc9b6182b453f5a"
 }

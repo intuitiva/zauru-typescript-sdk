@@ -27,12 +27,15 @@
     "drizzle-orm": "*"
   },
   "peerDependenciesMeta": {
-    "@tanstack/browser-db-sqlite-persistence": { "optional": true }
+    "@tanstack/browser-db-sqlite-persistence": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@tanstack/browser-db-sqlite-persistence": "^0.1.4",
     "@types/node": "^22",
     "drizzle-orm": "^0.45.1",
     "typescript": "^5.1.6"
-  }
+  },
+  "gitHead": "9c14d098c631176b83b33bc69bc9b6182b453f5a"
 }
