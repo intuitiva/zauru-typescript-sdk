@@ -1,2 +1,4 @@
 packages:
   - "packages/webapp/*"
+allowBuilds:
+  nx: true
