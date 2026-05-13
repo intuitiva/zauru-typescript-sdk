@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/webapp-config",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Configuración centralizada para aplicaciones Zauru SDK",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
