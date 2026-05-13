@@ -18,11 +18,11 @@ importers:
         specifier: ^19.0.0
         version: 19.2.14
       '@zauru-sdk/webapp-config':
-        specifier: workspace:^
-        version: link:../../webapp/config
+        specifier: ^5.0.3
+        version: 5.0.3
       '@zauru-sdk/webapp-services':
-        specifier: workspace:^
-        version: link:../../webapp/services
+        specifier: ^5.0.3
+        version: 5.0.3(typescript@5.6.2)
       react:
         specifier: ^19.0.0
         version: 19.2.6
@@ -1896,6 +1896,21 @@ packages:
   '@yarnpkg/parsers@3.0.0-rc.46':
     resolution: {integrity: sha512-aiATs7pSutzda/rq8fnuPwTglyVwjM22bNnK2ZgjrpAjQHSSl3lztd2f9evst1W/qnC58DRz7T7QndUDumAR4Q==}
     engines: {node: '>=14.15.0'}
+
+  '@zauru-sdk/webapp-common@5.0.3':
+    resolution: {integrity: sha512-+KBrjz7pYwB1hk7//bGVpd0Jt31kCcSbrTfTbuZGA+215NHHxxuH/pO/KylJ9yHbbQ1RDYZh7dnuJ+IwR3TGQA==}
+
+  '@zauru-sdk/webapp-config@5.0.3':
+    resolution: {integrity: sha512-Ktc/vx5OuUJOYiay6JuVLxkYIoH01O8/w9OffbvndfCCMTe5FjXzLdp6dEdEISLeIZEOe10thn7g9d6yuHKv3g==}
+
+  '@zauru-sdk/webapp-graphql@5.0.3':
+    resolution: {integrity: sha512-6TcjfCDgYrJGJFRTiPLX6ypeZOnKolp28xZCjQrEH58GkgH5amZMa3wTOkZez4sVFUOWq7oTMHWuPFAXs2115Q==}
+
+  '@zauru-sdk/webapp-services@5.0.3':
+    resolution: {integrity: sha512-Iqe2kb2KJEC5lLCiKF3aHwpS/sL0IxA8EUba1bFmLWjKt5uJBWxC8KLrTwBaANlfcdMJeJLQxUH8Kh3Qy/Sqnw==}
+
+  '@zauru-sdk/webapp-types@5.0.3':
+    resolution: {integrity: sha512-1ucDR2HE2n74ZufFo9j12Cje12JuhkpmpMGDLKL3dpcx4CgBmReueFWU0z0kG1UsoBP176lUMPdpdq0q//rx3A==}
 
   '@zkochan/js-yaml@0.0.7':
     resolution: {integrity: sha512-nrUSn7hzt7J6JWgWGz78ZYI8wj+gdIJdk0Ynjpp8l+trkn58Uqsf6RYrYkEK+3X18EX+TNdtJI0WxAtc+L84SQ==}
@@ -6329,6 +6344,36 @@ snapshots:
     dependencies:
       js-yaml: 3.14.1
       tslib: 2.7.0
+
+  '@zauru-sdk/webapp-common@5.0.3(typescript@5.6.2)':
+    dependencies:
+      '@remix-run/node': 2.12.1(typescript@5.6.2)
+      '@zauru-sdk/webapp-types': 5.0.3
+      moment: 2.30.1
+      moment-timezone: 0.5.45
+    transitivePeerDependencies:
+      - typescript
+
+  '@zauru-sdk/webapp-config@5.0.3': {}
+
+  '@zauru-sdk/webapp-graphql@5.0.3': {}
+
+  '@zauru-sdk/webapp-services@5.0.3(typescript@5.6.2)':
+    dependencies:
+      '@remix-run/node': 2.12.1(typescript@5.6.2)
+      '@upstash/redis': 1.34.5
+      '@zauru-sdk/webapp-common': 5.0.3(typescript@5.6.2)
+      '@zauru-sdk/webapp-config': 5.0.3
+      '@zauru-sdk/webapp-graphql': 5.0.3
+      '@zauru-sdk/webapp-types': 5.0.3
+      axios: 1.7.7
+      chalk: 5.3.0
+      moment: 2.30.1
+    transitivePeerDependencies:
+      - debug
+      - typescript
+
+  '@zauru-sdk/webapp-types@5.0.3': {}
 
   '@zkochan/js-yaml@0.0.7':
     dependencies:
