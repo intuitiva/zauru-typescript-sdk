@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/webapp-utils",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Utilidades, parseo de request y demás para desarrollo de webapps de Zauru",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
