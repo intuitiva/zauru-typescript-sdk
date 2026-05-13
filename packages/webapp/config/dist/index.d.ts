@@ -1,12 +1,12 @@
 export declare const config: {
-    redisBaseURL: any;
-    redisToken: any;
-    oauthBaseURL: any;
-    zauruBaseURL: any;
-    oauthClientID: any;
-    graphqlAPIBaseURL: any;
-    cmsAPIBaseURL: any;
-    cmsAPIToken: any;
-    expirationDurationInSeconds: any;
+    redisBaseURL: string;
+    redisToken: string;
+    oauthBaseURL: string | undefined;
+    zauruBaseURL: string | undefined;
+    oauthClientID: string | undefined;
+    graphqlAPIBaseURL: string | undefined;
+    cmsAPIBaseURL: string | undefined;
+    cmsAPIToken: string | undefined;
+    expirationDurationInSeconds: string | number;
     debugHTTP: boolean;
 };
