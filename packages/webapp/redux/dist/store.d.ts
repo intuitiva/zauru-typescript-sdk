@@ -18,9 +18,9 @@ type Whitelist = {
     [K in keyof RootState]?: string[];
 };
 export declare const cleanLocalStorage: (whitelist?: Whitelist) => void;
-export declare const store: import("@reduxjs/toolkit").EnhancedStore<any, import("redux").UnknownAction, Tuple<[import("redux").StoreEnhancer<{
+export declare const store: import("@reduxjs/toolkit").EnhancedStore<any, import("@reduxjs/toolkit").UnknownAction, Tuple<[import("@reduxjs/toolkit").StoreEnhancer<{
     dispatch: {};
-}>, import("redux").StoreEnhancer]>>;
+}>, import("@reduxjs/toolkit").StoreEnhancer]>>;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export declare const useAppSelector: TypedUseSelectorHook<RootState>;

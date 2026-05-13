@@ -13,5 +13,5 @@ export declare const automaticNumberFetchStart: import("@reduxjs/toolkit").Actio
     name: AUTOMATIC_NUMBER_NAMES;
     data: any;
 }, "automaticNumbers/automaticNumberFetchSuccess">;
-declare const _default: import("redux").Reducer<AutomaticNumberState>;
+declare const _default: import("@reduxjs/toolkit").Reducer<AutomaticNumberState>;
 export default _default;

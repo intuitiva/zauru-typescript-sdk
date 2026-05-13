@@ -5,5 +5,5 @@ export declare const setSessionValue: import("@reduxjs/toolkit").ActionCreatorWi
     name: string;
     data: any;
 }, "session/setSessionValue">;
-declare const _default: import("redux").Reducer<SessionState>;
+declare const _default: import("@reduxjs/toolkit").Reducer<SessionState>;
 export default _default;

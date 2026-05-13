@@ -8,5 +8,5 @@ export declare const tableSetPage: import("@reduxjs/toolkit").ActionCreatorWithP
     name: TABLE_NAMES;
     data: number;
 }, "table/tableSetPage">;
-declare const _default: import("redux").Reducer<TableState>;
+declare const _default: import("@reduxjs/toolkit").Reducer<TableState>;
 export default _default;

@@ -8,5 +8,5 @@ export interface UserState {
     loadingEmployeeInfo: boolean;
 }
 export declare const setUserProfile: import("@reduxjs/toolkit").ActionCreatorWithPayload<ProfileResponse, "user/setUserProfile">, setEmployeeProfile: import("@reduxjs/toolkit").ActionCreatorWithPayload<EmployeeGraphQL, "user/setEmployeeProfile">, setOauthProfile: import("@reduxjs/toolkit").ActionCreatorWithPayload<OauthProfile, "user/setOauthProfile">, setLoadingEmployeeProfile: import("@reduxjs/toolkit").ActionCreatorWithPayload<boolean, "user/setLoadingEmployeeProfile">, setLoadingOauthProfile: import("@reduxjs/toolkit").ActionCreatorWithPayload<boolean, "user/setLoadingOauthProfile">, setLoadingUserProfile: import("@reduxjs/toolkit").ActionCreatorWithPayload<boolean, "user/setLoadingUserProfile">;
-declare const _default: import("redux").Reducer<UserState>;
+declare const _default: import("@reduxjs/toolkit").Reducer<UserState>;
 export default _default;

@@ -4,5 +4,5 @@ export interface WebAppTableState {
     loadingSpecialItems: boolean;
 }
 export declare const setLoadingSpecialItems: import("@reduxjs/toolkit").ActionCreatorWithPayload<boolean, "webappTables/setLoadingSpecialItems">, setSpecialItems: import("@reduxjs/toolkit").ActionCreatorWithPayload<WebAppRowGraphQL<SpecialItem>[], "webappTables/setSpecialItems">;
-declare const _default: import("redux").Reducer<WebAppTableState>;
+declare const _default: import("@reduxjs/toolkit").Reducer<WebAppTableState>;
 export default _default;

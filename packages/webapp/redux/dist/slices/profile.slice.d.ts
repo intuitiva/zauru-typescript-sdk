@@ -22,5 +22,5 @@ export declare const profileFetchStart: import("@reduxjs/toolkit").ActionCreator
     name: PROFILE_NAMES;
     data: any;
 }, "profile/profileFetchSuccess">;
-declare const _default: import("redux").Reducer<ProfilesState>;
+declare const _default: import("@reduxjs/toolkit").Reducer<ProfilesState>;
 export default _default;

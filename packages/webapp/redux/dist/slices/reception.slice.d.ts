@@ -62,5 +62,5 @@ export declare const receptionFetchStart: import("@reduxjs/toolkit").ActionCreat
     name: RECEPTION_NAMES;
     data: any;
 }, "reception/receptionConcatToArray">;
-declare const _default: import("redux").Reducer<ReceptionState>;
+declare const _default: import("@reduxjs/toolkit").Reducer<ReceptionState>;
 export default _default;

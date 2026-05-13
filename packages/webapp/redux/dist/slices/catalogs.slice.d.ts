@@ -60,5 +60,5 @@ export declare const catalogsFetchStart: import("@reduxjs/toolkit").ActionCreato
     name: CATALOGS_NAMES;
     data: any[];
 }, "catalogs/catalogsFetchSuccess">, catalogsSetReFetch: import("@reduxjs/toolkit").ActionCreatorWithPayload<CATALOGS_NAMES, "catalogs/catalogsSetReFetch">;
-declare const _default: import("redux").Reducer<CatalogState>;
+declare const _default: import("@reduxjs/toolkit").Reducer<CatalogState>;
 export default _default;

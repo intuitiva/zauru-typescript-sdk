@@ -9,5 +9,5 @@ export declare const templateFetchStart: import("@reduxjs/toolkit").ActionCreato
     name: TEMPLATE_NAMES;
     data: any;
 }, "template/templateFetchSuccess">;
-declare const _default: import("redux").Reducer<TemplateState>;
+declare const _default: import("@reduxjs/toolkit").Reducer<TemplateState>;
 export default _default;

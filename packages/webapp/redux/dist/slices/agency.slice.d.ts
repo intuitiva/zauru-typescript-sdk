@@ -4,5 +4,5 @@ export interface AgencyState {
     loadingAgencyProfile: boolean;
 }
 export declare const setAgencyProfile: import("@reduxjs/toolkit").ActionCreatorWithPayload<AgencyGraphQL, "agency/setAgencyProfile">, setLoadingAgencyProfile: import("@reduxjs/toolkit").ActionCreatorWithPayload<boolean, "agency/setLoadingAgencyProfile">;
-declare const _default: import("redux").Reducer<AgencyState>;
+declare const _default: import("@reduxjs/toolkit").Reducer<AgencyState>;
 export default _default;

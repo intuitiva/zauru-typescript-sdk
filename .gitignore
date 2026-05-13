@@ -4,5 +4,6 @@ node_modules/
 *.log
 packages/.DS_Store
 packages/common/.DS_Store
-.npmrc
+# Tokens locales; la config de pnpm del repo va en .npmrc (versionado).
+.npmrc.local
 packages/webapp/common/.DS_Store
