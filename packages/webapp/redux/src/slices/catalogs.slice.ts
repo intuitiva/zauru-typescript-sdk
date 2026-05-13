@@ -1,0 +1,246 @@
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import type {
+  AgencyGraphQL,
+  BitacoraPOMassive,
+  BundleGraphQL,
+  CaseGraphQL,
+  CurrencyGraphQL,
+  EmployeeGraphQL,
+  FormGraphQL,
+  FormSubmissionGraphQL,
+  InvoiceGraphQL,
+  ItemCategoryGraphQL,
+  ItemGraphQL,
+  LotStockGraphQL,
+  MotivoRechazo,
+  CCPorcentajeRechazo,
+  SolicitudEliminacionPO,
+  PesoMaximoPorCanasta,
+  PayeeCategoryGraphQL,
+  PayeeGraphQL,
+  PaymentTermGraphQL,
+  ReceptionType,
+  ShipmentGraphQL,
+  SuggestedPriceGraphQL,
+  Template,
+  TipoMuestra,
+  WebAppRowGraphQL,
+  PrintTemplateGraphQL,
+  PaymentMethodGraphQL,
+  AuthorizationUpdateDiscountPO,
+  PoDiscountHistory,
+  Programacion,
+} from "@zauru-sdk/webapp-types";
+
+export type CATALOGS_NAMES =
+  | "agencies"
+  | "suggestedPrices"
+  | "providers"
+  | "providerCategories"
+  | "receptionTypes"
+  | "tiposDeMuestra"
+  | "programaciones4pinos"
+  | "motivosRechazo"
+  | "ccPorcentajesDeRechazo"
+  | "solicitudesEliminacionPO"
+  | "poDiscountHistory"
+  | "authorizationUpdateDiscountPO"
+  | "bitacoraRechazoMasivo"
+  | "pesoMaximoPorCanasta"
+  | "items"
+  | "itemsByReception"
+  | "itemsByLab"
+  | "itemServicesByLab"
+  | "itemCategoriesForLab"
+  | "payees"
+  | "payeesForLab"
+  | "payeeCategoriesLabPrices"
+  | "payeeCategories"
+  | "clientCategories"
+  | "bundlesRecipForLab"
+  | "currencies"
+  | "paymentTerms"
+  | "employeesByLab"
+  | "employeesByCurrentAgency"
+  | "invoicesByLab"
+  | "invoicesByCurrentAgency"
+  | "invoiceForms"
+  | "caseForms"
+  | "invoiceFormSubmissions"
+  | "cases"
+  | "myCaseFormSubmissions"
+  | "allForms"
+  | "shipmentsToMyAgency"
+  | "myAgencyLotStocks"
+  | "shipments"
+  | "bookings"
+  | "templates"
+  | "bundlesForLab"
+  | "paymentMethods"
+  | "employees"
+  | "printTemplates"
+  | "caseFormSubmissionsByCaseId"
+  | "invoiceFormSubmissionsByInvoiceId"
+  | "invoiceFormSubmissionsByAgencyId";
+
+type LoadingState<T> = {
+  data: T;
+  loading: boolean;
+  reFetch: boolean;
+};
+
+type CatalogState = {
+  agencies: LoadingState<AgencyGraphQL[]>;
+  suggestedPrices: LoadingState<SuggestedPriceGraphQL[]>;
+  providers: LoadingState<PayeeGraphQL[]>;
+  providerCategories: LoadingState<PayeeCategoryGraphQL[]>;
+  payees: LoadingState<PayeeGraphQL[]>;
+  payeesForLab: LoadingState<PayeeGraphQL[]>;
+  payeeCategoriesLabPrices: LoadingState<PayeeCategoryGraphQL[]>;
+  payeeCategories: LoadingState<PayeeCategoryGraphQL[]>;
+  clientCategories: LoadingState<PayeeCategoryGraphQL[]>;
+  receptionTypes: LoadingState<WebAppRowGraphQL<ReceptionType>[]>;
+  tiposDeMuestra: LoadingState<WebAppRowGraphQL<TipoMuestra>[]>;
+  templates: LoadingState<WebAppRowGraphQL<Template>[]>;
+  shipments: LoadingState<ShipmentGraphQL[]>;
+  bookings: LoadingState<ShipmentGraphQL[]>;
+  programaciones4pinos: LoadingState<WebAppRowGraphQL<Programacion>[]>;
+  motivosRechazo: LoadingState<WebAppRowGraphQL<MotivoRechazo>[]>;
+  ccPorcentajesDeRechazo: LoadingState<WebAppRowGraphQL<CCPorcentajeRechazo>[]>;
+  solicitudesEliminacionPO: LoadingState<
+    WebAppRowGraphQL<SolicitudEliminacionPO>[]
+  >;
+  poDiscountHistory: LoadingState<WebAppRowGraphQL<PoDiscountHistory>[]>;
+  authorizationUpdateDiscountPO: LoadingState<
+    WebAppRowGraphQL<AuthorizationUpdateDiscountPO>[]
+  >;
+  bitacoraRechazoMasivo: LoadingState<WebAppRowGraphQL<BitacoraPOMassive>[]>;
+  pesoMaximoPorCanasta: LoadingState<WebAppRowGraphQL<PesoMaximoPorCanasta>[]>;
+  items: LoadingState<ItemGraphQL[]>;
+  itemsByReception: LoadingState<ItemGraphQL[]>;
+  itemsByLab: LoadingState<ItemGraphQL[]>;
+  itemServicesByLab: LoadingState<ItemGraphQL[]>;
+  itemCategoriesForLab: LoadingState<ItemCategoryGraphQL[]>;
+  bundlesRecipForLab: LoadingState<BundleGraphQL[]>;
+  bundlesForLab: LoadingState<BundleGraphQL[]>;
+  currencies: LoadingState<CurrencyGraphQL[]>;
+  paymentTerms: LoadingState<PaymentTermGraphQL[]>;
+  employees: LoadingState<EmployeeGraphQL[]>;
+  employeesByLab: LoadingState<EmployeeGraphQL[]>;
+  employeesByCurrentAgency: LoadingState<EmployeeGraphQL[]>;
+  invoicesByLab: LoadingState<InvoiceGraphQL[]>;
+  invoicesByCurrentAgency: LoadingState<InvoiceGraphQL[]>;
+  invoiceForms: LoadingState<FormGraphQL[]>;
+  caseForms: LoadingState<FormGraphQL[]>;
+  allForms: LoadingState<FormGraphQL[]>;
+  invoiceFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;
+  cases: LoadingState<CaseGraphQL[]>;
+  myCaseFormSubmissions: LoadingState<FormSubmissionGraphQL[]>;
+  myAgencyLotStocks: LoadingState<LotStockGraphQL[]>;
+  shipmentsToMyAgency: LoadingState<ShipmentGraphQL[]>;
+  paymentMethods: LoadingState<PaymentMethodGraphQL[]>;
+  printTemplates: LoadingState<PrintTemplateGraphQL[]>;
+  invoiceFormSubmissionsByInvoiceId: LoadingState<FormSubmissionGraphQL[]>;
+  invoiceFormSubmissionsByAgencyId: LoadingState<FormSubmissionGraphQL[]>;
+  caseFormSubmissionsByCaseId: LoadingState<FormSubmissionGraphQL[]>;
+};
+
+const createLoadingState = <T>(initialData: T): LoadingState<T> => ({
+  data: initialData,
+  loading: false,
+  reFetch: false,
+});
+
+const initialState: CatalogState = {
+  agencies: createLoadingState([]),
+  suggestedPrices: createLoadingState([]),
+  providers: createLoadingState([]),
+  providerCategories: createLoadingState([]),
+  receptionTypes: createLoadingState([]),
+  tiposDeMuestra: createLoadingState([]),
+  templates: createLoadingState([]),
+  shipments: createLoadingState([]),
+  bookings: createLoadingState([]),
+  programaciones4pinos: createLoadingState([]),
+  motivosRechazo: createLoadingState([]),
+  ccPorcentajesDeRechazo: createLoadingState([]),
+  solicitudesEliminacionPO: createLoadingState([]),
+  poDiscountHistory: createLoadingState([]),
+  authorizationUpdateDiscountPO: createLoadingState([]),
+  bitacoraRechazoMasivo: createLoadingState([]),
+  pesoMaximoPorCanasta: createLoadingState([]),
+  items: createLoadingState([]),
+  itemsByReception: createLoadingState([]),
+  payees: createLoadingState([]),
+  payeesForLab: createLoadingState([]),
+  itemCategoriesForLab: createLoadingState([]),
+  payeeCategoriesLabPrices: createLoadingState([]),
+  payeeCategories: createLoadingState([]),
+  clientCategories: createLoadingState([]),
+  itemsByLab: createLoadingState([]),
+  itemServicesByLab: createLoadingState([]),
+  bundlesRecipForLab: createLoadingState([]),
+  bundlesForLab: createLoadingState([]),
+  currencies: createLoadingState([]),
+  paymentTerms: createLoadingState([]),
+  employees: createLoadingState([]),
+  employeesByLab: createLoadingState([]),
+  employeesByCurrentAgency: createLoadingState([]),
+  invoicesByLab: createLoadingState([]),
+  invoicesByCurrentAgency: createLoadingState([]),
+  invoiceForms: createLoadingState([]),
+  caseForms: createLoadingState([]),
+  allForms: createLoadingState([]),
+  invoiceFormSubmissions: createLoadingState([]),
+  cases: createLoadingState([]),
+  myCaseFormSubmissions: createLoadingState([]),
+  myAgencyLotStocks: createLoadingState([]),
+  shipmentsToMyAgency: createLoadingState([]),
+  paymentMethods: createLoadingState([]),
+  printTemplates: createLoadingState([]),
+  invoiceFormSubmissionsByInvoiceId: createLoadingState([]),
+  invoiceFormSubmissionsByAgencyId: createLoadingState([]),
+  caseFormSubmissionsByCaseId: createLoadingState([]),
+};
+
+const ensureCatalogEntry = (
+  state: CatalogState,
+  name: CATALOGS_NAMES,
+): LoadingState<any[]> => {
+  if (!state[name]) {
+    (state as Record<CATALOGS_NAMES, LoadingState<any[]>>)[name] = {
+      data: [],
+      loading: false,
+      reFetch: false,
+    };
+  }
+  return (state as Record<CATALOGS_NAMES, LoadingState<any[]>>)[name];
+};
+
+const catalogsSlice = createSlice({
+  name: "catalogs",
+  initialState,
+  reducers: {
+    catalogsSetReFetch: (state, action: PayloadAction<CATALOGS_NAMES>) => {
+      ensureCatalogEntry(state, action.payload).reFetch = true;
+    },
+    catalogsFetchStart: (state, action: PayloadAction<CATALOGS_NAMES>) => {
+      ensureCatalogEntry(state, action.payload).loading = true;
+    },
+    catalogsFetchSuccess: (
+      state,
+      action: PayloadAction<{ name: CATALOGS_NAMES; data: any[] }>,
+    ) => {
+      const entry = ensureCatalogEntry(state, action.payload.name);
+      entry.data = action.payload.data;
+      entry.loading = false;
+      entry.reFetch = false;
+    },
+  },
+});
+
+export const { catalogsFetchStart, catalogsFetchSuccess, catalogsSetReFetch } =
+  catalogsSlice.actions;
+
+export default catalogsSlice.reducer;

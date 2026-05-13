@@ -5,3 +5,4 @@ node_modules/
 packages/.DS_Store
 packages/common/.DS_Store
 .npmrc
+packages/webapp/common/.DS_Store

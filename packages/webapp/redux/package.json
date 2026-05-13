@@ -1,0 +1,35 @@
+{
+  "name": "@zauru-sdk/webapp-redux",
+  "version": "3.0.0",
+  "description": "Estructura de Redux propuesta para el desarrollo de webapps en Zauru.",
+  "main": "./dist/esm/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "npm run build:esm",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Oscar Cuéllar",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.2.1",
+    "@zauru-sdk/webapp-types": "^3.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^9.1.0",
+    "react-select": "^5.8.0"
+  },
+  "gitHead": "4afb063c0534f4a103ffec5e7d5be75d283fdc00"
+}

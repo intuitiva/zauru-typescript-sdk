@@ -1,0 +1,34 @@
+{
+  "name": "@zauru-sdk/webapp-utils",
+  "version": "3.0.0",
+  "description": "Utilidades, parseo de request y demás para desarrollo de webapps de Zauru",
+  "main": "./dist/esm/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "npm run build:esm",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Oscar Cuéllar",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@remix-run/node": "^2.8.1",
+    "@zauru-sdk/webapp-common": "^3.0.0",
+    "@zauru-sdk/webapp-config": "^3.0.0",
+    "@zauru-sdk/webapp-graphql": "^3.0.0",
+    "@zauru-sdk/webapp-services": "^3.0.0",
+    "@zauru-sdk/webapp-types": "^3.0.0"
+  },
+  "gitHead": "a72a5602375b1aa2ee8afb066f61f4b8c580f5a3"
+}

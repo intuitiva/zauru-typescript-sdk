@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { PROFILE_NAMES } from "@zauru-sdk/redux";
+import { PROFILE_NAMES } from "@zauru-sdk/webapp-redux";
 import {
   getAgencyInfo,
   getEmployeeInfo,
@@ -8,7 +8,7 @@ import {
   getOauthUserInfo,
   getProfileInformation,
   getSession,
-} from "@zauru-sdk/services";
+} from "@zauru-sdk/webapp-services";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const cookie = request.headers.get("Cookie");

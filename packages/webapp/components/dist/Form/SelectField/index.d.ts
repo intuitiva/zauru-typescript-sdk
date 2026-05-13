@@ -1,0 +1,24 @@
+import { SelectFieldOption } from "@zauru-sdk/webapp-types";
+type Props = {
+    id?: string;
+    name?: string;
+    title?: string;
+    defaultValue?: SelectFieldOption;
+    defaultValueMulti?: SelectFieldOption[];
+    helpText?: string;
+    options: Array<SelectFieldOption>;
+    onChange?: (value: SelectFieldOption | null) => void;
+    onChangeMulti?: (value: SelectFieldOption[]) => void;
+    onInputChange?: (newValue: string) => void;
+    isClearable?: boolean;
+    disabled?: boolean;
+    menuIsOpen?: boolean;
+    readOnly?: boolean;
+    isMulti?: boolean;
+    loading?: boolean;
+    hint?: string;
+    className?: string;
+    required?: boolean;
+};
+export declare const SelectField: (props: Props) => import("react/jsx-runtime").JSX.Element;
+export {};

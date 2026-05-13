@@ -1,0 +1,37 @@
+import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { getGraphQLAPIHeaders } from "../common.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
+import { getEmployeesByAgencyIdStringQuery, getEmployeesStringQuery, } from "@zauru-sdk/webapp-graphql";
+export async function getEmployees(session, filters) {
+    return handlePossibleAxiosErrors(async () => {
+        const headers = await getGraphQLAPIHeaders(session);
+        const initialFilters = {
+            ...(filters ? filters : {}),
+        };
+        const query = getEmployeesStringQuery(initialFilters);
+        const response = await httpGraphQLAPI.post("", {
+            query,
+        }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
+        const registers = response?.data?.data?.employees;
+        return registers;
+    });
+}
+/**
+ * getEmployeesByAgencyId
+ */
+export async function getEmployeesByAgencyId(session, id) {
+    return handlePossibleAxiosErrors(async () => {
+        const headers = await getGraphQLAPIHeaders(session);
+        const response = await httpGraphQLAPI.post("", {
+            query: getEmployeesByAgencyIdStringQuery(Number(id)),
+        }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
+        const registers = response?.data?.data?.employees;
+        return registers;
+    });
+}

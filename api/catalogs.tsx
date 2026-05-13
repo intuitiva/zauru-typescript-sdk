@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { CATALOGS_NAMES } from "@zauru-sdk/redux";
+import { CATALOGS_NAMES } from "@zauru-sdk/webapp-redux";
 import {
   getAgencies,
   getAllForms,
@@ -34,8 +34,8 @@ import {
   get4pinosSolicitudEliminacionPO,
   get4pinosPoDiscountHistory,
   get4pinosWeightLimitPerBasket,
-} from "@zauru-sdk/services";
-import { AxiosUtilsResponse } from "@zauru-sdk/types";
+} from "@zauru-sdk/webapp-services";
+import { AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
 import {
   TEXT_PAYEE_CATEGORY_NOTES_FOR_PRICE,
   getBitacorasPOMassive,
@@ -54,7 +54,7 @@ import {
   getTemplates,
   getTipoMuestras,
   getProgramaciones,
-} from "@zauru-sdk/utils";
+} from "@zauru-sdk/webapp-utils";
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {

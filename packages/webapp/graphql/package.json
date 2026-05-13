@@ -1,0 +1,25 @@
+{
+  "name": "@zauru-sdk/webapp-graphql",
+  "version": "3.0.0",
+  "description": "Queries de uso común para las aplicación de Zauru.",
+  "main": "./dist/esm/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "npm run build:esm",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Oscar Cuéllar",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "gitHead": "a72a5602375b1aa2ee8afb066f61f4b8c580f5a3"
+}
