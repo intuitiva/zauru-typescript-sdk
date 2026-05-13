@@ -6,7 +6,8 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "npm run build:esm",
@@ -33,5 +34,5 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
-  "gitHead": "4afb063c0534f4a103ffec5e7d5be75d283fdc00"
+  "gitHead": "dc00c2f6f6cb4a3d2b1843abfbdb3fe0e44114a7"
 }

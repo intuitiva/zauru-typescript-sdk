@@ -46,43 +46,86 @@ npx lerna run build
 
 ## Publicar en npm (versionado automático + publish)
 
-El flujo sigue siendo el de siempre: **Lerna** lee los commits convencionales (`conventionalCommits` en `lerna.json`), calcula el siguiente número de versión **compartido** entre todos los paquetes del monorepo, actualiza los `package.json`, genera tags/commits según las opciones que elijas, y publica.
+**Lerna** usa commits [Conventional Commits](https://www.conventionalcommits.org/) (`lerna.json`) y mantiene una **versión fija compartida** en todos los paquetes bajo `packages/webapp/*`.
 
-1. Autenticación en npm (una vez por máquina o CI):
+### 1. Autenticación
 
-   ```bash
-   npm login
-   ```
+npm y pnpm leen credenciales sobre todo de **`~/.npmrc`**. Comprueba:
 
-   O con token (por ejemplo en CI), sin guardar el token en un archivo versionado:
+```bash
+npm whoami
+npm config get registry
+```
 
-   ```bash
-   npm config set //registry.npmjs.org/:_authToken "TU_TOKEN_AQUI"
-   ```
+Debe salir tu usuario y `https://registry.npmjs.org/`. Si en `~/.npmrc` tienes otro `registry` o `@zauru-sdk:registry` (mirror corporativo, Verdaccio, etc.), el **PUT de publicación puede responder `E404`**. Este repo fuerza en [`.npmrc`](.npmrc) el registry público para `@zauru-sdk`; aun así conviene revisar el `~/.npmrc` global.
 
-2. Asegúrate de que el árbol de git está limpio y con los commits que quieres versionar (mensajes [Conventional Commits](https://www.conventionalcommits.org/) para que Lerna infiera `patch` / `minor` / `major`).
+Token (CI o local):
 
-3. Compila:
+```bash
+npm config set //registry.npmjs.org/:_authToken "TU_TOKEN_AQUI"
+```
 
-   ```bash
-   pnpm run build
-   ```
+**Nota:** el archivo **`.npmrc.local`** no lo lee npm por defecto. Si solo ahí tienes el token, cópialo a `~/.npmrc` o usa la variable de entorno estándar en CI:
 
-4. Publica (interactivo por defecto):
+```bash
+export NPM_TOKEN=npm_xxxxxxxx
+npm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
+```
 
-   ```bash
-   pnpm run publish:packages
-   ```
+Si tu cuenta tiene **2FA** en escritura, puede hacer falta `--otp=123456` en el comando de publicación (o un token de automatización con permiso de publicación en npmjs).
 
-   Es un alias de `lerna publish`. También puedes usar:
+### 2. Build
 
-   ```bash
-   npx lerna publish
-   ```
+```bash
+pnpm run build
+```
 
-Lerna te propondrá la nueva versión en función de los commits desde el último release. Si solo cambió un subconjunto de paquetes, puedes usar las opciones de Lerna (`--force-publish`, etc.) según tu política; el comportamiento por defecto es el mismo ecosistema que ya tenías con Yarn + Lerna.
+### 3. Comandos de publicación (Lerna)
 
-**Importante (pnpm):** las dependencias **entre** paquetes `@zauru-sdk/webapp-*` deben usar el protocolo **`workspace:^`** en cada `package.json`. Así, cuando Lerna sube la versión y ejecuta `pnpm install --lockfile-only`, pnpm enlaza contra los workspaces locales y **no** intenta bajar del registry una versión que aún no está publicada (evita `ERR_PNPM_NO_MATCHING_VERSION`). Al publicar, pnpm reescribe esas referencias en el `package.json` del tarball con el rango semver correcto para los consumidores.
+El script `pnpm run publish:packages` equivale a:
+
+`lerna publish --registry https://registry.npmjs.org/ --no-verify-access`
+
+(`--no-verify-access` evita falsos positivos en la comprobación de acceso; el registry explícito evita publicar contra un host equivocado.)
+
+Puedes añadir **argumentos de Lerna** después de `--`. Ejemplos (en zsh, quoted el `'*'`):
+
+| Objetivo | Comando |
+|----------|---------|
+| Subir **solo patch** (p. ej. `5.0.0` → `5.0.1`) según commits | `pnpm run publish:packages -- patch` |
+| Subir **minor** (`5.0.x` → `5.1.0`) | `pnpm run publish:packages -- minor` |
+| Subir **major** (`5.x.x` → `6.0.0`) | `pnpm run publish:packages -- major` |
+| **Forzar** bump patch aunque Lerna no vea cambios (HEAD ya etiquetado) | `pnpm run publish:packages -- patch --force-publish '*'` |
+| **Número exacto** para todos los paquetes | `pnpm run publish:packages -- 5.0.2` |
+| **Prepatch** / prerelease (`5.0.0` → `5.0.1-alpha.0`, etc.) | `pnpm run publish:packages -- prepatch` o `prerelease` |
+| **Reintentar** subir lo que ya está en los `package.json` **sin** nuevo bump | `pnpm run publish:packages -- from-package` |
+| OTP en la misma línea | `pnpm run publish:packages -- patch --otp=123456` |
+
+También puedes usar `npx lerna publish ...` con los mismos argumentos.
+
+Si Lerna dice **«Current HEAD is already released»** y no quieres otro bump, usa **`from-package`** para subir a npm la versión que ya tienes en disco.
+
+### 4. Alternativa: solo versionar con Lerna y publicar con pnpm
+
+Si `lerna publish` sigue fallando en el paso de `pnpm publish`, separa pasos:
+
+```bash
+npx lerna version patch --force-publish '*' --yes
+pnpm run publish:recursive
+```
+
+`publish:recursive` ejecuta `pnpm -r publish` con `--access public` y el registry npmjs (reescribe `workspace:^` en los tarballs).
+
+### 5. Dependencias internas (`workspace:^`)
+
+Las dependencias **entre** paquetes `@zauru-sdk/webapp-*` deben ser **`workspace:^`**. Así el `pnpm install --lockfile-only` que hace Lerna no intenta resolver en npm una versión que aún no existe (`ERR_PNPM_NO_MATCHING_VERSION`).
+
+**Importante:** al ejecutar **`lerna version`** o **`lerna publish`**, Lerna a veces **reescribe** esas entradas a rangos tipo `^5.0.1`. Si tras un versionado ves errores de `No matching version found for @zauru-sdk/webapp-…` al hacer `pnpm install`, vuelve a dejar el protocolo workspace y reinstala:
+
+```bash
+pnpm run sync:workspace-protocol
+pnpm install
+```
 
 ## Añadir una nueva librería al monorepo
 
@@ -99,7 +142,10 @@ Lerna te propondrá la nueva versión en función de los commits desde el últim
      "module": "./dist/esm/index.js",
      "types": "./dist/index.d.ts",
      "type": "module",
-     "publishConfig": { "access": "public" },
+     "publishConfig": {
+       "access": "public",
+       "registry": "https://registry.npmjs.org/"
+     },
      "scripts": {
        "build": "npm run build:esm",
        "build:esm": "tsc -p tsconfig.esm.json"
@@ -145,5 +191,5 @@ pnpm unlink @zauru-sdk/webapp-config
 ## Notas sobre pnpm
 
 - La configuración de workspaces está en [`pnpm-workspace.yaml`](pnpm-workspace.yaml).
-- En la raíz hay un [`.npmrc`](.npmrc) con `public-hoist-pattern` para tipos (`@types/*`) y evitar choques de TypeScript con resoluciones duplicadas.
-- Los tokens npm no deben versionarse: usa `.npmrc.local` (ignorado en git) si necesitas overrides privados en tu máquina.
+- En la raíz hay un [`.npmrc`](.npmrc) con `public-hoist-pattern` para tipos, **registry** y **`@zauru-sdk:registry`** apuntando a `https://registry.npmjs.org/`.
+- Los tokens npm no deben versionarse: usa `~/.npmrc` o variables de entorno en CI. El archivo **`.npmrc.local`** no lo carga npm/pnpm por defecto (solo si lo enlazas tú o copias el token a `~/.npmrc`).

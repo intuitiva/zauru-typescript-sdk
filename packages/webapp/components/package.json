@@ -7,7 +7,8 @@
   "types": "./dist/index.d.ts",
   "type": "module",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "npm run build:esm",
@@ -54,5 +55,5 @@
     "styled-components": "^5.3.5",
     "zod": "^3.23.8"
   },
-  "gitHead": "a72a5602375b1aa2ee8afb066f61f4b8c580f5a3"
+  "gitHead": "dc00c2f6f6cb4a3d2b1843abfbdb3fe0e44114a7"
 }
