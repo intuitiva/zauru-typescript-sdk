@@ -23,7 +23,7 @@ type Props = {
   forwardedRef?: React.RefObject<{
     insertItems: (items: FormatedItem[]) => void;
     getTableState: (
-      updatedData?: ReactNode[][]
+      updatedData?: ReactNode[][],
     ) => TableStateItem[] | undefined;
   }>;
 };
@@ -39,7 +39,7 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
 
   const createItemSelect = (
     rowIndex: number,
-    defaultValue?: SelectFieldOption
+    defaultValue?: SelectFieldOption,
   ) => (
     <SelectField
       key={rowIndex}
@@ -77,13 +77,13 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
   const createRow = (
     rowIndex: number,
     item?: FormatedItem,
-    quantity?: number
+    quantity?: number,
   ) => {
     const itemCreated = createItemSelect(rowIndex, item ?? undefined);
     const quantityCreated = createItemQuantity(rowIndex, quantity ?? 1);
     const templateCreated = createTemplateName(
       rowIndex,
-      item ? item.template : "Seleccione un item para visualizar su etiqueta."
+      item ? item.template : "Seleccione un item para visualizar su etiqueta.",
     );
     return [itemCreated, quantityCreated, templateCreated];
   };
@@ -99,26 +99,30 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
           const rowIndex = (prevData?.length ?? 0) + index;
           const [itemCreated, quantityCreated, templateCreated] = createRow(
             rowIndex,
-            item
+            item,
           );
           updateRow(rowIndex, item, 1);
           return [itemCreated, quantityCreated, templateCreated];
         }),
       ]);
     },
-    [items]
+    [items],
   );
 
   const getTableState = (temp?: ReactNode[][]) => {
     const updatedData = temp ?? tableData;
     const tableState = updatedData?.map((rowData) => {
       const firstElement = rowData[0];
-      const item_id = React.isValidElement(firstElement)
+      const item_id = React.isValidElement<{
+        defaultValue?: { value?: string };
+      }>(firstElement)
         ? firstElement.props.defaultValue?.value
         : undefined;
 
       const secondElement = rowData[1];
-      const quantity = React.isValidElement(secondElement)
+      const quantity = React.isValidElement<{ defaultValue?: number }>(
+        secondElement,
+      )
         ? secondElement.props.defaultValue
         : undefined;
 
@@ -133,7 +137,7 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
   const updateRow = (
     rowIndex: number,
     item?: FormatedItem,
-    quantity?: number
+    quantity?: number,
   ) => {
     setTableData((prevData) => {
       const updatedData = prevData?.map((_, index) => {
@@ -141,18 +145,20 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
           const firstElement = prevData[index][0];
           const selectedItem =
             item ??
-            (React.isValidElement(firstElement)
+            (React.isValidElement<{ defaultValue?: { value?: number } }>(
+              firstElement,
+            )
               ? items?.find(
-                  (x) => x.value === firstElement.props.defaultValue?.value
+                  (x) => x.value === firstElement.props.defaultValue?.value,
                 )
               : undefined);
 
           const secondElement = prevData[index][1];
           const newQuantity = quantity
             ? quantity
-            : React.isValidElement(secondElement)
-            ? secondElement.props.defaultValue
-            : undefined;
+            : React.isValidElement<{ defaultValue?: number }>(secondElement)
+              ? secondElement.props.defaultValue
+              : undefined;
 
           return createRow(rowIndex, selectedItem, newQuantity);
         } else {
@@ -179,7 +185,7 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
 
   const removeRow = (rowIndex: number) => {
     setTableData((prevData) =>
-      prevData?.filter((_, index) => index !== rowIndex)
+      prevData?.filter((_, index) => index !== rowIndex),
     );
   };
 
@@ -213,7 +219,7 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
           <button
             className="bg-red-500 hover:bg-red-600 font-bold py-1 px-2 rounded ml-2"
             onClick={(
-              event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+              event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
             ) => {
               event.preventDefault();
               event.stopPropagation();
@@ -255,7 +261,7 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
               <button
                 className="bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded"
                 onClick={(
-                  event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                  event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
                 ) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -269,9 +275,11 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }: Props) => {
             <td colSpan={2}>
               Total de etiquetas a imprimir:{" "}
               {tableData?.reduce((sum, x) => {
-                const val = React.isValidElement(x[1])
-                  ? x[1]?.props?.defaultValue
-                  : undefined;
+                const val = React.isValidElement<{ defaultValue?: number }>(
+                  x[1],
+                )
+                  ? (x[1]?.props?.defaultValue ?? 0)
+                  : 0;
                 if (!sum) return val;
                 return sum + val;
               }, 0)}

@@ -121,8 +121,8 @@ export const DynamicPrintTable = ({ forwardedRef, ...props }) => {
                                         addRow();
                                     }, type: "button", children: "+" }) }), _jsxs("td", { colSpan: 2, children: ["Total de etiquetas a imprimir:", " ", tableData?.reduce((sum, x) => {
                                         const val = React.isValidElement(x[1])
-                                            ? x[1]?.props?.defaultValue
-                                            : undefined;
+                                            ? (x[1]?.props?.defaultValue ?? 0)
+                                            : 0;
                                         if (!sum)
                                             return val;
                                         return sum + val;
