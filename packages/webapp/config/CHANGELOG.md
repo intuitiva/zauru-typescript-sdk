@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 6.0.0 (2026-05-14)
+
+
+
+## 5.0.3 (2026-05-13)
+
+
+
+## 5.0.2 (2026-05-13)
+
+
+### Bug Fixes
+
+* **publish:** explicit npmjs registry, lerna flags, and workspace protocol sync ([fd57ef3](https://github.com/intuitiva/zauru-typescript-sdk/commit/fd57ef30ffb91021e54bc9e078be794a4f4acfe5))
+
+
+
+## 5.0.1 (2026-05-13)
+
+
+
+# 5.0.0 (2026-05-13)
+
+
+### Bug Fixes
+
+* use workspace:^ for internal @zauru-sdk/webapp-* dependencies ([35ff200](https://github.com/intuitiva/zauru-typescript-sdk/commit/35ff200378dee1928e04bcf4327aa1490ecb3792))
+
+
+* feat!: move packages to packages/webapp and rename to @zauru-sdk/webapp-* ([64ca702](https://github.com/intuitiva/zauru-typescript-sdk/commit/64ca702ba340e15a9e6585ca856130f649ac2ef3))
+
+
+### BREAKING CHANGES
+
+* Published package names are now @zauru-sdk/webapp-<name>
+(e.g. @zauru-sdk/webapp-services). Workspace layout is packages/webapp/*.
+Monorepo version set to 3.0.0.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+
+
+
+
 ## [5.0.3](https://github.com/intuitiva/zauru-typescript-sdk/compare/v5.0.2...v5.0.3) (2026-05-13)
 
 **Note:** Version bump only for package @zauru-sdk/webapp-config
