@@ -1,4 +1,4 @@
-import { SelectFieldOption } from "@zauru-sdk/webapp-types";
+import { SelectFieldOption } from "@zauru-sdk/types";
 
 //Component to show all information in an array
 export const LabelArray = ({ info }: { info: SelectFieldOption[] }) => {

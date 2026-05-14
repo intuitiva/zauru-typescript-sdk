@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   associateWebAppTableRegister,
   createWebAppTableRegister,
@@ -7,14 +7,14 @@ import {
   getVariablesByName,
   getWebAppTableRegisters,
   updateWebAppTableRegister,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   Programacion,
   WebAppRowAssociateResponse,
   WebAppRowGraphQL,
   WebAppTableUpdateResponse,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 /**
  * Get programaciones from the web app table.

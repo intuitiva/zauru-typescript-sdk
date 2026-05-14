@@ -1,12 +1,12 @@
 import { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   create4pinosPoDiscountHistory,
   getPurchaseOrder,
   getVariablesByName,
   update4pinosPoDiscountHistory,
-} from "@zauru-sdk/webapp-services";
-import { PoDiscountHistory } from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/services";
+import { PoDiscountHistory } from "@zauru-sdk/types";
 
 export const add4pinosPoDiscountsHistory = async (
   session: Session,

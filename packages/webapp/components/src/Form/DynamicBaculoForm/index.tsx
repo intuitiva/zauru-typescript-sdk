@@ -11,9 +11,9 @@ import {
   FormSubmissionValueGraphQL,
   GenericDynamicTableColumn,
   SelectFieldOption,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import { GenericDynamicTable } from "../../DynamicTable/GenericDynamicTable.js";
-import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/webapp-common";
+import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/common";
 import { StaticAlert } from "../../Alerts/index.js";
 import { SubContainer } from "../../Containers/index.js";
 import { LineSeparator } from "../../LineSeparator/index.js";

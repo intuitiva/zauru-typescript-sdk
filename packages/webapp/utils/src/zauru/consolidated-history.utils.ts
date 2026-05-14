@@ -1,17 +1,17 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   createWebAppTableRegister,
   getVariablesByName,
   getWebAppTableRegisters,
   updateWebAppTableRegister,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   WebAppRowGraphQL,
   ConsolidatedHistory,
   WebAppTableUpdateResponse,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 /**
  * Get getConsolidatedHistories from the web app table.

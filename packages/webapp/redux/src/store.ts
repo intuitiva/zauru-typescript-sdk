@@ -48,13 +48,13 @@ function persistReduxStateToLocalStorage(state: RootState): void {
   } catch (error) {
     if (isQuotaExceededError(error)) {
       console.warn(
-        "[@zauru-sdk/webapp-redux] localStorage quota exceeded; Redux state was not persisted.",
+        "[@zauru-sdk/redux] localStorage quota exceeded; Redux state was not persisted.",
         { key: LOCAL_STORAGE_REDUX_NAME, error },
       );
       return;
     }
     console.error(
-      "[@zauru-sdk/webapp-redux] Failed to persist Redux state to localStorage.",
+      "[@zauru-sdk/redux] Failed to persist Redux state to localStorage.",
       error,
     );
   }
@@ -191,7 +191,7 @@ export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
   } catch (e) {
     if (isQuotaExceededError(e)) {
       console.warn(
-        "[@zauru-sdk/webapp-redux] localStorage quota exceeded while saving after cleanLocalStorage.",
+        "[@zauru-sdk/redux] localStorage quota exceeded while saving after cleanLocalStorage.",
         { key: LOCAL_STORAGE_REDUX_NAME, error: e },
       );
     } else {

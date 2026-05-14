@@ -1,16 +1,16 @@
 import type { Session } from "@remix-run/node";
-import { formatDateToUTC, handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { formatDateToUTC, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   ConsolidateGraphQL,
   GeneratePDFBody,
   NewConsolidatedBody,
   PDFResult,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getConsolidatesBetweenDatesStringQuery } from "@zauru-sdk/webapp-graphql";
+import { getConsolidatesBetweenDatesStringQuery } from "@zauru-sdk/graphql";
 
 /**
  *

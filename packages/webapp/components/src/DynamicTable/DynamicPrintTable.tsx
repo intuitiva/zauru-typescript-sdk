@@ -1,8 +1,8 @@
 import React, { useEffect, useCallback, useState, type ReactNode } from "react";
 import { TextField } from "../Form/TextField/index.js";
 import { SelectField } from "../Form/SelectField/index.js";
-import { useAppSelector } from "@zauru-sdk/webapp-redux";
-import { SelectFieldOption } from "@zauru-sdk/webapp-types";
+import { useAppSelector } from "@zauru-sdk/redux";
+import { SelectFieldOption } from "@zauru-sdk/types";
 
 export type TableStateItem = {
   item_id: string | undefined;

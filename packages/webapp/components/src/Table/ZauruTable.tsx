@@ -6,7 +6,7 @@ import type {
   TableStyles,
 } from "react-data-table-component";
 import { createTheme } from "react-data-table-component";
-import { SearchSVG } from "@zauru-sdk/webapp-icons";
+import { SearchSVG } from "@zauru-sdk/icons";
 import * as ReactDataTableComponent from "react-data-table-component";
 const DataTable = ReactDataTableComponent.default as any;
 

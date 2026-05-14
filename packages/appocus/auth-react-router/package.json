@@ -23,16 +23,16 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@zauru-sdk/webapp-config": "*",
-    "@zauru-sdk/webapp-services": "*",
+    "@zauru-sdk/config": "*",
+    "@zauru-sdk/services": "*",
     "react": "^18.2.0 || ^19.0.0",
     "react-router": "^7.0.0",
     "sonner": "^1.0.0 || ^2.0.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
-    "@zauru-sdk/webapp-config": "^5.0.3",
-    "@zauru-sdk/webapp-services": "^5.0.3",
+    "@zauru-sdk/config": "workspace:^",
+    "@zauru-sdk/services": "workspace:^",
     "react": "^19.0.0",
     "react-router": "^7.10.1",
     "sonner": "^2.0.7",

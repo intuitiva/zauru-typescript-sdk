@@ -1,12 +1,12 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { AxiosUtilsResponse, EmployeeGraphQL } from "@zauru-sdk/webapp-types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { AxiosUtilsResponse, EmployeeGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import {
   getEmployeesByAgencyIdStringQuery,
   getEmployeesStringQuery,
-} from "@zauru-sdk/webapp-graphql";
+} from "@zauru-sdk/graphql";
 
 export async function getEmployees(
   session: Session,

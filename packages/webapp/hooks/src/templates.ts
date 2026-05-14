@@ -7,7 +7,7 @@ import {
   templateFetchSuccess,
   useAppDispatch,
   useAppSelector,
-} from "@zauru-sdk/webapp-redux";
+} from "@zauru-sdk/redux";
 import { useEffect, useState } from "react";
 import { showAlert } from "./index.js";
 

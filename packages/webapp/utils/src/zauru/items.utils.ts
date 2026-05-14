@@ -2,7 +2,7 @@ import type { Session } from "@remix-run/node";
 import {
   extractValueBetweenTags,
   handlePossibleAxiosErrors,
-} from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/common";
 import {
   createItem,
   createItemCategory,
@@ -10,7 +10,7 @@ import {
   getItemsByCategoryId,
   getItemsBySuperCategoryId,
   getVariablesByName,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   ItemGraphQL,
@@ -19,7 +19,7 @@ import {
   ResponseItemList,
   HTMLItemListSchema,
   ItemCategoryGraphQL,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 /**
  *

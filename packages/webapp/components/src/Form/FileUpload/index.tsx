@@ -1,4 +1,4 @@
-import { DownloadIconSVG, IdeaIconSVG } from "@zauru-sdk/webapp-icons";
+import { DownloadIconSVG, IdeaIconSVG } from "@zauru-sdk/icons";
 import React, { useState, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { Button } from "../../Buttons/index.js";

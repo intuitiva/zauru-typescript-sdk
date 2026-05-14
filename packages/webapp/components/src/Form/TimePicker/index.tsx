@@ -1,4 +1,4 @@
-import { ClockIconSVG, CloseSvgIcon, IdeaIconSVG } from "@zauru-sdk/webapp-icons";
+import { ClockIconSVG, CloseSvgIcon, IdeaIconSVG } from "@zauru-sdk/icons";
 import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 

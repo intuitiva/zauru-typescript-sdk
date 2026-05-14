@@ -1,5 +1,5 @@
-import { IdeaIconSVG } from "@zauru-sdk/webapp-icons";
-import { SelectFieldOption } from "@zauru-sdk/webapp-types";
+import { IdeaIconSVG } from "@zauru-sdk/icons";
+import { SelectFieldOption } from "@zauru-sdk/types";
 import React, {
   useEffect,
   useState,

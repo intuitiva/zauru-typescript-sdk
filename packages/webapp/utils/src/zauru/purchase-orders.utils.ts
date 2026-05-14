@@ -5,7 +5,7 @@ import {
   getStringFullDate,
   getZauruDateByText,
   handlePossibleAxiosErrors,
-} from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/common";
 import {
   commitSession,
   createNewPurchaseOrder,
@@ -18,7 +18,7 @@ import {
   getVariablesByName,
   inactivarLote,
   updateReceivedPurchaseOrder,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   DataTablesFilterBody,
@@ -29,7 +29,7 @@ import {
   PurchasesDataTableListFormatedSchema,
   PurchasesListResponseSchema,
   UpdatePurchaseOrderBody,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia

@@ -1,18 +1,18 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   createWebAppTableRegister,
   deleteWebAppTableRegister,
   getVariablesByName,
   getWebAppTableRegisters,
   updateWebAppTableRegister,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import {
   WebAppRowGraphQL,
   TipoMuestra,
   AxiosUtilsResponse,
   WebAppTableUpdateResponse,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 /**
  * Get tipoMuestras from the web app table.

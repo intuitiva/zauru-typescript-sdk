@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { ExitSvg } from "@zauru-sdk/webapp-icons";
+import { ExitSvg } from "@zauru-sdk/icons";
 import { createRoot } from "react-dom/client";
 
 export type AlertType = "success" | "error" | "info" | "warning";

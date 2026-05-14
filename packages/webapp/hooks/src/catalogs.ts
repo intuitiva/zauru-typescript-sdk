@@ -33,7 +33,7 @@ import type {
   PoDiscountHistory,
   PesoMaximoPorCanasta,
   Programacion,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
   ReduxParamsConfig,
@@ -41,7 +41,7 @@ import {
   catalogsFetchSuccess,
   useAppDispatch,
   useAppSelector,
-} from "@zauru-sdk/webapp-redux";
+} from "@zauru-sdk/redux";
 
 type CatalogType<T> = {
   data: T[];

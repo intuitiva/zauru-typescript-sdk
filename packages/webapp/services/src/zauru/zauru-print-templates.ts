@@ -1,9 +1,9 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { AxiosUtilsResponse, PrintTemplateGraphQL } from "@zauru-sdk/webapp-types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { AxiosUtilsResponse, PrintTemplateGraphQL } from "@zauru-sdk/types";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getGraphQLAPIHeaders } from "../common.js";
-import { getPrintTemplatesStringQuery } from "@zauru-sdk/webapp-graphql";
+import { getPrintTemplatesStringQuery } from "@zauru-sdk/graphql";
 
 /**
  * getPayees

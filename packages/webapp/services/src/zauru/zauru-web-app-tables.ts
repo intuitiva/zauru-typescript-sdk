@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   MotivoRechazo,
@@ -13,13 +13,13 @@ import {
   WebAppTableCreateBody,
   WebAppTableGraphQL,
   WebAppTableUpdateResponse,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import {
   getWebAppRowStringQuery,
   getWebAppRowsByWebAppTableIdStringQuery,
-} from "@zauru-sdk/webapp-graphql";
+} from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 
 /**

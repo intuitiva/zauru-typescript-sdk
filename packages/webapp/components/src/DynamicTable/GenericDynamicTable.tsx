@@ -8,10 +8,10 @@ import {
   GenericDynamicTableColumn,
   RowDataType,
   SelectFieldOption,
-} from "@zauru-sdk/webapp-types";
-import { generateClientUUID } from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/types";
+import { generateClientUUID } from "@zauru-sdk/common";
 import { LoadingInputSkeleton } from "../Skeletons/index.js";
-import { TrashSvg } from "@zauru-sdk/webapp-icons";
+import { TrashSvg } from "@zauru-sdk/icons";
 import { useFormContext } from "react-hook-form";
 import { ComponentError } from "../Alerts/index.js";
 

@@ -8,7 +8,7 @@ import {
   RejectionWebAppTableObject,
   ShipmentGraphQL,
   WebAppRowGraphQL,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 type ApiResponseFor4pinosReceptions = {
   apiCall: number;

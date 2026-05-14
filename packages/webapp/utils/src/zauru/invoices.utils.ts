@@ -1,15 +1,15 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   createInvoiceOrder,
   getInvoicesByAgencyId,
   getVariablesByName,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   InvoiceDetailsGraphQL,
   InvoiceGraphQL,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 /**
  *

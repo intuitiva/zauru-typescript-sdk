@@ -3,13 +3,13 @@ import {
   arrayToObject,
   getDatePickerCurrentDate,
   handlePossibleAxiosErrors,
-} from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   PurchaseOrderGraphQL,
   ReceptionDetailsGraphQL,
   ReceptionGraphQL,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
 
 /**

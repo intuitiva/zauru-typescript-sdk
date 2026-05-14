@@ -13,8 +13,8 @@ import {
   commitSession,
   getSession,
   nativeLogin,
-} from "@zauru-sdk/webapp-services";
-import { config } from "@zauru-sdk/webapp-config";
+} from "@zauru-sdk/services";
+import { config } from "@zauru-sdk/config";
 import { loginMiddleware } from "../middleware.js";
 import { AuthShellLayout } from "../auth-shell-layout.js";
 import { getAuthRuntime } from "../runtime-config.js";
@@ -22,7 +22,7 @@ import type { LoginFormComponent, RouteModule } from "../route-types.js";
 
 /**
  * Minimal session contract this route depends on. Re-typed locally so we don't
- * pull `@zauru-sdk/webapp-services` types into the consumer surface.
+ * pull `@zauru-sdk/services` types into the consumer surface.
  */
 type ZauruSession = {
   get: (key: string) => unknown;

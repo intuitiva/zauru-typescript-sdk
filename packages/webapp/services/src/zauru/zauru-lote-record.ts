@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { LoteRecordBody, WebAppRowGraphQL } from "@zauru-sdk/webapp-types";
+import { LoteRecordBody, WebAppRowGraphQL } from "@zauru-sdk/types";
 import { getVariablesByName } from "../common.js";
 import {
   createWebAppTableRegister,

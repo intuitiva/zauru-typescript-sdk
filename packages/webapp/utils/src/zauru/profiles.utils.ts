@@ -1,4 +1,4 @@
-import { ProfileResponse, SelectFieldOption } from "@zauru-sdk/webapp-types";
+import { ProfileResponse, SelectFieldOption } from "@zauru-sdk/types";
 
 /**
  *

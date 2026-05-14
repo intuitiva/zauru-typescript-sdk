@@ -7,9 +7,9 @@ import {
   OauthProfile,
   ProfileResponse,
   AxiosUtilsResponse,
-} from "@zauru-sdk/webapp-types";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { config } from "@zauru-sdk/webapp-config";
+} from "@zauru-sdk/types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { config } from "@zauru-sdk/config";
 
 /**
  * getOauthUserInfo

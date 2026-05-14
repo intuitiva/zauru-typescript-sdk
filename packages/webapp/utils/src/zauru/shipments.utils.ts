@@ -3,20 +3,20 @@ import {
   getDatePickerCurrentDate,
   handlePossibleAxiosErrors,
   reduceAdd,
-} from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/common";
 import {
   getDeliveryByBooking,
   getMyAgencyLotStocks,
   getShipments,
   getVariablesByName,
   insertBookings,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   InsertBookingBody,
   MovementGraphQL,
   ShipmentGraphQL,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 /**
  *

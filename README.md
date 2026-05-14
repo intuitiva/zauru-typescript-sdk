@@ -118,9 +118,9 @@ pnpm run publish:recursive
 
 ### 5. Dependencias internas (`workspace:^`)
 
-Las dependencias **entre** paquetes `@zauru-sdk/webapp-*` deben ser **`workspace:^`**. Así el `pnpm install --lockfile-only` que hace Lerna no intenta resolver en npm una versión que aún no existe (`ERR_PNPM_NO_MATCHING_VERSION`).
+Las dependencias **entre** paquetes `@zauru-sdk/*` deben ser **`workspace:^`**. Así el `pnpm install --lockfile-only` que hace Lerna no intenta resolver en npm una versión que aún no existe (`ERR_PNPM_NO_MATCHING_VERSION`).
 
-**Importante:** al ejecutar **`lerna version`** o **`lerna publish`**, Lerna a veces **reescribe** esas entradas a rangos tipo `^5.0.1`. Si tras un versionado ves errores de `No matching version found for @zauru-sdk/webapp-…` al hacer `pnpm install`, vuelve a dejar el protocolo workspace y reinstala:
+**Importante:** al ejecutar **`lerna version`** o **`lerna publish`**, Lerna a veces **reescribe** esas entradas a rangos tipo `^5.0.1`. Si tras un versionado ves errores de `No matching version found for @zauru-sdk/…` al hacer `pnpm install`, vuelve a dejar el protocolo workspace y reinstala:
 
 ```bash
 pnpm run sync:workspace-protocol
@@ -131,11 +131,11 @@ pnpm install
 
 1. Crea una carpeta bajo `packages/webapp/<nombre-corto>/` (por ejemplo `packages/webapp/my-feature/`).
 
-2. Añade un `package.json` con nombre bajo el scope **`@zauru-sdk/webapp-<nombre-corto>`** (npm solo permite una barra en el nombre: `@alcance/paquete`). Ejemplo:
+2. Añade un `package.json` con nombre bajo el scope **`@zauru-sdk/<nombre-corto>`** (npm solo permite una barra en el nombre: `@alcance/paquete`). Ejemplo:
 
    ```json
    {
-     "name": "@zauru-sdk/webapp-my-feature",
+     "name": "@zauru-sdk/my-feature",
      "version": "3.0.0",
      "private": false,
      "main": "./dist/esm/index.js",
@@ -156,7 +156,7 @@ pnpm install
 
 3. Declara en `dependencies` / `devDependencies` **todas** las dependencias que importes (pnpm no “adivina” dependencias transitivas como a veces hacía la instalación clásica con hoisting plano).
 
-4. Referencia otros paquetes de este monorepo siempre con **`"workspace:^"`** (p. ej. `"@zauru-sdk/webapp-types": "workspace:^"`). No uses solo `^x.y.z` hacia otro paquete del mismo repo: en `lerna publish` pnpm intentaría resolverlo en npm antes de que exista la release.
+4. Referencia otros paquetes de este monorepo siempre con **`"workspace:^"`** (p. ej. `"@zauru-sdk/types": "workspace:^"`). No uses solo `^x.y.z` hacia otro paquete del mismo repo: en `lerna publish` pnpm intentaría resolverlo en npm antes de que exista la release.
 
 5. No hace falta tocar `pnpm-workspace.yaml` si el paquete cae bajo el glob `packages/webapp/*`.
 
@@ -169,21 +169,21 @@ pnpm install
 Desde la raíz, puedes enlazar un paquete concreto al global de pnpm:
 
 ```bash
-pnpm --filter @zauru-sdk/webapp-config link --global
-pnpm --filter @zauru-sdk/webapp-services link --global
+pnpm --filter @zauru-sdk/config link --global
+pnpm --filter @zauru-sdk/services link --global
 # … repite para los que necesites
 ```
 
 En el proyecto consumidor:
 
 ```bash
-pnpm link @zauru-sdk/webapp-config @zauru-sdk/webapp-services
+pnpm link @zauru-sdk/config @zauru-sdk/services
 ```
 
 Para quitar enlaces:
 
 ```bash
-pnpm unlink @zauru-sdk/webapp-config
+pnpm unlink @zauru-sdk/config
 ```
 
 (Alternativa: en el consumidor usa `workspace:` o rutas `file:../zauru-typescript-sdk/packages/webapp/...` solo para desarrollo local.)

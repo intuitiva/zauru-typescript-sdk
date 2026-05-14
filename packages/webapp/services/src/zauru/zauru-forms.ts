@@ -3,7 +3,7 @@ import {
   arrayToObject,
   convertToFormData,
   handlePossibleAxiosErrors,
-} from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   FormDocumentType,
@@ -11,7 +11,7 @@ import {
   FormSubmissionGraphQL,
   SubmissionCasesGraphQL,
   SubmissionInvoicesGraphQL,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import {
@@ -25,7 +25,7 @@ import {
   getInvoiceFormSubmissionsByInvoiceIdStringQuery,
   getLastInvoiceFormSubmissionStringQuery,
   getMyCaseFormSubmissionsStringQuery,
-} from "@zauru-sdk/webapp-graphql";
+} from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 
 /**

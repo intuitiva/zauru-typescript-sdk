@@ -1,5 +1,5 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { AxiosUtilsResponse } from "@zauru-sdk/types";
 import { getCMSHeaders } from "../common.js";
 import { httpCMSAPI } from "../zauru/httpCMS.js";
 

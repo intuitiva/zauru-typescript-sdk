@@ -1,5 +1,5 @@
 /**
- * Reemplaza dependencias internas @zauru-sdk/webapp-* (rangos semver) por workspace:^.
+ * Reemplaza dependencias internas @zauru-sdk/* (rangos semver) por workspace:^.
  * Lerna suele reescribir workspace:^ a ^X.Y.Z al versionar; hay que volver a ejecutar esto
  * antes de pnpm install / publish en monorepo con pnpm.
  */

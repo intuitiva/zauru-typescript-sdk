@@ -1,16 +1,16 @@
 import type { Session } from "@remix-run/node";
-import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   createFormSubmission,
   getInvoiceFormSubmissionsByInvoiceId,
   getLastInvoiceFormSubmission,
   getVariablesByName,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   SubmissionInvoicesGraphQL,
   TransformedObject,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 export function transformFormSubmitObject(input: {
   [key: string]: any;

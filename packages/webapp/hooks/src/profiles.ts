@@ -6,14 +6,14 @@ import type {
   EmployeeGraphQL,
   OauthProfile,
   ProfileResponse,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import {
   PROFILE_NAMES,
   profileFetchStart,
   profileFetchSuccess,
   useAppDispatch,
   useAppSelector,
-} from "@zauru-sdk/webapp-redux";
+} from "@zauru-sdk/redux";
 
 type ProfileType<T> = {
   data: T;

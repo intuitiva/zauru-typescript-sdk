@@ -1,7 +1,7 @@
 import {
   useGetEmployeeProfile,
   useGetSessionAttribute,
-} from "@zauru-sdk/webapp-hooks";
+} from "@zauru-sdk/hooks";
 import { Link } from "@remix-run/react";
 
 export const ValidateEmployeeAccess = ({

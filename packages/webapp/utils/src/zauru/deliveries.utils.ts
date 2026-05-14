@@ -1,11 +1,11 @@
 import type { Session } from "@remix-run/node";
-import { extractValueBetweenTags } from "@zauru-sdk/webapp-common";
-import { getDeliveriesDataTables } from "@zauru-sdk/webapp-services";
+import { extractValueBetweenTags } from "@zauru-sdk/common";
+import { getDeliveriesDataTables } from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   DataTablesFilterBody,
   DeliveryHTMLDataTable,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 export type DeliveryDataTable = {
   zid: string;

@@ -1,9 +1,9 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { AxiosUtilsResponse, CurrencyGraphQL } from "@zauru-sdk/webapp-types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { AxiosUtilsResponse, CurrencyGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getCurrenciesStringQuery } from "@zauru-sdk/webapp-graphql";
+import { getCurrenciesStringQuery } from "@zauru-sdk/graphql";
 
 /**
  * getCurrencies

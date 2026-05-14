@@ -1,4 +1,4 @@
-import { CheckIconSVG, PencilSvg } from "@zauru-sdk/webapp-icons";
+import { CheckIconSVG, PencilSvg } from "@zauru-sdk/icons";
 import { useState, useEffect, useRef } from "react";
 
 type Props = {

@@ -1,4 +1,4 @@
-import { SelectFieldOption } from "@zauru-sdk/webapp-types";
+import { SelectFieldOption } from "@zauru-sdk/types";
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 

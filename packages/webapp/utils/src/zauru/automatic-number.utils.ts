@@ -1,7 +1,7 @@
 import type { Session } from "@remix-run/node";
-import { updateAutomaticNumber, getVariablesByName } from "@zauru-sdk/webapp-services";
-import { AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { updateAutomaticNumber, getVariablesByName } from "@zauru-sdk/services";
+import { AxiosUtilsResponse } from "@zauru-sdk/types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 
 /**
  * updateMuestraAutomaticNumber

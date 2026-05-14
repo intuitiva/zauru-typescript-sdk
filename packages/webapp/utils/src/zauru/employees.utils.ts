@@ -1,10 +1,10 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   getEmployeesByAgencyId,
   getVariablesByName,
-} from "@zauru-sdk/webapp-services";
-import { AxiosUtilsResponse, EmployeeGraphQL } from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/services";
+import { AxiosUtilsResponse, EmployeeGraphQL } from "@zauru-sdk/types";
 
 /**
  *

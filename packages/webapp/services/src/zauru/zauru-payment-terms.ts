@@ -1,12 +1,12 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { AxiosUtilsResponse, PaymentTermGraphQL } from "@zauru-sdk/webapp-types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { AxiosUtilsResponse, PaymentTermGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import {
   getPaymentTermByIdStringQuery,
   getPaymentTermsStringQuery,
-} from "@zauru-sdk/webapp-graphql";
+} from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 
 /**

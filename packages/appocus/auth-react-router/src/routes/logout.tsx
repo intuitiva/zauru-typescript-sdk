@@ -3,8 +3,8 @@
 import * as React from "react";
 import { useEffect } from "react";
 import { redirect, useSubmit } from "react-router";
-import { getSession, destroySession } from "@zauru-sdk/webapp-services";
-import { config } from "@zauru-sdk/webapp-config";
+import { getSession, destroySession } from "@zauru-sdk/services";
+import { config } from "@zauru-sdk/config";
 import { AuthShellLayout } from "../auth-shell-layout.js";
 import type { LoginFormComponent, RouteModule } from "../route-types.js";
 

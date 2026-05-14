@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CalendarIconSVG, CloseSvgIcon, IdeaIconSVG } from "@zauru-sdk/webapp-icons";
+import { CalendarIconSVG, CloseSvgIcon, IdeaIconSVG } from "@zauru-sdk/icons";
 import { useFormContext } from "react-hook-form";
 
 type Props = {

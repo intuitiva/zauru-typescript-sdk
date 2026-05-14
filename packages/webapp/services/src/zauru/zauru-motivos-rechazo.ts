@@ -1,12 +1,12 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   MotivoRechazo,
   RegisterMotivosRechazoBody,
   WebAppRowGraphQL,
   WebAppTableUpdateResponse,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import { getVariablesByName } from "../common.js";
 import {
   createWebAppTableRegister,

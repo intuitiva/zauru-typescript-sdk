@@ -2,7 +2,7 @@ import type { Session } from "@remix-run/node";
 import {
   handlePossibleAxiosErrors,
   localDateToUSDate,
-} from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/common";
 import {
   SpecialItem,
   WebAppRowGraphQL,
@@ -13,7 +13,7 @@ import {
   CostoSemanal,
   BitacoraCostosItems,
   WebAppTableUpdateResponse,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import moment from "moment";
 import { createSpecialItem, updateSpecialItem } from "./specialItem.utils.js";
 import {
@@ -22,7 +22,7 @@ import {
   getVariablesByName,
   getWebAppTableRegisters,
   updateWebAppTableRegister,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import { updatePurchaseItemPrice } from "./purchase-orders.utils.js";
 
 /**

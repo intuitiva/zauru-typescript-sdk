@@ -1,14 +1,14 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   ItemWithPrices,
   SuggestedPriceGraphQL,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
 import { Session } from "@remix-run/node";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getSuggestedPricesStringQuery } from "@zauru-sdk/webapp-graphql";
+import { getSuggestedPricesStringQuery } from "@zauru-sdk/graphql";
 
 /**
  *

@@ -17,10 +17,10 @@ import {
   VariableGraphQL,
   GraphQLToken,
   AxiosUtilsResponse,
-} from "@zauru-sdk/webapp-types";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getVariables } from "./zauru/zauru-variables.js";
-import { config } from "@zauru-sdk/webapp-config";
+import { config } from "@zauru-sdk/config";
 
 /**
  * nativeLogin

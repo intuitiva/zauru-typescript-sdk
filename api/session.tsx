@@ -1,12 +1,12 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { config } from "@zauru-sdk/webapp-config";
-import { SERVER_CONFIG_TYPES } from "@zauru-sdk/webapp-hooks";
+import { config } from "@zauru-sdk/config";
+import { SERVER_CONFIG_TYPES } from "@zauru-sdk/hooks";
 import {
   getHeaders,
   getSession,
   getVariablesByName,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const cookie = request.headers.get("Cookie");

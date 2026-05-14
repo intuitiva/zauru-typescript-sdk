@@ -1,10 +1,10 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { AxiosUtilsResponse, SerialGraphQL } from "@zauru-sdk/webapp-types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { AxiosUtilsResponse, SerialGraphQL } from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
 import { Session } from "@remix-run/node";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getSerialsStringQuery } from "@zauru-sdk/webapp-graphql";
+import { getSerialsStringQuery } from "@zauru-sdk/graphql";
 
 /**
  * getSerials

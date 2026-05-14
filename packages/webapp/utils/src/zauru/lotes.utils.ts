@@ -4,7 +4,7 @@ import {
   getLotesFiltered,
   getPurchase,
   getVariablesByName,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import { getPurchaseOrderDataTables } from "./purchase-orders.utils.js";
 
 /**

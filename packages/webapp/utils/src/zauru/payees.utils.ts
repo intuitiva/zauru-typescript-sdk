@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   createPayee,
   createPayeeCategory,
@@ -11,13 +11,13 @@ import {
   getVariablesByName,
   updatePayeeCategory,
   updatePaymentTerm,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   CreatePriceListBody,
   PayeeCategoryGraphQL,
   PayeeGraphQL,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 export const TEXT_PAYEE_CATEGORY_NOTES_FOR_PRICE =
   "CATEGORIA_QUE_REPRESENTA_UN_PRECIO_DE_LABORATORIO (No borrar esto): ";

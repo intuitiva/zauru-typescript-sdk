@@ -31,7 +31,7 @@ import type {
   AuthorizationUpdateDiscountPO,
   PoDiscountHistory,
   Programacion,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 export type CATALOGS_NAMES =
   | "agencies"

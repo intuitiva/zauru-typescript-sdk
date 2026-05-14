@@ -1,5 +1,5 @@
-import { isNumeric } from "@zauru-sdk/webapp-common";
-import { GenericDynamicTableColumn } from "@zauru-sdk/webapp-types";
+import { isNumeric } from "@zauru-sdk/common";
+import { GenericDynamicTableColumn } from "@zauru-sdk/types";
 
 //TABLA PARA LA IMPRESION:
 export const BasicTableHTML = (props: {

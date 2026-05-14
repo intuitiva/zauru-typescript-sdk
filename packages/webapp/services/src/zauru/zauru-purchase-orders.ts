@@ -6,7 +6,7 @@ import {
   getBasketsSchema,
   handlePossibleAxiosErrors,
   reduceAdd,
-} from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   BasketSchema,
@@ -19,7 +19,7 @@ import {
   SelectFieldOption,
   TaggingGraphQL,
   UpdatePurchaseOrderBody,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
@@ -28,7 +28,7 @@ import {
   getPurchaseOrderByIdNumberStringQuery,
   getPurchaseOrderStringQuery,
   getPurchaseOrdersBetweenDatesStringQuery,
-} from "@zauru-sdk/webapp-graphql";
+} from "@zauru-sdk/graphql";
 
 /**
  * markAsReceivePurchaseOrder

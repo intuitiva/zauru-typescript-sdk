@@ -5,7 +5,7 @@ import type {
   EmployeeGraphQL,
   OauthProfile,
   ProfileResponse,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 
 export type PROFILE_NAMES =
   | "userProfile"

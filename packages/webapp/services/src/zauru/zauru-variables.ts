@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { httpZauru } from "./httpZauru.js";
-import { VariableGraphQL, AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { VariableGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 
 /**
  * getVariables Function for get all zauru variables

@@ -1,8 +1,8 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getAgenciesStringQuery } from "@zauru-sdk/webapp-graphql";
-import type { AgencyGraphQL, AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
+import { getAgenciesStringQuery } from "@zauru-sdk/graphql";
+import type { AgencyGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 
 /**

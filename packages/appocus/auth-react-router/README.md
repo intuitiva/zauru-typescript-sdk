@@ -1,6 +1,6 @@
 # @appocus/auth-react-router
 
-OAuth login plumbing for Appocus apps built on React Router 7 + `@zauru-sdk/webapp-services`.
+OAuth login plumbing for Appocus apps built on React Router 7 + `@zauru-sdk/services`.
 
 ## What's inside
 
@@ -18,7 +18,7 @@ OAuth login plumbing for Appocus apps built on React Router 7 + `@zauru-sdk/weba
 pnpm add @appocus/auth-react-router
 ```
 
-Peer deps: `react`, `react-router`, `sonner`, `@zauru-sdk/webapp-services`, `@zauru-sdk/webapp-config`.
+Peer deps: `react`, `react-router`, `sonner`, `@zauru-sdk/services`, `@zauru-sdk/config`.
 
 ## Configure once
 

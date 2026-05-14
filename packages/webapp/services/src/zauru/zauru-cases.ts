@@ -1,9 +1,9 @@
 import type { Session } from "@remix-run/node";
-import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { AxiosUtilsResponse, CaseGraphQL } from "@zauru-sdk/webapp-types";
+import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { AxiosUtilsResponse, CaseGraphQL } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getCasesStringQuery } from "@zauru-sdk/webapp-graphql";
+import { getCasesStringQuery } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 
 /**

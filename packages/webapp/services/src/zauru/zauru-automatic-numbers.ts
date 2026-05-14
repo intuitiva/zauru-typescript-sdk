@@ -1,8 +1,8 @@
 import {
   DocumentAutomaticNumberGraphQL,
   AxiosUtilsResponse,
-} from "@zauru-sdk/webapp-types";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/types";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 
 /**

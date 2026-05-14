@@ -1,10 +1,10 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   DataTablesFilterBody,
   HTMLDataTableDeliveries,
   ShipmentGraphQL,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
 
 /**

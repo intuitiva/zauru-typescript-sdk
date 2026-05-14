@@ -1,5 +1,5 @@
-import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { AxiosUtilsResponse, PaymentGraphQL } from "@zauru-sdk/webapp-types";
+import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { AxiosUtilsResponse, PaymentGraphQL } from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
 
 /**

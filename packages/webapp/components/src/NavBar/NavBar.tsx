@@ -4,7 +4,7 @@ import {
   LogoutDropDownSvgIcon,
   MenuAlt4Svg,
   OpcionButtonSvgIcon,
-} from "@zauru-sdk/webapp-icons";
+} from "@zauru-sdk/icons";
 import { COLORS } from "./NavBar.utils.js";
 import type {
   ColorInterface,
@@ -13,7 +13,7 @@ import type {
   NavBarProps,
 } from "./NavBar.types.js";
 import { Link, useNavigate, useLocation } from "@remix-run/react";
-import { useAppSelector } from "@zauru-sdk/webapp-redux";
+import { useAppSelector } from "@zauru-sdk/redux";
 
 const OptionsDropDownButton = ({ color, options, name }: EntityProps) => {
   const [showOptionsMenu, setShowOptionsMenu] = useState(true);

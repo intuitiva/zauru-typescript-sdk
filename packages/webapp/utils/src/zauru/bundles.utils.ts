@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   getVariablesByName,
   getBundlesByItemCategoryId,
@@ -10,13 +10,13 @@ import {
   deleteItem,
   getFormByName,
   deleteForm,
-} from "@zauru-sdk/webapp-services";
+} from "@zauru-sdk/services";
 import {
   AxiosUtilsResponse,
   BundleGraphQL,
   FormGraphQL,
   ItemGraphQL,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import { createNewLaboratoryItem } from "./items.utils.js";
 
 export const LAB_BUNDLE_NAME = "LAB_BUNDLE_RECIP_";

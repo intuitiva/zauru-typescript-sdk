@@ -7,8 +7,8 @@ import type {
   SelectFieldOption,
   MonthsType,
   JsonMemoType,
-} from "@zauru-sdk/webapp-types";
-import { MONTHS } from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
+import { MONTHS } from "@zauru-sdk/types";
 
 export const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[] = [
   { label: "Microbiología", value: "microbiologa" },

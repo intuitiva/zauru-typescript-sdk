@@ -4,7 +4,7 @@ import {
   handlePossibleAxiosErrors,
   reduceAdd,
   truncateDecimals,
-} from "@zauru-sdk/webapp-common";
+} from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   ItemAssociatedLots,
@@ -18,7 +18,7 @@ import {
   PoBasketType,
   PurchasesDataTableListFormatedSchema,
   UpdateLoteBody,
-} from "@zauru-sdk/webapp-types";
+} from "@zauru-sdk/types";
 import moment from "moment";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpZauru } from "./httpZauru.js";
@@ -27,7 +27,7 @@ import { httpGraphQLAPI } from "./httpGraphQL.js";
 import {
   getLotStocksByAgencyIdStringQuery,
   getLotsByNameStringQuery,
-} from "@zauru-sdk/webapp-graphql";
+} from "@zauru-sdk/graphql";
 import { getDeliveriesDataTables } from "./zauru-deliveries.js";
 
 /**
