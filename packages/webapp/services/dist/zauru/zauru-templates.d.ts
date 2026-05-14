@@ -1,4 +1,4 @@
-import { AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse } from "@zauru-sdk/types";
 /**
  *
  * @param headers

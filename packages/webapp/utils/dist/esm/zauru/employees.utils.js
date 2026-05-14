@@ -1,5 +1,5 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { getEmployeesByAgencyId, getVariablesByName, } from "@zauru-sdk/webapp-services";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { getEmployeesByAgencyId, getVariablesByName, } from "@zauru-sdk/services";
 /**
  *
  * @param headers

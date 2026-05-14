@@ -1,4 +1,4 @@
-import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 /**
  * createInvoice

@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, ItemCategoryGraphQL, ItemDataTable, ItemGraphQL, ItemSuperCategoryGraphQL, SearchItemParams } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, ItemCategoryGraphQL, ItemDataTable, ItemGraphQL, ItemSuperCategoryGraphQL, SearchItemParams } from "@zauru-sdk/types";
 /**
  *
  * @param headers

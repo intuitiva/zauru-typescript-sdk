@@ -1,7 +1,7 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getPaymentTermByIdStringQuery, getPaymentTermsStringQuery, } from "@zauru-sdk/webapp-graphql";
+import { getPaymentTermByIdStringQuery, getPaymentTermsStringQuery, } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 /**
  * getPaymentTerms

@@ -47,10 +47,10 @@ function persistReduxStateToLocalStorage(state) {
     }
     catch (error) {
         if (isQuotaExceededError(error)) {
-            console.warn("[@zauru-sdk/webapp-redux] localStorage quota exceeded; Redux state was not persisted.", { key: exports.LOCAL_STORAGE_REDUX_NAME, error });
+            console.warn("[@zauru-sdk/redux] localStorage quota exceeded; Redux state was not persisted.", { key: exports.LOCAL_STORAGE_REDUX_NAME, error });
             return;
         }
-        console.error("[@zauru-sdk/webapp-redux] Failed to persist Redux state to localStorage.", error);
+        console.error("[@zauru-sdk/redux] Failed to persist Redux state to localStorage.", error);
     }
 }
 const persistanceLocalStorageMiddleware = (store) => (next) => (action) => {
@@ -164,7 +164,7 @@ const cleanLocalStorage = (whitelist = {}) => {
     }
     catch (e) {
         if (isQuotaExceededError(e)) {
-            console.warn("[@zauru-sdk/webapp-redux] localStorage quota exceeded while saving after cleanLocalStorage.", { key: exports.LOCAL_STORAGE_REDUX_NAME, error: e });
+            console.warn("[@zauru-sdk/redux] localStorage quota exceeded while saving after cleanLocalStorage.", { key: exports.LOCAL_STORAGE_REDUX_NAME, error: e });
         }
         else {
             console.error("Ocurrió un error al clonar y eliminar el viejo localStorage", e);

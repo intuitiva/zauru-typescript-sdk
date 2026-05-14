@@ -1,4 +1,4 @@
-import { AxiosUtilsResponse, TagGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, TagGraphQL } from "@zauru-sdk/types";
 /**
  * createTag
  * @param headers

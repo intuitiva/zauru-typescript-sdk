@@ -1,5 +1,5 @@
 import React from "react";
-import { FormDocumentType } from "@zauru-sdk/webapp-types";
+import { FormDocumentType } from "@zauru-sdk/types";
 interface ChatLayoutProps {
     children?: React.ReactNode;
     sendingMessage?: boolean;

@@ -1,7 +1,7 @@
-import { arrayToObject, convertToFormData, handlePossibleAxiosErrors, } from "@zauru-sdk/webapp-common";
+import { arrayToObject, convertToFormData, handlePossibleAxiosErrors, } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getAllFormsStringQuery, getCaseFormSubmissionsByCaseIdStringQuery, getFormByNameStringQuery, getFormSubmissionByIdStringQuery, getFormsByDocumentTypeStringQuery, getFormsStringQuery, getInvoiceFormSubmissionsByAgencyIdStringQuery, getInvoiceFormSubmissionsByInvoiceIdStringQuery, getLastInvoiceFormSubmissionStringQuery, getMyCaseFormSubmissionsStringQuery, } from "@zauru-sdk/webapp-graphql";
+import { getAllFormsStringQuery, getCaseFormSubmissionsByCaseIdStringQuery, getFormByNameStringQuery, getFormSubmissionByIdStringQuery, getFormsByDocumentTypeStringQuery, getFormsStringQuery, getInvoiceFormSubmissionsByAgencyIdStringQuery, getInvoiceFormSubmissionsByInvoiceIdStringQuery, getLastInvoiceFormSubmissionStringQuery, getMyCaseFormSubmissionsStringQuery, } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 /**
  * getForms

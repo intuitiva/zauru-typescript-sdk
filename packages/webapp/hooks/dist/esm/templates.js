@@ -2,16 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useGetReceptionTemplate = void 0;
 const react_1 = require("@remix-run/react");
-const webapp_redux_1 = require("@zauru-sdk/webapp-redux");
+const redux_1 = require("@zauru-sdk/redux");
 const react_2 = require("react");
 const index_js_1 = require("./index.js");
 function useGetTemplateObject(TEMPLATE_NAME, config = {}) {
     try {
-        const dispatch = (0, webapp_redux_1.useAppDispatch)();
+        const dispatch = (0, redux_1.useAppDispatch)();
         const fetcher = (0, react_1.useFetcher)();
         const [fetchTriggered, setFetchTriggered] = (0, react_2.useState)(false);
         // Obtenemos del store lo que ya se tenga
-        const objectData = (0, webapp_redux_1.useAppSelector)((state) => state.templates[TEMPLATE_NAME]);
+        const objectData = (0, redux_1.useAppSelector)((state) => state.templates[TEMPLATE_NAME]);
         // Verifica si ya tenemos algo en Redux
         const hasLocalData = objectData?.data && Object.keys(objectData.data).length > 0;
         // Estado local para data y loading
@@ -30,7 +30,7 @@ function useGetTemplateObject(TEMPLATE_NAME, config = {}) {
             const mustFetch = config.online || objectData?.reFetch || !hasLocalData;
             if (mustFetch) {
                 setData((prev) => ({ ...prev, loading: true }));
-                dispatch((0, webapp_redux_1.templateFetchStart)(TEMPLATE_NAME));
+                dispatch((0, redux_1.templateFetchStart)(TEMPLATE_NAME));
                 // Aquí hacemos la llamada a la API a través del fetcher
                 try {
                     setFetchTriggered(true);
@@ -95,7 +95,7 @@ function useGetTemplateObject(TEMPLATE_NAME, config = {}) {
                         const newData = possibleData[TEMPLATE_NAME];
                         if (newData) {
                             // Guardamos en redux y en el state local
-                            dispatch((0, webapp_redux_1.templateFetchSuccess)({
+                            dispatch((0, redux_1.templateFetchSuccess)({
                                 name: TEMPLATE_NAME,
                                 data: newData,
                             }));

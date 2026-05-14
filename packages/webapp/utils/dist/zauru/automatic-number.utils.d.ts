@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse } from "@zauru-sdk/types";
 /**
  * updateMuestraAutomaticNumber
  * @param headers

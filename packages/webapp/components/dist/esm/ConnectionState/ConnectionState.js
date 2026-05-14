@@ -1,5 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { useIsOnline } from "@zauru-sdk/webapp-hooks";
+import { useIsOnline } from "@zauru-sdk/hooks";
 export const ConnectionState = () => {
     const isOnline = useIsOnline();
     // Definir estilos

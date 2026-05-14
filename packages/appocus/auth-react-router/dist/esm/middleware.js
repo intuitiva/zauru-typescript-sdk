@@ -1,5 +1,5 @@
 import { redirect } from "react-router";
-import { getSession, getRefreshSession } from "@zauru-sdk/webapp-services";
+import { getSession, getRefreshSession } from "@zauru-sdk/services";
 /**
  * Throws a redirect to `/login` if the request has no OAuth session cookie.
  * Attach as a route middleware on authenticated routes.

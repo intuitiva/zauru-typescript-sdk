@@ -1,4 +1,4 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getVariablesByName } from "../common.js";
 import { createWebAppTableRegister, deleteWebAppTableRegister, getWebAppTableRegisters, updateWebAppTableRegister, } from "./zauru-web-app-tables.js";
 export async function get4pinosPoDiscountHistory(headers, session) {

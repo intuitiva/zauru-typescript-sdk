@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, RejectionWebAppTableObject, WebAppRowAssociateBody, WebAppRowAssociateResponse, WebAppRowDissociateBody, WebAppRowDissociateResponse, WebAppRowGraphQL, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, RejectionWebAppTableObject, WebAppRowAssociateBody, WebAppRowAssociateResponse, WebAppRowDissociateBody, WebAppRowDissociateResponse, WebAppRowGraphQL, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 /**
  * getWebAppRow
  * @param headers

@@ -1,5 +1,5 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { createWebAppTableRegister, deleteWebAppTableRegister, getVariablesByName, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/webapp-services";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { createWebAppTableRegister, deleteWebAppTableRegister, getVariablesByName, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/services";
 /**
  * Get tipoMuestras from the web app table.
  * @param headers Request headers.

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useGetSessionAttribute = void 0;
 const react_1 = require("@remix-run/react");
-const webapp_redux_1 = require("@zauru-sdk/webapp-redux");
+const redux_1 = require("@zauru-sdk/redux");
 const react_2 = require("react");
 const index_js_1 = require("./index.js");
 /**
@@ -13,8 +13,8 @@ const index_js_1 = require("./index.js");
 const useGetSessionAttribute = (name, type) => {
     try {
         const fetcher = (0, react_1.useFetcher)();
-        const dispatch = (0, webapp_redux_1.useAppDispatch)();
-        const sessionData = (0, webapp_redux_1.useAppSelector)((state) => state.session[name]);
+        const dispatch = (0, redux_1.useAppDispatch)();
+        const sessionData = (0, redux_1.useAppSelector)((state) => state.session[name]);
         const [data, setData] = (0, react_2.useState)(sessionData);
         (0, react_2.useEffect)(() => {
             if (fetcher.data?.title) {
@@ -31,7 +31,7 @@ const useGetSessionAttribute = (name, type) => {
                     const receivedData = fetcher.data;
                     if (receivedData) {
                         setData(receivedData.data);
-                        dispatch((0, webapp_redux_1.setSessionValue)({
+                        dispatch((0, redux_1.setSessionValue)({
                             name: name,
                             data: receivedData.data,
                         }));

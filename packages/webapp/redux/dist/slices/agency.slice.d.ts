@@ -1,4 +1,4 @@
-import { AgencyGraphQL } from "@zauru-sdk/webapp-types";
+import { AgencyGraphQL } from "@zauru-sdk/types";
 export interface AgencyState {
     agencyProfile: AgencyGraphQL;
     loadingAgencyProfile: boolean;

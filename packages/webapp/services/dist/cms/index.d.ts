@@ -1,4 +1,4 @@
-import { AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse } from "@zauru-sdk/types";
 export type CMSGeneralQueryResponse<T> = {
     docs: T[];
     hasNextPage: boolean;

@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { TextField } from "../Form/TextField/index.js";
 import { Form } from "@remix-run/react";
 import { LoadingInputSkeleton } from "../Skeletons/LoadingInputSkeleton.js";
-import { AttachmentIconSVG, SendMessageIcon, SpinnerSvg, } from "@zauru-sdk/webapp-icons";
+import { AttachmentIconSVG, SendMessageIcon, SpinnerSvg, } from "@zauru-sdk/icons";
 export const ChatLayout = ({ children, sendingMessage = false, formConfig = undefined, }) => {
     const refAttachment = useRef(null);
     const [formValues, setFormValues] = useState({ image: null });

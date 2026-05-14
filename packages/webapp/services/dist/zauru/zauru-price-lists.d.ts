@@ -1,4 +1,4 @@
-import { AxiosUtilsResponse, CreatePriceListBody, PriceListGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, CreatePriceListBody, PriceListGraphQL } from "@zauru-sdk/types";
 /**
  * createPriceList
  * @param session

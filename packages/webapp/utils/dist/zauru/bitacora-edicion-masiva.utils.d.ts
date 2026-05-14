@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, WebAppTableUpdateResponse, BitacoraPOMassive, WebAppRowGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, WebAppTableUpdateResponse, BitacoraPOMassive, WebAppRowGraphQL } from "@zauru-sdk/types";
 /**
  * Get saveBitacoraPOMassive from the web app table.
  * @param headers Request headers.

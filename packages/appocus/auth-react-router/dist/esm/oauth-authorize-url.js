@@ -1,4 +1,4 @@
-import { config } from "@zauru-sdk/webapp-config";
+import { config } from "@zauru-sdk/config";
 /**
  * Build the Zauru OAuth `dialog/authorize` URL using the host's `request.url` to
  * derive the `redirect_uri`. Pass `options.state` to mark this authorization as

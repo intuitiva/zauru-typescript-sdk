@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { isNumeric } from "@zauru-sdk/webapp-common";
+import { isNumeric } from "@zauru-sdk/common";
 //TABLA PARA LA IMPRESION:
 export const BasicTableHTML = (props) => {
     const { data, footer, headers } = props;

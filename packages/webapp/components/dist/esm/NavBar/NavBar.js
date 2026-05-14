@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import React, { useState, useEffect, useMemo } from "react";
-import { DropDownArrowSvgIcon, LogoutDropDownSvgIcon, MenuAlt4Svg, OpcionButtonSvgIcon, } from "@zauru-sdk/webapp-icons";
+import { DropDownArrowSvgIcon, LogoutDropDownSvgIcon, MenuAlt4Svg, OpcionButtonSvgIcon, } from "@zauru-sdk/icons";
 import { COLORS } from "./NavBar.utils.js";
 import { Link, useNavigate, useLocation } from "@remix-run/react";
-import { useAppSelector } from "@zauru-sdk/webapp-redux";
+import { useAppSelector } from "@zauru-sdk/redux";
 const OptionsDropDownButton = ({ color, options, name }) => {
     const [showOptionsMenu, setShowOptionsMenu] = useState(true);
     return (_jsx("div", { className: "nav-item ml-auto", children: _jsx("div", { className: "flex justify-center", children: _jsxs("div", { className: "relative inline-block", children: [_jsxs("button", { onClick: () => setShowOptionsMenu(!showOptionsMenu), className: `relative flex items-center p-2 text-xs text-white ${color.bg700} active:${color.bg900} border border-transparent rounded-full uppercase focus:ring-opacity-40 focus:outline-none`, children: [name ?? _jsx(OpcionButtonSvgIcon, {}), _jsx(DropDownArrowSvgIcon, {})] }), _jsx("div", { className: "absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800", hidden: showOptionsMenu, onMouseLeave: () => setShowOptionsMenu(true), children: options.map((option, index) => (_jsx(React.Fragment, { children: option }, index))) })] }) }) }));

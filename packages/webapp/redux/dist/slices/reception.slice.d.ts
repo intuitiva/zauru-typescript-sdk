@@ -1,4 +1,4 @@
-import { ItemAssociatedLots, NewPurchaseOrderResponse, PurchaseOrderGeneralInfo, PurchaseOrderGraphQL, RejectionWebAppTableObject, ShipmentGraphQL, WebAppRowGraphQL } from "@zauru-sdk/webapp-types";
+import { ItemAssociatedLots, NewPurchaseOrderResponse, PurchaseOrderGeneralInfo, PurchaseOrderGraphQL, RejectionWebAppTableObject, ShipmentGraphQL, WebAppRowGraphQL } from "@zauru-sdk/types";
 type ApiResponseFor4pinosReceptions = {
     apiCall: number;
     authorizedPO?: PurchaseOrderGraphQL;

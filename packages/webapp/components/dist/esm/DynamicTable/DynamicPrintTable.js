@@ -2,7 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useEffect, useCallback, useState } from "react";
 import { TextField } from "../Form/TextField/index.js";
 import { SelectField } from "../Form/SelectField/index.js";
-import { useAppSelector } from "@zauru-sdk/webapp-redux";
+import { useAppSelector } from "@zauru-sdk/redux";
 const errorAnimation = {
     hidden: { opacity: 0, y: -10 },
     visible: { opacity: 1, y: 0 },

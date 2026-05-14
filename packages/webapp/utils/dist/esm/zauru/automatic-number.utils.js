@@ -1,5 +1,5 @@
-import { updateAutomaticNumber, getVariablesByName } from "@zauru-sdk/webapp-services";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { updateAutomaticNumber, getVariablesByName } from "@zauru-sdk/services";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 /**
  * updateMuestraAutomaticNumber
  * @param headers

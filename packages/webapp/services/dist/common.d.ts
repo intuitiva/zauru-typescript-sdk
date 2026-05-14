@@ -1,6 +1,6 @@
 import { Session } from "@remix-run/node";
 import { AxiosRequestHeaders } from "axios";
-import { EmployeeGraphQL, OauthProfile, ProfileResponse, AgencyGraphQL, VariableGraphQL, AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
+import { EmployeeGraphQL, OauthProfile, ProfileResponse, AgencyGraphQL, VariableGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
 /**
  * nativeLogin
  * @param session

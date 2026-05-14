@@ -1,4 +1,4 @@
-import { VariableGraphQL, AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
+import { VariableGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
 /**
  * getVariables Function for get all zauru variables
  * @param headers

@@ -1,5 +1,5 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { getPurchasesListDataTables, getVariablesByName, } from "@zauru-sdk/webapp-services";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { getPurchasesListDataTables, getVariablesByName, } from "@zauru-sdk/services";
 /**
  * getProvidersList
  * @param headers

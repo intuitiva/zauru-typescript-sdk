@@ -5,7 +5,7 @@ exports.useGetReduxCatalog = useGetReduxCatalog;
 const react_1 = require("@remix-run/react");
 const react_2 = require("react");
 const index_js_1 = require("./components/index.js");
-const webapp_redux_1 = require("@zauru-sdk/webapp-redux");
+const redux_1 = require("@zauru-sdk/redux");
 /**
  *
  * @param CATALOG_NAME
@@ -24,10 +24,10 @@ const webapp_redux_1 = require("@zauru-sdk/webapp-redux");
  * (loading true until the first response).
  */
 function useGetReduxCatalog(CATALOG_NAME, { online = false, staleWhileRevalidate = false, wheres = [], otherParams, } = {}) {
-    const dispatch = (0, webapp_redux_1.useAppDispatch)();
+    const dispatch = (0, redux_1.useAppDispatch)();
     const fetcher = (0, react_1.useFetcher)();
     const [fetchTriggered, setFetchTriggered] = (0, react_2.useState)(false);
-    const catalogData = (0, webapp_redux_1.useAppSelector)((state) => state.catalogs[CATALOG_NAME]);
+    const catalogData = (0, redux_1.useAppSelector)((state) => state.catalogs[CATALOG_NAME]);
     // Verifica si ya tenemos algo en Redux
     const hasLocalData = Boolean(catalogData?.data?.length);
     const [data, setData] = (0, react_2.useState)({
@@ -61,7 +61,7 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, staleWhileRevalidate
                 }
                 else {
                     setData((prev) => ({ ...prev, loading: true }));
-                    dispatch((0, webapp_redux_1.catalogsFetchStart)(CATALOG_NAME));
+                    dispatch((0, redux_1.catalogsFetchStart)(CATALOG_NAME));
                 }
                 // Construimos el query para `wheres` y `otherParams`
                 const encodedWheres = (wheres || []).map((where) => encodeURIComponent(where));
@@ -149,7 +149,7 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, staleWhileRevalidate
                         const newData = possibleData[CATALOG_NAME];
                         if (Array.isArray(newData)) {
                             // Guardamos en redux y en el state local
-                            dispatch((0, webapp_redux_1.catalogsFetchSuccess)({
+                            dispatch((0, redux_1.catalogsFetchSuccess)({
                                 name: CATALOG_NAME,
                                 data: newData,
                             }));

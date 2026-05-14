@@ -1,4 +1,4 @@
-import { AxiosUtilsResponse, DataTablesFilterBody, HTMLDataTableDeliveries, ShipmentGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, DataTablesFilterBody, HTMLDataTableDeliveries, ShipmentGraphQL } from "@zauru-sdk/types";
 /**
  * getDelivery
  * @param headers

@@ -1,4 +1,4 @@
-import { SelectFieldOption } from "@zauru-sdk/webapp-types";
+import { SelectFieldOption } from "@zauru-sdk/types";
 import React from "react";
 type Props = {
     id?: string;

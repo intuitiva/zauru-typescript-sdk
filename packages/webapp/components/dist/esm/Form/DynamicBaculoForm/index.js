@@ -7,7 +7,7 @@ import { FileUploadField } from "../FileUpload/index.js";
 import { FormDatePicker } from "../DatePicker/index.js";
 import { FormTimePicker } from "../TimePicker/index.js";
 import { GenericDynamicTable } from "../../DynamicTable/GenericDynamicTable.js";
-import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/webapp-common";
+import { getDepSelectOptions, getMunSelectOptions } from "@zauru-sdk/common";
 import { StaticAlert } from "../../Alerts/index.js";
 import { SubContainer } from "../../Containers/index.js";
 import { LineSeparator } from "../../LineSeparator/index.js";

@@ -2,7 +2,7 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
 import { useSearchParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { createTheme } from "react-data-table-component";
-import { SearchSVG } from "@zauru-sdk/webapp-icons";
+import { SearchSVG } from "@zauru-sdk/icons";
 import * as ReactDataTableComponent from "react-data-table-component";
 const DataTable = ReactDataTableComponent.default;
 const customStyles = {

@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { useGetEmployeeProfile, useGetSessionAttribute, } from "@zauru-sdk/webapp-hooks";
+import { useGetEmployeeProfile, useGetSessionAttribute, } from "@zauru-sdk/hooks";
 import { Link } from "@remix-run/react";
 export const ValidateEmployeeAccess = ({ children, permissionVariableName, showIfNoPermission = false, noPermissionComponent, }) => {
     const { data: employee } = useGetEmployeeProfile();

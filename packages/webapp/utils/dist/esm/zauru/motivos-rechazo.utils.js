@@ -1,5 +1,5 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { createWebAppTableRegister, getVariablesByName, } from "@zauru-sdk/webapp-services";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { createWebAppTableRegister, getVariablesByName, } from "@zauru-sdk/services";
 export const formatearMotivoDeRechazo = (entity) => {
     return { id: entity.id, name: entity.data.Nombre };
 };

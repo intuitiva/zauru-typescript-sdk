@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, InvoiceGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, InvoiceGraphQL } from "@zauru-sdk/types";
 /**
  * getInvoicesByAgencyId
  */

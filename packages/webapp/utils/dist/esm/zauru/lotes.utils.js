@@ -1,4 +1,4 @@
-import { getLote, getLotesFiltered, getPurchase, getVariablesByName, } from "@zauru-sdk/webapp-services";
+import { getLote, getLotesFiltered, getPurchase, getVariablesByName, } from "@zauru-sdk/services";
 import { getPurchaseOrderDataTables } from "./purchase-orders.utils.js";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes de rechazo

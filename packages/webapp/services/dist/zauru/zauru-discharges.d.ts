@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, GeneratePDFBody, NewDischargeBody, PDFResult } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, GeneratePDFBody, NewDischargeBody, PDFResult } from "@zauru-sdk/types";
 /**
  *
  * @param headers

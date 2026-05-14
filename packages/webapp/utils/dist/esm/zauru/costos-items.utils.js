@@ -1,7 +1,7 @@
-import { handlePossibleAxiosErrors, localDateToUSDate, } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors, localDateToUSDate, } from "@zauru-sdk/common";
 import moment from "moment";
 import { createSpecialItem, updateSpecialItem } from "./specialItem.utils.js";
-import { createWebAppTableRegister, getPurchasesList, getVariablesByName, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/webapp-services";
+import { createWebAppTableRegister, getPurchasesList, getVariablesByName, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/services";
 import { updatePurchaseItemPrice } from "./purchase-orders.utils.js";
 /**
  *

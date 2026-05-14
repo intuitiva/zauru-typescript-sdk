@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, PrintTemplateGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, PrintTemplateGraphQL } from "@zauru-sdk/types";
 /**
  * getPayees
  * @param headers

@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, BundleGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, BundleGraphQL } from "@zauru-sdk/types";
 export declare const LAB_BUNDLE_NAME = "LAB_BUNDLE_RECIP_";
 /**
  *

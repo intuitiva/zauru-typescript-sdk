@@ -2,8 +2,8 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useEffect } from "react";
 import { redirect, useSubmit } from "react-router";
-import { getSession, destroySession } from "@zauru-sdk/webapp-services";
-import { config } from "@zauru-sdk/webapp-config";
+import { getSession, destroySession } from "@zauru-sdk/services";
+import { config } from "@zauru-sdk/config";
 import { AuthShellLayout } from "../auth-shell-layout.js";
 /** Module-scope flag to avoid double-submission under React Strict Mode. */
 let logoutAutoSubmitStarted = false;

@@ -1,5 +1,5 @@
 import { getVariablesByName } from "../common.js";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 /**
  *

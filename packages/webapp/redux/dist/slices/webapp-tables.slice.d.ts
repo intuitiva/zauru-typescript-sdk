@@ -1,4 +1,4 @@
-import { SpecialItem, WebAppRowGraphQL } from "@zauru-sdk/webapp-types";
+import { SpecialItem, WebAppRowGraphQL } from "@zauru-sdk/types";
 export interface WebAppTableState {
     specialItems: WebAppRowGraphQL<SpecialItem>[];
     loadingSpecialItems: boolean;

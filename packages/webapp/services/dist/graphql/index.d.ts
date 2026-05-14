@@ -1,5 +1,5 @@
 import { Session } from "@remix-run/node";
-import { AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse } from "@zauru-sdk/types";
 /**
  * getGeneralQuery
  * @param headers

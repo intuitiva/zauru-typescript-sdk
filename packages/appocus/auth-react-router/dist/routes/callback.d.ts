@@ -1,7 +1,7 @@
 import type { LoginFormComponent, RouteModule } from "../route-types.js";
 /**
  * Minimal session contract this route depends on. Re-typed locally so we don't
- * pull `@zauru-sdk/webapp-services` types into the consumer surface.
+ * pull `@zauru-sdk/services` types into the consumer surface.
  */
 type ZauruSession = {
     get: (key: string) => unknown;

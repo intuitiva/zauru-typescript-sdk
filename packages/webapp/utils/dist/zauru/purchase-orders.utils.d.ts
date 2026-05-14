@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, LoteWithPurchaseFormatedSchema, PurchaseOrderGraphQL, PurchasesDataTableListFormatedSchema, PurchasesListResponseSchema } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, LoteWithPurchaseFormatedSchema, PurchaseOrderGraphQL, PurchasesDataTableListFormatedSchema, PurchasesListResponseSchema } from "@zauru-sdk/types";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia
  * @param headers

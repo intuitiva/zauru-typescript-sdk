@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, Programacion, WebAppRowAssociateResponse, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, Programacion, WebAppRowAssociateResponse, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 /**
  * Get programaciones from the web app table.
  * @param headers Request headers.

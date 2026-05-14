@@ -1,5 +1,5 @@
-import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { createFormSubmission, getInvoiceFormSubmissionsByInvoiceId, getLastInvoiceFormSubmission, getVariablesByName, } from "@zauru-sdk/webapp-services";
+import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { createFormSubmission, getInvoiceFormSubmissionsByInvoiceId, getLastInvoiceFormSubmission, getVariablesByName, } from "@zauru-sdk/services";
 export function transformFormSubmitObject(input) {
     const form_submission_values = [];
     const isJsonArray = (value) => {

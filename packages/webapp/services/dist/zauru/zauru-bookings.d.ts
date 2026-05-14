@@ -1,4 +1,4 @@
-import { AxiosUtilsResponse, InsertBookingBody, ShipmentGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, InsertBookingBody, ShipmentGraphQL } from "@zauru-sdk/types";
 import { Session } from "@remix-run/node";
 /**
  * insertBookings

@@ -1,5 +1,5 @@
-import { getDatePickerCurrentDate, handlePossibleAxiosErrors, reduceAdd, } from "@zauru-sdk/webapp-common";
-import { getDeliveryByBooking, getMyAgencyLotStocks, getShipments, getVariablesByName, insertBookings, } from "@zauru-sdk/webapp-services";
+import { getDatePickerCurrentDate, handlePossibleAxiosErrors, reduceAdd, } from "@zauru-sdk/common";
+import { getDeliveryByBooking, getMyAgencyLotStocks, getShipments, getVariablesByName, insertBookings, } from "@zauru-sdk/services";
 /**
  *
  * @param headers

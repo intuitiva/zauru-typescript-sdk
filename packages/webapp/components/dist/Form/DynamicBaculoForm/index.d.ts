@@ -1,4 +1,4 @@
-import { FormGraphQL, FormSubmissionValueGraphQL } from "@zauru-sdk/webapp-types";
+import { FormGraphQL, FormSubmissionValueGraphQL } from "@zauru-sdk/types";
 import { z } from "zod";
 export declare const getDynamicBaculoFormSchema: (form?: FormGraphQL, extraFieldValidations?: {
     [key: string]: any;

@@ -1,5 +1,5 @@
-import { extractValueBetweenTags } from "@zauru-sdk/webapp-common";
-import { getDeliveriesDataTables } from "@zauru-sdk/webapp-services";
+import { extractValueBetweenTags } from "@zauru-sdk/common";
+import { getDeliveriesDataTables } from "@zauru-sdk/services";
 /**
  * getDeliveriesFormated
  * @param headers

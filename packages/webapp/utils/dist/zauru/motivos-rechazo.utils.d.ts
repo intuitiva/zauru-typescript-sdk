@@ -1,5 +1,5 @@
 import { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, BasicIdNameSchema, MotivoRechazo, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, BasicIdNameSchema, MotivoRechazo, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 export declare const formatearMotivoDeRechazo: (entity: WebAppRowGraphQL<MotivoRechazo>) => BasicIdNameSchema;
 /**
  * Post saveRechazoCanastas from the web app table.

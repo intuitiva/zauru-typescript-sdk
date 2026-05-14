@@ -1,4 +1,4 @@
-import { AxiosUtilsResponse, SerialGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, SerialGraphQL } from "@zauru-sdk/types";
 import { Session } from "@remix-run/node";
 /**
  * getSerials

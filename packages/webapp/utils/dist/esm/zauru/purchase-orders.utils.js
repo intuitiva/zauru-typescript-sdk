@@ -1,5 +1,5 @@
-import { CURRENCY_PREFIX, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, } from "@zauru-sdk/webapp-common";
-import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, getLotesWithPurchaseFormated, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder, } from "@zauru-sdk/webapp-services";
+import { CURRENCY_PREFIX, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, } from "@zauru-sdk/common";
+import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, getLotesWithPurchaseFormated, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia
  * @param headers

@@ -1,4 +1,4 @@
-import { AxiosUtilsResponse, PaymentGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, PaymentGraphQL } from "@zauru-sdk/types";
 /**
  * createInvoice
  * @param headers

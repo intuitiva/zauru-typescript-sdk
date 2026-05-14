@@ -1,4 +1,4 @@
-import { arrayToObject, getDatePickerCurrentDate, handlePossibleAxiosErrors, } from "@zauru-sdk/webapp-common";
+import { arrayToObject, getDatePickerCurrentDate, handlePossibleAxiosErrors, } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 export async function createNewReception(headers, body, purchase_order_id) {
     return handlePossibleAxiosErrors(async () => {

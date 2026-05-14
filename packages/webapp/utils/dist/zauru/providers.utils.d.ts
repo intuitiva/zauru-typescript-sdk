@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, BasicIdNameSchema } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, BasicIdNameSchema } from "@zauru-sdk/types";
 /**
  * getProvidersList
  * @param headers

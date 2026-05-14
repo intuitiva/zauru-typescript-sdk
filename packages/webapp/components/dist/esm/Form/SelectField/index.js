@@ -1,5 +1,5 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
-import { IdeaIconSVG } from "@zauru-sdk/webapp-icons";
+import { IdeaIconSVG } from "@zauru-sdk/icons";
 import { useEffect, useState, useRef, useCallback, } from "react";
 import { LoadingInputSkeleton } from "../../Skeletons/index.js";
 import { useFormContext } from "react-hook-form";

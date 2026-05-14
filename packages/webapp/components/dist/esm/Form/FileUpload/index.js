@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { DownloadIconSVG, IdeaIconSVG } from "@zauru-sdk/webapp-icons";
+import { DownloadIconSVG, IdeaIconSVG } from "@zauru-sdk/icons";
 import { useState, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { Button } from "../../Buttons/index.js";

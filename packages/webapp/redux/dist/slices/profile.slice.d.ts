@@ -1,4 +1,4 @@
-import type { AgencyGraphQL, EmployeeGraphQL, OauthProfile, ProfileResponse } from "@zauru-sdk/webapp-types";
+import type { AgencyGraphQL, EmployeeGraphQL, OauthProfile, ProfileResponse } from "@zauru-sdk/types";
 export type PROFILE_NAMES = "userProfile" | "oauthProfile" | "employeeProfile" | "agencyProfile";
 export interface ProfilesState {
     userProfile: {

@@ -1,5 +1,5 @@
-import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL, PaymentMethodGraphQL, CCPorcentajeRechazo, SolicitudEliminacionPO, AuthorizationUpdateDiscountPO, PoDiscountHistory, PesoMaximoPorCanasta, Programacion } from "@zauru-sdk/webapp-types";
-import { CATALOGS_NAMES, ReduxParamsConfig } from "@zauru-sdk/webapp-redux";
+import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL, PaymentMethodGraphQL, CCPorcentajeRechazo, SolicitudEliminacionPO, AuthorizationUpdateDiscountPO, PoDiscountHistory, PesoMaximoPorCanasta, Programacion } from "@zauru-sdk/types";
+import { CATALOGS_NAMES, ReduxParamsConfig } from "@zauru-sdk/redux";
 type CatalogType<T> = {
     data: T[];
     loading: boolean;

@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, ItemAssociatedLots, LotGraphQL, LotStockGraphQL, LoteDescription, LoteProcesadoSchema, LoteSchema, LoteWithPurchaseFormatedSchema, ObjectKeyString, PurchasesDataTableListFormatedSchema, UpdateLoteBody } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, ItemAssociatedLots, LotGraphQL, LotStockGraphQL, LoteDescription, LoteProcesadoSchema, LoteSchema, LoteWithPurchaseFormatedSchema, ObjectKeyString, PurchasesDataTableListFormatedSchema, UpdateLoteBody } from "@zauru-sdk/types";
 /**
  * getBasketsLots
  * @param headers

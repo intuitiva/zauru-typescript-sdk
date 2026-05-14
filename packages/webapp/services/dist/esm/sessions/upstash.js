@@ -1,6 +1,6 @@
 import { createSessionStorage } from "@remix-run/node";
 import crypto from "crypto";
-import { config } from "@zauru-sdk/webapp-config";
+import { config } from "@zauru-sdk/config";
 import axios from "axios";
 const redisBaseURL = config.redisBaseURL;
 const headers = {

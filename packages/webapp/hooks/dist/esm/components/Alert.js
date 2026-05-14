@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.showAlert = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
-const webapp_icons_1 = require("@zauru-sdk/webapp-icons");
+const icons_1 = require("@zauru-sdk/icons");
 const client_1 = require("react-dom/client");
 const Alert = ({ type, title, description, onClose }) => {
     const [, setLifetime] = (0, react_1.useState)(4000);
@@ -67,7 +67,7 @@ const Alert = ({ type, title, description, onClose }) => {
         }, children: [(0, jsx_runtime_1.jsxs)("div", { className: "flex items-center justify-between", children: [(0, jsx_runtime_1.jsx)("h3", { className: "font-semibold", children: title }), (0, jsx_runtime_1.jsx)("button", { className: "text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition duration-150 ease-in-out", onClick: () => {
                             setLifetime(0);
                             onClose && onClose();
-                        }, children: (0, jsx_runtime_1.jsx)(webapp_icons_1.ExitSvg, {}) })] }), (0, jsx_runtime_1.jsx)("div", { className: "mt-2", children: (0, jsx_runtime_1.jsx)("p", { className: "text-sm overflow-wrap break-words", children: description }) }), (0, jsx_runtime_1.jsx)("div", { className: "relative h-1 mt-4 bg-gray-200 rounded", children: (0, jsx_runtime_1.jsx)("div", { className: `absolute left-0 top-0 h-full ${getColor()} rounded`, style: { width: `${progress * 100}%` } }) })] }));
+                        }, children: (0, jsx_runtime_1.jsx)(icons_1.ExitSvg, {}) })] }), (0, jsx_runtime_1.jsx)("div", { className: "mt-2", children: (0, jsx_runtime_1.jsx)("p", { className: "text-sm overflow-wrap break-words", children: description }) }), (0, jsx_runtime_1.jsx)("div", { className: "relative h-1 mt-4 bg-gray-200 rounded", children: (0, jsx_runtime_1.jsx)("div", { className: `absolute left-0 top-0 h-full ${getColor()} rounded`, style: { width: `${progress * 100}%` } }) })] }));
 };
 let activeAlerts = [];
 let lastAlerts = [];

@@ -1,6 +1,6 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getAgenciesStringQuery } from "@zauru-sdk/webapp-graphql";
+import { getAgenciesStringQuery } from "@zauru-sdk/graphql";
 import { getGraphQLAPIHeaders } from "../common.js";
 /**
  * getAgencies

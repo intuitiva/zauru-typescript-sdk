@@ -1,4 +1,4 @@
-import { CaseSupplyGraphQL } from "@zauru-sdk/webapp-types";
+import { CaseSupplyGraphQL } from "@zauru-sdk/types";
 /**
  * makeCaseSuppliesWithPrice
  * @param case_supplies

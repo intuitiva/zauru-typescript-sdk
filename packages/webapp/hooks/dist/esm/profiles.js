@@ -4,12 +4,12 @@ exports.useGetEmployeeProfile = exports.useGetOauthProfile = exports.useGetUserP
 const react_1 = require("@remix-run/react");
 const react_2 = require("react");
 const index_js_1 = require("./index.js");
-const webapp_redux_1 = require("@zauru-sdk/webapp-redux");
+const redux_1 = require("@zauru-sdk/redux");
 const useGetProfile = (PROFILE_NAME) => {
     try {
         const fetcher = (0, react_1.useFetcher)();
-        const dispatch = (0, webapp_redux_1.useAppDispatch)();
-        const profileData = (0, webapp_redux_1.useAppSelector)((state) => state.profiles[PROFILE_NAME]);
+        const dispatch = (0, redux_1.useAppDispatch)();
+        const profileData = (0, redux_1.useAppSelector)((state) => state.profiles[PROFILE_NAME]);
         const [data, setData] = (0, react_2.useState)({
             data: Object.keys(profileData?.data)?.length
                 ? profileData?.data
@@ -30,7 +30,7 @@ const useGetProfile = (PROFILE_NAME) => {
                 const receivedData = fetcher.data;
                 if (receivedData) {
                     setData({ data: receivedData[PROFILE_NAME], loading: false });
-                    dispatch((0, webapp_redux_1.profileFetchSuccess)({
+                    dispatch((0, redux_1.profileFetchSuccess)({
                         name: PROFILE_NAME,
                         data: receivedData[PROFILE_NAME],
                     }));
@@ -41,7 +41,7 @@ const useGetProfile = (PROFILE_NAME) => {
             if (Object.keys(profileData?.data).length <= 0) {
                 try {
                     setData({ ...data, loading: true });
-                    dispatch((0, webapp_redux_1.profileFetchStart)(PROFILE_NAME));
+                    dispatch((0, redux_1.profileFetchStart)(PROFILE_NAME));
                     fetcher.load(`/api/profiles?profile=${PROFILE_NAME}`);
                 }
                 catch (ex) {

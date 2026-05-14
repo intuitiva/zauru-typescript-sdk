@@ -1,5 +1,5 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { getVariablesByName, getBundlesByItemCategoryId, createBundle, createForm, deleteBundle, getItemByName, deleteItem, getFormByName, deleteForm, } from "@zauru-sdk/webapp-services";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { getVariablesByName, getBundlesByItemCategoryId, createBundle, createForm, deleteBundle, getItemByName, deleteItem, getFormByName, deleteForm, } from "@zauru-sdk/services";
 import { createNewLaboratoryItem } from "./items.utils.js";
 export const LAB_BUNDLE_NAME = "LAB_BUNDLE_RECIP_";
 /**

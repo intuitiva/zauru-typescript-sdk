@@ -1,6 +1,6 @@
 import axios from "axios";
 import chalk from "chalk";
-import { config } from "@zauru-sdk/webapp-config";
+import { config } from "@zauru-sdk/config";
 const axiosInstance = axios.create({
     baseURL: `${config.graphqlAPIBaseURL}`,
 });

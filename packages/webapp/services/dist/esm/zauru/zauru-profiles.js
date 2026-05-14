@@ -1,7 +1,7 @@
 import { httpZauru } from "./httpZauru.js";
 import { httpOauth } from "./httpOauth.js";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { config } from "@zauru-sdk/webapp-config";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { config } from "@zauru-sdk/config";
 /**
  * getOauthUserInfo
  * @param codeValue

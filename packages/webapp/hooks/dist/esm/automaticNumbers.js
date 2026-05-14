@@ -2,14 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useGetAutomaticNumber = void 0;
 const react_1 = require("@remix-run/react");
-const webapp_redux_1 = require("@zauru-sdk/webapp-redux");
+const redux_1 = require("@zauru-sdk/redux");
 const react_2 = require("react");
 const index_js_1 = require("./index.js");
 const useGetAutomaticNumber = (AUTOMATIC_NUMBER_NAME) => {
     try {
         const fetcher = (0, react_1.useFetcher)();
-        const dispatch = (0, webapp_redux_1.useAppDispatch)();
-        const objectData = (0, webapp_redux_1.useAppSelector)((state) => state.automaticNumbers[AUTOMATIC_NUMBER_NAME]);
+        const dispatch = (0, redux_1.useAppDispatch)();
+        const objectData = (0, redux_1.useAppSelector)((state) => state.automaticNumbers[AUTOMATIC_NUMBER_NAME]);
         const [data, setData] = (0, react_2.useState)({
             data: objectData?.data && Object.keys(objectData?.data).length
                 ? objectData?.data
@@ -33,7 +33,7 @@ const useGetAutomaticNumber = (AUTOMATIC_NUMBER_NAME) => {
                         data: receivedData[AUTOMATIC_NUMBER_NAME],
                         loading: false,
                     });
-                    dispatch((0, webapp_redux_1.automaticNumberFetchSuccess)({
+                    dispatch((0, redux_1.automaticNumberFetchSuccess)({
                         name: AUTOMATIC_NUMBER_NAME,
                         data: receivedData[AUTOMATIC_NUMBER_NAME],
                     }));
@@ -44,7 +44,7 @@ const useGetAutomaticNumber = (AUTOMATIC_NUMBER_NAME) => {
             if (objectData?.data && Object.keys(objectData?.data).length <= 0) {
                 try {
                     setData({ ...data, loading: true });
-                    dispatch((0, webapp_redux_1.automaticNumberFetchStart)(AUTOMATIC_NUMBER_NAME));
+                    dispatch((0, redux_1.automaticNumberFetchStart)(AUTOMATIC_NUMBER_NAME));
                     fetcher.load(`/api/automaticNumbers?object=${AUTOMATIC_NUMBER_NAME}`);
                 }
                 catch (ex) {

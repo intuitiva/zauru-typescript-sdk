@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, WebAppRowGraphQL, DischargeHistory, WebAppTableUpdateResponse } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, WebAppRowGraphQL, DischargeHistory, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 /**
  * Get getDischargeHistories from the web app table.
  * @param headers Request headers.

@@ -1,10 +1,10 @@
-import { getBasketsSchema, handlePossibleAxiosErrors, reduceAdd, truncateDecimals, } from "@zauru-sdk/webapp-common";
+import { getBasketsSchema, handlePossibleAxiosErrors, reduceAdd, truncateDecimals, } from "@zauru-sdk/common";
 import moment from "moment";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpZauru } from "./httpZauru.js";
 import { createLoteRecord } from "./zauru-lote-record.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getLotStocksByAgencyIdStringQuery, getLotsByNameStringQuery, } from "@zauru-sdk/webapp-graphql";
+import { getLotStocksByAgencyIdStringQuery, getLotsByNameStringQuery, } from "@zauru-sdk/graphql";
 import { getDeliveriesDataTables } from "./zauru-deliveries.js";
 /**
  * getBasketsLots

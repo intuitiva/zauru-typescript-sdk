@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, PayeeCategoryGraphQL, PayeeGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, PayeeCategoryGraphQL, PayeeGraphQL } from "@zauru-sdk/types";
 export declare const TEXT_PAYEE_CATEGORY_NOTES_FOR_PRICE = "CATEGORIA_QUE_REPRESENTA_UN_PRECIO_DE_LABORATORIO (No borrar esto): ";
 export declare const TEXT_PAYEE_CATEGORY_NAME_FOR_PRICE = "CAT-LABORATORIO: ";
 /**

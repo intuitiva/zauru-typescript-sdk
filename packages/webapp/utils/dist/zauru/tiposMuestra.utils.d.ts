@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { WebAppRowGraphQL, TipoMuestra, AxiosUtilsResponse, WebAppTableUpdateResponse } from "@zauru-sdk/webapp-types";
+import { WebAppRowGraphQL, TipoMuestra, AxiosUtilsResponse, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 /**
  * Get tipoMuestras from the web app table.
  * @param headers Request headers.

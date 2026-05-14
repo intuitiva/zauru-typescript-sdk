@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { ClockIconSVG, CloseSvgIcon, IdeaIconSVG } from "@zauru-sdk/webapp-icons";
+import { ClockIconSVG, CloseSvgIcon, IdeaIconSVG } from "@zauru-sdk/icons";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 export const FormTimePicker = (props) => {

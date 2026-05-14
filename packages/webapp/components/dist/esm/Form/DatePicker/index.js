@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
-import { CalendarIconSVG, CloseSvgIcon, IdeaIconSVG } from "@zauru-sdk/webapp-icons";
+import { CalendarIconSVG, CloseSvgIcon, IdeaIconSVG } from "@zauru-sdk/icons";
 import { useFormContext } from "react-hook-form";
 export const FormDatePicker = (props) => {
     const { id, name, title, defaultValue = "", hint, helpText, onChange, tabIndex, disabled = false, className = "", isClearable = false, required = false, } = props;

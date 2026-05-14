@@ -5,9 +5,9 @@ import { TextField } from "../Form/TextField/index.js";
 import { CheckBox } from "../Form/Checkbox/index.js";
 import { createModal } from "../Modal/index.js";
 import { Button } from "../Buttons/index.js";
-import { generateClientUUID } from "@zauru-sdk/webapp-common";
+import { generateClientUUID } from "@zauru-sdk/common";
 import { LoadingInputSkeleton } from "../Skeletons/index.js";
-import { TrashSvg } from "@zauru-sdk/webapp-icons";
+import { TrashSvg } from "@zauru-sdk/icons";
 import { useFormContext } from "react-hook-form";
 import { ComponentError } from "../Alerts/index.js";
 const GenericDynamicTableErrorComponent = ({ name }) => {

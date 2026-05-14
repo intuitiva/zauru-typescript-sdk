@@ -1,5 +1,5 @@
 import { Redis } from "@upstash/redis";
-import { config } from "@zauru-sdk/webapp-config";
+import { config } from "@zauru-sdk/config";
 const redis = new Redis({
     url: config.redisBaseURL,
     token: config.redisToken,

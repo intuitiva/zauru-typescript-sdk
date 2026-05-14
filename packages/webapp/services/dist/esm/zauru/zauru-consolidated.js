@@ -1,8 +1,8 @@
-import { formatDateToUTC, handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { formatDateToUTC, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getConsolidatesBetweenDatesStringQuery } from "@zauru-sdk/webapp-graphql";
+import { getConsolidatesBetweenDatesStringQuery } from "@zauru-sdk/graphql";
 /**
  *
  * @param headers

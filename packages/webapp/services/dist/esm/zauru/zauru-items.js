@@ -1,7 +1,7 @@
-import { extractValueBetweenTags, handlePossibleAxiosErrors, } from "@zauru-sdk/webapp-common";
+import { extractValueBetweenTags, handlePossibleAxiosErrors, } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getItemByNameStringQuery, getItemCategoryByIdStringQuery, getItemsByCategoryStringQuery, getItemsBySuperCategoryStringQuery, getItemsStringQuery, getSuperCategoryByIdStringQuery, } from "@zauru-sdk/webapp-graphql";
+import { getItemByNameStringQuery, getItemCategoryByIdStringQuery, getItemsByCategoryStringQuery, getItemsBySuperCategoryStringQuery, getItemsStringQuery, getSuperCategoryByIdStringQuery, } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 //============================ FORMATEADO DE ITEMS
 function extractIdFromURL(input) {

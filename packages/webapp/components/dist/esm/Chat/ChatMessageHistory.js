@@ -1,5 +1,5 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
-import { CheckIconSVG, PencilSvg } from "@zauru-sdk/webapp-icons";
+import { CheckIconSVG, PencilSvg } from "@zauru-sdk/icons";
 import { useState, useEffect, useRef } from "react";
 export const ChatMessageHistory = (props) => {
     const { author, content, onLike, onUpdateComment, id, commentOwner = false, date, imageLink, } = props;

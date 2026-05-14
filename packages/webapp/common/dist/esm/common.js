@@ -23,7 +23,7 @@ exports.calculateTimeDifference = calculateTimeDifference;
 exports.parseCode = parseCode;
 const moment_1 = __importDefault(require("moment"));
 require("moment-timezone");
-const webapp_types_1 = require("@zauru-sdk/webapp-types");
+const types_1 = require("@zauru-sdk/types");
 exports.DESTINOS_MUESTRA_OPTIONS = [
     { label: "Microbiología", value: "microbiologa" },
     { label: "Residuos de plaguicidas", value: "residuos_de_plaguicidas" },
@@ -128,7 +128,7 @@ const getNewDateByFormat = (date) => {
         return new Date();
     }
     const date_parts = date.split(" ");
-    const new_date = new Date(parseInt(date_parts[4]), webapp_types_1.MONTHS[date_parts[2]], parseInt(date_parts[0]));
+    const new_date = new Date(parseInt(date_parts[4]), types_1.MONTHS[date_parts[2]], parseInt(date_parts[0]));
     return new_date;
 };
 exports.getNewDateByFormat = getNewDateByFormat;

@@ -1,5 +1,5 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { createPayee, createPayeeCategory, createPriceList, deletePayeeCategory, deletePriceList, getPayeeCategoriesByNotesMatch, getPaymentTermById, getVariablesByName, updatePayeeCategory, updatePaymentTerm, } from "@zauru-sdk/webapp-services";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { createPayee, createPayeeCategory, createPriceList, deletePayeeCategory, deletePriceList, getPayeeCategoriesByNotesMatch, getPaymentTermById, getVariablesByName, updatePayeeCategory, updatePaymentTerm, } from "@zauru-sdk/services";
 export const TEXT_PAYEE_CATEGORY_NOTES_FOR_PRICE = "CATEGORIA_QUE_REPRESENTA_UN_PRECIO_DE_LABORATORIO (No borrar esto): ";
 export const TEXT_PAYEE_CATEGORY_NAME_FOR_PRICE = "CAT-LABORATORIO: ";
 /**

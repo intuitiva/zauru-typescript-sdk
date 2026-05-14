@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, WebAppRowGraphQL, ReceptionType } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, WebAppRowGraphQL, ReceptionType } from "@zauru-sdk/types";
 /**
  * Get template history entries from the web app table.
  * @param headers Request headers.

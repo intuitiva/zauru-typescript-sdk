@@ -1,4 +1,4 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getCMSHeaders } from "../common.js";
 import { httpCMSAPI } from "../zauru/httpCMS.js";
 /**

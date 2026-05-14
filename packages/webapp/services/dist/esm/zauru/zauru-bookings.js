@@ -1,8 +1,8 @@
-import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getShipmentsStringQuery } from "@zauru-sdk/webapp-graphql";
+import { getShipmentsStringQuery } from "@zauru-sdk/graphql";
 /**
  * insertBookings
  * @param headers

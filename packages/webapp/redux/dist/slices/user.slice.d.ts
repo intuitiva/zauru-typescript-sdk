@@ -1,4 +1,4 @@
-import { EmployeeGraphQL, OauthProfile, ProfileResponse } from "@zauru-sdk/webapp-types";
+import { EmployeeGraphQL, OauthProfile, ProfileResponse } from "@zauru-sdk/types";
 export interface UserState {
     userProfile: ProfileResponse;
     loadingUserProfile: boolean;

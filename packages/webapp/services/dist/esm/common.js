@@ -3,9 +3,9 @@ import { commitSession, getSession } from "./sessions/sessions.js";
 import chalk from "chalk";
 import { httpZauru } from "./zauru/httpZauru.js";
 import { getAgencyInfo, getEmployeeInfo, getOauthUserInfo, getProfileInformation, } from "./zauru/zauru-profiles.js";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getVariables } from "./zauru/zauru-variables.js";
-import { config } from "@zauru-sdk/webapp-config";
+import { config } from "@zauru-sdk/config";
 /**
  * nativeLogin
  * @param session

@@ -1,4 +1,4 @@
-import { GenericDynamicTableColumn } from "@zauru-sdk/webapp-types";
+import { GenericDynamicTableColumn } from "@zauru-sdk/types";
 export declare const BasicTableHTML: (props: {
     data: {
         [key: string]: string;

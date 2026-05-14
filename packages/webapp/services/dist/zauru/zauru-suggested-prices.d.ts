@@ -1,4 +1,4 @@
-import { AxiosUtilsResponse, ItemWithPrices, SuggestedPriceGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, ItemWithPrices, SuggestedPriceGraphQL } from "@zauru-sdk/types";
 import { Session } from "@remix-run/node";
 /**
  *

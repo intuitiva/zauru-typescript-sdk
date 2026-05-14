@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, SubmissionInvoicesGraphQL, TransformedObject } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, SubmissionInvoicesGraphQL, TransformedObject } from "@zauru-sdk/types";
 export declare function transformFormSubmitObject(input: {
     [key: string]: any;
 }): TransformedObject;

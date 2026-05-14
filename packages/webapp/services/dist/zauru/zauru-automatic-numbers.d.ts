@@ -1,4 +1,4 @@
-import { DocumentAutomaticNumberGraphQL, AxiosUtilsResponse } from "@zauru-sdk/webapp-types";
+import { DocumentAutomaticNumberGraphQL, AxiosUtilsResponse } from "@zauru-sdk/types";
 /**
  * updateAutomaticNumber
  * @param headers

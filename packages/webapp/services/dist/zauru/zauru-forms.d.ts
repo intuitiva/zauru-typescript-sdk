@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, FormDocumentType, FormGraphQL, FormSubmissionGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, FormDocumentType, FormGraphQL, FormSubmissionGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL } from "@zauru-sdk/types";
 /**
  * getForms
  */

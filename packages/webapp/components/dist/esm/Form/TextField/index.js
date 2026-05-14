@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { IdeaIconSVG } from "@zauru-sdk/webapp-icons";
+import { IdeaIconSVG } from "@zauru-sdk/icons";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 export const TextField = (props) => {

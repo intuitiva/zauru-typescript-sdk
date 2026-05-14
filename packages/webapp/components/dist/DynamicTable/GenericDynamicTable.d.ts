@@ -1,5 +1,5 @@
 import React from "react";
-import { GenericDynamicTableColumn, RowDataType, SelectFieldOption } from "@zauru-sdk/webapp-types";
+import { GenericDynamicTableColumn, RowDataType, SelectFieldOption } from "@zauru-sdk/types";
 export type FooterColumnConfig = {
     content?: React.ReactNode;
     className?: string;

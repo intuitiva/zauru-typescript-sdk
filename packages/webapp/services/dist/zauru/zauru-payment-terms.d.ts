@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, PaymentTermGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, PaymentTermGraphQL } from "@zauru-sdk/types";
 /**
  * getPaymentTerms
  */

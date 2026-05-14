@@ -1,5 +1,5 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { getVariablesByName, getWebAppTableRegisters, } from "@zauru-sdk/webapp-services";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { getVariablesByName, getWebAppTableRegisters, } from "@zauru-sdk/services";
 /**
  * Get template history entries from the web app table.
  * @param headers Request headers.

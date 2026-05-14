@@ -1,8 +1,8 @@
-import { arrayToObject, convertToFormData, formatDateToUTC, getBasketsSchema, handlePossibleAxiosErrors, reduceAdd, } from "@zauru-sdk/webapp-common";
+import { arrayToObject, convertToFormData, formatDateToUTC, getBasketsSchema, handlePossibleAxiosErrors, reduceAdd, } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, } from "@zauru-sdk/webapp-graphql";
+import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, } from "@zauru-sdk/graphql";
 /**
  * markAsReceivePurchaseOrder
  * Esta función sólo se utiliza cuando se van a marcar como recibida toda la órden de compra, se recibe todo lo que se envío

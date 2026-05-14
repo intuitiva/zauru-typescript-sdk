@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, BasketSchema, DataTablesFilterBody, HTMLPurchasesListSchema, NewPurchaseOrderResponse, PurchaseOrderDetailsGraphQL, PurchaseOrderGraphQL, PurchasesListResponseSchema, TaggingGraphQL, UpdatePurchaseOrderBody } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, BasketSchema, DataTablesFilterBody, HTMLPurchasesListSchema, NewPurchaseOrderResponse, PurchaseOrderDetailsGraphQL, PurchaseOrderGraphQL, PurchasesListResponseSchema, TaggingGraphQL, UpdatePurchaseOrderBody } from "@zauru-sdk/types";
 /**
  * markAsReceivePurchaseOrder
  * Esta función sólo se utiliza cuando se van a marcar como recibida toda la órden de compra, se recibe todo lo que se envío

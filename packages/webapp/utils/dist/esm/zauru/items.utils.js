@@ -1,5 +1,5 @@
-import { handlePossibleAxiosErrors, } from "@zauru-sdk/webapp-common";
-import { createItem, createItemCategory, getItemCategoriesBySuperCategoryId, getItemsByCategoryId, getItemsBySuperCategoryId, getVariablesByName, } from "@zauru-sdk/webapp-services";
+import { handlePossibleAxiosErrors, } from "@zauru-sdk/common";
+import { createItem, createItemCategory, getItemCategoriesBySuperCategoryId, getItemsByCategoryId, getItemsBySuperCategoryId, getVariablesByName, } from "@zauru-sdk/services";
 /**
  *
  * @param headers

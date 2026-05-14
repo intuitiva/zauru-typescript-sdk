@@ -1,4 +1,4 @@
-import { AUTOMATIC_NUMBER_NAMES } from "@zauru-sdk/webapp-redux";
+import { AUTOMATIC_NUMBER_NAMES } from "@zauru-sdk/redux";
 type ProfileType<T> = {
     data: T;
     loading: boolean;

@@ -1,5 +1,5 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/webapp-common";
-import { create4pinosPoDiscountHistory, getPurchaseOrder, getVariablesByName, update4pinosPoDiscountHistory, } from "@zauru-sdk/webapp-services";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { create4pinosPoDiscountHistory, getPurchaseOrder, getVariablesByName, update4pinosPoDiscountHistory, } from "@zauru-sdk/services";
 export const add4pinosPoDiscountsHistory = async (session, headers, purchaseOrderId, discounts) => {
     return handlePossibleAxiosErrors(async () => {
         const { historial_porcentajes_de_rechazo_webapp_table_id } = await getVariablesByName(headers, session, [

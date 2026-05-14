@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { SpecialItem, WebAppRowGraphQL, RowDataType, AxiosUtilsResponse, PurchaseOrderCosto, BitacoraCostosItems, WebAppTableUpdateResponse } from "@zauru-sdk/webapp-types";
+import { SpecialItem, WebAppRowGraphQL, RowDataType, AxiosUtilsResponse, PurchaseOrderCosto, BitacoraCostosItems, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 /**
  *
  * @param headers

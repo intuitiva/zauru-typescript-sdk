@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, CaseGraphQL } from "@zauru-sdk/webapp-types";
+import { AxiosUtilsResponse, CaseGraphQL } from "@zauru-sdk/types";
 /**
  * getCases
  * @param session
