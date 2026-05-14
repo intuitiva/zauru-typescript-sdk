@@ -1,11 +1,18 @@
 {
   "name": "@appocus/auth-react-router",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "OAuth login flow building blocks for Appocus React Router apps: middlewares, OAuth URL builder, authenticated fetch with reauth popup, and route factories for /login, /logout, /login-popup, /callback and the reauth-popup-done page.",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
+  "exports": {
+    ".": {
+      "browser": "./dist/esm/client.js",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/esm/index.js"
+    }
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
