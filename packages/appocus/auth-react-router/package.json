@@ -1,6 +1,6 @@
 {
   "name": "@appocus/auth-react-router",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "OAuth login flow building blocks for Appocus React Router apps: middlewares, OAuth URL builder, authenticated fetch with reauth popup, and route factories for /login, /logout, /login-popup, /callback and the reauth-popup-done page.",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
@@ -38,8 +38,8 @@
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
-    "@zauru-sdk/config": "^6.0.0",
-    "@zauru-sdk/services": "^6.0.1",
+    "@zauru-sdk/config": "workspace:^",
+    "@zauru-sdk/services": "workspace:^",
     "react": "^19.0.0",
     "react-router": "^7.10.1",
     "sonner": "^2.0.7",
