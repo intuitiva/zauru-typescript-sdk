@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/redux",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "Estructura de Redux propuesta para el desarrollo de webapps en Zauru.",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
