@@ -26,11 +26,11 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
-    "@zauru-sdk/types": "workspace:^",
+    "@zauru-sdk/types": "^6.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.0",
     "react-select": "^5.8.0"
   },
-  "gitHead": "dc00c2f6f6cb4a3d2b1843abfbdb3fe0e44114a7"
+  "gitHead": "57c966c16b47b52c32e72d40ccd7c76d9aaba247"
 }
