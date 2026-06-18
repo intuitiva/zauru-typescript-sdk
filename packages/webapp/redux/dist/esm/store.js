@@ -15,6 +15,7 @@ const templates_slice_js_1 = __importDefault(require("./slices/templates.slice.j
 const automaticNumbers_slice_js_1 = __importDefault(require("./slices/automaticNumbers.slice.js"));
 const tables_slice_js_1 = __importDefault(require("./slices/tables.slice.js"));
 const formsSavedData_slice_js_1 = __importDefault(require("./slices/formsSavedData.slice.js"));
+const formValidation_slice_js_1 = __importDefault(require("./slices/formValidation.slice.js"));
 /**
  * Full Redux snapshot key in `localStorage`. Written by
  * `persistanceLocalStorageMiddleware` after every action.
@@ -68,6 +69,7 @@ const buildSliceInitialStates = () => ({
     automaticNumbers: (0, automaticNumbers_slice_js_1.default)(undefined, { type: "@@INIT" }),
     tables: (0, tables_slice_js_1.default)(undefined, { type: "@@INIT" }),
     formSavedData: (0, formsSavedData_slice_js_1.default)(undefined, { type: "@@INIT" }),
+    formValidation: (0, formValidation_slice_js_1.default)(undefined, { type: "@@INIT" }),
 });
 const isPlainObject = (value) => typeof value === "object" && value !== null && !Array.isArray(value);
 const preloadedState = (() => {
@@ -183,6 +185,7 @@ exports.store = (0, toolkit_1.configureStore)({
         automaticNumbers: automaticNumbers_slice_js_1.default,
         tables: tables_slice_js_1.default,
         formSavedData: formsSavedData_slice_js_1.default,
+        formValidation: formValidation_slice_js_1.default,
     },
     preloadedState,
     middleware: (getDefaultMiddleware) => new toolkit_1.Tuple(persistanceLocalStorageMiddleware),

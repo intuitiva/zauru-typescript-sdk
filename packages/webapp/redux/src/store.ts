@@ -11,6 +11,7 @@ import templateReducer from "./slices/templates.slice.js";
 import automaticNumberReducer from "./slices/automaticNumbers.slice.js";
 import tableReducer from "./slices/tables.slice.js";
 import formSavedDataReducer from "./slices/formsSavedData.slice.js";
+import formValidationReducer from "./slices/formValidation.slice.js";
 
 /**
  * Full Redux snapshot key in `localStorage`. Written by
@@ -77,6 +78,7 @@ const buildSliceInitialStates = () => ({
   automaticNumbers: automaticNumberReducer(undefined, { type: "@@INIT" }),
   tables: tableReducer(undefined, { type: "@@INIT" }),
   formSavedData: formSavedDataReducer(undefined, { type: "@@INIT" }),
+  formValidation: formValidationReducer(undefined, { type: "@@INIT" }),
 });
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
@@ -214,6 +216,7 @@ export const store = configureStore({
     automaticNumbers: automaticNumberReducer,
     tables: tableReducer,
     formSavedData: formSavedDataReducer,
+    formValidation: formValidationReducer,
   } as any,
   preloadedState,
   middleware: (getDefaultMiddleware) =>
