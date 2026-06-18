@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/redux@6.2.0...@zauru-sdk/redux@6.3.0) (2026-06-18)
+
+
+### Features
+
+* restaurando formValidations ([1411e6c](https://github.com/intuitiva/zauru-typescript-sdk/commit/1411e6c6f08d8350508b3dc2fade2ed4a05c03d2))
+
+
+
+
+
 # [6.2.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/redux@6.0.1...@zauru-sdk/redux@6.2.0) (2026-05-29)
 
 

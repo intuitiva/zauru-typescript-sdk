@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/components",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "description": "Componentes reutilizables en las WebApps de Zauru.",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
