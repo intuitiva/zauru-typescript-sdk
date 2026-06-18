@@ -762,7 +762,7 @@ export type Programacion = {
   fecha_cosecha_inicio: string;
   fecha_cosecha_fin: string;
   prestamo_maximo_pos_gtq: number;
-  estado: "en_curso" | "completada";
+  estado: "en_curso" | "completada" | "eliminada";
   observaciones_cierre: string;
   purchase_orders: Partial<PurchaseOrderGraphQL>[];
 };
