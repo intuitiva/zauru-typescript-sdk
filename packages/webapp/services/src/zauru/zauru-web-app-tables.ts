@@ -29,7 +29,7 @@ import { httpZauru } from "./httpZauru.js";
  */
 export async function getWebAppRow<T>(
   session: Session,
-  id: number
+  id: number,
 ): Promise<AxiosUtilsResponse<T>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -45,7 +45,7 @@ export async function getWebAppRow<T>(
       {
         query: getWebAppRowStringQuery(id),
       },
-      { headers }
+      { headers },
     );
 
     if (response.data.errors) {
@@ -65,7 +65,7 @@ export async function getWebAppRow<T>(
 export async function getWebAppTableRegisters<T>(
   session: Session,
   webapp_table_id: string,
-  limit?: number
+  limit?: number,
 ): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -81,10 +81,10 @@ export async function getWebAppTableRegisters<T>(
       {
         query: getWebAppRowsByWebAppTableIdStringQuery(
           Number(webapp_table_id),
-          limit
+          limit,
         ),
       },
-      { headers }
+      { headers },
     );
 
     if (response.data.errors) {
@@ -109,14 +109,14 @@ export async function getWebAppTableRegisters<T>(
 export async function deleteWebAppTableRegister(
   headers: any,
   id_web_app_table: string,
-  id_register: number
+  id_register: number,
 ): Promise<WebAppTableUpdateResponse> {
   const response = await httpZauru<WebAppTableUpdateResponse>(
     `/apps/webapp_tables/${id_web_app_table}/webapp_rows/${id_register}.json`,
     {
       method: "DELETE",
       headers: headers,
-    }
+    },
   );
 
   return response.data;
@@ -133,7 +133,7 @@ export async function createWebAppTableRegister<T>(
   headers: any,
   id_web_app_table: string,
   body: T,
-  extraBody?: { temp_purchase_order_id: string | number }
+  extraBody?: WebAppRowAssociateBody,
 ): Promise<WebAppTableUpdateResponse> {
   const requestBody = {
     webapp_row: { data: body },
@@ -145,7 +145,7 @@ export async function createWebAppTableRegister<T>(
       method: "POST",
       headers: headers,
       data: requestBody,
-    }
+    },
   );
 
   return response.data;
@@ -162,7 +162,7 @@ export async function updateWebAppTableRegister<T>(
   headers: any,
   id_web_app_table: string,
   id_register: number | string,
-  body: Partial<T>
+  body: Partial<T>,
 ): Promise<WebAppTableUpdateResponse> {
   const requestBody = { webapp_row: { data: body } } as WebAppTableBody<T>;
   const response = await httpZauru<WebAppTableUpdateResponse>(
@@ -171,7 +171,7 @@ export async function updateWebAppTableRegister<T>(
       method: "PATCH",
       headers: headers,
       data: requestBody,
-    }
+    },
   );
 
   return response.data;
@@ -185,7 +185,7 @@ export async function associateWebAppTableRegister(
   headers: any,
   id_web_app_table: string,
   id_register: number | string,
-  body: WebAppRowAssociateBody
+  body: WebAppRowAssociateBody,
 ): Promise<WebAppRowAssociateResponse> {
   const response = await httpZauru<WebAppRowAssociateResponse>(
     `/apps/webapp_tables/${id_web_app_table}/webapp_rows/${id_register}/associate.json`,
@@ -193,7 +193,7 @@ export async function associateWebAppTableRegister(
       method: "POST",
       headers: headers,
       data: body,
-    }
+    },
   );
 
   return response.data;
@@ -208,7 +208,7 @@ export async function dissociateWebAppTableRegister(
   headers: any,
   id_web_app_table: string,
   id_register: number | string,
-  body: WebAppRowDissociateBody
+  body: WebAppRowDissociateBody,
 ): Promise<WebAppRowDissociateResponse> {
   const response = await httpZauru<WebAppRowDissociateResponse>(
     `/apps/webapp_tables/${id_web_app_table}/webapp_rows/${id_register}/dissociate.json`,
@@ -216,7 +216,7 @@ export async function dissociateWebAppTableRegister(
       method: "DELETE",
       headers: headers,
       data: body,
-    }
+    },
   );
 
   return response.data;
@@ -232,7 +232,7 @@ export async function dissociateWebAppTableRegister(
  */
 export async function createWebAppTable(
   headers: any,
-  body: WebAppTableCreateBody
+  body: WebAppTableCreateBody,
 ) {
   try {
     const response = await httpZauru.post<WebAppTableGraphQL>(
@@ -240,7 +240,7 @@ export async function createWebAppTable(
       { webapp_table: body },
       {
         headers,
-      }
+      },
     );
 
     return {
@@ -264,7 +264,7 @@ export async function createWebAppTable(
  */
 export const getRejectionWebAppTable = async (
   headers: any,
-  session: Session
+  session: Session,
 ): Promise<AxiosUtilsResponse<RejectionWebAppTableObject>> => {
   return handlePossibleAxiosErrors(async () => {
     const {
@@ -277,14 +277,14 @@ export const getRejectionWebAppTable = async (
 
     const webappTableResponse = await httpZauru.get<WebAppTableGraphQL>(
       `/apps/webapp_tables/${recepciones_rejections_webapp_table_id}.json`,
-      { headers }
+      { headers },
     );
 
     const webappTableRejectionsResponse = await httpZauru.get<
       WebAppRowGraphQL<MotivoRechazo>[]
     >(
       `/apps/webapp_tables/${recepciones_rejection_types_webapp_table_id}/webapp_rows.json`,
-      { headers }
+      { headers },
     );
 
     const rejections_select: { value: string; label: string }[] = [];

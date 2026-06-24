@@ -28,9 +28,7 @@ export declare function deleteWebAppTableRegister(headers: any, id_web_app_table
  * @param id_web_app_table
  * @returns
  */
-export declare function createWebAppTableRegister<T>(headers: any, id_web_app_table: string, body: T, extraBody?: {
-    temp_purchase_order_id: string | number;
-}): Promise<WebAppTableUpdateResponse>;
+export declare function createWebAppTableRegister<T>(headers: any, id_web_app_table: string, body: T, extraBody?: WebAppRowAssociateBody): Promise<WebAppTableUpdateResponse>;
 /**
  * updateWebAppTableRegister Function for update a web app table register
  * @param headers
