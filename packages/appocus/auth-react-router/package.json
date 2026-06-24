@@ -1,6 +1,6 @@
 {
   "name": "@appocus/auth-react-router",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "OAuth login flow building blocks for Appocus React Router apps: middlewares, OAuth URL builder, authenticated fetch with reauth popup, and route factories for /login, /logout, /login-popup, /callback and the reauth-popup-done page.",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
