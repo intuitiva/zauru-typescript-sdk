@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.5.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.4.0...@zauru-sdk/types@6.5.0) (2026-06-24)
+
+
+### Features
+
+* adding associateWorkOrderToProgramacion function ([c40fa50](https://github.com/intuitiva/zauru-typescript-sdk/commit/c40fa50c8519dc5d48dd57c01b85f2301447aa41))
+
+
+
+
+
 # [6.4.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.3.0...@zauru-sdk/types@6.4.0) (2026-06-18)
 
 
