@@ -33,6 +33,15 @@ export declare const deleteProgramacion: (headers: any, session: Session, id: st
  */
 export declare const associatePurchaseOrderToProgramacion: (headers: any, session: Session, id: string, purchase_order_id: number | string) => Promise<AxiosUtilsResponse<WebAppRowAssociateResponse>>;
 /**
+ * Associate a WorkOrder to an existing programacion.
+ * @param headers Request headers.
+ * @param session Session object.
+ * @param id ID of the programacion (webapp row) to associate to.
+ * @param work_order_id ID of the WorkOrder to associate.
+ * @returns A Promise of AxiosUtilsResponse<WebAppRowAssociateResponse>.
+ */
+export declare const associateWorkOrderToProgramacion: (headers: any, session: Session, id: string, work_order_id: number | string) => Promise<AxiosUtilsResponse<WebAppRowAssociateResponse>>;
+/**
  * Update a programacion in the web app table.
  * @param headers Request headers.
  * @param session Session object.

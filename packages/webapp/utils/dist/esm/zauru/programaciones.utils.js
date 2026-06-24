@@ -61,6 +61,21 @@ export const associatePurchaseOrderToProgramacion = (headers, session, id, purch
     });
 };
 /**
+ * Associate a WorkOrder to an existing programacion.
+ * @param headers Request headers.
+ * @param session Session object.
+ * @param id ID of the programacion (webapp row) to associate to.
+ * @param work_order_id ID of the WorkOrder to associate.
+ * @returns A Promise of AxiosUtilsResponse<WebAppRowAssociateResponse>.
+ */
+export const associateWorkOrderToProgramacion = (headers, session, id, work_order_id) => {
+    return handlePossibleAxiosErrors(async () => {
+        const { programaciones_webapp_table_id } = await getVariablesByName(headers, session, ["programaciones_webapp_table_id"]);
+        const response = await associateWebAppTableRegister(headers, programaciones_webapp_table_id, Number(id), { temp_work_order_id: work_order_id });
+        return response;
+    });
+};
+/**
  * Update a programacion in the web app table.
  * @param headers Request headers.
  * @param session Session object.

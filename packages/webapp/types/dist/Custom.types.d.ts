@@ -404,6 +404,7 @@ export type WebAppRowAssociateBody = {
     temp_invoice_id?: number | string;
     temp_shipment_id?: number | string;
     temp_employee_id?: number | string;
+    temp_work_order_id?: number | string;
 };
 export type WebAppRowAssociateResponse = {
     webapp_row_id: number;
