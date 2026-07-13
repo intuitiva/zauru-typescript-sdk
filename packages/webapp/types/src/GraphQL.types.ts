@@ -814,3 +814,38 @@ export type WebAppTableGraphQL = {
   created_at: string;
   updated_at: string;
 };
+
+export type ProductionWorkOrderDetailGraphQL = {
+  id: number;
+  work_order_id: number;
+  item_id?: number | null;
+  bundle_id?: number | null;
+  lot_id?: number | null;
+  serial_id?: number | null;
+  cost_center_id?: number | null;
+  booked_quantity: number | string;
+  delivered_quantity?: number | string | null;
+  reference?: string | null;
+  average_cost?: number | string | null;
+};
+
+export type ProductionWorkOrderGraphQL = {
+  id: number;
+  zid?: number;
+  id_number?: string | null;
+  agency_id: number;
+  reference?: string | null;
+  order_date: string;
+  needs_delivery: boolean;
+  closed: boolean;
+  voided: boolean;
+  closed_at?: string | null;
+  assigned_invoice_id?: number | null;
+  assigned_agency_id?: number | null;
+  assigned_lot_id?: number | null;
+  assigned_serial_id?: number | null;
+  responsible_id?: number | null;
+  tag_id?: number | null;
+  memo?: string | null;
+  production_work_order_details?: ProductionWorkOrderDetailGraphQL[];
+};

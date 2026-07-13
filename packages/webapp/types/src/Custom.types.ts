@@ -860,3 +860,49 @@ export type JsonMemoType = {
   originalNetWeight?: number;
   originalNetWeightLines?: Array<{ weight: number }>;
 };
+
+export type CloseOpenWorkOrderDetailInput = {
+  id: number | string;
+  item_id?: number | string | null;
+  bundle_id?: number | string | null;
+  cost_center_id?: number | string | null;
+  lot_id?: number | string | null;
+  serial_id?: number | string | null;
+  booked_quantity?: number | string;
+  delivered_quantity?: number | string;
+  reference?: string | null;
+  _destroy?: boolean;
+};
+
+export type CloseOpenWorkOrderBody = {
+  production_work_order: {
+    work_order_details_attributes?: CloseOpenWorkOrderDetailInput[];
+  };
+};
+
+export type CloseOpenWorkOrderResponse = {
+  id: number;
+  closed: boolean;
+  closed_at?: string | null;
+  id_number?: string | null;
+};
+
+export type OpenWorkOrdersDataTableRow = {
+  zid: string;
+  num: string;
+  odt: string;
+  ag: string;
+  asg: string;
+  rsp: string;
+  tg: string;
+  lns: number;
+  act: string;
+  DT_RowId: string;
+};
+
+export type OpenWorkOrdersDataTableResponse = {
+  draw: number;
+  recordsTotal: number;
+  recordsFiltered: number;
+  data: OpenWorkOrdersDataTableRow[];
+};

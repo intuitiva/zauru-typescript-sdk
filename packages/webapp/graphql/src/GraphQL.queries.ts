@@ -2078,3 +2078,54 @@ query getPrintTemplates {
     }
 }
 `;
+
+export const getProductionWorkOrderStringQuery = (config: {
+  id: number | string;
+  closed?: boolean;
+  voided?: boolean;
+}) => {
+  const conditions = [`id: { _eq: ${config.id} }`];
+
+  if (config.closed !== undefined) {
+    conditions.push(`closed: { _eq: ${config.closed} }`);
+  }
+
+  if (config.voided !== undefined) {
+    conditions.push(`voided: { _eq: ${config.voided} }`);
+  }
+
+  return `query getProductionWorkOrder {
+  production_work_orders(where: { ${conditions.join(", ")} }) {
+    id
+    zid
+    id_number
+    agency_id
+    reference
+    order_date
+    needs_delivery
+    closed
+    voided
+    closed_at
+    assigned_invoice_id
+    assigned_agency_id
+    assigned_lot_id
+    assigned_serial_id
+    responsible_id
+    tag_id
+    memo
+    production_work_order_details {
+      id
+      work_order_id
+      item_id
+      bundle_id
+      lot_id
+      serial_id
+      cost_center_id
+      booked_quantity
+      delivered_quantity
+      reference
+      average_cost
+    }
+  }
+}`;
+};
