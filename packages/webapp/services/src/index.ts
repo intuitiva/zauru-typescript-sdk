@@ -40,6 +40,7 @@ export * from "./zauru/zauru-payment-terms.js";
 export * from "./zauru/zauru-payment-method.js";
 export * from "./zauru/zauru-price-lists.js";
 export * from "./zauru/zauru-print-templates.js";
+export * from "./zauru/zauru-production-work-orders.js";
 export * from "./zauru/zauru-purchase-orders.js";
 export * from "./zauru/zauru-profiles.js";
 export * from "./zauru/zauru-receptions.js";
