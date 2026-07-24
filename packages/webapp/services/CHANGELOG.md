@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.5.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.4.0...@zauru-sdk/services@6.5.0) (2026-07-24)
+
+
+### Features
+
+* add .json to update_close endpoint ([4c61ed4](https://github.com/intuitiva/zauru-typescript-sdk/commit/4c61ed41a81fb43e793343f625fc0cc4462bc513))
+
+
+
+
+
 # [6.4.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.3.0...@zauru-sdk/services@6.4.0) (2026-07-13)
 
 
