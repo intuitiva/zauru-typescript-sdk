@@ -156,7 +156,7 @@ export const closeOpenWorkOrder = (
       : sendBody;
 
     const response = await httpZauru.patch<CloseOpenWorkOrderResponse>(
-      `/production/open_work_orders/${id}/update_close`,
+      `/production/open_work_orders/${id}/update_close.json`,
       normalizedBody,
       { headers },
     );
