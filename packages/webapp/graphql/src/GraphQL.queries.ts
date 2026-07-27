@@ -703,6 +703,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
         agency_id
         discount
         other_charges
+        total
         consolidate_id
         shipment_reference
         reference

@@ -130,6 +130,7 @@ export type PurchaseOrderGraphQL = {
     import: boolean;
     discount: number;
     other_charges: number;
+    total: number;
     delivery_date: string;
     shipment_reference: string;
     webapp_table_rowables?: {
