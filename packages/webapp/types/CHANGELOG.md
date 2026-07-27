@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.7.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.6.0...@zauru-sdk/types@6.7.0) (2026-07-27)
+
+
+### Features
+
+* agregando total a las ordenes de compra ([a5a54ca](https://github.com/intuitiva/zauru-typescript-sdk/commit/a5a54ca6fed3762b2930194b659462d60e30e5fd))
+
+
+
+
+
 # [6.6.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.5.0...@zauru-sdk/types@6.6.0) (2026-07-13)
 
 
