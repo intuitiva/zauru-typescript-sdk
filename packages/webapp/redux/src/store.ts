@@ -26,7 +26,7 @@ import formValidationReducer from "./slices/formValidation.slice.js";
  * private mode, Safari, or nearly full disks can lower the effective cap. Other
  * apps on the same origin share the same quota.
  */
-export const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v7.0";
+export const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v8.0";
 
 function isQuotaExceededError(error: unknown): boolean {
   if (error instanceof DOMException && error.name === "QuotaExceededError") {
