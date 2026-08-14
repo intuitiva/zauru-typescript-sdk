@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.5.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/redux@6.4.0...@zauru-sdk/redux@6.5.0) (2026-08-14)
+
+
+### Features
+
+* mejorando redux ([8d55dcc](https://github.com/intuitiva/zauru-typescript-sdk/commit/8d55dcce8526498574cfe4070900673c63bcb171))
+* mejorando redux ([cb5d24a](https://github.com/intuitiva/zauru-typescript-sdk/commit/cb5d24ab07c72e43754790870bdd9a3024f49aaa))
+
+
+
+
+
 # [6.4.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/redux@6.3.4...@zauru-sdk/redux@6.4.0) (2026-07-28)
 
 
