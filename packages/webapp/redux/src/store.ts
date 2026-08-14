@@ -1,7 +1,7 @@
 import type { TypedUseSelectorHook } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
-import type { MiddlewareAPI } from "@reduxjs/toolkit";
-import { Tuple, configureStore } from "@reduxjs/toolkit";
+import type { AnyAction, MiddlewareAPI } from "@reduxjs/toolkit";
+import { Tuple, combineReducers, configureStore } from "@reduxjs/toolkit";
 import catalogsReducer from "./slices/catalogs.slice.js";
 import profilesReducer from "./slices/profile.slice.js";
 import webappTablesReducer from "./slices/webapp-tables.slice.js";
@@ -122,6 +122,38 @@ type Whitelist = {
   [K in keyof RootState]?: string[];
 };
 
+const RESET_STORE = "zauru/RESET_STORE";
+
+const appReducer = combineReducers({
+  catalogs: catalogsReducer,
+  profiles: profilesReducer,
+  webappTables: webappTablesReducer,
+  receptions: receptionsReducer,
+  session: sessionReducer,
+  templates: templateReducer,
+  automaticNumbers: automaticNumberReducer,
+  tables: tableReducer,
+  formSavedData: formSavedDataReducer,
+  formValidation: formValidationReducer,
+} as any);
+
+const rootReducer = (
+  state: ReturnType<typeof appReducer> | undefined,
+  action: AnyAction,
+) => {
+  if (action.type === RESET_STORE) {
+    return action.payload as ReturnType<typeof appReducer>;
+  }
+  return appReducer(state, action);
+};
+
+export const store = configureStore({
+  reducer: rootReducer,
+  preloadedState,
+  middleware: (getDefaultMiddleware) =>
+    new Tuple(persistanceLocalStorageMiddleware),
+});
+
 export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
   const savedState = localStorage.getItem(LOCAL_STORAGE_REDUX_NAME);
   const state = JSON.parse(savedState ?? "{}") as RootState;
@@ -159,36 +191,49 @@ export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
   }
 
   try {
-    if (!(typeof document === "undefined") && Object.keys(state)?.length > 0) {
+    if (!(typeof document === "undefined")) {
       const initialState: RootState = buildSliceInitialStates() as RootState;
-
       const newState: RootState = { ...initialState };
 
-      for (const reducerName in whitelist) {
-        if (state.hasOwnProperty(reducerName)) {
-          const key = reducerName as keyof RootState;
-          const reducerState = state[key];
-          const whitelistKey = whitelist[key as any];
+      if (Object.keys(state)?.length > 0) {
+        const stateRecord = state as Record<string, any>;
+        const nextState = newState as Record<string, any>;
+        const whitelistRecord = whitelist as Record<
+          string,
+          string[] | undefined
+        >;
 
-          if (whitelistKey && whitelistKey.length > 0) {
-            newState[key] = newState[key] ? { ...newState[key] } : ({} as any);
+        for (const reducerName in whitelist) {
+          if (Object.prototype.hasOwnProperty.call(stateRecord, reducerName)) {
+            const reducerState = stateRecord[reducerName];
+            const whitelistKey = whitelistRecord[reducerName];
 
-            for (const propertyName of whitelistKey) {
-              if (reducerState?.hasOwnProperty(propertyName)) {
-                const propKey = propertyName as keyof typeof reducerState;
-                if (newState[key] && reducerState) {
-                  newState[key][propKey] = reducerState[propKey];
+            if (whitelistKey && whitelistKey.length > 0) {
+              nextState[reducerName] = nextState[reducerName]
+                ? { ...nextState[reducerName] }
+                : {};
+
+              for (const propertyName of whitelistKey) {
+                if (
+                  reducerState &&
+                  Object.prototype.hasOwnProperty.call(
+                    reducerState,
+                    propertyName,
+                  )
+                ) {
+                  nextState[reducerName][propertyName] =
+                    reducerState[propertyName];
                 }
               }
+            } else if (reducerState) {
+              nextState[reducerName] = reducerState;
             }
-          } else if (reducerState) {
-            newState[key] = reducerState as any;
           }
         }
       }
 
-      // Guarda el nuevo estado en el almacenamiento local
       persistReduxStateToLocalStorage(newState);
+      store.dispatch({ type: RESET_STORE, payload: newState });
     }
   } catch (e) {
     if (isQuotaExceededError(e)) {
@@ -204,24 +249,6 @@ export const cleanLocalStorage = (whitelist: Whitelist = {}) => {
     }
   }
 };
-
-export const store = configureStore({
-  reducer: {
-    catalogs: catalogsReducer,
-    profiles: profilesReducer,
-    webappTables: webappTablesReducer,
-    receptions: receptionsReducer,
-    session: sessionReducer,
-    templates: templateReducer,
-    automaticNumbers: automaticNumberReducer,
-    tables: tableReducer,
-    formSavedData: formSavedDataReducer,
-    formValidation: formValidationReducer,
-  } as any,
-  preloadedState,
-  middleware: (getDefaultMiddleware) =>
-    new Tuple(persistanceLocalStorageMiddleware),
-});
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
