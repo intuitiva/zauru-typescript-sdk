@@ -1,6 +1,6 @@
 import type { TypedUseSelectorHook } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
-import type { AnyAction, MiddlewareAPI } from "@reduxjs/toolkit";
+import type { AnyAction, MiddlewareAPI, Reducer } from "@reduxjs/toolkit";
 import { Tuple, combineReducers, configureStore } from "@reduxjs/toolkit";
 import catalogsReducer from "./slices/catalogs.slice.js";
 import profilesReducer from "./slices/profile.slice.js";
@@ -148,7 +148,7 @@ const rootReducer = (
 };
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: rootReducer as unknown as Reducer<any, AnyAction>,
   preloadedState,
   middleware: (getDefaultMiddleware) =>
     new Tuple(persistanceLocalStorageMiddleware),

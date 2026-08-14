@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useAppDispatch = exports.useAppSelector = exports.store = exports.cleanLocalStorage = exports.LOCAL_STORAGE_REDUX_NAME = void 0;
+exports.useAppDispatch = exports.useAppSelector = exports.cleanLocalStorage = exports.store = exports.LOCAL_STORAGE_REDUX_NAME = void 0;
 const react_redux_1 = require("react-redux");
 const toolkit_1 = require("@reduxjs/toolkit");
 const catalogs_slice_js_1 = __importDefault(require("./slices/catalogs.slice.js"));
@@ -103,6 +103,30 @@ const preloadedState = (() => {
         // Ignorar los errores, se utiliza el estado inicial definido en cada reducer
     }
 })();
+const RESET_STORE = "zauru/RESET_STORE";
+const appReducer = (0, toolkit_1.combineReducers)({
+    catalogs: catalogs_slice_js_1.default,
+    profiles: profile_slice_js_1.default,
+    webappTables: webapp_tables_slice_js_1.default,
+    receptions: reception_slice_js_1.default,
+    session: session_slice_js_1.default,
+    templates: templates_slice_js_1.default,
+    automaticNumbers: automaticNumbers_slice_js_1.default,
+    tables: tables_slice_js_1.default,
+    formSavedData: formsSavedData_slice_js_1.default,
+    formValidation: formValidation_slice_js_1.default,
+});
+const rootReducer = (state, action) => {
+    if (action.type === RESET_STORE) {
+        return action.payload;
+    }
+    return appReducer(state, action);
+};
+exports.store = (0, toolkit_1.configureStore)({
+    reducer: rootReducer,
+    preloadedState,
+    middleware: (getDefaultMiddleware) => new toolkit_1.Tuple(persistanceLocalStorageMiddleware),
+});
 const cleanLocalStorage = (whitelist = {}) => {
     const savedState = localStorage.getItem(exports.LOCAL_STORAGE_REDUX_NAME);
     const state = JSON.parse(savedState ?? "{}");
@@ -136,32 +160,37 @@ const cleanLocalStorage = (whitelist = {}) => {
         console.error(error);
     }
     try {
-        if (!(typeof document === "undefined") && Object.keys(state)?.length > 0) {
+        if (!(typeof document === "undefined")) {
             const initialState = buildSliceInitialStates();
             const newState = { ...initialState };
-            for (const reducerName in whitelist) {
-                if (state.hasOwnProperty(reducerName)) {
-                    const key = reducerName;
-                    const reducerState = state[key];
-                    const whitelistKey = whitelist[key];
-                    if (whitelistKey && whitelistKey.length > 0) {
-                        newState[key] = newState[key] ? { ...newState[key] } : {};
-                        for (const propertyName of whitelistKey) {
-                            if (reducerState?.hasOwnProperty(propertyName)) {
-                                const propKey = propertyName;
-                                if (newState[key] && reducerState) {
-                                    newState[key][propKey] = reducerState[propKey];
+            if (Object.keys(state)?.length > 0) {
+                const stateRecord = state;
+                const nextState = newState;
+                const whitelistRecord = whitelist;
+                for (const reducerName in whitelist) {
+                    if (Object.prototype.hasOwnProperty.call(stateRecord, reducerName)) {
+                        const reducerState = stateRecord[reducerName];
+                        const whitelistKey = whitelistRecord[reducerName];
+                        if (whitelistKey && whitelistKey.length > 0) {
+                            nextState[reducerName] = nextState[reducerName]
+                                ? { ...nextState[reducerName] }
+                                : {};
+                            for (const propertyName of whitelistKey) {
+                                if (reducerState &&
+                                    Object.prototype.hasOwnProperty.call(reducerState, propertyName)) {
+                                    nextState[reducerName][propertyName] =
+                                        reducerState[propertyName];
                                 }
                             }
                         }
-                    }
-                    else if (reducerState) {
-                        newState[key] = reducerState;
+                        else if (reducerState) {
+                            nextState[reducerName] = reducerState;
+                        }
                     }
                 }
             }
-            // Guarda el nuevo estado en el almacenamiento local
             persistReduxStateToLocalStorage(newState);
+            exports.store.dispatch({ type: RESET_STORE, payload: newState });
         }
     }
     catch (e) {
@@ -174,21 +203,5 @@ const cleanLocalStorage = (whitelist = {}) => {
     }
 };
 exports.cleanLocalStorage = cleanLocalStorage;
-exports.store = (0, toolkit_1.configureStore)({
-    reducer: {
-        catalogs: catalogs_slice_js_1.default,
-        profiles: profile_slice_js_1.default,
-        webappTables: webapp_tables_slice_js_1.default,
-        receptions: reception_slice_js_1.default,
-        session: session_slice_js_1.default,
-        templates: templates_slice_js_1.default,
-        automaticNumbers: automaticNumbers_slice_js_1.default,
-        tables: tables_slice_js_1.default,
-        formSavedData: formsSavedData_slice_js_1.default,
-        formValidation: formValidation_slice_js_1.default,
-    },
-    preloadedState,
-    middleware: (getDefaultMiddleware) => new toolkit_1.Tuple(persistanceLocalStorageMiddleware),
-});
 exports.useAppSelector = react_redux_1.useSelector;
 exports.useAppDispatch = react_redux_1.useDispatch;

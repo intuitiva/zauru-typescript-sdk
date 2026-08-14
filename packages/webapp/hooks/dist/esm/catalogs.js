@@ -148,15 +148,25 @@ function useGetReduxCatalog(CATALOG_NAME, { online = false, staleWhileRevalidate
                         // Caso: la respuesta sí es data real
                         const newData = possibleData[CATALOG_NAME];
                         if (Array.isArray(newData)) {
-                            // Guardamos en redux y en el state local
-                            dispatch((0, redux_1.catalogsFetchSuccess)({
-                                name: CATALOG_NAME,
-                                data: newData,
-                            }));
-                            setData({
-                                data: newData,
-                                loading: false,
-                            });
+                            // A successful empty list must not wipe a catalog that was already
+                            // cached (timeouts/partial responses often arrive as []).
+                            if (newData.length === 0 && hasLocalData) {
+                                console.log("La respuesta vino vacía pero hay datos locales en la consulta de", CATALOG_NAME);
+                                setData({
+                                    data: catalogData?.data || [],
+                                    loading: false,
+                                });
+                            }
+                            else {
+                                dispatch((0, redux_1.catalogsFetchSuccess)({
+                                    name: CATALOG_NAME,
+                                    data: newData,
+                                }));
+                                setData({
+                                    data: newData,
+                                    loading: false,
+                                });
+                            }
                         }
                         else {
                             // Por alguna razón no llegó el array esperado

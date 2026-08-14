@@ -1,4 +1,5 @@
 import type { TypedUseSelectorHook } from "react-redux";
+import type { AnyAction } from "@reduxjs/toolkit";
 import { Tuple } from "@reduxjs/toolkit";
 /**
  * Full Redux snapshot key in `localStorage`. Written by
@@ -17,10 +18,10 @@ export declare const LOCAL_STORAGE_REDUX_NAME = "___redux__state__v8.0";
 type Whitelist = {
     [K in keyof RootState]?: string[];
 };
-export declare const cleanLocalStorage: (whitelist?: Whitelist) => void;
-export declare const store: import("@reduxjs/toolkit").EnhancedStore<any, import("@reduxjs/toolkit").UnknownAction, Tuple<[import("@reduxjs/toolkit").StoreEnhancer<{
+export declare const store: import("@reduxjs/toolkit").EnhancedStore<any, AnyAction, Tuple<[import("@reduxjs/toolkit").StoreEnhancer<{
     dispatch: {};
 }>, import("@reduxjs/toolkit").StoreEnhancer]>>;
+export declare const cleanLocalStorage: (whitelist?: Whitelist) => void;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export declare const useAppSelector: TypedUseSelectorHook<RootState>;
