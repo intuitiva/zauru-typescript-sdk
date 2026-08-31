@@ -489,11 +489,23 @@ export type BitacoraPOMassive = {
     manual_override?: boolean;
     manual_discount?: number;
 };
+/**
+ * Filtro aplicado al generar un consolidado.
+ * Lista genérica: para agregar un filtro nuevo basta con empujar otro ítem
+ * ({ key, label, value }) sin cambiar el modelo de ConsolidatedHistory.
+ */
+export type ConsolidatedAppliedFilter = {
+    key: string;
+    label: string;
+    value: string;
+    raw?: unknown;
+};
 export type ConsolidatedHistory = {
     creadoPor: string;
     fechaCreacion: string;
     grupos: ConsolidateGroup[];
     pdfLink: string;
+    filtros?: ConsolidatedAppliedFilter[];
 };
 export type ConsolidateGroup = {
     purchaseOrderIds: number[];
