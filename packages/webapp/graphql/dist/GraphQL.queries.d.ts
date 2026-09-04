@@ -61,6 +61,8 @@ export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: strin
     discount?: number;
     excludeVoided?: boolean;
     tagId?: number | string;
+    paid?: boolean;
+    limit?: number;
 }) => string;
 export declare const getPayeesStringQuery: (filters?: {
     id_number?: string;

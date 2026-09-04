@@ -501,6 +501,8 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     discount?: number;
     excludeVoided?: boolean;
     tagId?: number | string;
+    paid?: boolean;
+    limit?: number;
   },
 ) => {
   const conditions = [];
@@ -511,6 +513,10 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
 
   if (config.excludeVoided) {
     conditions.push("voided: { _eq: false }");
+  }
+
+  if (typeof config.paid === "boolean") {
+    conditions.push(`paid: { _eq: ${config.paid} }`);
   }
 
   if (config.agencyId) {
@@ -686,9 +692,13 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   }`
     : "";
 
+  const limitClause =
+    typeof config.limit === "number" ? `limit: ${config.limit},` : "";
+
   return `
     query getPurchaseOrdersBetweenDates {
       purchase_orders (
+        ${limitClause}
         order_by: { id: desc },
         ${whereClause}
       ) {
@@ -707,6 +717,8 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
         consolidate_id
         shipment_reference
         reference
+        incoterm_destination
+        paid
         ${purchaseOrderDetails}
         ${lots}
         ${webAppRows}

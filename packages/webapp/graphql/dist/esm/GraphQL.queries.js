@@ -394,6 +394,9 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
     if (config.excludeVoided) {
         conditions.push("voided: { _eq: false }");
     }
+    if (typeof config.paid === "boolean") {
+        conditions.push(`paid: { _eq: ${config.paid} }`);
+    }
     if (config.agencyId) {
         conditions.push(`agency_id: { _eq: ${config.agencyId} }`);
     }
@@ -529,9 +532,11 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
     }
   }`
         : "";
+    const limitClause = typeof config.limit === "number" ? `limit: ${config.limit},` : "";
     return `
     query getPurchaseOrdersBetweenDates {
       purchase_orders (
+        ${limitClause}
         order_by: { id: desc },
         ${whereClause}
       ) {
@@ -550,6 +555,8 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
         consolidate_id
         shipment_reference
         reference
+        incoterm_destination
+        paid
         ${purchaseOrderDetails}
         ${lots}
         ${webAppRows}

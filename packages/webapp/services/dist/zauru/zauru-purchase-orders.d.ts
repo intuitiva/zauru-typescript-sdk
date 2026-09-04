@@ -179,6 +179,8 @@ export declare const getGraphQLPurchaseOrderBetweenDates: (session: Session, dat
     discount?: number;
     excludeVoided?: boolean;
     tagId?: number;
+    paid?: boolean;
+    limit?: number;
 }) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
 /**
  * deletePurchaseOrder
