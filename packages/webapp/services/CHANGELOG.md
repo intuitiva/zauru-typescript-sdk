@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.6.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.5.2...@zauru-sdk/services@6.6.0) (2026-09-04)
+
+
+### Features
+
+* filtrar paid, limit e incoterm_destination en OC entre fechas ([5a8fe6e](https://github.com/intuitiva/zauru-typescript-sdk/commit/5a8fe6e564f56a1b32c4948cc1a98e29026e7c8c))
+
+
+
+
+
 ## [6.5.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.5.1...@zauru-sdk/services@6.5.2) (2026-08-31)
 
 **Note:** Version bump only for package @zauru-sdk/services
