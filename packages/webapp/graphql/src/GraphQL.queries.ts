@@ -38,6 +38,7 @@ export const getLast100ReceptionsStringQuery = (
           reference
           booked_quantity
           delivered_quantity
+          unit_cost
         }
         lots(where: {active: {_eq: true}}) {
           id
@@ -81,6 +82,7 @@ query getPurchaseOrderByIdNumber {
       reference
       booked_quantity
       delivered_quantity
+      unit_cost
     }
     lots(where: {active: {_eq: true}}) {
       id
@@ -191,6 +193,7 @@ query getPurchaseOrder($id: bigint) @cached {
       reference
       booked_quantity
       delivered_quantity
+      unit_cost
       item {
         name
         stocks_only_integer
@@ -350,6 +353,7 @@ export const getShipmentsStringQuery = ({
             reference
             booked_quantity
             delivered_quantity
+            unit_cost
           }
         }`
       : "";
@@ -653,6 +657,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
             reference
             booked_quantity
             delivered_quantity
+            unit_cost
           }`
     : "";
 
