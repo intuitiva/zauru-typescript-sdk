@@ -1,4 +1,4 @@
-import { CURRENCY_PREFIX, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, } from "@zauru-sdk/common";
+import { CURRENCY_PREFIX, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, setRejectionPercentage, } from "@zauru-sdk/common";
 import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, getLotesWithPurchaseFormated, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia
@@ -173,18 +173,34 @@ export const updatePurchaseItemPrice = async (headers, data, purchase_id) => {
 };
 /**
  * updateOchAndDis
- * @param headers
- * @param session
- * @returns
+ * Updates rejectionPercentage in purchase_order.memo (not the financial discount column)
+ * and optionally other_charges (tolerancia).
  */
-export const updateOchAndDis = async (headers, data, purchase_id) => {
+export const updateOchAndDis = async (headers, data, purchase_id, session) => {
     return handlePossibleAxiosErrors(async () => {
+        const rejectionPercentage = Number(data?.rejectionPercentage ?? data?.discount ?? 0);
+        let currentMemo = data.memo;
+        if (currentMemo === undefined && session) {
+            const purchaseOrderResponse = await getPurchaseOrder(session, purchase_id, {
+                withLotStocksToMyAgency: false,
+                withPayee: false,
+                withReceptions: false,
+            });
+            if (purchaseOrderResponse.error || !purchaseOrderResponse.data) {
+                throw new Error(purchaseOrderResponse.userMsg ||
+                    "No se pudo obtener la orden de compra para actualizar el porcentaje de rechazo");
+            }
+            currentMemo = purchaseOrderResponse.data.memo;
+        }
+        if (currentMemo === undefined) {
+            throw new Error("memo or session is required to update rejectionPercentage");
+        }
         const body = {
             purchase_order: {
-                discount: Number(data?.discount),
+                memo: setRejectionPercentage(currentMemo, rejectionPercentage),
             },
         };
-        if (data.other_charges) {
+        if (data.other_charges !== undefined && data.other_charges !== null) {
             body.purchase_order.other_charges = Number(data.other_charges);
         }
         const responseUpdate = await updateReceivedPurchaseOrder(headers, body, purchase_id);

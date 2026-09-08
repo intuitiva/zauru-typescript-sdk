@@ -336,6 +336,7 @@ export type UpdatePurchaseOrderBody = {
     id_number?: string;
     discount?: number;
     other_charges?: number;
+    memo?: string;
     payee_id?: number | string;
     reference?: string;
     purchase_order_details_attributes?: {
@@ -872,6 +873,8 @@ export type JsonMemoType = {
   elotinUnitsPerPound?: string;
   originalNetWeight?: number;
   originalNetWeightLines?: Array<{ weight: number }>;
+  confirmed?: boolean;
+  rejectionPercentage?: number;
 };
 
 export type CloseOpenWorkOrderDetailInput = {

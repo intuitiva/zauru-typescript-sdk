@@ -30,6 +30,37 @@ export const parseJsonMemo = (memo?: string): JsonMemoType => {
   }
 };
 
+export const stringifyJsonMemo = (memo: JsonMemoType): string =>
+  JSON.stringify(memo);
+
+export const mergeJsonMemo = (
+  memo: string | undefined,
+  patch: Partial<JsonMemoType>,
+): string => stringifyJsonMemo({ ...parseJsonMemo(memo), ...patch });
+
+export const getRejectionPercentage = (
+  source: string | { memo?: string } | JsonMemoType | undefined,
+): number => {
+  if (source == null || source === "") return 0;
+
+  let parsed: JsonMemoType;
+  if (typeof source === "string") {
+    parsed = parseJsonMemo(source);
+  } else if (typeof (source as { memo?: unknown }).memo === "string") {
+    parsed = parseJsonMemo((source as { memo: string }).memo);
+  } else {
+    parsed = source as JsonMemoType;
+  }
+
+  const value = Number(parsed.rejectionPercentage);
+  return Number.isFinite(value) ? value : 0;
+};
+
+export const setRejectionPercentage = (
+  memo: string | undefined,
+  percentage: number,
+): string => mergeJsonMemo(memo, { rejectionPercentage: percentage });
+
 /**
  * Obtener el objeto de canastas en base al memo
  * @param memo

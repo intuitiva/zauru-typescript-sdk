@@ -5,6 +5,7 @@ import {
   getStringFullDate,
   getZauruDateByText,
   handlePossibleAxiosErrors,
+  setRejectionPercentage,
 } from "@zauru-sdk/common";
 import {
   commitSession,
@@ -316,23 +317,56 @@ export const updatePurchaseItemPrice = async (
 
 /**
  * updateOchAndDis
- * @param headers
- * @param session
- * @returns
+ * Updates rejectionPercentage in purchase_order.memo (not the financial discount column)
+ * and optionally other_charges (tolerancia).
  */
 export const updateOchAndDis = async (
   headers: any,
-  data: { discount?: number | string; other_charges?: number | string },
+  data: {
+    rejectionPercentage?: number | string;
+    discount?: number | string;
+    other_charges?: number | string;
+    memo?: string;
+  },
   purchase_id: number,
+  session?: Session,
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
+    const rejectionPercentage = Number(
+      data?.rejectionPercentage ?? data?.discount ?? 0,
+    );
+
+    let currentMemo = data.memo;
+    if (currentMemo === undefined && session) {
+      const purchaseOrderResponse = await getPurchaseOrder(session, purchase_id, {
+        withLotStocksToMyAgency: false,
+        withPayee: false,
+        withReceptions: false,
+      });
+
+      if (purchaseOrderResponse.error || !purchaseOrderResponse.data) {
+        throw new Error(
+          purchaseOrderResponse.userMsg ||
+            "No se pudo obtener la orden de compra para actualizar el porcentaje de rechazo",
+        );
+      }
+
+      currentMemo = purchaseOrderResponse.data.memo;
+    }
+
+    if (currentMemo === undefined) {
+      throw new Error(
+        "memo or session is required to update rejectionPercentage",
+      );
+    }
+
     const body = {
       purchase_order: {
-        discount: Number(data?.discount),
+        memo: setRejectionPercentage(currentMemo, rejectionPercentage),
       },
     } as UpdatePurchaseOrderBody;
 
-    if (data.other_charges) {
+    if (data.other_charges !== undefined && data.other_charges !== null) {
       body.purchase_order.other_charges = Number(data.other_charges);
     }
 

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.priceToText = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.obtenerFechaActualConZonaHoraria = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.parseJsonMemo = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.priceToText = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.obtenerFechaActualConZonaHoraria = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.setRejectionPercentage = exports.getRejectionPercentage = exports.mergeJsonMemo = exports.stringifyJsonMemo = exports.parseJsonMemo = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
 exports.generateClientUUID = generateClientUUID;
 exports.extractValueBetweenTags = extractValueBetweenTags;
 exports.isJsonArray = isJsonArray;
@@ -44,6 +44,29 @@ const parseJsonMemo = (memo) => {
     }
 };
 exports.parseJsonMemo = parseJsonMemo;
+const stringifyJsonMemo = (memo) => JSON.stringify(memo);
+exports.stringifyJsonMemo = stringifyJsonMemo;
+const mergeJsonMemo = (memo, patch) => (0, exports.stringifyJsonMemo)({ ...(0, exports.parseJsonMemo)(memo), ...patch });
+exports.mergeJsonMemo = mergeJsonMemo;
+const getRejectionPercentage = (source) => {
+    if (source == null || source === "")
+        return 0;
+    let parsed;
+    if (typeof source === "string") {
+        parsed = (0, exports.parseJsonMemo)(source);
+    }
+    else if (typeof source.memo === "string") {
+        parsed = (0, exports.parseJsonMemo)(source.memo);
+    }
+    else {
+        parsed = source;
+    }
+    const value = Number(parsed.rejectionPercentage);
+    return Number.isFinite(value) ? value : 0;
+};
+exports.getRejectionPercentage = getRejectionPercentage;
+const setRejectionPercentage = (memo, percentage) => (0, exports.mergeJsonMemo)(memo, { rejectionPercentage: percentage });
+exports.setRejectionPercentage = setRejectionPercentage;
 /**
  * Obtener el objeto de canastas en base al memo
  * @param memo

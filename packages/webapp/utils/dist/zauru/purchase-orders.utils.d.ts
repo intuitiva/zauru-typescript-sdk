@@ -36,14 +36,15 @@ export declare const updatePurchaseItemPrice: (headers: any, data: {
 }, purchase_id: number) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * updateOchAndDis
- * @param headers
- * @param session
- * @returns
+ * Updates rejectionPercentage in purchase_order.memo (not the financial discount column)
+ * and optionally other_charges (tolerancia).
  */
 export declare const updateOchAndDis: (headers: any, data: {
+    rejectionPercentage?: number | string;
     discount?: number | string;
     other_charges?: number | string;
-}, purchase_id: number) => Promise<AxiosUtilsResponse<boolean>>;
+    memo?: string;
+}, purchase_id: number, session?: Session) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * Obtengo los id's de las órdenes de compra en un arreglo numérico
  * @param headers

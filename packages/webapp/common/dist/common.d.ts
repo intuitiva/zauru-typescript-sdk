@@ -2,6 +2,12 @@ import "moment-timezone";
 import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption, JsonMemoType } from "@zauru-sdk/types";
 export declare const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[];
 export declare const parseJsonMemo: (memo?: string) => JsonMemoType;
+export declare const stringifyJsonMemo: (memo: JsonMemoType) => string;
+export declare const mergeJsonMemo: (memo: string | undefined, patch: Partial<JsonMemoType>) => string;
+export declare const getRejectionPercentage: (source: string | {
+    memo?: string;
+} | JsonMemoType | undefined) => number;
+export declare const setRejectionPercentage: (memo: string | undefined, percentage: number) => string;
 /**
  * Obtener el objeto de canastas en base al memo
  * @param memo
