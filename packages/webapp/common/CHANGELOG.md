@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.2.5...@zauru-sdk/common@6.3.0) (2026-09-08)
+
+
+### Features
+
+* store purchase order rejection percentage in memo ([65d77c1](https://github.com/intuitiva/zauru-typescript-sdk/commit/65d77c156ebd17cf599767ccc6cc9653170165f9))
+
+
+
+
+
 ## [6.2.5](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.2.4...@zauru-sdk/common@6.2.5) (2026-08-31)
 
 **Note:** Version bump only for package @zauru-sdk/common
