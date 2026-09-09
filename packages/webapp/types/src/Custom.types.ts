@@ -546,6 +546,8 @@ export type POHistoryMassive = {
   originalOtherCharges: number;
   originalDiscount: number;
   revertida?: boolean;
+  /** memo del listado, para actualizar rejectionPercentage sin volver a consultar la OC */
+  memo?: string | object | null;
 };
 
 export type BitacoraPOMassive = {
