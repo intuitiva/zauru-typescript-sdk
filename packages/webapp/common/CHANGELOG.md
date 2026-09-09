@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.3.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.3.0...@zauru-sdk/common@6.3.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* read rejection percentage from memo objects ([3e1292a](https://github.com/intuitiva/zauru-typescript-sdk/commit/3e1292a2d77f1347a8ceef526019298618fe2ca0))
+
+
+
+
+
 # [6.3.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.2.5...@zauru-sdk/common@6.3.0) (2026-09-08)
 
 
