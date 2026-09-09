@@ -326,7 +326,7 @@ export const updateOchAndDis = async (
     rejectionPercentage?: number | string;
     discount?: number | string;
     other_charges?: number | string;
-    memo?: string;
+    memo?: string | object;
   },
   purchase_id: number,
   session?: Session,

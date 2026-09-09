@@ -43,7 +43,7 @@ export declare const updateOchAndDis: (headers: any, data: {
     rejectionPercentage?: number | string;
     discount?: number | string;
     other_charges?: number | string;
-    memo?: string;
+    memo?: string | object;
 }, purchase_id: number, session?: Session) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * Obtengo los id's de las órdenes de compra en un arreglo numérico

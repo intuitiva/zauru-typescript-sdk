@@ -18,8 +18,11 @@ export const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[] = [
 moment.locale("es");
 
 // Helper function to parse JSON memo safely
-export const parseJsonMemo = (memo?: string): JsonMemoType => {
-  if (!memo) return {};
+export const parseJsonMemo = (memo?: string | object): JsonMemoType => {
+  if (memo == null || memo === "") return {};
+  if (typeof memo === "object") {
+    return memo as JsonMemoType;
+  }
   try {
     return JSON.parse(memo);
   } catch (error) {
@@ -34,30 +37,48 @@ export const stringifyJsonMemo = (memo: JsonMemoType): string =>
   JSON.stringify(memo);
 
 export const mergeJsonMemo = (
-  memo: string | undefined,
+  memo: string | object | undefined,
   patch: Partial<JsonMemoType>,
 ): string => stringifyJsonMemo({ ...parseJsonMemo(memo), ...patch });
 
+const toFiniteNumber = (value: unknown): number | undefined => {
+  if (value == null || value === "") return undefined;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+};
+
+/**
+ * Reads rejection % from memo.rejectionPercentage.
+ * Does not use purchase_orders.discount (monetary Baculo field).
+ */
 export const getRejectionPercentage = (
-  source: string | { memo?: string } | JsonMemoType | undefined,
+  source: string | { memo?: string | object } | JsonMemoType | undefined,
 ): number => {
   if (source == null || source === "") return 0;
 
-  let parsed: JsonMemoType;
   if (typeof source === "string") {
-    parsed = parseJsonMemo(source);
-  } else if (typeof (source as { memo?: unknown }).memo === "string") {
-    parsed = parseJsonMemo((source as { memo: string }).memo);
-  } else {
-    parsed = source as JsonMemoType;
+    return toFiniteNumber(parseJsonMemo(source).rejectionPercentage) ?? 0;
   }
 
-  const value = Number(parsed.rejectionPercentage);
-  return Number.isFinite(value) ? value : 0;
+  if (typeof source !== "object") return 0;
+
+  const record = source as {
+    memo?: string | object;
+    rejectionPercentage?: number | string;
+  };
+
+  if (record.memo != null && record.memo !== "") {
+    const fromMemo = toFiniteNumber(
+      parseJsonMemo(record.memo).rejectionPercentage,
+    );
+    if (fromMemo !== undefined) return fromMemo;
+  }
+
+  return toFiniteNumber(record.rejectionPercentage) ?? 0;
 };
 
 export const setRejectionPercentage = (
-  memo: string | undefined,
+  memo: string | object | undefined,
   percentage: number,
 ): string => mergeJsonMemo(memo, { rejectionPercentage: percentage });
 

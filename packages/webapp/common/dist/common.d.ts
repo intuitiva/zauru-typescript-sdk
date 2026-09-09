@@ -1,13 +1,17 @@
 import "moment-timezone";
 import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption, JsonMemoType } from "@zauru-sdk/types";
 export declare const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[];
-export declare const parseJsonMemo: (memo?: string) => JsonMemoType;
+export declare const parseJsonMemo: (memo?: string | object) => JsonMemoType;
 export declare const stringifyJsonMemo: (memo: JsonMemoType) => string;
-export declare const mergeJsonMemo: (memo: string | undefined, patch: Partial<JsonMemoType>) => string;
+export declare const mergeJsonMemo: (memo: string | object | undefined, patch: Partial<JsonMemoType>) => string;
+/**
+ * Reads rejection % from memo.rejectionPercentage.
+ * Does not use purchase_orders.discount (monetary Baculo field).
+ */
 export declare const getRejectionPercentage: (source: string | {
-    memo?: string;
+    memo?: string | object;
 } | JsonMemoType | undefined) => number;
-export declare const setRejectionPercentage: (memo: string | undefined, percentage: number) => string;
+export declare const setRejectionPercentage: (memo: string | object | undefined, percentage: number) => string;
 /**
  * Obtener el objeto de canastas en base al memo
  * @param memo

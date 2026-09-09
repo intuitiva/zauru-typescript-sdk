@@ -31,8 +31,11 @@ exports.DESTINOS_MUESTRA_OPTIONS = [
 moment_1.default.locale("es");
 // Helper function to parse JSON memo safely
 const parseJsonMemo = (memo) => {
-    if (!memo)
+    if (memo == null || memo === "")
         return {};
+    if (typeof memo === "object") {
+        return memo;
+    }
     try {
         return JSON.parse(memo);
     }
@@ -48,21 +51,31 @@ const stringifyJsonMemo = (memo) => JSON.stringify(memo);
 exports.stringifyJsonMemo = stringifyJsonMemo;
 const mergeJsonMemo = (memo, patch) => (0, exports.stringifyJsonMemo)({ ...(0, exports.parseJsonMemo)(memo), ...patch });
 exports.mergeJsonMemo = mergeJsonMemo;
+const toFiniteNumber = (value) => {
+    if (value == null || value === "")
+        return undefined;
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+};
+/**
+ * Reads rejection % from memo.rejectionPercentage.
+ * Does not use purchase_orders.discount (monetary Baculo field).
+ */
 const getRejectionPercentage = (source) => {
     if (source == null || source === "")
         return 0;
-    let parsed;
     if (typeof source === "string") {
-        parsed = (0, exports.parseJsonMemo)(source);
+        return toFiniteNumber((0, exports.parseJsonMemo)(source).rejectionPercentage) ?? 0;
     }
-    else if (typeof source.memo === "string") {
-        parsed = (0, exports.parseJsonMemo)(source.memo);
+    if (typeof source !== "object")
+        return 0;
+    const record = source;
+    if (record.memo != null && record.memo !== "") {
+        const fromMemo = toFiniteNumber((0, exports.parseJsonMemo)(record.memo).rejectionPercentage);
+        if (fromMemo !== undefined)
+            return fromMemo;
     }
-    else {
-        parsed = source;
-    }
-    const value = Number(parsed.rejectionPercentage);
-    return Number.isFinite(value) ? value : 0;
+    return toFiniteNumber(record.rejectionPercentage) ?? 0;
 };
 exports.getRejectionPercentage = getRejectionPercentage;
 const setRejectionPercentage = (memo, percentage) => (0, exports.mergeJsonMemo)(memo, { rejectionPercentage: percentage });
