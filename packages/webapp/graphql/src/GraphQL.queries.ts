@@ -406,6 +406,46 @@ export const getShipmentsStringQuery = ({
   }`;
 };
 
+/**
+ * Lightweight lookup of a shipment already linked to a purchase order
+ * by reference. Used to reuse an existing booking instead of creating
+ * a duplicate when a previous attempt persisted the shipment but not
+ * the local apiCall.
+ */
+export const getBookingByPurchaseOrderAndReferenceStringQuery = (
+  purchaseOrderId: number | string,
+  reference: string,
+) => {
+  const escapedReference = String(reference)
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"');
+
+  return `
+query getBookingByPurchaseOrderAndReference {
+  purchase_orders(where: {id: {_eq: ${Number(purchaseOrderId)}}}) {
+    shipment_purchase_orders(
+      where: {
+        shipment: {
+          reference: { _eq: "${escapedReference}" }
+          voided: { _eq: false }
+          returned: { _eq: false }
+        }
+      }
+      limit: 1
+    ) {
+      shipment {
+        id
+        reference
+        delivered
+        voided
+        returned
+      }
+    }
+  }
+}
+`;
+};
+
 export const getLotsByNameStringQuery = (name: string, entity_id: number) => `
 query getLots {
     lots (limit: 100, order_by: {id: desc}, where: {entity_id: {_eq: ${entity_id}}, name: {_eq: "${name}"}}) {

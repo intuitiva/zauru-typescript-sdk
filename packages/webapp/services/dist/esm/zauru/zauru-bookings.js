@@ -2,7 +2,7 @@ import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getShipmentsStringQuery } from "@zauru-sdk/graphql";
+import { getBookingByPurchaseOrderAndReferenceStringQuery, getShipmentsStringQuery, } from "@zauru-sdk/graphql";
 /**
  * insertBookings
  * @param headers
@@ -78,5 +78,23 @@ export const getBooking = async (headers, booking_id) => {
             headers,
         });
         return response.data;
+    });
+};
+/**
+ * getBookingByPurchaseOrderAndReference
+ * Returns the first non-voided, non-returned shipment linked to the PO
+ * with the given reference, or null when none exists.
+ */
+export const getBookingByPurchaseOrderAndReference = async (session, purchaseOrderId, reference) => {
+    return handlePossibleAxiosErrors(async () => {
+        const headers = await getGraphQLAPIHeaders(session);
+        const response = await httpGraphQLAPI.post("", {
+            query: getBookingByPurchaseOrderAndReferenceStringQuery(purchaseOrderId, reference),
+        }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
+        return (response.data?.data?.purchase_orders?.[0]?.shipment_purchase_orders?.[0]
+            ?.shipment ?? null);
     });
 };

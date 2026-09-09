@@ -26,3 +26,9 @@ export declare const getBookings: (session: Session, wheres?: string[]) => Promi
  * @returns
  */
 export declare const getBooking: (headers: any, booking_id: string) => Promise<AxiosUtilsResponse<ShipmentGraphQL>>;
+/**
+ * getBookingByPurchaseOrderAndReference
+ * Returns the first non-voided, non-returned shipment linked to the PO
+ * with the given reference, or null when none exists.
+ */
+export declare const getBookingByPurchaseOrderAndReference: (session: Session, purchaseOrderId: number | string, reference: string) => Promise<AxiosUtilsResponse<ShipmentGraphQL | null>>;

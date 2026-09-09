@@ -31,6 +31,13 @@ export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, s
         endDate: string;
     };
 }) => string;
+/**
+ * Lightweight lookup of a shipment already linked to a purchase order
+ * by reference. Used to reuse an existing booking instead of creating
+ * a duplicate when a previous attempt persisted the shipment but not
+ * the local apiCall.
+ */
+export declare const getBookingByPurchaseOrderAndReferenceStringQuery: (purchaseOrderId: number | string, reference: string) => string;
 export declare const getLotsByNameStringQuery: (name: string, entity_id: number) => string;
 export declare const getLotStocksByAgencyIdStringQuery: (agency_id: number) => string;
 export declare const getSerialsStringQuery: (filters: {
