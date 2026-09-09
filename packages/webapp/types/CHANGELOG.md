@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.10.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.9.0...@zauru-sdk/types@6.10.0) (2026-09-09)
+
+
+### Features
+
+* persist listing memo on POHistoryMassive ([8d28f62](https://github.com/intuitiva/zauru-typescript-sdk/commit/8d28f62b000d973415b61cead979d819ad6d27e9))
+
+
+
+
+
 # [6.9.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.8.0...@zauru-sdk/types@6.9.0) (2026-09-08)
 
 
