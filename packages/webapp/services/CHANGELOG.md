@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.7.3](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.7.2...@zauru-sdk/services@6.7.3) (2026-09-10)
+
+
+### Bug Fixes
+
+* refrescar variables de sesión si faltan en el cache ([d62d213](https://github.com/intuitiva/zauru-typescript-sdk/commit/d62d2138527cbca5c3dced9c9fb804c3bcb99528))
+
+
+
+
+
 ## [6.7.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.7.1...@zauru-sdk/services@6.7.2) (2026-09-10)
 
 **Note:** Version bump only for package @zauru-sdk/services
