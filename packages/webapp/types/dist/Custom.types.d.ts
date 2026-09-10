@@ -577,6 +577,8 @@ export type PurchaseOrderCosto = {
     msgResultado?: string;
     fecha: string;
     memo?: string;
+    payee_id?: number;
+    reference?: string;
     purchase_order_details: {
         id: number;
         item_id: number;
