@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.13.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.12.0...@zauru-sdk/types@6.13.0) (2026-09-10)
+
+
+### Features
+
+* add payee_id and reference to PurchaseOrderCosto ([393cba3](https://github.com/intuitiva/zauru-typescript-sdk/commit/393cba37ae3b44bdd079c1c9eb0ac2bcaab27b5d))
+
+
+
+
+
 # [6.12.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.11.0...@zauru-sdk/types@6.12.0) (2026-09-10)
 
 
