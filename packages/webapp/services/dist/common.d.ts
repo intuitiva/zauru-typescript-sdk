@@ -53,6 +53,10 @@ export declare const saveSessionMessage: (session: Session, info: SessionMessage
 export declare const deleteSessionMessage: (session: Session, id: string) => Promise<boolean>;
 export declare function generateDistinctCode(prefix: string): string;
 /**
+ * Actualiza las variables en la sesión desde Zauru.
+ */
+export declare function actualizarVariables(headers: any, session: Session): Promise<VariableGraphQL[]>;
+/**
  *
  * @param headers
  * @param session
@@ -63,10 +67,3 @@ export declare function getVariablesByName(headers: any, session: Session, names
     [key: string]: string;
 }>;
 export declare function getVariablesSchemaByName(headers: any, session: Session, names: Array<string>): Promise<VariableGraphQL[]>;
-/**
- * Actualiza las variables en la sesión.
- * @param {any} headers - Headers necesarios para la consulta.
- * @param {Session} session - La sesión actual.
- * @returns {Promise<void>}
- */
-export declare function actualizarVariables(headers: any, session: Session): Promise<void>;

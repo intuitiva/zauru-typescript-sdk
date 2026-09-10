@@ -233,6 +233,52 @@ export function generateDistinctCode(prefix) {
     const codigoProducto = `${prefix}-${uuid}`;
     return codigoProducto;
 }
+const getCachedSessionVariables = (session) => {
+    const tempVars = session.get("variables");
+    return Array.isArray(tempVars) && tempVars.length ? tempVars : [];
+};
+const pickVariablesByName = (variables, names) => {
+    const returnObject = {};
+    for (const variable of variables) {
+        if (names.includes(variable.name)) {
+            returnObject[variable.name] = variable.value;
+        }
+    }
+    return returnObject;
+};
+const missingVariableNames = (names, found) => names.filter((name) => !Object.keys(found).includes(name));
+/**
+ * Actualiza las variables en la sesión desde Zauru.
+ */
+export async function actualizarVariables(headers, session) {
+    const response = await getVariables(headers);
+    if (response.error) {
+        throw new Error(`${response.userMsg} - ${response.msg}`);
+    }
+    const variables = response.data ?? [];
+    session.set("variables", variables);
+    await commitSession(session);
+    console.log("Variables actualizadas y sesión refrescada.");
+    return variables;
+}
+const getSessionVariables = async (headers, session, options) => {
+    if (!options?.refresh) {
+        const cached = getCachedSessionVariables(session);
+        if (cached.length) {
+            return { variables: cached, refreshed: false };
+        }
+    }
+    return {
+        variables: await actualizarVariables(headers, session),
+        refreshed: true,
+    };
+};
+const assertRequestedVariablesFound = (names, found) => {
+    const noEncontradas = missingVariableNames(names, found);
+    if (noEncontradas.length) {
+        throw new Error(`No se encontraron las variables: ${noEncontradas.join(",")} pruebe cerrar e iniciar sesión nuevamente para continuar.`);
+    }
+};
 /**
  *
  * @param headers
@@ -241,78 +287,27 @@ export function generateDistinctCode(prefix) {
  * @returns
  */
 export async function getVariablesByName(headers, session, names) {
-    //variables
-    let variables = [];
-    //consulto si ya están guardadas en la sesión
-    const tempVars = session.get("variables");
-    if (Array.isArray(tempVars) && tempVars.length) {
-        //si ya están guardadas, uso esas
-        variables = tempVars;
-    }
-    else {
-        //si no están en la sesión, las obtengo de zauru y luego las guardo en la sesión
-        //Obtengo mis variables, para tener los tags solicitados
-        const response = await getVariables(headers);
-        if (response.error) {
-            throw new Error(`${response.userMsg} - ${response.msg}`);
+    let { variables, refreshed } = await getSessionVariables(headers, session);
+    let returnObject = pickVariablesByName(variables, names);
+    if (missingVariableNames(names, returnObject).length) {
+        if (!refreshed) {
+            ({ variables } = await getSessionVariables(headers, session, {
+                refresh: true,
+            }));
+            returnObject = pickVariablesByName(variables, names);
         }
-        session.set("variables", response.data?.map((x) => {
-            return { id: x.id, name: x.name, value: x.value };
-        }));
-        await commitSession(session);
-        variables = response.data ?? [];
-    }
-    const filtrados = variables.filter((value) => names.includes(value.name));
-    const returnObject = {};
-    filtrados.forEach((variable) => {
-        returnObject[`${variable.name}`] = variable.value;
-    });
-    //Pregunto si todas las variables fueron encontradas o no
-    if (!names.every((variable) => Object.keys(returnObject).includes(variable))) {
-        const noEncontradas = names
-            .filter((variable) => !Object.keys(returnObject).includes(variable))
-            .join(",");
-        throw new Error(`No se encontraron las variables: ${noEncontradas} pruebe cerrar e iniciar sesión nuevamente para continuar.`);
+        assertRequestedVariablesFound(names, returnObject);
     }
     return returnObject;
 }
 export async function getVariablesSchemaByName(headers, session, names) {
-    //variables
-    let variables = [];
-    //consulto si ya están guardadas en la sesión
-    const tempVars = session.get("variables");
-    if (Array.isArray(tempVars) && tempVars.length) {
-        //si ya están guardadas, uso esas
-        variables = tempVars;
+    let { variables, refreshed } = await getSessionVariables(headers, session);
+    let filtrados = variables.filter((value) => names.includes(value.name));
+    if (filtrados.length !== names.length && !refreshed) {
+        ({ variables } = await getSessionVariables(headers, session, {
+            refresh: true,
+        }));
+        filtrados = variables.filter((value) => names.includes(value.name));
     }
-    else {
-        //si no están en la sesión, las obtengo de zauru y luego las guardo en la sesión
-        //Obtengo mis variables, para tener los tags solicitados
-        const response = await getVariables(headers);
-        if (response.error) {
-            throw new Error(`${response.userMsg} - ${response.msg}`);
-        }
-        session.set("variables", response.data);
-        await commitSession(session);
-        variables = response.data ?? [];
-    }
-    const filtrados = variables.filter((value) => names.includes(value.name));
     return filtrados;
-}
-/**
- * Actualiza las variables en la sesión.
- * @param {any} headers - Headers necesarios para la consulta.
- * @param {Session} session - La sesión actual.
- * @returns {Promise<void>}
- */
-export async function actualizarVariables(headers, session) {
-    // Intentamos obtener las variables desde el servidor
-    const response = await getVariables(headers);
-    if (response.error) {
-        throw new Error(`${response.userMsg} - ${response.msg}`);
-    }
-    // Guardamos las variables en la sesión
-    session.set("variables", response.data);
-    await commitSession(session);
-    console.log("Variables actualizadas y sesión refrescada.");
 }
