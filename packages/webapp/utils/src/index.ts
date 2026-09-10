@@ -18,6 +18,7 @@ export * from "./zauru/providers.utils.js";
 export * from "./zauru/purchase-orders.utils.js";
 export * from "./zauru/shipments.utils.js";
 export * from "./zauru/specialItem.utils.js";
+export * from "./zauru/priceAdjustmentRules.utils.js";
 export * from "./zauru/templates.utils.js";
 export * from "./zauru/tiposMuestra.utils.js";
 export * from "./zauru/webapp-tables.utils.js";

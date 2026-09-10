@@ -291,6 +291,7 @@ export const updatePurchaseItemPrice = async (
       string,
       { unit_cost: number; item_id: number; id: number }
     >;
+    memo?: string;
   },
   purchase_id: number,
 ): Promise<AxiosUtilsResponse<boolean>> => {
@@ -299,6 +300,7 @@ export const updatePurchaseItemPrice = async (
       purchase_order: {
         purchase_order_details_attributes:
           data.purchase_order_details_attributes,
+        ...(data.memo !== undefined ? { memo: data.memo } : {}),
       },
     } as UpdatePurchaseOrderBody;
     const responseUpdate = await updateReceivedPurchaseOrder(
