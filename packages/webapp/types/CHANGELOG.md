@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.12.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.11.0...@zauru-sdk/types@6.12.0) (2026-09-10)
+
+
+### Features
+
+* calculate item price from weekly cost matrix ([8ae4547](https://github.com/intuitiva/zauru-typescript-sdk/commit/8ae4547640f687dc6dcb04a83223ea4fd8b32fa6))
+
+
+
+
+
 # [6.11.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.10.0...@zauru-sdk/types@6.11.0) (2026-09-10)
 
 
