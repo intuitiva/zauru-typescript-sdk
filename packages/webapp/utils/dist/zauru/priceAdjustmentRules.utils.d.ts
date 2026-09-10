@@ -6,5 +6,5 @@ export declare const getPriceAdjustmentRules: (headers: any, session: Session) =
 export declare const createPriceAdjustmentRule: (headers: any, session: Session, body: PriceAdjustmentRule) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 export declare const updatePriceAdjustmentRule: (headers: any, session: Session, id: string, body: Partial<PriceAdjustmentRule>) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 export declare const priceAdjustmentRuleMatches: (rule: PriceAdjustmentRule, ctx: PriceAdjustmentContext) => boolean;
-export declare const formatPriceAdjustmentDescription: (result: Pick<PriceAdjustmentResult, "basePrice" | "finalPrice" | "steps">) => string;
+export declare const formatPriceAdjustmentDescription: (result: Pick<PriceAdjustmentResult, "basePrice" | "finalPrice" | "steps">, baseLabel?: string) => string;
 export declare const applyPriceAdjustmentRules: (basePrice: number, rules: Array<PriceAdjustmentRule | WebAppRowGraphQL<PriceAdjustmentRule>>, ctx: PriceAdjustmentContext) => PriceAdjustmentResult;

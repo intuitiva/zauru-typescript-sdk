@@ -165,8 +165,9 @@ const formatRuleEffect = (step: PriceAdjustmentStep) => {
 
 export const formatPriceAdjustmentDescription = (
   result: Pick<PriceAdjustmentResult, "basePrice" | "finalPrice" | "steps">,
+  baseLabel = "base",
 ): string => {
-  const base = `${formatMoney(result.basePrice)} (base)`;
+  const base = `${formatMoney(result.basePrice)} (${baseLabel})`;
   if (result.steps.length === 0) {
     return base;
   }

@@ -79,8 +79,8 @@ const formatRuleEffect = (step) => {
     }
     return `${formatSignedAmount(step.appliedAmount)} (${step.ruleName})`;
 };
-export const formatPriceAdjustmentDescription = (result) => {
-    const base = `${formatMoney(result.basePrice)} (base)`;
+export const formatPriceAdjustmentDescription = (result, baseLabel = "base") => {
+    const base = `${formatMoney(result.basePrice)} (${baseLabel})`;
     if (result.steps.length === 0) {
         return base;
     }

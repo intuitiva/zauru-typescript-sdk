@@ -1,4 +1,4 @@
-import { EmployeeGraphQL, ItemGraphQL, LotGraphQL, LotStockGraphQL, MembershipGraphQL, MovementGraphQL, PriceListGraphQL, ProfileGraphQL, PurchaseOrderGraphQL, ShipmentGraphQL, SuggestedPriceGraphQL } from "./GraphQL.types";
+import { EmployeeGraphQL, ItemGraphQL, LotGraphQL, LotStockGraphQL, MembershipGraphQL, MovementGraphQL, PriceListGraphQL, ProfileGraphQL, PurchaseOrderGraphQL, ShipmentGraphQL, SuggestedPriceGraphQL, WebAppRowGraphQL } from "./GraphQL.types";
 export type SpecialItem = {
     item: number;
     provider: number;
@@ -582,6 +582,7 @@ export type PurchaseOrderCosto = {
         item_id: number;
         unit_cost: number;
         calculo?: string;
+        precioBase?: number;
     }[];
 };
 export type CostoSemanal = {
@@ -607,6 +608,28 @@ export type BitacoraCostosItems = {
     accion: string;
     modificadoPor: string;
     fechaCreacion: string;
+};
+export type WeeklyCostPeriod = "lunMar" | "mieJue" | "vieSabDom";
+export type WeeklyCostMatrixSource = "especial" | "general" | "fallback";
+export type WeeklyCostMatrix = {
+    costos: CostoSemanal[];
+    costosEspeciales: CostoSemanalSpecialItem[];
+    fechas: BitacoraCostosItems["fechas"];
+};
+export type CalculateItemPriceFromWeeklyMatrixInput = {
+    itemId: number;
+    date: string;
+    region?: string;
+    tipo?: string;
+    providerCategoryId?: number;
+    matrix?: WeeklyCostMatrix | null;
+    specialItems?: Array<SpecialItem | WebAppRowGraphQL<SpecialItem>>;
+    rules?: Array<PriceAdjustmentRule | WebAppRowGraphQL<PriceAdjustmentRule>>;
+};
+export type CalculateItemPriceFromWeeklyMatrixResult = PriceAdjustmentResult & {
+    source: WeeklyCostMatrixSource;
+    period: WeeklyCostPeriod;
+    specialItemId?: number;
 };
 export type DischargeHistory = {
     creadoPor: string;
