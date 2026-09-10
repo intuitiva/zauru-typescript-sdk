@@ -33,6 +33,7 @@ export declare const updatePurchaseItemPrice: (headers: any, data: {
         item_id: number;
         id: number;
     }>;
+    memo?: string;
 }, purchase_id: number) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * updateOchAndDis

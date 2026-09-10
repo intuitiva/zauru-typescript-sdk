@@ -9,6 +9,53 @@ export type SpecialItem = {
     providerCategory: number;
     specialLabel: string;
 };
+export type PriceAdjustmentFilterMode = "all" | "include" | "exclude";
+export type PriceAdjustmentFilters = {
+    itemMode: PriceAdjustmentFilterMode;
+    itemIds: number[];
+    tipoMode: PriceAdjustmentFilterMode;
+    tipos: string[];
+    programaMode: PriceAdjustmentFilterMode;
+    providerCategoryIds: number[];
+};
+export type PriceAdjustmentOperation = "add" | "subtract";
+export type PriceAdjustmentValueType = "amount" | "percentage";
+export type PriceAdjustmentRule = {
+    nombre: string;
+    prioridad: number;
+    activa: boolean;
+    operacion: PriceAdjustmentOperation;
+    tipoValor: PriceAdjustmentValueType;
+    valor: number;
+    filtros: PriceAdjustmentFilters;
+    fechaEliminacion: string;
+};
+export type PriceAdjustmentContext = {
+    itemId: number;
+    tipo?: string;
+    providerCategoryId?: number;
+};
+export type PriceAdjustmentStep = {
+    ruleName: string;
+    operation: PriceAdjustmentOperation;
+    valueType: PriceAdjustmentValueType;
+    value: number;
+    appliedAmount: number;
+    runningTotal: number;
+};
+export type PriceAdjustmentResult = {
+    basePrice: number;
+    finalPrice: number;
+    description: string;
+    steps: PriceAdjustmentStep[];
+};
+export type CostCalculationMemo = {
+    itemId: number;
+    basePrice: number;
+    finalPrice: number;
+    description: string;
+    steps: PriceAdjustmentStep[];
+};
 export type ExtendedInsertBookingBody = {
     movements: Partial<MovementGraphQL>[];
 };
@@ -529,10 +576,12 @@ export type PurchaseOrderCosto = {
     finalizado?: boolean;
     msgResultado?: string;
     fecha: string;
+    memo?: string;
     purchase_order_details: {
         id: number;
         item_id: number;
         unit_cost: number;
+        calculo?: string;
     }[];
 };
 export type CostoSemanal = {
@@ -775,6 +824,7 @@ export type JsonMemoType = {
     }>;
     confirmed?: boolean;
     rejectionPercentage?: number;
+    costCalculations?: CostCalculationMemo[];
 };
 export type CloseOpenWorkOrderDetailInput = {
     id: number | string;

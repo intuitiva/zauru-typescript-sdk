@@ -162,6 +162,7 @@ export const updatePurchaseItemPrice = async (headers, data, purchase_id) => {
         const body = {
             purchase_order: {
                 purchase_order_details_attributes: data.purchase_order_details_attributes,
+                ...(data.memo !== undefined ? { memo: data.memo } : {}),
             },
         };
         const responseUpdate = await updateReceivedPurchaseOrder(headers, body, purchase_id);
