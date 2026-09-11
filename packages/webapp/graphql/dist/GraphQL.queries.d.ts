@@ -90,8 +90,7 @@ export type GetWebAppRowsByTableIdOptions = {
      */
     data?: Record<string, WebAppRowDataFilterValue>;
 };
-export declare const toGetWebAppRowsByTableIdOptions: (limitOrOptions?: number | GetWebAppRowsByTableIdOptions) => GetWebAppRowsByTableIdOptions;
-export declare const getWebAppRowsByWebAppTableIdStringQuery: (webapp_table_id: number, limitOrOptions?: number | GetWebAppRowsByTableIdOptions) => string;
+export declare const getWebAppRowsByWebAppTableIdStringQuery: (webapp_table_id: number, options?: GetWebAppRowsByTableIdOptions) => string;
 export declare const getPayeeCategoryByIdStringQuery: (id: number) => string;
 export declare const getPayeeCategoriesByNotesMatchStringQuery: (match: string) => string;
 export declare const getPayeeCategoriesStringQuery = "\nquery getPayeeCategories {\n  payee_categories {\n    id\n    name\n    notes\n    payees_count\n    price_list_id\n  }\n}\n";

@@ -83,15 +83,14 @@ export const getProgramaciones = (
 
     const dataFilters = expandProgramacionFilters(options?.filters);
     const hasFilters = Boolean(dataFilters);
-    const queryOptions: number | GetWebAppRowsByTableIdOptions | undefined =
-      hasFilters
-        ? {
-            data: dataFilters,
-            limit: options?.limit ?? PROGRAMACIONES_FILTERED_DEFAULT_LIMIT,
-          }
-        : options?.limit != null
-          ? options.limit
-          : undefined;
+    const queryOptions: GetWebAppRowsByTableIdOptions | undefined = hasFilters
+      ? {
+          data: dataFilters,
+          limit: options?.limit ?? PROGRAMACIONES_FILTERED_DEFAULT_LIMIT,
+        }
+      : options?.limit != null
+        ? { limit: options.limit }
+        : undefined;
 
     const response = await getWebAppTableRegisters<Programacion>(
       session,

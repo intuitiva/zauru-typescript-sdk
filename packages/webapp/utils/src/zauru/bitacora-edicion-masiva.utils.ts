@@ -59,7 +59,7 @@ export const getBitacorasPOMassive = (
     const response = await getWebAppTableRegisters<BitacoraPOMassive>(
       session,
       bitacora_ediciones_masivas_web_app_table_id,
-      1000
+      { limit: 1000 }
     );
 
     if (response.error || !response.data) {

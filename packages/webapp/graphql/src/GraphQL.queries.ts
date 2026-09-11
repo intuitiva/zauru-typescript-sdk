@@ -871,15 +871,6 @@ export type GetWebAppRowsByTableIdOptions = {
 
 const GRAPHQL_NAME_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
 
-export const toGetWebAppRowsByTableIdOptions = (
-  limitOrOptions?: number | GetWebAppRowsByTableIdOptions,
-): GetWebAppRowsByTableIdOptions => {
-  if (typeof limitOrOptions === "number") {
-    return { limit: limitOrOptions };
-  }
-  return limitOrOptions ?? {};
-};
-
 const serializeGraphQLLiteral = (value: WebAppRowDataFilterScalar): string => {
   if (value === null) {
     return "null";
@@ -934,9 +925,9 @@ const buildDataFilterAndClauses = (
 
 export const getWebAppRowsByWebAppTableIdStringQuery = (
   webapp_table_id: number,
-  limitOrOptions?: number | GetWebAppRowsByTableIdOptions,
+  options?: GetWebAppRowsByTableIdOptions,
 ) => {
-  const options = toGetWebAppRowsByTableIdOptions(limitOrOptions);
+  const { limit, data } = options ?? {};
   const tableId = Number(webapp_table_id);
   const conditions: string[] = [];
 
@@ -944,7 +935,7 @@ export const getWebAppRowsByWebAppTableIdStringQuery = (
     conditions.push(`webapp_table_id: {_eq: ${tableId}}`);
   }
 
-  const dataAnd = buildDataFilterAndClauses(options.data);
+  const dataAnd = buildDataFilterAndClauses(data);
   if (dataAnd.length > 0) {
     conditions.push(`_and: [${dataAnd.join(", ")}]`);
   }
@@ -953,7 +944,7 @@ export const getWebAppRowsByWebAppTableIdStringQuery = (
     ? `where: { ${conditions.join(", ")} }`
     : "";
 
-  const limitClause = options.limit ? `limit: ${Number(options.limit)}` : "";
+  const limitClause = limit ? `limit: ${Number(limit)}` : "";
 
   const orderByClause = `order_by: { id: desc }`;
 

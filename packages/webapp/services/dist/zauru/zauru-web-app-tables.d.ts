@@ -11,10 +11,10 @@ export declare function getWebAppRow<T>(session: Session, id: number): Promise<A
  * getWebAppTableRegisters Function for get all web app table registers
  * @param headers
  * @param webapp_table_id web app table id
- * @param limitOrOptions optional row limit, or `{ limit, data }` JSONB filters
+ * @param options optional `{ limit, data }` JSONB filters
  * @returns
  */
-export declare function getWebAppTableRegisters<T>(session: Session, webapp_table_id: string, limitOrOptions?: number | GetWebAppRowsByTableIdOptions): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>>;
+export declare function getWebAppTableRegisters<T>(session: Session, webapp_table_id: string, options?: GetWebAppRowsByTableIdOptions): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>>;
 /**
  * deleteWebAppTableRegister Function for delete a web app table register
  * @param headers

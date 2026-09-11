@@ -47,7 +47,7 @@ export const getProgramaciones = (headers, session, options) => {
                 limit: options?.limit ?? PROGRAMACIONES_FILTERED_DEFAULT_LIMIT,
             }
             : options?.limit != null
-                ? options.limit
+                ? { limit: options.limit }
                 : undefined;
         const response = await getWebAppTableRegisters(session, programaciones_webapp_table_id, queryOptions);
         if (response.error) {

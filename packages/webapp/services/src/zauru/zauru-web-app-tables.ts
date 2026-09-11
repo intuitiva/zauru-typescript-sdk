@@ -61,13 +61,13 @@ export async function getWebAppRow<T>(
  * getWebAppTableRegisters Function for get all web app table registers
  * @param headers
  * @param webapp_table_id web app table id
- * @param limitOrOptions optional row limit, or `{ limit, data }` JSONB filters
+ * @param options optional `{ limit, data }` JSONB filters
  * @returns
  */
 export async function getWebAppTableRegisters<T>(
   session: Session,
   webapp_table_id: string,
-  limitOrOptions?: number | GetWebAppRowsByTableIdOptions,
+  options?: GetWebAppRowsByTableIdOptions,
 ): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>> {
   return handlePossibleAxiosErrors(async () => {
     const headers = await getGraphQLAPIHeaders(session);
@@ -83,7 +83,7 @@ export async function getWebAppTableRegisters<T>(
       {
         query: getWebAppRowsByWebAppTableIdStringQuery(
           Number(webapp_table_id),
-          limitOrOptions,
+          options,
         ),
       },
       { headers },
