@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.19](https://github.com/intuitiva/zauru-typescript-sdk/compare/@appocus/auth-react-router@0.5.18...@appocus/auth-react-router@0.5.19) (2026-09-11)
+
+**Note:** Version bump only for package @appocus/auth-react-router
+
+
+
+
+
 ## [0.5.18](https://github.com/intuitiva/zauru-typescript-sdk/compare/@appocus/auth-react-router@0.5.17...@appocus/auth-react-router@0.5.18) (2026-09-11)
 
 **Note:** Version bump only for package @appocus/auth-react-router

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.8.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.7.5...@zauru-sdk/services@6.8.0) (2026-09-11)
+
+
+### Features
+
+* filter webapp table rows by JSON data ([225d117](https://github.com/intuitiva/zauru-typescript-sdk/commit/225d117cc4b1d4f97d8dc511e1083cbb32972957))
+
+
+
+
+
 ## [6.7.5](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.7.4...@zauru-sdk/services@6.7.5) (2026-09-11)
 
 **Note:** Version bump only for package @zauru-sdk/services
