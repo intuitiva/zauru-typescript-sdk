@@ -19,6 +19,7 @@ import {
   filterActivePriceAdjustmentRules,
   formatPriceAdjustmentDescription,
   getPriceAdjustmentRules,
+  normalizeComparableValue,
 } from "./priceAdjustmentRules.utils.js";
 import { getSpecialItems } from "./specialItem.utils.js";
 
@@ -149,7 +150,8 @@ export const matchSpecialItemForWeeklyPrice = (
     (specialItem) =>
       specialItem.data.item === params.itemId &&
       specialItem.data.region === params.region &&
-      specialItem.data.tipo === params.tipo,
+      normalizeComparableValue(specialItem.data.tipo) ===
+        normalizeComparableValue(params.tipo),
   );
 
 export const pickLatestMassiveCostBitacora = (

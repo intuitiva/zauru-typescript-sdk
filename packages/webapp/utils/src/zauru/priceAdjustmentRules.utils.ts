@@ -101,6 +101,18 @@ export const updatePriceAdjustmentRule = (
   });
 };
 
+export const normalizeComparableValue = (
+  value: string | number | undefined | null,
+): string => String(value ?? "").replace(/\s+/g, " ").trim();
+
+export const formatReceptionTypeValue = (
+  type?: { Nombre?: string; Codigo?: string } | null,
+): string =>
+  [type?.Nombre, type?.Codigo]
+    .map((part) => String(part ?? "").trim())
+    .filter(Boolean)
+    .join(" ");
+
 const matchesFilter = (
   mode: PriceAdjustmentFilterMode | undefined,
   selected: Array<string | number> | undefined,
@@ -113,12 +125,18 @@ const matchesFilter = (
     return true;
   }
 
-  if (value === undefined || value === null || value === "") {
+  if (value === undefined || value === null) {
     return false;
   }
 
-  const asString = String(value);
-  const included = values.some((item) => String(item) === asString);
+  const asString = normalizeComparableValue(value);
+  if (!asString) {
+    return false;
+  }
+
+  const included = values.some(
+    (item) => normalizeComparableValue(item) === asString,
+  );
 
   if (normalizedMode === "include") {
     return values.length > 0 && included;

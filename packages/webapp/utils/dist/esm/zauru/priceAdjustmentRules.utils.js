@@ -44,17 +44,25 @@ export const updatePriceAdjustmentRule = (headers, session, id, body) => {
         return updateWebAppTableRegister(headers, tableId, Number(id), body);
     });
 };
+export const normalizeComparableValue = (value) => String(value ?? "").replace(/\s+/g, " ").trim();
+export const formatReceptionTypeValue = (type) => [type?.Nombre, type?.Codigo]
+    .map((part) => String(part ?? "").trim())
+    .filter(Boolean)
+    .join(" ");
 const matchesFilter = (mode, selected, value) => {
     const normalizedMode = mode ?? "all";
     const values = selected ?? [];
     if (normalizedMode === "all") {
         return true;
     }
-    if (value === undefined || value === null || value === "") {
+    if (value === undefined || value === null) {
         return false;
     }
-    const asString = String(value);
-    const included = values.some((item) => String(item) === asString);
+    const asString = normalizeComparableValue(value);
+    if (!asString) {
+        return false;
+    }
+    const included = values.some((item) => normalizeComparableValue(item) === asString);
     if (normalizedMode === "include") {
         return values.length > 0 && included;
     }

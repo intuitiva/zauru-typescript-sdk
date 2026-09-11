@@ -1,7 +1,7 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getPayee, getPayees } from "@zauru-sdk/services";
 import { getCostosBitacora } from "./costos-items.utils.js";
-import { applyPriceAdjustmentRules, filterActivePriceAdjustmentRules, formatPriceAdjustmentDescription, getPriceAdjustmentRules, } from "./priceAdjustmentRules.utils.js";
+import { applyPriceAdjustmentRules, filterActivePriceAdjustmentRules, formatPriceAdjustmentDescription, getPriceAdjustmentRules, normalizeComparableValue, } from "./priceAdjustmentRules.utils.js";
 import { getSpecialItems } from "./specialItem.utils.js";
 export const MASSIVE_VEGETABLE_COST_ACCION = "Costos masivamente";
 const FALLBACK_UNIT_COST = 1;
@@ -90,7 +90,8 @@ export const filterActiveSpecialItems = (specialItems) => (specialItems ?? [])
     .sort((a, b) => a.id - b.id);
 export const matchSpecialItemForWeeklyPrice = (specialItems, params) => filterActiveSpecialItems(specialItems).find((specialItem) => specialItem.data.item === params.itemId &&
     specialItem.data.region === params.region &&
-    specialItem.data.tipo === params.tipo);
+    normalizeComparableValue(specialItem.data.tipo) ===
+        normalizeComparableValue(params.tipo));
 export const pickLatestMassiveCostBitacora = (rows, date) => {
     const masivas = (rows ?? [])
         .filter((row) => row.data?.accion === MASSIVE_VEGETABLE_COST_ACCION)
