@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPrintTemplatesStringQuery = exports.getCasesStringQuery = exports.getInvoicesByAgencyIdStringQuery = exports.getPaymentTermByIdStringQuery = exports.getPaymentMethodsStringQuery = exports.getPaymentTermsStringQuery = exports.getSuggestedPricesStringQuery = exports.getCurrenciesStringQuery = exports.getInvoiceFormSubmissionsByInvoiceIdStringQuery = exports.getCaseFormSubmissionsByCaseIdStringQuery = exports.getLastInvoiceFormSubmissionStringQuery = exports.getInvoiceFormSubmissionsByAgencyIdStringQuery = exports.getFormSubmissionByIdStringQuery = exports.getMyCaseFormSubmissionsStringQuery = exports.getFormsByDocumentTypeStringQuery = exports.getFormsStringQuery = exports.getFormByNameStringQuery = exports.getAllFormsStringQuery = exports.getItemByNameStringQuery = exports.getBundleByNameStringQuery = exports.getBundlesByItemCategoryIdStringQuery = exports.getEmployeesByAgencyIdStringQuery = exports.getEmployeesStringQuery = exports.getEmployeeProfileStringQuery = exports.getConsolidatesBetweenDatesStringQuery = exports.getItemsBySuperCategoryStringQuery = exports.getItemsStringQuery = exports.getItemsByCategoryStringQuery = exports.getItemCategoryByIdStringQuery = exports.getSuperCategoryByIdStringQuery = exports.getPayeeByIdStringQuery = exports.getClientCategoriesStringQuery = exports.getProviderCategoriesStringQuery = exports.getPayeeCategoriesStringQuery = exports.getPayeeCategoriesByNotesMatchStringQuery = exports.getPayeeCategoryByIdStringQuery = exports.getWebAppRowsByWebAppTableIdStringQuery = exports.getWebAppRowStringQuery = exports.getAgenciesStringQuery = exports.getProvidersStringQuery = exports.getPayeesStringQuery = exports.getPurchaseOrdersBetweenDatesStringQuery = exports.getSerialsStringQuery = exports.getLotStocksByAgencyIdStringQuery = exports.getLotsByNameStringQuery = exports.getBookingByPurchaseOrderAndReferenceStringQuery = exports.getShipmentsStringQuery = exports.getPurchaseOrderStringQuery = exports.getPurchaseOrderByIdNumberStringQuery = exports.getLast100ReceptionsStringQuery = void 0;
-exports.getProductionWorkOrderStringQuery = void 0;
+exports.getCasesStringQuery = exports.getInvoicesByAgencyIdStringQuery = exports.getPaymentTermByIdStringQuery = exports.getPaymentMethodsStringQuery = exports.getPaymentTermsStringQuery = exports.getSuggestedPricesStringQuery = exports.getCurrenciesStringQuery = exports.getInvoiceFormSubmissionsByInvoiceIdStringQuery = exports.getCaseFormSubmissionsByCaseIdStringQuery = exports.getLastInvoiceFormSubmissionStringQuery = exports.getInvoiceFormSubmissionsByAgencyIdStringQuery = exports.getFormSubmissionByIdStringQuery = exports.getMyCaseFormSubmissionsStringQuery = exports.getFormsByDocumentTypeStringQuery = exports.getFormsStringQuery = exports.getFormByNameStringQuery = exports.getAllFormsStringQuery = exports.getItemByNameStringQuery = exports.getBundleByNameStringQuery = exports.getBundlesByItemCategoryIdStringQuery = exports.getEmployeesByAgencyIdStringQuery = exports.getEmployeesStringQuery = exports.getEmployeeProfileStringQuery = exports.getConsolidatesBetweenDatesStringQuery = exports.getItemsBySuperCategoryStringQuery = exports.getItemsStringQuery = exports.getItemsByCategoryStringQuery = exports.getItemCategoryByIdStringQuery = exports.getSuperCategoryByIdStringQuery = exports.getPayeeByIdStringQuery = exports.getClientCategoriesStringQuery = exports.getProviderCategoriesStringQuery = exports.getPayeeCategoriesStringQuery = exports.getPayeeCategoriesByNotesMatchStringQuery = exports.getPayeeCategoryByIdStringQuery = exports.getWebAppRowsByWebAppTableIdStringQuery = exports.toGetWebAppRowsByTableIdOptions = exports.getWebAppRowStringQuery = exports.getAgenciesStringQuery = exports.getProvidersStringQuery = exports.getPayeesStringQuery = exports.getPurchaseOrdersBetweenDatesStringQuery = exports.getSerialsStringQuery = exports.getLotStocksByAgencyIdStringQuery = exports.getLotsByNameStringQuery = exports.getBookingByPurchaseOrderAndReferenceStringQuery = exports.getShipmentsStringQuery = exports.getPurchaseOrderStringQuery = exports.getPurchaseOrderByIdNumberStringQuery = exports.getLast100ReceptionsStringQuery = void 0;
+exports.getProductionWorkOrderStringQuery = exports.getPrintTemplatesStringQuery = void 0;
 const getLast100ReceptionsStringQuery = (agency_id) => {
     const conditions = ["voided: {_eq: false}"];
     if (agency_id) {
@@ -676,15 +676,73 @@ query getWebAppRow {
 }
 `;
 exports.getWebAppRowStringQuery = getWebAppRowStringQuery;
-const getWebAppRowsByWebAppTableIdStringQuery = (webapp_table_id, limit) => {
+const GRAPHQL_NAME_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
+const toGetWebAppRowsByTableIdOptions = (limitOrOptions) => {
+    if (typeof limitOrOptions === "number") {
+        return { limit: limitOrOptions };
+    }
+    return limitOrOptions ?? {};
+};
+exports.toGetWebAppRowsByTableIdOptions = toGetWebAppRowsByTableIdOptions;
+const serializeGraphQLLiteral = (value) => {
+    if (value === null) {
+        return "null";
+    }
+    if (typeof value === "boolean") {
+        return value ? "true" : "false";
+    }
+    if (typeof value === "number") {
+        if (!Number.isFinite(value)) {
+            throw new Error("Invalid numeric GraphQL literal");
+        }
+        return String(value);
+    }
+    return JSON.stringify(value);
+};
+const buildDataContainsClause = (key, value) => {
+    if (!GRAPHQL_NAME_RE.test(key)) {
+        throw new Error(`Invalid webapp row data filter key: ${key}`);
+    }
+    return `{ data: { _contains: { ${key}: ${serializeGraphQLLiteral(value)} } } }`;
+};
+const buildDataFilterAndClauses = (data) => {
+    if (!data) {
+        return [];
+    }
+    const andParts = [];
+    for (const [key, raw] of Object.entries(data)) {
+        if (raw === undefined) {
+            continue;
+        }
+        const values = Array.isArray(raw) ? raw : [raw];
+        if (values.length === 0) {
+            continue;
+        }
+        const orParts = values.map((value) => buildDataContainsClause(key, value));
+        if (orParts.length === 1) {
+            andParts.push(orParts[0]);
+        }
+        else {
+            andParts.push(`{ _or: [${orParts.join(", ")}] }`);
+        }
+    }
+    return andParts;
+};
+const getWebAppRowsByWebAppTableIdStringQuery = (webapp_table_id, limitOrOptions) => {
+    const options = (0, exports.toGetWebAppRowsByTableIdOptions)(limitOrOptions);
+    const tableId = Number(webapp_table_id);
     const conditions = [];
-    if (webapp_table_id) {
-        conditions.push(`webapp_table_id: {_eq: ${webapp_table_id}}`);
+    if (tableId) {
+        conditions.push(`webapp_table_id: {_eq: ${tableId}}`);
+    }
+    const dataAnd = buildDataFilterAndClauses(options.data);
+    if (dataAnd.length > 0) {
+        conditions.push(`_and: [${dataAnd.join(", ")}]`);
     }
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} }`
         : "";
-    const limitClause = limit ? `limit: ${limit}` : "";
+    const limitClause = options.limit ? `limit: ${Number(options.limit)}` : "";
     const orderByClause = `order_by: { id: desc }`;
     return `
     query getWebAppRowsByWebAppTableId {

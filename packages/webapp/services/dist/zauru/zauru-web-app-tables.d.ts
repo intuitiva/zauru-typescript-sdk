@@ -1,5 +1,6 @@
 import type { Session } from "@remix-run/node";
 import { AxiosUtilsResponse, RejectionWebAppTableObject, WebAppRowAssociateBody, WebAppRowAssociateResponse, WebAppRowDissociateBody, WebAppRowDissociateResponse, WebAppRowGraphQL, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
+import { type GetWebAppRowsByTableIdOptions } from "@zauru-sdk/graphql";
 /**
  * getWebAppRow
  * @param headers
@@ -10,9 +11,10 @@ export declare function getWebAppRow<T>(session: Session, id: number): Promise<A
  * getWebAppTableRegisters Function for get all web app table registers
  * @param headers
  * @param webapp_table_id web app table id
+ * @param limitOrOptions optional row limit, or `{ limit, data }` JSONB filters
  * @returns
  */
-export declare function getWebAppTableRegisters<T>(session: Session, webapp_table_id: string, limit?: number): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>>;
+export declare function getWebAppTableRegisters<T>(session: Session, webapp_table_id: string, limitOrOptions?: number | GetWebAppRowsByTableIdOptions): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>>;
 /**
  * deleteWebAppTableRegister Function for delete a web app table register
  * @param headers

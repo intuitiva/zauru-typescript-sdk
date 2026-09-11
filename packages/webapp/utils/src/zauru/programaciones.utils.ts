@@ -1,5 +1,9 @@
 import type { Session } from "@remix-run/node";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import type {
+  GetWebAppRowsByTableIdOptions,
+  WebAppRowDataFilterValue,
+} from "@zauru-sdk/graphql";
 import {
   associateWebAppTableRegister,
   createWebAppTableRegister,
@@ -16,15 +20,59 @@ import {
   WebAppTableUpdateResponse,
 } from "@zauru-sdk/types";
 
+const PROGRAMACIONES_FILTERED_DEFAULT_LIMIT = 1000;
+const JSONB_ID_FILTER_KEYS = new Set(["payee_id", "item_id"]);
+
+export type GetProgramacionesOptions = {
+  filters?: Record<string, WebAppRowDataFilterValue>;
+  limit?: number;
+};
+
+const expandJsonbIdFilterValue = (
+  value: WebAppRowDataFilterValue,
+): WebAppRowDataFilterValue => {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return [value, String(value)];
+  }
+  if (typeof value === "string" && value !== "" && Number.isFinite(Number(value))) {
+    return [Number(value), value];
+  }
+  return value;
+};
+
+const expandProgramacionFilters = (
+  filters?: Record<string, WebAppRowDataFilterValue>,
+): Record<string, WebAppRowDataFilterValue> | undefined => {
+  if (!filters) {
+    return undefined;
+  }
+
+  const expanded: Record<string, WebAppRowDataFilterValue> = {};
+  for (const [key, value] of Object.entries(filters)) {
+    if (value === undefined) {
+      continue;
+    }
+    expanded[key] = JSONB_ID_FILTER_KEYS.has(key)
+      ? expandJsonbIdFilterValue(value)
+      : value;
+  }
+  return Object.keys(expanded).length > 0 ? expanded : undefined;
+};
+
 /**
  * Get programaciones from the web app table.
  * @param headers Request headers.
  * @param session Session object.
+ * @param options Optional JSON `data` filters and row limit. With filters, defaults to the last 1000 rows.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<Programacion>[]>>.
  */
 export const getProgramaciones = (
   headers: any,
   session: Session,
+  options?: GetProgramacionesOptions,
 ): Promise<AxiosUtilsResponse<WebAppRowGraphQL<Programacion>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { programaciones_webapp_table_id } = await getVariablesByName(
@@ -33,9 +81,22 @@ export const getProgramaciones = (
       ["programaciones_webapp_table_id"],
     );
 
+    const dataFilters = expandProgramacionFilters(options?.filters);
+    const hasFilters = Boolean(dataFilters);
+    const queryOptions: number | GetWebAppRowsByTableIdOptions | undefined =
+      hasFilters
+        ? {
+            data: dataFilters,
+            limit: options?.limit ?? PROGRAMACIONES_FILTERED_DEFAULT_LIMIT,
+          }
+        : options?.limit != null
+          ? options.limit
+          : undefined;
+
     const response = await getWebAppTableRegisters<Programacion>(
       session,
       programaciones_webapp_table_id,
+      queryOptions,
     );
 
     if (response.error) {

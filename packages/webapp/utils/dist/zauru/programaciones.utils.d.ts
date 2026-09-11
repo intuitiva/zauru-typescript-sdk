@@ -1,12 +1,18 @@
 import type { Session } from "@remix-run/node";
+import type { WebAppRowDataFilterValue } from "@zauru-sdk/graphql";
 import { AxiosUtilsResponse, Programacion, WebAppRowAssociateResponse, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
+export type GetProgramacionesOptions = {
+    filters?: Record<string, WebAppRowDataFilterValue>;
+    limit?: number;
+};
 /**
  * Get programaciones from the web app table.
  * @param headers Request headers.
  * @param session Session object.
+ * @param options Optional JSON `data` filters and row limit. With filters, defaults to the last 1000 rows.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<Programacion>[]>>.
  */
-export declare const getProgramaciones: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<Programacion>[]>>;
+export declare const getProgramaciones: (headers: any, session: Session, options?: GetProgramacionesOptions) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<Programacion>[]>>;
 /**
  * Create a programacion in the web app table.
  * @param headers Request headers.

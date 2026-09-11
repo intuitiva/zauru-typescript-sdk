@@ -24,13 +24,14 @@ export async function getWebAppRow(session, id) {
  * getWebAppTableRegisters Function for get all web app table registers
  * @param headers
  * @param webapp_table_id web app table id
+ * @param limitOrOptions optional row limit, or `{ limit, data }` JSONB filters
  * @returns
  */
-export async function getWebAppTableRegisters(session, webapp_table_id, limit) {
+export async function getWebAppTableRegisters(session, webapp_table_id, limitOrOptions) {
     return handlePossibleAxiosErrors(async () => {
         const headers = await getGraphQLAPIHeaders(session);
         const response = await httpGraphQLAPI.post("", {
-            query: getWebAppRowsByWebAppTableIdStringQuery(Number(webapp_table_id), limit),
+            query: getWebAppRowsByWebAppTableIdStringQuery(Number(webapp_table_id), limitOrOptions),
         }, { headers });
         if (response.data.errors) {
             throw new Error(response.data.errors.map((x) => x.message).join(";"));

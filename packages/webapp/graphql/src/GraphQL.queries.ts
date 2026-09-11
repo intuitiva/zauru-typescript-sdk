@@ -854,21 +854,106 @@ query getWebAppRow {
 }
 `;
 
+export type WebAppRowDataFilterScalar = string | number | boolean | null;
+
+export type WebAppRowDataFilterValue =
+  | WebAppRowDataFilterScalar
+  | WebAppRowDataFilterScalar[];
+
+export type GetWebAppRowsByTableIdOptions = {
+  limit?: number;
+  /**
+   * JSONB `_contains` filters against `webapp_rows.data`.
+   * Multiple keys are AND-ed. An array value becomes an OR of `_contains`.
+   */
+  data?: Record<string, WebAppRowDataFilterValue>;
+};
+
+const GRAPHQL_NAME_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
+
+export const toGetWebAppRowsByTableIdOptions = (
+  limitOrOptions?: number | GetWebAppRowsByTableIdOptions,
+): GetWebAppRowsByTableIdOptions => {
+  if (typeof limitOrOptions === "number") {
+    return { limit: limitOrOptions };
+  }
+  return limitOrOptions ?? {};
+};
+
+const serializeGraphQLLiteral = (value: WebAppRowDataFilterScalar): string => {
+  if (value === null) {
+    return "null";
+  }
+  if (typeof value === "boolean") {
+    return value ? "true" : "false";
+  }
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) {
+      throw new Error("Invalid numeric GraphQL literal");
+    }
+    return String(value);
+  }
+  return JSON.stringify(value);
+};
+
+const buildDataContainsClause = (
+  key: string,
+  value: WebAppRowDataFilterScalar,
+): string => {
+  if (!GRAPHQL_NAME_RE.test(key)) {
+    throw new Error(`Invalid webapp row data filter key: ${key}`);
+  }
+  return `{ data: { _contains: { ${key}: ${serializeGraphQLLiteral(value)} } } }`;
+};
+
+const buildDataFilterAndClauses = (
+  data?: Record<string, WebAppRowDataFilterValue>,
+): string[] => {
+  if (!data) {
+    return [];
+  }
+
+  const andParts: string[] = [];
+  for (const [key, raw] of Object.entries(data)) {
+    if (raw === undefined) {
+      continue;
+    }
+    const values = Array.isArray(raw) ? raw : [raw];
+    if (values.length === 0) {
+      continue;
+    }
+    const orParts = values.map((value) => buildDataContainsClause(key, value));
+    if (orParts.length === 1) {
+      andParts.push(orParts[0]);
+    } else {
+      andParts.push(`{ _or: [${orParts.join(", ")}] }`);
+    }
+  }
+  return andParts;
+};
+
 export const getWebAppRowsByWebAppTableIdStringQuery = (
   webapp_table_id: number,
-  limit?: number,
+  limitOrOptions?: number | GetWebAppRowsByTableIdOptions,
 ) => {
-  const conditions = [];
+  const options = toGetWebAppRowsByTableIdOptions(limitOrOptions);
+  const tableId = Number(webapp_table_id);
+  const conditions: string[] = [];
 
-  if (webapp_table_id) {
-    conditions.push(`webapp_table_id: {_eq: ${webapp_table_id}}`);
+  if (tableId) {
+    conditions.push(`webapp_table_id: {_eq: ${tableId}}`);
+  }
+
+  const dataAnd = buildDataFilterAndClauses(options.data);
+  if (dataAnd.length > 0) {
+    conditions.push(`_and: [${dataAnd.join(", ")}]`);
   }
 
   const whereClause = conditions.length
     ? `where: { ${conditions.join(", ")} }`
     : "";
 
-  const limitClause = limit ? `limit: ${limit}` : "";
+  const limitClause = options.limit ? `limit: ${Number(options.limit)}` : "";
 
   const orderByClause = `order_by: { id: desc }`;
 
