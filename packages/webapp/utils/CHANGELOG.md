@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.9.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.9.0...@zauru-sdk/utils@6.9.1) (2026-09-11)
+
+
+### Bug Fixes
+
+* match reception types ignoring extra whitespace ([7dac1f7](https://github.com/intuitiva/zauru-typescript-sdk/commit/7dac1f7c25c7d0ee451fb4ec706d8aaae186971f))
+
+
+
+
+
 # [6.9.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.8.0...@zauru-sdk/utils@6.9.0) (2026-09-11)
 
 
