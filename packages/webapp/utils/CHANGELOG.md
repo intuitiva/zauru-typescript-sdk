@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.9.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.9.1...@zauru-sdk/utils@6.9.2) (2026-09-11)
+
+
+### Bug Fixes
+
+* round adjusted vegetable prices to two decimals ([2f152ae](https://github.com/intuitiva/zauru-typescript-sdk/commit/2f152aea5307dfc0bf9897719d418680dab88d1b))
+
+
+
+
+
 ## [6.9.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.9.0...@zauru-sdk/utils@6.9.1) (2026-09-11)
 
 
