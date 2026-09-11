@@ -34,11 +34,13 @@ export declare const updatePurchaseItemPrice: (headers: any, data: {
         id: number;
     }>;
     memo?: string;
+    discount?: number;
 }, purchase_id: number) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * updateOchAndDis
- * Updates rejectionPercentage in purchase_order.memo (not the financial discount column)
- * and optionally other_charges (tolerancia).
+ * Updates rejectionPercentage in purchase_order.memo and the monetary
+ * purchase_orders.discount (qty × unit_cost × % / 100). Optionally other_charges.
+ * `data.discount` is a legacy alias for the rejection percentage, not money.
  */
 export declare const updateOchAndDis: (headers: any, data: {
     rejectionPercentage?: number | string;

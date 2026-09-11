@@ -1,5 +1,5 @@
 import "moment-timezone";
-import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption, JsonMemoType } from "@zauru-sdk/types";
+import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption, JsonMemoType, CalculatePurchaseOrderFinancialsInput, CalculatePurchaseOrderFinancialsResult } from "@zauru-sdk/types";
 export declare const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[];
 export declare const parseJsonMemo: (memo?: string | object) => JsonMemoType;
 export declare const stringifyJsonMemo: (memo: JsonMemoType) => string;
@@ -12,6 +12,12 @@ export declare const getRejectionPercentage: (source: string | {
     memo?: string | object;
 } | JsonMemoType | undefined) => number;
 export declare const setRejectionPercentage: (memo: string | object | undefined, percentage: number) => string;
+/**
+ * Header money for a purchase order: subtotal = qty × unit_cost,
+ * discount = subtotal × rejectionPercentage / 100.
+ * Does not change unit cost. purchase_orders.discount is the monetary column.
+ */
+export declare const calculatePurchaseOrderFinancials: (input: CalculatePurchaseOrderFinancialsInput) => CalculatePurchaseOrderFinancialsResult;
 /**
  * Obtener el objeto de canastas en base al memo
  * @param memo

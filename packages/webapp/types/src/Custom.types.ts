@@ -674,6 +674,7 @@ export type PurchaseOrderCosto = {
   memo?: string;
   payee_id?: number;
   reference?: string;
+  discount?: number;
   purchase_order_details: {
     id: number;
     item_id: number;
@@ -681,6 +682,25 @@ export type PurchaseOrderCosto = {
     calculo?: string;
     precioBase?: number;
   }[];
+};
+
+export type PurchaseOrderFinancialDetail = {
+  booked_quantity?: number | string | null;
+  delivered_quantity?: number | string | null;
+  booked?: number | string | null;
+  delivered?: number | string | null;
+  quantity?: number | string | null;
+  unit_cost?: number | string | null;
+};
+
+export type CalculatePurchaseOrderFinancialsInput = {
+  details?: PurchaseOrderFinancialDetail[] | null;
+  rejectionPercentage?: number | string | null;
+};
+
+export type CalculatePurchaseOrderFinancialsResult = {
+  subtotal: number;
+  discount: number;
 };
 
 export type CostoSemanal = {

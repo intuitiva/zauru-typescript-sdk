@@ -7,6 +7,9 @@ import type {
   SelectFieldOption,
   MonthsType,
   JsonMemoType,
+  CalculatePurchaseOrderFinancialsInput,
+  CalculatePurchaseOrderFinancialsResult,
+  PurchaseOrderFinancialDetail,
 } from "@zauru-sdk/types";
 import { MONTHS } from "@zauru-sdk/types";
 
@@ -81,6 +84,55 @@ export const setRejectionPercentage = (
   memo: string | object | undefined,
   percentage: number,
 ): string => mergeJsonMemo(memo, { rejectionPercentage: percentage });
+
+const roundMoney = (value: number): number =>
+  Math.round((value + Number.EPSILON) * 100) / 100;
+
+const lineQuantity = (detail: PurchaseOrderFinancialDetail): number => {
+  const delivered =
+    toFiniteNumber(detail.delivered_quantity) ??
+    toFiniteNumber(detail.delivered);
+  if (delivered != null && delivered > 0) return delivered;
+
+  return (
+    toFiniteNumber(detail.booked_quantity) ??
+    toFiniteNumber(detail.booked) ??
+    toFiniteNumber(detail.quantity) ??
+    0
+  );
+};
+
+/**
+ * Header money for a purchase order: subtotal = qty × unit_cost,
+ * discount = subtotal × rejectionPercentage / 100.
+ * Does not change unit cost. purchase_orders.discount is the monetary column.
+ */
+export const calculatePurchaseOrderFinancials = (
+  input: CalculatePurchaseOrderFinancialsInput,
+): CalculatePurchaseOrderFinancialsResult => {
+  const details = input.details ?? [];
+  const subtotal = roundMoney(
+    details.reduce((sum, detail) => {
+      const unitCost = toFiniteNumber(detail.unit_cost) ?? 0;
+      return sum + lineQuantity(detail) * unitCost;
+    }, 0),
+  );
+
+  const rejectionPercentage = toFiniteNumber(input.rejectionPercentage);
+  if (
+    rejectionPercentage == null ||
+    rejectionPercentage <= 0 ||
+    !Number.isFinite(subtotal) ||
+    subtotal <= 0
+  ) {
+    return { subtotal: Number.isFinite(subtotal) ? subtotal : 0, discount: 0 };
+  }
+
+  return {
+    subtotal,
+    discount: roundMoney(subtotal * (rejectionPercentage / 100)),
+  };
+};
 
 /**
  * Obtener el objeto de canastas en base al memo

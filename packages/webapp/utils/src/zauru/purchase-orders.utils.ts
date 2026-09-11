@@ -1,6 +1,7 @@
 import type { Session } from "@remix-run/node";
 import {
   CURRENCY_PREFIX,
+  calculatePurchaseOrderFinancials,
   getNewDateByFormat,
   getStringFullDate,
   getZauruDateByText,
@@ -14,6 +15,7 @@ import {
   deletePurchaseOrder,
   deleteReception,
   getLotesWithPurchaseFormated,
+  getPurchase,
   getPurchaseOrder,
   getPurchasesListDataTables,
   getVariablesByName,
@@ -26,6 +28,7 @@ import {
   HTMLPurchasesListSchema,
   LoteWithPurchaseFormatedSchema,
   ObjectKeyString,
+  PurchaseOrderFinancialDetail,
   PurchaseOrderGraphQL,
   PurchasesDataTableListFormatedSchema,
   PurchasesListResponseSchema,
@@ -292,6 +295,7 @@ export const updatePurchaseItemPrice = async (
       { unit_cost: number; item_id: number; id: number }
     >;
     memo?: string;
+    discount?: number;
   },
   purchase_id: number,
 ): Promise<AxiosUtilsResponse<boolean>> => {
@@ -301,6 +305,7 @@ export const updatePurchaseItemPrice = async (
         purchase_order_details_attributes:
           data.purchase_order_details_attributes,
         ...(data.memo !== undefined ? { memo: data.memo } : {}),
+        ...(data.discount !== undefined ? { discount: data.discount } : {}),
       },
     } as UpdatePurchaseOrderBody;
     const responseUpdate = await updateReceivedPurchaseOrder(
@@ -317,10 +322,28 @@ export const updatePurchaseItemPrice = async (
   });
 };
 
+const extractPurchaseOrderFinancialDetails = (
+  purchase: unknown,
+): PurchaseOrderFinancialDetail[] => {
+  if (purchase == null || typeof purchase !== "object") return [];
+  const record = purchase as Record<string, unknown>;
+  const raw =
+    record.purchase_order_details ??
+    record.purchase_order_details_attributes ??
+    record.details ??
+    [];
+  if (Array.isArray(raw)) return raw as PurchaseOrderFinancialDetail[];
+  if (raw && typeof raw === "object") {
+    return Object.values(raw) as PurchaseOrderFinancialDetail[];
+  }
+  return [];
+};
+
 /**
  * updateOchAndDis
- * Updates rejectionPercentage in purchase_order.memo (not the financial discount column)
- * and optionally other_charges (tolerancia).
+ * Updates rejectionPercentage in purchase_order.memo and the monetary
+ * purchase_orders.discount (qty × unit_cost × % / 100). Optionally other_charges.
+ * `data.discount` is a legacy alias for the rejection percentage, not money.
  */
 export const updateOchAndDis = async (
   headers: any,
@@ -339,7 +362,17 @@ export const updateOchAndDis = async (
     );
 
     let currentMemo = data.memo;
-    if (currentMemo === undefined && session) {
+    let details: PurchaseOrderFinancialDetail[] = [];
+
+    const restPurchaseResponse = await getPurchase(headers, purchase_id);
+    if (!restPurchaseResponse.error && restPurchaseResponse.data) {
+      if (currentMemo === undefined) {
+        currentMemo = restPurchaseResponse.data.memo;
+      }
+      details = extractPurchaseOrderFinancialDetails(restPurchaseResponse.data);
+    }
+
+    if ((currentMemo === undefined || details.length === 0) && session) {
       const purchaseOrderResponse = await getPurchaseOrder(session, purchase_id, {
         withLotStocksToMyAgency: false,
         withPayee: false,
@@ -353,7 +386,14 @@ export const updateOchAndDis = async (
         );
       }
 
-      currentMemo = purchaseOrderResponse.data.memo;
+      if (currentMemo === undefined) {
+        currentMemo = purchaseOrderResponse.data.memo;
+      }
+      if (details.length === 0) {
+        details = extractPurchaseOrderFinancialDetails(
+          purchaseOrderResponse.data,
+        );
+      }
     }
 
     if (currentMemo === undefined) {
@@ -362,9 +402,22 @@ export const updateOchAndDis = async (
       );
     }
 
+    if (details.length === 0) {
+      throw new Error(
+        restPurchaseResponse.userMsg ||
+          "No se pudieron obtener los detalles de la orden de compra para calcular el descuento",
+      );
+    }
+
+    const { discount } = calculatePurchaseOrderFinancials({
+      details,
+      rejectionPercentage,
+    });
+
     const body = {
       purchase_order: {
         memo: setRejectionPercentage(currentMemo, rejectionPercentage),
+        discount,
       },
     } as UpdatePurchaseOrderBody;
 
