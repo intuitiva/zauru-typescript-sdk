@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.14.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.13.0...@zauru-sdk/types@6.14.0) (2026-09-11)
+
+
+### Features
+
+* calculate monetary PO discount from rejection percentage ([270a484](https://github.com/intuitiva/zauru-typescript-sdk/commit/270a4844ced0034700257a57cb9ceb2e331f15e9))
+
+
+
+
+
 # [6.13.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.12.0...@zauru-sdk/types@6.13.0) (2026-09-10)
 
 
