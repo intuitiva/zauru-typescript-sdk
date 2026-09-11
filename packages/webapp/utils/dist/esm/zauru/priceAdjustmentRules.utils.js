@@ -74,8 +74,12 @@ export const priceAdjustmentRuleMatches = (rule, ctx) => {
         matchesFilter(filtros.tipoMode, filtros.tipos, ctx.tipo) &&
         matchesFilter(filtros.programaMode, filtros.providerCategoryIds, ctx.providerCategoryId));
 };
-const roundMoney = (value) => Math.round((value + Number.EPSILON) * 10000) / 10000;
+const roundMoney = (value, digits = 4) => {
+    const factor = 10 ** digits;
+    return Math.round((value + Number.EPSILON) * factor) / factor;
+};
 const formatMoney = (value) => Number.isInteger(value) ? String(value) : String(roundMoney(value));
+const formatFinalPrice = (value) => roundMoney(value, 2).toFixed(2);
 const formatSignedAmount = (value) => {
     const abs = formatMoney(Math.abs(value));
     return value < 0 ? `- ${abs}` : `+ ${abs}`;
@@ -92,7 +96,7 @@ export const formatPriceAdjustmentDescription = (result, baseLabel = "base") => 
     if (result.steps.length === 0) {
         return base;
     }
-    return `${base} ${result.steps.map(formatRuleEffect).join(" ")} = ${formatMoney(result.finalPrice)}`;
+    return `${base} ${result.steps.map(formatRuleEffect).join(" ")} = ${formatFinalPrice(result.finalPrice)}`;
 };
 export const applyPriceAdjustmentRules = (basePrice, rules, ctx) => {
     const start = Number(basePrice);
@@ -131,7 +135,7 @@ export const applyPriceAdjustmentRules = (basePrice, rules, ctx) => {
     }
     const result = {
         basePrice: roundMoney(safeBase),
-        finalPrice: roundMoney(runningTotal),
+        finalPrice: roundMoney(runningTotal, 2),
         description: "",
         steps,
     };

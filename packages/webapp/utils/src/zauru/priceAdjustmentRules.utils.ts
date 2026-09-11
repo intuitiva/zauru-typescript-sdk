@@ -162,11 +162,15 @@ export const priceAdjustmentRuleMatches = (
   );
 };
 
-const roundMoney = (value: number) =>
-  Math.round((value + Number.EPSILON) * 10000) / 10000;
+const roundMoney = (value: number, digits = 4) => {
+  const factor = 10 ** digits;
+  return Math.round((value + Number.EPSILON) * factor) / factor;
+};
 
 const formatMoney = (value: number) =>
   Number.isInteger(value) ? String(value) : String(roundMoney(value));
+
+const formatFinalPrice = (value: number) => roundMoney(value, 2).toFixed(2);
 
 const formatSignedAmount = (value: number) => {
   const abs = formatMoney(Math.abs(value));
@@ -189,7 +193,7 @@ export const formatPriceAdjustmentDescription = (
   if (result.steps.length === 0) {
     return base;
   }
-  return `${base} ${result.steps.map(formatRuleEffect).join(" ")} = ${formatMoney(result.finalPrice)}`;
+  return `${base} ${result.steps.map(formatRuleEffect).join(" ")} = ${formatFinalPrice(result.finalPrice)}`;
 };
 
 export const applyPriceAdjustmentRules = (
@@ -237,7 +241,7 @@ export const applyPriceAdjustmentRules = (
 
   const result: PriceAdjustmentResult = {
     basePrice: roundMoney(safeBase),
-    finalPrice: roundMoney(runningTotal),
+    finalPrice: roundMoney(runningTotal, 2),
     description: "",
     steps,
   };
