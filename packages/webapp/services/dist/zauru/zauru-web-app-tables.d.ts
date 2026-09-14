@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, RejectionWebAppTableObject, WebAppRowAssociateBody, WebAppRowAssociateResponse, WebAppRowDissociateBody, WebAppRowDissociateResponse, WebAppRowGraphQL, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, RejectionPercentageAdjustmentRule, RejectionWebAppTableObject, WebAppRowAssociateBody, WebAppRowAssociateResponse, WebAppRowDissociateBody, WebAppRowDissociateResponse, WebAppRowGraphQL, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 import { type GetWebAppRowsByTableIdOptions } from "@zauru-sdk/graphql";
 /**
  * getWebAppRow
@@ -23,6 +23,11 @@ export declare function getWebAppTableRegisters<T>(session: Session, webapp_tabl
  * @returns
  */
 export declare function deleteWebAppTableRegister(headers: any, id_web_app_table: string, id_register: number): Promise<WebAppTableUpdateResponse>;
+/**
+ * REST listing of webapp table rows (no GraphQL session token required).
+ */
+export declare function getWebAppTableRegistersRest<T>(headers: any, id_web_app_table: string): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>>;
+export declare const getRejectionPercentageAdjustmentRulesByHeaders: (headers: any) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[]>>;
 /**
  * createWebAppTableRegister function for create a new web app table register
  * @param headers

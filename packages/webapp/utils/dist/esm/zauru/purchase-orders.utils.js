@@ -1,5 +1,6 @@
-import { CURRENCY_PREFIX, calculatePurchaseOrderFinancials, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, setRejectionPercentage, } from "@zauru-sdk/common";
+import { CURRENCY_PREFIX, applyRejectionPercentageRulesToFinancials, calculatePurchaseOrderFinancials, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, setRejectionPercentage, } from "@zauru-sdk/common";
 import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, getLotesWithPurchaseFormated, getPurchase, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
+import { getActiveRejectionPercentageAdjustmentRules } from "./rejectionPercentageAdjustmentRules.utils.js";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia
  * @param headers
@@ -188,6 +189,23 @@ const extractPurchaseOrderFinancialDetails = (purchase) => {
     }
     return [];
 };
+const extractPurchaseOrderItemIds = (purchase) => {
+    if (purchase == null || typeof purchase !== "object")
+        return [];
+    const record = purchase;
+    const raw = record.purchase_order_details ??
+        record.purchase_order_details_attributes ??
+        record.details ??
+        [];
+    const list = Array.isArray(raw)
+        ? raw
+        : raw && typeof raw === "object"
+            ? Object.values(raw)
+            : [];
+    return list
+        .map((detail) => Number(detail.item_id))
+        .filter((itemId) => Number.isFinite(itemId));
+};
 /**
  * updateOchAndDis
  * Updates rejectionPercentage in purchase_order.memo and the monetary
@@ -199,8 +217,10 @@ export const updateOchAndDis = async (headers, data, purchase_id, session) => {
         const rejectionPercentage = Number(data?.rejectionPercentage ?? data?.discount ?? 0);
         let currentMemo = data.memo;
         let details = [];
+        let loadedPurchase;
         const restPurchaseResponse = await getPurchase(headers, purchase_id);
         if (!restPurchaseResponse.error && restPurchaseResponse.data) {
+            loadedPurchase = restPurchaseResponse.data;
             if (currentMemo === undefined) {
                 currentMemo = restPurchaseResponse.data.memo;
             }
@@ -209,7 +229,7 @@ export const updateOchAndDis = async (headers, data, purchase_id, session) => {
         if ((currentMemo === undefined || details.length === 0) && session) {
             const purchaseOrderResponse = await getPurchaseOrder(session, purchase_id, {
                 withLotStocksToMyAgency: false,
-                withPayee: false,
+                withPayee: true,
                 withReceptions: false,
             });
             if (purchaseOrderResponse.error || !purchaseOrderResponse.data) {
@@ -222,6 +242,9 @@ export const updateOchAndDis = async (headers, data, purchase_id, session) => {
             if (details.length === 0) {
                 details = extractPurchaseOrderFinancialDetails(purchaseOrderResponse.data);
             }
+            if (loadedPurchase == null) {
+                loadedPurchase = purchaseOrderResponse.data;
+            }
         }
         if (currentMemo === undefined) {
             throw new Error("memo or session is required to update rejectionPercentage");
@@ -230,14 +253,37 @@ export const updateOchAndDis = async (headers, data, purchase_id, session) => {
             throw new Error(restPurchaseResponse.userMsg ||
                 "No se pudieron obtener los detalles de la orden de compra para calcular el descuento");
         }
-        const { discount } = calculatePurchaseOrderFinancials({
-            details,
-            rejectionPercentage,
-        });
+        const rules = await getActiveRejectionPercentageAdjustmentRules(headers, session);
+        const purchaseRecord = loadedPurchase;
+        const payee = purchaseRecord?.payee;
+        const itemIds = extractPurchaseOrderItemIds(loadedPurchase);
+        const tipo = purchaseRecord?.reference;
+        const adjusted = rules.length > 0
+            ? applyRejectionPercentageRulesToFinancials({
+                memo: currentMemo,
+                originPercentage: rejectionPercentage,
+                details,
+                rules,
+                ctx: {
+                    itemIds,
+                    tipo,
+                    providerCategoryId: payee?.payee_category_id ??
+                        purchaseRecord
+                            ?.payee_category_id,
+                },
+            })
+            : {
+                memo: setRejectionPercentage(currentMemo, rejectionPercentage),
+                discount: calculatePurchaseOrderFinancials({
+                    details,
+                    rejectionPercentage,
+                }).discount,
+                finalPercentage: rejectionPercentage,
+            };
         const body = {
             purchase_order: {
-                memo: setRejectionPercentage(currentMemo, rejectionPercentage),
-                discount,
+                memo: adjusted.memo,
+                discount: adjusted.discount,
             },
         };
         if (data.other_charges !== undefined && data.other_charges !== null) {

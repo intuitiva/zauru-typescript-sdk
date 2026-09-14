@@ -1,8 +1,9 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { handlePossibleAxiosErrors, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getWebAppRowStringQuery, getWebAppRowsByWebAppTableIdStringQuery, } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
+import { getVariables } from "./zauru-variables.js";
 /**
  * getWebAppRow
  * @param headers
@@ -56,6 +57,33 @@ export async function deleteWebAppTableRegister(headers, id_web_app_table, id_re
     });
     return response.data;
 }
+/**
+ * REST listing of webapp table rows (no GraphQL session token required).
+ */
+export async function getWebAppTableRegistersRest(headers, id_web_app_table) {
+    return handlePossibleAxiosErrors(async () => {
+        const response = await httpZauru.get(`/apps/webapp_tables/${id_web_app_table}/webapp_rows.json`, { headers });
+        return Array.isArray(response.data) ? response.data : [];
+    });
+}
+export const getRejectionPercentageAdjustmentRulesByHeaders = (headers) => {
+    return handlePossibleAxiosErrors(async () => {
+        const varsResponse = await getVariables(headers);
+        if (varsResponse.error || !varsResponse.data) {
+            return [];
+        }
+        const tableId = varsResponse.data.find((variable) => variable.name === REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR)?.value;
+        if (!tableId) {
+            return [];
+        }
+        const rowsResponse = await getWebAppTableRegistersRest(headers, tableId);
+        if (rowsResponse.error) {
+            throw new Error(rowsResponse.userMsg ??
+                "No se pudieron leer las reglas de porcentaje de rechazo");
+        }
+        return rowsResponse.data ?? [];
+    });
+};
 /**
  * createWebAppTableRegister function for create a new web app table register
  * @param headers

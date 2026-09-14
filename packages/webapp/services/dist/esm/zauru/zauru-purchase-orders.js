@@ -1,7 +1,8 @@
-import { arrayToObject, convertToFormData, formatDateToUTC, getBasketsSchema, handlePossibleAxiosErrors, reduceAdd, } from "@zauru-sdk/common";
+import { arrayToObject, applyRejectionPercentageRulesToFinancials, convertToFormData, filterActiveRejectionPercentageAdjustmentRules, formatDateToUTC, getBasketsSchema, getRejectionPercentage, handlePossibleAxiosErrors, parseJsonMemo, reduceAdd, } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
+import { getRejectionPercentageAdjustmentRulesByHeaders } from "./zauru-web-app-tables.js";
 import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, } from "@zauru-sdk/graphql";
 /**
  * markAsReceivePurchaseOrder
@@ -23,14 +24,47 @@ export const markAsReceivePurchaseOrder = (headers, body) => {
         return true;
     });
 };
+const applyRejectionRulesToPurchaseOrderBody = async (headers, body) => {
+    const originPercentage = getRejectionPercentage(body.memo);
+    const details = body.purchase_order_details ?? [];
+    const parsedMemo = parseJsonMemo(body.memo);
+    if (parsedMemo.rejectionPercentage == null || details.length === 0) {
+        return body;
+    }
+    const rulesResponse = await getRejectionPercentageAdjustmentRulesByHeaders(headers);
+    const rules = filterActiveRejectionPercentageAdjustmentRules(rulesResponse.error ? [] : rulesResponse.data);
+    if (rules.length === 0) {
+        return body;
+    }
+    const payee = body.payee;
+    const adjusted = applyRejectionPercentageRulesToFinancials({
+        memo: body.memo,
+        originPercentage,
+        details,
+        rules,
+        ctx: {
+            itemIds: details
+                .map((detail) => Number(detail.item_id))
+                .filter((itemId) => Number.isFinite(itemId)),
+            tipo: body.reference ?? undefined,
+            providerCategoryId: payee?.payee_category_id,
+        },
+    });
+    return {
+        ...body,
+        memo: adjusted.memo,
+        discount: adjusted.discount,
+    };
+};
 export const createNewPurchaseOrder = (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
+        const adjustedBody = await applyRejectionRulesToPurchaseOrderBody(headers, body);
         let sendBody = {
-            ...body,
-            purchase_order_details_attributes: arrayToObject(body?.purchase_order_details),
+            ...adjustedBody,
+            purchase_order_details_attributes: arrayToObject(adjustedBody?.purchase_order_details),
             tag_ids: [
                 "",
-                ...(body?.taggings?.map((x) => x?.tag_id?.toString()) ?? []),
+                ...(adjustedBody?.taggings?.map((x) => x?.tag_id?.toString()) ?? []),
             ],
         };
         delete sendBody.__rvfInternalFormId;

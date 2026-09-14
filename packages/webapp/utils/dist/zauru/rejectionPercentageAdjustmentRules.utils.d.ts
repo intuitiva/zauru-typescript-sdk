@@ -1,10 +1,7 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, RejectionPercentageAdjustmentContext, RejectionPercentageAdjustmentResult, RejectionPercentageAdjustmentRule, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
-export declare const filterActiveRejectionPercentageAdjustmentRules: (rules?: WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[]) => WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[];
+import { AxiosUtilsResponse, RejectionPercentageAdjustmentRule, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
+export { applyRejectionPercentageAdjustmentRules, applyRejectionPercentageRulesToFinancials, filterActiveRejectionPercentageAdjustmentRules, formatRejectionPercentageAdjustmentDescription, rejectionPercentageAdjustmentRuleMatches, resolveRejectionPercentageBase, resolveRejectionPercentageOrigin, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, } from "@zauru-sdk/common";
 export declare const getRejectionPercentageAdjustmentRules: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[]>>;
+export declare const getActiveRejectionPercentageAdjustmentRules: (headers: any, session?: Session) => Promise<WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[]>;
 export declare const createRejectionPercentageAdjustmentRule: (headers: any, session: Session, body: RejectionPercentageAdjustmentRule) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
 export declare const updateRejectionPercentageAdjustmentRule: (headers: any, session: Session, id: string, body: Partial<RejectionPercentageAdjustmentRule>) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
-export declare const rejectionPercentageAdjustmentRuleMatches: (rule: RejectionPercentageAdjustmentRule, ctx: RejectionPercentageAdjustmentContext) => boolean;
-export declare const formatRejectionPercentageAdjustmentDescription: (result: Pick<RejectionPercentageAdjustmentResult, "basePercentage" | "finalPercentage" | "steps">, baseLabel?: string) => string;
-export declare const resolveRejectionPercentageBase: (memo?: string | object) => number;
-export declare const applyRejectionPercentageAdjustmentRules: (basePercentage: number, rules: Array<RejectionPercentageAdjustmentRule | WebAppRowGraphQL<RejectionPercentageAdjustmentRule>>, ctx: RejectionPercentageAdjustmentContext) => RejectionPercentageAdjustmentResult;

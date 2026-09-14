@@ -1,8 +1,12 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import {
+  handlePossibleAxiosErrors,
+  REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,
+} from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   MotivoRechazo,
+  RejectionPercentageAdjustmentRule,
   RejectionWebAppTableObject,
   WebAppRowAssociateBody,
   WebAppRowAssociateResponse,
@@ -22,6 +26,7 @@ import {
   type GetWebAppRowsByTableIdOptions,
 } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
+import { getVariables } from "./zauru-variables.js";
 
 /**
  * getWebAppRow
@@ -123,6 +128,54 @@ export async function deleteWebAppTableRegister(
 
   return response.data;
 }
+
+/**
+ * REST listing of webapp table rows (no GraphQL session token required).
+ */
+export async function getWebAppTableRegistersRest<T>(
+  headers: any,
+  id_web_app_table: string,
+): Promise<AxiosUtilsResponse<WebAppRowGraphQL<T>[]>> {
+  return handlePossibleAxiosErrors(async () => {
+    const response = await httpZauru.get<WebAppRowGraphQL<T>[]>(
+      `/apps/webapp_tables/${id_web_app_table}/webapp_rows.json`,
+      { headers },
+    );
+    return Array.isArray(response.data) ? response.data : [];
+  });
+}
+
+export const getRejectionPercentageAdjustmentRulesByHeaders = (
+  headers: any,
+): Promise<
+  AxiosUtilsResponse<WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[]>
+> => {
+  return handlePossibleAxiosErrors(async () => {
+    const varsResponse = await getVariables(headers);
+    if (varsResponse.error || !varsResponse.data) {
+      return [];
+    }
+    const tableId = varsResponse.data.find(
+      (variable) =>
+        variable.name === REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,
+    )?.value;
+    if (!tableId) {
+      return [];
+    }
+    const rowsResponse =
+      await getWebAppTableRegistersRest<RejectionPercentageAdjustmentRule>(
+        headers,
+        tableId,
+      );
+    if (rowsResponse.error) {
+      throw new Error(
+        rowsResponse.userMsg ??
+          "No se pudieron leer las reglas de porcentaje de rechazo",
+      );
+    }
+    return rowsResponse.data ?? [];
+  });
+};
 
 /**
  * createWebAppTableRegister function for create a new web app table register

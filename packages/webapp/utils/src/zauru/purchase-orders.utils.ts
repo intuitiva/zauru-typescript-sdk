@@ -1,6 +1,7 @@
 import type { Session } from "@remix-run/node";
 import {
   CURRENCY_PREFIX,
+  applyRejectionPercentageRulesToFinancials,
   calculatePurchaseOrderFinancials,
   getNewDateByFormat,
   getStringFullDate,
@@ -34,6 +35,7 @@ import {
   PurchasesListResponseSchema,
   UpdatePurchaseOrderBody,
 } from "@zauru-sdk/types";
+import { getActiveRejectionPercentageAdjustmentRules } from "./rejectionPercentageAdjustmentRules.utils.js";
 
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia
@@ -339,6 +341,24 @@ const extractPurchaseOrderFinancialDetails = (
   return [];
 };
 
+const extractPurchaseOrderItemIds = (purchase: unknown): number[] => {
+  if (purchase == null || typeof purchase !== "object") return [];
+  const record = purchase as Record<string, unknown>;
+  const raw =
+    record.purchase_order_details ??
+    record.purchase_order_details_attributes ??
+    record.details ??
+    [];
+  const list = Array.isArray(raw)
+    ? raw
+    : raw && typeof raw === "object"
+      ? Object.values(raw)
+      : [];
+  return list
+    .map((detail) => Number((detail as { item_id?: number }).item_id))
+    .filter((itemId) => Number.isFinite(itemId));
+};
+
 /**
  * updateOchAndDis
  * Updates rejectionPercentage in purchase_order.memo and the monetary
@@ -363,9 +383,11 @@ export const updateOchAndDis = async (
 
     let currentMemo = data.memo;
     let details: PurchaseOrderFinancialDetail[] = [];
+    let loadedPurchase: unknown;
 
     const restPurchaseResponse = await getPurchase(headers, purchase_id);
     if (!restPurchaseResponse.error && restPurchaseResponse.data) {
+      loadedPurchase = restPurchaseResponse.data;
       if (currentMemo === undefined) {
         currentMemo = restPurchaseResponse.data.memo;
       }
@@ -375,7 +397,7 @@ export const updateOchAndDis = async (
     if ((currentMemo === undefined || details.length === 0) && session) {
       const purchaseOrderResponse = await getPurchaseOrder(session, purchase_id, {
         withLotStocksToMyAgency: false,
-        withPayee: false,
+        withPayee: true,
         withReceptions: false,
       });
 
@@ -394,6 +416,9 @@ export const updateOchAndDis = async (
           purchaseOrderResponse.data,
         );
       }
+      if (loadedPurchase == null) {
+        loadedPurchase = purchaseOrderResponse.data;
+      }
     }
 
     if (currentMemo === undefined) {
@@ -409,15 +434,50 @@ export const updateOchAndDis = async (
       );
     }
 
-    const { discount } = calculatePurchaseOrderFinancials({
-      details,
-      rejectionPercentage,
-    });
+    const rules = await getActiveRejectionPercentageAdjustmentRules(
+      headers,
+      session,
+    );
+    const purchaseRecord = loadedPurchase as
+      | {
+          reference?: string;
+          payee_category_id?: number;
+          payee?: { payee_category_id?: number };
+        }
+      | undefined;
+    const payee = purchaseRecord?.payee;
+    const itemIds = extractPurchaseOrderItemIds(loadedPurchase);
+    const tipo = purchaseRecord?.reference;
+
+    const adjusted =
+      rules.length > 0
+        ? applyRejectionPercentageRulesToFinancials({
+            memo: currentMemo,
+            originPercentage: rejectionPercentage,
+            details,
+            rules,
+            ctx: {
+              itemIds,
+              tipo,
+              providerCategoryId:
+                payee?.payee_category_id ??
+                (purchaseRecord as { payee_category_id?: number } | undefined)
+                  ?.payee_category_id,
+            },
+          })
+        : {
+            memo: setRejectionPercentage(currentMemo, rejectionPercentage),
+            discount: calculatePurchaseOrderFinancials({
+              details,
+              rejectionPercentage,
+            }).discount,
+            finalPercentage: rejectionPercentage,
+          };
 
     const body = {
       purchase_order: {
-        memo: setRejectionPercentage(currentMemo, rejectionPercentage),
-        discount,
+        memo: adjusted.memo,
+        discount: adjusted.discount,
       },
     } as UpdatePurchaseOrderBody;
 
