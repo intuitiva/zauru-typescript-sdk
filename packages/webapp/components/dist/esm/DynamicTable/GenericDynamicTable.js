@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SelectField } from "../Form/SelectField/index.js";
 import { TextField } from "../Form/TextField/index.js";
 import { CheckBox } from "../Form/Checkbox/index.js";
@@ -97,7 +97,7 @@ const GenericDynamicTableErrorComponent = ({ name }) => {
  */
 export const GenericDynamicTable = (props) => {
     const { columns, onChange, className, footerRow, defaultValue = [], thCSSProperties, thElementsClassName = "", editable = true, readOnly = false, // Nuevo prop
-    searcheables = [], loading = false, paginated = true, defaultItemsPerPage = 10, itemsPerPageOptions = [10, 50, 100], name, withoutBg = false, orientation = "horizontal", maxRows, confirmDelete = true, addRowButtonHandler, } = props;
+    searcheables = [], loading = false, paginated = true, defaultItemsPerPage = 10, itemsPerPageOptions = [10, 50, 100], name, withoutBg = false, orientation = "horizontal", maxRows, confirmDelete = true, addRowButtonHandler, rowSummary, } = props;
     /**
      * Definimos una variable interna para saber si los campos son
      * efectivamente editables: solo si `editable` es true y `readOnly` es false.
@@ -185,7 +185,10 @@ export const GenericDynamicTable = (props) => {
         const renderRow = (rowData, index) => {
             const rendereableColumns = columns.filter((column) => column.type !== "hidden");
             if (orientation === "horizontal") {
-                return (_jsxs("tr", { className: index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "", children: [rendereableColumns.map((column) => renderCell(rowData, column)), isEditable && renderDeleteButton(rowData)] }, rowData.id));
+                const rowClassName = index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "";
+                const summaryColSpan = rendereableColumns.length + (isEditable ? 1 : 0);
+                const summaryContent = rowSummary?.(rowData);
+                return (_jsxs(React.Fragment, { children: [_jsxs("tr", { className: rowClassName, children: [rendereableColumns.map((column) => renderCell(rowData, column)), isEditable && renderDeleteButton(rowData)] }), summaryContent ? (_jsx("tr", { className: rowClassName, children: _jsxs("td", { colSpan: summaryColSpan, className: "px-2 pb-3 pt-0 text-sm text-gray-700 border-b border-gray-300", children: [_jsx("span", { className: "font-medium text-gray-500", children: "Resumen: " }), summaryContent] }) })) : null] }, rowData.id));
             }
             else {
                 // Orientación vertical

@@ -17,6 +17,7 @@ type Props = {
     zauruBaseURL?: string;
     setProcessing?: (processing: boolean) => void;
     signature?: boolean;
+    capture?: "user" | "environment";
 };
 export declare const FileUploadField: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

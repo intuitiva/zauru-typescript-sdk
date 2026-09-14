@@ -145,7 +145,7 @@ createTheme("subTable", {
 });
 //Documentación de la tabla https://react-data-table-component.netlify.app/?path=/docs/getting-started-intro--docs
 export const ZauruTable = (props) => {
-    const { columns, conditionalRowStyles, data, loading = false, pagination, search, theme, className, offlineSearch = [], whitOutPagination = false, ...others } = props;
+    const { columns, conditionalRowStyles, data, loading = false, pagination, search, expandable, theme, className, offlineSearch = [], whitOutPagination = false, ...others } = props;
     const [, setSearchParams] = useSearchParams({
         page: "1",
         perPage: "10",
@@ -211,7 +211,7 @@ export const ZauruTable = (props) => {
     };
     const loadSubHeader = !!(search || offlineSearch.length > 0);
     const subHeaderComponent = loadSubHeader ? subHeaderComponentMemo : undefined;
-    return (_jsx("div", { className: "w-full min-w-0 max-w-full overflow-x-auto", children: _jsx(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: columns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination?.totalRows ?? undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions
+    return (_jsx("div", { className: "w-full min-w-0 max-w-full overflow-x-auto", children: _jsx(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: columns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, expandableRows: !!expandable, expandOnRowClicked: !!expandable, expandableRowExpanded: expandable ? expandable.expandableRowExpanded : undefined, expandableRowsComponent: expandable ? expandable.expandableRowsComponent : undefined, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination?.totalRows ?? undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions
                 ? pagination.rowsPerPageOptions
                 : [10, 50, 100], ...others }) }));
 };

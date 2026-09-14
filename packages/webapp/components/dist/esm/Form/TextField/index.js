@@ -1,11 +1,12 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { IdeaIconSVG } from "@zauru-sdk/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 export const TextField = (props) => {
     const { id, name, defaultValue = "", hidden, type = "text", onChange, onKeyDown, disabled = false, readOnly = false, min, integer = false, stopChangeEvents, style, title, helpText, className = "", hint, required, autoComplete = "off", } = props;
     const [showTooltip, setShowTooltip] = useState(false);
     const [value, setValue] = useState(defaultValue);
+    const inputRef = useRef(null);
     const { register: tempRegister, formState: { errors }, setValue: setOnFormValue, } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
     const error = errors ? errors[props.name ?? "-1"] : undefined;
     const register = tempRegister
@@ -14,12 +15,21 @@ export const TextField = (props) => {
             required,
         })
         : undefined; // Solo usar register si está disponible
+    const assignRef = (element) => {
+        inputRef.current = element;
+        if (typeof register?.ref === "function") {
+            register.ref(element);
+        }
+    };
     const color = error ? "red" : "gray";
     const isReadOnly = disabled || readOnly;
     const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
     const textColor = isReadOnly ? "text-gray-500" : `text-${color}-900`;
     const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-200`;
     useEffect(() => {
+        if (inputRef.current && document.activeElement === inputRef.current) {
+            return;
+        }
         if (setOnFormValue) {
             setOnFormValue(name ?? "-1", defaultValue);
         }
@@ -54,14 +64,14 @@ export const TextField = (props) => {
         }
     };
     if (hidden) {
-        return (_jsx("input", { type: type, id: id ?? name, value: value, hidden: true, ...(register ?? {}), name: name, onChange: handleInputChange }));
+        return (_jsx("input", { type: type, id: id ?? name, value: value, hidden: true, ...(register ?? {}), ref: assignRef, name: name, onChange: handleInputChange }));
     }
     const inputComponent = (_jsx("input", { type: type, readOnly: isReadOnly, disabled: disabled, id: id ?? name, value: value, onWheel: (e) => {
             e.currentTarget.blur();
         }, step: type === "number" ? 0.01 : undefined, onKeyDown: (event) => {
             handleKeyDown(event);
             onKeyDown && onKeyDown(event);
-        }, min: min, style: style, className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`, ...(register ?? {}), name: name, autoComplete: autoComplete, onChange: handleInputChange }));
+        }, min: min, style: style, className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`, ...(register ?? {}), ref: assignRef, name: name, autoComplete: autoComplete, onChange: handleInputChange }));
     if (!error && !title && !helpText) {
         return _jsx("div", { className: `${className}`, children: inputComponent });
     }

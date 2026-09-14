@@ -137,6 +137,9 @@ export const SelectField = (props) => {
         setFilteredOptions(options.filter((option) => option.label.toLowerCase().includes(newValue.toLowerCase())));
     }, [register, options]);
     const handleOptionClick = useCallback((option) => {
+        if (option.disabled) {
+            return;
+        }
         if (isMulti) {
             handleAddMultiValue(option);
         }
@@ -241,11 +244,18 @@ export const SelectField = (props) => {
                     ? "text-red-700 dark:text-red-500"
                     : "text-gray-700 dark:text-gray-500"}`, children: [title, required && _jsx("span", { className: "text-red-500", children: "*" })] })), _jsxs("div", { className: "relative", children: [_jsxs("div", { className: "flex items-center", children: [_jsx("input", { type: "text", id: id, value: inputValue, onFocus: () => setIsOpen(true), onKeyDown: handleKeyDown, readOnly: isReadOnly, disabled: disabled, className: `block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm pr-10`, placeholder: isMulti ? "Select options..." : "Select an option...", autoComplete: "off", onChange: handleInputChange, onBlur: handleBlur, required: required }), isClearable && (value || valueMulti.length > 0) && (_jsx("button", { type: "button", onClick: handleClear, className: "absolute inset-y-0 right-0 pr-3 flex items-center", children: "\u00D7" })), helpText && (_jsx("div", { className: "flex items-center relative ml-3", children: _jsxs("div", { className: "relative cursor-pointer", onMouseEnter: () => setShowTooltip(true), onMouseLeave: () => setShowTooltip(false), children: [_jsx(IdeaIconSVG, {}), showTooltip && (_jsx("div", { className: "absolute -left-48 top-0 mt-8 p-2 bg-white border rounded shadow text-black z-50", children: helpText }))] }) }))] }), _jsx("input", { type: "hidden", ...(register ?? {}), name: name, value: isMulti
                             ? valueMulti.map((v) => v.value).join(",")
-                            : value?.value || "" }), isOpen && !isReadOnly && (_jsx("ul", { ref: optionsRef, className: "absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm", children: filteredOptions.map((option, index) => (_jsx("li", { className: `cursor-pointer select-none relative py-2 pl-3 pr-9 ${(isMulti
+                            : value?.value || "" }), isOpen && !isReadOnly && (_jsx("ul", { ref: optionsRef, className: "absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm", children: filteredOptions.map((option, index) => {
+                            const isDisabled = Boolean(option.disabled);
+                            const disabledLabel = option.disabledLabel;
+                            const isSelected = isMulti
                                 ? valueMulti.some((v) => v.value === option.value)
-                                : value?.value === option.value)
-                                ? "text-white bg-indigo-600"
-                                : index === highlightedIndex
-                                    ? "text-black bg-sky-200"
-                                    : "text-gray-900"}`, onClick: () => handleOptionClick(option), onMouseEnter: () => setHighlightedIndex(index), onMouseLeave: () => setHighlightedIndex(-1), children: option.label }, `${option.value}-${index}`))) }))] }), isMulti && valueMulti.length > 0 && (_jsx("div", { className: "mt-2 flex flex-wrap gap-2", children: valueMulti.map((option, index) => (_jsxs("span", { className: "bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded", children: [option.label, _jsx("button", { type: "button", onClick: () => handleRemoveMultiValue(option), className: "ml-1 text-blue-600 hover:text-blue-800", children: "\u00D7" })] }, `${option.value}-${index}`))) })), error && (_jsxs("p", { className: `mt-2 text-sm text-${color}-600 dark:text-${color}-500`, children: [_jsx("span", { className: "font-medium", children: "Oops!" }), " ", error?.message?.toString() || "Error desconocido"] })), !error && hint && (_jsx("p", { className: `mt-2 italic text-sm text-${color}-500 dark:text-${color}-400`, children: hint }))] }));
+                                : value?.value === option.value;
+                            return (_jsxs("li", { className: `select-none relative py-2 pl-3 pr-9 ${isDisabled
+                                    ? "cursor-not-allowed text-gray-400 bg-gray-50"
+                                    : isSelected
+                                        ? "cursor-pointer text-white bg-indigo-600"
+                                        : index === highlightedIndex
+                                            ? "cursor-pointer text-black bg-sky-200"
+                                            : "cursor-pointer text-gray-900"}`, onClick: () => !isDisabled && handleOptionClick(option), onMouseEnter: () => !isDisabled && setHighlightedIndex(index), onMouseLeave: () => setHighlightedIndex(-1), children: [option.label, isDisabled && disabledLabel && (_jsxs("span", { className: "ml-2 text-xs text-gray-400", children: ["(", disabledLabel, ")"] }))] }, `${option.value}-${index}`));
+                        }) }))] }), isMulti && valueMulti.length > 0 && (_jsx("div", { className: "mt-2 flex flex-wrap gap-2", children: valueMulti.map((option, index) => (_jsxs("span", { className: "bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded", children: [option.label, _jsx("button", { type: "button", onClick: () => handleRemoveMultiValue(option), className: "ml-1 text-blue-600 hover:text-blue-800", children: "\u00D7" })] }, `${option.value}-${index}`))) })), error && (_jsxs("p", { className: `mt-2 text-sm text-${color}-600 dark:text-${color}-500`, children: [_jsx("span", { className: "font-medium", children: "Oops!" }), " ", error?.message?.toString() || "Error desconocido"] })), !error && hint && (_jsx("p", { className: `mt-2 italic text-sm text-${color}-500 dark:text-${color}-400`, children: hint }))] }));
 };

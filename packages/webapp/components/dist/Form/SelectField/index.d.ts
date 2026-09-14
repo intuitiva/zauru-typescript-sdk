@@ -6,7 +6,10 @@ type Props = {
     defaultValue?: SelectFieldOption;
     defaultValueMulti?: SelectFieldOption[];
     helpText?: string;
-    options: Array<SelectFieldOption>;
+    options: Array<SelectFieldOption & {
+        disabled?: boolean;
+        disabledLabel?: string;
+    }>;
     onChange?: (value: SelectFieldOption | null) => void;
     onChangeMulti?: (value: SelectFieldOption[]) => void;
     onInputChange?: (newValue: string) => void;

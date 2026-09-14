@@ -40,6 +40,8 @@ type Props = {
      * es decir, sin permitir ningún tipo de interacción de edición o eliminación.
      */
     readOnly?: boolean;
+    /** Contenido extra debajo de cada fila (p. ej. un resumen). */
+    rowSummary?: (rowData: RowDataType) => React.ReactNode;
 };
 /**
  *
