@@ -24,7 +24,7 @@ const OptionsDropDownButton = ({ color, options, name }: EntityProps) => {
         <div className="relative inline-block">
           <button
             onClick={() => setShowOptionsMenu(!showOptionsMenu)}
-            className={`relative flex items-center p-2 text-xs text-white ${color.bg700} active:${color.bg900} border border-transparent rounded-full uppercase focus:ring-opacity-40 focus:outline-none`}
+            className={`relative flex cursor-pointer items-center p-2 text-xs text-white ${color.bg700} active:${color.bg900} border border-transparent rounded-full uppercase focus:ring-opacity-40 focus:outline-none`}
           >
             {name ?? <OpcionButtonSvgIcon />}
             <DropDownArrowSvgIcon />
@@ -128,11 +128,17 @@ export const NavBar = ({
   selectedColor,
   version,
   reloadCatalogsOption,
+  showDarkModeToggle = false,
 }: NavBarProps) => {
   const color: ColorInterface = COLORS[selectedColor];
   const [NavBarOpen, setNavBarOpen] = useState(false);
   const [currentVersion, setCurrentVersion] = useState(version);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", isDarkMode);
+  }, [isDarkMode]);
 
   useEffect(() => {
     if (version !== currentVersion) {
@@ -213,6 +219,18 @@ export const NavBar = ({
                     </div>
                   </Link>
                 ),
+                showDarkModeToggle && (
+                  <button
+                    key="dark-mode-toggle"
+                    type="button"
+                    className="block w-full cursor-pointer text-left px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    onClick={() => setIsDarkMode((value) => !value)}
+                  >
+                    <div className="mx-auto pt-2">
+                      <span>{isDarkMode ? "Modo claro" : "Modo oscuro"}</span>
+                    </div>
+                  </button>
+                ),
                 <Link
                   key="cerrar-sesion"
                   className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
@@ -229,7 +247,7 @@ export const NavBar = ({
         </ul>
       </>
     );
-  }, [items, loggedIn, hiddenItemsChange]);
+  }, [items, loggedIn, hiddenItemsChange, showDarkModeToggle, isDarkMode]);
 
   return (
     <nav className={`py-3 ${color.bg600}`}>

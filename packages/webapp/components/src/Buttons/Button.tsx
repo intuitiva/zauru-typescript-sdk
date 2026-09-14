@@ -2,7 +2,7 @@ import type { ColorInterface } from "../NavBar/NavBar.types.js";
 import { useFormContext } from "react-hook-form";
 import { useState, useRef, useEffect } from "react";
 
-type DropdownOption = {
+export type DropdownOption = {
   label: string;
   value: string;
   onClick: () => void;
@@ -141,7 +141,7 @@ export const Button = (props: Props) => {
         className={`${isButtonDisabled ? " bg-opacity-25 " : ""} ${
           loading
             ? " cursor-progress"
-            : `${isButtonDisabled ? "" : `hover:${color.bg700}`}`
+            : `${isButtonDisabled ? " cursor-not-allowed" : `cursor-pointer hover:${color.bg700}`}`
         } inline-flex justify-center rounded-md border border-transparent ${
           color.bg600
         } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
@@ -174,11 +174,13 @@ export const Button = (props: Props) => {
         <button
           type="button"
           disabled={isButtonDisabled}
+          aria-haspopup="menu"
+          aria-expanded={isDropdownOpen}
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className={`${isButtonDisabled ? " bg-opacity-25 " : ""} ${
             loading
               ? " cursor-progress"
-              : `${isButtonDisabled ? "" : `hover:${color.bg700}`}`
+              : `${isButtonDisabled ? " cursor-not-allowed" : `cursor-pointer hover:${color.bg700}`}`
           } inline-flex justify-center items-center rounded-md border border-transparent ${
             color.bg600
           } py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${
@@ -205,25 +207,29 @@ export const Button = (props: Props) => {
         </button>
       </div>
 
-      {isDropdownOpen && (
-        <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      {isDropdownOpen && !isButtonDisabled ? (
+        <div
+          role="menu"
+          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+        >
           <div className="py-1">
-            {dropdownOptions.map((option, index) => (
+            {dropdownOptions.map((option) => (
               <button
-                key={index}
+                key={option.value}
                 type="button"
+                role="menuitem"
                 onClick={() => {
                   option.onClick();
                   setIsDropdownOpen(false);
                 }}
-                className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 text-left"
+                className="block w-full cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 text-left"
               >
                 {option.label}
               </button>
             ))}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 

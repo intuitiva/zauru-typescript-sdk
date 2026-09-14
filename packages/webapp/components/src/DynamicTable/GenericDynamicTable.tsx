@@ -59,6 +59,8 @@ type Props = {
    * es decir, sin permitir ningún tipo de interacción de edición o eliminación.
    */
   readOnly?: boolean;
+  /** Contenido extra debajo de cada fila (p. ej. un resumen). */
+  rowSummary?: (rowData: RowDataType) => React.ReactNode;
 };
 
 const GenericDynamicTableErrorComponent = ({ name }: { name: string }) => {
@@ -178,6 +180,7 @@ export const GenericDynamicTable = (props: Props) => {
     maxRows,
     confirmDelete = true,
     addRowButtonHandler,
+    rowSummary,
   } = props;
 
   /**
@@ -300,16 +303,30 @@ export const GenericDynamicTable = (props: Props) => {
       );
 
       if (orientation === "horizontal") {
+        const rowClassName =
+          index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "";
+        const summaryColSpan =
+          rendereableColumns.length + (isEditable ? 1 : 0);
+        const summaryContent = rowSummary?.(rowData);
+
         return (
-          <tr
-            key={rowData.id}
-            className={
-              index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : ""
-            }
-          >
-            {rendereableColumns.map((column) => renderCell(rowData, column))}
-            {isEditable && renderDeleteButton(rowData)}
-          </tr>
+          <React.Fragment key={rowData.id}>
+            <tr className={rowClassName}>
+              {rendereableColumns.map((column) => renderCell(rowData, column))}
+              {isEditable && renderDeleteButton(rowData)}
+            </tr>
+            {summaryContent ? (
+              <tr className={rowClassName}>
+                <td
+                  colSpan={summaryColSpan}
+                  className="px-2 pb-3 pt-0 text-sm text-gray-700 border-b border-gray-300"
+                >
+                  <span className="font-medium text-gray-500">Resumen: </span>
+                  {summaryContent}
+                </td>
+              </tr>
+            ) : null}
+          </React.Fragment>
         );
       } else {
         // Orientación vertical

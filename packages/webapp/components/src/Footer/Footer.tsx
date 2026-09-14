@@ -40,7 +40,8 @@ export const Footer = ({
     <footer className={`inset-x-0 bottom-0 px-2 py-[20px] ${color}`}>
       <div className="px-4 mx-auto flex flex-wrap items-center justify-center">
         <p className="text-white text-[1.2rem]">
-          {`Creado en `} <a href={href}>Zauru</a> {`con ❤️ v.${version}`}
+          {`Creado en `} <a href={href}>Zauru</a>{" "}
+          {`con ❤️ ${new Date().getFullYear()} v.${version}`}
         </p>
         {showConnection && (
           <div className="ml-5">

@@ -17,7 +17,9 @@ type Props = {
   defaultValue?: SelectFieldOption;
   defaultValueMulti?: SelectFieldOption[];
   helpText?: string;
-  options: Array<SelectFieldOption>;
+  options: Array<
+    SelectFieldOption & { disabled?: boolean; disabledLabel?: string }
+  >;
   onChange?: (value: SelectFieldOption | null) => void;
   onChangeMulti?: (value: SelectFieldOption[]) => void;
   onInputChange?: (newValue: string) => void;
@@ -236,7 +238,10 @@ export const SelectField = (props: Props) => {
   );
 
   const handleOptionClick = useCallback(
-    (option: SelectFieldOption) => {
+    (option: SelectFieldOption & { disabled?: boolean }) => {
+      if (option.disabled) {
+        return;
+      }
       if (isMulti) {
         handleAddMultiValue(option);
       } else {
@@ -441,27 +446,43 @@ export const SelectField = (props: Props) => {
             ref={optionsRef}
             className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
           >
-            {filteredOptions.map((option, index) => (
-              <li
-                key={`${option.value}-${index}`}
-                className={`cursor-pointer select-none relative py-2 pl-3 pr-9 ${
-                  (
-                    isMulti
-                      ? valueMulti.some((v) => v.value === option.value)
-                      : value?.value === option.value
-                  )
-                    ? "text-white bg-indigo-600"
-                    : index === highlightedIndex
-                    ? "text-black bg-sky-200"
-                    : "text-gray-900"
-                }`}
-                onClick={() => handleOptionClick(option)}
-                onMouseEnter={() => setHighlightedIndex(index)}
-                onMouseLeave={() => setHighlightedIndex(-1)}
-              >
-                {option.label}
-              </li>
-            ))}
+            {filteredOptions.map((option, index) => {
+              const isDisabled = Boolean(
+                (option as SelectFieldOption & { disabled?: boolean }).disabled
+              );
+              const disabledLabel = (
+                option as SelectFieldOption & { disabledLabel?: string }
+              ).disabledLabel;
+              const isSelected = isMulti
+                ? valueMulti.some((v) => v.value === option.value)
+                : value?.value === option.value;
+              return (
+                <li
+                  key={`${option.value}-${index}`}
+                  className={`select-none relative py-2 pl-3 pr-9 ${
+                    isDisabled
+                      ? "cursor-not-allowed text-gray-400 bg-gray-50"
+                      : isSelected
+                        ? "cursor-pointer text-white bg-indigo-600"
+                        : index === highlightedIndex
+                          ? "cursor-pointer text-black bg-sky-200"
+                          : "cursor-pointer text-gray-900"
+                  }`}
+                  onClick={() => !isDisabled && handleOptionClick(option)}
+                  onMouseEnter={() =>
+                    !isDisabled && setHighlightedIndex(index)
+                  }
+                  onMouseLeave={() => setHighlightedIndex(-1)}
+                >
+                  {option.label}
+                  {isDisabled && disabledLabel && (
+                    <span className="ml-2 text-xs text-gray-400">
+                      ({disabledLabel})
+                    </span>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

@@ -7,7 +7,7 @@ type Props = {
 export const OutletContainer = (props: Props) => {
   const { children } = props;
   return (
-    <div className="flex-1 overflow-x-auto" suppressHydrationWarning>
+    <div className="min-w-0 flex-1 overflow-x-auto" suppressHydrationWarning>
       {children}
     </div>
   );

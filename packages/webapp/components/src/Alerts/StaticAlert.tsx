@@ -7,7 +7,7 @@ type Props = {
   description: any;
   showCloseButton?: boolean;
   onClose?: () => void;
-  type?: "success" | "info";
+  type?: "success" | "info" | "warning";
   loading?: boolean;
 };
 
@@ -31,6 +31,16 @@ const getConfig = (type: string) => {
           "rounded-md focus:outline-none focus:ring-2 focus:ring-green-500",
         path: (
           <path d="M8.445 12.6675A.9.9 0 0 0 7.1424 13.91l2.5726 2.7448c.3679.3856.9884.3689 1.335-.036l5.591-7.0366a.9.9 0 0 0-1.3674-1.1705l-4.6548 5.9132a.4.4 0 0 1-.607.0252l-1.567-1.6826zM1.9995 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10z"></path>
+        ),
+      };
+    case "warning":
+      return {
+        containerClassName:
+          "text-yellow-900 bg-yellow-100 border border-yellow-200 rounded-md",
+        buttonClassName:
+          "rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500",
+        path: (
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.93 14.93h-1.86c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h1.86c.41 0 .75.34.75.75s-.34.75-.75.75zm.57-4.42l-.57 2.36h-1.86l-.57-2.36c-.13-.54.21-1.08.76-1.08h1.48c.55 0 .88.54.76 1.08zm0-2.36h-2.58c-.55 0-.88-.54-.76-1.08l.57-2.36h1.86l.57 2.36c.12.54-.21 1.08-.76 1.08z"></path>
         ),
       };
     default:

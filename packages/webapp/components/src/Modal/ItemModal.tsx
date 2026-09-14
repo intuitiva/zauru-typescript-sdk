@@ -93,8 +93,10 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
   const filteredList = itemList
     .map((category) => ({
       ...category,
-      items: category.items.filter((item) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      items: category.items.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.code.toLowerCase().includes(searchTerm.toLowerCase())
       ),
     }))
     .filter(
@@ -163,10 +165,15 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">
-            {selectedItem ? "Confirmar selección" : "Seleccionar un Ítem"}
+            {selectedItem
+              ? "Confirmar selección"
+              : `Seleccionar un Ítem - (${itemList.reduce(
+                  (acc, category) => acc + category.items.length,
+                  0
+                )} ítems disponibles)`}
           </h2>
           <button
-            className="text-gray-500 hover:text-gray-800 text-3xl"
+            className="text-gray-500 hover:text-gray-800 text-3xl cursor-pointer"
             onClick={handleCloseModal}
           >
             &times;
@@ -187,7 +194,7 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
             <div className="relative mb-4">
               <input
                 type="text"
-                placeholder="Buscar por nombre o categoría..."
+                placeholder="Buscar por nombre, código o categoría..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="p-2 border rounded-lg w-full"
@@ -323,6 +330,12 @@ const ItemSelectionModal: React.FC<ItemModalProps> = ({
               className="w-40 h-40 object-cover rounded mb-4 shadow-md"
             />
             <p className="mb-2 text-xl font-bold">{selectedItem.name}</p>
+            <p className="mb-2 text-base font-semibold text-gray-700">
+              Código:
+              <span className="ml-1 font-normal text-gray-800">
+                {selectedItem.code}
+              </span>
+            </p>
             <p className="mb-2 text-base font-semibold text-gray-700">
               Stock disponible:
               <span className="ml-1 font-normal text-gray-800">

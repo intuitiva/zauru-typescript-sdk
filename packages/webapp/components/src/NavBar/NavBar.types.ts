@@ -32,6 +32,7 @@ export type NavBarProps = {
   LinkComponent?: any;
   version?: string;
   reloadCatalogsOption?: boolean;
+  showDarkModeToggle?: boolean;
 };
 
 export type NavBarStateProps = {

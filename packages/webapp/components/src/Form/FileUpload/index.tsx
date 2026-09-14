@@ -22,6 +22,7 @@ type Props = {
   zauruBaseURL?: string;
   setProcessing?: (processing: boolean) => void;
   signature?: boolean;
+  capture?: "user" | "environment";
 };
 
 export const FileUploadField = (props: Props) => {
@@ -43,6 +44,7 @@ export const FileUploadField = (props: Props) => {
     zauruBaseURL = "https://zauru.herokuapp.com",
     setProcessing,
     signature = false,
+    capture,
   } = props;
 
   const {
@@ -572,6 +574,7 @@ export const FileUploadField = (props: Props) => {
           type="file"
           id={id ?? name}
           accept={fileTypes.map((ft) => `.${ft}`).join(", ")}
+          capture={capture}
           className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
           {...(register ?? {})}
           ref={fileInputRef}

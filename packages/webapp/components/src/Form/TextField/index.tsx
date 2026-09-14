@@ -1,5 +1,5 @@
 import { IdeaIconSVG } from "@zauru-sdk/icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 type Props = {
@@ -52,6 +52,7 @@ export const TextField = (props: Props) => {
 
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const [value, setValue] = useState(defaultValue);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const {
     register: tempRegister,
     formState: { errors },
@@ -65,6 +66,13 @@ export const TextField = (props: Props) => {
       })
     : undefined; // Solo usar register si está disponible
 
+  const assignRef = (element: HTMLInputElement | null) => {
+    inputRef.current = element;
+    if (typeof register?.ref === "function") {
+      register.ref(element);
+    }
+  };
+
   const color = error ? "red" : "gray";
 
   const isReadOnly = disabled || readOnly;
@@ -73,6 +81,9 @@ export const TextField = (props: Props) => {
   const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-200`;
 
   useEffect(() => {
+    if (inputRef.current && document.activeElement === inputRef.current) {
+      return;
+    }
     if (setOnFormValue) {
       setOnFormValue(name ?? "-1", defaultValue);
     }
@@ -119,6 +130,7 @@ export const TextField = (props: Props) => {
         value={value}
         hidden
         {...(register ?? {})}
+        ref={assignRef}
         name={name}
         onChange={handleInputChange}
       />
@@ -144,6 +156,7 @@ export const TextField = (props: Props) => {
       style={style}
       className={`block w-full rounded-md ${bgColor} ${borderColor} ${textColor} shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
       {...(register ?? {})}
+      ref={assignRef}
       name={name}
       autoComplete={autoComplete}
       onChange={handleInputChange}

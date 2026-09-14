@@ -20,7 +20,7 @@ export const BlockUI = (props: Props) => {
           <div className="flex items-center">
             <span className="text-3xl mr-4">{loadingText}</span>
             <svg
-              className="animate-spin h-36 w-36 text-gray-600"
+              className="animate-spin h-5 w-5 text-gray-600"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"

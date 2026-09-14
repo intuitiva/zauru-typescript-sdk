@@ -6,20 +6,29 @@ import {
   useRouteError,
   Link,
 } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const ErrorLayout = ({
   from,
   isRootLevel = true,
   error: parentError,
+  onError,
 }: {
   from?: string;
   isRootLevel?: boolean;
   error?: Error;
+  onError?: (error: Error, meta: { from?: string }) => void;
 }) => {
   try {
     const error = useRouteError();
     const [showDetails, setShowDetails] = useState(!!parentError);
+
+    useEffect(() => {
+      const reportable = error instanceof Error ? error : parentError;
+      if (reportable instanceof Error) {
+        onError?.(reportable, { from });
+      }
+    }, [error, parentError, from, onError]);
 
     const baseError = (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -49,7 +58,7 @@ export const ErrorLayout = ({
             <div className="mb-4 text-center">
               <button
                 onClick={() => setShowDetails(!showDetails)}
-                className="text-blue-400 hover:text-blue-300 transition duration-300"
+                className="text-blue-400 hover:text-blue-300 transition duration-300 cursor-pointer"
               >
                 {showDetails ? "Ocultar detalles" : "Ver más detalles"}
               </button>
