@@ -1,3 +1,4 @@
+import { ActionList } from "../src/Buttons/ActionList.js";
 import { Button } from "../src/Buttons/Button.js";
 
 export const Default = () => <Button title="Guardar" />;
@@ -25,6 +26,27 @@ export const Dropdown = () => (
     dropdownOptions={[
       { label: "Exportar", value: "export", onClick: () => undefined },
       { label: "Imprimir", value: "print", onClick: () => undefined },
+    ]}
+  />
+);
+
+export const Actions = () => (
+  <ActionList
+    items={[
+      {
+        key: "pdf",
+        badge: "PDF",
+        badgeClassName: "bg-red-50 text-red-700",
+        label: "Imprimir reporte",
+        onClick: () => undefined,
+      },
+      {
+        key: "xls",
+        badge: "XLS",
+        badgeClassName: "bg-green-50 text-green-700",
+        label: "Exportar Excel",
+        onClick: () => undefined,
+      },
     ]}
   />
 );
