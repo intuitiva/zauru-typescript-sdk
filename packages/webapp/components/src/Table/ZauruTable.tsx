@@ -10,22 +10,82 @@ import { SearchSVG } from "@zauru-sdk/icons";
 import * as ReactDataTableComponent from "react-data-table-component";
 const DataTable = ReactDataTableComponent.default as any;
 
+const headerTextWrapStyle = {
+  whiteSpace: "normal",
+  overflow: "visible",
+  textOverflow: "clip",
+  overflowWrap: "break-word",
+  wordBreak: "break-word",
+  lineHeight: "1.25",
+} as const;
+
 const customStyles: TableStyles = {
+  table: {
+    style: {
+      minWidth: 0,
+    },
+  },
+  tableWrapper: {
+    style: {
+      display: "block",
+      width: "100%",
+      maxWidth: "100%",
+      minWidth: 0,
+      overflowX: "auto",
+    },
+  },
+  responsiveWrapper: {
+    style: {
+      width: "100%",
+      maxWidth: "100%",
+      minWidth: 0,
+      overflowX: "auto",
+    },
+  },
+  headRow: {
+    style: {
+      minHeight: "40px",
+      height: "auto",
+      alignItems: "stretch",
+    },
+    denseStyle: {
+      minHeight: "36px",
+      height: "auto",
+    },
+  },
   headCells: {
     style: {
       color: "#202124",
       fontSize: "14px",
       justifyContent: "left",
-      whiteSpace: "normal",
-      wordBreak: "break-word",
-      maxWidth: "250px",
-      padding: "4px", // Add some padding
+      alignItems: "flex-start",
+      paddingTop: "8px",
+      paddingBottom: "8px",
+      ...headerTextWrapStyle,
+      ".rdt_TableCol_Sortable": {
+        height: "auto",
+        minHeight: "100%",
+        overflow: "visible",
+        whiteSpace: "normal",
+        alignItems: "flex-start",
+      },
+      ".rdt_TableCol_Sortable > div": headerTextWrapStyle,
     },
   },
   cells: {
     style: {
       whiteSpace: "normal", // Allow wrapping for cell content
       wordBreak: "break-word",
+    },
+  },
+  expanderRow: {
+    style: {
+      minWidth: 0,
+      width: "100%",
+      maxWidth: "100%",
+      overflowX: "auto",
+      display: "grid",
+      gridTemplateColumns: "minmax(0, 1fr)",
     },
   },
   rows: {
@@ -225,7 +285,8 @@ export const ZauruTable = (props: Props) => {
   const subHeaderComponent = loadSubHeader ? subHeaderComponentMemo : undefined;
 
   return (
-    <DataTable
+    <div className="w-full min-w-0 max-w-full overflow-x-auto">
+      <DataTable
       className={className}
       subHeaderWrap
       theme={theme ?? "solarized"}
@@ -254,7 +315,8 @@ export const ZauruTable = (props: Props) => {
           ? pagination.rowsPerPageOptions
           : [10, 50, 100]
       }
-      {...others}
-    />
+        {...others}
+      />
+    </div>
   );
 };

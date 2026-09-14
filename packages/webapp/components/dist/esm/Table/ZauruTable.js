@@ -5,22 +5,81 @@ import { createTheme } from "react-data-table-component";
 import { SearchSVG } from "@zauru-sdk/icons";
 import * as ReactDataTableComponent from "react-data-table-component";
 const DataTable = ReactDataTableComponent.default;
+const headerTextWrapStyle = {
+    whiteSpace: "normal",
+    overflow: "visible",
+    textOverflow: "clip",
+    overflowWrap: "break-word",
+    wordBreak: "break-word",
+    lineHeight: "1.25",
+};
 const customStyles = {
+    table: {
+        style: {
+            minWidth: 0,
+        },
+    },
+    tableWrapper: {
+        style: {
+            display: "block",
+            width: "100%",
+            maxWidth: "100%",
+            minWidth: 0,
+            overflowX: "auto",
+        },
+    },
+    responsiveWrapper: {
+        style: {
+            width: "100%",
+            maxWidth: "100%",
+            minWidth: 0,
+            overflowX: "auto",
+        },
+    },
+    headRow: {
+        style: {
+            minHeight: "40px",
+            height: "auto",
+            alignItems: "stretch",
+        },
+        denseStyle: {
+            minHeight: "36px",
+            height: "auto",
+        },
+    },
     headCells: {
         style: {
             color: "#202124",
             fontSize: "14px",
             justifyContent: "left",
-            whiteSpace: "normal",
-            wordBreak: "break-word",
-            maxWidth: "250px",
-            padding: "4px", // Add some padding
+            alignItems: "flex-start",
+            paddingTop: "8px",
+            paddingBottom: "8px",
+            ...headerTextWrapStyle,
+            ".rdt_TableCol_Sortable": {
+                height: "auto",
+                minHeight: "100%",
+                overflow: "visible",
+                whiteSpace: "normal",
+                alignItems: "flex-start",
+            },
+            ".rdt_TableCol_Sortable > div": headerTextWrapStyle,
         },
     },
     cells: {
         style: {
             whiteSpace: "normal", // Allow wrapping for cell content
             wordBreak: "break-word",
+        },
+    },
+    expanderRow: {
+        style: {
+            minWidth: 0,
+            width: "100%",
+            maxWidth: "100%",
+            overflowX: "auto",
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1fr)",
         },
     },
     rows: {
@@ -152,7 +211,7 @@ export const ZauruTable = (props) => {
     };
     const loadSubHeader = !!(search || offlineSearch.length > 0);
     const subHeaderComponent = loadSubHeader ? subHeaderComponentMemo : undefined;
-    return (_jsx(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: columns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination?.totalRows ?? undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions
-            ? pagination.rowsPerPageOptions
-            : [10, 50, 100], ...others }));
+    return (_jsx("div", { className: "w-full min-w-0 max-w-full overflow-x-auto", children: _jsx(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: columns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination?.totalRows ?? undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions
+                ? pagination.rowsPerPageOptions
+                : [10, 50, 100], ...others }) }));
 };
