@@ -4,6 +4,7 @@
   "scripts": {
     "build": "pnpm -r run build",
     "clean": "pnpm -r exec rm -rf dist",
+    "components:play": "pnpm --filter @zauru-sdk/components play",
     "publish:packages": "lerna publish --registry https://registry.npmjs.org/ --no-verify-access",
     "publish:recursive": "pnpm -r publish --access public --no-git-checks --registry https://registry.npmjs.org/",
     "sync:workspace-protocol": "node scripts/sync-workspace-protocol.mjs",

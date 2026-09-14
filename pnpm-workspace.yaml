@@ -3,4 +3,7 @@ packages:
   - "packages/appocus/*"
 allowBuilds:
   '@journeyapps/wa-sqlite': true
+  '@swc/core': true
+  esbuild: true
+  msw: true
   nx: true
