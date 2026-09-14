@@ -1,4 +1,4 @@
-import { CURRENCY_PREFIX, applyRejectionPercentageRulesToFinancials, calculatePurchaseOrderFinancials, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, setRejectionPercentage, } from "@zauru-sdk/common";
+import { CURRENCY_PREFIX, calculatePurchaseOrderFinancials, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, mergeJsonMemo, } from "@zauru-sdk/common";
 import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, getLotesWithPurchaseFormated, getPurchase, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
 import { getActiveRejectionPercentageAdjustmentRules } from "./rejectionPercentageAdjustmentRules.utils.js";
 /**
@@ -258,32 +258,26 @@ export const updateOchAndDis = async (headers, data, purchase_id, session) => {
         const payee = purchaseRecord?.payee;
         const itemIds = extractPurchaseOrderItemIds(loadedPurchase);
         const tipo = purchaseRecord?.reference;
-        const adjusted = rules.length > 0
-            ? applyRejectionPercentageRulesToFinancials({
-                memo: currentMemo,
-                originPercentage: rejectionPercentage,
-                details,
-                rules,
-                ctx: {
-                    itemIds,
-                    tipo,
-                    providerCategoryId: payee?.payee_category_id ??
-                        purchaseRecord
-                            ?.payee_category_id,
-                },
-            })
-            : {
-                memo: setRejectionPercentage(currentMemo, rejectionPercentage),
-                discount: calculatePurchaseOrderFinancials({
-                    details,
-                    rejectionPercentage,
-                }).discount,
-                finalPercentage: rejectionPercentage,
-            };
+        const financials = calculatePurchaseOrderFinancials({
+            details,
+            rejectionPercentage,
+            memo: currentMemo,
+            rules,
+            ctx: {
+                itemIds,
+                tipo,
+                providerCategoryId: payee?.payee_category_id ??
+                    purchaseRecord
+                        ?.payee_category_id,
+            },
+        });
         const body = {
             purchase_order: {
-                memo: adjusted.memo,
-                discount: adjusted.discount,
+                memo: mergeJsonMemo(currentMemo, {
+                    rejectionPercentage: financials.rejectionPercentage,
+                    rejectionCalculations: financials.rejectionCalculations,
+                }),
+                discount: financials.discount,
             },
         };
         if (data.other_charges !== undefined && data.other_charges !== null) {

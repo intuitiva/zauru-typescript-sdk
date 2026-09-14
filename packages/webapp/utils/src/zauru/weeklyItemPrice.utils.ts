@@ -239,6 +239,7 @@ export const calculateItemPriceFromWeeklyMatrix = (
     source,
     period,
     specialItemId,
+    providerCategoryId: input.providerCategoryId,
   };
 };
 

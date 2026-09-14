@@ -1,10 +1,15 @@
 import type { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import {
+  filterActiveRejectionPercentageAdjustmentRules,
+  handlePossibleAxiosErrors,
+  REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,
+} from "@zauru-sdk/common";
 import {
   createWebAppTableRegister,
-  getRejectionPercentageAdjustmentRulesByHeaders,
+  getVariables,
   getVariablesByName,
   getWebAppTableRegisters,
+  getWebAppTableRegistersRest,
   updateWebAppTableRegister,
 } from "@zauru-sdk/services";
 import {
@@ -16,17 +21,11 @@ import {
 
 export {
   applyRejectionPercentageAdjustmentRules,
-  applyRejectionPercentageRulesToFinancials,
   filterActiveRejectionPercentageAdjustmentRules,
   formatRejectionPercentageAdjustmentDescription,
   rejectionPercentageAdjustmentRuleMatches,
   resolveRejectionPercentageBase,
   resolveRejectionPercentageOrigin,
-  REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,
-} from "@zauru-sdk/common";
-
-import {
-  filterActiveRejectionPercentageAdjustmentRules,
   REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,
 } from "@zauru-sdk/common";
 
@@ -58,6 +57,42 @@ export const getRejectionPercentageAdjustmentRules = (
     }
 
     return response.data ?? [];
+  });
+};
+
+/**
+ * Same listing without a Remix session: resolves the table id over REST, for
+ * background flows that only carry the Zauru headers.
+ */
+export const getRejectionPercentageAdjustmentRulesByHeaders = (
+  headers: any,
+): Promise<
+  AxiosUtilsResponse<WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[]>
+> => {
+  return handlePossibleAxiosErrors(async () => {
+    const varsResponse = await getVariables(headers);
+    const tableId = varsResponse.data?.find(
+      (variable) =>
+        variable.name === REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,
+    )?.value;
+
+    if (varsResponse.error || !tableId) {
+      return [];
+    }
+
+    const rowsResponse =
+      await getWebAppTableRegistersRest<RejectionPercentageAdjustmentRule>(
+        headers,
+        tableId,
+      );
+
+    if (rowsResponse.error) {
+      throw new Error(
+        `Ocurrió un error al consultar las reglas de ajuste de porcentaje de rechazo: ${rowsResponse.userMsg}`,
+      );
+    }
+
+    return rowsResponse.data ?? [];
   });
 };
 

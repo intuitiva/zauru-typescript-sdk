@@ -1,7 +1,6 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { createWebAppTableRegister, getRejectionPercentageAdjustmentRulesByHeaders, getVariablesByName, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/services";
-export { applyRejectionPercentageAdjustmentRules, applyRejectionPercentageRulesToFinancials, filterActiveRejectionPercentageAdjustmentRules, formatRejectionPercentageAdjustmentDescription, rejectionPercentageAdjustmentRuleMatches, resolveRejectionPercentageBase, resolveRejectionPercentageOrigin, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, } from "@zauru-sdk/common";
-import { filterActiveRejectionPercentageAdjustmentRules, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, } from "@zauru-sdk/common";
+import { filterActiveRejectionPercentageAdjustmentRules, handlePossibleAxiosErrors, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, } from "@zauru-sdk/common";
+import { createWebAppTableRegister, getVariables, getVariablesByName, getWebAppTableRegisters, getWebAppTableRegistersRest, updateWebAppTableRegister, } from "@zauru-sdk/services";
+export { applyRejectionPercentageAdjustmentRules, filterActiveRejectionPercentageAdjustmentRules, formatRejectionPercentageAdjustmentDescription, rejectionPercentageAdjustmentRuleMatches, resolveRejectionPercentageBase, resolveRejectionPercentageOrigin, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, } from "@zauru-sdk/common";
 const getTableId = async (headers, session) => {
     const vars = await getVariablesByName(headers, session, [
         REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,
@@ -16,6 +15,24 @@ export const getRejectionPercentageAdjustmentRules = (headers, session) => {
             throw new Error(`Ocurrió un error al consultar las reglas de ajuste de porcentaje de rechazo: ${response.userMsg}`);
         }
         return response.data ?? [];
+    });
+};
+/**
+ * Same listing without a Remix session: resolves the table id over REST, for
+ * background flows that only carry the Zauru headers.
+ */
+export const getRejectionPercentageAdjustmentRulesByHeaders = (headers) => {
+    return handlePossibleAxiosErrors(async () => {
+        const varsResponse = await getVariables(headers);
+        const tableId = varsResponse.data?.find((variable) => variable.name === REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR)?.value;
+        if (varsResponse.error || !tableId) {
+            return [];
+        }
+        const rowsResponse = await getWebAppTableRegistersRest(headers, tableId);
+        if (rowsResponse.error) {
+            throw new Error(`Ocurrió un error al consultar las reglas de ajuste de porcentaje de rechazo: ${rowsResponse.userMsg}`);
+        }
+        return rowsResponse.data ?? [];
     });
 };
 export const getActiveRejectionPercentageAdjustmentRules = async (headers, session) => {

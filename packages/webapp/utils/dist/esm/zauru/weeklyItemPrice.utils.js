@@ -151,6 +151,7 @@ export const calculateItemPriceFromWeeklyMatrix = (input) => {
         source,
         period,
         specialItemId,
+        providerCategoryId: input.providerCategoryId,
     };
 };
 export const loadLatestWeeklyCostMatrix = (headers, session, date) => {

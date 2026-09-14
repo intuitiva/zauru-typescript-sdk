@@ -1,14 +1,10 @@
 import type { Session } from "@remix-run/node";
 import {
   arrayToObject,
-  applyRejectionPercentageRulesToFinancials,
   convertToFormData,
-  filterActiveRejectionPercentageAdjustmentRules,
   formatDateToUTC,
   getBasketsSchema,
-  getRejectionPercentage,
   handlePossibleAxiosErrors,
-  parseJsonMemo,
   reduceAdd,
 } from "@zauru-sdk/common";
 import {
@@ -27,7 +23,6 @@ import {
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getRejectionPercentageAdjustmentRulesByHeaders } from "./zauru-web-app-tables.js";
 import {
   getLast100ReceptionsStringQuery,
   getPurchaseOrderByIdNumberStringQuery,
@@ -59,50 +54,6 @@ export const markAsReceivePurchaseOrder = (
   });
 };
 
-const applyRejectionRulesToPurchaseOrderBody = async (
-  headers: any,
-  body: CreateNewPurchaseOrderType,
-): Promise<CreateNewPurchaseOrderType> => {
-  const originPercentage = getRejectionPercentage(body.memo);
-  const details = body.purchase_order_details ?? [];
-  const parsedMemo = parseJsonMemo(body.memo);
-  if (parsedMemo.rejectionPercentage == null || details.length === 0) {
-    return body;
-  }
-
-  const rulesResponse =
-    await getRejectionPercentageAdjustmentRulesByHeaders(headers);
-  const rules = filterActiveRejectionPercentageAdjustmentRules(
-    rulesResponse.error ? [] : rulesResponse.data,
-  );
-  if (rules.length === 0) {
-    return body;
-  }
-
-  const payee = body.payee as
-    | { payee_category_id?: number }
-    | undefined;
-  const adjusted = applyRejectionPercentageRulesToFinancials({
-    memo: body.memo,
-    originPercentage,
-    details,
-    rules,
-    ctx: {
-      itemIds: details
-        .map((detail) => Number(detail.item_id))
-        .filter((itemId) => Number.isFinite(itemId)),
-      tipo: body.reference ?? undefined,
-      providerCategoryId: payee?.payee_category_id,
-    },
-  });
-
-  return {
-    ...body,
-    memo: adjusted.memo,
-    discount: adjusted.discount,
-  };
-};
-
 /**
  * createNewPurchaseOrder
  * @param headers
@@ -121,18 +72,14 @@ export const createNewPurchaseOrder = (
   body: CreateNewPurchaseOrderType,
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
-    const adjustedBody = await applyRejectionRulesToPurchaseOrderBody(
-      headers,
-      body,
-    );
     let sendBody = {
-      ...adjustedBody,
+      ...body,
       purchase_order_details_attributes: arrayToObject(
-        adjustedBody?.purchase_order_details,
+        body?.purchase_order_details,
       ),
       tag_ids: [
         "",
-        ...(adjustedBody?.taggings?.map((x) => x?.tag_id?.toString()) ?? []),
+        ...(body?.taggings?.map((x) => x?.tag_id?.toString()) ?? []),
       ],
     } as any;
 

@@ -12,6 +12,10 @@ import type {
   PurchaseOrderFinancialDetail,
 } from "@zauru-sdk/types";
 import { MONTHS } from "@zauru-sdk/types";
+import {
+  applyRejectionPercentageAdjustmentRules,
+  resolveRejectionPercentageOrigin,
+} from "./rejectionPercentageAdjustment.js";
 
 export const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[] = [
   { label: "Microbiología", value: "microbiologa" },
@@ -85,6 +89,18 @@ export const setRejectionPercentage = (
   percentage: number,
 ): string => mergeJsonMemo(memo, { rejectionPercentage: percentage });
 
+/**
+ * Rejection % of origin stored in the memo, ignoring the adjustment rules
+ * already applied on top of it.
+ */
+export const resolveRejectionPercentageBase = (
+  memo?: string | object,
+): number =>
+  resolveRejectionPercentageOrigin(
+    getRejectionPercentage(memo),
+    parseJsonMemo(memo).rejectionCalculations,
+  );
+
 const roundMoney = (value: number): number =>
   Math.round((value + Number.EPSILON) * 100) / 100;
 
@@ -106,6 +122,11 @@ const lineQuantity = (detail: PurchaseOrderFinancialDetail): number => {
  * Header money for a purchase order: subtotal = qty × unit_cost,
  * discount = subtotal × rejectionPercentage / 100.
  * Does not change unit cost. purchase_orders.discount is the monetary column.
+ *
+ * If `rules` is given, the rejection % is resolved back to the origin stored in
+ * the memo and the rules are stacked on top of it before calculating the money.
+ * `rejectionPercentage` in the result is the % that was actually charged and
+ * `rejectionCalculations` is the trace to store in the memo.
  */
 export const calculatePurchaseOrderFinancials = (
   input: CalculatePurchaseOrderFinancialsInput,
@@ -117,20 +138,31 @@ export const calculatePurchaseOrderFinancials = (
       return sum + lineQuantity(detail) * unitCost;
     }, 0),
   );
+  const safeSubtotal = Number.isFinite(subtotal) ? subtotal : 0;
 
-  const rejectionPercentage = toFiniteNumber(input.rejectionPercentage);
-  if (
-    rejectionPercentage == null ||
-    rejectionPercentage <= 0 ||
-    !Number.isFinite(subtotal) ||
-    subtotal <= 0
-  ) {
-    return { subtotal: Number.isFinite(subtotal) ? subtotal : 0, discount: 0 };
-  }
+  const passedPercentage = toFiniteNumber(input.rejectionPercentage) ?? 0;
+  const rejectionCalculations = input.rules
+    ? applyRejectionPercentageAdjustmentRules(
+        resolveRejectionPercentageOrigin(
+          passedPercentage,
+          parseJsonMemo(input.memo).rejectionCalculations,
+        ),
+        input.rules,
+        input.ctx ?? { itemIds: [] },
+      )
+    : undefined;
+
+  const rejectionPercentage =
+    rejectionCalculations?.finalPercentage ?? passedPercentage;
 
   return {
-    subtotal,
-    discount: roundMoney(subtotal * (rejectionPercentage / 100)),
+    subtotal: safeSubtotal,
+    discount:
+      rejectionPercentage > 0 && safeSubtotal > 0
+        ? roundMoney(safeSubtotal * (rejectionPercentage / 100))
+        : 0,
+    rejectionPercentage,
+    rejectionCalculations,
   };
 };
 

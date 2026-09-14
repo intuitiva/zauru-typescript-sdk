@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.applyRejectionPercentageRulesToFinancials = exports.applyRejectionPercentageAdjustmentRules = exports.resolveRejectionPercentageBase = exports.resolveRejectionPercentageOrigin = exports.formatRejectionPercentageAdjustmentDescription = exports.rejectionPercentageAdjustmentRuleMatches = exports.filterActiveRejectionPercentageAdjustmentRules = exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = void 0;
-const common_js_1 = require("./common.js");
+exports.applyRejectionPercentageAdjustmentRules = exports.resolveRejectionPercentageOrigin = exports.formatRejectionPercentageAdjustmentDescription = exports.rejectionPercentageAdjustmentRuleMatches = exports.filterActiveRejectionPercentageAdjustmentRules = exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = void 0;
 exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = "rejection_percentage_adjustment_rules_web_app_table_id";
 const defaultFilters = () => ({
     itemMode: "all",
@@ -71,10 +70,13 @@ const formatRejectionPercentageAdjustmentDescription = (result, baseLabel = "ori
     return `${base} ${result.steps.map(formatRuleEffect).join(" ")} = ${formatFinalPercentage(result.finalPercentage)}`;
 };
 exports.formatRejectionPercentageAdjustmentDescription = formatRejectionPercentageAdjustmentDescription;
-const resolveRejectionPercentageOrigin = (passedPercentage, memo) => {
-    const parsed = (0, common_js_1.parseJsonMemo)(memo);
+/**
+ * Callers may pass the origin % or the previously stored final %. With the
+ * previous calculations we go back to the origin so the rules never stack twice.
+ */
+const resolveRejectionPercentageOrigin = (passedPercentage, previousCalculations) => {
     const passed = clampPercentage(Number.isFinite(Number(passedPercentage)) ? Number(passedPercentage) : 0);
-    const calc = parsed.rejectionCalculations;
+    const calc = previousCalculations;
     if (!calc || !Number.isFinite(Number(calc.finalPercentage))) {
         return passed;
     }
@@ -89,8 +91,6 @@ const resolveRejectionPercentageOrigin = (passedPercentage, memo) => {
     return clampPercentage(safePreviousBase + (passed - previousFinal));
 };
 exports.resolveRejectionPercentageOrigin = resolveRejectionPercentageOrigin;
-const resolveRejectionPercentageBase = (memo) => (0, exports.resolveRejectionPercentageOrigin)((0, common_js_1.getRejectionPercentage)(memo), memo);
-exports.resolveRejectionPercentageBase = resolveRejectionPercentageBase;
 const applyRejectionPercentageAdjustmentRules = (basePercentage, rules, ctx) => {
     const start = Number(basePercentage);
     const safeBase = Number.isFinite(start) ? clampPercentage(start) : 0;
@@ -128,25 +128,3 @@ const applyRejectionPercentageAdjustmentRules = (basePercentage, rules, ctx) => 
     return result;
 };
 exports.applyRejectionPercentageAdjustmentRules = applyRejectionPercentageAdjustmentRules;
-const applyRejectionPercentageRulesToFinancials = (input) => {
-    const origin = (0, exports.resolveRejectionPercentageOrigin)(input.originPercentage, input.memo);
-    const result = (0, exports.applyRejectionPercentageAdjustmentRules)(origin, input.rules, input.ctx);
-    const { discount } = (0, common_js_1.calculatePurchaseOrderFinancials)({
-        details: input.details,
-        rejectionPercentage: result.finalPercentage,
-    });
-    return {
-        memo: (0, common_js_1.mergeJsonMemo)(input.memo, {
-            rejectionPercentage: result.finalPercentage,
-            rejectionCalculations: {
-                basePercentage: result.basePercentage,
-                finalPercentage: result.finalPercentage,
-                description: result.description,
-                steps: result.steps,
-            },
-        }),
-        discount,
-        finalPercentage: result.finalPercentage,
-    };
-};
-exports.applyRejectionPercentageRulesToFinancials = applyRejectionPercentageRulesToFinancials;

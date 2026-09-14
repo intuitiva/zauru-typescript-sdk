@@ -13,9 +13,19 @@ export declare const getRejectionPercentage: (source: string | {
 } | JsonMemoType | undefined) => number;
 export declare const setRejectionPercentage: (memo: string | object | undefined, percentage: number) => string;
 /**
+ * Rejection % of origin stored in the memo, ignoring the adjustment rules
+ * already applied on top of it.
+ */
+export declare const resolveRejectionPercentageBase: (memo?: string | object) => number;
+/**
  * Header money for a purchase order: subtotal = qty × unit_cost,
  * discount = subtotal × rejectionPercentage / 100.
  * Does not change unit cost. purchase_orders.discount is the monetary column.
+ *
+ * If `rules` is given, the rejection % is resolved back to the origin stored in
+ * the memo and the rules are stacked on top of it before calculating the money.
+ * `rejectionPercentage` in the result is the % that was actually charged and
+ * `rejectionCalculations` is the trace to store in the memo.
  */
 export declare const calculatePurchaseOrderFinancials: (input: CalculatePurchaseOrderFinancialsInput) => CalculatePurchaseOrderFinancialsResult;
 /**

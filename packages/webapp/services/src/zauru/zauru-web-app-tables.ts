@@ -1,12 +1,8 @@
 import type { Session } from "@remix-run/node";
-import {
-  handlePossibleAxiosErrors,
-  REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,
-} from "@zauru-sdk/common";
+import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
   MotivoRechazo,
-  RejectionPercentageAdjustmentRule,
   RejectionWebAppTableObject,
   WebAppRowAssociateBody,
   WebAppRowAssociateResponse,
@@ -26,7 +22,6 @@ import {
   type GetWebAppRowsByTableIdOptions,
 } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
-import { getVariables } from "./zauru-variables.js";
 
 /**
  * getWebAppRow
@@ -144,38 +139,6 @@ export async function getWebAppTableRegistersRest<T>(
     return Array.isArray(response.data) ? response.data : [];
   });
 }
-
-export const getRejectionPercentageAdjustmentRulesByHeaders = (
-  headers: any,
-): Promise<
-  AxiosUtilsResponse<WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[]>
-> => {
-  return handlePossibleAxiosErrors(async () => {
-    const varsResponse = await getVariables(headers);
-    if (varsResponse.error || !varsResponse.data) {
-      return [];
-    }
-    const tableId = varsResponse.data.find(
-      (variable) =>
-        variable.name === REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,
-    )?.value;
-    if (!tableId) {
-      return [];
-    }
-    const rowsResponse =
-      await getWebAppTableRegistersRest<RejectionPercentageAdjustmentRule>(
-        headers,
-        tableId,
-      );
-    if (rowsResponse.error) {
-      throw new Error(
-        rowsResponse.userMsg ??
-          "No se pudieron leer las reglas de porcentaje de rechazo",
-      );
-    }
-    return rowsResponse.data ?? [];
-  });
-};
 
 /**
  * createWebAppTableRegister function for create a new web app table register

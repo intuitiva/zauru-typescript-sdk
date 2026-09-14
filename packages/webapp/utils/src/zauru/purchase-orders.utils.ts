@@ -1,13 +1,12 @@
 import type { Session } from "@remix-run/node";
 import {
   CURRENCY_PREFIX,
-  applyRejectionPercentageRulesToFinancials,
   calculatePurchaseOrderFinancials,
   getNewDateByFormat,
   getStringFullDate,
   getZauruDateByText,
   handlePossibleAxiosErrors,
-  setRejectionPercentage,
+  mergeJsonMemo,
 } from "@zauru-sdk/common";
 import {
   commitSession,
@@ -449,35 +448,28 @@ export const updateOchAndDis = async (
     const itemIds = extractPurchaseOrderItemIds(loadedPurchase);
     const tipo = purchaseRecord?.reference;
 
-    const adjusted =
-      rules.length > 0
-        ? applyRejectionPercentageRulesToFinancials({
-            memo: currentMemo,
-            originPercentage: rejectionPercentage,
-            details,
-            rules,
-            ctx: {
-              itemIds,
-              tipo,
-              providerCategoryId:
-                payee?.payee_category_id ??
-                (purchaseRecord as { payee_category_id?: number } | undefined)
-                  ?.payee_category_id,
-            },
-          })
-        : {
-            memo: setRejectionPercentage(currentMemo, rejectionPercentage),
-            discount: calculatePurchaseOrderFinancials({
-              details,
-              rejectionPercentage,
-            }).discount,
-            finalPercentage: rejectionPercentage,
-          };
+    const financials = calculatePurchaseOrderFinancials({
+      details,
+      rejectionPercentage,
+      memo: currentMemo,
+      rules,
+      ctx: {
+        itemIds,
+        tipo,
+        providerCategoryId:
+          payee?.payee_category_id ??
+          (purchaseRecord as { payee_category_id?: number } | undefined)
+            ?.payee_category_id,
+      },
+    });
 
     const body = {
       purchase_order: {
-        memo: adjusted.memo,
-        discount: adjusted.discount,
+        memo: mergeJsonMemo(currentMemo, {
+          rejectionPercentage: financials.rejectionPercentage,
+          rejectionCalculations: financials.rejectionCalculations,
+        }),
+        discount: financials.discount,
       },
     } as UpdatePurchaseOrderBody;
 

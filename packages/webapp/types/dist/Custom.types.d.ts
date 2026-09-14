@@ -631,11 +631,21 @@ export type PurchaseOrderFinancialDetail = {
 };
 export type CalculatePurchaseOrderFinancialsInput = {
     details?: PurchaseOrderFinancialDetail[] | null;
+    /** % de rechazo de origen, o el % final ya guardado en el memo */
     rejectionPercentage?: number | string | null;
+    /** memo de la OC, para recuperar el % de origen y no apilar dos veces las reglas */
+    memo?: string | object;
+    /** reglas activas; si no se pasan, el % se usa tal cual */
+    rules?: Array<RejectionPercentageAdjustmentRule | WebAppRowGraphQL<RejectionPercentageAdjustmentRule>>;
+    ctx?: RejectionPercentageAdjustmentContext;
 };
 export type CalculatePurchaseOrderFinancialsResult = {
     subtotal: number;
     discount: number;
+    /** % de rechazo con el que se calculó el descuento */
+    rejectionPercentage: number;
+    /** trazabilidad de las reglas aplicadas, para guardar en el memo */
+    rejectionCalculations?: RejectionCalculationMemo;
 };
 export type CostoSemanal = {
     item: number;
@@ -682,6 +692,8 @@ export type CalculateItemPriceFromWeeklyMatrixResult = PriceAdjustmentResult & {
     source: WeeklyCostMatrixSource;
     period: WeeklyCostPeriod;
     specialItemId?: number;
+    /** categoría (programa) del proveedor con la que se filtraron las reglas */
+    providerCategoryId?: number;
 };
 export type DischargeHistory = {
     creadoPor: string;

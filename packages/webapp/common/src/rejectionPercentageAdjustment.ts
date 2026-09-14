@@ -1,19 +1,13 @@
 import type {
   PriceAdjustmentFilterMode,
   PriceAdjustmentFilters,
-  PurchaseOrderFinancialDetail,
+  RejectionCalculationMemo,
   RejectionPercentageAdjustmentContext,
   RejectionPercentageAdjustmentResult,
   RejectionPercentageAdjustmentRule,
   RejectionPercentageAdjustmentStep,
   WebAppRowGraphQL,
 } from "@zauru-sdk/types";
-import {
-  calculatePurchaseOrderFinancials,
-  getRejectionPercentage,
-  mergeJsonMemo,
-  parseJsonMemo,
-} from "./common.js";
 
 export const REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR =
   "rejection_percentage_adjustment_rules_web_app_table_id";
@@ -139,15 +133,18 @@ export const formatRejectionPercentageAdjustmentDescription = (
   return `${base} ${result.steps.map(formatRuleEffect).join(" ")} = ${formatFinalPercentage(result.finalPercentage)}`;
 };
 
+/**
+ * Callers may pass the origin % or the previously stored final %. With the
+ * previous calculations we go back to the origin so the rules never stack twice.
+ */
 export const resolveRejectionPercentageOrigin = (
   passedPercentage: number,
-  memo?: string | object,
+  previousCalculations?: RejectionCalculationMemo | null,
 ): number => {
-  const parsed = parseJsonMemo(memo);
   const passed = clampPercentage(
     Number.isFinite(Number(passedPercentage)) ? Number(passedPercentage) : 0,
   );
-  const calc = parsed.rejectionCalculations;
+  const calc = previousCalculations;
   if (!calc || !Number.isFinite(Number(calc.finalPercentage))) {
     return passed;
   }
@@ -164,11 +161,6 @@ export const resolveRejectionPercentageOrigin = (
 
   return clampPercentage(safePreviousBase + (passed - previousFinal));
 };
-
-export const resolveRejectionPercentageBase = (
-  memo?: string | object,
-): number =>
-  resolveRejectionPercentageOrigin(getRejectionPercentage(memo), memo);
 
 export const applyRejectionPercentageAdjustmentRules = (
   basePercentage: number,
@@ -216,43 +208,4 @@ export const applyRejectionPercentageAdjustmentRules = (
   };
   result.description = formatRejectionPercentageAdjustmentDescription(result);
   return result;
-};
-
-export const applyRejectionPercentageRulesToFinancials = (input: {
-  memo?: string | object;
-  originPercentage: number;
-  details: PurchaseOrderFinancialDetail[];
-  rules: Array<
-    | RejectionPercentageAdjustmentRule
-    | WebAppRowGraphQL<RejectionPercentageAdjustmentRule>
-  >;
-  ctx: RejectionPercentageAdjustmentContext;
-}): { memo: string; discount: number; finalPercentage: number } => {
-  const origin = resolveRejectionPercentageOrigin(
-    input.originPercentage,
-    input.memo,
-  );
-  const result = applyRejectionPercentageAdjustmentRules(
-    origin,
-    input.rules,
-    input.ctx,
-  );
-  const { discount } = calculatePurchaseOrderFinancials({
-    details: input.details,
-    rejectionPercentage: result.finalPercentage,
-  });
-
-  return {
-    memo: mergeJsonMemo(input.memo, {
-      rejectionPercentage: result.finalPercentage,
-      rejectionCalculations: {
-        basePercentage: result.basePercentage,
-        finalPercentage: result.finalPercentage,
-        description: result.description,
-        steps: result.steps,
-      },
-    }),
-    discount,
-    finalPercentage: result.finalPercentage,
-  };
 };

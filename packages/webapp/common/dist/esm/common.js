@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.priceToText = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.obtenerFechaActualConZonaHoraria = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.calculatePurchaseOrderFinancials = exports.setRejectionPercentage = exports.getRejectionPercentage = exports.mergeJsonMemo = exports.stringifyJsonMemo = exports.parseJsonMemo = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.priceToText = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.obtenerFechaActualConZonaHoraria = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.calculatePurchaseOrderFinancials = exports.resolveRejectionPercentageBase = exports.setRejectionPercentage = exports.getRejectionPercentage = exports.mergeJsonMemo = exports.stringifyJsonMemo = exports.parseJsonMemo = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
 exports.generateClientUUID = generateClientUUID;
 exports.extractValueBetweenTags = extractValueBetweenTags;
 exports.isJsonArray = isJsonArray;
@@ -24,6 +24,7 @@ exports.parseCode = parseCode;
 const moment_1 = __importDefault(require("moment"));
 require("moment-timezone");
 const types_1 = require("@zauru-sdk/types");
+const rejectionPercentageAdjustment_js_1 = require("./rejectionPercentageAdjustment.js");
 exports.DESTINOS_MUESTRA_OPTIONS = [
     { label: "Microbiología", value: "microbiologa" },
     { label: "Residuos de plaguicidas", value: "residuos_de_plaguicidas" },
@@ -80,6 +81,12 @@ const getRejectionPercentage = (source) => {
 exports.getRejectionPercentage = getRejectionPercentage;
 const setRejectionPercentage = (memo, percentage) => (0, exports.mergeJsonMemo)(memo, { rejectionPercentage: percentage });
 exports.setRejectionPercentage = setRejectionPercentage;
+/**
+ * Rejection % of origin stored in the memo, ignoring the adjustment rules
+ * already applied on top of it.
+ */
+const resolveRejectionPercentageBase = (memo) => (0, rejectionPercentageAdjustment_js_1.resolveRejectionPercentageOrigin)((0, exports.getRejectionPercentage)(memo), (0, exports.parseJsonMemo)(memo).rejectionCalculations);
+exports.resolveRejectionPercentageBase = resolveRejectionPercentageBase;
 const roundMoney = (value) => Math.round((value + Number.EPSILON) * 100) / 100;
 const lineQuantity = (detail) => {
     const delivered = toFiniteNumber(detail.delivered_quantity) ??
@@ -95,6 +102,11 @@ const lineQuantity = (detail) => {
  * Header money for a purchase order: subtotal = qty × unit_cost,
  * discount = subtotal × rejectionPercentage / 100.
  * Does not change unit cost. purchase_orders.discount is the monetary column.
+ *
+ * If `rules` is given, the rejection % is resolved back to the origin stored in
+ * the memo and the rules are stacked on top of it before calculating the money.
+ * `rejectionPercentage` in the result is the % that was actually charged and
+ * `rejectionCalculations` is the trace to store in the memo.
  */
 const calculatePurchaseOrderFinancials = (input) => {
     const details = input.details ?? [];
@@ -102,16 +114,19 @@ const calculatePurchaseOrderFinancials = (input) => {
         const unitCost = toFiniteNumber(detail.unit_cost) ?? 0;
         return sum + lineQuantity(detail) * unitCost;
     }, 0));
-    const rejectionPercentage = toFiniteNumber(input.rejectionPercentage);
-    if (rejectionPercentage == null ||
-        rejectionPercentage <= 0 ||
-        !Number.isFinite(subtotal) ||
-        subtotal <= 0) {
-        return { subtotal: Number.isFinite(subtotal) ? subtotal : 0, discount: 0 };
-    }
+    const safeSubtotal = Number.isFinite(subtotal) ? subtotal : 0;
+    const passedPercentage = toFiniteNumber(input.rejectionPercentage) ?? 0;
+    const rejectionCalculations = input.rules
+        ? (0, rejectionPercentageAdjustment_js_1.applyRejectionPercentageAdjustmentRules)((0, rejectionPercentageAdjustment_js_1.resolveRejectionPercentageOrigin)(passedPercentage, (0, exports.parseJsonMemo)(input.memo).rejectionCalculations), input.rules, input.ctx ?? { itemIds: [] })
+        : undefined;
+    const rejectionPercentage = rejectionCalculations?.finalPercentage ?? passedPercentage;
     return {
-        subtotal,
-        discount: roundMoney(subtotal * (rejectionPercentage / 100)),
+        subtotal: safeSubtotal,
+        discount: rejectionPercentage > 0 && safeSubtotal > 0
+            ? roundMoney(safeSubtotal * (rejectionPercentage / 100))
+            : 0,
+        rejectionPercentage,
+        rejectionCalculations,
     };
 };
 exports.calculatePurchaseOrderFinancials = calculatePurchaseOrderFinancials;
