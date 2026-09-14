@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.10.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.9.2...@zauru-sdk/utils@6.10.0) (2026-09-14)
+
+
+### Features
+
+* add rejection percentage adjustment rules engine ([d400852](https://github.com/intuitiva/zauru-typescript-sdk/commit/d4008523addec1f3cfcb0420529ced83413403bd))
+
+
+
+
+
 ## [6.9.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.9.1...@zauru-sdk/utils@6.9.2) (2026-09-11)
 
 
