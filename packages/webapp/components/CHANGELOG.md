@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.2.28...@zauru-sdk/components@6.3.0) (2026-09-14)
+
+
+### Features
+
+* agregar ActionList y SearchFiltersSummary genéricos ([775d986](https://github.com/intuitiva/zauru-typescript-sdk/commit/775d986cf06aeefd7a4269947ab96280ea167314))
+* agregar playground Ladle para los componentes webapp ([a616a77](https://github.com/intuitiva/zauru-typescript-sdk/commit/a616a77484f02ef71f5b6ff96ad6d6e98f789cb5))
+* mostrar títulos de tabla completos y scroll interno al expandir ([b62a253](https://github.com/intuitiva/zauru-typescript-sdk/commit/b62a253a3a5d8879572f9db00b2a86737b8886cc))
+* unificar componentes webapp con las copias remix-* ([714274a](https://github.com/intuitiva/zauru-typescript-sdk/commit/714274abd5ccc5e77affa3da41787b381c47de5f))
+
+
+
+
+
 ## [6.2.28](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.2.27...@zauru-sdk/components@6.2.28) (2026-09-14)
 
 **Note:** Version bump only for package @zauru-sdk/components
