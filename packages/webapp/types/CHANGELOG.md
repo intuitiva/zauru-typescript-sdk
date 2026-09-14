@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.16.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.15.0...@zauru-sdk/types@6.16.0) (2026-09-14)
+
+
+### Features
+
+* apply rejection percentage rules inside calculatePurchaseOrderFinancials ([e1852ba](https://github.com/intuitiva/zauru-typescript-sdk/commit/e1852ba86e8263df8a365adda884e6b88802a001))
+
+
+
+
+
 # [6.15.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.14.0...@zauru-sdk/types@6.15.0) (2026-09-14)
 
 
