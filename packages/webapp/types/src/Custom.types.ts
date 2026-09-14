@@ -81,6 +81,44 @@ export type CostCalculationMemo = {
   steps: PriceAdjustmentStep[];
 };
 
+export type RejectionPercentageAdjustmentRule = {
+  nombre: string;
+  prioridad: number;
+  activa: boolean;
+  operacion: PriceAdjustmentOperation;
+  valor: number;
+  filtros: PriceAdjustmentFilters;
+  fechaEliminacion: string;
+};
+
+export type RejectionPercentageAdjustmentContext = {
+  itemIds: number[];
+  tipo?: string;
+  providerCategoryId?: number;
+};
+
+export type RejectionPercentageAdjustmentStep = {
+  ruleName: string;
+  operation: PriceAdjustmentOperation;
+  value: number;
+  appliedAmount: number;
+  runningTotal: number;
+};
+
+export type RejectionPercentageAdjustmentResult = {
+  basePercentage: number;
+  finalPercentage: number;
+  description: string;
+  steps: RejectionPercentageAdjustmentStep[];
+};
+
+export type RejectionCalculationMemo = {
+  basePercentage: number;
+  finalPercentage: number;
+  description: string;
+  steps: RejectionPercentageAdjustmentStep[];
+};
+
 export type ExtendedInsertBookingBody = {
   movements: Partial<MovementGraphQL>[];
 };
@@ -987,6 +1025,7 @@ export type JsonMemoType = {
   confirmed?: boolean;
   rejectionPercentage?: number;
   costCalculations?: CostCalculationMemo[];
+  rejectionCalculations?: RejectionCalculationMemo;
 };
 
 export type CloseOpenWorkOrderDetailInput = {
