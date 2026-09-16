@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.5.5](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.5.4...@zauru-sdk/components@6.5.5) (2026-09-16)
+
+
+### Bug Fixes
+
+* estirar filas de ZauruTable al ancho del contenido al hacer scroll ([de57d25](https://github.com/intuitiva/zauru-typescript-sdk/commit/de57d25243d907a889aba0a5e05328646b50b5cb))
+
+
+
+
+
 ## [6.5.4](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.5.3...@zauru-sdk/components@6.5.4) (2026-09-16)
 
 
