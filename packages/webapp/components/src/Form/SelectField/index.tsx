@@ -81,6 +81,12 @@ export const SelectField = (props: Props) => {
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const selectRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<HTMLUListElement>(null);
+  const hasManualSingleValue = useRef(false);
+  const hasManualMultiValue = useRef(false);
+  const lastSyncedDefaultValue = useRef(defaultValue?.value);
+  const lastSyncedDefaultValues = useRef(
+    defaultValueMulti.map((option) => option.value),
+  );
   const [isTabPressed, setIsTabPressed] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
@@ -119,20 +125,71 @@ export const SelectField = (props: Props) => {
   const bgColor = isReadOnly ? "bg-gray-200" : `bg-${color}-50`;
   const textColor = isReadOnly ? "text-gray-500" : `text-${color}-900`;
   const borderColor = isReadOnly ? "border-gray-300" : `border-${color}-200`;
+  const defaultValueMultiKey = defaultValueMulti
+    .map((option) => String(option.value))
+    .join("\u0000");
 
-  // Sincronizar estado interno cuando cambien las props
+  // Sincronizar defaults asíncronos con el estado visual y React Hook Form.
+  //
+  // Es importante depender del valor escalar y no del objeto completo: muchas
+  // pantallas construyen el option con `find()` en cada render. También solo
+  // reemplazamos el valor actual si todavía está vacío o conserva el último
+  // default sincronizado; así una selección manual no se pierde cuando el
+  // catálogo termina de cargar o se recrea el objeto de opciones.
   useEffect(() => {
-    if (defaultValue && (!value || value.value !== defaultValue.value)) {
-      setValue(defaultValue);
-      setInputValue(defaultValue.label);
+    if (!defaultValue || isMulti || hasManualSingleValue.current) {
+      return;
     }
-  }, [defaultValue]);
+
+    const currentValue = value?.value;
+    const canSyncDefault =
+      currentValue === undefined ||
+      currentValue === null ||
+      currentValue === lastSyncedDefaultValue.current;
+
+    if (canSyncDefault) {
+      if (currentValue !== defaultValue.value) {
+        setValue(defaultValue);
+        setInputValue(defaultValue.label);
+      }
+      setFormValue?.(name || "", defaultValue.value);
+    }
+
+    lastSyncedDefaultValue.current = defaultValue.value;
+  }, [defaultValue?.value, isMulti, name, setFormValue]);
 
   useEffect(() => {
-    if (!areOptionArraysEqual(defaultValueMulti, valueMulti)) {
-      setValueMulti(defaultValueMulti);
+    if (
+      !isMulti ||
+      defaultValueMulti.length === 0 ||
+      hasManualMultiValue.current
+    ) {
+      return;
     }
-  }, [defaultValueMulti]);
+
+    const currentValues = valueMulti.map((option) => option.value);
+    const previousDefaultValues = lastSyncedDefaultValues.current;
+    const canSyncDefault =
+      currentValues.length === 0 ||
+      areOptionArraysEqual(
+        valueMulti,
+        previousDefaultValues.map((value) => ({ value, label: "" })),
+      );
+
+    if (canSyncDefault) {
+      if (!areOptionArraysEqual(defaultValueMulti, valueMulti)) {
+        setValueMulti(defaultValueMulti);
+      }
+      setFormValue?.(
+        name || "",
+        defaultValueMulti.map((option) => option.value),
+      );
+    }
+
+    lastSyncedDefaultValues.current = defaultValueMulti.map(
+      (option) => option.value,
+    );
+  }, [defaultValueMultiKey, isMulti, name, setFormValue]);
 
   useEffect(() => {
     setFilteredOptions(options);
@@ -156,6 +213,7 @@ export const SelectField = (props: Props) => {
 
   const handleSetSingleValue = useCallback(
     (value?: SelectFieldOption) => {
+      hasManualSingleValue.current = true;
       if (value) {
         setValue(value);
         setInputValue(value.label);
@@ -176,6 +234,7 @@ export const SelectField = (props: Props) => {
 
   const handleAddMultiValue = useCallback(
     (value?: SelectFieldOption) => {
+      hasManualMultiValue.current = true;
       if (value) {
         const existValue = options.some((v) => v.value === value.value);
         const noEstaYaSeleccionado = !valueMulti.some(
