@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.4.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.3.2...@zauru-sdk/components@6.4.0) (2026-09-16)
+
+
+### Features
+
+* extraer login, logout, home e index a factories del SDK ([83312db](https://github.com/intuitiva/zauru-typescript-sdk/commit/83312db6778188df9852aa2afbf7d45ae3782b47))
+
+
+
+
+
 ## [6.3.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.3.1...@zauru-sdk/components@6.3.2) (2026-09-16)
 
 **Note:** Version bump only for package @zauru-sdk/components
