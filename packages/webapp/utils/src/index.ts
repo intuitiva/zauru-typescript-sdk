@@ -1,6 +1,7 @@
 export * from "./zauru/automatic-number.utils.js";
 export * from "./zauru/bitacora-edicion-masiva.utils.js";
 export * from "./zauru/bundles.utils.js";
+export * from "./zauru/catalogs.loader.js";
 export * from "./zauru/cases.utils.js";
 export * from "./zauru/consolidated-history.utils.js";
 export * from "./zauru/costos-items.utils.js";
