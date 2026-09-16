@@ -10,15 +10,10 @@ const headerTextWrapStyle = {
     overflow: "visible",
     textOverflow: "clip",
     overflowWrap: "break-word",
-    wordBreak: "break-word",
+    wordBreak: "normal",
     lineHeight: "1.25",
 };
 const customStyles = {
-    table: {
-        style: {
-            minWidth: 0,
-        },
-    },
     tableWrapper: {
         style: {
             display: "block",
@@ -68,8 +63,11 @@ const customStyles = {
     },
     cells: {
         style: {
-            whiteSpace: "normal", // Allow wrapping for cell content
-            wordBreak: "break-word",
+            whiteSpace: "normal",
+            overflow: "visible",
+            textOverflow: "clip",
+            overflowWrap: "break-word",
+            wordBreak: "normal",
         },
     },
     expanderRow: {
@@ -211,7 +209,15 @@ export const ZauruTable = (props) => {
     };
     const loadSubHeader = !!(search || offlineSearch.length > 0);
     const subHeaderComponent = loadSubHeader ? subHeaderComponentMemo : undefined;
-    return (_jsx("div", { className: "w-full min-w-0 max-w-full overflow-x-auto", children: _jsx(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: columns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, expandableRows: !!expandable, expandOnRowClicked: !!expandable, expandableRowExpanded: expandable ? expandable.expandableRowExpanded : undefined, expandableRowsComponent: expandable ? expandable.expandableRowsComponent : undefined, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination?.totalRows ?? undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions
+    const normalizedColumns = Array.isArray(columns)
+        ? columns.map((column) => {
+            if (!column || typeof column !== "object") {
+                return column;
+            }
+            return { wrap: true, ...column };
+        })
+        : columns;
+    return (_jsx("div", { className: "w-full min-w-0 max-w-full overflow-x-auto", children: _jsx(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: normalizedColumns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, expandableRows: !!expandable, expandOnRowClicked: !!expandable, expandableRowExpanded: expandable ? expandable.expandableRowExpanded : undefined, expandableRowsComponent: expandable ? expandable.expandableRowsComponent : undefined, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination?.totalRows ?? undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions
                 ? pagination.rowsPerPageOptions
                 : [10, 50, 100], ...others }) }));
 };
