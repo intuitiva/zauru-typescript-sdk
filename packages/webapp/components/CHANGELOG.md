@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.5.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.5.1...@zauru-sdk/components@6.5.2) (2026-09-16)
+
+
+### Bug Fixes
+
+* sincronizar defaults async de SelectField ([5a06089](https://github.com/intuitiva/zauru-typescript-sdk/commit/5a06089bd2bbda775418123ed983ab98bf8cbef0))
+
+
+
+
+
 ## [6.5.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.5.0...@zauru-sdk/components@6.5.1) (2026-09-16)
 
 **Note:** Version bump only for package @zauru-sdk/components
