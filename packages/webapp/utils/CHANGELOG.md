@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.16.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.16.0...@zauru-sdk/utils@6.16.1) (2026-09-16)
+
+
+### Bug Fixes
+
+* aceptar Remix 1 como peer opcional de utils ([d40d8cf](https://github.com/intuitiva/zauru-typescript-sdk/commit/d40d8cf41b7f5d1012a3fe1f5351baddad1ad05e))
+
+
+
+
+
 # [6.16.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.15.0...@zauru-sdk/utils@6.16.0) (2026-09-16)
 
 
