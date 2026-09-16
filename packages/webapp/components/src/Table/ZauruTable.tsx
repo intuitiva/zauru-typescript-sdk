@@ -16,16 +16,11 @@ const headerTextWrapStyle = {
   overflow: "visible",
   textOverflow: "clip",
   overflowWrap: "break-word",
-  wordBreak: "break-word",
+  wordBreak: "normal",
   lineHeight: "1.25",
 } as const;
 
 const customStyles: TableStyles = {
-  table: {
-    style: {
-      minWidth: 0,
-    },
-  },
   tableWrapper: {
     style: {
       display: "block",
@@ -75,8 +70,11 @@ const customStyles: TableStyles = {
   },
   cells: {
     style: {
-      whiteSpace: "normal", // Allow wrapping for cell content
-      wordBreak: "break-word",
+      whiteSpace: "normal",
+      overflow: "visible",
+      textOverflow: "clip",
+      overflowWrap: "break-word",
+      wordBreak: "normal",
     },
   },
   expanderRow: {
@@ -289,6 +287,14 @@ export const ZauruTable = (props: Props) => {
 
   const loadSubHeader = !!(search || offlineSearch.length > 0);
   const subHeaderComponent = loadSubHeader ? subHeaderComponentMemo : undefined;
+  const normalizedColumns = Array.isArray(columns)
+    ? columns.map((column: any) => {
+        if (!column || typeof column !== "object") {
+          return column;
+        }
+        return { wrap: true, ...column };
+      })
+    : columns;
 
   return (
     <div className="w-full min-w-0 max-w-full overflow-x-auto">
@@ -296,7 +302,7 @@ export const ZauruTable = (props: Props) => {
       className={className}
       subHeaderWrap
       theme={theme ?? "solarized"}
-      columns={columns}
+      columns={normalizedColumns}
       conditionalRowStyles={conditionalRowStyles}
       data={filteredData}
       customStyles={customStyles}
