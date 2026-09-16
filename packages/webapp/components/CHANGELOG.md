@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.5.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.4.0...@zauru-sdk/components@6.5.0) (2026-09-16)
+
+
+### Features
+
+* extraer CloudWatch y observabilidad de Remix al SDK ([425af0d](https://github.com/intuitiva/zauru-typescript-sdk/commit/425af0dcd1955d2739204b3f69f9d77090553141))
+
+
+
+
+
 # [6.4.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.3.2...@zauru-sdk/components@6.4.0) (2026-09-16)
 
 

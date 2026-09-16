@@ -1,6 +1,6 @@
 {
   "name": "@zauru-sdk/utils",
-  "version": "6.15.0",
+  "version": "6.16.0",
   "description": "Utilidades, parseo de request y demás para desarrollo de webapps de Zauru",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
@@ -25,8 +25,12 @@
   },
   "typesVersions": {
     "*": {
-      "cloudwatch.server": ["./dist/zauru/cloudwatch.server.d.ts"],
-      "remix-entry.server": ["./dist/zauru/remix-entry.server.d.ts"]
+      "cloudwatch.server": [
+        "./dist/zauru/cloudwatch.server.d.ts"
+      ],
+      "remix-entry.server": [
+        "./dist/zauru/remix-entry.server.d.ts"
+      ]
     }
   },
   "publishConfig": {
@@ -44,13 +48,17 @@
   "author": "Oscar Cuéllar",
   "license": "MIT",
   "peerDependencies": {
+    "@remix-run/react": "^2.8.1",
     "react": "^18.2.0 || ^19.0.0",
-    "react-dom": "^18.2.0 || ^19.0.0",
-    "@remix-run/react": "^2.8.1"
+    "react-dom": "^18.2.0 || ^19.0.0"
   },
   "peerDependenciesMeta": {
-    "@remix-run/react": { "optional": true },
-    "react-dom": { "optional": true }
+    "@remix-run/react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@remix-run/react": "^2.8.1",
