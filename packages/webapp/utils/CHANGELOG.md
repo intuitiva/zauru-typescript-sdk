@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.14.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.13.0...@zauru-sdk/utils@6.14.0) (2026-09-16)
+
+
+### Features
+
+* unificar loaders de /api en createZauruApiLoader ([d734cdc](https://github.com/intuitiva/zauru-typescript-sdk/commit/d734cdc96cc49ce2f9ddc44cd0266104643a57b1))
+
+
+
+
+
 # [6.13.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.12.0...@zauru-sdk/utils@6.13.0) (2026-09-16)
 
 
