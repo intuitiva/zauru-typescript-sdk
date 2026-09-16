@@ -159,11 +159,7 @@ export const SelectField = (props: Props) => {
   }, [defaultValue?.value, isMulti, name, setFormValue]);
 
   useEffect(() => {
-    if (
-      !isMulti ||
-      defaultValueMulti.length === 0 ||
-      hasManualMultiValue.current
-    ) {
+    if (!isMulti || hasManualMultiValue.current) {
       return;
     }
 
