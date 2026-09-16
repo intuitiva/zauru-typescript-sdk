@@ -13,7 +13,17 @@ const headerTextWrapStyle = {
     wordBreak: "normal",
     lineHeight: "1.25",
 };
+const fullContentWidthStyle = {
+    width: "max-content",
+    minWidth: "100%",
+    maxWidth: "none",
+};
 const customStyles = {
+    table: {
+        style: {
+            ...fullContentWidthStyle,
+        },
+    },
     tableWrapper: {
         style: {
             display: "block",
@@ -31,11 +41,17 @@ const customStyles = {
             overflowX: "auto",
         },
     },
+    head: {
+        style: {
+            ...fullContentWidthStyle,
+        },
+    },
     headRow: {
         style: {
             minHeight: "40px",
             height: "auto",
             alignItems: "stretch",
+            ...fullContentWidthStyle,
         },
         denseStyle: {
             minHeight: "36px",
@@ -81,6 +97,9 @@ const customStyles = {
         },
     },
     rows: {
+        style: {
+            ...fullContentWidthStyle,
+        },
         highlightOnHoverStyle: {
             backgroundColor: "rgb(230, 244, 244)",
             borderBottomColor: "#FFFFFF",
