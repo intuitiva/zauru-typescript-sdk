@@ -1,7 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { isRouteErrorResponse, Links, Meta, Scripts, useRouteError, Link, } from "@remix-run/react";
 import { useEffect, useState } from "react";
-export const ErrorLayout = ({ from, isRootLevel = true, error: parentError, onError, }) => {
+import { sendClientError } from "../../observability/sendClientError.js";
+export const ErrorLayout = ({ from, isRootLevel = true, error: parentError, onError, reportErrors = true, }) => {
     try {
         const error = useRouteError();
         const [showDetails, setShowDetails] = useState(!!parentError);
@@ -10,7 +11,25 @@ export const ErrorLayout = ({ from, isRootLevel = true, error: parentError, onEr
             if (reportable instanceof Error) {
                 onError?.(reportable, { from });
             }
-        }, [error, parentError, from, onError]);
+            if (!reportErrors || onError)
+                return;
+            if (reportable instanceof Error) {
+                sendClientError({
+                    message: reportable.message,
+                    stack: reportable.stack,
+                    source: "errorBoundary",
+                    url: from,
+                });
+                return;
+            }
+            if (isRouteErrorResponse(error)) {
+                sendClientError({
+                    message: `Error en request: ${error.status}: ${error.statusText}`,
+                    source: "errorBoundary",
+                    url: from,
+                });
+            }
+        }, [error, parentError, from, onError, reportErrors]);
         const baseError = (_jsxs("div", { className: "min-h-screen flex flex-col items-center justify-center p-4", children: [_jsx("img", { src: "/logo.png", alt: "Zauru Logo", className: "mb-8 h-20" }), _jsx("h1", { className: "text-5xl font-extrabold text-red-500 mb-6", children: "\u00A1Ups!" }), _jsxs("div", { className: "w-full max-w-2xl flex flex-col items-center", children: [_jsx("p", { className: "text-2xl text-gray-300 mb-8 text-center", children: isRouteErrorResponse(error)
                                 ? `Error en request: ${error.status}: ${error.statusText} - PATH: ${error.data.path} - MESSAGE: ${error.data.message}`
                                 : error instanceof Error

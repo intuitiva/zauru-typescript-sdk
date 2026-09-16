@@ -26,3 +26,4 @@ export * from "./Zendesk/index.js";
 export * from "./HOC/ValidateEmployeeAccess/index.js";
 export * from "./Routes/index.js";
 export * from "./SidePanel/index.js";
+export * from "./observability/index.js";
