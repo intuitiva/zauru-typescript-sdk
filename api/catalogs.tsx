@@ -1,13 +1,6 @@
 import { CatalogsRoute, createCatalogsLoader } from "@zauru-sdk/utils";
 
-/**
- * Shared catalog loader. Extra keys override or add catalogs for this webapp.
- *
- * @example
- * export const loader = createCatalogsLoader({
- *   programaciones4pinos: async ({ headers, session, url }) => { ... },
- * });
- */
+/** Optional per-route stub. Prefer `api/$.tsx` + `createZauruApiLoader`. */
 export const loader = createCatalogsLoader();
 
 export default CatalogsRoute;
