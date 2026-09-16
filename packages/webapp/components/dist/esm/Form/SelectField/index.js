@@ -84,9 +84,7 @@ export const SelectField = (props) => {
         lastSyncedDefaultValue.current = defaultValue.value;
     }, [defaultValue?.value, isMulti, name, setFormValue]);
     useEffect(() => {
-        if (!isMulti ||
-            defaultValueMulti.length === 0 ||
-            hasManualMultiValue.current) {
+        if (!isMulti || hasManualMultiValue.current) {
             return;
         }
         const currentValues = valueMulti.map((option) => option.value);
