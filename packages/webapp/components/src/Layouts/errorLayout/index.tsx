@@ -7,17 +7,21 @@ import {
   Link,
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { sendClientError } from "../../observability/sendClientError.js";
 
 export const ErrorLayout = ({
   from,
   isRootLevel = true,
   error: parentError,
   onError,
+  reportErrors = true,
 }: {
   from?: string;
   isRootLevel?: boolean;
   error?: Error;
   onError?: (error: Error, meta: { from?: string }) => void;
+  /** Default true. POSTs to `/api/client-errors` unless `onError` is passed. */
+  reportErrors?: boolean;
 }) => {
   try {
     const error = useRouteError();
@@ -28,7 +32,24 @@ export const ErrorLayout = ({
       if (reportable instanceof Error) {
         onError?.(reportable, { from });
       }
-    }, [error, parentError, from, onError]);
+      if (!reportErrors || onError) return;
+      if (reportable instanceof Error) {
+        sendClientError({
+          message: reportable.message,
+          stack: reportable.stack,
+          source: "errorBoundary",
+          url: from,
+        });
+        return;
+      }
+      if (isRouteErrorResponse(error)) {
+        sendClientError({
+          message: `Error en request: ${error.status}: ${error.statusText}`,
+          source: "errorBoundary",
+          url: from,
+        });
+      }
+    }, [error, parentError, from, onError, reportErrors]);
 
     const baseError = (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
