@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.13.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.12.0...@zauru-sdk/utils@6.13.0) (2026-09-16)
+
+
+### Features
+
+* extraer el loader de /api/catalogs a @zauru-sdk/utils ([dbf5791](https://github.com/intuitiva/zauru-typescript-sdk/commit/dbf57910e85af566d0abbedf32f123fde42437c3))
+
+
+
+
+
 # [6.12.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.11.0...@zauru-sdk/utils@6.12.0) (2026-09-14)
 
 

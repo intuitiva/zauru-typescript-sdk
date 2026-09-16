@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.3.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.3.0...@zauru-sdk/components@6.3.1) (2026-09-16)
+
+**Note:** Version bump only for package @zauru-sdk/components
+
+
+
+
+
 # [6.3.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.2.28...@zauru-sdk/components@6.3.0) (2026-09-14)
 
 
