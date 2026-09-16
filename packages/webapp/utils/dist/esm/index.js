@@ -1,4 +1,5 @@
 export * from "./zauru/api.loaders.js";
+export * from "./zauru/auth.loaders.js";
 export * from "./zauru/automatic-number.utils.js";
 export * from "./zauru/bitacora-edicion-masiva.utils.js";
 export * from "./zauru/bundles.utils.js";
