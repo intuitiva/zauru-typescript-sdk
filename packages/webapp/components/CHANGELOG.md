@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.5.6](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.5.5...@zauru-sdk/components@6.5.6) (2026-09-17)
+
+
+### Bug Fixes
+
+* resolver width % de ZauruTable contra el contenedor ([9518a4d](https://github.com/intuitiva/zauru-typescript-sdk/commit/9518a4d8d40d7655b26e0e25450e20cba271ac34))
+
+
+
+
+
 ## [6.5.5](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.5.4...@zauru-sdk/components@6.5.5) (2026-09-16)
 
 
