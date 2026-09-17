@@ -13,15 +13,15 @@ const headerTextWrapStyle = {
     wordBreak: "normal",
     lineHeight: "1.25",
 };
-const fullContentWidthStyle = {
-    width: "max-content",
+const fillContainerWidthStyle = {
+    width: "100%",
     minWidth: "100%",
     maxWidth: "none",
 };
 const customStyles = {
     table: {
         style: {
-            ...fullContentWidthStyle,
+            ...fillContainerWidthStyle,
         },
     },
     tableWrapper: {
@@ -43,7 +43,7 @@ const customStyles = {
     },
     head: {
         style: {
-            ...fullContentWidthStyle,
+            ...fillContainerWidthStyle,
         },
     },
     headRow: {
@@ -51,7 +51,7 @@ const customStyles = {
             minHeight: "40px",
             height: "auto",
             alignItems: "stretch",
-            ...fullContentWidthStyle,
+            ...fillContainerWidthStyle,
         },
         denseStyle: {
             minHeight: "36px",
@@ -98,7 +98,7 @@ const customStyles = {
     },
     rows: {
         style: {
-            ...fullContentWidthStyle,
+            ...fillContainerWidthStyle,
         },
         highlightOnHoverStyle: {
             backgroundColor: "rgb(230, 244, 244)",
@@ -233,7 +233,18 @@ export const ZauruTable = (props) => {
             if (!column || typeof column !== "object") {
                 return column;
             }
-            return { wrap: true, ...column };
+            const next = { wrap: true, ...column };
+            // RDT `width` sets both min-width and max-width, wiping a px floor.
+            // Keep % as flex-basis so minWidth/maxWidth/grow still apply.
+            if (typeof next.width === "string" && next.width.endsWith("%")) {
+                const pct = next.width;
+                delete next.width;
+                next.style = {
+                    flexBasis: pct,
+                    ...next.style,
+                };
+            }
+            return next;
         })
         : columns;
     return (_jsx("div", { className: "w-full min-w-0 max-w-full overflow-x-auto", children: _jsx(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: normalizedColumns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, expandableRows: !!expandable, expandOnRowClicked: !!expandable, expandableRowExpanded: expandable ? expandable.expandableRowExpanded : undefined, expandableRowsComponent: expandable ? expandable.expandableRowsComponent : undefined, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination?.totalRows ?? undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions
