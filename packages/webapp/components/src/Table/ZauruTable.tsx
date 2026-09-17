@@ -20,8 +20,8 @@ const headerTextWrapStyle = {
   lineHeight: "1.25",
 } as const;
 
-const fullContentWidthStyle = {
-  width: "max-content",
+const fillContainerWidthStyle = {
+  width: "100%",
   minWidth: "100%",
   maxWidth: "none",
 } as const;
@@ -29,7 +29,7 @@ const fullContentWidthStyle = {
 const customStyles: TableStyles = {
   table: {
     style: {
-      ...fullContentWidthStyle,
+      ...fillContainerWidthStyle,
     },
   },
   tableWrapper: {
@@ -51,7 +51,7 @@ const customStyles: TableStyles = {
   },
   head: {
     style: {
-      ...fullContentWidthStyle,
+      ...fillContainerWidthStyle,
     },
   },
   headRow: {
@@ -59,7 +59,7 @@ const customStyles: TableStyles = {
       minHeight: "40px",
       height: "auto",
       alignItems: "stretch",
-      ...fullContentWidthStyle,
+      ...fillContainerWidthStyle,
     },
     denseStyle: {
       minHeight: "36px",
@@ -106,7 +106,7 @@ const customStyles: TableStyles = {
   },
   rows: {
     style: {
-      ...fullContentWidthStyle,
+      ...fillContainerWidthStyle,
     },
     highlightOnHoverStyle: {
       backgroundColor: "rgb(230, 244, 244)",
@@ -312,7 +312,18 @@ export const ZauruTable = (props: Props) => {
         if (!column || typeof column !== "object") {
           return column;
         }
-        return { wrap: true, ...column };
+        const next = { wrap: true, ...column };
+        // RDT `width` sets both min-width and max-width, wiping a px floor.
+        // Keep % as flex-basis so minWidth/maxWidth/grow still apply.
+        if (typeof next.width === "string" && next.width.endsWith("%")) {
+          const pct = next.width;
+          delete next.width;
+          next.style = {
+            flexBasis: pct,
+            ...next.style,
+          };
+        }
+        return next;
       })
     : columns;
 
