@@ -34,6 +34,8 @@ import {
   PurchaseOrderGraphQL,
   PurchasesDataTableListFormatedSchema,
   PurchasesListResponseSchema,
+  RejectionPercentageApplication,
+  RejectionPercentageLayers,
   UpdateOchAndDisResult,
   UpdatePurchaseOrderBody,
 } from "@zauru-sdk/types";
@@ -365,24 +367,23 @@ const extractPurchaseOrderItemIds = (purchase: unknown): number[] => {
  * updateOchAndDis
  * Updates rejectionPercentage in purchase_order.memo and the monetary
  * purchase_orders.discount (qty × unit_cost × % / 100). Optionally other_charges.
+ * Prefer `rejectionApplication` (delta + mode) so successive layers are preserved.
  * `data.discount` is a legacy alias for the rejection percentage, not money.
  */
 export const updateOchAndDis = async (
   headers: any,
   data: {
+    rejectionApplication?: RejectionPercentageApplication;
+    rejectionLayers?: RejectionPercentageLayers;
     rejectionPercentage?: number | string;
     discount?: number | string;
     other_charges?: number | string;
     memo?: string | object;
   },
   purchase_id: number,
-    session?: Session,
+  session?: Session,
 ): Promise<AxiosUtilsResponse<UpdateOchAndDisResult>> => {
   return handlePossibleAxiosErrors(async () => {
-    const rejectionPercentage = Number(
-      data?.rejectionPercentage ?? data?.discount ?? 0,
-    );
-
     let currentMemo = data.memo;
     let liveMemo: string | object | undefined;
     let details: PurchaseOrderFinancialDetail[] = [];
@@ -459,10 +460,23 @@ export const updateOchAndDis = async (
     const previousCalculations =
       parseJsonMemo(memoForOrigin).rejectionCalculations;
 
+    const hasExplicitLayers = data.rejectionLayers != null;
+    const hasApplication = data.rejectionApplication != null;
+
     const financials = calculatePurchaseOrderFinancials({
       details,
-      rejectionPercentage,
       memo: memoForOrigin,
+      ...(hasExplicitLayers ? { rejectionLayers: data.rejectionLayers } : {}),
+      ...(hasApplication
+        ? { rejectionApplication: data.rejectionApplication }
+        : {}),
+      ...(!hasExplicitLayers && !hasApplication
+        ? {
+            rejectionPercentage: Number(
+              data?.rejectionPercentage ?? data?.discount ?? 0,
+            ),
+          }
+        : {}),
       rules,
       ctx: {
         itemIds,
@@ -484,6 +498,7 @@ export const updateOchAndDis = async (
         memo: mergeJsonMemo(memoForOrigin, {
           rejectionPercentage: financials.rejectionPercentage,
           rejectionCalculations: financials.rejectionCalculations,
+          rejectionLayers: financials.rejectionLayers,
         }),
         discount: financials.discount,
       },
@@ -505,6 +520,7 @@ export const updateOchAndDis = async (
 
     return {
       rejectionPercentage: financials.rejectionPercentage,
+      rejectionLayers: financials.rejectionLayers,
       rejectionCalculations: financials.rejectionCalculations,
       newlyAppliedSteps,
     };

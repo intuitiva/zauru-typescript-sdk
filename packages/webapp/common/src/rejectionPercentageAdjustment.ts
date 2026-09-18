@@ -6,6 +6,8 @@ import type {
   RejectionPercentageAdjustmentResult,
   RejectionPercentageAdjustmentRule,
   RejectionPercentageAdjustmentStep,
+  RejectionPercentageApplication,
+  RejectionPercentageLayers,
   WebAppRowGraphQL,
 } from "@zauru-sdk/types";
 
@@ -110,6 +112,71 @@ const roundPercentage = (value: number, digits = 4) => {
 };
 
 const clampPercentage = (value: number) => Math.min(100, Math.max(0, value));
+
+const toLayerNumber = (value: unknown): number => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+export const normalizeRejectionPercentageLayers = (
+  layers?: Partial<RejectionPercentageLayers> | null,
+): RejectionPercentageLayers => ({
+  additive: clampPercentage(roundPercentage(toLayerNumber(layers?.additive))),
+  successive: Array.isArray(layers?.successive)
+    ? layers.successive.map((value) => toLayerNumber(value))
+    : [],
+});
+
+export const applyRejectionPercentageLayers = (
+  layers: RejectionPercentageLayers,
+  application: RejectionPercentageApplication,
+): RejectionPercentageLayers => {
+  const current = normalizeRejectionPercentageLayers(layers);
+  const value = toLayerNumber(application.value);
+
+  switch (application.mode) {
+    case "add":
+      return {
+        additive: clampPercentage(roundPercentage(current.additive + value)),
+        successive: [...current.successive],
+      };
+    case "replace":
+      return {
+        additive: clampPercentage(roundPercentage(value)),
+        successive: [],
+      };
+    case "successive":
+      return {
+        additive: current.additive,
+        successive: [...current.successive, value],
+      };
+    default: {
+      const _exhaustive: never = application.mode;
+      return _exhaustive;
+    }
+  }
+};
+
+/**
+ * Effective rejection % after additive then each successive rate on the remainder.
+ * 10% then 10% successive → 19, not 20.
+ */
+export const computeEffectiveRejectionPercentage = (
+  layers: RejectionPercentageLayers,
+  digits = 2,
+): number => {
+  const normalized = normalizeRejectionPercentageLayers(layers);
+  let remainingFactor = 1 - normalized.additive / 100;
+  for (const rate of normalized.successive) {
+    remainingFactor *= 1 - rate / 100;
+  }
+  return roundPercentage((1 - remainingFactor) * 100, digits);
+};
+
+export const hasSuccessiveRejectionLayers = (
+  layers?: Partial<RejectionPercentageLayers> | null,
+): boolean =>
+  Array.isArray(layers?.successive) && layers.successive.length > 0;
 
 const formatPercentage = (value: number) =>
   Number.isInteger(value) ? String(value) : String(roundPercentage(value));

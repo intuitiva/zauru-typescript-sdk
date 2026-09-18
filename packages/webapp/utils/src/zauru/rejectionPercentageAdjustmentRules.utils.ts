@@ -21,11 +21,15 @@ import {
 
 export {
   applyRejectionPercentageAdjustmentRules,
+  applyRejectionPercentageLayers,
+  computeEffectiveRejectionPercentage,
   filterActiveRejectionPercentageAdjustmentRules,
   formatAutomaticRejectionRuleHistoryDescription,
   formatRejectionPercentageAdjustmentDescription,
   getNewlyAppliedRejectionRuleSteps,
+  hasSuccessiveRejectionLayers,
   isAutomaticRejectionRuleHistoryType,
+  normalizeRejectionPercentageLayers,
   rejectionPercentageAdjustmentRuleMatches,
   resolveRejectionPercentageBase,
   resolveRejectionPercentageOrigin,

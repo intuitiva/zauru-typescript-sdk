@@ -12,6 +12,7 @@ export type RejectionPercentageHistoryItem = {
   employee_name?: string;
   created_at?: string;
   type?: string;
+  successive?: boolean;
 };
 
 type NamedRecord = {
@@ -78,6 +79,7 @@ export const RejectionPercentageHistoryList = ({
     <div className={`space-y-3 max-h-60 overflow-y-auto ${className}`.trim()}>
       {items.map((item, index) => {
         const isAutomatic = isAutomaticRejectionRuleHistoryType(item.type);
+        const isSuccessive = item.successive === true;
         const employeeName =
           item.employee_name?.trim() ||
           findName(employees, item.employee_id) ||
@@ -91,7 +93,9 @@ export const RejectionPercentageHistoryList = ({
           <div
             key={`${item.created_at ?? "entry"}-${item.type ?? "manual"}-${index}`}
             className={
-              isAutomatic
+              isSuccessive
+                ? "border border-amber-200 rounded-lg p-3 bg-amber-50"
+                : isAutomatic
                 ? "border border-indigo-200 rounded-lg p-3 bg-indigo-50"
                 : "border border-gray-100 rounded-lg p-3 bg-gray-50"
             }
@@ -100,13 +104,20 @@ export const RejectionPercentageHistoryList = ({
               <div className="flex items-center gap-2 min-w-0">
                 <span
                   className={
-                    isAutomatic
+                    isSuccessive
+                      ? "font-semibold text-amber-800"
+                      : isAutomatic
                       ? "font-semibold text-indigo-800"
                       : "font-semibold text-blue-600"
                   }
                 >
                   {formatSignedPercentage(Number(item.discount) || 0, isAutomatic)}
                 </span>
+                {isSuccessive ? (
+                  <span className="shrink-0 whitespace-nowrap rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                    Sucesivo
+                  </span>
+                ) : null}
                 {isAutomatic ? (
                   <span className="shrink-0 whitespace-nowrap rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-800">
                     Automático
@@ -121,7 +132,9 @@ export const RejectionPercentageHistoryList = ({
             </div>
             <p
               className={
-                isAutomatic
+                isSuccessive
+                  ? "text-sm text-amber-900 mb-1"
+                  : isAutomatic
                   ? "text-sm text-indigo-900 mb-1"
                   : "text-sm text-gray-700 mb-1"
               }

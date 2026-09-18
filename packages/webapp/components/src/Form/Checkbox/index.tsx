@@ -1,3 +1,4 @@
+import { QuestionMarkIconSVG } from "@zauru-sdk/icons";
 import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -13,6 +14,8 @@ type Props = {
   disabled?: boolean;
   borderColor?: string;
   required?: boolean;
+  helpText?: string;
+  helpAriaLabel?: string;
 };
 
 export const CheckBox = (props: Props) => {
@@ -24,9 +27,12 @@ export const CheckBox = (props: Props) => {
     disabled = false,
     label,
     required = false,
+    helpText,
+    helpAriaLabel = "Más información",
   } = props;
 
   const [checked, setChecked] = useState(defaultValue);
+  const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
     setChecked(defaultValue);
@@ -63,7 +69,9 @@ export const CheckBox = (props: Props) => {
       type="checkbox"
       id={id ?? name}
       checked={checked}
-      className={`form-checkbox h-4 w-4 text-indigo-600 ${borderColor} focus:border-indigo-500 focus:ring-indigo-500`}
+      className={`form-checkbox h-4 w-4 text-indigo-600 ${borderColor} ${
+        disabled ? "cursor-not-allowed" : "cursor-pointer"
+      } focus:border-indigo-500 focus:ring-indigo-500`}
       disabled={disabled}
       {...(register ?? {})}
       name={name}
@@ -71,7 +79,29 @@ export const CheckBox = (props: Props) => {
     />
   );
 
-  if (!error && !label) {
+  const helpButton = helpText ? (
+    <div className="relative ml-2 shrink-0">
+      <button
+        type="button"
+        className="cursor-pointer inline-flex items-center justify-center text-gray-500 hover:text-indigo-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1 rounded-full"
+        aria-label={helpAriaLabel}
+        aria-expanded={showHelp}
+        onMouseEnter={() => setShowHelp(true)}
+        onMouseLeave={() => setShowHelp(false)}
+        onFocus={() => setShowHelp(true)}
+        onBlur={() => setShowHelp(false)}
+      >
+        <QuestionMarkIconSVG />
+      </button>
+      {showHelp ? (
+        <div className="absolute z-50 left-1/2 -translate-x-1/2 bottom-full mb-2 w-72 max-w-[min(18rem,calc(100vw-2rem))] rounded border border-gray-200 bg-white p-2 text-left text-sm text-black shadow motion-reduce:transition-none">
+          {helpText}
+        </div>
+      ) : null}
+    </div>
+  ) : null;
+
+  if (!error && !label && !helpText) {
     return inputComponent;
   }
 
@@ -88,6 +118,7 @@ export const CheckBox = (props: Props) => {
             {required && <span className="text-red-500">*</span>}
           </label>
         )}
+        {helpButton}
       </div>
       {error && (
         <p className={`mt-2 text-sm text-${color}-600 dark:text-${color}-500`}>

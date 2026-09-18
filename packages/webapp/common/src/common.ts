@@ -10,10 +10,15 @@ import type {
   CalculatePurchaseOrderFinancialsInput,
   CalculatePurchaseOrderFinancialsResult,
   PurchaseOrderFinancialDetail,
+  RejectionPercentageLayers,
 } from "@zauru-sdk/types";
 import { MONTHS } from "@zauru-sdk/types";
 import {
   applyRejectionPercentageAdjustmentRules,
+  applyRejectionPercentageLayers,
+  computeEffectiveRejectionPercentage,
+  hasSuccessiveRejectionLayers,
+  normalizeRejectionPercentageLayers,
   resolveRejectionPercentageOrigin,
 } from "./rejectionPercentageAdjustment.js";
 
@@ -89,17 +94,58 @@ export const setRejectionPercentage = (
   percentage: number,
 ): string => mergeJsonMemo(memo, { rejectionPercentage: percentage });
 
+const memoFromRejectionSource = (
+  source: string | { memo?: string | object } | JsonMemoType | undefined,
+): JsonMemoType => {
+  if (source == null || source === "") return {};
+  if (typeof source === "string") return parseJsonMemo(source);
+  if (typeof source !== "object") return {};
+  const record = source as { memo?: string | object } & JsonMemoType;
+  if (record.memo != null && record.memo !== "") {
+    return parseJsonMemo(record.memo);
+  }
+  return parseJsonMemo(record);
+};
+
+/**
+ * User rejection layers (before automatic rules). Legacy memos without
+ * `rejectionLayers` use the stored origin as additive and no successive rates.
+ */
+export const resolveRejectionPercentageLayers = (
+  memo?: string | object | JsonMemoType,
+  fallbackAdditive?: number,
+): RejectionPercentageLayers => {
+  const parsed = parseJsonMemo(memo);
+  if (parsed.rejectionLayers) {
+    return normalizeRejectionPercentageLayers(parsed.rejectionLayers);
+  }
+
+  const origin = resolveRejectionPercentageOrigin(
+    fallbackAdditive ?? getRejectionPercentage(parsed),
+    parsed.rejectionCalculations,
+  );
+  return normalizeRejectionPercentageLayers({
+    additive: origin,
+    successive: [],
+  });
+};
+
+export const getRejectionPercentageLayers = (
+  source: string | { memo?: string | object } | JsonMemoType | undefined,
+): RejectionPercentageLayers =>
+  resolveRejectionPercentageLayers(memoFromRejectionSource(source));
+
+export const hasSuccessiveRejectionPercentage = (
+  source: string | { memo?: string | object } | JsonMemoType | undefined,
+): boolean => hasSuccessiveRejectionLayers(getRejectionPercentageLayers(source));
+
 /**
  * Rejection % of origin stored in the memo, ignoring the adjustment rules
  * already applied on top of it.
  */
 export const resolveRejectionPercentageBase = (
   memo?: string | object,
-): number =>
-  resolveRejectionPercentageOrigin(
-    getRejectionPercentage(memo),
-    parseJsonMemo(memo).rejectionCalculations,
-  );
+): number => resolveRejectionPercentageLayers(memo).additive;
 
 const roundMoney = (value: number): number =>
   Math.round((value + Number.EPSILON) * 100) / 100;
@@ -119,14 +165,13 @@ const lineQuantity = (detail: PurchaseOrderFinancialDetail): number => {
 };
 
 /**
- * Header money for a purchase order: subtotal = qty × unit_cost,
- * discount = subtotal × rejectionPercentage / 100.
+ * Header money for a purchase order: subtotal = qty × unit_cost.
+ * Additive rates are summed first; successive rates then apply to the remainder.
  * Does not change unit cost. purchase_orders.discount is the monetary column.
  *
- * If `rules` is given, the rejection % is resolved back to the origin stored in
- * the memo and the rules are stacked on top of it before calculating the money.
- * `rejectionPercentage` in the result is the % that was actually charged and
- * `rejectionCalculations` is the trace to store in the memo.
+ * User layers (before rules) are returned as `rejectionLayers` for the memo.
+ * Automatic rules add percentage points on the additive block only.
+ * `rejectionPercentage` in the result is the effective % that was charged.
  */
 export const calculatePurchaseOrderFinancials = (
   input: CalculatePurchaseOrderFinancialsInput,
@@ -140,28 +185,45 @@ export const calculatePurchaseOrderFinancials = (
   );
   const safeSubtotal = Number.isFinite(subtotal) ? subtotal : 0;
 
-  const passedPercentage = toFiniteNumber(input.rejectionPercentage) ?? 0;
+  const parsedMemo = parseJsonMemo(input.memo);
+  let userLayers = input.rejectionLayers
+    ? normalizeRejectionPercentageLayers(input.rejectionLayers)
+    : resolveRejectionPercentageLayers(
+        parsedMemo,
+        toFiniteNumber(input.rejectionPercentage),
+      );
+
+  if (input.rejectionApplication) {
+    userLayers = applyRejectionPercentageLayers(
+      userLayers,
+      input.rejectionApplication,
+    );
+  }
+
   const rejectionCalculations = input.rules
     ? applyRejectionPercentageAdjustmentRules(
-        resolveRejectionPercentageOrigin(
-          passedPercentage,
-          parseJsonMemo(input.memo).rejectionCalculations,
-        ),
+        userLayers.additive,
         input.rules,
         input.ctx ?? { itemIds: [] },
       )
     : undefined;
 
+  const chargedLayers = {
+    additive:
+      rejectionCalculations?.finalPercentage ?? userLayers.additive,
+    successive: userLayers.successive,
+  };
   const rejectionPercentage =
-    rejectionCalculations?.finalPercentage ?? passedPercentage;
+    computeEffectiveRejectionPercentage(chargedLayers);
 
   return {
     subtotal: safeSubtotal,
     discount:
-      rejectionPercentage > 0 && safeSubtotal > 0
+      rejectionPercentage !== 0 && safeSubtotal > 0
         ? roundMoney(safeSubtotal * (rejectionPercentage / 100))
         : 0,
     rejectionPercentage,
+    rejectionLayers: userLayers,
     rejectionCalculations,
   };
 };

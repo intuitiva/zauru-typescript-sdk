@@ -119,6 +119,21 @@ export type RejectionCalculationMemo = {
   steps: RejectionPercentageAdjustmentStep[];
 };
 
+export type RejectionPercentageApplicationMode =
+  | "add"
+  | "replace"
+  | "successive";
+
+export type RejectionPercentageApplication = {
+  value: number;
+  mode: RejectionPercentageApplicationMode;
+};
+
+export type RejectionPercentageLayers = {
+  additive: number;
+  successive: number[];
+};
+
 export type ExtendedInsertBookingBody = {
   movements: Partial<MovementGraphQL>[];
 };
@@ -346,6 +361,7 @@ export type PoDiscountHistoryEntry = {
   employee_name: string;
   created_at: string;
   type: PoDiscountHistoryType;
+  successive?: boolean;
 };
 
 export type PoDiscountHistory = {
@@ -356,6 +372,7 @@ export type PoDiscountHistory = {
 
 export type UpdateOchAndDisResult = {
   rejectionPercentage: number;
+  rejectionLayers: RejectionPercentageLayers;
   rejectionCalculations?: RejectionCalculationMemo;
   newlyAppliedSteps: RejectionPercentageAdjustmentStep[];
 };
@@ -651,6 +668,7 @@ export type POHistoryMassive = {
   finalizada?: boolean;
   originalOtherCharges: number;
   originalDiscount: number;
+  originalLayers?: RejectionPercentageLayers;
   revertida?: boolean;
   /** memo del listado, para actualizar rejectionPercentage sin volver a consultar la OC */
   memo?: string | object | null;
@@ -670,6 +688,7 @@ export type BitacoraPOMassive = {
   fechaCreacion: string;
   observations: string;
   replace: boolean;
+  successive?: boolean;
   desprocesar?: boolean;
   lbsBuenas?: number;
   lbsMalas?: number;
@@ -746,6 +765,10 @@ export type CalculatePurchaseOrderFinancialsInput = {
   details?: PurchaseOrderFinancialDetail[] | null;
   /** % de rechazo de origen, o el % final ya guardado en el memo */
   rejectionPercentage?: number | string | null;
+  /** capas de usuario (antes de reglas). Si no se pasan, se leen del memo */
+  rejectionLayers?: RejectionPercentageLayers;
+  /** delta a aplicar sobre las capas actuales */
+  rejectionApplication?: RejectionPercentageApplication;
   /** memo de la OC, para recuperar el % de origen y no apilar dos veces las reglas */
   memo?: string | object;
   /** reglas activas; si no se pasan, el % se usa tal cual */
@@ -759,8 +782,10 @@ export type CalculatePurchaseOrderFinancialsInput = {
 export type CalculatePurchaseOrderFinancialsResult = {
   subtotal: number;
   discount: number;
-  /** % de rechazo con el que se calculó el descuento */
+  /** % de rechazo efectivo con el que se calculó el descuento */
   rejectionPercentage: number;
+  /** capas de usuario (antes de reglas), para guardar en el memo */
+  rejectionLayers: RejectionPercentageLayers;
   /** trazabilidad de las reglas aplicadas, para guardar en el memo */
   rejectionCalculations?: RejectionCalculationMemo;
 };
@@ -1050,6 +1075,7 @@ export type JsonMemoType = {
   originalNetWeightLines?: Array<{ weight: number }>;
   confirmed?: boolean;
   rejectionPercentage?: number;
+  rejectionLayers?: RejectionPercentageLayers;
   costCalculations?: CostCalculationMemo[];
   rejectionCalculations?: RejectionCalculationMemo;
 };
