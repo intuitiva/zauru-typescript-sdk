@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.18.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.17.0...@zauru-sdk/utils@6.18.0) (2026-09-18)
+
+
+### Features
+
+* descuento sucesivo en porcentajes de rechazo ([c437bbd](https://github.com/intuitiva/zauru-typescript-sdk/commit/c437bbd6a1305fd417c4ac55f8e07eb244f2fe3d))
+
+
+
+
+
 # [6.17.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.16.1...@zauru-sdk/utils@6.17.0) (2026-09-18)
 
 
