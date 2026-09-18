@@ -1,12 +1,38 @@
 import { Session } from "@remix-run/node";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import {
+  formatAutomaticRejectionRuleHistoryDescription,
+  handlePossibleAxiosErrors,
+  REJECTION_PERCENTAGE_RULE_HISTORY_TYPE,
+} from "@zauru-sdk/common";
 import {
   create4pinosPoDiscountHistory,
   getPurchaseOrder,
   getVariablesByName,
   update4pinosPoDiscountHistory,
 } from "@zauru-sdk/services";
-import { PoDiscountHistory } from "@zauru-sdk/types";
+import {
+  PoDiscountHistory,
+  PoDiscountHistoryEntry,
+  RejectionPercentageAdjustmentStep,
+} from "@zauru-sdk/types";
+
+export const mapRejectionRuleStepsToDiscountHistory = (
+  steps: RejectionPercentageAdjustmentStep[],
+  meta: {
+    agency_id: number;
+    employee_id?: number;
+    created_at?: string;
+  },
+): PoDiscountHistoryEntry[] =>
+  steps.map((step) => ({
+    agency_id: meta.agency_id,
+    employee_id: meta.employee_id ?? 0,
+    employee_name: "Sistema",
+    created_at: meta.created_at ?? new Date().toISOString(),
+    description: formatAutomaticRejectionRuleHistoryDescription(step),
+    type: REJECTION_PERCENTAGE_RULE_HISTORY_TYPE,
+    discount: step.appliedAmount,
+  }));
 
 export const add4pinosPoDiscountsHistory = async (
   session: Session,

@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement, type ComponentType } from "react";
 import { PassThrough } from "node:stream";
 import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
@@ -7,6 +7,12 @@ import { renderToPipeableStream } from "react-dom/server";
 import { handleError } from "./cloudwatch-remix.server.js";
 
 const ABORT_DELAY = 5_000;
+
+const RemixServerComponent = RemixServer as ComponentType<{
+  context: EntryContext;
+  url: string;
+  abortDelay: number;
+}>;
 
 function isBotRequest(userAgent: string | null): boolean {
   if (!userAgent) return false;
@@ -59,7 +65,7 @@ function handleBotRequest(
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      createElement(RemixServer, {
+      createElement(RemixServerComponent, {
         context: remixContext,
         url: request.url,
         abortDelay: ABORT_DELAY,
@@ -106,7 +112,7 @@ function handleBrowserRequest(
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      createElement(RemixServer, {
+      createElement(RemixServerComponent, {
         context: remixContext,
         url: request.url,
         abortDelay: ABORT_DELAY,

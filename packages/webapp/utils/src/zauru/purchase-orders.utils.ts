@@ -2,11 +2,13 @@ import type { Session } from "@remix-run/node";
 import {
   CURRENCY_PREFIX,
   calculatePurchaseOrderFinancials,
+  getNewlyAppliedRejectionRuleSteps,
   getNewDateByFormat,
   getStringFullDate,
   getZauruDateByText,
   handlePossibleAxiosErrors,
   mergeJsonMemo,
+  parseJsonMemo,
 } from "@zauru-sdk/common";
 import {
   commitSession,
@@ -32,6 +34,7 @@ import {
   PurchaseOrderGraphQL,
   PurchasesDataTableListFormatedSchema,
   PurchasesListResponseSchema,
+  UpdateOchAndDisResult,
   UpdatePurchaseOrderBody,
 } from "@zauru-sdk/types";
 import { getActiveRejectionPercentageAdjustmentRules } from "./rejectionPercentageAdjustmentRules.utils.js";
@@ -373,20 +376,22 @@ export const updateOchAndDis = async (
     memo?: string | object;
   },
   purchase_id: number,
-  session?: Session,
-): Promise<AxiosUtilsResponse<boolean>> => {
+    session?: Session,
+): Promise<AxiosUtilsResponse<UpdateOchAndDisResult>> => {
   return handlePossibleAxiosErrors(async () => {
     const rejectionPercentage = Number(
       data?.rejectionPercentage ?? data?.discount ?? 0,
     );
 
     let currentMemo = data.memo;
+    let liveMemo: string | object | undefined;
     let details: PurchaseOrderFinancialDetail[] = [];
     let loadedPurchase: unknown;
 
     const restPurchaseResponse = await getPurchase(headers, purchase_id);
     if (!restPurchaseResponse.error && restPurchaseResponse.data) {
       loadedPurchase = restPurchaseResponse.data;
+      liveMemo = restPurchaseResponse.data.memo;
       if (currentMemo === undefined) {
         currentMemo = restPurchaseResponse.data.memo;
       }
@@ -407,6 +412,9 @@ export const updateOchAndDis = async (
         );
       }
 
+      if (liveMemo === undefined) {
+        liveMemo = purchaseOrderResponse.data.memo;
+      }
       if (currentMemo === undefined) {
         currentMemo = purchaseOrderResponse.data.memo;
       }
@@ -447,11 +455,14 @@ export const updateOchAndDis = async (
     const payee = purchaseRecord?.payee;
     const itemIds = extractPurchaseOrderItemIds(loadedPurchase);
     const tipo = purchaseRecord?.reference;
+    const memoForOrigin = liveMemo ?? currentMemo;
+    const previousCalculations =
+      parseJsonMemo(memoForOrigin).rejectionCalculations;
 
     const financials = calculatePurchaseOrderFinancials({
       details,
       rejectionPercentage,
-      memo: currentMemo,
+      memo: memoForOrigin,
       rules,
       ctx: {
         itemIds,
@@ -463,9 +474,14 @@ export const updateOchAndDis = async (
       },
     });
 
+    const newlyAppliedSteps = getNewlyAppliedRejectionRuleSteps(
+      previousCalculations,
+      financials.rejectionCalculations,
+    );
+
     const body = {
       purchase_order: {
-        memo: mergeJsonMemo(currentMemo, {
+        memo: mergeJsonMemo(memoForOrigin, {
           rejectionPercentage: financials.rejectionPercentage,
           rejectionCalculations: financials.rejectionCalculations,
         }),
@@ -487,7 +503,11 @@ export const updateOchAndDis = async (
       throw new Error(responseUpdate.userMsg);
     }
 
-    return true;
+    return {
+      rejectionPercentage: financials.rejectionPercentage,
+      rejectionCalculations: financials.rejectionCalculations,
+      newlyAppliedSteps,
+    };
   });
 };
 

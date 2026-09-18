@@ -22,11 +22,15 @@ import {
 export {
   applyRejectionPercentageAdjustmentRules,
   filterActiveRejectionPercentageAdjustmentRules,
+  formatAutomaticRejectionRuleHistoryDescription,
   formatRejectionPercentageAdjustmentDescription,
+  getNewlyAppliedRejectionRuleSteps,
+  isAutomaticRejectionRuleHistoryType,
   rejectionPercentageAdjustmentRuleMatches,
   resolveRejectionPercentageBase,
   resolveRejectionPercentageOrigin,
   REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,
+  REJECTION_PERCENTAGE_RULE_HISTORY_TYPE,
 } from "@zauru-sdk/common";
 
 const getTableId = async (headers: any, session: Session) => {

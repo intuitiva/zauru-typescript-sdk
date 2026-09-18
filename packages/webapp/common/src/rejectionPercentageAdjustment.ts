@@ -12,6 +12,9 @@ import type {
 export const REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR =
   "rejection_percentage_adjustment_rules_web_app_table_id";
 
+export const REJECTION_PERCENTAGE_RULE_HISTORY_TYPE =
+  "rechazo_regla_automatica" as const;
+
 const defaultFilters = (): PriceAdjustmentFilters => ({
   itemMode: "all",
   itemIds: [],
@@ -161,6 +164,43 @@ export const resolveRejectionPercentageOrigin = (
 
   return clampPercentage(safePreviousBase + (passed - previousFinal));
 };
+
+export const rejectionRuleStepKey = (
+  step: Pick<
+    RejectionPercentageAdjustmentStep,
+    "ruleName" | "operation" | "value"
+  >,
+): string => `${step.ruleName}|${step.operation}|${step.value}`;
+
+/**
+ * Rules already stored in the memo are skipped so a later edit does not
+ * create a second history line (or a second +2%) for the same rule.
+ */
+export const getNewlyAppliedRejectionRuleSteps = (
+  previous?: RejectionCalculationMemo | null,
+  next?: RejectionCalculationMemo | null,
+): RejectionPercentageAdjustmentStep[] => {
+  if (!next?.steps?.length) {
+    return [];
+  }
+  const previousKeys = new Set(
+    (previous?.steps ?? []).map(rejectionRuleStepKey),
+  );
+  return next.steps.filter(
+    (step) => !previousKeys.has(rejectionRuleStepKey(step)),
+  );
+};
+
+export const formatAutomaticRejectionRuleHistoryDescription = (
+  step: RejectionPercentageAdjustmentStep,
+): string => {
+  const sign = step.operation === "subtract" ? "-" : "+";
+  return `% Rechazo aplicado automáticamente por regla "${step.ruleName}": ${sign}${formatPercentage(step.value)}%.`;
+};
+
+export const isAutomaticRejectionRuleHistoryType = (
+  type: string | undefined,
+): boolean => type === REJECTION_PERCENTAGE_RULE_HISTORY_TYPE;
 
 export const applyRejectionPercentageAdjustmentRules = (
   basePercentage: number,
