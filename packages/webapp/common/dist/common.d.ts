@@ -1,5 +1,5 @@
 import "moment-timezone";
-import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption, JsonMemoType, CalculatePurchaseOrderFinancialsInput, CalculatePurchaseOrderFinancialsResult } from "@zauru-sdk/types";
+import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption, JsonMemoType, CalculatePurchaseOrderFinancialsInput, CalculatePurchaseOrderFinancialsResult, RejectionPercentageLayers } from "@zauru-sdk/types";
 export declare const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[];
 export declare const parseJsonMemo: (memo?: string | object) => JsonMemoType;
 export declare const stringifyJsonMemo: (memo: JsonMemoType) => string;
@@ -13,19 +13,29 @@ export declare const getRejectionPercentage: (source: string | {
 } | JsonMemoType | undefined) => number;
 export declare const setRejectionPercentage: (memo: string | object | undefined, percentage: number) => string;
 /**
+ * User rejection layers (before automatic rules). Legacy memos without
+ * `rejectionLayers` use the stored origin as additive and no successive rates.
+ */
+export declare const resolveRejectionPercentageLayers: (memo?: string | object | JsonMemoType, fallbackAdditive?: number) => RejectionPercentageLayers;
+export declare const getRejectionPercentageLayers: (source: string | {
+    memo?: string | object;
+} | JsonMemoType | undefined) => RejectionPercentageLayers;
+export declare const hasSuccessiveRejectionPercentage: (source: string | {
+    memo?: string | object;
+} | JsonMemoType | undefined) => boolean;
+/**
  * Rejection % of origin stored in the memo, ignoring the adjustment rules
  * already applied on top of it.
  */
 export declare const resolveRejectionPercentageBase: (memo?: string | object) => number;
 /**
- * Header money for a purchase order: subtotal = qty × unit_cost,
- * discount = subtotal × rejectionPercentage / 100.
+ * Header money for a purchase order: subtotal = qty × unit_cost.
+ * Additive rates are summed first; successive rates then apply to the remainder.
  * Does not change unit cost. purchase_orders.discount is the monetary column.
  *
- * If `rules` is given, the rejection % is resolved back to the origin stored in
- * the memo and the rules are stacked on top of it before calculating the money.
- * `rejectionPercentage` in the result is the % that was actually charged and
- * `rejectionCalculations` is the trace to store in the memo.
+ * User layers (before rules) are returned as `rejectionLayers` for the memo.
+ * Automatic rules add percentage points on the additive block only.
+ * `rejectionPercentage` in the result is the effective % that was charged.
  */
 export declare const calculatePurchaseOrderFinancials: (input: CalculatePurchaseOrderFinancialsInput) => CalculatePurchaseOrderFinancialsResult;
 /**

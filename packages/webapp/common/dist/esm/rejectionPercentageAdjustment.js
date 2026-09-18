@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.applyRejectionPercentageAdjustmentRules = exports.isAutomaticRejectionRuleHistoryType = exports.formatAutomaticRejectionRuleHistoryDescription = exports.getNewlyAppliedRejectionRuleSteps = exports.rejectionRuleStepKey = exports.resolveRejectionPercentageOrigin = exports.formatRejectionPercentageAdjustmentDescription = exports.rejectionPercentageAdjustmentRuleMatches = exports.filterActiveRejectionPercentageAdjustmentRules = exports.REJECTION_PERCENTAGE_RULE_HISTORY_TYPE = exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = void 0;
+exports.applyRejectionPercentageAdjustmentRules = exports.isAutomaticRejectionRuleHistoryType = exports.formatAutomaticRejectionRuleHistoryDescription = exports.getNewlyAppliedRejectionRuleSteps = exports.rejectionRuleStepKey = exports.resolveRejectionPercentageOrigin = exports.formatRejectionPercentageAdjustmentDescription = exports.hasSuccessiveRejectionLayers = exports.computeEffectiveRejectionPercentage = exports.applyRejectionPercentageLayers = exports.normalizeRejectionPercentageLayers = exports.rejectionPercentageAdjustmentRuleMatches = exports.filterActiveRejectionPercentageAdjustmentRules = exports.REJECTION_PERCENTAGE_RULE_HISTORY_TYPE = exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = void 0;
 exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = "rejection_percentage_adjustment_rules_web_app_table_id";
 exports.REJECTION_PERCENTAGE_RULE_HISTORY_TYPE = "rechazo_regla_automatica";
 const defaultFilters = () => ({
@@ -57,6 +57,58 @@ const roundPercentage = (value, digits = 4) => {
     return Math.round((value + Number.EPSILON) * factor) / factor;
 };
 const clampPercentage = (value) => Math.min(100, Math.max(0, value));
+const toLayerNumber = (value) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+};
+const normalizeRejectionPercentageLayers = (layers) => ({
+    additive: clampPercentage(roundPercentage(toLayerNumber(layers?.additive))),
+    successive: Array.isArray(layers?.successive)
+        ? layers.successive.map((value) => toLayerNumber(value))
+        : [],
+});
+exports.normalizeRejectionPercentageLayers = normalizeRejectionPercentageLayers;
+const applyRejectionPercentageLayers = (layers, application) => {
+    const current = (0, exports.normalizeRejectionPercentageLayers)(layers);
+    const value = toLayerNumber(application.value);
+    switch (application.mode) {
+        case "add":
+            return {
+                additive: clampPercentage(roundPercentage(current.additive + value)),
+                successive: [...current.successive],
+            };
+        case "replace":
+            return {
+                additive: clampPercentage(roundPercentage(value)),
+                successive: [],
+            };
+        case "successive":
+            return {
+                additive: current.additive,
+                successive: [...current.successive, value],
+            };
+        default: {
+            const _exhaustive = application.mode;
+            return _exhaustive;
+        }
+    }
+};
+exports.applyRejectionPercentageLayers = applyRejectionPercentageLayers;
+/**
+ * Effective rejection % after additive then each successive rate on the remainder.
+ * 10% then 10% successive → 19, not 20.
+ */
+const computeEffectiveRejectionPercentage = (layers, digits = 2) => {
+    const normalized = (0, exports.normalizeRejectionPercentageLayers)(layers);
+    let remainingFactor = 1 - normalized.additive / 100;
+    for (const rate of normalized.successive) {
+        remainingFactor *= 1 - rate / 100;
+    }
+    return roundPercentage((1 - remainingFactor) * 100, digits);
+};
+exports.computeEffectiveRejectionPercentage = computeEffectiveRejectionPercentage;
+const hasSuccessiveRejectionLayers = (layers) => Array.isArray(layers?.successive) && layers.successive.length > 0;
+exports.hasSuccessiveRejectionLayers = hasSuccessiveRejectionLayers;
 const formatPercentage = (value) => Number.isInteger(value) ? String(value) : String(roundPercentage(value));
 const formatFinalPercentage = (value) => roundPercentage(value, 2).toFixed(2);
 const formatRuleEffect = (step) => {

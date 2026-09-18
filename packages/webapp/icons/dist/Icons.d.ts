@@ -42,6 +42,7 @@ export declare const LoadingBarSpinnerSvg: (props?: {
     darkSpinnerFillColor?: string;
 }) => import("react/jsx-runtime").JSX.Element;
 export declare const IdeaIconSVG: () => import("react/jsx-runtime").JSX.Element;
+export declare const QuestionMarkIconSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const CalendarIconSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const ClockIconSVG: () => import("react/jsx-runtime").JSX.Element;
 export declare const FinishLabRemisionSVG: () => import("react/jsx-runtime").JSX.Element;

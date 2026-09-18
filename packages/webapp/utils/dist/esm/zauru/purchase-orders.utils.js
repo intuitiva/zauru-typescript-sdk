@@ -210,11 +210,11 @@ const extractPurchaseOrderItemIds = (purchase) => {
  * updateOchAndDis
  * Updates rejectionPercentage in purchase_order.memo and the monetary
  * purchase_orders.discount (qty × unit_cost × % / 100). Optionally other_charges.
+ * Prefer `rejectionApplication` (delta + mode) so successive layers are preserved.
  * `data.discount` is a legacy alias for the rejection percentage, not money.
  */
 export const updateOchAndDis = async (headers, data, purchase_id, session) => {
     return handlePossibleAxiosErrors(async () => {
-        const rejectionPercentage = Number(data?.rejectionPercentage ?? data?.discount ?? 0);
         let currentMemo = data.memo;
         let liveMemo;
         let details = [];
@@ -265,10 +265,20 @@ export const updateOchAndDis = async (headers, data, purchase_id, session) => {
         const tipo = purchaseRecord?.reference;
         const memoForOrigin = liveMemo ?? currentMemo;
         const previousCalculations = parseJsonMemo(memoForOrigin).rejectionCalculations;
+        const hasExplicitLayers = data.rejectionLayers != null;
+        const hasApplication = data.rejectionApplication != null;
         const financials = calculatePurchaseOrderFinancials({
             details,
-            rejectionPercentage,
             memo: memoForOrigin,
+            ...(hasExplicitLayers ? { rejectionLayers: data.rejectionLayers } : {}),
+            ...(hasApplication
+                ? { rejectionApplication: data.rejectionApplication }
+                : {}),
+            ...(!hasExplicitLayers && !hasApplication
+                ? {
+                    rejectionPercentage: Number(data?.rejectionPercentage ?? data?.discount ?? 0),
+                }
+                : {}),
             rules,
             ctx: {
                 itemIds,
@@ -284,6 +294,7 @@ export const updateOchAndDis = async (headers, data, purchase_id, session) => {
                 memo: mergeJsonMemo(memoForOrigin, {
                     rejectionPercentage: financials.rejectionPercentage,
                     rejectionCalculations: financials.rejectionCalculations,
+                    rejectionLayers: financials.rejectionLayers,
                 }),
                 discount: financials.discount,
             },
@@ -297,6 +308,7 @@ export const updateOchAndDis = async (headers, data, purchase_id, session) => {
         }
         return {
             rejectionPercentage: financials.rejectionPercentage,
+            rejectionLayers: financials.rejectionLayers,
             rejectionCalculations: financials.rejectionCalculations,
             newlyAppliedSteps,
         };

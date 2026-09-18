@@ -1,8 +1,16 @@
-import type { RejectionCalculationMemo, RejectionPercentageAdjustmentContext, RejectionPercentageAdjustmentResult, RejectionPercentageAdjustmentRule, RejectionPercentageAdjustmentStep, WebAppRowGraphQL } from "@zauru-sdk/types";
+import type { RejectionCalculationMemo, RejectionPercentageAdjustmentContext, RejectionPercentageAdjustmentResult, RejectionPercentageAdjustmentRule, RejectionPercentageAdjustmentStep, RejectionPercentageApplication, RejectionPercentageLayers, WebAppRowGraphQL } from "@zauru-sdk/types";
 export declare const REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = "rejection_percentage_adjustment_rules_web_app_table_id";
 export declare const REJECTION_PERCENTAGE_RULE_HISTORY_TYPE: "rechazo_regla_automatica";
 export declare const filterActiveRejectionPercentageAdjustmentRules: (rules?: WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[]) => WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[];
 export declare const rejectionPercentageAdjustmentRuleMatches: (rule: RejectionPercentageAdjustmentRule, ctx: RejectionPercentageAdjustmentContext) => boolean;
+export declare const normalizeRejectionPercentageLayers: (layers?: Partial<RejectionPercentageLayers> | null) => RejectionPercentageLayers;
+export declare const applyRejectionPercentageLayers: (layers: RejectionPercentageLayers, application: RejectionPercentageApplication) => RejectionPercentageLayers;
+/**
+ * Effective rejection % after additive then each successive rate on the remainder.
+ * 10% then 10% successive → 19, not 20.
+ */
+export declare const computeEffectiveRejectionPercentage: (layers: RejectionPercentageLayers, digits?: number) => number;
+export declare const hasSuccessiveRejectionLayers: (layers?: Partial<RejectionPercentageLayers> | null) => boolean;
 export declare const formatRejectionPercentageAdjustmentDescription: (result: Pick<RejectionPercentageAdjustmentResult, "basePercentage" | "finalPercentage" | "steps">, baseLabel?: string) => string;
 /**
  * Callers may pass the origin % or the previously stored final %. With the

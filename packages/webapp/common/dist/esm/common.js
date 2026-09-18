@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.priceToText = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.obtenerFechaActualConZonaHoraria = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.calculatePurchaseOrderFinancials = exports.resolveRejectionPercentageBase = exports.setRejectionPercentage = exports.getRejectionPercentage = exports.mergeJsonMemo = exports.stringifyJsonMemo = exports.parseJsonMemo = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.priceToText = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.obtenerFechaActualConZonaHoraria = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.calculatePurchaseOrderFinancials = exports.resolveRejectionPercentageBase = exports.hasSuccessiveRejectionPercentage = exports.getRejectionPercentageLayers = exports.resolveRejectionPercentageLayers = exports.setRejectionPercentage = exports.getRejectionPercentage = exports.mergeJsonMemo = exports.stringifyJsonMemo = exports.parseJsonMemo = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
 exports.generateClientUUID = generateClientUUID;
 exports.extractValueBetweenTags = extractValueBetweenTags;
 exports.isJsonArray = isJsonArray;
@@ -81,11 +81,44 @@ const getRejectionPercentage = (source) => {
 exports.getRejectionPercentage = getRejectionPercentage;
 const setRejectionPercentage = (memo, percentage) => (0, exports.mergeJsonMemo)(memo, { rejectionPercentage: percentage });
 exports.setRejectionPercentage = setRejectionPercentage;
+const memoFromRejectionSource = (source) => {
+    if (source == null || source === "")
+        return {};
+    if (typeof source === "string")
+        return (0, exports.parseJsonMemo)(source);
+    if (typeof source !== "object")
+        return {};
+    const record = source;
+    if (record.memo != null && record.memo !== "") {
+        return (0, exports.parseJsonMemo)(record.memo);
+    }
+    return (0, exports.parseJsonMemo)(record);
+};
+/**
+ * User rejection layers (before automatic rules). Legacy memos without
+ * `rejectionLayers` use the stored origin as additive and no successive rates.
+ */
+const resolveRejectionPercentageLayers = (memo, fallbackAdditive) => {
+    const parsed = (0, exports.parseJsonMemo)(memo);
+    if (parsed.rejectionLayers) {
+        return (0, rejectionPercentageAdjustment_js_1.normalizeRejectionPercentageLayers)(parsed.rejectionLayers);
+    }
+    const origin = (0, rejectionPercentageAdjustment_js_1.resolveRejectionPercentageOrigin)(fallbackAdditive ?? (0, exports.getRejectionPercentage)(parsed), parsed.rejectionCalculations);
+    return (0, rejectionPercentageAdjustment_js_1.normalizeRejectionPercentageLayers)({
+        additive: origin,
+        successive: [],
+    });
+};
+exports.resolveRejectionPercentageLayers = resolveRejectionPercentageLayers;
+const getRejectionPercentageLayers = (source) => (0, exports.resolveRejectionPercentageLayers)(memoFromRejectionSource(source));
+exports.getRejectionPercentageLayers = getRejectionPercentageLayers;
+const hasSuccessiveRejectionPercentage = (source) => (0, rejectionPercentageAdjustment_js_1.hasSuccessiveRejectionLayers)((0, exports.getRejectionPercentageLayers)(source));
+exports.hasSuccessiveRejectionPercentage = hasSuccessiveRejectionPercentage;
 /**
  * Rejection % of origin stored in the memo, ignoring the adjustment rules
  * already applied on top of it.
  */
-const resolveRejectionPercentageBase = (memo) => (0, rejectionPercentageAdjustment_js_1.resolveRejectionPercentageOrigin)((0, exports.getRejectionPercentage)(memo), (0, exports.parseJsonMemo)(memo).rejectionCalculations);
+const resolveRejectionPercentageBase = (memo) => (0, exports.resolveRejectionPercentageLayers)(memo).additive;
 exports.resolveRejectionPercentageBase = resolveRejectionPercentageBase;
 const roundMoney = (value) => Math.round((value + Number.EPSILON) * 100) / 100;
 const lineQuantity = (detail) => {
@@ -99,14 +132,13 @@ const lineQuantity = (detail) => {
         0);
 };
 /**
- * Header money for a purchase order: subtotal = qty × unit_cost,
- * discount = subtotal × rejectionPercentage / 100.
+ * Header money for a purchase order: subtotal = qty × unit_cost.
+ * Additive rates are summed first; successive rates then apply to the remainder.
  * Does not change unit cost. purchase_orders.discount is the monetary column.
  *
- * If `rules` is given, the rejection % is resolved back to the origin stored in
- * the memo and the rules are stacked on top of it before calculating the money.
- * `rejectionPercentage` in the result is the % that was actually charged and
- * `rejectionCalculations` is the trace to store in the memo.
+ * User layers (before rules) are returned as `rejectionLayers` for the memo.
+ * Automatic rules add percentage points on the additive block only.
+ * `rejectionPercentage` in the result is the effective % that was charged.
  */
 const calculatePurchaseOrderFinancials = (input) => {
     const details = input.details ?? [];
@@ -115,17 +147,28 @@ const calculatePurchaseOrderFinancials = (input) => {
         return sum + lineQuantity(detail) * unitCost;
     }, 0));
     const safeSubtotal = Number.isFinite(subtotal) ? subtotal : 0;
-    const passedPercentage = toFiniteNumber(input.rejectionPercentage) ?? 0;
+    const parsedMemo = (0, exports.parseJsonMemo)(input.memo);
+    let userLayers = input.rejectionLayers
+        ? (0, rejectionPercentageAdjustment_js_1.normalizeRejectionPercentageLayers)(input.rejectionLayers)
+        : (0, exports.resolveRejectionPercentageLayers)(parsedMemo, toFiniteNumber(input.rejectionPercentage));
+    if (input.rejectionApplication) {
+        userLayers = (0, rejectionPercentageAdjustment_js_1.applyRejectionPercentageLayers)(userLayers, input.rejectionApplication);
+    }
     const rejectionCalculations = input.rules
-        ? (0, rejectionPercentageAdjustment_js_1.applyRejectionPercentageAdjustmentRules)((0, rejectionPercentageAdjustment_js_1.resolveRejectionPercentageOrigin)(passedPercentage, (0, exports.parseJsonMemo)(input.memo).rejectionCalculations), input.rules, input.ctx ?? { itemIds: [] })
+        ? (0, rejectionPercentageAdjustment_js_1.applyRejectionPercentageAdjustmentRules)(userLayers.additive, input.rules, input.ctx ?? { itemIds: [] })
         : undefined;
-    const rejectionPercentage = rejectionCalculations?.finalPercentage ?? passedPercentage;
+    const chargedLayers = {
+        additive: rejectionCalculations?.finalPercentage ?? userLayers.additive,
+        successive: userLayers.successive,
+    };
+    const rejectionPercentage = (0, rejectionPercentageAdjustment_js_1.computeEffectiveRejectionPercentage)(chargedLayers);
     return {
         subtotal: safeSubtotal,
-        discount: rejectionPercentage > 0 && safeSubtotal > 0
+        discount: rejectionPercentage !== 0 && safeSubtotal > 0
             ? roundMoney(safeSubtotal * (rejectionPercentage / 100))
             : 0,
         rejectionPercentage,
+        rejectionLayers: userLayers,
         rejectionCalculations,
     };
 };

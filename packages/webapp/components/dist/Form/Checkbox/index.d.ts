@@ -10,6 +10,8 @@ type Props = {
     disabled?: boolean;
     borderColor?: string;
     required?: boolean;
+    helpText?: string;
+    helpAriaLabel?: string;
 };
 export declare const CheckBox: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

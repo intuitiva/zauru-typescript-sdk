@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, LoteWithPurchaseFormatedSchema, PurchaseOrderGraphQL, PurchasesDataTableListFormatedSchema, PurchasesListResponseSchema, UpdateOchAndDisResult } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, LoteWithPurchaseFormatedSchema, PurchaseOrderGraphQL, PurchasesDataTableListFormatedSchema, PurchasesListResponseSchema, RejectionPercentageApplication, RejectionPercentageLayers, UpdateOchAndDisResult } from "@zauru-sdk/types";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia
  * @param headers
@@ -40,9 +40,12 @@ export declare const updatePurchaseItemPrice: (headers: any, data: {
  * updateOchAndDis
  * Updates rejectionPercentage in purchase_order.memo and the monetary
  * purchase_orders.discount (qty × unit_cost × % / 100). Optionally other_charges.
+ * Prefer `rejectionApplication` (delta + mode) so successive layers are preserved.
  * `data.discount` is a legacy alias for the rejection percentage, not money.
  */
 export declare const updateOchAndDis: (headers: any, data: {
+    rejectionApplication?: RejectionPercentageApplication;
+    rejectionLayers?: RejectionPercentageLayers;
     rejectionPercentage?: number | string;
     discount?: number | string;
     other_charges?: number | string;
