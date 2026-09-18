@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.6.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.5.6...@zauru-sdk/components@6.6.0) (2026-09-18)
+
+
+### Features
+
+* registrar reglas automáticas de % rechazo en el historial ([4784849](https://github.com/intuitiva/zauru-typescript-sdk/commit/4784849904f9ac6570e60543895a858dece8e039))
+
+
+
+
+
 ## [6.5.6](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.5.5...@zauru-sdk/components@6.5.6) (2026-09-17)
 
 
