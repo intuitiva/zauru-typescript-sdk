@@ -1,6 +1,6 @@
 import { filterActiveRejectionPercentageAdjustmentRules, handlePossibleAxiosErrors, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, } from "@zauru-sdk/common";
 import { createWebAppTableRegister, getVariables, getVariablesByName, getWebAppTableRegisters, getWebAppTableRegistersRest, updateWebAppTableRegister, } from "@zauru-sdk/services";
-export { applyRejectionPercentageAdjustmentRules, filterActiveRejectionPercentageAdjustmentRules, formatRejectionPercentageAdjustmentDescription, rejectionPercentageAdjustmentRuleMatches, resolveRejectionPercentageBase, resolveRejectionPercentageOrigin, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, } from "@zauru-sdk/common";
+export { applyRejectionPercentageAdjustmentRules, filterActiveRejectionPercentageAdjustmentRules, formatAutomaticRejectionRuleHistoryDescription, formatRejectionPercentageAdjustmentDescription, getNewlyAppliedRejectionRuleSteps, isAutomaticRejectionRuleHistoryType, rejectionPercentageAdjustmentRuleMatches, resolveRejectionPercentageBase, resolveRejectionPercentageOrigin, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, REJECTION_PERCENTAGE_RULE_HISTORY_TYPE, } from "@zauru-sdk/common";
 const getTableId = async (headers, session) => {
     const vars = await getVariablesByName(headers, session, [
         REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR,

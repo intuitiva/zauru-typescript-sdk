@@ -1,6 +1,6 @@
 import type { Session } from "@remix-run/node";
 import { AxiosUtilsResponse, RejectionPercentageAdjustmentRule, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
-export { applyRejectionPercentageAdjustmentRules, filterActiveRejectionPercentageAdjustmentRules, formatRejectionPercentageAdjustmentDescription, rejectionPercentageAdjustmentRuleMatches, resolveRejectionPercentageBase, resolveRejectionPercentageOrigin, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, } from "@zauru-sdk/common";
+export { applyRejectionPercentageAdjustmentRules, filterActiveRejectionPercentageAdjustmentRules, formatAutomaticRejectionRuleHistoryDescription, formatRejectionPercentageAdjustmentDescription, getNewlyAppliedRejectionRuleSteps, isAutomaticRejectionRuleHistoryType, rejectionPercentageAdjustmentRuleMatches, resolveRejectionPercentageBase, resolveRejectionPercentageOrigin, REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR, REJECTION_PERCENTAGE_RULE_HISTORY_TYPE, } from "@zauru-sdk/common";
 export declare const getRejectionPercentageAdjustmentRules: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[]>>;
 /**
  * Same listing without a Remix session: resolves the table id over REST, for

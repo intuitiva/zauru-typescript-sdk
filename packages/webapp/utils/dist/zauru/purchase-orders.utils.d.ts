@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, LoteWithPurchaseFormatedSchema, PurchaseOrderGraphQL, PurchasesDataTableListFormatedSchema, PurchasesListResponseSchema } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, LoteWithPurchaseFormatedSchema, PurchaseOrderGraphQL, PurchasesDataTableListFormatedSchema, PurchasesListResponseSchema, UpdateOchAndDisResult } from "@zauru-sdk/types";
 /**
  * Obtiene el listado de ordenes de compra, formateado especialmente para armar la tabla de edición de porcentajes y tolerancia
  * @param headers
@@ -47,7 +47,7 @@ export declare const updateOchAndDis: (headers: any, data: {
     discount?: number | string;
     other_charges?: number | string;
     memo?: string | object;
-}, purchase_id: number, session?: Session) => Promise<AxiosUtilsResponse<boolean>>;
+}, purchase_id: number, session?: Session) => Promise<AxiosUtilsResponse<UpdateOchAndDisResult>>;
 /**
  * Obtengo los id's de las órdenes de compra en un arreglo numérico
  * @param headers

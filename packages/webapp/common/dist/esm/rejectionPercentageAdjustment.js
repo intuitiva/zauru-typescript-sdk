@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.applyRejectionPercentageAdjustmentRules = exports.resolveRejectionPercentageOrigin = exports.formatRejectionPercentageAdjustmentDescription = exports.rejectionPercentageAdjustmentRuleMatches = exports.filterActiveRejectionPercentageAdjustmentRules = exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = void 0;
+exports.applyRejectionPercentageAdjustmentRules = exports.isAutomaticRejectionRuleHistoryType = exports.formatAutomaticRejectionRuleHistoryDescription = exports.getNewlyAppliedRejectionRuleSteps = exports.rejectionRuleStepKey = exports.resolveRejectionPercentageOrigin = exports.formatRejectionPercentageAdjustmentDescription = exports.rejectionPercentageAdjustmentRuleMatches = exports.filterActiveRejectionPercentageAdjustmentRules = exports.REJECTION_PERCENTAGE_RULE_HISTORY_TYPE = exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = void 0;
 exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = "rejection_percentage_adjustment_rules_web_app_table_id";
+exports.REJECTION_PERCENTAGE_RULE_HISTORY_TYPE = "rechazo_regla_automatica";
 const defaultFilters = () => ({
     itemMode: "all",
     itemIds: [],
@@ -91,6 +92,27 @@ const resolveRejectionPercentageOrigin = (passedPercentage, previousCalculations
     return clampPercentage(safePreviousBase + (passed - previousFinal));
 };
 exports.resolveRejectionPercentageOrigin = resolveRejectionPercentageOrigin;
+const rejectionRuleStepKey = (step) => `${step.ruleName}|${step.operation}|${step.value}`;
+exports.rejectionRuleStepKey = rejectionRuleStepKey;
+/**
+ * Rules already stored in the memo are skipped so a later edit does not
+ * create a second history line (or a second +2%) for the same rule.
+ */
+const getNewlyAppliedRejectionRuleSteps = (previous, next) => {
+    if (!next?.steps?.length) {
+        return [];
+    }
+    const previousKeys = new Set((previous?.steps ?? []).map(exports.rejectionRuleStepKey));
+    return next.steps.filter((step) => !previousKeys.has((0, exports.rejectionRuleStepKey)(step)));
+};
+exports.getNewlyAppliedRejectionRuleSteps = getNewlyAppliedRejectionRuleSteps;
+const formatAutomaticRejectionRuleHistoryDescription = (step) => {
+    const sign = step.operation === "subtract" ? "-" : "+";
+    return `% Rechazo aplicado automáticamente por regla "${step.ruleName}": ${sign}${formatPercentage(step.value)}%.`;
+};
+exports.formatAutomaticRejectionRuleHistoryDescription = formatAutomaticRejectionRuleHistoryDescription;
+const isAutomaticRejectionRuleHistoryType = (type) => type === exports.REJECTION_PERCENTAGE_RULE_HISTORY_TYPE;
+exports.isAutomaticRejectionRuleHistoryType = isAutomaticRejectionRuleHistoryType;
 const applyRejectionPercentageAdjustmentRules = (basePercentage, rules, ctx) => {
     const start = Number(basePercentage);
     const safeBase = Number.isFinite(start) ? clampPercentage(start) : 0;

@@ -1,5 +1,14 @@
-import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { formatAutomaticRejectionRuleHistoryDescription, handlePossibleAxiosErrors, REJECTION_PERCENTAGE_RULE_HISTORY_TYPE, } from "@zauru-sdk/common";
 import { create4pinosPoDiscountHistory, getPurchaseOrder, getVariablesByName, update4pinosPoDiscountHistory, } from "@zauru-sdk/services";
+export const mapRejectionRuleStepsToDiscountHistory = (steps, meta) => steps.map((step) => ({
+    agency_id: meta.agency_id,
+    employee_id: meta.employee_id ?? 0,
+    employee_name: "Sistema",
+    created_at: meta.created_at ?? new Date().toISOString(),
+    description: formatAutomaticRejectionRuleHistoryDescription(step),
+    type: REJECTION_PERCENTAGE_RULE_HISTORY_TYPE,
+    discount: step.appliedAmount,
+}));
 export const add4pinosPoDiscountsHistory = async (session, headers, purchaseOrderId, discounts) => {
     return handlePossibleAxiosErrors(async () => {
         const { historial_porcentajes_de_rechazo_webapp_table_id } = await getVariablesByName(headers, session, [
