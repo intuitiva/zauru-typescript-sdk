@@ -283,6 +283,8 @@ export type PoDiscountHistoryEntry = {
     created_at: string;
     type: PoDiscountHistoryType;
     successive?: boolean;
+    /** Motivo ingresado por el usuario al editar el porcentaje (campo Observaciones). */
+    observations?: string;
 };
 export type PoDiscountHistory = {
     purchase_order_id: number;

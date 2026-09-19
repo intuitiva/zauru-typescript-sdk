@@ -7,6 +7,7 @@ export type RejectionPercentageHistoryItem = {
     created_at?: string;
     type?: string;
     successive?: boolean;
+    observations?: string;
 };
 type NamedRecord = {
     id?: number;
