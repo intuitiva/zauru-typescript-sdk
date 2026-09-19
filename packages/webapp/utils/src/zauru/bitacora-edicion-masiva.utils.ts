@@ -1,5 +1,6 @@
 import type { Session } from "@remix-run/node";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import type { GetWebAppRowsByTableIdOptions } from "@zauru-sdk/graphql";
 import {
   createWebAppTableRegister,
   getVariablesByName,
@@ -13,11 +14,13 @@ import {
   WebAppRowGraphQL,
 } from "@zauru-sdk/types";
 
+const BITACORA_DEFAULT_LIMIT = 1000;
+
 /**
  * Get saveBitacoraPOMassive from the web app table.
  * @param headers Request headers.
  * @param session Session object.
- * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
+ * @returns A Promise of AxiosUtilsResponse<WebAppTableUpdateResponse>.
  */
 export const saveBitacoraPOMassive = (
   headers: any,
@@ -44,11 +47,13 @@ export const saveBitacoraPOMassive = (
  * Get getBitacorasPOMassive from the web app table.
  * @param headers Request headers.
  * @param session Session object.
+ * @param options Optional JSON `data` filters, `createdAt` range and row limit. Defaults to the last 1000 rows.
  * @returns A Promise of AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>.
  */
 export const getBitacorasPOMassive = (
   headers: any,
-  session: Session
+  session: Session,
+  options?: GetWebAppRowsByTableIdOptions
 ): Promise<AxiosUtilsResponse<WebAppRowGraphQL<BitacoraPOMassive>[]>> => {
   return handlePossibleAxiosErrors(async () => {
     const { bitacora_ediciones_masivas_web_app_table_id } =
@@ -59,7 +64,11 @@ export const getBitacorasPOMassive = (
     const response = await getWebAppTableRegisters<BitacoraPOMassive>(
       session,
       bitacora_ediciones_masivas_web_app_table_id,
-      { limit: 1000 }
+      {
+        limit: options?.limit ?? BITACORA_DEFAULT_LIMIT,
+        ...(options?.data ? { data: options.data } : {}),
+        ...(options?.createdAt ? { createdAt: options.createdAt } : {}),
+      }
     );
 
     if (response.error || !response.data) {

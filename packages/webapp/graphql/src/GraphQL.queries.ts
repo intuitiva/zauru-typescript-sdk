@@ -865,11 +865,23 @@ export type GetWebAppRowsByTableIdOptions = {
   /**
    * JSONB `_contains` filters against `webapp_rows.data`.
    * Multiple keys are AND-ed. An array value becomes an OR of `_contains`.
+   * Numeric scalars also match the string form (`1` or `"1"`), because JSONB is typed.
    */
   data?: Record<string, WebAppRowDataFilterValue>;
+  /**
+   * Filter the row timestamp (`webapp_rows.created_at`), not `data`.
+   * Values are GraphQL string literals (`YYYY-MM-DD` or ISO-8601).
+   */
+  createdAt?: {
+    gte?: string;
+    lte?: string;
+    lt?: string;
+  };
 };
 
 const GRAPHQL_NAME_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
+const GRAPHQL_TIMESTAMP_RE =
+  /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})?)?$/;
 
 const serializeGraphQLLiteral = (value: WebAppRowDataFilterScalar): string => {
   if (value === null) {
@@ -897,6 +909,34 @@ const buildDataContainsClause = (
   return `{ data: { _contains: { ${key}: ${serializeGraphQLLiteral(value)} } } }`;
 };
 
+const expandJsonbContainsValue = (
+  value: WebAppRowDataFilterScalar,
+): WebAppRowDataFilterScalar[] => {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return [value, String(value)];
+  }
+  if (typeof value === "string" && value !== "" && Number.isFinite(Number(value))) {
+    return [Number(value), value];
+  }
+  return [value];
+};
+
+const uniqueJsonbContainsValues = (
+  values: WebAppRowDataFilterScalar[],
+): WebAppRowDataFilterScalar[] => {
+  const seen = new Set<string>();
+  const unique: WebAppRowDataFilterScalar[] = [];
+  for (const value of values) {
+    const identity = `${typeof value}:${String(value)}`;
+    if (seen.has(identity)) {
+      continue;
+    }
+    seen.add(identity);
+    unique.push(value);
+  }
+  return unique;
+};
+
 const buildDataFilterAndClauses = (
   data?: Record<string, WebAppRowDataFilterValue>,
 ): string[] => {
@@ -909,7 +949,9 @@ const buildDataFilterAndClauses = (
     if (raw === undefined) {
       continue;
     }
-    const values = Array.isArray(raw) ? raw : [raw];
+    const values = uniqueJsonbContainsValues(
+      (Array.isArray(raw) ? raw : [raw]).flatMap(expandJsonbContainsValue),
+    );
     if (values.length === 0) {
       continue;
     }
@@ -923,16 +965,49 @@ const buildDataFilterAndClauses = (
   return andParts;
 };
 
+const serializeGraphQLTimestamp = (value: string, bound: string): string => {
+  if (!GRAPHQL_TIMESTAMP_RE.test(value)) {
+    throw new Error(`Invalid webapp row created_at ${bound}: ${value}`);
+  }
+  return JSON.stringify(value);
+};
+
+const buildCreatedAtClause = (
+  createdAt?: GetWebAppRowsByTableIdOptions["createdAt"],
+): string => {
+  if (!createdAt) {
+    return "";
+  }
+
+  const bounds: string[] = [];
+  if (createdAt.gte) {
+    bounds.push(`_gte: ${serializeGraphQLTimestamp(createdAt.gte, "gte")}`);
+  }
+  if (createdAt.lte) {
+    bounds.push(`_lte: ${serializeGraphQLTimestamp(createdAt.lte, "lte")}`);
+  }
+  if (createdAt.lt) {
+    bounds.push(`_lt: ${serializeGraphQLTimestamp(createdAt.lt, "lt")}`);
+  }
+
+  return bounds.length ? `created_at: { ${bounds.join(", ")} }` : "";
+};
+
 export const getWebAppRowsByWebAppTableIdStringQuery = (
   webapp_table_id: number,
   options?: GetWebAppRowsByTableIdOptions,
 ) => {
-  const { limit, data } = options ?? {};
+  const { limit, data, createdAt } = options ?? {};
   const tableId = Number(webapp_table_id);
   const conditions: string[] = [];
 
   if (tableId) {
     conditions.push(`webapp_table_id: {_eq: ${tableId}}`);
+  }
+
+  const createdAtClause = buildCreatedAtClause(createdAt);
+  if (createdAtClause) {
+    conditions.push(createdAtClause);
   }
 
   const dataAnd = buildDataFilterAndClauses(data);
