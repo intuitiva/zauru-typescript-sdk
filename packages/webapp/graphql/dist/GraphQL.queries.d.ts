@@ -87,8 +87,18 @@ export type GetWebAppRowsByTableIdOptions = {
     /**
      * JSONB `_contains` filters against `webapp_rows.data`.
      * Multiple keys are AND-ed. An array value becomes an OR of `_contains`.
+     * Numeric scalars also match the string form (`1` or `"1"`), because JSONB is typed.
      */
     data?: Record<string, WebAppRowDataFilterValue>;
+    /**
+     * Filter the row timestamp (`webapp_rows.created_at`), not `data`.
+     * Values are GraphQL string literals (`YYYY-MM-DD` or ISO-8601).
+     */
+    createdAt?: {
+        gte?: string;
+        lte?: string;
+        lt?: string;
+    };
 };
 export declare const getWebAppRowsByWebAppTableIdStringQuery: (webapp_table_id: number, options?: GetWebAppRowsByTableIdOptions) => string;
 export declare const getPayeeCategoryByIdStringQuery: (id: number) => string;

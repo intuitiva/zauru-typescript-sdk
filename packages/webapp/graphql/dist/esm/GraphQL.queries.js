@@ -677,6 +677,7 @@ query getWebAppRow {
 `;
 exports.getWebAppRowStringQuery = getWebAppRowStringQuery;
 const GRAPHQL_NAME_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
+const GRAPHQL_TIMESTAMP_RE = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})?)?$/;
 const serializeGraphQLLiteral = (value) => {
     if (value === null) {
         return "null";
@@ -698,6 +699,28 @@ const buildDataContainsClause = (key, value) => {
     }
     return `{ data: { _contains: { ${key}: ${serializeGraphQLLiteral(value)} } } }`;
 };
+const expandJsonbContainsValue = (value) => {
+    if (typeof value === "number" && Number.isFinite(value)) {
+        return [value, String(value)];
+    }
+    if (typeof value === "string" && value !== "" && Number.isFinite(Number(value))) {
+        return [Number(value), value];
+    }
+    return [value];
+};
+const uniqueJsonbContainsValues = (values) => {
+    const seen = new Set();
+    const unique = [];
+    for (const value of values) {
+        const identity = `${typeof value}:${String(value)}`;
+        if (seen.has(identity)) {
+            continue;
+        }
+        seen.add(identity);
+        unique.push(value);
+    }
+    return unique;
+};
 const buildDataFilterAndClauses = (data) => {
     if (!data) {
         return [];
@@ -707,7 +730,7 @@ const buildDataFilterAndClauses = (data) => {
         if (raw === undefined) {
             continue;
         }
-        const values = Array.isArray(raw) ? raw : [raw];
+        const values = uniqueJsonbContainsValues((Array.isArray(raw) ? raw : [raw]).flatMap(expandJsonbContainsValue));
         if (values.length === 0) {
             continue;
         }
@@ -721,12 +744,38 @@ const buildDataFilterAndClauses = (data) => {
     }
     return andParts;
 };
+const serializeGraphQLTimestamp = (value, bound) => {
+    if (!GRAPHQL_TIMESTAMP_RE.test(value)) {
+        throw new Error(`Invalid webapp row created_at ${bound}: ${value}`);
+    }
+    return JSON.stringify(value);
+};
+const buildCreatedAtClause = (createdAt) => {
+    if (!createdAt) {
+        return "";
+    }
+    const bounds = [];
+    if (createdAt.gte) {
+        bounds.push(`_gte: ${serializeGraphQLTimestamp(createdAt.gte, "gte")}`);
+    }
+    if (createdAt.lte) {
+        bounds.push(`_lte: ${serializeGraphQLTimestamp(createdAt.lte, "lte")}`);
+    }
+    if (createdAt.lt) {
+        bounds.push(`_lt: ${serializeGraphQLTimestamp(createdAt.lt, "lt")}`);
+    }
+    return bounds.length ? `created_at: { ${bounds.join(", ")} }` : "";
+};
 const getWebAppRowsByWebAppTableIdStringQuery = (webapp_table_id, options) => {
-    const { limit, data } = options ?? {};
+    const { limit, data, createdAt } = options ?? {};
     const tableId = Number(webapp_table_id);
     const conditions = [];
     if (tableId) {
         conditions.push(`webapp_table_id: {_eq: ${tableId}}`);
+    }
+    const createdAtClause = buildCreatedAtClause(createdAt);
+    if (createdAtClause) {
+        conditions.push(createdAtClause);
     }
     const dataAnd = buildDataFilterAndClauses(data);
     if (dataAnd.length > 0) {
