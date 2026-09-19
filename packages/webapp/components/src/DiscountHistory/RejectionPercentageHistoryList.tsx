@@ -13,6 +13,7 @@ export type RejectionPercentageHistoryItem = {
   created_at?: string;
   type?: string;
   successive?: boolean;
+  observations?: string;
 };
 
 type NamedRecord = {
@@ -88,6 +89,12 @@ export const RejectionPercentageHistoryList = ({
           findName(agencies, item.agency_id) ||
           (item.agency_id != null ? `ID: ${item.agency_id}` : "No especificada");
         const description = item.description || "Sin descripción";
+        const observations = item.observations?.trim() ?? "";
+        const noteClassName = isSuccessive
+          ? "text-sm text-amber-900 mb-1"
+          : isAutomatic
+            ? "text-sm text-indigo-900 mb-1"
+            : "text-sm text-gray-700 mb-1";
 
         return (
           <div
@@ -130,18 +137,15 @@ export const RejectionPercentageHistoryList = ({
                 </span>
               ) : null}
             </div>
-            <p
-              className={
-                isSuccessive
-                  ? "text-sm text-amber-900 mb-1"
-                  : isAutomatic
-                  ? "text-sm text-indigo-900 mb-1"
-                  : "text-sm text-gray-700 mb-1"
-              }
-              title={description}
-            >
+            <p className={noteClassName} title={description}>
               {description}
             </p>
+            {observations ? (
+              <p className={`${noteClassName} break-words whitespace-pre-wrap`}>
+                <span className="font-medium">Motivo: </span>
+                {observations}
+              </p>
+            ) : null}
             <div className="flex justify-between gap-3 text-xs text-gray-500">
               <span className="min-w-0">
                 {isAutomatic
