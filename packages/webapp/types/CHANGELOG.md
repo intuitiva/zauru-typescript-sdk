@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.19.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.18.0...@zauru-sdk/types@6.19.0) (2026-09-19)
+
+
+### Features
+
+* guardar y mostrar motivo en historial de % rechazo ([02e546f](https://github.com/intuitiva/zauru-typescript-sdk/commit/02e546f716538b4c91542398e3984153145d862e))
+
+
+
+
+
 # [6.18.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.17.0...@zauru-sdk/types@6.18.0) (2026-09-18)
 
 
