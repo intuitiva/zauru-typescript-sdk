@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.8.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.7.0...@zauru-sdk/graphql@6.8.0) (2026-09-19)
+
+
+### Features
+
+* filtrar filas de webapp table por JSON y created_at ([ea21d48](https://github.com/intuitiva/zauru-typescript-sdk/commit/ea21d48b877d44726767f97be592c5c34a119e83))
+
+
+
+
+
 # [6.7.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.6.0...@zauru-sdk/graphql@6.7.0) (2026-09-11)
 
 
