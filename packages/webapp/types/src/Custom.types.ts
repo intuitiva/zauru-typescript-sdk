@@ -457,6 +457,7 @@ export type PurchasesDataTableListFormatedSchema = {
 
 export type UpdatePurchaseOrderBody = {
   purchase_order: {
+    issue_date?: string;
     shipment_reference?: string;
     id_number?: string;
     discount?: number;
