@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.20.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.19.0...@zauru-sdk/types@6.20.0) (2026-09-22)
+
+
+### Features
+
+* permitir fecha en actualización de órdenes de compra ([ce32ef4](https://github.com/intuitiva/zauru-typescript-sdk/commit/ce32ef47d6e6a3f1d923faf1c3b1de388d985ec8))
+
+
+
+
+
 # [6.19.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.18.0...@zauru-sdk/types@6.19.0) (2026-09-19)
 
 
