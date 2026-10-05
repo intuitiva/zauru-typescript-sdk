@@ -26,6 +26,7 @@ export * from "./zauru/rejectionPercentageAdjustmentRules.utils.js";
 export * from "./zauru/weeklyItemPrice.utils.js";
 export * from "./zauru/templates.utils.js";
 export * from "./zauru/tiposMuestra.utils.js";
+export * from "./zauru/rbac/index.js";
 export * from "./zauru/webapp-tables.utils.js";
 export * from "./zauru/4pinos-po-discount-history.utils.js";
 export * from "./zauru/programaciones.utils.js";

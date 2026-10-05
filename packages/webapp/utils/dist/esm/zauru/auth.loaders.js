@@ -41,7 +41,7 @@ export function createLoginAction(extras) {
             return redirect(authorizeUrl(request));
         }
         if (session.has("code")) {
-            if (isDenied(extras?.requireAccess?.(session))) {
+            if (isDenied(await extras?.requireAccess?.(session))) {
                 return redirect("/");
             }
             return redirect("/home");
@@ -50,7 +50,7 @@ export function createLoginAction(extras) {
         if (loginResponse.error || !loginResponse.data) {
             return Response.json(loginErrorPayload(loginResponse.userMsg?.toString() ?? ""));
         }
-        if (isDenied(extras?.requireAccess?.(session))) {
+        if (isDenied(await extras?.requireAccess?.(session))) {
             return Response.json(loginErrorPayload("No tienes permiso para acceder a esta aplicación. Si crees que esto es un error, contacta al administrador.", "Acceso denegado"));
         }
         if (extras?.afterLogin) {
@@ -78,7 +78,7 @@ export function createSessionGuardLoader(extras) {
         if (!session.has("username")) {
             return redirect("/");
         }
-        if (isDenied(extras?.requireAccess?.(session))) {
+        if (isDenied(await extras?.requireAccess?.(session))) {
             return redirect("/");
         }
         return Response.json({});
@@ -104,7 +104,7 @@ export function createIndexLoader(extras) {
     return async ({ request }) => {
         const session = await getSession(request.headers.get("Cookie"));
         if (session.has("username")) {
-            if (isDenied(extras?.requireAccess?.(session))) {
+            if (isDenied(await extras?.requireAccess?.(session))) {
                 return Response.json({});
             }
             return redirect("/home");
@@ -121,7 +121,7 @@ export function createReloadCatalogsLoader(extras) {
         if (!session.has("username")) {
             return redirect("/");
         }
-        if (isDenied(extras?.requireAccess?.(session))) {
+        if (isDenied(await extras?.requireAccess?.(session))) {
             return redirect("/");
         }
         try {

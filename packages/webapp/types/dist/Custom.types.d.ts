@@ -1031,3 +1031,42 @@ export type OpenWorkOrdersDataTableResponse = {
     recordsFiltered: number;
     data: OpenWorkOrdersDataTableRow[];
 };
+export type PermissionAction = {
+    key: string;
+    label: string;
+};
+export type PermissionGroup = {
+    id: string;
+    label: string;
+    actions: PermissionAction[];
+};
+export type WebappRole = {
+    name: string;
+    description?: string;
+    permission_keys: string[];
+    fechaEliminacion?: string;
+};
+export type WebappEmployeeRole = {
+    employee_id: number;
+    role_id: number;
+    allowed_item_ids?: number[];
+    allowed_payee_ids?: number[];
+    fechaEliminacion?: string;
+};
+export type WebappAccessContext = {
+    employeeId: number;
+    email: string;
+    superAdmin: boolean;
+    roleId: number | null;
+    roleName: string | null;
+    assignmentId: number | null;
+    permissionKeys: string[];
+    allowedItemIds: number[];
+    allowedPayeeIds: number[];
+};
+export type WebappRbacConfig = {
+    rolesTableVar: string;
+    employeeRolesTableVar: string;
+    allPermissionKeys: readonly string[];
+    superAdminEmailSuffixes?: readonly string[];
+};

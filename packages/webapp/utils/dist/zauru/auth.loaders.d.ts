@@ -7,7 +7,7 @@ export type AuthAccessExtras = {
      * Return `false` to deny. Throw `redirect(...)` to send the user elsewhere.
      * Any other return (including `void`) allows access.
      */
-    requireAccess?: (session: AuthSession) => boolean | void;
+    requireAccess?: (session: AuthSession) => boolean | void | Promise<boolean | void>;
 };
 export type LoginActionExtras = AuthAccessExtras & {
     afterLogin?: (ctx: {
