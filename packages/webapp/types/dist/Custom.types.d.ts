@@ -30,12 +30,19 @@ export type PriceAdjustmentRule = {
     filtros: PriceAdjustmentFilters;
     fechaEliminacion: string;
 };
+export type PriceAdjustmentReversalRule = {
+    nombre: string;
+    activa: boolean;
+    sourceRuleId: number;
+    fechaEliminacion: string;
+};
 export type PriceAdjustmentContext = {
     itemId: number;
     tipo?: string;
     providerCategoryId?: number;
 };
 export type PriceAdjustmentStep = {
+    ruleId?: number;
     ruleName: string;
     operation: PriceAdjustmentOperation;
     valueType: PriceAdjustmentValueType;
@@ -50,11 +57,49 @@ export type PriceAdjustmentResult = {
     steps: PriceAdjustmentStep[];
 };
 export type CostCalculationMemo = {
+    calculationId?: string;
+    detailId?: number;
     itemId: number;
     basePrice: number;
     finalPrice: number;
     description: string;
     steps: PriceAdjustmentStep[];
+};
+export type CertificationPenaltyHistoryEntry = {
+    id: string;
+    calculationId: string;
+    detailId: number;
+    itemId: number;
+    sourceRuleId: number;
+    sourceRuleName: string;
+    reversalRuleId: number;
+    reversalRuleName: string;
+    amount: number;
+    previousPrice: number;
+    finalPrice: number;
+    employeeId: number;
+    employeeName: string;
+    agencyId: number;
+    createdAt: string;
+    bitacoraId?: number;
+};
+export type PriceAdjustmentReversalMatch = {
+    sourceRuleId: number;
+    sourceRuleName: string;
+    reversalRuleId: number;
+    reversalRuleName: string;
+    appliedAmount: number;
+};
+export type PriceAdjustmentReversalPlan = {
+    status: "eligible" | "ineligible" | "already_applied" | "price_changed";
+    reason?: string;
+    calculationId?: string;
+    detailId?: number;
+    itemId: number;
+    previousPrice: number;
+    finalPrice: number;
+    penaltyAmount: number;
+    matches: PriceAdjustmentReversalMatch[];
 };
 export type RejectionPercentageAdjustmentRule = {
     nombre: string;
@@ -942,6 +987,7 @@ export type JsonMemoType = {
     rejectionPercentage?: number;
     rejectionLayers?: RejectionPercentageLayers;
     costCalculations?: CostCalculationMemo[];
+    certificationPenaltyHistory?: CertificationPenaltyHistoryEntry[];
     rejectionCalculations?: RejectionCalculationMemo;
 };
 export type CloseOpenWorkOrderDetailInput = {
