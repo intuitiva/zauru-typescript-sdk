@@ -13,12 +13,17 @@ import {
   PriceAdjustmentFilters,
   PriceAdjustmentResult,
   PriceAdjustmentRule,
+  PriceAdjustmentReversalPlan,
+  PriceAdjustmentReversalRule,
   PriceAdjustmentStep,
+  CertificationPenaltyHistoryEntry,
   WebAppRowGraphQL,
   WebAppTableUpdateResponse,
 } from "@zauru-sdk/types";
 
 const TABLE_VAR = "price_adjustment_rules_web_app_table_id";
+export const PRICE_ADJUSTMENT_REVERSAL_RULES_TABLE_VAR =
+  "price_adjustment_reversal_rules_web_app_table_id";
 
 const DEFAULT_FILTERS: PriceAdjustmentFilters = {
   itemMode: "all",
@@ -100,6 +105,68 @@ export const updatePriceAdjustmentRule = (
     return updateWebAppTableRegister(headers, tableId, Number(id), body);
   });
 };
+
+const getReversalTableId = async (headers: any, session: Session) => {
+  const vars = await getVariablesByName(headers, session, [
+    PRICE_ADJUSTMENT_REVERSAL_RULES_TABLE_VAR,
+  ]);
+  return vars[PRICE_ADJUSTMENT_REVERSAL_RULES_TABLE_VAR];
+};
+
+export const filterActivePriceAdjustmentReversalRules = (
+  rules?: WebAppRowGraphQL<PriceAdjustmentReversalRule>[],
+) =>
+  (rules ?? []).filter(
+    (rule) => !rule.data?.fechaEliminacion && rule.data?.activa !== false,
+  );
+
+export const getPriceAdjustmentReversalRules = (
+  headers: any,
+  session: Session,
+): Promise<
+  AxiosUtilsResponse<WebAppRowGraphQL<PriceAdjustmentReversalRule>[]>
+> =>
+  handlePossibleAxiosErrors(async () => {
+    const tableId = await getReversalTableId(headers, session);
+    const response =
+      await getWebAppTableRegisters<PriceAdjustmentReversalRule>(
+        session,
+        tableId,
+      );
+
+    if (response.error) {
+      throw new Error(
+        `Ocurrió un error al consultar las reglas de reversión de precio: ${response.userMsg}`,
+      );
+    }
+
+    return response.data ?? [];
+  });
+
+export const createPriceAdjustmentReversalRule = (
+  headers: any,
+  session: Session,
+  body: PriceAdjustmentReversalRule,
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> =>
+  handlePossibleAxiosErrors(async () => {
+    const tableId = await getReversalTableId(headers, session);
+    return createWebAppTableRegister<PriceAdjustmentReversalRule>(
+      headers,
+      tableId,
+      body,
+    );
+  });
+
+export const updatePriceAdjustmentReversalRule = (
+  headers: any,
+  session: Session,
+  id: string | number,
+  body: Partial<PriceAdjustmentReversalRule>,
+): Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>> =>
+  handlePossibleAxiosErrors(async () => {
+    const tableId = await getReversalTableId(headers, session);
+    return updateWebAppTableRegister(headers, tableId, Number(id), body);
+  });
 
 export const normalizeComparableValue = (
   value: string | number | undefined | null,
@@ -207,12 +274,24 @@ export const applyPriceAdjustmentRules = (
   const steps: PriceAdjustmentStep[] = [];
 
   const normalized = rules
-    .map((rule) => ("data" in rule ? rule.data : rule))
-    .filter((rule): rule is PriceAdjustmentRule => Boolean(rule))
-    .filter((rule) => !rule.fechaEliminacion && rule.activa !== false)
-    .sort((a, b) => (a.prioridad ?? 0) - (b.prioridad ?? 0));
+    .map((rule) => ({
+      rule: "data" in rule ? rule.data : rule,
+      ruleId: "data" in rule ? rule.id : undefined,
+    }))
+    .filter((entry) => Boolean(entry.rule)) as Array<{
+    rule: PriceAdjustmentRule;
+    ruleId: number | undefined;
+  }>;
 
-  for (const rule of normalized) {
+  const activeRules = normalized
+    .filter(
+      ({ rule }) => !rule.fechaEliminacion && rule.activa !== false,
+    )
+    .sort(
+      (a, b) => (a.rule.prioridad ?? 0) - (b.rule.prioridad ?? 0),
+    );
+
+  for (const { rule, ruleId } of activeRules) {
     if (!priceAdjustmentRuleMatches(rule, ctx)) {
       continue;
     }
@@ -230,6 +309,7 @@ export const applyPriceAdjustmentRules = (
 
     runningTotal = roundMoney(runningTotal);
     steps.push({
+      ...(ruleId !== undefined ? { ruleId } : {}),
       ruleName: rule.nombre,
       operation: rule.operacion,
       valueType: rule.tipoValor,
@@ -247,4 +327,120 @@ export const applyPriceAdjustmentRules = (
   };
   result.description = formatPriceAdjustmentDescription(result);
   return result;
+};
+
+const sameMoney = (left: number, right: number) =>
+  Math.abs(roundMoney(left, 2) - roundMoney(right, 2)) < 0.000001;
+
+export const buildPriceAdjustmentReversalPlan = ({
+  calculation,
+  currentPrice,
+  reversalRules,
+  history,
+}: {
+  calculation: {
+    calculationId?: string;
+    detailId?: number;
+    itemId: number;
+    finalPrice: number;
+    steps: PriceAdjustmentStep[];
+  };
+  currentPrice: number;
+  reversalRules: WebAppRowGraphQL<PriceAdjustmentReversalRule>[];
+  history?: CertificationPenaltyHistoryEntry[];
+}): PriceAdjustmentReversalPlan => {
+  const base = {
+    calculationId: calculation.calculationId,
+    detailId: calculation.detailId,
+    itemId: calculation.itemId,
+    previousPrice: roundMoney(currentPrice, 2),
+    finalPrice: roundMoney(currentPrice, 2),
+    penaltyAmount: 0,
+    matches: [],
+  };
+
+  if (!calculation.calculationId || calculation.detailId == null) {
+    return {
+      ...base,
+      status: "ineligible",
+      reason: "El cálculo no contiene calculationId y detailId.",
+    };
+  }
+
+  const activeRules = filterActivePriceAdjustmentReversalRules(reversalRules);
+  const reversalBySource = new Map(
+    activeRules.map((entry) => [entry.data.sourceRuleId, entry]),
+  );
+  const applicable = calculation.steps.flatMap((step) => {
+    if (
+      step.ruleId == null ||
+      step.operation !== "add" ||
+      step.appliedAmount <= 0
+    ) {
+      return [];
+    }
+    const reversal = reversalBySource.get(step.ruleId);
+    if (!reversal) return [];
+    return [
+      {
+        sourceRuleId: step.ruleId,
+        sourceRuleName: step.ruleName,
+        reversalRuleId: reversal.id,
+        reversalRuleName: reversal.data.nombre,
+        appliedAmount: roundMoney(step.appliedAmount),
+      },
+    ];
+  });
+
+  if (applicable.length === 0) {
+    return {
+      ...base,
+      status: "ineligible",
+      reason: "Ningún paso del cálculo tiene una regla de reversión activa.",
+    };
+  }
+
+  const calculationHistory = (history ?? []).filter(
+    (entry) =>
+      entry.calculationId === calculation.calculationId &&
+      entry.detailId === calculation.detailId,
+  );
+  const alreadyAppliedSourceIds = new Set(
+    calculationHistory.map((entry) => entry.sourceRuleId),
+  );
+  const pending = applicable.filter(
+    (match) => !alreadyAppliedSourceIds.has(match.sourceRuleId),
+  );
+
+  if (pending.length === 0) {
+    return {
+      ...base,
+      status: "already_applied",
+      reason: "Todas las reglas vinculadas ya fueron penalizadas.",
+    };
+  }
+
+  const expectedCurrentPrice = roundMoney(
+    Number(calculation.finalPrice) +
+      calculationHistory.reduce((sum, entry) => sum + entry.amount, 0),
+    2,
+  );
+  if (!sameMoney(currentPrice, expectedCurrentPrice)) {
+    return {
+      ...base,
+      status: "price_changed",
+      reason: `El precio actual ${roundMoney(currentPrice, 2)} no coincide con el precio esperado ${expectedCurrentPrice}.`,
+    };
+  }
+
+  const penaltyAmount = roundMoney(
+    -pending.reduce((sum, match) => sum + match.appliedAmount, 0),
+  );
+  return {
+    ...base,
+    status: "eligible",
+    finalPrice: roundMoney(currentPrice + penaltyAmount, 2),
+    penaltyAmount,
+    matches: pending,
+  };
 };
