@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.21.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.20.0...@zauru-sdk/utils@6.21.0) (2026-10-05)
+
+
+### Features
+
+* motor RBAC genérico para webapps Remix (roles, asignaciones y matriz) ([b48c635](https://github.com/intuitiva/zauru-typescript-sdk/commit/b48c635101814ebf0b362636839b626d23a13b57))
+
+
+
+
+
 # [6.20.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.19.1...@zauru-sdk/utils@6.20.0) (2026-10-05)
 
 
