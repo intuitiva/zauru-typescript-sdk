@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.10.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.9.0...@zauru-sdk/components@6.10.0) (2026-10-05)
+
+
+### Features
+
+* menú Configuración genérico y extras de asignación fuera del SDK ([2691957](https://github.com/intuitiva/zauru-typescript-sdk/commit/2691957c9dba23226a4b8d371fee26b221e126f0))
+
+
+
+
+
 # [6.9.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.8.3...@zauru-sdk/components@6.9.0) (2026-10-05)
 
 
