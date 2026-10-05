@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.20.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.19.1...@zauru-sdk/utils@6.20.0) (2026-10-05)
+
+
+### Features
+
+* agregar reglas de reversión de ajustes de precio ([7e2d9ee](https://github.com/intuitiva/zauru-typescript-sdk/commit/7e2d9eede53c93314bc936b4ad171a63f691d26c))
+
+
+
+
+
 ## [6.19.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.19.0...@zauru-sdk/utils@6.19.1) (2026-09-22)
 
 **Note:** Version bump only for package @zauru-sdk/utils
