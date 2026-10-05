@@ -20,7 +20,9 @@ export type AuthAccessExtras = {
    * Return `false` to deny. Throw `redirect(...)` to send the user elsewhere.
    * Any other return (including `void`) allows access.
    */
-  requireAccess?: (session: AuthSession) => boolean | void;
+  requireAccess?: (
+    session: AuthSession,
+  ) => boolean | void | Promise<boolean | void>;
 };
 
 export type LoginActionExtras = AuthAccessExtras & {
@@ -85,7 +87,7 @@ export function createLoginAction(
     }
 
     if (session.has("code")) {
-      if (isDenied(extras?.requireAccess?.(session))) {
+      if (isDenied(await extras?.requireAccess?.(session))) {
         return redirect("/");
       }
       return redirect("/home");
@@ -99,7 +101,7 @@ export function createLoginAction(
       );
     }
 
-    if (isDenied(extras?.requireAccess?.(session))) {
+    if (isDenied(await extras?.requireAccess?.(session))) {
       return Response.json(
         loginErrorPayload(
           "No tienes permiso para acceder a esta aplicación. Si crees que esto es un error, contacta al administrador.",
@@ -140,7 +142,7 @@ export function createSessionGuardLoader(
     if (!session.has("username")) {
       return redirect("/");
     }
-    if (isDenied(extras?.requireAccess?.(session))) {
+    if (isDenied(await extras?.requireAccess?.(session))) {
       return redirect("/");
     }
     return Response.json({});
@@ -171,7 +173,7 @@ export function createIndexLoader(extras?: AuthAccessExtras): LoaderFunction {
   return async ({ request }) => {
     const session = await getSession(request.headers.get("Cookie"));
     if (session.has("username")) {
-      if (isDenied(extras?.requireAccess?.(session))) {
+      if (isDenied(await extras?.requireAccess?.(session))) {
         return Response.json({});
       }
       return redirect("/home");
@@ -191,7 +193,7 @@ export function createReloadCatalogsLoader(
     if (!session.has("username")) {
       return redirect("/");
     }
-    if (isDenied(extras?.requireAccess?.(session))) {
+    if (isDenied(await extras?.requireAccess?.(session))) {
       return redirect("/");
     }
 
