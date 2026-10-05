@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   useRef,
+  useId,
   KeyboardEvent,
   useCallback,
 } from "react";
@@ -89,6 +90,10 @@ export const SelectField = (props: Props) => {
   );
   const [isTabPressed, setIsTabPressed] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const generatedInputId = useId();
+  const inputId = id ?? (name ? `${name}-input` : generatedInputId);
+  const errorId = `${inputId}-error`;
+  const hintId = `${inputId}-hint`;
 
   // Use refs to store stable references to callbacks
   const onChangeRef = useRef(onChange);
@@ -409,12 +414,11 @@ export const SelectField = (props: Props) => {
     return (
       <>
         {title && (
-          <label
-            htmlFor={error ? `${name}-error` : `${name}-success`}
+          <span
             className={`block text-sm font-medium text-${color}-700 dark:text-${color}-500`}
           >
             {title}
-          </label>
+          </span>
         )}
         <LoadingInputSkeleton />
         {helpText && (
@@ -432,7 +436,7 @@ export const SelectField = (props: Props) => {
     <div className={`col-span-6 sm:col-span-3 ${className}`} ref={selectRef}>
       {title && (
         <label
-          htmlFor={error ? `${name}-error` : `${name}-success`}
+          htmlFor={inputId}
           className={`block text-sm font-medium ${
             color === "red"
               ? "text-red-700 dark:text-red-500"
@@ -447,7 +451,7 @@ export const SelectField = (props: Props) => {
         <div className="flex items-center">
           <input
             type="text"
-            id={id}
+            id={inputId}
             value={inputValue}
             onFocus={() => setIsOpen(true)}
             onKeyDown={handleKeyDown}
@@ -459,6 +463,8 @@ export const SelectField = (props: Props) => {
             onChange={handleInputChange}
             onBlur={handleBlur}
             required={required}
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? errorId : hint ? hintId : undefined}
           />
           {isClearable && (value || valueMulti.length > 0) && (
             <button
@@ -570,13 +576,17 @@ export const SelectField = (props: Props) => {
         </ul>
       )}
       {error && (
-        <p className={`mt-2 text-sm text-${color}-600 dark:text-${color}-500`}>
+        <p
+          id={errorId}
+          className={`mt-2 text-sm text-${color}-600 dark:text-${color}-500`}
+        >
           <span className="font-medium">Oops!</span>{" "}
           {error?.message?.toString() || "Error desconocido"}
         </p>
       )}
       {!error && hint && (
         <p
+          id={hintId}
           className={`mt-2 italic text-sm text-${color}-500 dark:text-${color}-400`}
         >
           {hint}
