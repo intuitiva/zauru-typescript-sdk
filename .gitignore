@@ -10,3 +10,5 @@ packages/webapp/common/.DS_Store
 .npmrc
 .DS_Store
 packages/webapp/components/build/
+.DS_Store
+.DS_Store
