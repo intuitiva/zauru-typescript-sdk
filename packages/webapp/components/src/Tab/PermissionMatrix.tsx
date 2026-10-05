@@ -174,6 +174,8 @@ function GroupRows({
               >
                 <input
                   type="checkbox"
+                  id={`permission-${role.id}-${action.key}`}
+                  name={`permission-${role.id}-${action.key}`}
                   className={checkboxClass}
                   checked={granted}
                   disabled={disabled || pending}
