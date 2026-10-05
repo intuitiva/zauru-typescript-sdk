@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.11.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.10.0...@zauru-sdk/components@6.11.0) (2026-10-05)
+
+
+### Bug Fixes
+
+* asociar etiquetas del selector con su campo ([1626bbd](https://github.com/intuitiva/zauru-typescript-sdk/commit/1626bbdd58971c353bf03b07533a171a05ec8571))
+* identificar controles de la matriz de permisos ([472c956](https://github.com/intuitiva/zauru-typescript-sdk/commit/472c9565f2dc167e8566706f58c27ca55c6c9d09))
+* limitar altura de selecciones múltiples ([b0e578d](https://github.com/intuitiva/zauru-typescript-sdk/commit/b0e578df1d7ec2198abfd57515b6dc8409227c4d))
+
+
+### Features
+
+* exportar gestión de acceso de empleados ([df97155](https://github.com/intuitiva/zauru-typescript-sdk/commit/df97155d1370cdb624cc3ceb3905111a42edf65f))
+* exportar gestión de roles ([f0ee633](https://github.com/intuitiva/zauru-typescript-sdk/commit/f0ee63301583591b72faba93b8eab2d7ec8e735f))
+
+
+
+
+
 # [6.10.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.9.0...@zauru-sdk/components@6.10.0) (2026-10-05)
 
 
