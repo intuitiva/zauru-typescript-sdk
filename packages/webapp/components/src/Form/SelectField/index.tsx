@@ -464,9 +464,14 @@ export const SelectField = (props: Props) => {
             <button
               type="button"
               onClick={handleClear}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              aria-label={
+                isMulti
+                  ? "Limpiar todas las opciones seleccionadas"
+                  : "Limpiar la opción seleccionada"
+              }
+              className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-gray-600 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
             >
-              ×
+              <span aria-hidden="true">×</span>
             </button>
           )}
           {helpText && (
@@ -542,23 +547,27 @@ export const SelectField = (props: Props) => {
         )}
       </div>
       {isMulti && valueMulti.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-2">
+        <ul
+          className="mt-2 flex max-h-20 flex-wrap gap-1.5 overflow-auto overscroll-contain rounded-md border border-blue-100 bg-blue-50/40 p-1.5"
+          aria-label="Opciones seleccionadas"
+        >
           {valueMulti.map((option, index) => (
-            <span
+            <li
               key={`${option.value}-${index}`}
-              className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+              className="inline-flex max-w-full shrink-0 items-center rounded bg-blue-100 py-0.5 pl-2.5 pr-0.5 text-xs font-semibold text-blue-800"
             >
-              {option.label}
+              <span className="whitespace-nowrap">{option.label}</span>
               <button
                 type="button"
                 onClick={() => handleRemoveMultiValue(option)}
-                className="ml-1 text-blue-600 hover:text-blue-800"
+                aria-label={`Quitar ${option.label}`}
+                className="ml-1 inline-flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded text-blue-700 hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
               >
-                ×
+                <span aria-hidden="true">×</span>
               </button>
-            </span>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
       {error && (
         <p className={`mt-2 text-sm text-${color}-600 dark:text-${color}-500`}>
