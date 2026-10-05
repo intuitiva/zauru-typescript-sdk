@@ -24,7 +24,6 @@ import {
 import {
   DEFAULT_SUPER_ADMIN_EMAIL_SUFFIXES,
   isValidPermissionKey,
-  normalizeIdList,
   normalizePermissionKeys,
 } from "./catalog.js";
 
@@ -53,8 +52,7 @@ export type UpdateRoleInput = Partial<
 export type AssignEmployeeRoleInput = {
   employee_id: number;
   role_id: number | null;
-  allowed_item_ids?: number[];
-  allowed_payee_ids?: number[];
+  extra?: Record<string, unknown>;
 };
 
 export function createWebappRbac(config: WebappRbacConfig) {
@@ -288,22 +286,16 @@ export function createWebappRbac(config: WebappRbacConfig) {
           current.id,
           {
             ...current.data,
-            allowed_item_ids: normalizeIdList(
-              body.allowed_item_ids ?? current.data.allowed_item_ids,
-            ),
-            allowed_payee_ids: normalizeIdList(
-              body.allowed_payee_ids ?? current.data.allowed_payee_ids,
-            ),
             fechaEliminacion: deletedAt(),
           },
         );
       }
 
-      const payload: WebappEmployeeRole = {
+      const payload = {
+        ...current?.data,
+        ...(body.extra ?? {}),
         employee_id: employeeId,
         role_id: toNumber(body.role_id),
-        allowed_item_ids: normalizeIdList(body.allowed_item_ids),
-        allowed_payee_ids: normalizeIdList(body.allowed_payee_ids),
         fechaEliminacion: "",
       };
 
@@ -339,9 +331,8 @@ export function createWebappRbac(config: WebappRbacConfig) {
         roleId: null,
         roleName: null,
         assignmentId: null,
+        assignment: null,
         permissionKeys: [...config.allPermissionKeys],
-        allowedItemIds: [],
-        allowedPayeeIds: [],
       };
     }
 
@@ -376,9 +367,8 @@ export function createWebappRbac(config: WebappRbacConfig) {
       roleId,
       roleName: role.data.name,
       assignmentId: assignment.id,
+      assignment: assignment.data,
       permissionKeys: sanitizeKeys(role.data.permission_keys),
-      allowedItemIds: normalizeIdList(assignment.data.allowed_item_ids),
-      allowedPayeeIds: normalizeIdList(assignment.data.allowed_payee_ids),
     };
   };
 

@@ -15,7 +15,12 @@ import type {
 import { Link, useNavigate, useLocation } from "@remix-run/react";
 import { useAppSelector } from "@zauru-sdk/redux";
 
-const OptionsDropDownButton = ({ color, options, name }: EntityProps) => {
+const OptionsDropDownButton = ({
+  color,
+  options,
+  name,
+  ariaLabel,
+}: EntityProps & { ariaLabel?: string }) => {
   const [showOptionsMenu, setShowOptionsMenu] = useState(true);
 
   return (
@@ -23,8 +28,14 @@ const OptionsDropDownButton = ({ color, options, name }: EntityProps) => {
       <div className="flex justify-center">
         <div className="relative inline-block">
           <button
+            type="button"
+            aria-label={
+              ariaLabel ?? (typeof name === "string" ? name : "Menú")
+            }
+            aria-haspopup="menu"
+            aria-expanded={!showOptionsMenu}
             onClick={() => setShowOptionsMenu(!showOptionsMenu)}
-            className={`relative flex cursor-pointer items-center p-2 text-xs text-white ${color.bg700} active:${color.bg900} border border-transparent rounded-full uppercase focus:ring-opacity-40 focus:outline-none`}
+            className={`relative flex cursor-pointer items-center p-2 text-xs text-white ${color.bg700} active:${color.bg900} border border-transparent rounded-full uppercase focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2`}
           >
             {name ?? <OpcionButtonSvgIcon />}
             <DropDownArrowSvgIcon />
@@ -128,6 +139,7 @@ export const NavBar = ({
   selectedColor,
   version,
   reloadCatalogsOption,
+  settingsOption,
   showDarkModeToggle = false,
 }: NavBarProps) => {
   const color: ColorInterface = COLORS[selectedColor];
@@ -191,7 +203,35 @@ export const NavBar = ({
           {loggedIn && (
             <OptionsDropDownButton
               color={color}
+              ariaLabel="Menú de usuario"
               options={[
+                settingsOption && (
+                  <Link
+                    key="configuracion"
+                    className="block cursor-pointer px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    to="/configuracion"
+                  >
+                    <div className="mx-auto pt-2">
+                      <svg
+                        className="h-5 w-5 mr-1"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        viewBox="0 0 24 24"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                      >
+                        <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
+                        <path d="M19.4 13a7.7 7.7 0 0 0 .06-2l2.1-1.64-2-3.46-2.55 1a7.7 7.7 0 0 0-1.73-1L14.7 2H9.3l-.58 2.9a7.7 7.7 0 0 0-1.73 1l-2.55-1-2 3.46L4.54 11a7.7 7.7 0 0 0 0 2l-2.1 1.64 2 3.46 2.55-1a7.7 7.7 0 0 0 1.73 1L9.3 22h5.4l.58-2.9a7.7 7.7 0 0 0 1.73-1l2.55 1 2-3.46Z" />
+                      </svg>
+                      <span>Configuración</span>
+                    </div>
+                  </Link>
+                ),
                 reloadCatalogsOption && (
                   <Link
                     key="recargar-catalogos"
@@ -247,7 +287,7 @@ export const NavBar = ({
         </ul>
       </>
     );
-  }, [items, loggedIn, hiddenItemsChange, showDarkModeToggle, isDarkMode]);
+  }, [items, loggedIn, hiddenItemsChange, reloadCatalogsOption, settingsOption, showDarkModeToggle, isDarkMode]);
 
   return (
     <nav className={`py-3 ${color.bg600}`}>

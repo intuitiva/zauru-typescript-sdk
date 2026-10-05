@@ -1204,8 +1204,6 @@ export type WebappRole = {
 export type WebappEmployeeRole = {
   employee_id: number;
   role_id: number;
-  allowed_item_ids?: number[];
-  allowed_payee_ids?: number[];
   fechaEliminacion?: string;
 };
 
@@ -1216,9 +1214,8 @@ export type WebappAccessContext = {
   roleId: number | null;
   roleName: string | null;
   assignmentId: number | null;
+  assignment: WebappEmployeeRole | null;
   permissionKeys: string[];
-  allowedItemIds: number[];
-  allowedPayeeIds: number[];
 };
 
 export type WebappRbacConfig = {
