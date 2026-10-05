@@ -1,4 +1,5 @@
 export * from "./Alerts/index.js";
+export * from "./AccessControl/index.js";
 export * from "./BlockUI/index.js";
 export * from "./Buttons/index.js";
 export * from "./Card/index.js";
