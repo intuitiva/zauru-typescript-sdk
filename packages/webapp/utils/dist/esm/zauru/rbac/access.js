@@ -29,8 +29,7 @@ export function emptyAccessContext(employeeId, email) {
         roleId: null,
         roleName: null,
         assignmentId: null,
+        assignment: null,
         permissionKeys: [],
-        allowedItemIds: [],
-        allowedPayeeIds: [],
     };
 }

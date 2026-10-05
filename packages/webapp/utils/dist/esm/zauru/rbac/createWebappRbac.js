@@ -2,7 +2,7 @@ import { redirect } from "@remix-run/node";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { createWebAppTableRegister, getVariablesByName, getWebAppRow, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/services";
 import { hasPermission as hasPermissionInContext, isActiveWebappRow, isSuperAdminEmail, } from "./access.js";
-import { DEFAULT_SUPER_ADMIN_EMAIL_SUFFIXES, isValidPermissionKey, normalizeIdList, normalizePermissionKeys, } from "./catalog.js";
+import { DEFAULT_SUPER_ADMIN_EMAIL_SUFFIXES, isValidPermissionKey, normalizePermissionKeys, } from "./catalog.js";
 const deletedAt = () => new Date().toISOString();
 const toNumber = (value) => {
     const parsed = Number(value);
@@ -142,16 +142,14 @@ export function createWebappRbac(config) {
             }
             return updateWebAppTableRegister(headers, employeeRolesTableId, current.id, {
                 ...current.data,
-                allowed_item_ids: normalizeIdList(body.allowed_item_ids ?? current.data.allowed_item_ids),
-                allowed_payee_ids: normalizeIdList(body.allowed_payee_ids ?? current.data.allowed_payee_ids),
                 fechaEliminacion: deletedAt(),
             });
         }
         const payload = {
+            ...current?.data,
+            ...(body.extra ?? {}),
             employee_id: employeeId,
             role_id: toNumber(body.role_id),
-            allowed_item_ids: normalizeIdList(body.allowed_item_ids),
-            allowed_payee_ids: normalizeIdList(body.allowed_payee_ids),
             fechaEliminacion: "",
         };
         if (current) {
@@ -171,9 +169,8 @@ export function createWebappRbac(config) {
                 roleId: null,
                 roleName: null,
                 assignmentId: null,
+                assignment: null,
                 permissionKeys: [...config.allPermissionKeys],
-                allowedItemIds: [],
-                allowedPayeeIds: [],
             };
         }
         if (!employeeId) {
@@ -202,9 +199,8 @@ export function createWebappRbac(config) {
             roleId,
             roleName: role.data.name,
             assignmentId: assignment.id,
+            assignment: assignment.data,
             permissionKeys: sanitizeKeys(role.data.permission_keys),
-            allowedItemIds: normalizeIdList(assignment.data.allowed_item_ids),
-            allowedPayeeIds: normalizeIdList(assignment.data.allowed_payee_ids),
         };
     };
     const hasAppAccess = async (headers, session) => {

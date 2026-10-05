@@ -14,8 +14,7 @@ export type UpdateRoleInput = Partial<Pick<WebappRole, "name" | "description" | 
 export type AssignEmployeeRoleInput = {
     employee_id: number;
     role_id: number | null;
-    allowed_item_ids?: number[];
-    allowed_payee_ids?: number[];
+    extra?: Record<string, unknown>;
 };
 export declare function createWebappRbac(config: WebappRbacConfig): {
     config: WebappRbacConfig;
