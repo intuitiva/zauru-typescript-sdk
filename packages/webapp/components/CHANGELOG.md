@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.12.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.11.1...@zauru-sdk/components@6.12.0) (2026-10-07)
+
+
+### Features
+
+* agregar submenús anidados al dropdown de Button ([8bf8c5e](https://github.com/intuitiva/zauru-typescript-sdk/commit/8bf8c5ecb80d03cb10f806d912f148084576d655))
+
+
+
+
+
 ## [6.11.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.11.0...@zauru-sdk/components@6.11.1) (2026-10-07)
 
 **Note:** Version bump only for package @zauru-sdk/components
