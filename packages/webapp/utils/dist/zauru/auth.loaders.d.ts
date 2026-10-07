@@ -6,8 +6,12 @@ export type AuthAccessExtras = {
     /**
      * Return `false` to deny. Throw `redirect(...)` to send the user elsewhere.
      * Any other return (including `void`) allows access.
+     *
+     * `headers` is present after a successful `loginWebApp`; otherwise it is
+     * built from the session (`X-User-Email` / `X-User-Token`). Prefer
+     * `rbac.hasAppAccessFromSession` so callers do not pass `{}`.
      */
-    requireAccess?: (session: AuthSession) => boolean | void | Promise<boolean | void>;
+    requireAccess?: (session: AuthSession, headers?: Record<string, string>) => boolean | void | Promise<boolean | void>;
 };
 export type LoginActionExtras = AuthAccessExtras & {
     afterLogin?: (ctx: {

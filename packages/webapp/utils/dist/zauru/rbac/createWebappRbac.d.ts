@@ -29,7 +29,9 @@ export declare function createWebappRbac(config: WebappRbacConfig): {
     assignEmployeeRole: (headers: any, session: Session, body: AssignEmployeeRoleInput) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
     resolveAccess: (headers: any, session: Session) => Promise<WebappAccessContext | null>;
     hasAppAccess: (headers: any, session: Session) => Promise<boolean>;
+    hasAppAccessFromSession: (session: Session) => Promise<boolean>;
     requireAppAccess: (headers: any, session: Session) => Promise<WebappAccessContext>;
+    requireAppAccessFromSession: (session: Session) => Promise<WebappAccessContext>;
     requirePermission: (headers: any, session: Session, key: string) => Promise<WebappAccessContext>;
     hasPermission: typeof hasPermissionInContext;
     isSuperAdminEmail: (email: string | null | undefined) => boolean;

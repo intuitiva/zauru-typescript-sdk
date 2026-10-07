@@ -1,6 +1,6 @@
 import { redirect } from "@remix-run/node";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { createWebAppTableRegister, getVariablesByName, getWebAppRow, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/services";
+import { createWebAppTableRegister, getHeaders, getVariablesByName, getWebAppRow, getWebAppTableRegisters, updateWebAppTableRegister, } from "@zauru-sdk/services";
 import { hasPermission as hasPermissionInContext, isActiveWebappRow, isSuperAdminEmail, } from "./access.js";
 import { DEFAULT_SUPER_ADMIN_EMAIL_SUFFIXES, isValidPermissionKey, normalizePermissionKeys, } from "./catalog.js";
 const deletedAt = () => new Date().toISOString();
@@ -11,11 +11,14 @@ const toNumber = (value) => {
 export function createWebappRbac(config) {
     const suffixes = config.superAdminEmailSuffixes ?? DEFAULT_SUPER_ADMIN_EMAIL_SUFFIXES;
     const validKeys = new Set(config.allPermissionKeys);
+    const resolveHeaders = async (headers, session) => {
+        if (headers?.["X-User-Token"] || headers?.["x-user-token"]) {
+            return headers;
+        }
+        return getHeaders(null, session);
+    };
     const getTableIds = async (headers, session) => {
-        const vars = await getVariablesByName(headers, session, [
-            config.rolesTableVar,
-            config.employeeRolesTableVar,
-        ]);
+        const vars = await getVariablesByName(await resolveHeaders(headers, session), session, [config.rolesTableVar, config.employeeRolesTableVar]);
         return {
             rolesTableId: vars[config.rolesTableVar],
             employeeRolesTableId: vars[config.employeeRolesTableVar],
@@ -210,6 +213,7 @@ export function createWebappRbac(config) {
         const context = await resolveAccess(headers, session);
         return context != null;
     };
+    const hasAppAccessFromSession = (session) => hasAppAccess(undefined, session);
     const requireAppAccess = async (headers, session) => {
         if (!session.has("username")) {
             throw redirect("/");
@@ -220,6 +224,7 @@ export function createWebappRbac(config) {
         }
         return context;
     };
+    const requireAppAccessFromSession = (session) => requireAppAccess(undefined, session);
     const requirePermission = async (headers, session, key) => {
         const context = await requireAppAccess(headers, session);
         if (!hasPermissionInContext(context, key)) {
@@ -240,7 +245,9 @@ export function createWebappRbac(config) {
         assignEmployeeRole,
         resolveAccess,
         hasAppAccess,
+        hasAppAccessFromSession,
         requireAppAccess,
+        requireAppAccessFromSession,
         requirePermission,
         hasPermission: hasPermissionInContext,
         isSuperAdminEmail: (email) => isSuperAdminEmail(email, suffixes),

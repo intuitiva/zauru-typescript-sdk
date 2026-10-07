@@ -1,6 +1,6 @@
 import { redirect } from "@remix-run/node";
 import { config } from "@zauru-sdk/config";
-import { commitSession, destroySession, getRefreshSession, getSession, loginWebApp, } from "@zauru-sdk/services";
+import { commitSession, destroySession, getHeaders, getRefreshSession, getSession, loginWebApp, } from "@zauru-sdk/services";
 const loginErrorPayload = (description, title) => ({
     error: true,
     type: "error",
@@ -9,6 +9,23 @@ const loginErrorPayload = (description, title) => ({
     description,
 });
 const isDenied = (result) => result === false;
+const isResponse = (value) => typeof Response !== "undefined" && value instanceof Response;
+const deniedLoginPayload = () => loginErrorPayload("No tienes permiso para acceder a esta aplicación. Si crees que esto es un error, contacta al administrador.", "Acceso denegado");
+const evaluateLoginAccess = async (extras, session, headers) => {
+    try {
+        if (isDenied(await extras?.requireAccess?.(session, headers))) {
+            return Response.json(deniedLoginPayload());
+        }
+        return null;
+    }
+    catch (error) {
+        if (isResponse(error)) {
+            throw error;
+        }
+        const description = error instanceof Error ? error.message : String(error);
+        return Response.json(loginErrorPayload(description));
+    }
+};
 const authorizeUrl = (request) => {
     const url = new URL(request.url);
     const hostname = `${url.port ? "http://" : "https://"}${url.hostname}${url.port ? `:${url.port}` : ""}`;
@@ -41,7 +58,16 @@ export function createLoginAction(extras) {
             return redirect(authorizeUrl(request));
         }
         if (session.has("code")) {
-            if (isDenied(await extras?.requireAccess?.(session))) {
+            const existingHeaders = await getHeaders(null, session);
+            try {
+                if (isDenied(await extras?.requireAccess?.(session, existingHeaders))) {
+                    return redirect("/");
+                }
+            }
+            catch (error) {
+                if (isResponse(error)) {
+                    throw error;
+                }
                 return redirect("/");
             }
             return redirect("/home");
@@ -50,8 +76,9 @@ export function createLoginAction(extras) {
         if (loginResponse.error || !loginResponse.data) {
             return Response.json(loginErrorPayload(loginResponse.userMsg?.toString() ?? ""));
         }
-        if (isDenied(await extras?.requireAccess?.(session))) {
-            return Response.json(loginErrorPayload("No tienes permiso para acceder a esta aplicación. Si crees que esto es un error, contacta al administrador.", "Acceso denegado"));
+        const denied = await evaluateLoginAccess(extras, session, loginResponse.data.headers);
+        if (denied) {
+            return denied;
         }
         if (extras?.afterLogin) {
             await extras.afterLogin({
@@ -78,7 +105,8 @@ export function createSessionGuardLoader(extras) {
         if (!session.has("username")) {
             return redirect("/");
         }
-        if (isDenied(await extras?.requireAccess?.(session))) {
+        const headers = await getHeaders(null, session);
+        if (isDenied(await extras?.requireAccess?.(session, headers))) {
             return redirect("/");
         }
         return Response.json({});
@@ -104,7 +132,8 @@ export function createIndexLoader(extras) {
     return async ({ request }) => {
         const session = await getSession(request.headers.get("Cookie"));
         if (session.has("username")) {
-            if (isDenied(await extras?.requireAccess?.(session))) {
+            const headers = await getHeaders(null, session);
+            if (isDenied(await extras?.requireAccess?.(session, headers))) {
                 return Response.json({});
             }
             return redirect("/home");
@@ -121,7 +150,8 @@ export function createReloadCatalogsLoader(extras) {
         if (!session.has("username")) {
             return redirect("/");
         }
-        if (isDenied(await extras?.requireAccess?.(session))) {
+        const headers = await getHeaders(null, session);
+        if (isDenied(await extras?.requireAccess?.(session, headers))) {
             return redirect("/");
         }
         try {
