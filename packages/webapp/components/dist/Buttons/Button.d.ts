@@ -1,17 +1,19 @@
+import { type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 export type DropdownOption = {
     label: string;
     value: string;
-    onClick: () => void;
+    onClick?: () => void;
+    children?: DropdownOption[];
 };
 type Props = {
     type?: "reset" | "button" | "submit" | undefined;
     title?: string;
     name?: string;
-    onClickSave?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onClickSave?: (e: ReactMouseEvent<HTMLButtonElement>) => void;
     loading?: boolean;
     loadingText?: string;
     selectedColor?: "indigo" | "green" | "red" | "yellow" | "gray";
-    children?: React.ReactNode;
+    children?: ReactNode;
     className?: string;
     disabled?: boolean;
     enableFormErrorsValidation?: boolean;

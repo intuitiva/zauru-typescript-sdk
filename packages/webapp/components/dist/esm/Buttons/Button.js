@@ -1,6 +1,75 @@
-import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useFormContext } from "react-hook-form";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState, } from "react";
+const SUBMENU_OPEN_DELAY_MS = 150;
+const SUBMENU_CLOSE_DELAY_MS = 200;
+const prefersReducedMotion = () => typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const DropdownMenuItem = ({ option, onLeafClick }) => {
+    const hasChildren = Boolean(option.children?.length);
+    const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
+    const openTimerRef = useRef(null);
+    const closeTimerRef = useRef(null);
+    const clearTimers = () => {
+        if (openTimerRef.current != null) {
+            window.clearTimeout(openTimerRef.current);
+            openTimerRef.current = null;
+        }
+        if (closeTimerRef.current != null) {
+            window.clearTimeout(closeTimerRef.current);
+            closeTimerRef.current = null;
+        }
+    };
+    useEffect(() => {
+        return () => {
+            clearTimers();
+        };
+    }, []);
+    const openSubmenu = (immediate = false) => {
+        if (!hasChildren)
+            return;
+        clearTimers();
+        if (immediate || prefersReducedMotion()) {
+            setIsSubmenuOpen(true);
+            return;
+        }
+        openTimerRef.current = window.setTimeout(() => {
+            setIsSubmenuOpen(true);
+        }, SUBMENU_OPEN_DELAY_MS);
+    };
+    const closeSubmenu = (immediate = false) => {
+        clearTimers();
+        if (immediate || prefersReducedMotion()) {
+            setIsSubmenuOpen(false);
+            return;
+        }
+        closeTimerRef.current = window.setTimeout(() => {
+            setIsSubmenuOpen(false);
+        }, SUBMENU_CLOSE_DELAY_MS);
+    };
+    const handleClick = () => {
+        if (hasChildren) {
+            setIsSubmenuOpen((open) => !open);
+            return;
+        }
+        option.onClick?.();
+        onLeafClick();
+    };
+    const handleKeyDown = (event) => {
+        if (!hasChildren)
+            return;
+        if (event.key === "ArrowRight" || event.key === "Enter") {
+            event.preventDefault();
+            openSubmenu(true);
+        }
+        if (event.key === "ArrowLeft" || event.key === "Escape") {
+            event.preventDefault();
+            closeSubmenu(true);
+        }
+    };
+    const itemClassName = "flex w-full cursor-pointer items-center justify-between gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:ring-2 focus:ring-indigo-500 focus:ring-inset motion-reduce:transition-none";
+    return (_jsxs("div", { className: "relative", onMouseEnter: () => openSubmenu(), onMouseLeave: () => closeSubmenu(), children: [_jsxs("button", { type: "button", role: "menuitem", "aria-haspopup": hasChildren ? "menu" : undefined, "aria-expanded": hasChildren ? isSubmenuOpen : undefined, onClick: handleClick, onKeyDown: handleKeyDown, className: itemClassName, children: [_jsx("span", { children: option.label }), hasChildren ? (_jsx("svg", { "aria-hidden": "true", className: "h-4 w-4 shrink-0 text-gray-500", xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", children: _jsx("path", { fillRule: "evenodd", d: "M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z", clipRule: "evenodd" }) })) : null] }), hasChildren && isSubmenuOpen ? (_jsx("div", { role: "menu", className: "absolute right-full top-0 z-20 mr-1 w-56 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none", children: option.children?.map((child) => (_jsx(DropdownMenuItem, { option: child, onLeafClick: onLeafClick }, child.value))) })) : null] }));
+};
 export const Button = (props) => {
     const { type = "submit", loading = false, loadingText = "Guardando...", title = "Guardar", name = "save", onClickSave, selectedColor = "indigo", children, className = "", disabled = false, enableFormErrorsValidation = false, enableFormErrorsDescriptions = false, dropdownOptions = [], dropdownTitle, } = props;
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -69,9 +138,16 @@ export const Button = (props) => {
                 setIsDropdownOpen(false);
             }
         };
+        const handleEscape = (event) => {
+            if (event.key === "Escape") {
+                setIsDropdownOpen(false);
+            }
+        };
         document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("keydown", handleEscape);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("keydown", handleEscape);
         };
     }, []);
     const isButtonDisabled = loading || disabled || (enableFormErrorsValidation && formHasErrors);
@@ -89,10 +165,7 @@ export const Button = (props) => {
                         ? " cursor-progress"
                         : `${isButtonDisabled ? " cursor-not-allowed" : `cursor-pointer hover:${color.bg700}`}`} inline-flex justify-center items-center rounded-md border border-transparent ${color.bg600} py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:${color.ring500} focus:ring-offset-2 ${className}`, children: [loading
                             ? children ?? loadingText
-                            : children ?? dropdownTitle ?? title, _jsx("svg", { className: `ml-2 -mr-1 h-4 w-4 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`, xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", children: _jsx("path", { fillRule: "evenodd", d: "M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z", clipRule: "evenodd" }) })] }) }), isDropdownOpen && !isButtonDisabled ? (_jsx("div", { role: "menu", className: "absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none", children: _jsx("div", { className: "py-1", children: dropdownOptions.map((option) => (_jsx("button", { type: "button", role: "menuitem", onClick: () => {
-                            option.onClick();
-                            setIsDropdownOpen(false);
-                        }, className: "block w-full cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 text-left", children: option.label }, option.value))) }) })) : null] }));
+                            : children ?? dropdownTitle ?? title, _jsx("svg", { className: `ml-2 -mr-1 h-4 w-4 transition-transform motion-reduce:transition-none ${isDropdownOpen ? "rotate-180" : ""}`, xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", "aria-hidden": "true", children: _jsx("path", { fillRule: "evenodd", d: "M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z", clipRule: "evenodd" }) })] }) }), isDropdownOpen && !isButtonDisabled ? (_jsx("div", { role: "menu", className: "absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none", children: _jsx("div", { className: "py-1", children: dropdownOptions.map((option) => (_jsx(DropdownMenuItem, { option: option, onLeafClick: () => setIsDropdownOpen(false) }, option.value))) }) })) : null] }));
     return (_jsxs(_Fragment, { children: [(enableFormErrorsValidation && formHasErrors && errorMessage) ||
                 (enableFormErrorsDescriptions && errorMessage) ? (_jsx("div", { className: "flex flex-col items-end mb-2", children: _jsx("div", { className: "p-2 bg-red-100 border border-red-400 text-red-700 rounded-md shadow-sm", children: _jsx("p", { className: "text-sm", children: errorMessage }) }) })) : null, dropdownContent] }));
 };
