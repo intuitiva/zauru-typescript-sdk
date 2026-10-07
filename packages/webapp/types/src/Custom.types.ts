@@ -110,6 +110,21 @@ export type CertificationPenaltyHistoryEntry = {
   bitacoraId?: number;
 };
 
+export type UnitCostPenaltyHistoryEntry = {
+  id: string;
+  detailId: number;
+  itemId: number;
+  amount: number;
+  reason: string;
+  previousUnitCost: number;
+  finalUnitCost: number;
+  employeeId: number;
+  employeeName: string;
+  agencyId: number;
+  createdAt: string;
+  bitacoraId: number;
+};
+
 export type PriceAdjustmentReversalMatch = {
   sourceRuleId: number;
   sourceRuleName: string;
@@ -731,9 +746,15 @@ export type POHistoryMassive = {
 };
 
 export type BitacoraPOMassive = {
+  operationType?:
+    | "rejection_adjustment"
+    | "certification_penalty"
+    | "unit_cost_penalty";
   accion: string;
   discount?: number | string;
   other_charges?: number | string;
+  penaltyAmount?: number;
+  penaltyReason?: string;
   payeeCategoryId?: number | string;
   itemId?: number | string;
   fechaDesde?: string;
@@ -1134,6 +1155,7 @@ export type JsonMemoType = {
   rejectionLayers?: RejectionPercentageLayers;
   costCalculations?: CostCalculationMemo[];
   certificationPenaltyHistory?: CertificationPenaltyHistoryEntry[];
+  unitCostPenaltyHistory?: UnitCostPenaltyHistoryEntry[];
   rejectionCalculations?: RejectionCalculationMemo;
 };
 
