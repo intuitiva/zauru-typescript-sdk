@@ -2,6 +2,7 @@ import { redirect, type Session } from "@remix-run/node";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   createWebAppTableRegister,
+  getHeaders,
   getVariablesByName,
   getWebAppRow,
   getWebAppTableRegisters,
@@ -60,14 +61,22 @@ export function createWebappRbac(config: WebappRbacConfig) {
     config.superAdminEmailSuffixes ?? DEFAULT_SUPER_ADMIN_EMAIL_SUFFIXES;
   const validKeys = new Set(config.allPermissionKeys);
 
+  const resolveHeaders = async (headers: any, session: Session) => {
+    if (headers?.["X-User-Token"] || headers?.["x-user-token"]) {
+      return headers;
+    }
+    return getHeaders(null, session);
+  };
+
   const getTableIds = async (
     headers: any,
     session: Session,
   ): Promise<TableIds> => {
-    const vars = await getVariablesByName(headers, session, [
-      config.rolesTableVar,
-      config.employeeRolesTableVar,
-    ]);
+    const vars = await getVariablesByName(
+      await resolveHeaders(headers, session),
+      session,
+      [config.rolesTableVar, config.employeeRolesTableVar],
+    );
     return {
       rolesTableId: vars[config.rolesTableVar],
       employeeRolesTableId: vars[config.employeeRolesTableVar],
@@ -383,6 +392,9 @@ export function createWebappRbac(config: WebappRbacConfig) {
     return context != null;
   };
 
+  const hasAppAccessFromSession = (session: Session): Promise<boolean> =>
+    hasAppAccess(undefined, session);
+
   const requireAppAccess = async (
     headers: any,
     session: Session,
@@ -396,6 +408,10 @@ export function createWebappRbac(config: WebappRbacConfig) {
     }
     return context;
   };
+
+  const requireAppAccessFromSession = (
+    session: Session,
+  ): Promise<WebappAccessContext> => requireAppAccess(undefined, session);
 
   const requirePermission = async (
     headers: any,
@@ -422,7 +438,9 @@ export function createWebappRbac(config: WebappRbacConfig) {
     assignEmployeeRole,
     resolveAccess,
     hasAppAccess,
+    hasAppAccessFromSession,
     requireAppAccess,
+    requireAppAccessFromSession,
     requirePermission,
     hasPermission: hasPermissionInContext,
     isSuperAdminEmail: (email: string | null | undefined) =>
