@@ -1,23 +1,163 @@
 import type { ColorInterface } from "../NavBar/NavBar.types.js";
 import { useFormContext } from "react-hook-form";
-import { useState, useRef, useEffect } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
+  type ReactNode,
+} from "react";
 
 export type DropdownOption = {
   label: string;
   value: string;
-  onClick: () => void;
+  onClick?: () => void;
+  children?: DropdownOption[];
+};
+
+const SUBMENU_OPEN_DELAY_MS = 150;
+const SUBMENU_CLOSE_DELAY_MS = 200;
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+type DropdownMenuItemProps = {
+  option: DropdownOption;
+  onLeafClick: () => void;
+};
+
+const DropdownMenuItem = ({ option, onLeafClick }: DropdownMenuItemProps) => {
+  const hasChildren = Boolean(option.children?.length);
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
+  const openTimerRef = useRef<number | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
+
+  const clearTimers = () => {
+    if (openTimerRef.current != null) {
+      window.clearTimeout(openTimerRef.current);
+      openTimerRef.current = null;
+    }
+    if (closeTimerRef.current != null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      clearTimers();
+    };
+  }, []);
+
+  const openSubmenu = (immediate = false) => {
+    if (!hasChildren) return;
+    clearTimers();
+    if (immediate || prefersReducedMotion()) {
+      setIsSubmenuOpen(true);
+      return;
+    }
+    openTimerRef.current = window.setTimeout(() => {
+      setIsSubmenuOpen(true);
+    }, SUBMENU_OPEN_DELAY_MS);
+  };
+
+  const closeSubmenu = (immediate = false) => {
+    clearTimers();
+    if (immediate || prefersReducedMotion()) {
+      setIsSubmenuOpen(false);
+      return;
+    }
+    closeTimerRef.current = window.setTimeout(() => {
+      setIsSubmenuOpen(false);
+    }, SUBMENU_CLOSE_DELAY_MS);
+  };
+
+  const handleClick = () => {
+    if (hasChildren) {
+      setIsSubmenuOpen((open) => !open);
+      return;
+    }
+    option.onClick?.();
+    onLeafClick();
+  };
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    if (!hasChildren) return;
+    if (event.key === "ArrowRight" || event.key === "Enter") {
+      event.preventDefault();
+      openSubmenu(true);
+    }
+    if (event.key === "ArrowLeft" || event.key === "Escape") {
+      event.preventDefault();
+      closeSubmenu(true);
+    }
+  };
+
+  const itemClassName =
+    "flex w-full cursor-pointer items-center justify-between gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:ring-2 focus:ring-indigo-500 focus:ring-inset motion-reduce:transition-none";
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => openSubmenu()}
+      onMouseLeave={() => closeSubmenu()}
+    >
+      <button
+        type="button"
+        role="menuitem"
+        aria-haspopup={hasChildren ? "menu" : undefined}
+        aria-expanded={hasChildren ? isSubmenuOpen : undefined}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        className={itemClassName}
+      >
+        <span>{option.label}</span>
+        {hasChildren ? (
+          <svg
+            aria-hidden="true"
+            className="h-4 w-4 shrink-0 text-gray-500"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ) : null}
+      </button>
+      {hasChildren && isSubmenuOpen ? (
+        <div
+          role="menu"
+          className="absolute right-full top-0 z-20 mr-1 w-56 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+        >
+          {option.children?.map((child) => (
+            <DropdownMenuItem
+              key={child.value}
+              option={child}
+              onLeafClick={onLeafClick}
+            />
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
 };
 
 type Props = {
   type?: "reset" | "button" | "submit" | undefined;
   title?: string;
   name?: string;
-  onClickSave?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClickSave?: (e: ReactMouseEvent<HTMLButtonElement>) => void;
   //Cargando...
   loading?: boolean;
   loadingText?: string;
   selectedColor?: "indigo" | "green" | "red" | "yellow" | "gray";
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
   disabled?: boolean;
   enableFormErrorsValidation?: boolean;
@@ -119,9 +259,17 @@ export const Button = (props: Props) => {
       }
     };
 
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsDropdownOpen(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, []);
 
@@ -191,12 +339,13 @@ export const Button = (props: Props) => {
             ? children ?? loadingText
             : children ?? dropdownTitle ?? title}
           <svg
-            className={`ml-2 -mr-1 h-4 w-4 transition-transform ${
+            className={`ml-2 -mr-1 h-4 w-4 transition-transform motion-reduce:transition-none ${
               isDropdownOpen ? "rotate-180" : ""
             }`}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
+            aria-hidden="true"
           >
             <path
               fillRule="evenodd"
@@ -214,18 +363,11 @@ export const Button = (props: Props) => {
         >
           <div className="py-1">
             {dropdownOptions.map((option) => (
-              <button
+              <DropdownMenuItem
                 key={option.value}
-                type="button"
-                role="menuitem"
-                onClick={() => {
-                  option.onClick();
-                  setIsDropdownOpen(false);
-                }}
-                className="block w-full cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 text-left"
-              >
-                {option.label}
-              </button>
+                option={option}
+                onLeafClick={() => setIsDropdownOpen(false)}
+              />
             ))}
           </div>
         </div>
