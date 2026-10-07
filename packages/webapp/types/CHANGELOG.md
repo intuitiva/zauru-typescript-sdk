@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.24.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.23.0...@zauru-sdk/types@6.24.0) (2026-10-07)
+
+
+### Features
+
+* tipar penalizaciones al costo unitario ([9f02cc5](https://github.com/intuitiva/zauru-typescript-sdk/commit/9f02cc56abc198e811257c52ad2ef4d47075e260))
+
+
+
+
+
 # [6.23.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.22.0...@zauru-sdk/types@6.23.0) (2026-10-05)
 
 

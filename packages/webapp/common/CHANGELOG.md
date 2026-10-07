@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.6](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.8.5...@zauru-sdk/common@6.8.6) (2026-10-07)
+
+**Note:** Version bump only for package @zauru-sdk/common
+
+
+
+
+
 ## [6.8.5](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.8.4...@zauru-sdk/common@6.8.5) (2026-10-05)
 
 **Note:** Version bump only for package @zauru-sdk/common
