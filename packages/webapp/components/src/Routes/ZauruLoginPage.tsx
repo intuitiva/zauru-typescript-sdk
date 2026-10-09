@@ -1,5 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { isOauthUserinfoUnauthorizedError } from "@zauru-sdk/common";
 import { useValidateNotifications } from "@zauru-sdk/hooks";
 import {
   cleanLocalStorage,
@@ -68,6 +69,21 @@ export function ZauruLoginPage({
     useEffect(() => {
       setIsClient(true);
     }, []);
+
+    useEffect(() => {
+      const alreadyReauthed = document.cookie
+        .split(";")
+        .some((part) => part.trim() === "zauru_oauth_reauth=1");
+      if (
+        fetcher.data?.error &&
+        !alreadyReauthed &&
+        isOauthUserinfoUnauthorizedError(
+          String(fetcher.data?.description ?? ""),
+        )
+      ) {
+        window.location.replace("/logout?reauth=1");
+      }
+    }, [fetcher.data]);
 
     useEffect(() => {
       cleanLocalStorage(cleanLocalStorageArgs);
