@@ -26,6 +26,10 @@ export declare function createLoginLoader(): LoaderFunction;
  * Remix action for `/login`: OAuth authorize, `loginWebApp`, cookie commit.
  * `afterLogin` runs before `commitSession`. `requireAccess` can deny after
  * a successful OAuth exchange or when a session already has `code`.
+ *
+ * HTTP 401 on `/api/userinfo` (expired/stale `code`) clears the Remix session
+ * and redirects to `/logout?reauth=1` so `/login` can request a new code.
+ * A 120s `zauru_oauth_reauth` cookie prevents a loop if OAuth keeps failing.
  */
 export declare function createLoginAction(extras?: LoginActionExtras): ActionFunction;
 /**

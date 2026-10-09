@@ -1,4 +1,5 @@
 import { redirect } from "@remix-run/node";
+import { isOauthUserinfoUnauthorizedError } from "@zauru-sdk/common";
 import { config } from "@zauru-sdk/config";
 import { commitSession, destroySession, getHeaders, getRefreshSession, getSession, loginWebApp, } from "@zauru-sdk/services";
 const loginErrorPayload = (description, title) => ({
@@ -26,10 +27,21 @@ const evaluateLoginAccess = async (extras, session, headers) => {
         return Response.json(loginErrorPayload(description));
     }
 };
+const OAUTH_REAUTH_COOKIE = "zauru_oauth_reauth";
 const authorizeUrl = (request) => {
     const url = new URL(request.url);
     const hostname = `${url.port ? "http://" : "https://"}${url.hostname}${url.port ? `:${url.port}` : ""}`;
     return `${config.oauthBaseURL}/dialog/authorize?client_id=${config.oauthClientID}&response_type=code&redirect_uri=${hostname}/login`;
+};
+const hasOauthReauthCookie = (request) => (request.headers.get("Cookie") ?? "")
+    .split(";")
+    .some((part) => part.trim() === `${OAUTH_REAUTH_COOKIE}=1`);
+const oauthReauthSetCookie = () => `${OAUTH_REAUTH_COOKIE}=1; Path=/; Max-Age=120; SameSite=Lax`;
+const redirectOauthReauth = async (session) => {
+    const headers = new Headers();
+    headers.append("Set-Cookie", await destroySession(session));
+    headers.append("Set-Cookie", oauthReauthSetCookie());
+    return redirect("/logout?reauth=1", { headers });
 };
 export function createLoginLoader() {
     return async () => Response.json({});
@@ -38,6 +50,10 @@ export function createLoginLoader() {
  * Remix action for `/login`: OAuth authorize, `loginWebApp`, cookie commit.
  * `afterLogin` runs before `commitSession`. `requireAccess` can deny after
  * a successful OAuth exchange or when a session already has `code`.
+ *
+ * HTTP 401 on `/api/userinfo` (expired/stale `code`) clears the Remix session
+ * and redirects to `/logout?reauth=1` so `/login` can request a new code.
+ * A 120s `zauru_oauth_reauth` cookie prevents a loop if OAuth keeps failing.
  */
 export function createLoginAction(extras) {
     return async ({ request }) => {
@@ -74,7 +90,12 @@ export function createLoginAction(extras) {
         }
         const loginResponse = await loginWebApp(session, codeValue, cookie);
         if (loginResponse.error || !loginResponse.data) {
-            return Response.json(loginErrorPayload(loginResponse.userMsg?.toString() ?? ""));
+            const userMsg = loginResponse.userMsg?.toString() ?? "";
+            if (isOauthUserinfoUnauthorizedError(userMsg) &&
+                !hasOauthReauthCookie(request)) {
+                return redirectOauthReauth(session);
+            }
+            return Response.json(loginErrorPayload(userMsg));
         }
         const denied = await evaluateLoginAccess(extras, session, loginResponse.data.headers);
         if (denied) {
@@ -113,7 +134,19 @@ export function createSessionGuardLoader(extras) {
     };
 }
 export function createLogoutLoader(extras) {
-    return createSessionGuardLoader(extras);
+    const guard = createSessionGuardLoader(extras);
+    return async (args) => {
+        const url = new URL(args.request.url);
+        if (url.searchParams.get("reauth") === "1") {
+            const session = await getSession(args.request.headers.get("Cookie"));
+            return redirect("/login", {
+                headers: {
+                    "Set-Cookie": await destroySession(session),
+                },
+            });
+        }
+        return guard(args);
+    };
 }
 export function createLogoutAction() {
     return async ({ request }) => {
