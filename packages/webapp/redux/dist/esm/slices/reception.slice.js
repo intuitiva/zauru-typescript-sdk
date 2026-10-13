@@ -39,6 +39,11 @@ const initialState = {
         loading: false,
         reFetch: false,
     },
+    offlineQueueShipments: {
+        data: [],
+        loading: false,
+        reFetch: false,
+    },
 };
 const receptionSlice = (0, toolkit_1.createSlice)({
     name: "reception",

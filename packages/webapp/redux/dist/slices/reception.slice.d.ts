@@ -1,4 +1,4 @@
-import { ItemAssociatedLots, NewPurchaseOrderResponse, PurchaseOrderGeneralInfo, PurchaseOrderGraphQL, RejectionWebAppTableObject, ShipmentGraphQL, WebAppRowGraphQL } from "@zauru-sdk/types";
+import { ItemAssociatedLots, NewPurchaseOrderResponse, PurchaseOrderGeneralInfo, PurchaseOrderGraphQL, RejectionWebAppTableObject, QueueShipmentsForm, ShipmentGraphQL, WebAppRowGraphQL } from "@zauru-sdk/types";
 type ApiResponseFor4pinosReceptions = {
     apiCall: number;
     authorizedPO?: PurchaseOrderGraphQL;
@@ -17,7 +17,7 @@ type QueueFormReceptionWebAppTable = {
     username?: string;
     token?: string;
 };
-export type RECEPTION_NAMES = "basketLots" | "rejectionInfo" | "newPurchaseOrderInfo" | "purchaseOrderGeneralInfo" | "poReceptions" | "offlineQueueReceptions" | "queueReceptions";
+export type RECEPTION_NAMES = "basketLots" | "rejectionInfo" | "newPurchaseOrderInfo" | "purchaseOrderGeneralInfo" | "poReceptions" | "offlineQueueReceptions" | "offlineQueueShipments" | "queueReceptions";
 export interface ReceptionState {
     basketLots: {
         loading: boolean;
@@ -52,6 +52,11 @@ export interface ReceptionState {
     offlineQueueReceptions: {
         loading: boolean;
         data: WebAppRowGraphQL<QueueFormReceptionWebAppTable>[];
+        reFetch: boolean;
+    };
+    offlineQueueShipments: {
+        loading: boolean;
+        data: WebAppRowGraphQL<QueueShipmentsForm>[];
         reFetch: boolean;
     };
 }
