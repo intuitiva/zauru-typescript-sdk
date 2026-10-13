@@ -6,6 +6,7 @@ import {
   PurchaseOrderGeneralInfo,
   PurchaseOrderGraphQL,
   RejectionWebAppTableObject,
+  QueueShipmentsForm,
   ShipmentGraphQL,
   WebAppRowGraphQL,
 } from "@zauru-sdk/types";
@@ -37,6 +38,7 @@ export type RECEPTION_NAMES =
   | "purchaseOrderGeneralInfo"
   | "poReceptions"
   | "offlineQueueReceptions"
+  | "offlineQueueShipments"
   | "queueReceptions";
 
 export interface ReceptionState {
@@ -69,6 +71,11 @@ export interface ReceptionState {
   offlineQueueReceptions: {
     loading: boolean;
     data: WebAppRowGraphQL<QueueFormReceptionWebAppTable>[];
+    reFetch: boolean;
+  };
+  offlineQueueShipments: {
+    loading: boolean;
+    data: WebAppRowGraphQL<QueueShipmentsForm>[];
     reFetch: boolean;
   };
 }
@@ -105,6 +112,11 @@ const initialState: ReceptionState = {
     reFetch: false,
   },
   offlineQueueReceptions: {
+    data: [],
+    loading: false,
+    reFetch: false,
+  },
+  offlineQueueShipments: {
     data: [],
     loading: false,
     reFetch: false,
