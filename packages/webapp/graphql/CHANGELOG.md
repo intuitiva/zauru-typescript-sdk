@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.9.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.8.0...@zauru-sdk/graphql@6.9.0) (2026-10-16)
+
+
+### Features
+
+* permitir omitir movements en getShipments ([1f7c0fb](https://github.com/intuitiva/zauru-typescript-sdk/commit/1f7c0fbf37b6dce0aa28576c751ee7cd866eff9b))
+
+
+
+
+
 # [6.8.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.7.0...@zauru-sdk/graphql@6.8.0) (2026-09-19)
 
 

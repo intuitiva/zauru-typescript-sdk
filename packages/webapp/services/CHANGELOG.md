@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.13.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.12.0...@zauru-sdk/services@6.13.0) (2026-10-16)
+
+
+### Features
+
+* no importar async_hooks en el cliente HTTP ([165851b](https://github.com/intuitiva/zauru-typescript-sdk/commit/165851bd95927e685fb2d74fbca6e3fcfc822d2f))
+
+
+
+
+
 ## [6.11.10](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.11.9...@zauru-sdk/services@6.11.10) (2026-10-09)
 
 **Note:** Version bump only for package @zauru-sdk/services
