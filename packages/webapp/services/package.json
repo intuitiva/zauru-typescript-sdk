@@ -13,7 +13,7 @@
   "scripts": {
     "build": "npm run build:esm",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsx --test src/zauru/httpClientRuntime.test.ts"
   },
   "files": [
     "dist"
@@ -21,6 +21,7 @@
   "author": "Oscar Cuéllar",
   "license": "MIT",
   "devDependencies": {
+    "tsx": "^4.23.15",
     "typescript": "^5.1.6"
   },
   "dependencies": {
