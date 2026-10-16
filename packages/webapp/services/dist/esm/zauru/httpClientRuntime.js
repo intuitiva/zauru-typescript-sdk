@@ -1,10 +1,34 @@
-import { AsyncLocalStorage } from "node:async_hooks";
 import { bindHttpClientPolicyRuntime, getHttpClientPolicy, httpTimeoutMsForClient, isRetryableHttpError, } from "@zauru-sdk/common";
-const als = new AsyncLocalStorage();
-bindHttpClientPolicyRuntime({
-    get: () => als.getStore(),
-    run: (policy, fn) => als.run(policy, fn),
-});
+/**
+ * Bind Node ALS without a static `node:async_hooks` import. Vite's client
+ * bundle stubs that builtin as `__vite-browser-external` and fails named
+ * exports. `process.getBuiltinModule` is runtime-only (Node 20.16+/22+).
+ * Older Node and the browser keep common's fallback store.
+ */
+function tryBindNodeAls() {
+    const processRef = globalThis.process;
+    if (!processRef?.versions?.node ||
+        typeof processRef.getBuiltinModule !== "function") {
+        return;
+    }
+    try {
+        const hooks = processRef.getBuiltinModule("async_hooks") ??
+            processRef.getBuiltinModule("node:async_hooks");
+        const AsyncLocalStorage = hooks?.AsyncLocalStorage;
+        if (!AsyncLocalStorage) {
+            return;
+        }
+        const als = new AsyncLocalStorage();
+        bindHttpClientPolicyRuntime({
+            get: () => als.getStore(),
+            run: (policy, fn) => als.run(policy, fn),
+        });
+    }
+    catch {
+        // Keep common's in-process fallback.
+    }
+}
+tryBindNodeAls();
 export function applyHttpClientTimeout(request, client) {
     if (request.timeout != null && request.timeout > 0) {
         return request;

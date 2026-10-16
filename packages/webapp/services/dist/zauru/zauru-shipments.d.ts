@@ -12,6 +12,7 @@ export declare function getShipments(session: Session, config: {
     id_number_not_null?: boolean;
     id_number_not_empty?: boolean;
     withMovementLots?: boolean;
+    withMovements?: boolean;
     memoILike?: string;
     voided?: boolean;
     delivered?: boolean;

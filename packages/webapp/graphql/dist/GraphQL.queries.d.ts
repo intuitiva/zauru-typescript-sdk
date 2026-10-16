@@ -5,7 +5,7 @@ export declare const getPurchaseOrderStringQuery: (id: number, config?: {
     withPayee: boolean;
     withReceptions: boolean;
 }) => string;
-export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null, id_number, id_number_not_empty, withMovementLots, withPurchaseOrdersByShipmentReference, limit, id, wheres, memoILike, plannedShippingDateRange, plannedDeliveryDateRange, }: {
+export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, suffix, voided, delivered, shipped, returned, id_number_not_null, id_number, id_number_not_empty, withMovementLots, withMovements, withPurchaseOrdersByShipmentReference, limit, id, wheres, memoILike, plannedShippingDateRange, plannedDeliveryDateRange, }: {
     agency_to_id?: number | number[];
     agency_from_id?: number | number[];
     suffix?: string;
@@ -17,6 +17,7 @@ export declare const getShipmentsStringQuery: ({ agency_to_id, agency_from_id, s
     id_number?: string;
     id_number_not_empty?: boolean;
     withMovementLots?: boolean;
+    withMovements?: boolean;
     withPurchaseOrdersByShipmentReference?: boolean;
     limit?: number;
     id?: number | string;
