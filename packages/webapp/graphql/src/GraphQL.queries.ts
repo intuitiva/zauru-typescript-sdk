@@ -225,6 +225,7 @@ export const getShipmentsStringQuery = ({
   id_number,
   id_number_not_empty = false,
   withMovementLots = false,
+  withMovements = true,
   withPurchaseOrdersByShipmentReference = false,
   limit = 1000,
   id,
@@ -244,6 +245,7 @@ export const getShipmentsStringQuery = ({
   id_number?: string;
   id_number_not_empty?: boolean;
   withMovementLots?: boolean;
+  withMovements?: boolean;
   withPurchaseOrdersByShipmentReference?: boolean;
   limit?: number;
   id?: number | string;
@@ -358,6 +360,18 @@ export const getShipmentsStringQuery = ({
         }`
       : "";
 
+  const movements = withMovements
+    ? `movements {
+        id
+        booked_quantity
+        delivered_quantity
+        reference
+        item_id
+        lot_id
+        ${movementLots}
+      }`
+    : "";
+
   return `query getShipments {
     shipments(
       limit: ${limit}, 
@@ -393,15 +407,7 @@ export const getShipmentsStringQuery = ({
       returned_at
       returner_id
       ${purchaseOrdersByShipmentReference}
-      movements {
-        id
-        booked_quantity
-        delivered_quantity
-        reference
-        item_id
-        lot_id
-        ${movementLots}
-      }
+      ${movements}
     }
   }`;
 };
