@@ -182,9 +182,12 @@ export declare const sortByProperty: (array: any[], property: string) => any[];
 /**
  * Handle web app table actions and return a response with a consistent format.
  * @param action A function that returns a Promise of type T.
+ * @param timeout Seconds for the whole callback. Omit to use the active
+ *   HTTP client policy (25s by default). `false` disables the race so each
+ *   HTTP call uses its own axios timeout.
  * @returns A Promise of AxiosUtilsResponse<T>.
  */
-export declare function handlePossibleAxiosErrors<T>(action: () => Promise<T>, timeout?: number): Promise<AxiosUtilsResponse<T>>;
+export declare function handlePossibleAxiosErrors<T>(action: () => Promise<T>, timeout?: number | false): Promise<AxiosUtilsResponse<T>>;
 /**
  * createPostgresUrl
  * @param host

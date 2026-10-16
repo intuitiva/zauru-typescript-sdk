@@ -1,6 +1,7 @@
 import axios from "axios";
 import chalk from "chalk";
 import { config } from "@zauru-sdk/config";
+import { applyHttpClientTimeout, maybeRetryHttpRequest, } from "./httpClientRuntime.js";
 const axiosInstance = axios.create({
     baseURL: `${config.zauruBaseURL}`,
 });
@@ -8,7 +9,7 @@ axiosInstance.interceptors.request.use(function (request) {
     // Do something before request is sent
     const baseName = `${request.baseURL}${request.url}`;
     console.log(chalk.green(baseName));
-    request.timeout = 200000;
+    applyHttpClientTimeout(request, "zauru");
     request.metadata = { startTime: Date.now() };
     if (config.debugHTTP) {
         console.log(chalk.cyan(`[DEBUG] REQUEST METHOD: ${request.method?.toUpperCase()}`));
@@ -54,7 +55,11 @@ axiosInstance.interceptors.response.use(function (response) {
         console.log(chalk.cyan("[DEBUG] RESPONSE DATA:"), JSON.stringify(response.data, null, 2));
     }
     return response;
-}, function (error) {
+}, async function (error) {
+    const retried = await maybeRetryHttpRequest(error, axiosInstance, "zauru");
+    if (retried) {
+        return retried;
+    }
     console.log(chalk.red("---------------- ERROR CON REQUEST (RESPONSE INTERCEPTOR) ----------------"));
     // Do something with response error
     const { response } = error;

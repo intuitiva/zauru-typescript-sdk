@@ -25,6 +25,7 @@ const moment_1 = __importDefault(require("moment"));
 require("moment-timezone");
 const types_1 = require("@zauru-sdk/types");
 const rejectionPercentageAdjustment_js_1 = require("./rejectionPercentageAdjustment.js");
+const httpClientPolicy_js_1 = require("./httpClientPolicy.js");
 exports.DESTINOS_MUESTRA_OPTIONS = [
     { label: "Microbiología", value: "microbiologa" },
     { label: "Residuos de plaguicidas", value: "residuos_de_plaguicidas" },
@@ -711,13 +712,36 @@ exports.sortByProperty = sortByProperty;
 /**
  * Handle web app table actions and return a response with a consistent format.
  * @param action A function that returns a Promise of type T.
+ * @param timeout Seconds for the whole callback. Omit to use the active
+ *   HTTP client policy (25s by default). `false` disables the race so each
+ *   HTTP call uses its own axios timeout.
  * @returns A Promise of AxiosUtilsResponse<T>.
  */
-async function handlePossibleAxiosErrors(action, timeout = 25) {
-    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error(`Timeout skipped after ${timeout} seconds`)), timeout * 1000));
+async function handlePossibleAxiosErrors(action, timeout) {
+    const policyTimeout = (0, httpClientPolicy_js_1.getHttpClientPolicy)().actionTimeoutSeconds;
+    const resolved = timeout === undefined ? policyTimeout : timeout;
+    const seconds = resolved === false || resolved <= 0
+        ? null
+        : resolved ?? httpClientPolicy_js_1.DEFAULT_ACTION_TIMEOUT_SECONDS;
     try {
-        const result = await Promise.race([action(), timeoutPromise]);
-        return { error: false, data: result };
+        if (seconds == null) {
+            const result = await action();
+            return { error: false, data: result };
+        }
+        let timer;
+        try {
+            const result = await Promise.race([
+                action(),
+                new Promise((_, reject) => {
+                    timer = setTimeout(() => reject(new Error(`Timeout skipped after ${seconds} seconds`)), seconds * 1000);
+                }),
+            ]);
+            return { error: false, data: result };
+        }
+        finally {
+            if (timer)
+                clearTimeout(timer);
+        }
     }
     catch (error) {
         return {
