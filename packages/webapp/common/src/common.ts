@@ -21,6 +21,10 @@ import {
   normalizeRejectionPercentageLayers,
   resolveRejectionPercentageOrigin,
 } from "./rejectionPercentageAdjustment.js";
+import {
+  DEFAULT_ACTION_TIMEOUT_SECONDS,
+  getHttpClientPolicy,
+} from "./httpClientPolicy.js";
 
 export const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[] = [
   { label: "Microbiología", value: "microbiologa" },
@@ -848,22 +852,44 @@ export const sortByProperty = (array: any[], property: string) => {
 /**
  * Handle web app table actions and return a response with a consistent format.
  * @param action A function that returns a Promise of type T.
+ * @param timeout Seconds for the whole callback. Omit to use the active
+ *   HTTP client policy (25s by default). `false` disables the race so each
+ *   HTTP call uses its own axios timeout.
  * @returns A Promise of AxiosUtilsResponse<T>.
  */
 export async function handlePossibleAxiosErrors<T>(
   action: () => Promise<T>,
-  timeout: number = 25
+  timeout?: number | false,
 ): Promise<AxiosUtilsResponse<T>> {
-  const timeoutPromise = new Promise((_, reject) =>
-    setTimeout(
-      () => reject(new Error(`Timeout skipped after ${timeout} seconds`)),
-      timeout * 1000
-    )
-  );
+  const policyTimeout = getHttpClientPolicy().actionTimeoutSeconds;
+  const resolved = timeout === undefined ? policyTimeout : timeout;
+  const seconds =
+    resolved === false || resolved <= 0
+      ? null
+      : resolved ?? DEFAULT_ACTION_TIMEOUT_SECONDS;
 
   try {
-    const result = await Promise.race([action(), timeoutPromise]);
-    return { error: false, data: result } as AxiosUtilsResponse<T>;
+    if (seconds == null) {
+      const result = await action();
+      return { error: false, data: result } as AxiosUtilsResponse<T>;
+    }
+
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      const result = await Promise.race([
+        action(),
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(
+            () =>
+              reject(new Error(`Timeout skipped after ${seconds} seconds`)),
+            seconds * 1000,
+          );
+        }),
+      ]);
+      return { error: false, data: result } as AxiosUtilsResponse<T>;
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
   } catch (error) {
     return {
       error: true,

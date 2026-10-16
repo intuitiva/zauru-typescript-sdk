@@ -1,6 +1,10 @@
 import axios from "axios";
 import chalk from "chalk";
 import { config } from "@zauru-sdk/config";
+import {
+  applyHttpClientTimeout,
+  maybeRetryHttpRequest,
+} from "./httpClientRuntime.js";
 
 const axiosInstance = axios.create({
   baseURL: `${config.graphqlAPIBaseURL}`,
@@ -11,7 +15,7 @@ axiosInstance.interceptors.request.use(
     // Do something before request is sent
     const baseName = `${request.baseURL}${request.url}`;
     console.log(chalk.green(baseName));
-    request.timeout = 200000;
+    applyHttpClientTimeout(request, "graphql");
     (request as any).metadata = { startTime: Date.now() };
 
     if (config.debugHTTP) {
@@ -72,7 +76,15 @@ axiosInstance.interceptors.response.use(
     }
     return response;
   },
-  function (error) {
+  async function (error) {
+    const retried = await maybeRetryHttpRequest(
+      error,
+      axiosInstance,
+      "graphql",
+    );
+    if (retried) {
+      return retried;
+    }
     console.log(
       chalk.red("---------------- ERROR CON REQUEST GRAPHQL ----------------"),
     );
