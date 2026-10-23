@@ -51,14 +51,14 @@ export const generateDischargePDF = async (
   body: GeneratePDFBody
 ): Promise<AxiosUtilsResponse<{ status: number; zid: number }>> => {
   return handlePossibleAxiosErrors(async () => {
-    const { consolidated_template_id } = await getVariablesByName(
+    const { discharge_template_id } = await getVariablesByName(
       headers,
       session,
-      ["consolidated_template_id"]
+      ["discharge_template_id"]
     );
-    body.print_template = consolidated_template_id;
+    body.print_template = discharge_template_id;
     const response = await httpZauru.post<{ status: number; zid: number }>(
-      "/purchases/consolidates/gen_print_all.json",
+      "/purchases/discharges/gen_print_all.json",
       body,
       { headers }
     );
@@ -79,7 +79,7 @@ export const getDischargePDFResult = async (
 ): Promise<AxiosUtilsResponse<PDFResult>> => {
   return handlePossibleAxiosErrors(async () => {
     const response = await httpZauru.get<PDFResult>(
-      "purchases/consolidates/check_print_all",
+      "purchases/discharges/check_print_all",
       {
         headers,
         params: { zid },
