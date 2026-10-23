@@ -13,7 +13,7 @@
   "scripts": {
     "build": "npm run build:esm",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "test": "tsx --test src/zauru/httpClientRuntime.test.ts"
+    "test": "tsx --test src/zauru/*.test.ts"
   },
   "files": [
     "dist"
