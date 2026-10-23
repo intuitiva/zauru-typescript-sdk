@@ -23,9 +23,9 @@ export const createDischarge = async (session, headers, body) => {
  */
 export const generateDischargePDF = async (headers, session, body) => {
     return handlePossibleAxiosErrors(async () => {
-        const { consolidated_template_id } = await getVariablesByName(headers, session, ["consolidated_template_id"]);
-        body.print_template = consolidated_template_id;
-        const response = await httpZauru.post("/purchases/consolidates/gen_print_all.json", body, { headers });
+        const { discharge_template_id } = await getVariablesByName(headers, session, ["discharge_template_id"]);
+        body.print_template = discharge_template_id;
+        const response = await httpZauru.post("/purchases/discharges/gen_print_all.json", body, { headers });
         return response.data;
     });
 };
@@ -37,7 +37,7 @@ export const generateDischargePDF = async (headers, session, body) => {
  */
 export const getDischargePDFResult = async (headers, zid) => {
     return handlePossibleAxiosErrors(async () => {
-        const response = await httpZauru.get("purchases/consolidates/check_print_all", {
+        const response = await httpZauru.get("purchases/discharges/check_print_all", {
             headers,
             params: { zid },
         });
