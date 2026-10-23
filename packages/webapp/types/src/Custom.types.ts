@@ -613,6 +613,71 @@ export type GeneratePDFBody = {
   print_template: number | string;
 };
 
+export type PrintTemplateRow = {
+  id?: number;
+  title?: string | null;
+  header?: boolean | null;
+  column?: boolean;
+  index?: number;
+  size?: number | null;
+  variable_size?: boolean;
+  print_template_id?: number;
+  print_template_for_form_group_id?: number | null;
+  _destroy?: boolean;
+};
+
+export type PrintTemplateCell = {
+  id?: number;
+  header?: boolean | null;
+  row?: number;
+  column?: number;
+  value?: string | null;
+  colspan?: number;
+  print_template_id?: number;
+  print_template_for_form_group_id?: number | null;
+  _destroy?: boolean;
+};
+
+export type PrintTemplate = {
+  id: number;
+  name: string;
+  operation_id: number;
+  font_family: string;
+  font_size: string;
+  active?: boolean;
+  width?: number;
+  height?: number;
+  top_margin?: number;
+  left_margin?: number;
+  body_columns?: number;
+  print_template_rows?: PrintTemplateRow[];
+  print_template_cells?: PrintTemplateCell[];
+};
+
+export type NewPrintTemplateBody = Partial<Omit<PrintTemplate, "id">> & {
+  name: string;
+  operation_id: number;
+  font_family: string;
+  font_size: string;
+  print_template_rows_attributes?: PrintTemplateRow[];
+  print_template_cells_attributes?: PrintTemplateCell[];
+};
+
+export type DocumentPrint = {
+  id: number;
+  active: boolean;
+  operation_id: number;
+  print_template_id: number;
+  notes?: string | null;
+};
+
+export type NewDocumentPrintBody = {
+  active?: boolean;
+  operation_id: number;
+  print_template_id: number;
+  notes?: string;
+};
+
 export type GeneratedPDFResult = { status: number; zid: number };
 
 export type PDFResult = {
