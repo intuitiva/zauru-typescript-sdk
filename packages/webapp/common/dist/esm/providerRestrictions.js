@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkProviderRestrictionValue = exports.validateProviderRestrictionInput = exports.matchReceptionTypeCode = exports.isRestrictionValueAllowed = exports.resolveAllowedRestrictionValues = exports.filterActiveProviderRestrictions = exports.isRestrictionActiveOnDate = exports.restrictionHasDateRange = exports.normalizeProviderRestrictionValues = exports.isProviderRestrictionMode = exports.formatRestrictionTypeValue = exports.normalizeRestrictionValue = exports.PROVIDER_ITEM_RESTRICTIONS_TABLE_VAR = exports.PROVIDER_TYPE_RESTRICTIONS_TABLE_VAR = void 0;
+exports.checkProviderRestrictionValue = exports.validateProviderRestrictionInput = exports.restrictionLeavesNoAllowedValues = exports.sampleDatesForRestrictionRules = exports.matchReceptionTypeCode = exports.isRestrictionValueAllowed = exports.resolveAllowedRestrictionValues = exports.filterActiveProviderRestrictions = exports.isRestrictionActiveOnDate = exports.restrictionHasDateRange = exports.normalizeProviderRestrictionValues = exports.isProviderRestrictionMode = exports.formatRestrictionTypeValue = exports.normalizeRestrictionValue = exports.PROVIDER_ITEM_RESTRICTIONS_TABLE_VAR = exports.PROVIDER_TYPE_RESTRICTIONS_TABLE_VAR = void 0;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 exports.PROVIDER_TYPE_RESTRICTIONS_TABLE_VAR = "ctl_calidad_admin_restricciones_tipos_proveedor_web_app_table_id";
 exports.PROVIDER_ITEM_RESTRICTIONS_TABLE_VAR = "ctl_calidad_admin_restricciones_verduras_proveedor_web_app_table_id";
@@ -119,7 +119,47 @@ const matchReceptionTypeCode = (formValue, types) => {
     return wanted;
 };
 exports.matchReceptionTypeCode = matchReceptionTypeCode;
-const validateProviderRestrictionInput = (input) => {
+const shiftYmd = (ymd, days) => {
+    const [year, month, day] = ymd.split("-").map(Number);
+    const utc = new Date(Date.UTC(year, month - 1, day + days));
+    const nextYear = utc.getUTCFullYear();
+    const nextMonth = String(utc.getUTCMonth() + 1).padStart(2, "0");
+    const nextDay = String(utc.getUTCDate()).padStart(2, "0");
+    return `${nextYear}-${nextMonth}-${nextDay}`;
+};
+const sampleDatesForRestrictionRules = (rules) => {
+    const dates = new Set(["1970-01-01", "2999-12-31"]);
+    for (const rule of rules) {
+        const start = (0, exports.normalizeRestrictionValue)(rule.start_date);
+        const end = (0, exports.normalizeRestrictionValue)(rule.end_date);
+        if (DATE_RE.test(start)) {
+            dates.add(start);
+            dates.add(shiftYmd(start, -1));
+        }
+        if (DATE_RE.test(end)) {
+            dates.add(end);
+            dates.add(shiftYmd(end, 1));
+        }
+    }
+    return [...dates].sort();
+};
+exports.sampleDatesForRestrictionRules = sampleDatesForRestrictionRules;
+const restrictionLeavesNoAllowedValues = (input) => {
+    const universe = input.universe
+        .map(exports.normalizeRestrictionValue)
+        .filter(Boolean);
+    if (universe.length === 0) {
+        return false;
+    }
+    return (0, exports.sampleDatesForRestrictionRules)(input.rules ?? []).some((date) => (0, exports.resolveAllowedRestrictionValues)({
+        payeeId: input.payeeId,
+        date,
+        rules: input.rules,
+        universe,
+    }).length === 0);
+};
+exports.restrictionLeavesNoAllowedValues = restrictionLeavesNoAllowedValues;
+const validateProviderRestrictionInput = (input, options) => {
     const errors = [];
     if (!Number(input.payee_id) || Number(input.payee_id) < 1) {
         errors.push({ field: "payee_id", message: "Seleccione un proveedor." });
@@ -163,6 +203,35 @@ const validateProviderRestrictionInput = (input) => {
             errors.push({
                 field: "motivo",
                 message: "Indique el motivo de la excepción con rango de fechas.",
+            });
+        }
+    }
+    const universe = (options?.universe ?? [])
+        .map(exports.normalizeRestrictionValue)
+        .filter(Boolean);
+    if (universe.length > 0 &&
+        Number(input.payee_id) > 0 &&
+        (0, exports.isProviderRestrictionMode)(input.mode) &&
+        (0, exports.normalizeProviderRestrictionValues)(input.values).length > 0) {
+        const proposed = {
+            payee_id: Number(input.payee_id),
+            mode: input.mode,
+            values: (0, exports.normalizeProviderRestrictionValues)(input.values),
+            start_date: start,
+            end_date: end,
+            motivo: (0, exports.normalizeRestrictionValue)(input.motivo),
+        };
+        const otherRules = (options?.otherRules ?? []).filter((rule) => Number(rule.payee_id) === Number(input.payee_id) &&
+            !(0, exports.normalizeRestrictionValue)(rule.fechaEliminacion));
+        if ((0, exports.restrictionLeavesNoAllowedValues)({
+            payeeId: Number(input.payee_id),
+            rules: [...otherRules, proposed],
+            universe,
+        })) {
+            const noun = (0, exports.normalizeRestrictionValue)(options?.valueNoun) || "opciones";
+            errors.push({
+                field: "values",
+                message: `Esta regla dejaría al proveedor sin ${noun} para escoger. Debe quedar al menos uno.`,
             });
         }
     }

@@ -39,7 +39,18 @@ export type ProviderRestrictionInputError = {
     field: string;
     message: string;
 };
-export declare const validateProviderRestrictionInput: (input: ProviderRestrictionInput) => ProviderRestrictionInputError[];
+export type ValidateProviderRestrictionOptions = {
+    universe?: Array<string | number>;
+    otherRules?: ProviderRestrictionRule[];
+    valueNoun?: string;
+};
+export declare const sampleDatesForRestrictionRules: (rules: Array<Pick<ProviderRestrictionRule, "start_date" | "end_date">>) => string[];
+export declare const restrictionLeavesNoAllowedValues: (input: {
+    payeeId: number;
+    rules: ProviderRestrictionRule[] | undefined;
+    universe: Array<string | number>;
+}) => boolean;
+export declare const validateProviderRestrictionInput: (input: ProviderRestrictionInput, options?: ValidateProviderRestrictionOptions) => ProviderRestrictionInputError[];
 export declare const checkProviderRestrictionValue: (input: {
     payeeId: number;
     date: string;
