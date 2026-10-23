@@ -985,6 +985,25 @@ export type ReceptionType = {
     Codigo: string;
     Nombre: string;
 };
+export type ProviderRestrictionMode = "include" | "exclude";
+export type ProviderRestrictionRule = {
+    payee_id: number;
+    mode: ProviderRestrictionMode;
+    values: Array<string | number>;
+    start_date?: string;
+    end_date?: string;
+    motivo?: string;
+    fechaEliminacion?: string;
+};
+export type ProviderRestrictionCheckResult = {
+    allowed: true;
+} | {
+    allowed: false;
+    title: string;
+    description: string;
+    mode: ProviderRestrictionMode;
+    matchedValues: string[];
+};
 export type QueueShipmentsForm = {
     creadoPor: string;
     fechaCreacion: string;

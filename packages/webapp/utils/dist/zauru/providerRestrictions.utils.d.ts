@@ -1,0 +1,21 @@
+import type { Session } from "@remix-run/node";
+import type { AxiosUtilsResponse, ProviderRestrictionCheckResult, ProviderRestrictionRule, ReceptionType, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
+export declare const mapProviderRestrictionRows: (rows?: WebAppRowGraphQL<ProviderRestrictionRule>[]) => ProviderRestrictionRule[];
+export declare const getProviderTypeRestrictions: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<ProviderRestrictionRule>[]>>;
+export declare const createProviderTypeRestriction: (headers: any, session: Session, body: ProviderRestrictionRule) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const updateProviderTypeRestriction: (headers: any, session: Session, id: number, body: Partial<ProviderRestrictionRule>) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const getProviderItemRestrictions: (headers: any, session: Session) => Promise<AxiosUtilsResponse<WebAppRowGraphQL<ProviderRestrictionRule>[]>>;
+export declare const createProviderItemRestriction: (headers: any, session: Session, body: ProviderRestrictionRule) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const updateProviderItemRestriction: (headers: any, session: Session, id: number, body: Partial<ProviderRestrictionRule>) => Promise<AxiosUtilsResponse<WebAppTableUpdateResponse>>;
+export declare const evaluateProviderReceptionRestrictions: (input: {
+    payeeId: number;
+    date: string;
+    typeValue?: string;
+    itemId?: number;
+    typeRules?: WebAppRowGraphQL<ProviderRestrictionRule>[];
+    itemRules?: WebAppRowGraphQL<ProviderRestrictionRule>[];
+    receptionTypes?: Array<WebAppRowGraphQL<ReceptionType> | ReceptionType>;
+    itemIds?: Array<string | number>;
+    typeLabel?: string;
+    itemLabel?: string;
+}) => ProviderRestrictionCheckResult;
