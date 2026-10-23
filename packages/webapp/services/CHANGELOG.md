@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.14.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.13.0...@zauru-sdk/services@6.14.0) (2026-10-23)
+
+
+### Features
+
+* CRUD REST de plantillas de impresión y document prints
+* generar PDF de cheques contra discharges/gen_print_all
+
+
+
 # [6.13.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.12.0...@zauru-sdk/services@6.13.0) (2026-10-16)
 
 
