@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.26.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.24.0...@zauru-sdk/types@6.26.0) (2026-10-23)
+
+
+### Features
+
+* tipos REST de plantillas de impresión y document prints ([fdffea6](https://github.com/intuitiva/zauru-typescript-sdk/commit/fdffea67af46b001825c776e11da1289e01b0a5a))
+
+
+
+
+
 # [6.25.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.24.0...@zauru-sdk/types@6.25.0) (2026-10-23)
 
 
