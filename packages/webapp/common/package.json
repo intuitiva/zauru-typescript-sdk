@@ -12,7 +12,7 @@
   "scripts": {
     "build": "npm run build:esm",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "test": "tsx --test src/httpClientPolicy.test.ts"
+    "test": "tsx --test src/httpClientPolicy.test.ts src/providerRestrictions.test.ts"
   },
   "author": "Oscar Cuéllar",
   "license": "MIT",
