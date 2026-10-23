@@ -8,6 +8,7 @@ import {
   isRestrictionValueAllowed,
   matchReceptionTypeCode,
   resolveAllowedRestrictionValues,
+  restrictionLeavesNoAllowedValues,
   validateProviderRestrictionInput,
 } from "./providerRestrictions.js";
 
@@ -271,6 +272,88 @@ describe("validateProviderRestrictionInput", () => {
     });
     assert.equal(
       errors.some((error) => error.field === "start_date"),
+      true,
+    );
+  });
+
+  it("When exclude removes every value in the universe, it should reject it", () => {
+    const errors = validateProviderRestrictionInput(
+      {
+        payee_id: 1,
+        mode: "exclude",
+        values: ["N", "1"],
+      },
+      { universe: ["N", "1"], valueNoun: "tipos de recepción" },
+    );
+    assert.equal(
+      errors.some((error) => error.message.includes("sin tipos de recepción")),
+      true,
+    );
+  });
+
+  it("When exclude leaves at least one value, it should allow it", () => {
+    const errors = validateProviderRestrictionInput(
+      {
+        payee_id: 1,
+        mode: "exclude",
+        values: ["1"],
+      },
+      { universe: ["N", "1"] },
+    );
+    assert.deepEqual(errors, []);
+  });
+
+  it("When an overlapping exclude would empty an include, it should reject it", () => {
+    const errors = validateProviderRestrictionInput(
+      {
+        payee_id: 10,
+        mode: "exclude",
+        values: ["Normal"],
+        start_date: "2026-10-27",
+        end_date: "2026-11-02",
+        motivo: "Auditoría",
+      },
+      {
+        universe: ["Normal", "Certificado 1"],
+        otherRules: [
+          rule({
+            payee_id: 10,
+            mode: "include",
+            values: ["Normal"],
+          }),
+        ],
+      },
+    );
+    assert.equal(
+      errors.some((error) => error.field === "values"),
+      true,
+    );
+  });
+});
+
+describe("restrictionLeavesNoAllowedValues", () => {
+  it("When two dated excludes only empty the overlap, it should detect that day", () => {
+    assert.equal(
+      restrictionLeavesNoAllowedValues({
+        payeeId: 3,
+        universe: ["A", "B"],
+        rules: [
+          rule({
+            payee_id: 3,
+            mode: "exclude",
+            values: ["A"],
+            start_date: "2026-10-01",
+            end_date: "2026-10-20",
+          }),
+          rule({
+            payee_id: 3,
+            mode: "exclude",
+            values: ["B"],
+            start_date: "2026-10-10",
+            end_date: "2026-10-15",
+          }),
+        ],
+      }),
       true,
     );
   });
