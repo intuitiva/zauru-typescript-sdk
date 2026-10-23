@@ -196,8 +196,65 @@ export type ProviderRestrictionInputError = {
   message: string;
 };
 
+export type ValidateProviderRestrictionOptions = {
+  universe?: Array<string | number>;
+  otherRules?: ProviderRestrictionRule[];
+  valueNoun?: string;
+};
+
+const shiftYmd = (ymd: string, days: number): string => {
+  const [year, month, day] = ymd.split("-").map(Number);
+  const utc = new Date(Date.UTC(year, month - 1, day + days));
+  const nextYear = utc.getUTCFullYear();
+  const nextMonth = String(utc.getUTCMonth() + 1).padStart(2, "0");
+  const nextDay = String(utc.getUTCDate()).padStart(2, "0");
+  return `${nextYear}-${nextMonth}-${nextDay}`;
+};
+
+export const sampleDatesForRestrictionRules = (
+  rules: Array<Pick<ProviderRestrictionRule, "start_date" | "end_date">>,
+): string[] => {
+  const dates = new Set<string>(["1970-01-01", "2999-12-31"]);
+  for (const rule of rules) {
+    const start = normalizeRestrictionValue(rule.start_date);
+    const end = normalizeRestrictionValue(rule.end_date);
+    if (DATE_RE.test(start)) {
+      dates.add(start);
+      dates.add(shiftYmd(start, -1));
+    }
+    if (DATE_RE.test(end)) {
+      dates.add(end);
+      dates.add(shiftYmd(end, 1));
+    }
+  }
+  return [...dates].sort();
+};
+
+export const restrictionLeavesNoAllowedValues = (input: {
+  payeeId: number;
+  rules: ProviderRestrictionRule[] | undefined;
+  universe: Array<string | number>;
+}): boolean => {
+  const universe = input.universe
+    .map(normalizeRestrictionValue)
+    .filter(Boolean);
+  if (universe.length === 0) {
+    return false;
+  }
+  return sampleDatesForRestrictionRules(input.rules ?? []).some(
+    (date) =>
+      resolveAllowedRestrictionValues({
+        payeeId: input.payeeId,
+        date,
+        rules: input.rules,
+        universe,
+      }).length === 0,
+  );
+};
+
 export const validateProviderRestrictionInput = (
   input: ProviderRestrictionInput,
+  options?: ValidateProviderRestrictionOptions,
 ): ProviderRestrictionInputError[] => {
   const errors: ProviderRestrictionInputError[] = [];
   if (!Number(input.payee_id) || Number(input.payee_id) < 1) {
@@ -241,6 +298,44 @@ export const validateProviderRestrictionInput = (
       errors.push({
         field: "motivo",
         message: "Indique el motivo de la excepción con rango de fechas.",
+      });
+    }
+  }
+
+  const universe = (options?.universe ?? [])
+    .map(normalizeRestrictionValue)
+    .filter(Boolean);
+  if (
+    universe.length > 0 &&
+    Number(input.payee_id) > 0 &&
+    isProviderRestrictionMode(input.mode) &&
+    normalizeProviderRestrictionValues(input.values).length > 0
+  ) {
+    const proposed: ProviderRestrictionRule = {
+      payee_id: Number(input.payee_id),
+      mode: input.mode,
+      values: normalizeProviderRestrictionValues(input.values),
+      start_date: start,
+      end_date: end,
+      motivo: normalizeRestrictionValue(input.motivo),
+    };
+    const otherRules = (options?.otherRules ?? []).filter(
+      (rule) =>
+        Number(rule.payee_id) === Number(input.payee_id) &&
+        !normalizeRestrictionValue(rule.fechaEliminacion),
+    );
+    if (
+      restrictionLeavesNoAllowedValues({
+        payeeId: Number(input.payee_id),
+        rules: [...otherRules, proposed],
+        universe,
+      })
+    ) {
+      const noun =
+        normalizeRestrictionValue(options?.valueNoun) || "opciones";
+      errors.push({
+        field: "values",
+        message: `Esta regla dejaría al proveedor sin ${noun} para escoger. Debe quedar al menos uno.`,
       });
     }
   }
