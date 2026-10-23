@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.11.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.10.1...@zauru-sdk/common@6.11.0) (2026-10-23)
+
+
+### Features
+
+* motor de restricciones de tipos y verduras por proveedor ([ea09fd6](https://github.com/intuitiva/zauru-typescript-sdk/commit/ea09fd6a4cbed61fc29640baf1bc2b0b78db18da))
+
+
+
+
+
 ## [6.10.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.10.0...@zauru-sdk/common@6.10.1) (2026-10-23)
 
 **Note:** Version bump only for package @zauru-sdk/common

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.25.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.24.2...@zauru-sdk/utils@6.25.0) (2026-10-23)
+
+
+### Features
+
+* CRUD de restricciones de recepción por proveedor ([c5459ac](https://github.com/intuitiva/zauru-typescript-sdk/commit/c5459ac46c8deb4f2c296697d24f0dedf4eaca89))
+
+
+
+
+
 ## [6.24.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.24.1...@zauru-sdk/utils@6.24.2) (2026-10-23)
 
 **Note:** Version bump only for package @zauru-sdk/utils
