@@ -26,6 +26,26 @@ import { getSpecialItems } from "./specialItem.utils.js";
 export const MASSIVE_VEGETABLE_COST_ACCION = "Costos masivamente";
 const FALLBACK_UNIT_COST = 1;
 
+export const pickProviderCategoryId = (
+  payee?: { payee_category_id?: number | null } | null,
+  payees?: Array<{ id?: number; payee_category_id?: number | null }> | null,
+  payeeId?: number,
+): number | undefined => {
+  const fromPayee = payee?.payee_category_id;
+  if (fromPayee != null && Number.isFinite(Number(fromPayee))) {
+    return Number(fromPayee);
+  }
+  if (payeeId == null || !payees?.length) {
+    return undefined;
+  }
+  const match = payees.find((item) => item.id === payeeId);
+  const fromList = match?.payee_category_id;
+  if (fromList == null || !Number.isFinite(Number(fromList))) {
+    return undefined;
+  }
+  return Number(fromList);
+};
+
 type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 const isSpecialItemRow = (
@@ -320,9 +340,8 @@ export const resolveItemPriceFromLatestWeeklyMatrix = (
     let providerCategoryId: number | undefined;
     if (params.payeeId != null) {
       const payeeResponse = await getPayee(session, params.payeeId);
-      if (!payeeResponse.error && payeeResponse.data) {
-        providerCategoryId = payeeResponse.data.payee_category_id;
-      } else {
+      providerCategoryId = pickProviderCategoryId(payeeResponse.data);
+      if (providerCategoryId == null) {
         const payeesResponse = await getPayees(session);
         if (payeesResponse.error || !payeesResponse.data) {
           throw new Error(
@@ -331,9 +350,11 @@ export const resolveItemPriceFromLatestWeeklyMatrix = (
             }`,
           );
         }
-        providerCategoryId = payeesResponse.data.find(
-          (payee) => payee.id === params.payeeId,
-        )?.payee_category_id;
+        providerCategoryId = pickProviderCategoryId(
+          undefined,
+          payeesResponse.data,
+          params.payeeId,
+        );
       }
     }
 
