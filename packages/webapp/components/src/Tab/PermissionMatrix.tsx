@@ -30,6 +30,8 @@ export function permissionMatrixCellKey(roleId: number, key: string): string {
 const checkboxClass =
   "form-checkbox h-4 w-4 cursor-pointer rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50";
 
+const FIRST_COL_SHADOW = "shadow-[2px_0_4px_-2px_rgba(0,0,0,0.12)]";
+
 export const PermissionMatrix = ({
   groups,
   roles,
@@ -58,8 +60,8 @@ export const PermissionMatrix = ({
     keys.length > 0 && keys.every((key) => role.permissionKeys.includes(key));
 
   return (
-    <div className="overflow-x-auto rounded-md border border-gray-200">
-      <table className="min-w-full border-collapse text-sm">
+    <div className="relative isolate max-h-[70vh] overflow-auto rounded-md border border-gray-200">
+      <table className="min-w-full border-separate border-spacing-0 text-sm">
         <caption className="sr-only">
           Matriz de permisos por rol. Filas son acciones, columnas son roles.
         </caption>
@@ -67,7 +69,7 @@ export const PermissionMatrix = ({
           <tr className="bg-gray-50">
             <th
               scope="col"
-              className="sticky left-0 z-10 min-w-[16rem] border-b border-gray-200 bg-gray-50 px-3 py-2 text-left font-semibold text-gray-800"
+              className={`sticky left-0 top-0 z-40 min-w-[16rem] border-b border-gray-200 bg-gray-50 px-3 py-2 text-left font-semibold text-gray-800 ${FIRST_COL_SHADOW}`}
             >
               Permiso
             </th>
@@ -77,7 +79,7 @@ export const PermissionMatrix = ({
                 <th
                   key={role.id}
                   scope="col"
-                  className="min-w-[9rem] border-b border-l border-gray-200 px-3 py-2 text-center font-semibold text-gray-800"
+                  className="sticky top-0 z-30 min-w-[9rem] border-b border-l border-gray-200 bg-gray-50 px-3 py-2 text-center font-semibold text-gray-800"
                 >
                   <div className="flex flex-col items-center gap-1">
                     <span className="break-words">{role.name}</span>
@@ -113,6 +115,7 @@ export const PermissionMatrix = ({
                 onToggle={onToggle}
                 onBulkSection={onBulkSection}
                 checkboxClass={checkboxClass}
+                firstColShadow={FIRST_COL_SHADOW}
               />
             );
           })}
@@ -131,6 +134,7 @@ function GroupRows({
   onToggle,
   onBulkSection,
   checkboxClass,
+  firstColShadow,
 }: {
   group: PermissionGroup;
   roles: PermissionMatrixRole[];
@@ -140,56 +144,67 @@ function GroupRows({
   onToggle: Props["onToggle"];
   onBulkSection: Props["onBulkSection"];
   checkboxClass: string;
+  firstColShadow: string;
 }) {
   return (
     <>
       <tr className="bg-slate-100">
         <th
           scope="colgroup"
-          colSpan={roles.length + 1}
-          className="sticky left-0 border-b border-gray-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-700"
+          className={`sticky left-0 z-20 border-b border-gray-200 bg-slate-100 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-700 ${firstColShadow}`}
         >
           {group.label}
         </th>
+        {roles.map((role) => (
+          <td
+            key={role.id}
+            className="border-b border-l border-gray-200 bg-slate-100"
+          />
+        ))}
       </tr>
-      {group.actions.map((action) => (
-        <tr key={action.key} className="odd:bg-white even:bg-slate-50">
-          <th
-            scope="row"
-            className="sticky left-0 z-10 border-b border-gray-100 bg-inherit px-3 py-2 text-left font-normal text-gray-800"
-          >
-            <div className="flex flex-col gap-0.5">
-              <span>{action.label}</span>
-              <code className="text-xs text-gray-500">{action.key}</code>
-            </div>
-          </th>
-          {roles.map((role) => {
-            const granted = role.permissionKeys.includes(action.key);
-            const cellKey = permissionMatrixCellKey(role.id, action.key);
-            const pending = pendingCells?.has(cellKey) ?? false;
-            return (
-              <td
-                key={role.id}
-                className="border-b border-l border-gray-100 px-3 py-2 text-center"
-              >
-                <input
-                  type="checkbox"
-                  id={`permission-${role.id}-${action.key}`}
-                  name={`permission-${role.id}-${action.key}`}
-                  className={checkboxClass}
-                  checked={granted}
-                  disabled={disabled || pending}
-                  aria-label={`${role.name}: ${action.label}`}
-                  onChange={() => onToggle(role.id, action.key, !granted)}
-                />
-              </td>
-            );
-          })}
-        </tr>
-      ))}
+      {group.actions.map((action, actionIndex) => {
+        const rowBg = actionIndex % 2 === 0 ? "bg-white" : "bg-slate-50";
+        return (
+          <tr key={action.key} className={rowBg}>
+            <th
+              scope="row"
+              className={`sticky left-0 z-10 border-b border-gray-100 px-3 py-2 text-left font-normal text-gray-800 ${rowBg} ${firstColShadow}`}
+            >
+              <div className="flex flex-col gap-0.5">
+                <span>{action.label}</span>
+                <code className="text-xs text-gray-500">{action.key}</code>
+              </div>
+            </th>
+            {roles.map((role) => {
+              const granted = role.permissionKeys.includes(action.key);
+              const cellKey = permissionMatrixCellKey(role.id, action.key);
+              const pending = pendingCells?.has(cellKey) ?? false;
+              return (
+                <td
+                  key={role.id}
+                  className="border-b border-l border-gray-100 px-3 py-2 text-center"
+                >
+                  <input
+                    type="checkbox"
+                    id={`permission-${role.id}-${action.key}`}
+                    name={`permission-${role.id}-${action.key}`}
+                    className={checkboxClass}
+                    checked={granted}
+                    disabled={disabled || pending}
+                    aria-label={`${role.name}: ${action.label}`}
+                    onChange={() => onToggle(role.id, action.key, !granted)}
+                  />
+                </td>
+              );
+            })}
+          </tr>
+        );
+      })}
       {onBulkSection ? (
         <tr>
-          <td className="sticky left-0 z-10 border-b border-gray-200 bg-white px-3 py-1 text-xs text-gray-500">
+          <td
+            className={`sticky left-0 z-10 border-b border-gray-200 bg-white px-3 py-1 text-xs text-gray-500 ${firstColShadow}`}
+          >
             Sección
           </td>
           {roles.map((role) => {
