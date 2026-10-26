@@ -1004,6 +1004,28 @@ export type ProviderRestrictionCheckResult = {
     mode: ProviderRestrictionMode;
     matchedValues: string[];
 };
+export type ProviderReceptionExceptionMode = "allow" | "block";
+/**
+ * Permanent matrix state for one provider and reception type.
+ * Missing rows and missing item ids are allowed by default.
+ */
+export type ProviderReceptionBlockRule = {
+    payee_id: number;
+    reception_type_code: string;
+    blocked_item_ids: Array<string | number>;
+    fechaEliminacion?: string;
+};
+/** A dated override applied on top of the permanent provider matrix. */
+export type ProviderReceptionException = {
+    payee_id: number;
+    reception_type_code: string;
+    mode: ProviderReceptionExceptionMode;
+    item_ids: Array<string | number>;
+    start_date: string;
+    end_date: string;
+    motivo: string;
+    fechaEliminacion?: string;
+};
 export type QueueShipmentsForm = {
     creadoPor: string;
     fechaCreacion: string;

@@ -19,4 +19,5 @@ __exportStar(require("./gtZones.js"), exports);
 __exportStar(require("./httpClientPolicy.js"), exports);
 __exportStar(require("./oauthErrors.js"), exports);
 __exportStar(require("./providerRestrictions.js"), exports);
+__exportStar(require("./providerReceptionMatrix.js"), exports);
 __exportStar(require("./rejectionPercentageAdjustment.js"), exports);
