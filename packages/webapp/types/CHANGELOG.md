@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.28.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.26.0...@zauru-sdk/types@6.28.0) (2026-10-26)
+
+
+### Features
+
+* agregar matriz de restricciones de recepción ([11a07b0](https://github.com/intuitiva/zauru-typescript-sdk/commit/11a07b04aa71dd6a38b79f10c4209d08e8f7607c))
+* tipos de restricciones de recepción por proveedor ([50ee227](https://github.com/intuitiva/zauru-typescript-sdk/commit/50ee2270182f4a58dcfd25c65129f6f7b2af647a))
+
+
+
+
+
 # [6.27.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.26.0...@zauru-sdk/types@6.27.0) (2026-10-23)
 
 

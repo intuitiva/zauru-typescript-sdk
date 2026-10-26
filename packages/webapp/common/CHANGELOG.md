@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.12.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.10.1...@zauru-sdk/common@6.12.0) (2026-10-26)
+
+
+### Bug Fixes
+
+* rechazar restricciones que dejan al proveedor sin opciones ([24e6609](https://github.com/intuitiva/zauru-typescript-sdk/commit/24e6609b9cbf1498bec52bbeae9cd52a57945b45))
+
+
+### Features
+
+* agregar matriz de restricciones de recepción ([11a07b0](https://github.com/intuitiva/zauru-typescript-sdk/commit/11a07b04aa71dd6a38b79f10c4209d08e8f7607c))
+* motor de restricciones de tipos y verduras por proveedor ([ea09fd6](https://github.com/intuitiva/zauru-typescript-sdk/commit/ea09fd6a4cbed61fc29640baf1bc2b0b78db18da))
+
+
+
+
+
 # [6.11.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.10.1...@zauru-sdk/common@6.11.0) (2026-10-23)
 
 
