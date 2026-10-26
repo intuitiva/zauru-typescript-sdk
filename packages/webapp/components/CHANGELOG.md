@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.14.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.13.3...@zauru-sdk/components@6.14.0) (2026-10-26)
+
+
+### Features
+
+* fijar cabecera y primera columna de PermissionMatrix al hacer scroll ([5b628a9](https://github.com/intuitiva/zauru-typescript-sdk/commit/5b628a9c0bc80169757cbe9ad96106cfe3732458))
+
+
+
+
+
 ## [6.13.3](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.13.2...@zauru-sdk/components@6.13.3) (2026-10-23)
 
 **Note:** Version bump only for package @zauru-sdk/components
