@@ -1,6 +1,18 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { getShipmentsStringQuery } from "./GraphQL.queries.js";
+import {
+  getPayeeByIdStringQuery,
+  getShipmentsStringQuery,
+} from "./GraphQL.queries.js";
+
+describe("getPayeeByIdStringQuery", () => {
+  it("includes payee_category_id so price rules can match by programa", () => {
+    const query = getPayeeByIdStringQuery(1689394);
+    assert.match(query, /payees\s*\(where:\s*\{\s*id:\s*\{\s*_eq:\s*1689394/);
+    assert.match(query, /payee_category_id/);
+    assert.match(query, /payee_category\s*\{/);
+  });
+});
 
 describe("getShipmentsStringQuery", () => {
   it("When withMovements is omitted, it should include movements", () => {
