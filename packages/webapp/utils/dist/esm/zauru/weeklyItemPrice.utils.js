@@ -5,6 +5,21 @@ import { applyPriceAdjustmentRules, filterActivePriceAdjustmentRules, formatPric
 import { getSpecialItems } from "./specialItem.utils.js";
 export const MASSIVE_VEGETABLE_COST_ACCION = "Costos masivamente";
 const FALLBACK_UNIT_COST = 1;
+export const pickProviderCategoryId = (payee, payees, payeeId) => {
+    const fromPayee = payee?.payee_category_id;
+    if (fromPayee != null && Number.isFinite(Number(fromPayee))) {
+        return Number(fromPayee);
+    }
+    if (payeeId == null || !payees?.length) {
+        return undefined;
+    }
+    const match = payees.find((item) => item.id === payeeId);
+    const fromList = match?.payee_category_id;
+    if (fromList == null || !Number.isFinite(Number(fromList))) {
+        return undefined;
+    }
+    return Number(fromList);
+};
 const isSpecialItemRow = (item) => typeof item.id === "number" &&
     Boolean(item.data);
 const isWeekday = (value) => value === 0 ||
@@ -190,15 +205,13 @@ export const resolveItemPriceFromLatestWeeklyMatrix = (headers, session, params)
         let providerCategoryId;
         if (params.payeeId != null) {
             const payeeResponse = await getPayee(session, params.payeeId);
-            if (!payeeResponse.error && payeeResponse.data) {
-                providerCategoryId = payeeResponse.data.payee_category_id;
-            }
-            else {
+            providerCategoryId = pickProviderCategoryId(payeeResponse.data);
+            if (providerCategoryId == null) {
                 const payeesResponse = await getPayees(session);
                 if (payeesResponse.error || !payeesResponse.data) {
                     throw new Error(`Error al obtener el proveedor para aplicar las reglas de ajuste: ${payeeResponse.userMsg ?? payeesResponse.userMsg ?? ""}`);
                 }
-                providerCategoryId = payeesResponse.data.find((payee) => payee.id === params.payeeId)?.payee_category_id;
+                providerCategoryId = pickProviderCategoryId(undefined, payeesResponse.data, params.payeeId);
             }
         }
         return calculateItemPriceFromWeeklyMatrix({

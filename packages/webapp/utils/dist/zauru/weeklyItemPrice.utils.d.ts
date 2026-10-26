@@ -1,6 +1,12 @@
 import type { Session } from "@remix-run/node";
 import { AxiosUtilsResponse, BitacoraCostosItems, CalculateItemPriceFromWeeklyMatrixInput, CalculateItemPriceFromWeeklyMatrixResult, CostoSemanal, CostoSemanalSpecialItem, SpecialItem, WebAppRowGraphQL, WeeklyCostMatrix, WeeklyCostPeriod } from "@zauru-sdk/types";
 export declare const MASSIVE_VEGETABLE_COST_ACCION = "Costos masivamente";
+export declare const pickProviderCategoryId: (payee?: {
+    payee_category_id?: number | null;
+} | null, payees?: Array<{
+    id?: number;
+    payee_category_id?: number | null;
+}> | null, payeeId?: number) => number | undefined;
 export declare const parseWeeklyCostDate: (value: string) => Date | null;
 export declare const getMondayOfWeeklyCostDate: (date: string) => string | null;
 export declare const getWeeklyCostPeriod: (date: string) => WeeklyCostPeriod;
