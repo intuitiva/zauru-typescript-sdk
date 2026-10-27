@@ -31,6 +31,8 @@ import type {
   AuthorizationUpdateDiscountPO,
   PoDiscountHistory,
   Programacion,
+  ProviderReceptionBlockRule,
+  ProviderReceptionException,
 } from "@zauru-sdk/types";
 
 export type CATALOGS_NAMES =
@@ -41,6 +43,8 @@ export type CATALOGS_NAMES =
   | "receptionTypes"
   | "tiposDeMuestra"
   | "programaciones4pinos"
+  | "providerReceptionBlockRules"
+  | "providerReceptionExceptions"
   | "motivosRechazo"
   | "ccPorcentajesDeRechazo"
   | "solicitudesEliminacionPO"
@@ -106,6 +110,12 @@ type CatalogState = {
   shipments: LoadingState<ShipmentGraphQL[]>;
   bookings: LoadingState<ShipmentGraphQL[]>;
   programaciones4pinos: LoadingState<WebAppRowGraphQL<Programacion>[]>;
+  providerReceptionBlockRules: LoadingState<
+    WebAppRowGraphQL<ProviderReceptionBlockRule>[]
+  >;
+  providerReceptionExceptions: LoadingState<
+    WebAppRowGraphQL<ProviderReceptionException>[]
+  >;
   motivosRechazo: LoadingState<WebAppRowGraphQL<MotivoRechazo>[]>;
   ccPorcentajesDeRechazo: LoadingState<WebAppRowGraphQL<CCPorcentajeRechazo>[]>;
   solicitudesEliminacionPO: LoadingState<
@@ -163,6 +173,8 @@ const initialState: CatalogState = {
   shipments: createLoadingState([]),
   bookings: createLoadingState([]),
   programaciones4pinos: createLoadingState([]),
+  providerReceptionBlockRules: createLoadingState([]),
+  providerReceptionExceptions: createLoadingState([]),
   motivosRechazo: createLoadingState([]),
   ccPorcentajesDeRechazo: createLoadingState([]),
   solicitudesEliminacionPO: createLoadingState([]),

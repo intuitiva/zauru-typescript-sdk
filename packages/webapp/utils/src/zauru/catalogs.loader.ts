@@ -54,6 +54,10 @@ import { getProgramaciones } from "./programaciones.utils.js";
 import { getShipmentsToMyAgency } from "./shipments.utils.js";
 import { getTemplates } from "./templates.utils.js";
 import { getTipoMuestras } from "./tiposMuestra.utils.js";
+import {
+  getProviderReceptionBlockRules,
+  getProviderReceptionExceptions,
+} from "./providerReceptionMatrix.utils.js";
 import { getReceptionTypes } from "./webapp-tables.utils.js";
 
 export type CatalogLoaderContext = {
@@ -161,6 +165,10 @@ const sdkCatalogHandlers: Record<string, CatalogHandler> = {
     getCCPorcentajesDeRechazo(headers, session),
   programaciones4pinos: ({ headers, session }) =>
     getProgramaciones(headers, session),
+  providerReceptionBlockRules: ({ headers, session }) =>
+    getProviderReceptionBlockRules(headers, session),
+  providerReceptionExceptions: ({ headers, session }) =>
+    getProviderReceptionExceptions(headers, session),
   solicitudesEliminacionPO: ({ headers, session }) =>
     get4pinosSolicitudEliminacionPO(headers, session),
   pesoMaximoPorCanasta: ({ headers, session }) =>

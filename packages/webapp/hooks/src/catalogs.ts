@@ -33,6 +33,8 @@ import type {
   PoDiscountHistory,
   PesoMaximoPorCanasta,
   Programacion,
+  ProviderReceptionBlockRule,
+  ProviderReceptionException,
 } from "@zauru-sdk/types";
 import {
   CATALOGS_NAMES,
@@ -591,6 +593,28 @@ export const useGetProgramaciones = (
 } =>
   useGetReduxCatalog<WebAppRowGraphQL<Programacion>>(
     "programaciones4pinos",
+    config,
+  );
+
+export const useGetProviderReceptionBlockRules = (
+  config?: ReduxParamsConfig,
+): {
+  loading: boolean;
+  data: WebAppRowGraphQL<ProviderReceptionBlockRule>[];
+} =>
+  useGetReduxCatalog<WebAppRowGraphQL<ProviderReceptionBlockRule>>(
+    "providerReceptionBlockRules",
+    config,
+  );
+
+export const useGetProviderReceptionExceptions = (
+  config?: ReduxParamsConfig,
+): {
+  loading: boolean;
+  data: WebAppRowGraphQL<ProviderReceptionException>[];
+} =>
+  useGetReduxCatalog<WebAppRowGraphQL<ProviderReceptionException>>(
+    "providerReceptionExceptions",
     config,
   );
 
