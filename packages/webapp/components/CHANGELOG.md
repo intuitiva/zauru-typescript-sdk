@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.14.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.14.1...@zauru-sdk/components@6.14.2) (2026-10-26)
+
+
+### Bug Fixes
+
+* alinear encabezados y celdas de ZauruTable ([46783d1](https://github.com/intuitiva/zauru-typescript-sdk/commit/46783d1f))
+
+
 ## [6.14.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.14.0...@zauru-sdk/components@6.14.1) (2026-10-26)
 
 **Note:** Version bump only for package @zauru-sdk/components
