@@ -19,6 +19,8 @@ const initialState = {
     shipments: createLoadingState([]),
     bookings: createLoadingState([]),
     programaciones4pinos: createLoadingState([]),
+    providerReceptionBlockRules: createLoadingState([]),
+    providerReceptionExceptions: createLoadingState([]),
     motivosRechazo: createLoadingState([]),
     ccPorcentajesDeRechazo: createLoadingState([]),
     solicitudesEliminacionPO: createLoadingState([]),

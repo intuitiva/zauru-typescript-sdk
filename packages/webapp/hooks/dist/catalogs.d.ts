@@ -1,4 +1,4 @@
-import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL, PaymentMethodGraphQL, CCPorcentajeRechazo, SolicitudEliminacionPO, AuthorizationUpdateDiscountPO, PoDiscountHistory, PesoMaximoPorCanasta, Programacion } from "@zauru-sdk/types";
+import type { AgencyGraphQL, BitacoraPOMassive, BundleGraphQL, CaseGraphQL, CurrencyGraphQL, EmployeeGraphQL, FormGraphQL, InvoiceGraphQL, ItemCategoryGraphQL, ItemGraphQL, LotStockGraphQL, MotivoRechazo, PayeeCategoryGraphQL, PayeeGraphQL, PaymentTermGraphQL, ReceptionType, ShipmentGraphQL, SubmissionCasesGraphQL, SubmissionInvoicesGraphQL, SuggestedPriceGraphQL, Template, TipoMuestra, WebAppRowGraphQL, PrintTemplateGraphQL, PaymentMethodGraphQL, CCPorcentajeRechazo, SolicitudEliminacionPO, AuthorizationUpdateDiscountPO, PoDiscountHistory, PesoMaximoPorCanasta, Programacion, ProviderReceptionBlockRule, ProviderReceptionException } from "@zauru-sdk/types";
 import { CATALOGS_NAMES, ReduxParamsConfig } from "@zauru-sdk/redux";
 type CatalogType<T> = {
     data: T[];
@@ -167,6 +167,14 @@ export declare const useGetCCPorcentajesDeRechazo: (config?: ReduxParamsConfig) 
 export declare const useGetProgramaciones: (config?: ReduxParamsConfig) => {
     loading: boolean;
     data: WebAppRowGraphQL<Programacion>[];
+};
+export declare const useGetProviderReceptionBlockRules: (config?: ReduxParamsConfig) => {
+    loading: boolean;
+    data: WebAppRowGraphQL<ProviderReceptionBlockRule>[];
+};
+export declare const useGetProviderReceptionExceptions: (config?: ReduxParamsConfig) => {
+    loading: boolean;
+    data: WebAppRowGraphQL<ProviderReceptionException>[];
 };
 export declare const useGet4pinosSolicitudEliminacionPO: (config?: ReduxParamsConfig) => {
     loading: boolean;
