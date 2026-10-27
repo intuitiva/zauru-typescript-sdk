@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.4.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/hooks@6.3.23...@zauru-sdk/hooks@6.4.0) (2026-10-27)
+
+
+### Features
+
+* cachear la matriz de recepción por proveedor como catálogo Redux ([adb8728](https://github.com/intuitiva/zauru-typescript-sdk/commit/adb8728a250952ab980d3e7ee3c62b6404a419f1))
+
+
+
+
+
 ## [6.3.23](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/hooks@6.3.22...@zauru-sdk/hooks@6.3.23) (2026-10-26)
 
 **Note:** Version bump only for package @zauru-sdk/hooks
