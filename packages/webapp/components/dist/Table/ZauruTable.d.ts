@@ -21,5 +21,7 @@ type Props = TableProps<any> & {
     theme?: "solarized" | "subTable";
     className?: string;
 };
+export declare const normalizeZauruTableColumns: (columns: any) => any;
+export declare const zauruTableFlexBasisCss: (tableClassName: string, columns: any) => string;
 export declare const ZauruTable: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

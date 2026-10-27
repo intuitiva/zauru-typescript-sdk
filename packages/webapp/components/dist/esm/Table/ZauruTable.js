@@ -1,6 +1,6 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { useSearchParams } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { createTheme } from "react-data-table-component";
 import { SearchSVG } from "@zauru-sdk/icons";
 import * as ReactDataTableComponent from "react-data-table-component";
@@ -160,6 +160,56 @@ createTheme("subTable", {
         background: "black",
     },
 });
+export const normalizeZauruTableColumns = (columns) => {
+    if (!Array.isArray(columns)) {
+        return columns;
+    }
+    return columns.map((column, index) => {
+        if (!column || typeof column !== "object") {
+            return column;
+        }
+        const next = { wrap: true, ...column };
+        if (next.id == null) {
+            next.id = index + 1;
+        }
+        // RDT `width` sets both min-width and max-width, wiping a px floor.
+        // Keep % as flex-basis so minWidth/maxWidth/grow still apply.
+        if (typeof next.width === "string" && next.width.endsWith("%")) {
+            const pct = next.width;
+            delete next.width;
+            next.style = {
+                flexBasis: pct,
+                ...next.style,
+            };
+        }
+        return next;
+    });
+};
+export const zauruTableFlexBasisCss = (tableClassName, columns) => {
+    if (!tableClassName || !Array.isArray(columns)) {
+        return "";
+    }
+    const safeClass = tableClassName.replace(/[^a-zA-Z0-9_-]/g, "");
+    if (!safeClass) {
+        return "";
+    }
+    return columns
+        .flatMap((column) => {
+        const basis = column?.style?.flexBasis;
+        if (basis == null || column?.id == null) {
+            return [];
+        }
+        const id = String(column.id).replace(/[^a-zA-Z0-9_-]/g, "");
+        const safeBasis = String(basis).replace(/[^\d.%]/g, "");
+        if (!id || !safeBasis) {
+            return [];
+        }
+        return [
+            `.${safeClass} [data-column-id="${id}"] { flex-basis: ${safeBasis} !important; }`,
+        ];
+    })
+        .join("\n");
+};
 //Documentación de la tabla https://react-data-table-component.netlify.app/?path=/docs/getting-started-intro--docs
 export const ZauruTable = (props) => {
     const { columns, conditionalRowStyles, data, loading = false, pagination, search, expandable, theme, className, offlineSearch = [], whitOutPagination = false, ...others } = props;
@@ -176,6 +226,9 @@ export const ZauruTable = (props) => {
     useEffect(() => {
         setFilteredData(data);
     }, [data]);
+    const tableInstanceClass = `zauru-table-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
+    const normalizedColumns = useMemo(() => normalizeZauruTableColumns(columns), [columns]);
+    const flexBasisCss = useMemo(() => zauruTableFlexBasisCss(tableInstanceClass, normalizedColumns), [tableInstanceClass, normalizedColumns]);
     const subHeaderComponentMemo = (_jsxs(_Fragment, { children: [_jsx("input", { name: "search", type: "text", placeholder: search?.placeholderSearch ?? "Filtrar", "aria-label": "Search Input", className: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg px-2", onChange: (event) => {
                     const searchTerm = event.target.value;
                     if (offlineSearch.length > 0) {
@@ -228,26 +281,7 @@ export const ZauruTable = (props) => {
     };
     const loadSubHeader = !!(search || offlineSearch.length > 0);
     const subHeaderComponent = loadSubHeader ? subHeaderComponentMemo : undefined;
-    const normalizedColumns = Array.isArray(columns)
-        ? columns.map((column) => {
-            if (!column || typeof column !== "object") {
-                return column;
-            }
-            const next = { wrap: true, ...column };
-            // RDT `width` sets both min-width and max-width, wiping a px floor.
-            // Keep % as flex-basis so minWidth/maxWidth/grow still apply.
-            if (typeof next.width === "string" && next.width.endsWith("%")) {
-                const pct = next.width;
-                delete next.width;
-                next.style = {
-                    flexBasis: pct,
-                    ...next.style,
-                };
-            }
-            return next;
-        })
-        : columns;
-    return (_jsx("div", { className: "w-full min-w-0 max-w-full overflow-x-auto", children: _jsx(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: normalizedColumns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, expandableRows: !!expandable, expandOnRowClicked: !!expandable, expandableRowExpanded: expandable ? expandable.expandableRowExpanded : undefined, expandableRowsComponent: expandable ? expandable.expandableRowsComponent : undefined, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination?.totalRows ?? undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions
-                ? pagination.rowsPerPageOptions
-                : [10, 50, 100], ...others }) }));
+    return (_jsxs("div", { className: `w-full min-w-0 max-w-full overflow-x-auto ${tableInstanceClass}`, children: [flexBasisCss ? _jsx("style", { children: flexBasisCss }) : null, _jsx(DataTable, { className: className, subHeaderWrap: true, theme: theme ?? "solarized", columns: normalizedColumns, conditionalRowStyles: conditionalRowStyles, data: filteredData, customStyles: customStyles, progressPending: loading, highlightOnHover: true, pointerOnHover: true, dense: true, striped: true, pagination: !whitOutPagination, persistTableHead: true, responsive: true, noHeader: true, expandableRows: !!expandable, expandOnRowClicked: !!expandable, expandableRowExpanded: expandable ? expandable.expandableRowExpanded : undefined, expandableRowsComponent: expandable ? expandable.expandableRowsComponent : undefined, subHeader: loadSubHeader, subHeaderComponent: subHeaderComponent, paginationServer: !!pagination, paginationTotalRows: pagination?.totalRows ?? undefined, onChangeRowsPerPage: pagination ? handlePerRowsChange : undefined, onChangePage: pagination ? handlePageChange : undefined, paginationComponentOptions: paginationComponentOptions, paginationRowsPerPageOptions: pagination?.rowsPerPageOptions
+                    ? pagination.rowsPerPageOptions
+                    : [10, 50, 100], ...others })] }));
 };
