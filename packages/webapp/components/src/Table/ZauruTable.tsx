@@ -1,5 +1,5 @@
 import { useSearchParams } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import type {
   PaginationOptions,
   TableProps,
@@ -193,6 +193,61 @@ type Props = TableProps<any> & {
   className?: string;
 };
 
+export const normalizeZauruTableColumns = (columns: any): any => {
+  if (!Array.isArray(columns)) {
+    return columns;
+  }
+  return columns.map((column: any, index: number) => {
+    if (!column || typeof column !== "object") {
+      return column;
+    }
+    const next = { wrap: true, ...column };
+    if (next.id == null) {
+      next.id = index + 1;
+    }
+    // RDT `width` sets both min-width and max-width, wiping a px floor.
+    // Keep % as flex-basis so minWidth/maxWidth/grow still apply.
+    if (typeof next.width === "string" && next.width.endsWith("%")) {
+      const pct = next.width;
+      delete next.width;
+      next.style = {
+        flexBasis: pct,
+        ...next.style,
+      };
+    }
+    return next;
+  });
+};
+
+export const zauruTableFlexBasisCss = (
+  tableClassName: string,
+  columns: any
+): string => {
+  if (!tableClassName || !Array.isArray(columns)) {
+    return "";
+  }
+  const safeClass = tableClassName.replace(/[^a-zA-Z0-9_-]/g, "");
+  if (!safeClass) {
+    return "";
+  }
+  return columns
+    .flatMap((column: any) => {
+      const basis = column?.style?.flexBasis;
+      if (basis == null || column?.id == null) {
+        return [];
+      }
+      const id = String(column.id).replace(/[^a-zA-Z0-9_-]/g, "");
+      const safeBasis = String(basis).replace(/[^\d.%]/g, "");
+      if (!id || !safeBasis) {
+        return [];
+      }
+      return [
+        `.${safeClass} [data-column-id="${id}"] { flex-basis: ${safeBasis} !important; }`,
+      ];
+    })
+    .join("\n");
+};
+
 //Documentación de la tabla https://react-data-table-component.netlify.app/?path=/docs/getting-started-intro--docs
 export const ZauruTable = (props: Props) => {
   const {
@@ -226,6 +281,16 @@ export const ZauruTable = (props: Props) => {
   useEffect(() => {
     setFilteredData(data);
   }, [data]);
+
+  const tableInstanceClass = `zauru-table-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
+  const normalizedColumns = useMemo(
+    () => normalizeZauruTableColumns(columns),
+    [columns]
+  );
+  const flexBasisCss = useMemo(
+    () => zauruTableFlexBasisCss(tableInstanceClass, normalizedColumns),
+    [tableInstanceClass, normalizedColumns]
+  );
 
   const subHeaderComponentMemo = (
     <>
@@ -307,28 +372,10 @@ export const ZauruTable = (props: Props) => {
 
   const loadSubHeader = !!(search || offlineSearch.length > 0);
   const subHeaderComponent = loadSubHeader ? subHeaderComponentMemo : undefined;
-  const normalizedColumns = Array.isArray(columns)
-    ? columns.map((column: any) => {
-        if (!column || typeof column !== "object") {
-          return column;
-        }
-        const next = { wrap: true, ...column };
-        // RDT `width` sets both min-width and max-width, wiping a px floor.
-        // Keep % as flex-basis so minWidth/maxWidth/grow still apply.
-        if (typeof next.width === "string" && next.width.endsWith("%")) {
-          const pct = next.width;
-          delete next.width;
-          next.style = {
-            flexBasis: pct,
-            ...next.style,
-          };
-        }
-        return next;
-      })
-    : columns;
 
   return (
-    <div className="w-full min-w-0 max-w-full overflow-x-auto">
+    <div className={`w-full min-w-0 max-w-full overflow-x-auto ${tableInstanceClass}`}>
+      {flexBasisCss ? <style>{flexBasisCss}</style> : null}
       <DataTable
       className={className}
       subHeaderWrap
