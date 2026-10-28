@@ -58,6 +58,30 @@ export const EyeSvg: React.FC<
   </svg>
 );
 
+export const ExternalLinkSvg: React.FC<
+  {
+    size?: number;
+  } & React.SVGProps<SVGSVGElement>
+> = ({ size = 16, className = "", ...props }) => (
+  <svg
+    className={className}
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    strokeWidth="2"
+    stroke="currentColor"
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
+    <path d="M11 13l9 -9" />
+    <path d="M15 4h5v5" />
+  </svg>
+);
+
 export const PencilSvg: React.FC<
   {
     size?: number;
