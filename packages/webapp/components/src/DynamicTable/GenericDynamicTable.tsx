@@ -31,8 +31,13 @@ type Props = {
   footerRow?: FooterColumnConfig[];
   thCSSProperties?: React.CSSProperties;
   thElementsClassName?: string;
-  /** Controla si se pueden o no editar los campos (oculta botones y/o deshabilita campos). */
+  /** Controla si se pueden editar los campos. */
   editable?: boolean;
+  /**
+   * Si es false, no muestra agregar/eliminar filas aunque `editable` esté activo.
+   * Útil para catálogos fijos cuyos valores sí se editan.
+   */
+  rowActions?: boolean;
   /** Opciones de búsqueda. */
   searcheables?: SelectFieldOption[];
   /** Activa o desactiva el “skeleton” de carga. */
@@ -169,6 +174,7 @@ export const GenericDynamicTable = (props: Props) => {
     thElementsClassName = "",
     editable = true,
     readOnly = false, // Nuevo prop
+    rowActions = true,
     searcheables = [],
     loading = false,
     paginated = true,
@@ -188,6 +194,7 @@ export const GenericDynamicTable = (props: Props) => {
    * efectivamente editables: solo si `editable` es true y `readOnly` es false.
    */
   const isEditable = editable && !readOnly;
+  const showRowActions = isEditable && rowActions;
 
   try {
     const [tableData, setTableData] = useState<RowDataType[]>(defaultValue);
@@ -276,7 +283,7 @@ export const GenericDynamicTable = (props: Props) => {
             {rendereableColumns.map((column, index) => {
               const ancho =
                 column.width ??
-                (isEditable ? 94 : 100) / (rendereableColumns.length ?? 1);
+                (showRowActions ? 94 : 100) / (rendereableColumns.length ?? 1);
               return (
                 <th
                   key={index}
@@ -289,7 +296,7 @@ export const GenericDynamicTable = (props: Props) => {
                 </th>
               );
             })}
-            {isEditable && <th style={{ width: "4%" }}></th>}
+            {showRowActions && <th style={{ width: "4%" }}></th>}
           </tr>
         );
       } else {
@@ -306,14 +313,14 @@ export const GenericDynamicTable = (props: Props) => {
         const rowClassName =
           index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "";
         const summaryColSpan =
-          rendereableColumns.length + (isEditable ? 1 : 0);
+          rendereableColumns.length + (showRowActions ? 1 : 0);
         const summaryContent = rowSummary?.(rowData);
 
         return (
           <React.Fragment key={rowData.id}>
             <tr className={rowClassName}>
               {rendereableColumns.map((column) => renderCell(rowData, column))}
-              {isEditable && renderDeleteButton(rowData)}
+              {showRowActions && renderDeleteButton(rowData)}
             </tr>
             {summaryContent ? (
               <tr className={rowClassName}>
@@ -345,7 +352,7 @@ export const GenericDynamicTable = (props: Props) => {
               {column.label}
             </th>
             {renderCell(rowData, column)}
-            {isEditable &&
+            {showRowActions &&
               column === rendereableColumns[rendereableColumns.length - 1] &&
               renderDeleteButton(rowData)}
           </tr>
@@ -572,7 +579,7 @@ export const GenericDynamicTable = (props: Props) => {
           <table className="w-full">
             {orientation === "horizontal" && <thead>{renderHeader()}</thead>}
             <tbody>{renderRows()}</tbody>
-            {isEditable && (
+            {showRowActions && (
               <tfoot>
                 <tr>
                   <td
@@ -633,7 +640,7 @@ export const GenericDynamicTable = (props: Props) => {
                         </td>
                       );
                     })}
-                  {isEditable && <td></td>}
+                  {showRowActions && <td></td>}
                 </tr>
               </tfoot>
             )}
