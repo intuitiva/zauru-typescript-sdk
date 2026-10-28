@@ -5,6 +5,9 @@ export declare const ExitSvg: () => import("react/jsx-runtime").JSX.Element;
 export declare const EyeSvg: React.FC<{
     size?: number;
 } & React.SVGProps<SVGSVGElement>>;
+export declare const ExternalLinkSvg: React.FC<{
+    size?: number;
+} & React.SVGProps<SVGSVGElement>>;
 export declare const PencilSvg: React.FC<{
     size?: number;
 } & React.SVGProps<SVGSVGElement>>;
