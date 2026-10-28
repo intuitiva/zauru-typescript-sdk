@@ -13,7 +13,7 @@
   "scripts": {
     "build": "npm run build:esm",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "test": "tsx --test src/zauru/*.test.ts"
+    "test": "tsx --test src/zauru/*.test.ts src/redis/*.test.ts"
   },
   "files": [
     "dist"
