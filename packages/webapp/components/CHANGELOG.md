@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.15.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.14.2...@zauru-sdk/components@6.15.0) (2026-10-28)
+
+
+### Features
+
+* permitir editar GenericDynamicTable sin agregar o borrar filas ([7fc9b41](https://github.com/intuitiva/zauru-typescript-sdk/commit/7fc9b41a7aebf2627a674bc8d9d70b772c378056))
+
+
+
+
+
 ## [6.14.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.14.1...@zauru-sdk/components@6.14.2) (2026-10-26)
 
 
