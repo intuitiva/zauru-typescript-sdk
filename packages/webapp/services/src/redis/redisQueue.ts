@@ -6,7 +6,7 @@ export type RedisLockClient = {
     key: string,
     value: string,
     opts: { nx: true; px: number },
-  ) => Promise<"OK" | null>;
+  ) => Promise<string | null>;
   eval: (
     script: string,
     keys: string[],
@@ -49,7 +49,7 @@ const getDefaultRedis = (): RedisLockClient => {
     defaultRedis = new Redis({
       url: config.redisBaseURL,
       token: config.redisToken,
-    });
+    }) as RedisLockClient;
   }
   return defaultRedis;
 };
