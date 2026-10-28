@@ -97,12 +97,13 @@ const GenericDynamicTableErrorComponent = ({ name }) => {
  */
 export const GenericDynamicTable = (props) => {
     const { columns, onChange, className, footerRow, defaultValue = [], thCSSProperties, thElementsClassName = "", editable = true, readOnly = false, // Nuevo prop
-    searcheables = [], loading = false, paginated = true, defaultItemsPerPage = 10, itemsPerPageOptions = [10, 50, 100], name, withoutBg = false, orientation = "horizontal", maxRows, confirmDelete = true, addRowButtonHandler, rowSummary, } = props;
+    rowActions = true, searcheables = [], loading = false, paginated = true, defaultItemsPerPage = 10, itemsPerPageOptions = [10, 50, 100], name, withoutBg = false, orientation = "horizontal", maxRows, confirmDelete = true, addRowButtonHandler, rowSummary, } = props;
     /**
      * Definimos una variable interna para saber si los campos son
      * efectivamente editables: solo si `editable` es true y `readOnly` es false.
      */
     const isEditable = editable && !readOnly;
+    const showRowActions = isEditable && rowActions;
     try {
         const [tableData, setTableData] = useState(defaultValue);
         const [deletedData, setDeletedData] = useState([]);
@@ -174,9 +175,9 @@ export const GenericDynamicTable = (props) => {
             if (orientation === "horizontal") {
                 return (_jsxs("tr", { style: { ...thCSSProperties }, children: [rendereableColumns.map((column, index) => {
                             const ancho = column.width ??
-                                (isEditable ? 94 : 100) / (rendereableColumns.length ?? 1);
+                                (showRowActions ? 94 : 100) / (rendereableColumns.length ?? 1);
                             return (_jsx("th", { className: `text-left align-middle p-2 ${thElementsClassName} ${column.headerClassName || ""}`, style: { width: `${ancho}%` }, children: column.label }, index));
-                        }), isEditable && _jsx("th", { style: { width: "4%" } })] }));
+                        }), showRowActions && _jsx("th", { style: { width: "4%" } })] }));
             }
             else {
                 return null;
@@ -186,13 +187,13 @@ export const GenericDynamicTable = (props) => {
             const rendereableColumns = columns.filter((column) => column.type !== "hidden");
             if (orientation === "horizontal") {
                 const rowClassName = index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "";
-                const summaryColSpan = rendereableColumns.length + (isEditable ? 1 : 0);
+                const summaryColSpan = rendereableColumns.length + (showRowActions ? 1 : 0);
                 const summaryContent = rowSummary?.(rowData);
-                return (_jsxs(React.Fragment, { children: [_jsxs("tr", { className: rowClassName, children: [rendereableColumns.map((column) => renderCell(rowData, column)), isEditable && renderDeleteButton(rowData)] }), summaryContent ? (_jsx("tr", { className: rowClassName, children: _jsxs("td", { colSpan: summaryColSpan, className: "px-2 pb-3 pt-0 text-sm text-gray-700 border-b border-gray-300", children: [_jsx("span", { className: "font-medium text-gray-500", children: "Resumen: " }), summaryContent] }) })) : null] }, rowData.id));
+                return (_jsxs(React.Fragment, { children: [_jsxs("tr", { className: rowClassName, children: [rendereableColumns.map((column) => renderCell(rowData, column)), showRowActions && renderDeleteButton(rowData)] }), summaryContent ? (_jsx("tr", { className: rowClassName, children: _jsxs("td", { colSpan: summaryColSpan, className: "px-2 pb-3 pt-0 text-sm text-gray-700 border-b border-gray-300", children: [_jsx("span", { className: "font-medium text-gray-500", children: "Resumen: " }), summaryContent] }) })) : null] }, rowData.id));
             }
             else {
                 // Orientación vertical
-                return rendereableColumns.map((column) => (_jsxs("tr", { className: index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "", children: [_jsx("th", { className: `text-left align-middle p-2 ${thElementsClassName} ${column.headerClassName || ""}`, children: column.label }), renderCell(rowData, column), isEditable &&
+                return rendereableColumns.map((column) => (_jsxs("tr", { className: index % 2 === 0 ? `${withoutBg ? "" : "bg-gray-200"}` : "", children: [_jsx("th", { className: `text-left align-middle p-2 ${thElementsClassName} ${column.headerClassName || ""}`, children: column.label }), renderCell(rowData, column), showRowActions &&
                             column === rendereableColumns[rendereableColumns.length - 1] &&
                             renderDeleteButton(rowData)] }, `${rowData.id}-${column.name}`)));
             }
@@ -303,7 +304,7 @@ export const GenericDynamicTable = (props) => {
         };
         return (_jsxs(_Fragment, { children: [name && (_jsxs(_Fragment, { children: [_jsx(GenericDynamicTableErrorComponent, { name: name }), _jsx("input", { name: name, type: "hidden", value: JSON.stringify(tableData), hidden: true }), _jsx("input", { name: `deleted_${name}`, type: "hidden", value: JSON.stringify(deletedData), hidden: true })] })), _jsxs("div", { className: `${className}`, children: [searcheables.length > 0 && (_jsx("div", { children: _jsx(TextField, { className: "mb-2", name: "search", title: `Buscar por: ${searcheables
                                     .map((x) => x.label)
-                                    .join(", ")}`, onChange: handleChangeSearch, disabled: loading || readOnly }) })), _jsxs("table", { className: "w-full", children: [orientation === "horizontal" && _jsx("thead", { children: renderHeader() }), _jsx("tbody", { children: renderRows() }), isEditable && (_jsx("tfoot", { children: _jsx("tr", { children: _jsx("td", { colSpan: orientation === "horizontal" ? columns.length + 1 : 2, className: "align-middle text-right", children: (!maxRows || tableData.length < maxRows) && (_jsx("button", { className: "bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded", onClick: (event) => {
+                                    .join(", ")}`, onChange: handleChangeSearch, disabled: loading || readOnly }) })), _jsxs("table", { className: "w-full", children: [orientation === "horizontal" && _jsx("thead", { children: renderHeader() }), _jsx("tbody", { children: renderRows() }), showRowActions && (_jsx("tfoot", { children: _jsx("tr", { children: _jsx("td", { colSpan: orientation === "horizontal" ? columns.length + 1 : 2, className: "align-middle text-right", children: (!maxRows || tableData.length < maxRows) && (_jsx("button", { className: "bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded", onClick: (event) => {
                                                     event.preventDefault();
                                                     event.stopPropagation();
                                                     if (addRowButtonHandler) {
@@ -317,7 +318,7 @@ export const GenericDynamicTable = (props) => {
                                                 .map((column, index) => {
                                                 const footerCell = footerRow.find((fc) => fc.name === column.name);
                                                 return (_jsx("td", { colSpan: orientation === "vertical" ? 2 : 1, className: `align-middle ${footerCell?.className || ""}`, children: footerCell ? (footerCell.cell ? (footerCell.cell(tableData)) : (footerCell.content)) : (_jsx(_Fragment, {})) }, index));
-                                            }), isEditable && _jsx("td", {})] }) }))] }), paginated && totalPages() > 1 && (_jsxs("div", { className: "flex justify-between items-center mt-4", children: [_jsxs("div", { className: "flex items-center", children: [_jsx(Button, { type: "button", disabled: currentPage === 1 || readOnly, onClickSave: () => setCurrentPage((old) => Math.max(old - 1, 1)), children: "Anterior" }), _jsx("span", { className: "mx-2", children: `Página ${currentPage} de ${totalPages()}` }), _jsx(Button, { type: "button", disabled: currentPage === totalPages() || readOnly, onClickSave: () => setCurrentPage((old) => Math.min(old + 1, totalPages())), children: "Siguiente" })] }), _jsx("div", { children: _jsx("select", { value: itemsPerPage, onChange: (e) => {
+                                            }), showRowActions && _jsx("td", {})] }) }))] }), paginated && totalPages() > 1 && (_jsxs("div", { className: "flex justify-between items-center mt-4", children: [_jsxs("div", { className: "flex items-center", children: [_jsx(Button, { type: "button", disabled: currentPage === 1 || readOnly, onClickSave: () => setCurrentPage((old) => Math.max(old - 1, 1)), children: "Anterior" }), _jsx("span", { className: "mx-2", children: `Página ${currentPage} de ${totalPages()}` }), _jsx(Button, { type: "button", disabled: currentPage === totalPages() || readOnly, onClickSave: () => setCurrentPage((old) => Math.min(old + 1, totalPages())), children: "Siguiente" })] }), _jsx("div", { children: _jsx("select", { value: itemsPerPage, onChange: (e) => {
                                             setItemsPerPage(Number(e.target.value));
                                             setCurrentPage(1); // resetear la página al cambiar los elementos por página
                                         }, children: itemsPerPageOptions.map((option) => (_jsxs("option", { value: option, children: [option, " elementos por p\u00E1gina"] }, option))) }) })] }))] })] }));

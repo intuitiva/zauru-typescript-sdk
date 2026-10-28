@@ -15,8 +15,13 @@ type Props = {
     footerRow?: FooterColumnConfig[];
     thCSSProperties?: React.CSSProperties;
     thElementsClassName?: string;
-    /** Controla si se pueden o no editar los campos (oculta botones y/o deshabilita campos). */
+    /** Controla si se pueden editar los campos. */
     editable?: boolean;
+    /**
+     * Si es false, no muestra agregar/eliminar filas aunque `editable` esté activo.
+     * Útil para catálogos fijos cuyos valores sí se editan.
+     */
+    rowActions?: boolean;
     /** Opciones de búsqueda. */
     searcheables?: SelectFieldOption[];
     /** Activa o desactiva el “skeleton” de carga. */
