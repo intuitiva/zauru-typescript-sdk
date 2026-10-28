@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.2.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/icons@6.1.0...@zauru-sdk/icons@6.2.0) (2026-10-28)
+
+
+### Features
+
+* agregar ExternalLinkSvg para enlaces que abren en pestaña nueva ([fc35a48](https://github.com/intuitiva/zauru-typescript-sdk/commit/fc35a487c1a2bf130fe1efbba3ca8ca0e1e03f1d))
+
+
+
+
+
 # [6.1.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/icons@6.0.0...@zauru-sdk/icons@6.1.0) (2026-09-18)
 
 
