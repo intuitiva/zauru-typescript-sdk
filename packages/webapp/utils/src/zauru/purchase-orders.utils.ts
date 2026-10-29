@@ -1,6 +1,7 @@
 import type { Session } from "@remix-run/node";
 import {
   CURRENCY_PREFIX,
+  buildPurchaseOrderDetailsCostAttributes,
   calculatePurchaseOrderFinancials,
   getNewlyAppliedRejectionRuleSteps,
   getNewDateByFormat,
@@ -287,31 +288,111 @@ export const getPurchaseOrderDataTables = async (
   return purchaseOrderDataTable;
 };
 
+type PurchaseOrderPriceUpdateInput = {
+  purchase_order_details_attributes?: Record<
+    string,
+    { unit_cost: number; item_id: number; id: number; cost?: number }
+  >;
+  memo?: string;
+  discount?: number;
+  other_charges?: number | string;
+};
+
+const unitCostOverridesFromAttributes = (
+  attributes?: PurchaseOrderPriceUpdateInput["purchase_order_details_attributes"],
+): Map<number, number> => {
+  const unitCostByDetailId = new Map<number, number>();
+  for (const detail of Object.values(attributes ?? {})) {
+    const id = Number(detail.id);
+    const unitCost = Number(detail.unit_cost);
+    if (Number.isFinite(id) && Number.isFinite(unitCost)) {
+      unitCostByDetailId.set(id, unitCost);
+    }
+  }
+  return unitCostByDetailId;
+};
+
 /**
  * updatePurchaseItemPrice
- * @param headers
- * @param data
- * @param purchase_id
+ * Writes unit_cost and the matching line `cost` (qty × unit_cost) so Baculo
+ * refreshes subtotal. Recalculates monetary discount when it is not passed.
  */
 export const updatePurchaseItemPrice = async (
   headers: any,
-  data: {
-    purchase_order_details_attributes: Record<
-      string,
-      { unit_cost: number; item_id: number; id: number }
-    >;
-    memo?: string;
-    discount?: number;
-  },
+  data: PurchaseOrderPriceUpdateInput,
   purchase_id: number,
+  session?: Session,
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
+    const restPurchaseResponse = await getPurchase(headers, purchase_id);
+    if (restPurchaseResponse.error || !restPurchaseResponse.data) {
+      throw new Error(
+        restPurchaseResponse.userMsg ||
+          "No se pudo obtener la orden de compra para actualizar el precio",
+      );
+    }
+
+    const loadedPurchase = restPurchaseResponse.data;
+    const details = extractPurchaseOrderFinancialDetails(loadedPurchase);
+    if (details.length === 0) {
+      throw new Error(
+        "No se pudieron obtener los detalles de la orden de compra para actualizar el costo",
+      );
+    }
+
+    const unitCostByDetailId = unitCostOverridesFromAttributes(
+      data.purchase_order_details_attributes,
+    );
+    const mergedDetails = details.map((detail) => {
+      const id = Number(detail.id);
+      return {
+        ...detail,
+        unit_cost: unitCostByDetailId.get(id) ?? detail.unit_cost,
+      };
+    });
+    const detailsAttributes = buildPurchaseOrderDetailsCostAttributes(
+      mergedDetails,
+      unitCostByDetailId,
+    );
+    if (Object.keys(detailsAttributes).length === 0) {
+      throw new Error(
+        "No se pudieron armar los costos de línea de la orden de compra",
+      );
+    }
+
+    let discount = data.discount;
+    if (discount === undefined) {
+      const rules = await getActiveRejectionPercentageAdjustmentRules(
+        headers,
+        session,
+      );
+      const purchaseRecord = loadedPurchase as {
+        reference?: string;
+        payee_category_id?: number;
+        payee?: { payee_category_id?: number };
+      };
+      discount = calculatePurchaseOrderFinancials({
+        details: mergedDetails,
+        memo: data.memo ?? loadedPurchase.memo,
+        rules,
+        ctx: {
+          itemIds: extractPurchaseOrderItemIds(loadedPurchase),
+          tipo: purchaseRecord.reference,
+          providerCategoryId:
+            purchaseRecord.payee?.payee_category_id ??
+            purchaseRecord.payee_category_id,
+        },
+      }).discount;
+    }
+
     const body = {
       purchase_order: {
-        purchase_order_details_attributes:
-          data.purchase_order_details_attributes,
+        purchase_order_details_attributes: detailsAttributes,
         ...(data.memo !== undefined ? { memo: data.memo } : {}),
-        ...(data.discount !== undefined ? { discount: data.discount } : {}),
+        discount,
+        ...(data.other_charges !== undefined && data.other_charges !== null
+          ? { other_charges: Number(data.other_charges) }
+          : {}),
       },
     } as UpdatePurchaseOrderBody;
     const responseUpdate = await updateReceivedPurchaseOrder(
@@ -493,29 +574,25 @@ export const updateOchAndDis = async (
       financials.rejectionCalculations,
     );
 
-    const body = {
-      purchase_order: {
+    const persistResponse = await updatePurchaseItemPrice(
+      headers,
+      {
         memo: mergeJsonMemo(memoForOrigin, {
           rejectionPercentage: financials.rejectionPercentage,
           rejectionCalculations: financials.rejectionCalculations,
           rejectionLayers: financials.rejectionLayers,
         }),
         discount: financials.discount,
+        ...(data.other_charges !== undefined && data.other_charges !== null
+          ? { other_charges: Number(data.other_charges) }
+          : {}),
       },
-    } as UpdatePurchaseOrderBody;
-
-    if (data.other_charges !== undefined && data.other_charges !== null) {
-      body.purchase_order.other_charges = Number(data.other_charges);
-    }
-
-    const responseUpdate = await updateReceivedPurchaseOrder(
-      headers,
-      body,
       purchase_id,
+      session,
     );
 
-    if (responseUpdate.error || responseUpdate.data === null) {
-      throw new Error(responseUpdate.userMsg);
+    if (persistResponse.error) {
+      throw new Error(persistResponse.userMsg);
     }
 
     return {
