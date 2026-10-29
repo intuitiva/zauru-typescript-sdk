@@ -78,14 +78,15 @@ const NavItems = ({ items, color, layout, openMenuId, setOpenMenuId, onNavigate,
         const children = visibleChildrenOf(item);
         const menuKey = `${item.name}-${index}`;
         if (children.length > 0) {
-            return (_jsx(NavItemGroup, { item: item, color: color, layout: layout, open: openMenuId === menuKey, onToggle: () => setOpenMenuId(openMenuId === menuKey ? null : menuKey), onNavigate: onNavigate }, menuKey));
+            return (_jsx(NavItemGroup, { item: item, color: color, layout: layout, open: openMenuId === menuKey, onToggle: () => setOpenMenuId((current) => (current === menuKey ? null : menuKey)), onNavigate: onNavigate }, menuKey));
         }
         return (_jsx(NavLinkItem, { item: item, color: color, layout: layout, onNavigate: onNavigate }, menuKey));
     }) }));
 export const NavBar = ({ title, loggedIn, items, selectedColor, version, reloadCatalogsOption, settingsOption, showDarkModeToggle = false, }) => {
     const color = COLORS[selectedColor];
     const [navOpen, setNavOpen] = useState(false);
-    const [openMenuId, setOpenMenuId] = useState(null);
+    const [desktopMenuId, setDesktopMenuId] = useState(null);
+    const [mobileAccordionId, setMobileAccordionId] = useState(null);
     const [currentVersion, setCurrentVersion] = useState(version);
     const [isDarkMode, setIsDarkMode] = useState(false);
     const navigate = useNavigate();
@@ -105,7 +106,8 @@ export const NavBar = ({ title, loggedIn, items, selectedColor, version, reloadC
     }, [version, currentVersion]);
     useEffect(() => {
         setNavOpen(false);
-        setOpenMenuId(null);
+        setDesktopMenuId(null);
+        setMobileAccordionId(null);
     }, [location.pathname]);
     useEffect(() => {
         if (!navOpen)
@@ -132,24 +134,33 @@ export const NavBar = ({ title, loggedIn, items, selectedColor, version, reloadC
             if (event.key !== "Escape")
                 return;
             setNavOpen(false);
-            setOpenMenuId(null);
+            setDesktopMenuId(null);
+            setMobileAccordionId(null);
         };
         document.addEventListener("keydown", onKeyDown);
         return () => document.removeEventListener("keydown", onKeyDown);
     }, []);
     useEffect(() => {
+        if (!desktopMenuId)
+            return;
         const onPointerDown = (event) => {
-            if (desktopMenuRef.current &&
-                !desktopMenuRef.current.contains(event.target)) {
-                setOpenMenuId(null);
-            }
+            const target = event.target;
+            if (mobileDrawerRef.current?.contains(target))
+                return;
+            if (desktopMenuRef.current?.contains(target))
+                return;
+            setDesktopMenuId(null);
         };
         document.addEventListener("mousedown", onPointerDown);
         return () => document.removeEventListener("mousedown", onPointerDown);
-    }, []);
+    }, [desktopMenuId]);
     const closeMenus = () => {
         setNavOpen(false);
-        setOpenMenuId(null);
+        setDesktopMenuId(null);
+        setMobileAccordionId(null);
+    };
+    const onLinkNavigate = () => {
+        window.setTimeout(closeMenus, 0);
     };
     const userEntries = useMemo(() => {
         if (!loggedIn)
@@ -202,8 +213,11 @@ export const NavBar = ({ title, loggedIn, items, selectedColor, version, reloadC
         if (!activeGroup)
             return;
         const index = visibleItems.indexOf(activeGroup);
-        setOpenMenuId(`${activeGroup.name}-${index}`);
+        setMobileAccordionId(`${activeGroup.name}-${index}`);
     }, [navOpen, visibleItems, location.pathname]);
-    const renderCluster = (layout) => (_jsxs(_Fragment, { children: [_jsx(NavItems, { items: visibleItems, color: color, layout: layout, openMenuId: openMenuId, setOpenMenuId: setOpenMenuId, onNavigate: closeMenus }), _jsx(UserMenu, { color: color, layout: layout, open: openMenuId === "user", onToggle: () => setOpenMenuId(openMenuId === "user" ? null : "user"), onNavigate: closeMenus, entries: userEntries })] }));
+    const renderCluster = (layout) => {
+        const isMobile = layout === "mobile";
+        return (_jsxs(_Fragment, { children: [_jsx(NavItems, { items: visibleItems, color: color, layout: layout, openMenuId: isMobile ? mobileAccordionId : desktopMenuId, setOpenMenuId: isMobile ? setMobileAccordionId : setDesktopMenuId, onNavigate: onLinkNavigate }), _jsx(UserMenu, { color: color, layout: layout, open: desktopMenuId === "user", onToggle: () => setDesktopMenuId((current) => (current === "user" ? null : "user")), onNavigate: onLinkNavigate, entries: userEntries })] }));
+    };
     return (_jsx("nav", { className: `py-2 ${color.bg600}`, "aria-label": "Principal", children: _jsxs("div", { className: "flex items-center justify-between gap-3 px-4 sm:px-5", children: [_jsxs("div", { className: "flex min-w-0 flex-1 items-center justify-between gap-2 lg:w-auto lg:flex-none", children: [_jsxs(Link, { className: `inline-flex min-h-11 min-w-0 cursor-pointer items-center gap-2 truncate text-sm font-bold uppercase text-white ${focusRing}`, to: "/home", children: [_jsx("img", { className: "h-7 w-auto shrink-0", src: "/logo.png", alt: "" }), _jsx("span", { className: "truncate", children: title })] }), version !== currentVersion && (_jsx("button", { type: "button", className: `shrink-0 cursor-pointer rounded-full px-3 py-2 text-xs text-white ${color.bg700} hover:opacity-90 ${focusRing}`, onClick: () => navigate(0), children: "Actualizar versi\u00F3n" })), _jsx("button", { type: "button", className: `inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md text-white lg:hidden ${focusRing} ${navOpen ? "pointer-events-none invisible" : ""}`, "aria-label": "Abrir men\u00FA", "aria-expanded": navOpen, "aria-controls": mobileNavId, "aria-hidden": navOpen, tabIndex: navOpen ? -1 : undefined, onClick: () => setNavOpen(true), children: _jsx(MenuAlt4Svg, { open: false }) })] }), navOpen && (_jsx("button", { type: "button", "aria-label": "Cerrar men\u00FA", className: "fixed inset-0 z-40 cursor-pointer bg-black/40 lg:hidden", onClick: closeMenus })), _jsxs("div", { ref: mobileDrawerRef, id: mobileNavId, "aria-hidden": !navOpen, className: `fixed inset-y-0 left-0 z-50 flex w-[min(20rem,86vw)] flex-col ${color.bg700} shadow-lg transition-transform duration-200 ease-out motion-reduce:transition-none lg:hidden ${navOpen ? "translate-x-0" : "pointer-events-none -translate-x-full"}`, children: [_jsxs("div", { className: "flex items-center justify-between gap-2 border-b border-white/15 px-4 py-3", children: [_jsx("p", { className: "truncate text-sm font-bold uppercase text-white", children: title }), _jsx("button", { type: "button", className: `inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md text-white ${focusRing}`, "aria-label": "Cerrar men\u00FA", onClick: closeMenus, children: _jsx(ExitSvg, {}) })] }), _jsx("div", { className: "flex-1 overflow-y-auto overscroll-contain p-3", children: renderCluster("mobile") })] }), _jsx("div", { ref: desktopMenuRef, className: "hidden min-w-0 flex-1 items-center gap-2 lg:flex", children: renderCluster("desktop") })] }) }));
 };
