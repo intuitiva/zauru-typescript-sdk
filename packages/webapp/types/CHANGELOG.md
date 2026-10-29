@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.29.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.28.0...@zauru-sdk/types@6.29.0) (2026-10-29)
+
+
+### Features
+
+* incluir cost en el update de detalles de OC ([24f8fb29](https://github.com/intuitiva/zauru-typescript-sdk/commit/24f8fb29))
+
+
 # [6.28.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.26.0...@zauru-sdk/types@6.28.0) (2026-10-26)
 
 

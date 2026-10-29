@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.13.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.12.0...@zauru-sdk/common@6.13.0) (2026-10-29)
+
+
+### Features
+
+* armar cost de línea como qty × unit_cost ([707d6b25](https://github.com/intuitiva/zauru-typescript-sdk/commit/707d6b25))
+
+
 # [6.12.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.10.1...@zauru-sdk/common@6.12.0) (2026-10-26)
 
 

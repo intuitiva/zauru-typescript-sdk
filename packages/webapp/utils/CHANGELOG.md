@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.28.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.27.0...@zauru-sdk/utils@6.28.0) (2026-10-29)
+
+
+### Features
+
+* sincronizar subtotal al cambiar precio o rechazo ([3dff4fa5](https://github.com/intuitiva/zauru-typescript-sdk/commit/3dff4fa5))
+
+
 # [6.27.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.26.1...@zauru-sdk/utils@6.27.0) (2026-10-27)
 
 
