@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.16.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.15.1...@zauru-sdk/components@6.16.0) (2026-10-29)
+
+
+### Features
+
+* rehacer el NavBar mobile y heredar el color de la app ([f1ab276](https://github.com/intuitiva/zauru-typescript-sdk/commit/f1ab276b6717e7a82e36ad71285b164d43ce243f))
+
+
+
+
+
 ## [6.15.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.15.0...@zauru-sdk/components@6.15.1) (2026-10-28)
 
 **Note:** Version bump only for package @zauru-sdk/components
