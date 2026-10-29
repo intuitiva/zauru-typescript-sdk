@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.priceToText = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.obtenerFechaActualConZonaHoraria = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.calculatePurchaseOrderFinancials = exports.resolveRejectionPercentageBase = exports.hasSuccessiveRejectionPercentage = exports.getRejectionPercentageLayers = exports.resolveRejectionPercentageLayers = exports.setRejectionPercentage = exports.getRejectionPercentage = exports.mergeJsonMemo = exports.stringifyJsonMemo = exports.parseJsonMemo = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
+exports.parsedObject = exports.sortByProperty = exports.labFormPatter = exports.labServicePattern = exports.getRandomNum = exports.CURRENCY_PREFIX = exports.truncateDecimals = exports.ZAURU_REGEX = exports.priceToText = exports.arrayToObject = exports.isNumeric = exports.toFixedIfNeeded = exports.formatTimeToTimePicker = exports.formatDateToDatePicker = exports.getFormattedDate = exports.parsedBaculoFormValue = exports.getPayeeInfoOptions = exports.getPayeeInfoIdOptions = exports.getPayeeFormated = exports.getDateAfterDays = exports.getTimePickerCurrentTime = exports.obtenerFechaActualConZonaHoraria = exports.getDatePickerCurrentDate = exports.stringDateToParsedUTCDate = exports.localDateToUSDate = exports.getStringFullDate = exports.getTodayMinutesDifference = exports.getTodayDaysDifference = exports.getStringDate = exports.getZauruDateByText = exports.getNewDateByFormat = exports.getFechaJuliana = exports.getBasketsSchema = exports.buildPurchaseOrderDetailsCostAttributes = exports.calculatePurchaseOrderFinancials = exports.resolveRejectionPercentageBase = exports.hasSuccessiveRejectionPercentage = exports.getRejectionPercentageLayers = exports.resolveRejectionPercentageLayers = exports.setRejectionPercentage = exports.getRejectionPercentage = exports.mergeJsonMemo = exports.stringifyJsonMemo = exports.parseJsonMemo = exports.DESTINOS_MUESTRA_OPTIONS = void 0;
 exports.generateClientUUID = generateClientUUID;
 exports.extractValueBetweenTags = extractValueBetweenTags;
 exports.isJsonArray = isJsonArray;
@@ -174,6 +174,30 @@ const calculatePurchaseOrderFinancials = (input) => {
     };
 };
 exports.calculatePurchaseOrderFinancials = calculatePurchaseOrderFinancials;
+/**
+ * Nested attributes for Zauru: `cost` must be sent with `unit_cost`.
+ * Baculo does not recalculate `purchase_order_details.cost` on save.
+ */
+const buildPurchaseOrderDetailsCostAttributes = (details, unitCostByDetailId) => {
+    const attributes = {};
+    let index = 0;
+    for (const detail of details ?? []) {
+        const id = toFiniteNumber(detail.id);
+        const itemId = toFiniteNumber(detail.item_id);
+        if (id == null || itemId == null)
+            continue;
+        const unitCost = unitCostByDetailId?.get(id) ?? toFiniteNumber(detail.unit_cost) ?? 0;
+        attributes[String(index)] = {
+            id,
+            item_id: itemId,
+            unit_cost: unitCost,
+            cost: roundMoney(lineQuantity(detail) * unitCost),
+        };
+        index += 1;
+    }
+    return attributes;
+};
+exports.buildPurchaseOrderDetailsCostAttributes = buildPurchaseOrderDetailsCostAttributes;
 /**
  * Obtener el objeto de canastas en base al memo
  * @param memo

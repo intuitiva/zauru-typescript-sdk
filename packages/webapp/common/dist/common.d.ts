@@ -1,5 +1,5 @@
 import "moment-timezone";
-import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption, JsonMemoType, CalculatePurchaseOrderFinancialsInput, CalculatePurchaseOrderFinancialsResult, RejectionPercentageLayers } from "@zauru-sdk/types";
+import type { PayeeGraphQL, AxiosUtilsResponse, BasketSchema, SelectFieldOption, JsonMemoType, CalculatePurchaseOrderFinancialsInput, CalculatePurchaseOrderFinancialsResult, PurchaseOrderDetailCostAttribute, PurchaseOrderFinancialDetail, RejectionPercentageLayers } from "@zauru-sdk/types";
 export declare const DESTINOS_MUESTRA_OPTIONS: SelectFieldOption[];
 export declare const parseJsonMemo: (memo?: string | object) => JsonMemoType;
 export declare const stringifyJsonMemo: (memo: JsonMemoType) => string;
@@ -38,6 +38,11 @@ export declare const resolveRejectionPercentageBase: (memo?: string | object) =>
  * `rejectionPercentage` in the result is the effective % that was charged.
  */
 export declare const calculatePurchaseOrderFinancials: (input: CalculatePurchaseOrderFinancialsInput) => CalculatePurchaseOrderFinancialsResult;
+/**
+ * Nested attributes for Zauru: `cost` must be sent with `unit_cost`.
+ * Baculo does not recalculate `purchase_order_details.cost` on save.
+ */
+export declare const buildPurchaseOrderDetailsCostAttributes: (details: PurchaseOrderFinancialDetail[] | null | undefined, unitCostByDetailId?: Map<number, number>) => Record<string, PurchaseOrderDetailCostAttribute>;
 /**
  * Obtener el objeto de canastas en base al memo
  * @param memo

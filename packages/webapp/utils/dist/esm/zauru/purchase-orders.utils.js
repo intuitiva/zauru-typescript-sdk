@@ -1,4 +1,4 @@
-import { CURRENCY_PREFIX, calculatePurchaseOrderFinancials, getNewlyAppliedRejectionRuleSteps, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, mergeJsonMemo, parseJsonMemo, } from "@zauru-sdk/common";
+import { CURRENCY_PREFIX, buildPurchaseOrderDetailsCostAttributes, calculatePurchaseOrderFinancials, getNewlyAppliedRejectionRuleSteps, getNewDateByFormat, getStringFullDate, getZauruDateByText, handlePossibleAxiosErrors, mergeJsonMemo, parseJsonMemo, } from "@zauru-sdk/common";
 import { commitSession, createNewPurchaseOrder, deleteDelivery, deletePurchaseOrder, deleteReception, getLotesWithPurchaseFormated, getPurchase, getPurchaseOrder, getPurchasesListDataTables, getVariablesByName, inactivarLote, updateReceivedPurchaseOrder, } from "@zauru-sdk/services";
 import { getActiveRejectionPercentageAdjustmentRules } from "./rejectionPercentageAdjustmentRules.utils.js";
 /**
@@ -152,19 +152,70 @@ export const getPurchaseOrderDataTables = async (headers, search, tag_id, agency
     const purchaseOrderDataTable = getPurchaseOrderFormated(ordersDataTables?.data[0]);
     return purchaseOrderDataTable;
 };
+const unitCostOverridesFromAttributes = (attributes) => {
+    const unitCostByDetailId = new Map();
+    for (const detail of Object.values(attributes ?? {})) {
+        const id = Number(detail.id);
+        const unitCost = Number(detail.unit_cost);
+        if (Number.isFinite(id) && Number.isFinite(unitCost)) {
+            unitCostByDetailId.set(id, unitCost);
+        }
+    }
+    return unitCostByDetailId;
+};
 /**
  * updatePurchaseItemPrice
- * @param headers
- * @param data
- * @param purchase_id
+ * Writes unit_cost and the matching line `cost` (qty × unit_cost) so Baculo
+ * refreshes subtotal. Recalculates monetary discount when it is not passed.
  */
-export const updatePurchaseItemPrice = async (headers, data, purchase_id) => {
+export const updatePurchaseItemPrice = async (headers, data, purchase_id, session) => {
     return handlePossibleAxiosErrors(async () => {
+        const restPurchaseResponse = await getPurchase(headers, purchase_id);
+        if (restPurchaseResponse.error || !restPurchaseResponse.data) {
+            throw new Error(restPurchaseResponse.userMsg ||
+                "No se pudo obtener la orden de compra para actualizar el precio");
+        }
+        const loadedPurchase = restPurchaseResponse.data;
+        const details = extractPurchaseOrderFinancialDetails(loadedPurchase);
+        if (details.length === 0) {
+            throw new Error("No se pudieron obtener los detalles de la orden de compra para actualizar el costo");
+        }
+        const unitCostByDetailId = unitCostOverridesFromAttributes(data.purchase_order_details_attributes);
+        const mergedDetails = details.map((detail) => {
+            const id = Number(detail.id);
+            return {
+                ...detail,
+                unit_cost: unitCostByDetailId.get(id) ?? detail.unit_cost,
+            };
+        });
+        const detailsAttributes = buildPurchaseOrderDetailsCostAttributes(mergedDetails, unitCostByDetailId);
+        if (Object.keys(detailsAttributes).length === 0) {
+            throw new Error("No se pudieron armar los costos de línea de la orden de compra");
+        }
+        let discount = data.discount;
+        if (discount === undefined) {
+            const rules = await getActiveRejectionPercentageAdjustmentRules(headers, session);
+            const purchaseRecord = loadedPurchase;
+            discount = calculatePurchaseOrderFinancials({
+                details: mergedDetails,
+                memo: data.memo ?? loadedPurchase.memo,
+                rules,
+                ctx: {
+                    itemIds: extractPurchaseOrderItemIds(loadedPurchase),
+                    tipo: purchaseRecord.reference,
+                    providerCategoryId: purchaseRecord.payee?.payee_category_id ??
+                        purchaseRecord.payee_category_id,
+                },
+            }).discount;
+        }
         const body = {
             purchase_order: {
-                purchase_order_details_attributes: data.purchase_order_details_attributes,
+                purchase_order_details_attributes: detailsAttributes,
                 ...(data.memo !== undefined ? { memo: data.memo } : {}),
-                ...(data.discount !== undefined ? { discount: data.discount } : {}),
+                discount,
+                ...(data.other_charges !== undefined && data.other_charges !== null
+                    ? { other_charges: Number(data.other_charges) }
+                    : {}),
             },
         };
         const responseUpdate = await updateReceivedPurchaseOrder(headers, body, purchase_id);
@@ -289,22 +340,19 @@ export const updateOchAndDis = async (headers, data, purchase_id, session) => {
             },
         });
         const newlyAppliedSteps = getNewlyAppliedRejectionRuleSteps(previousCalculations, financials.rejectionCalculations);
-        const body = {
-            purchase_order: {
-                memo: mergeJsonMemo(memoForOrigin, {
-                    rejectionPercentage: financials.rejectionPercentage,
-                    rejectionCalculations: financials.rejectionCalculations,
-                    rejectionLayers: financials.rejectionLayers,
-                }),
-                discount: financials.discount,
-            },
-        };
-        if (data.other_charges !== undefined && data.other_charges !== null) {
-            body.purchase_order.other_charges = Number(data.other_charges);
-        }
-        const responseUpdate = await updateReceivedPurchaseOrder(headers, body, purchase_id);
-        if (responseUpdate.error || responseUpdate.data === null) {
-            throw new Error(responseUpdate.userMsg);
+        const persistResponse = await updatePurchaseItemPrice(headers, {
+            memo: mergeJsonMemo(memoForOrigin, {
+                rejectionPercentage: financials.rejectionPercentage,
+                rejectionCalculations: financials.rejectionCalculations,
+                rejectionLayers: financials.rejectionLayers,
+            }),
+            discount: financials.discount,
+            ...(data.other_charges !== undefined && data.other_charges !== null
+                ? { other_charges: Number(data.other_charges) }
+                : {}),
+        }, purchase_id, session);
+        if (persistResponse.error) {
+            throw new Error(persistResponse.userMsg);
         }
         return {
             rejectionPercentage: financials.rejectionPercentage,

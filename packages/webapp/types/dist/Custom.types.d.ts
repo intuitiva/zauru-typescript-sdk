@@ -439,6 +439,7 @@ export type UpdatePurchaseOrderBody = {
                 id?: string | number;
                 unit_cost?: string | number;
                 item_id: string | number;
+                cost?: string | number;
             };
         };
     };
@@ -766,12 +767,20 @@ export type PurchaseOrderCosto = {
     }[];
 };
 export type PurchaseOrderFinancialDetail = {
+    id?: number | string | null;
+    item_id?: number | string | null;
     booked_quantity?: number | string | null;
     delivered_quantity?: number | string | null;
     booked?: number | string | null;
     delivered?: number | string | null;
     quantity?: number | string | null;
     unit_cost?: number | string | null;
+};
+export type PurchaseOrderDetailCostAttribute = {
+    id: number;
+    item_id: number;
+    unit_cost: number;
+    cost: number;
 };
 export type CalculatePurchaseOrderFinancialsInput = {
     details?: PurchaseOrderFinancialDetail[] | null;

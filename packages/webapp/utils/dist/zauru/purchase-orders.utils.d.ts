@@ -21,21 +21,23 @@ export declare const getPurchasesDataTableListFormated: (headers: any, session: 
  * @returns
  */
 export declare const getPurchaseOrderDataTables: (headers: any, search: string, tag_id?: string, agency_id?: string) => Promise<PurchasesDataTableListFormatedSchema>;
-/**
- * updatePurchaseItemPrice
- * @param headers
- * @param data
- * @param purchase_id
- */
-export declare const updatePurchaseItemPrice: (headers: any, data: {
-    purchase_order_details_attributes: Record<string, {
+type PurchaseOrderPriceUpdateInput = {
+    purchase_order_details_attributes?: Record<string, {
         unit_cost: number;
         item_id: number;
         id: number;
+        cost?: number;
     }>;
     memo?: string;
     discount?: number;
-}, purchase_id: number) => Promise<AxiosUtilsResponse<boolean>>;
+    other_charges?: number | string;
+};
+/**
+ * updatePurchaseItemPrice
+ * Writes unit_cost and the matching line `cost` (qty × unit_cost) so Baculo
+ * refreshes subtotal. Recalculates monetary discount when it is not passed.
+ */
+export declare const updatePurchaseItemPrice: (headers: any, data: PurchaseOrderPriceUpdateInput, purchase_id: number, session?: Session) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * updateOchAndDis
  * Updates rejectionPercentage in purchase_order.memo and the monetary
@@ -119,3 +121,4 @@ export declare const deleteTask: (session: Session, timeStamp: number) => Promis
 export declare const createNewLabItemRequest: (headers: any, session: Session, body: Partial<PurchaseOrderGraphQL> & {
     [key: string]: any;
 }) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
+export {};
