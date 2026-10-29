@@ -1,6 +1,14 @@
-import React, { useState, useEffect, useMemo } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   DropDownArrowSvgIcon,
+  ExitSvg,
   LogoutDropDownSvgIcon,
   MenuAlt4Svg,
   OpcionButtonSvgIcon,
@@ -8,73 +16,69 @@ import {
 import { COLORS } from "./NavBar.utils.js";
 import type {
   ColorInterface,
-  EntityProps,
   NavBarItem,
   NavBarProps,
 } from "./NavBar.types.js";
-import { Link, useNavigate, useLocation } from "@remix-run/react";
+import { Link, useLocation, useNavigate } from "@remix-run/react";
 import { useAppSelector } from "@zauru-sdk/redux";
 
-const OptionsDropDownButton = ({
-  color,
-  options,
-  name,
-  ariaLabel,
-}: EntityProps & { ariaLabel?: string }) => {
-  const [showOptionsMenu, setShowOptionsMenu] = useState(true);
+type NavLayout = "desktop" | "mobile";
 
-  return (
-    <div className="nav-item ml-auto">
-      <div className="flex justify-center">
-        <div className="relative inline-block">
-          <button
-            type="button"
-            aria-label={
-              ariaLabel ?? (typeof name === "string" ? name : "Menú")
-            }
-            aria-haspopup="menu"
-            aria-expanded={!showOptionsMenu}
-            onClick={() => setShowOptionsMenu(!showOptionsMenu)}
-            className={`relative flex cursor-pointer items-center p-2 text-xs text-white ${color.bg700} active:${color.bg900} border border-transparent rounded-full uppercase focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2`}
-          >
-            {name ?? <OpcionButtonSvgIcon />}
-            <DropDownArrowSvgIcon />
-          </button>
-          <div
-            className="absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-800"
-            hidden={showOptionsMenu}
-            onMouseLeave={() => setShowOptionsMenu(true)}
-          >
-            {options.map((option, index) => (
-              <React.Fragment key={index}>{option}</React.Fragment>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+type UserMenuEntry = {
+  key: string;
+  label: string;
+  to?: string;
+  onClick?: () => void;
+  icon?: ReactNode;
+  danger?: boolean;
 };
 
-const NavItem = ({
-  name,
-  link,
-  icon,
-  selectedColor,
-  childrens = [],
-  reduxNotificationBadge,
-}: NavBarItem) => {
-  const location = useLocation();
-  const isActive = location.pathname === link;
+const itemColor = (
+  item: Pick<NavBarItem, "selectedColor">,
+  fallback: ColorInterface
+): ColorInterface =>
+  item.selectedColor ? COLORS[item.selectedColor] : fallback;
 
-  const specialColor: ColorInterface = selectedColor
-    ? COLORS[selectedColor]
-    : COLORS["slate"];
+const visibleChildrenOf = (item: NavBarItem): NavBarItem[] =>
+  (item.childrens ?? []).filter((child) => child.hide !== true);
 
-  // Selecciona solo la parte del estado relevante
+const pathMatches = (pathname: string, link?: string) => {
+  if (!link) return false;
+  return pathname === link || pathname.startsWith(`${link}/`);
+};
+
+const focusRing =
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+
+const desktopTriggerClass = (color: ColorInterface, isActive: boolean) =>
+  `inline-flex min-h-11 cursor-pointer items-center gap-1 rounded-full px-4 text-xs font-medium uppercase leading-none text-white transition-opacity duration-150 motion-reduce:transition-none ${
+    isActive ? color.bg900 : color.bg700
+  } hover:opacity-90 ${focusRing}`;
+
+const mobileRowClass = (isActive: boolean) =>
+  `flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-lg px-3 text-left text-sm font-medium text-white transition-colors duration-150 motion-reduce:transition-none hover:bg-white/10 ${focusRing} ${
+    isActive ? "bg-white/15" : ""
+  }`;
+
+const dropdownItemClass = (danger?: boolean) =>
+  `flex min-h-11 w-full cursor-pointer items-center gap-2 px-4 text-sm transition-colors duration-150 motion-reduce:transition-none ${
+    danger
+      ? "text-red-700 hover:bg-red-50"
+      : "text-gray-700 hover:bg-gray-100"
+  }`;
+
+const NotificationBadge = ({ value }: { value: string | number }) => (
+  <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-xs font-bold text-white">
+    {value}
+  </span>
+);
+
+const useNotificationBadge = (item: NavBarItem) => {
   const relevantState = useAppSelector((state) =>
-    reduxNotificationBadge ? reduxNotificationBadge(state) : undefined
+    item.reduxNotificationBadge
+      ? item.reduxNotificationBadge(state)
+      : undefined
   );
-
   const [notificationBadge, setNotificationBadge] = useState<
     undefined | string | number
   >();
@@ -83,54 +87,342 @@ const NavItem = ({
     setNotificationBadge(relevantState);
   }, [relevantState]);
 
-  // Si este NavItem tiene elementos hijos, renderiza el botón desplegable:
-  if (childrens.length > 0) {
+  return notificationBadge;
+};
+
+const Chevron = ({ open }: { open: boolean }) => (
+  <span
+    className={`inline-flex shrink-0 transition-transform duration-150 motion-reduce:transition-none ${
+      open ? "rotate-180" : ""
+    }`}
+    aria-hidden="true"
+  >
+    <DropDownArrowSvgIcon />
+  </span>
+);
+
+const NavLinkItem = ({
+  item,
+  color,
+  layout,
+  onNavigate,
+}: {
+  item: NavBarItem;
+  color: ColorInterface;
+  layout: NavLayout;
+  onNavigate?: () => void;
+}) => {
+  const location = useLocation();
+  const isActive = pathMatches(location.pathname, item.link);
+  const notificationBadge = useNotificationBadge(item);
+  const palette = itemColor(item, color);
+
+  if (layout === "mobile") {
     return (
-      <OptionsDropDownButton
-        name={name}
-        color={specialColor}
-        options={childrens.map((x, index) => (
-          <Link
-            key={index}
-            to={x.link}
-            className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
-          >
-            {x.name}
-          </Link>
-        ))}
-      />
+      <li>
+        <Link
+          to={item.link}
+          aria-current={isActive ? "page" : undefined}
+          onClick={onNavigate}
+          className={`${mobileRowClass(isActive)} relative`}
+        >
+          {item.icon}
+          <span className="flex-1">{item.name}</span>
+          {notificationBadge !== undefined && (
+            <NotificationBadge value={notificationBadge} />
+          )}
+        </Link>
+      </li>
     );
   }
 
-  // Si NO tiene elementos hijos, se renderiza como un ítem simple:
   return (
-    <li className="nav-item relative">
-      <div
-        // Si está activo, usamos color de fondo más oscuro (bg900)
-        // De lo contrario, usamos el color normal (bg700)
-        className={`${
-          isActive ? specialColor.bg900 : specialColor.bg700
-        } container text-white w-full sm:w-auto h-10 text-sm py-1 uppercase shadow hover:shadow-lg outline-none rounded-full focus:outline-none my-auto sm:my-0 sm:mr-1 mb-1 ease-linear transition-all duration-150`}
+    <li className="relative">
+      <Link
+        to={item.link}
+        aria-current={isActive ? "page" : undefined}
+        className={`${desktopTriggerClass(palette, isActive)} relative`}
       >
-        <Link
-          className="px-3 flex items-center text-xs leading-snug text-white uppercase hover:opacity-75 relative"
-          to={link}
+        {item.icon}
+        <span>{item.name}</span>
+        {notificationBadge !== undefined && (
+          <NotificationBadge value={notificationBadge} />
+        )}
+      </Link>
+    </li>
+  );
+};
+
+const NavItemGroup = ({
+  item,
+  color,
+  layout,
+  open,
+  onToggle,
+  onNavigate,
+}: {
+  item: NavBarItem;
+  color: ColorInterface;
+  layout: NavLayout;
+  open: boolean;
+  onToggle: () => void;
+  onNavigate?: () => void;
+}) => {
+  const location = useLocation();
+  const children = visibleChildrenOf(item);
+  const childActive = children.some((child) =>
+    pathMatches(location.pathname, child.link)
+  );
+  const palette = itemColor(item, color);
+  const menuId = useId();
+
+  if (children.length === 0) {
+    return null;
+  }
+
+  if (layout === "mobile") {
+    return (
+      <li>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={menuId}
+          onClick={onToggle}
+          className={mobileRowClass(childActive)}
         >
-          <div className="mx-auto pt-2">
-            {icon}
-            <span>{name}</span>
-          </div>
-          {/* Badge de notificaciones */}
-          {notificationBadge !== undefined && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center w-5 h-5">
-              {notificationBadge}
-            </span>
-          )}
-        </Link>
+          {item.icon}
+          <span className="flex-1">{item.name}</span>
+          <Chevron open={open} />
+        </button>
+        <ul
+          id={menuId}
+          hidden={!open}
+          className="mt-1 ml-3 space-y-1 border-l border-white/20 pl-2"
+        >
+          {children.map((child) => {
+            const isActive = pathMatches(location.pathname, child.link);
+            return (
+              <li key={child.link}>
+                <Link
+                  to={child.link}
+                  aria-current={isActive ? "page" : undefined}
+                  onClick={onNavigate}
+                  className={mobileRowClass(isActive)}
+                >
+                  {child.icon}
+                  <span>{child.name}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </li>
+    );
+  }
+
+  return (
+    <li className="relative">
+      <button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={menuId}
+        onClick={onToggle}
+        className={desktopTriggerClass(palette, childActive)}
+      >
+        {item.icon}
+        <span>{item.name}</span>
+        <Chevron open={open} />
+      </button>
+      <div
+        id={menuId}
+        role="menu"
+        hidden={!open}
+        className="absolute left-0 z-30 mt-2 min-w-[14rem] overflow-hidden rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5"
+      >
+        {children.map((child) => (
+          <Link
+            key={child.link}
+            role="menuitem"
+            to={child.link}
+            onClick={onNavigate}
+            className={dropdownItemClass()}
+          >
+            {child.icon}
+            <span>{child.name}</span>
+          </Link>
+        ))}
       </div>
     </li>
   );
 };
+
+const UserMenu = ({
+  color,
+  layout,
+  open,
+  onToggle,
+  onNavigate,
+  entries,
+}: {
+  color: ColorInterface;
+  layout: NavLayout;
+  open: boolean;
+  onToggle: () => void;
+  onNavigate?: () => void;
+  entries: UserMenuEntry[];
+}) => {
+  const menuId = useId();
+
+  if (entries.length === 0) {
+    return null;
+  }
+
+  if (layout === "mobile") {
+    return (
+      <div className="mt-4 border-t border-white/20 pt-4">
+        <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-wide text-white/70">
+          Cuenta
+        </p>
+        <ul className="space-y-1">
+          {entries.map((entry) => (
+            <li key={entry.key}>
+              {entry.to ? (
+                <Link
+                  to={entry.to}
+                  onClick={onNavigate}
+                  className={`${mobileRowClass(false)} [&_svg]:!text-current ${
+                    entry.danger ? "text-red-100 hover:bg-red-500/20" : ""
+                  }`}
+                >
+                  {entry.icon}
+                  <span>{entry.label}</span>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    entry.onClick?.();
+                    onNavigate?.();
+                  }}
+                  className={`${mobileRowClass(false)} [&_svg]:!text-current`}
+                >
+                  {entry.icon}
+                  <span>{entry.label}</span>
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative ml-auto">
+      <button
+        type="button"
+        aria-label="Menú de usuario"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={menuId}
+        onClick={onToggle}
+        className={`${desktopTriggerClass(color, open)} p-0 px-3`}
+      >
+        <OpcionButtonSvgIcon />
+        <Chevron open={open} />
+      </button>
+      <div
+        id={menuId}
+        role="menu"
+        hidden={!open}
+        className="absolute right-0 z-30 mt-2 w-56 overflow-hidden rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5"
+      >
+        {entries.map((entry) =>
+          entry.to ? (
+            <Link
+              key={entry.key}
+              role="menuitem"
+              to={entry.to}
+              onClick={onNavigate}
+              className={dropdownItemClass(entry.danger)}
+            >
+              {entry.icon}
+              <span>{entry.label}</span>
+            </Link>
+          ) : (
+            <button
+              key={entry.key}
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                entry.onClick?.();
+                onNavigate?.();
+              }}
+              className={dropdownItemClass(entry.danger)}
+            >
+              {entry.icon}
+              <span>{entry.label}</span>
+            </button>
+          )
+        )}
+      </div>
+    </div>
+  );
+};
+
+const NavItems = ({
+  items,
+  color,
+  layout,
+  openMenuId,
+  setOpenMenuId,
+  onNavigate,
+}: {
+  items: NavBarItem[];
+  color: ColorInterface;
+  layout: NavLayout;
+  openMenuId: string | null;
+  setOpenMenuId: (id: string | null) => void;
+  onNavigate?: () => void;
+}) => (
+  <ul
+    className={
+      layout === "mobile"
+        ? "flex flex-col gap-1"
+        : "flex flex-wrap items-center gap-1"
+    }
+  >
+    {items.map((item, index) => {
+      const children = visibleChildrenOf(item);
+      const menuKey = `${item.name}-${index}`;
+      if (children.length > 0) {
+        return (
+          <NavItemGroup
+            key={menuKey}
+            item={item}
+            color={color}
+            layout={layout}
+            open={openMenuId === menuKey}
+            onToggle={() =>
+              setOpenMenuId(openMenuId === menuKey ? null : menuKey)
+            }
+            onNavigate={onNavigate}
+          />
+        );
+      }
+      return (
+        <NavLinkItem
+          key={menuKey}
+          item={item}
+          color={color}
+          layout={layout}
+          onNavigate={onNavigate}
+        />
+      );
+    })}
+  </ul>
+);
 
 export const NavBar = ({
   title,
@@ -143,10 +435,22 @@ export const NavBar = ({
   showDarkModeToggle = false,
 }: NavBarProps) => {
   const color: ColorInterface = COLORS[selectedColor];
-  const [NavBarOpen, setNavBarOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [currentVersion, setCurrentVersion] = useState(version);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const desktopMenuRef = useRef<HTMLDivElement>(null);
+  const mobileDrawerRef = useRef<HTMLDivElement>(null);
+  const wasNavOpen = useRef(false);
+  const mobileNavId = useId();
+
+  const visibleItems = useMemo(
+    () =>
+      items.filter((item) => item.loggedIn === loggedIn && item.hide !== true),
+    [items, loggedIn]
+  );
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDarkMode);
@@ -158,180 +462,248 @@ export const NavBar = ({
     }
   }, [version, currentVersion]);
 
-  const refreshPage = () => {
-    navigate(0);
+  useEffect(() => {
+    setNavOpen(false);
+    setOpenMenuId(null);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!navOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [navOpen]);
+
+  useEffect(() => {
+    const drawer = mobileDrawerRef.current;
+    if (!drawer) return;
+    if (navOpen) {
+      drawer.removeAttribute("inert");
+    } else {
+      drawer.setAttribute("inert", "");
+    }
+  }, [navOpen]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setNavOpen(false);
+      setOpenMenuId(null);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const onPointerDown = (event: MouseEvent) => {
+      if (
+        desktopMenuRef.current &&
+        !desktopMenuRef.current.contains(event.target as Node)
+      ) {
+        setOpenMenuId(null);
+      }
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    return () => document.removeEventListener("mousedown", onPointerDown);
+  }, []);
+
+  const closeMenus = () => {
+    setNavOpen(false);
+    setOpenMenuId(null);
   };
 
-  const renderNavItems = (items: NavBarItem[]) => (
-    <div className="flex flex-col lg:flex-row w-full">
-      {items.map((item, index) => {
-        return (
-          <NavItem
-            key={index}
-            name={item.name}
-            link={item.link}
-            icon={item.icon}
-            selectedColor={item.selectedColor}
-            color={color}
-            loggedIn={item.loggedIn}
-            reduxNotificationBadge={item.reduxNotificationBadge}
-            childrens={item.childrens?.map((x) => {
-              return { ...x } as any;
-            })}
-          />
-        );
-      })}
-    </div>
-  );
+  const userEntries = useMemo<UserMenuEntry[]>(() => {
+    if (!loggedIn) return [];
+    const entries: UserMenuEntry[] = [];
+    if (settingsOption) {
+      entries.push({
+        key: "configuracion",
+        label: "Configuración",
+        to: "/configuracion",
+        icon: (
+          <svg
+            className="h-5 w-5 shrink-0"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            viewBox="0 0 24 24"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
+            <path d="M19.4 13a7.7 7.7 0 0 0 .06-2l2.1-1.64-2-3.46-2.55 1a7.7 7.7 0 0 0-1.73-1L14.7 2H9.3l-.58 2.9a7.7 7.7 0 0 0-1.73 1l-2.55-1-2 3.46L4.54 11a7.7 7.7 0 0 0 0 2l-2.1 1.64 2 3.46 2.55-1a7.7 7.7 0 0 0 1.73 1L9.3 22h5.4l.58-2.9a7.7 7.7 0 0 0 1.73-1l2.55 1 2-3.46Z" />
+          </svg>
+        ),
+      });
+    }
+    if (reloadCatalogsOption) {
+      entries.push({
+        key: "recargar-catalogos",
+        label: "Recargar catálogos",
+        to: "/reload-catalogs",
+        icon: (
+          <svg
+            className="h-5 w-5 shrink-0"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            viewBox="0 0 24 24"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path d="M20.5 8c-1.392-3.179-4.823-5-8.522-5C7.299 3 3.453 6.552 3 11.1" />
+            <path d="M16.489 8.4h3.97A.54.54 0 0 0 21 7.86V3.9M3.5 16c1.392 3.179 4.823 5 8.522 5 4.679 0 8.525-3.552 8.978-8.1" />
+            <path d="M7.511 15.6h-3.97a.54.54 0 0 0-.541.54v3.96" />
+          </svg>
+        ),
+      });
+    }
+    if (showDarkModeToggle) {
+      entries.push({
+        key: "dark-mode-toggle",
+        label: isDarkMode ? "Modo claro" : "Modo oscuro",
+        onClick: () => setIsDarkMode((value) => !value),
+      });
+    }
+    entries.push({
+      key: "cerrar-sesion",
+      label: "Cerrar sesión",
+      to: "/logout",
+      icon: <LogoutDropDownSvgIcon />,
+      danger: true,
+    });
+    return entries;
+  }, [
+    loggedIn,
+    settingsOption,
+    reloadCatalogsOption,
+    showDarkModeToggle,
+    isDarkMode,
+  ]);
 
-  const hiddenItemsChange = useMemo(
-    () => items.filter((item) => item.hide === true),
-    [items]
-  );
-
-  const options = useMemo(() => {
-    return (
-      <>
-        <ul className="w-full lg:flex lg:items-center">
-          {renderNavItems(
-            items
-              .filter((item) => item.loggedIn === loggedIn)
-              .filter((item) => item.hide !== true)
-          )}
-        </ul>
-        <ul className="sm:flex sm:flex-col lg:flex-row ml-auto">
-          {loggedIn && (
-            <OptionsDropDownButton
-              color={color}
-              ariaLabel="Menú de usuario"
-              options={[
-                settingsOption && (
-                  <Link
-                    key="configuracion"
-                    className="block cursor-pointer px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
-                    to="/configuracion"
-                  >
-                    <div className="mx-auto pt-2">
-                      <svg
-                        className="h-5 w-5 mr-1"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        viewBox="0 0 24 24"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                      >
-                        <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
-                        <path d="M19.4 13a7.7 7.7 0 0 0 .06-2l2.1-1.64-2-3.46-2.55 1a7.7 7.7 0 0 0-1.73-1L14.7 2H9.3l-.58 2.9a7.7 7.7 0 0 0-1.73 1l-2.55-1-2 3.46L4.54 11a7.7 7.7 0 0 0 0 2l-2.1 1.64 2 3.46 2.55-1a7.7 7.7 0 0 0 1.73 1L9.3 22h5.4l.58-2.9a7.7 7.7 0 0 0 1.73-1l2.55 1 2-3.46Z" />
-                      </svg>
-                      <span>Configuración</span>
-                    </div>
-                  </Link>
-                ),
-                reloadCatalogsOption && (
-                  <Link
-                    key="recargar-catalogos"
-                    className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
-                    to="/reload-catalogs"
-                  >
-                    <div className="mx-auto pt-2">
-                      <svg
-                        className={`h-5 w-5 mr-1`}
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        viewBox="0 0 24 24"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M20.5 8c-1.392-3.179-4.823-5-8.522-5C7.299 3 3.453 6.552 3 11.1" />
-                        <path d="M16.489 8.4h3.97A.54.54 0 0 0 21 7.86V3.9M3.5 16c1.392 3.179 4.823 5 8.522 5 4.679 0 8.525-3.552 8.978-8.1" />
-                        <path d="M7.511 15.6h-3.97a.54.54 0 0 0-.541.54v3.96" />
-                      </svg>
-                      <span>Recargar catálogos</span>
-                    </div>
-                  </Link>
-                ),
-                showDarkModeToggle && (
-                  <button
-                    key="dark-mode-toggle"
-                    type="button"
-                    className="block w-full cursor-pointer text-left px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
-                    onClick={() => setIsDarkMode((value) => !value)}
-                  >
-                    <div className="mx-auto pt-2">
-                      <span>{isDarkMode ? "Modo claro" : "Modo oscuro"}</span>
-                    </div>
-                  </button>
-                ),
-                <Link
-                  key="cerrar-sesion"
-                  className={`block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-red-100 dark:hover:bg-gray-700 dark:hover:text-white`}
-                  to="/logout"
-                >
-                  <div className="mx-auto pt-2">
-                    {<LogoutDropDownSvgIcon />}
-                    <span>Cerrar sesión</span>
-                  </div>
-                </Link>,
-              ]}
-            />
-          )}
-        </ul>
-      </>
+  useEffect(() => {
+    const justOpened = navOpen && !wasNavOpen.current;
+    wasNavOpen.current = navOpen;
+    if (!justOpened) return;
+    const activeGroup = visibleItems.find((item) =>
+      visibleChildrenOf(item).some((child) =>
+        pathMatches(location.pathname, child.link)
+      )
     );
-  }, [items, loggedIn, hiddenItemsChange, reloadCatalogsOption, settingsOption, showDarkModeToggle, isDarkMode]);
+    if (!activeGroup) return;
+    const index = visibleItems.indexOf(activeGroup);
+    setOpenMenuId(`${activeGroup.name}-${index}`);
+  }, [navOpen, visibleItems, location.pathname]);
+
+  const renderCluster = (layout: NavLayout) => (
+    <>
+      <NavItems
+        items={visibleItems}
+        color={color}
+        layout={layout}
+        openMenuId={openMenuId}
+        setOpenMenuId={setOpenMenuId}
+        onNavigate={closeMenus}
+      />
+      <UserMenu
+        color={color}
+        layout={layout}
+        open={openMenuId === "user"}
+        onToggle={() => setOpenMenuId(openMenuId === "user" ? null : "user")}
+        onNavigate={closeMenus}
+        entries={userEntries}
+      />
+    </>
+  );
 
   return (
-    <nav className={`py-3 ${color.bg600}`}>
-      <div className="flex items-center justify-between ml-5 mr-5">
-        <div className="flex justify-between items-center w-full lg:w-auto">
+    <nav className={`py-2 ${color.bg600}`} aria-label="Principal">
+      <div className="flex items-center justify-between gap-3 px-4 sm:px-5">
+        <div className="flex min-w-0 flex-1 items-center justify-between gap-2 lg:w-auto lg:flex-none">
           <Link
-            className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
-            to={"/home"}
+            className={`inline-flex min-h-11 min-w-0 cursor-pointer items-center gap-2 truncate text-sm font-bold uppercase text-white ${focusRing}`}
+            to="/home"
           >
-            <div className="inline-block mr-2 mb-2 align-middle">
-              <img className="w-auto h-7" src="/logo.png" alt="logo-zauru" />
-            </div>
-            {title}
+            <img className="h-7 w-auto shrink-0" src="/logo.png" alt="" />
+            <span className="truncate">{title}</span>
           </Link>
           {version !== currentVersion && (
             <button
-              className={`ml-2 px-2 py-1 text-xs text-white ${color.bg700} rounded-full hover:${color.bg900} transition-colors duration-200`}
-              onClick={refreshPage}
+              type="button"
+              className={`shrink-0 cursor-pointer rounded-full px-3 py-2 text-xs text-white ${color.bg700} hover:opacity-90 ${focusRing}`}
+              onClick={() => navigate(0)}
             >
-              🔄 Actualizar versión
+              Actualizar versión
             </button>
           )}
           <button
-            className={`rounded lg:hidden focus:outline-none focus:ring focus:${color.ring600} focus:ring-opacity-50`}
-            aria-label="Toggle mobile menu"
             type="button"
-            onClick={() => setNavBarOpen(!NavBarOpen)}
+            className={`inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md text-white lg:hidden ${focusRing} ${
+              navOpen ? "pointer-events-none invisible" : ""
+            }`}
+            aria-label="Abrir menú"
+            aria-expanded={navOpen}
+            aria-controls={mobileNavId}
+            aria-hidden={navOpen}
+            tabIndex={navOpen ? -1 : undefined}
+            onClick={() => setNavOpen(true)}
           >
-            <MenuAlt4Svg open={NavBarOpen} />
+            <MenuAlt4Svg open={false} />
           </button>
         </div>
-        {/* Menú para dispositivos móviles */}
+
+        {navOpen && (
+          <button
+            type="button"
+            aria-label="Cerrar menú"
+            className="fixed inset-0 z-40 cursor-pointer bg-black/40 lg:hidden"
+            onClick={closeMenus}
+          />
+        )}
+
         <div
-          className={`lg:hidden fixed top-0 left-0 z-50 w-64 h-full ${
+          ref={mobileDrawerRef}
+          id={mobileNavId}
+          aria-hidden={!navOpen}
+          className={`fixed inset-y-0 left-0 z-50 flex w-[min(20rem,86vw)] flex-col ${
             color.bg700
-          } dark:bg-gray-900 shadow-lg transform ${
-            NavBarOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 ease-in-out overflow-y-auto`}
+          } shadow-lg transition-transform duration-200 ease-out motion-reduce:transition-none lg:hidden ${
+            navOpen ? "translate-x-0" : "pointer-events-none -translate-x-full"
+          }`}
         >
-          <div className="p-4">{options}</div>
+          <div className="flex items-center justify-between gap-2 border-b border-white/15 px-4 py-3">
+            <p className="truncate text-sm font-bold uppercase text-white">
+              {title}
+            </p>
+            <button
+              type="button"
+              className={`inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-md text-white ${focusRing}`}
+              aria-label="Cerrar menú"
+              onClick={closeMenus}
+            >
+              <ExitSvg />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto overscroll-contain p-3">
+            {renderCluster("mobile")}
+          </div>
         </div>
-        {/* Menú para escritorio */}
-        <div className="hidden lg:flex lg:items-center w-full lg:w-auto">
-          {options}
+
+        <div
+          ref={desktopMenuRef}
+          className="hidden min-w-0 flex-1 items-center gap-2 lg:flex"
+        >
+          {renderCluster("desktop")}
         </div>
       </div>
     </nav>
