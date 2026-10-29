@@ -4,7 +4,9 @@ import {
   useMemo,
   useRef,
   useState,
+  type Dispatch,
   type ReactNode,
+  type SetStateAction,
 } from "react";
 import {
   DropDownArrowSvgIcon,
@@ -383,7 +385,7 @@ const NavItems = ({
   color: ColorInterface;
   layout: NavLayout;
   openMenuId: string | null;
-  setOpenMenuId: (id: string | null) => void;
+  setOpenMenuId: Dispatch<SetStateAction<string | null>>;
   onNavigate?: () => void;
 }) => (
   <ul
@@ -405,7 +407,7 @@ const NavItems = ({
             layout={layout}
             open={openMenuId === menuKey}
             onToggle={() =>
-              setOpenMenuId(openMenuId === menuKey ? null : menuKey)
+              setOpenMenuId((current) => (current === menuKey ? null : menuKey))
             }
             onNavigate={onNavigate}
           />
@@ -436,7 +438,10 @@ export const NavBar = ({
 }: NavBarProps) => {
   const color: ColorInterface = COLORS[selectedColor];
   const [navOpen, setNavOpen] = useState(false);
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [desktopMenuId, setDesktopMenuId] = useState<string | null>(null);
+  const [mobileAccordionId, setMobileAccordionId] = useState<string | null>(
+    null
+  );
   const [currentVersion, setCurrentVersion] = useState(version);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
@@ -464,7 +469,8 @@ export const NavBar = ({
 
   useEffect(() => {
     setNavOpen(false);
-    setOpenMenuId(null);
+    setDesktopMenuId(null);
+    setMobileAccordionId(null);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -490,28 +496,33 @@ export const NavBar = ({
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       setNavOpen(false);
-      setOpenMenuId(null);
+      setDesktopMenuId(null);
+      setMobileAccordionId(null);
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
   useEffect(() => {
+    if (!desktopMenuId) return;
     const onPointerDown = (event: MouseEvent) => {
-      if (
-        desktopMenuRef.current &&
-        !desktopMenuRef.current.contains(event.target as Node)
-      ) {
-        setOpenMenuId(null);
-      }
+      const target = event.target as Node;
+      if (mobileDrawerRef.current?.contains(target)) return;
+      if (desktopMenuRef.current?.contains(target)) return;
+      setDesktopMenuId(null);
     };
     document.addEventListener("mousedown", onPointerDown);
     return () => document.removeEventListener("mousedown", onPointerDown);
-  }, []);
+  }, [desktopMenuId]);
 
   const closeMenus = () => {
     setNavOpen(false);
-    setOpenMenuId(null);
+    setDesktopMenuId(null);
+    setMobileAccordionId(null);
+  };
+
+  const onLinkNavigate = () => {
+    window.setTimeout(closeMenus, 0);
   };
 
   const userEntries = useMemo<UserMenuEntry[]>(() => {
@@ -602,29 +613,34 @@ export const NavBar = ({
     );
     if (!activeGroup) return;
     const index = visibleItems.indexOf(activeGroup);
-    setOpenMenuId(`${activeGroup.name}-${index}`);
+    setMobileAccordionId(`${activeGroup.name}-${index}`);
   }, [navOpen, visibleItems, location.pathname]);
 
-  const renderCluster = (layout: NavLayout) => (
-    <>
-      <NavItems
-        items={visibleItems}
-        color={color}
-        layout={layout}
-        openMenuId={openMenuId}
-        setOpenMenuId={setOpenMenuId}
-        onNavigate={closeMenus}
-      />
-      <UserMenu
-        color={color}
-        layout={layout}
-        open={openMenuId === "user"}
-        onToggle={() => setOpenMenuId(openMenuId === "user" ? null : "user")}
-        onNavigate={closeMenus}
-        entries={userEntries}
-      />
-    </>
-  );
+  const renderCluster = (layout: NavLayout) => {
+    const isMobile = layout === "mobile";
+    return (
+      <>
+        <NavItems
+          items={visibleItems}
+          color={color}
+          layout={layout}
+          openMenuId={isMobile ? mobileAccordionId : desktopMenuId}
+          setOpenMenuId={isMobile ? setMobileAccordionId : setDesktopMenuId}
+          onNavigate={onLinkNavigate}
+        />
+        <UserMenu
+          color={color}
+          layout={layout}
+          open={desktopMenuId === "user"}
+          onToggle={() =>
+            setDesktopMenuId((current) => (current === "user" ? null : "user"))
+          }
+          onNavigate={onLinkNavigate}
+          entries={userEntries}
+        />
+      </>
+    );
+  };
 
   return (
     <nav className={`py-2 ${color.bg600}`} aria-label="Principal">
