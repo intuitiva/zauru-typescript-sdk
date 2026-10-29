@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.16.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.16.0...@zauru-sdk/components@6.16.1) (2026-10-29)
+
+
+### Bug Fixes
+
+* navegar al elegir un ítem del submenu del NavBar ([75ba139](https://github.com/intuitiva/zauru-typescript-sdk/commit/75ba1395615f2c5dde2bd00d6e404296b45c0b3b))
+
+
+
+
+
 # [6.16.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.15.1...@zauru-sdk/components@6.16.0) (2026-10-29)
 
 
