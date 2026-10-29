@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.17.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.16.1...@zauru-sdk/components@6.17.0) (2026-10-29)
+
+
+### Features
+
+* reportar ErrorBoundaryAlert a CloudWatch ([de3c326](https://github.com/intuitiva/zauru-typescript-sdk/commit/de3c32674da2ebbbff53dc307e11ca213043d1c5))
+
+
+
+
+
 ## [6.16.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.16.0...@zauru-sdk/components@6.16.1) (2026-10-29)
 
 

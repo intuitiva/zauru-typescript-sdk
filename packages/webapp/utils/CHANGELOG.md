@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.29.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.28.0...@zauru-sdk/utils@6.29.0) (2026-10-29)
+
+
+### Features
+
+* mantener vivos los envíos a CloudWatch en Netlify ([0c30618](https://github.com/intuitiva/zauru-typescript-sdk/commit/0c306182c634af99f7afc78817d70384f6e3c547))
+
+
+
+
+
 # [6.28.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.27.0...@zauru-sdk/utils@6.28.0) (2026-10-29)
 
 
