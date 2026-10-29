@@ -9,6 +9,7 @@ import type {
   JsonMemoType,
   CalculatePurchaseOrderFinancialsInput,
   CalculatePurchaseOrderFinancialsResult,
+  PurchaseOrderDetailCostAttribute,
   PurchaseOrderFinancialDetail,
   RejectionPercentageLayers,
 } from "@zauru-sdk/types";
@@ -230,6 +231,36 @@ export const calculatePurchaseOrderFinancials = (
     rejectionLayers: userLayers,
     rejectionCalculations,
   };
+};
+
+/**
+ * Nested attributes for Zauru: `cost` must be sent with `unit_cost`.
+ * Baculo does not recalculate `purchase_order_details.cost` on save.
+ */
+export const buildPurchaseOrderDetailsCostAttributes = (
+  details: PurchaseOrderFinancialDetail[] | null | undefined,
+  unitCostByDetailId?: Map<number, number>,
+): Record<string, PurchaseOrderDetailCostAttribute> => {
+  const attributes: Record<string, PurchaseOrderDetailCostAttribute> = {};
+  let index = 0;
+
+  for (const detail of details ?? []) {
+    const id = toFiniteNumber(detail.id);
+    const itemId = toFiniteNumber(detail.item_id);
+    if (id == null || itemId == null) continue;
+
+    const unitCost =
+      unitCostByDetailId?.get(id) ?? toFiniteNumber(detail.unit_cost) ?? 0;
+    attributes[String(index)] = {
+      id,
+      item_id: itemId,
+      unit_cost: unitCost,
+      cost: roundMoney(lineQuantity(detail) * unitCost),
+    };
+    index += 1;
+  }
+
+  return attributes;
 };
 
 /**
