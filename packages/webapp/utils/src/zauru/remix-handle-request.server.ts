@@ -4,6 +4,7 @@ import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { renderToPipeableStream } from "react-dom/server";
+import { logError } from "./cloudwatch-logger.server.js";
 import { handleError } from "./cloudwatch-remix.server.js";
 
 const ABORT_DELAY = 5_000;
@@ -94,6 +95,15 @@ function handleBotRequest(
           responseStatusCode = 500;
           if (shellRendered) {
             console.error(error);
+            const err =
+              error instanceof Error ? error : new Error(String(error));
+            void logError("server", {
+              message: err.message,
+              stack: err.stack,
+              url: request.url,
+              method: request.method,
+              source: "ssr",
+            });
           }
         },
       },
@@ -141,6 +151,15 @@ function handleBrowserRequest(
           responseStatusCode = 500;
           if (shellRendered) {
             console.error(error);
+            const err =
+              error instanceof Error ? error : new Error(String(error));
+            void logError("server", {
+              message: err.message,
+              stack: err.stack,
+              url: request.url,
+              method: request.method,
+              source: "ssr",
+            });
           }
         },
       },

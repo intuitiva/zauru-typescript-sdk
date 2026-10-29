@@ -4,7 +4,12 @@
  * Import from `@zauru-sdk/utils/cloudwatch.server` (not the main barrel) so
  * the AWS SDK stays out of the client bundle.
  */
+import { installProcessErrorHandlers } from "./cloudwatch-logger.server.js";
+
+installProcessErrorHandlers();
+
 export {
+  installProcessErrorHandlers,
   isCloudWatchEnabled,
   logError,
   logEvent,

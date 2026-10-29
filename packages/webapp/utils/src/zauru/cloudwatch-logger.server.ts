@@ -75,10 +75,71 @@ const sequenceTokens: Record<string, string | undefined> = {};
 /** Serializes PutLogEvents so sequence tokens are not overwritten. */
 let putChain: Promise<void> = Promise.resolve();
 
+let processHandlersInstalled = false;
+let loggedConfigOnce = false;
+
 function envTrim(name: string): string | undefined {
   const v = process.env[name];
   if (!v || v.trim() === "") return undefined;
   return v.trim();
+}
+
+/**
+ * Netlify streaming functions freeze the isolate when the response ends.
+ * `waitUntil` keeps the Lambda awake until PutLogEvents finishes.
+ */
+function keepIsolateAlive(work: Promise<unknown>): void {
+  const g = globalThis as {
+    waitUntil?: (promise: Promise<unknown>) => void;
+    Netlify?: { waitUntil?: (promise: Promise<unknown>) => void };
+  };
+  try {
+    g.waitUntil?.(work);
+    g.Netlify?.waitUntil?.(work);
+  } catch {
+    // Hosts without waitUntil still await in the request path.
+  }
+}
+
+function logConfigOnce(): void {
+  if (loggedConfigOnce) return;
+  loggedConfigOnce = true;
+  const cfg = resolveCloudWatchConfig();
+  if (cfg.enabled) {
+    console.log(
+      `[observability] CloudWatch enabled group=${cfg.logGroup} env=${cfg.appEnv} creds=${cfg.prefixLabel} region=${cfg.region}`,
+    );
+    return;
+  }
+  console.log(`[observability] CloudWatch disabled: ${cfg.skipReason}`);
+}
+
+/**
+ * Catch throws that happen after Remix already returned 200 (fire-and-forget
+ * async work). Remix `handleError` does not see those.
+ */
+export function installProcessErrorHandlers(): void {
+  if (processHandlersInstalled) return;
+  if (typeof process === "undefined" || typeof process.on !== "function") {
+    return;
+  }
+  processHandlersInstalled = true;
+
+  const report = (source: string, reason: unknown) => {
+    const err = reason instanceof Error ? reason : new Error(String(reason));
+    void logError("server", {
+      message: err.message,
+      stack: err.stack,
+      source,
+    });
+  };
+
+  process.on("unhandledRejection", (reason) => {
+    report("unhandledRejection", reason);
+  });
+  process.on("uncaughtException", (err) => {
+    report("uncaughtException", err);
+  });
 }
 
 function resolveAwsCreds(): AwsCreds | null {
@@ -265,10 +326,10 @@ async function fetchSequenceToken(
       new DescribeLogStreamsCommand({
         logGroupName: logGroup,
         logStreamNamePrefix: stream,
-        limit: 1,
       }),
     );
-    return res.logStreams?.[0]?.uploadSequenceToken;
+    const match = res.logStreams?.find((s) => s.logStreamName === stream);
+    return match?.uploadSequenceToken;
   } catch {
     return undefined;
   }
@@ -449,6 +510,7 @@ export async function logEvent(
   origin: LogOrigin,
   payload: LogPayload,
 ): Promise<LogErrorResult> {
+  logConfigOnce();
   const line = buildLogLine(origin, {
     ...payload,
     appVersion: payload.appVersion ?? getDefaultAppVersion(),
@@ -460,7 +522,9 @@ export async function logEvent(
     console.log(`[observability] ${line}`);
   }
 
-  return emitToCloudWatch(origin, [line]);
+  const pending = emitToCloudWatch(origin, [line]);
+  keepIsolateAlive(pending);
+  return pending;
 }
 
 /**
