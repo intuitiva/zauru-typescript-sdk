@@ -1,5 +1,10 @@
 export type LogOrigin = "client" | "server" | "background";
 export type LogLevel = "error" | "info" | "warn";
+/**
+ * Catch throws that happen after Remix already returned 200 (fire-and-forget
+ * async work). Remix `handleError` does not see those.
+ */
+export declare function installProcessErrorHandlers(): void;
 export type CloudWatchConfigInfo = {
     enabled: boolean;
     logGroup?: string;

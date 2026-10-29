@@ -51,11 +51,64 @@ let clientKey = null;
 const sequenceTokens = {};
 /** Serializes PutLogEvents so sequence tokens are not overwritten. */
 let putChain = Promise.resolve();
+let processHandlersInstalled = false;
+let loggedConfigOnce = false;
 function envTrim(name) {
     const v = process.env[name];
     if (!v || v.trim() === "")
         return undefined;
     return v.trim();
+}
+/**
+ * Netlify streaming functions freeze the isolate when the response ends.
+ * `waitUntil` keeps the Lambda awake until PutLogEvents finishes.
+ */
+function keepIsolateAlive(work) {
+    const g = globalThis;
+    try {
+        g.waitUntil?.(work);
+        g.Netlify?.waitUntil?.(work);
+    }
+    catch {
+        // Hosts without waitUntil still await in the request path.
+    }
+}
+function logConfigOnce() {
+    if (loggedConfigOnce)
+        return;
+    loggedConfigOnce = true;
+    const cfg = resolveCloudWatchConfig();
+    if (cfg.enabled) {
+        console.log(`[observability] CloudWatch enabled group=${cfg.logGroup} env=${cfg.appEnv} creds=${cfg.prefixLabel} region=${cfg.region}`);
+        return;
+    }
+    console.log(`[observability] CloudWatch disabled: ${cfg.skipReason}`);
+}
+/**
+ * Catch throws that happen after Remix already returned 200 (fire-and-forget
+ * async work). Remix `handleError` does not see those.
+ */
+export function installProcessErrorHandlers() {
+    if (processHandlersInstalled)
+        return;
+    if (typeof process === "undefined" || typeof process.on !== "function") {
+        return;
+    }
+    processHandlersInstalled = true;
+    const report = (source, reason) => {
+        const err = reason instanceof Error ? reason : new Error(String(reason));
+        void logError("server", {
+            message: err.message,
+            stack: err.stack,
+            source,
+        });
+    };
+    process.on("unhandledRejection", (reason) => {
+        report("unhandledRejection", reason);
+    });
+    process.on("uncaughtException", (err) => {
+        report("uncaughtException", err);
+    });
 }
 function resolveAwsCreds() {
     for (const c of AWS_CANDIDATES) {
@@ -201,9 +254,9 @@ async function fetchSequenceToken(cw, logGroup, stream) {
         const res = await cw.send(new DescribeLogStreamsCommand({
             logGroupName: logGroup,
             logStreamNamePrefix: stream,
-            limit: 1,
         }));
-        return res.logStreams?.[0]?.uploadSequenceToken;
+        const match = res.logStreams?.find((s) => s.logStreamName === stream);
+        return match?.uploadSequenceToken;
     }
     catch {
         return undefined;
@@ -350,6 +403,7 @@ async function emitToCloudWatch(origin, lines) {
  * For client/server also prints with `console.error` (Netlify fallback).
  */
 export async function logEvent(origin, payload) {
+    logConfigOnce();
     const line = buildLogLine(origin, {
         ...payload,
         appVersion: payload.appVersion ?? getDefaultAppVersion(),
@@ -360,7 +414,9 @@ export async function logEvent(origin, payload) {
     else {
         console.log(`[observability] ${line}`);
     }
-    return emitToCloudWatch(origin, [line]);
+    const pending = emitToCloudWatch(origin, [line]);
+    keepIsolateAlive(pending);
+    return pending;
 }
 /**
  * Sends an error event to CloudWatch (and console.error as fallback).
