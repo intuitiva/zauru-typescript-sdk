@@ -1,10 +1,21 @@
 //<reference> https://tailwindtemplates.io/templates?category=alert
-import React from "react";
+import React, { useEffect } from "react";
+import { sendClientError } from "../../observability/sendClientError.js";
 
 type Props = { title: string; description: string };
 
 export const ErrorBoundaryAlert = (props: Props) => {
   const { title, description } = props;
+
+  useEffect(() => {
+    const message = [title, description].filter(Boolean).join(" — ");
+    if (!message) return;
+    sendClientError({
+      message,
+      source: "errorBoundary",
+    });
+  }, [title, description]);
+
   return (
     <div className="rounded-full top-20 mx-auto p-3">
       <div className="p-4 text-red-900 bg-red-100 border border-red-200 rounded-md">
