@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.30.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.30.0...@zauru-sdk/types@6.30.1) (2026-10-30)
+
+
+### Bug Fixes
+
+* respetar filtros de precios especiales ([428d118](https://github.com/intuitiva/zauru-typescript-sdk/commit/428d118d))
+
+
+
+
 # [6.30.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.29.0...@zauru-sdk/types@6.30.0) (2026-10-30)
 
 
