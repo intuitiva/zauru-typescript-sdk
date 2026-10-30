@@ -10,6 +10,9 @@ import {
   WebAppRowDissociateResponse,
   WebAppRowGraphQL,
   WebAppTableBody,
+  WebAppTableBulkCreateBody,
+  WebAppTableBulkResponse,
+  WebAppTableBulkUpdateBody,
   WebAppTableCreateBody,
   WebAppTableGraphQL,
   WebAppTableUpdateResponse,
@@ -170,6 +173,30 @@ export async function createWebAppTableRegister<T>(
 }
 
 /**
+ * Creates multiple webapp table rows in one Baculo request.
+ * Baculo currently accepts up to 200 rows per request.
+ */
+export async function createWebAppTableRegistersBulk<T>(
+  headers: any,
+  id_web_app_table: string,
+  bodies: T[],
+): Promise<WebAppTableBulkResponse<T>> {
+  const requestBody: WebAppTableBulkCreateBody<T> = {
+    webapp_rows: bodies.map((data) => ({ data })),
+  };
+  const response = await httpZauru<WebAppTableBulkResponse<T>>(
+    `/apps/webapp_tables/${id_web_app_table}/webapp_rows/bulk.json`,
+    {
+      method: "POST",
+      headers,
+      data: requestBody,
+    },
+  );
+
+  return response.data;
+}
+
+/**
  * updateWebAppTableRegister Function for update a web app table register
  * @param headers
  * @param id_web_app_table
@@ -188,6 +215,28 @@ export async function updateWebAppTableRegister<T>(
     {
       method: "PATCH",
       headers: headers,
+      data: requestBody,
+    },
+  );
+
+  return response.data;
+}
+
+/**
+ * Partially updates multiple webapp table rows in one Baculo request.
+ * Each row's data is shallow-merged with its current JSON data.
+ */
+export async function updateWebAppTableRegistersBulk<T>(
+  headers: any,
+  id_web_app_table: string,
+  rows: WebAppTableBulkUpdateBody<T>["webapp_rows"],
+): Promise<WebAppTableBulkResponse<T>> {
+  const requestBody: WebAppTableBulkUpdateBody<T> = { webapp_rows: rows };
+  const response = await httpZauru<WebAppTableBulkResponse<T>>(
+    `/apps/webapp_tables/${id_web_app_table}/webapp_rows/bulk.json`,
+    {
+      method: "PATCH",
+      headers,
       data: requestBody,
     },
   );
