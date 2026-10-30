@@ -103,10 +103,41 @@ export const filterActiveSpecialItems = (specialItems) => (specialItems ?? [])
     .filter(isSpecialItemRow)
     .filter((row) => !row.data?.fechaEliminacion)
     .sort((a, b) => a.id - b.id);
-export const matchSpecialItemForWeeklyPrice = (specialItems, params) => filterActiveSpecialItems(specialItems).find((specialItem) => specialItem.data.item === params.itemId &&
-    specialItem.data.region === params.region &&
-    normalizeComparableValue(specialItem.data.tipo) ===
-        normalizeComparableValue(params.tipo));
+const normalizeOptionalSpecialValue = (value) => {
+    const normalized = normalizeComparableValue(value);
+    return normalized === "0" ? "" : normalized;
+};
+const optionalSpecialValueMatches = (configured, actual) => {
+    const expected = normalizeOptionalSpecialValue(configured);
+    return !expected || expected === normalizeOptionalSpecialValue(actual);
+};
+const specialItemSpecificity = (specialItem) => [
+    specialItem.provider,
+    specialItem.region,
+    specialItem.tipo,
+    specialItem.providerCategory,
+].filter((value) => normalizeOptionalSpecialValue(value)).length;
+export const matchSpecialItemForWeeklyPrice = (specialItems, params) => {
+    let bestMatch;
+    let bestSpecificity = -1;
+    for (const specialItem of filterActiveSpecialItems(specialItems)) {
+        const data = specialItem.data;
+        const matches = Number(data.item) === Number(params.itemId) &&
+            optionalSpecialValueMatches(data.provider, params.providerId) &&
+            optionalSpecialValueMatches(data.region, params.region) &&
+            optionalSpecialValueMatches(data.tipo, params.tipo) &&
+            optionalSpecialValueMatches(data.providerCategory, params.providerCategoryId);
+        if (!matches) {
+            continue;
+        }
+        const specificity = specialItemSpecificity(data);
+        if (specificity > bestSpecificity) {
+            bestMatch = specialItem;
+            bestSpecificity = specificity;
+        }
+    }
+    return bestMatch;
+};
 export const pickLatestMassiveCostBitacora = (rows, date) => {
     const masivas = (rows ?? [])
         .filter((row) => row.data?.accion === MASSIVE_VEGETABLE_COST_ACCION)
@@ -136,6 +167,8 @@ export const calculateItemPriceFromWeeklyMatrix = (input) => {
         itemId: input.itemId,
         region: input.region,
         tipo: input.tipo,
+        providerId: input.providerId,
+        providerCategoryId: input.providerCategoryId,
     });
     let source = "fallback";
     let basePrice = FALLBACK_UNIT_COST;
@@ -219,6 +252,7 @@ export const resolveItemPriceFromLatestWeeklyMatrix = (headers, session, params)
             date: params.date,
             region: params.region,
             tipo: params.tipo,
+            providerId: params.payeeId,
             providerCategoryId,
             matrix: matrixResponse.data,
             specialItems: specialItemsResponse.data ?? [],

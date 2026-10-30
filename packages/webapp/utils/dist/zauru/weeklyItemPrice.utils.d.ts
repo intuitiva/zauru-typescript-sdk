@@ -17,6 +17,8 @@ export declare const matchSpecialItemForWeeklyPrice: (specialItems: Array<Specia
     itemId: number;
     region?: string;
     tipo?: string;
+    providerId?: number;
+    providerCategoryId?: number;
 }) => WebAppRowGraphQL<SpecialItem> | undefined;
 export declare const pickLatestMassiveCostBitacora: (rows: WebAppRowGraphQL<BitacoraCostosItems>[] | undefined, date?: string) => WebAppRowGraphQL<BitacoraCostosItems> | undefined;
 export declare const calculateItemPriceFromWeeklyMatrix: (input: CalculateItemPriceFromWeeklyMatrixInput) => CalculateItemPriceFromWeeklyMatrixResult;
