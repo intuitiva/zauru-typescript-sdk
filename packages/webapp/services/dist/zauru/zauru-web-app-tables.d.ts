@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, RejectionWebAppTableObject, WebAppRowAssociateBody, WebAppRowAssociateResponse, WebAppRowDissociateBody, WebAppRowDissociateResponse, WebAppRowGraphQL, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, RejectionWebAppTableObject, WebAppRowAssociateBody, WebAppRowAssociateResponse, WebAppRowDissociateBody, WebAppRowDissociateResponse, WebAppRowGraphQL, WebAppTableBulkResponse, WebAppTableBulkUpdateBody, WebAppTableCreateBody, WebAppTableGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 import { type GetWebAppRowsByTableIdOptions } from "@zauru-sdk/graphql";
 /**
  * getWebAppRow
@@ -36,6 +36,11 @@ export declare function getWebAppTableRegistersRest<T>(headers: any, id_web_app_
  */
 export declare function createWebAppTableRegister<T>(headers: any, id_web_app_table: string, body: T, extraBody?: WebAppRowAssociateBody): Promise<WebAppTableUpdateResponse>;
 /**
+ * Creates multiple webapp table rows in one Baculo request.
+ * Baculo currently accepts up to 200 rows per request.
+ */
+export declare function createWebAppTableRegistersBulk<T>(headers: any, id_web_app_table: string, bodies: T[]): Promise<WebAppTableBulkResponse<T>>;
+/**
  * updateWebAppTableRegister Function for update a web app table register
  * @param headers
  * @param id_web_app_table
@@ -43,6 +48,11 @@ export declare function createWebAppTableRegister<T>(headers: any, id_web_app_ta
  * @returns
  */
 export declare function updateWebAppTableRegister<T>(headers: any, id_web_app_table: string, id_register: number | string, body: Partial<T>): Promise<WebAppTableUpdateResponse>;
+/**
+ * Partially updates multiple webapp table rows in one Baculo request.
+ * Each row's data is shallow-merged with its current JSON data.
+ */
+export declare function updateWebAppTableRegistersBulk<T>(headers: any, id_web_app_table: string, rows: WebAppTableBulkUpdateBody<T>["webapp_rows"]): Promise<WebAppTableBulkResponse<T>>;
 /**
  * associateWebAppTableRegister — links one or more rowables to an existing row
  * POST /apps/webapp_tables/:webapp_table_id/webapp_rows/:id/associate.json

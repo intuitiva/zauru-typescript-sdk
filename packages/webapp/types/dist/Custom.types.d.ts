@@ -599,16 +599,31 @@ export type WebAppTableBody<T> = {
         data: T;
     };
 };
-export type WebAppTableUpdateResponse = {
+export type WebAppTableUpdateResponse<T = {
+    Nombre: string;
+}> = {
     id: number;
     webapp_table_id: number;
-    data: {
-        Nombre: string;
-    };
+    data: T;
     creator_id: number;
     updater_id: number | null;
     created_at: string;
     updated_at: string;
+};
+export type WebAppTableBulkCreateBody<T> = {
+    webapp_rows: Array<{
+        data: T;
+    }>;
+};
+export type WebAppTableBulkUpdateBody<T> = {
+    webapp_rows: Array<{
+        id: number | string;
+        data: Partial<T>;
+    }>;
+};
+export type WebAppTableBulkResponse<T> = {
+    webapp_rows: WebAppTableUpdateResponse<T>[];
+    count: number;
 };
 export type WebAppTableCreateBody = {
     name: string;

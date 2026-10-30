@@ -85,6 +85,21 @@ export async function createWebAppTableRegister(headers, id_web_app_table, body,
     return response.data;
 }
 /**
+ * Creates multiple webapp table rows in one Baculo request.
+ * Baculo currently accepts up to 200 rows per request.
+ */
+export async function createWebAppTableRegistersBulk(headers, id_web_app_table, bodies) {
+    const requestBody = {
+        webapp_rows: bodies.map((data) => ({ data })),
+    };
+    const response = await httpZauru(`/apps/webapp_tables/${id_web_app_table}/webapp_rows/bulk.json`, {
+        method: "POST",
+        headers,
+        data: requestBody,
+    });
+    return response.data;
+}
+/**
  * updateWebAppTableRegister Function for update a web app table register
  * @param headers
  * @param id_web_app_table
@@ -96,6 +111,19 @@ export async function updateWebAppTableRegister(headers, id_web_app_table, id_re
     const response = await httpZauru(`/apps/webapp_tables/${id_web_app_table}/webapp_rows/${id_register}.json`, {
         method: "PATCH",
         headers: headers,
+        data: requestBody,
+    });
+    return response.data;
+}
+/**
+ * Partially updates multiple webapp table rows in one Baculo request.
+ * Each row's data is shallow-merged with its current JSON data.
+ */
+export async function updateWebAppTableRegistersBulk(headers, id_web_app_table, rows) {
+    const requestBody = { webapp_rows: rows };
+    const response = await httpZauru(`/apps/webapp_tables/${id_web_app_table}/webapp_rows/bulk.json`, {
+        method: "PATCH",
+        headers,
         data: requestBody,
     });
     return response.data;
