@@ -1,5 +1,5 @@
 import { redirect } from "@remix-run/node";
-import { isOauthUserinfoUnauthorizedError } from "@zauru-sdk/common";
+import { ZAURU_OAUTH_REAUTH_COOKIE, hasZauruOauthReauthCookie, isOauthUserinfoUnauthorizedError, } from "@zauru-sdk/common";
 import { config } from "@zauru-sdk/config";
 import { commitSession, destroySession, getHeaders, getRefreshSession, getSession, loginWebApp, } from "@zauru-sdk/services";
 const loginErrorPayload = (description, title) => ({
@@ -27,16 +27,12 @@ const evaluateLoginAccess = async (extras, session, headers) => {
         return Response.json(loginErrorPayload(description));
     }
 };
-const OAUTH_REAUTH_COOKIE = "zauru_oauth_reauth";
 const authorizeUrl = (request) => {
     const url = new URL(request.url);
     const hostname = `${url.port ? "http://" : "https://"}${url.hostname}${url.port ? `:${url.port}` : ""}`;
     return `${config.oauthBaseURL}/dialog/authorize?client_id=${config.oauthClientID}&response_type=code&redirect_uri=${hostname}/login`;
 };
-const hasOauthReauthCookie = (request) => (request.headers.get("Cookie") ?? "")
-    .split(";")
-    .some((part) => part.trim() === `${OAUTH_REAUTH_COOKIE}=1`);
-const oauthReauthSetCookie = () => `${OAUTH_REAUTH_COOKIE}=1; Path=/; Max-Age=120; SameSite=Lax`;
+const oauthReauthSetCookie = () => `${ZAURU_OAUTH_REAUTH_COOKIE}=1; Path=/; Max-Age=120; SameSite=Lax`;
 const redirectOauthReauth = async (session) => {
     const headers = new Headers();
     headers.append("Set-Cookie", await destroySession(session));
@@ -92,7 +88,7 @@ export function createLoginAction(extras) {
         if (loginResponse.error || !loginResponse.data) {
             const userMsg = loginResponse.userMsg?.toString() ?? "";
             if (isOauthUserinfoUnauthorizedError(userMsg) &&
-                !hasOauthReauthCookie(request)) {
+                !hasZauruOauthReauthCookie(request.headers.get("Cookie"))) {
                 return redirectOauthReauth(session);
             }
             return Response.json(loginErrorPayload(userMsg));
@@ -139,11 +135,10 @@ export function createLogoutLoader(extras) {
         const url = new URL(args.request.url);
         if (url.searchParams.get("reauth") === "1") {
             const session = await getSession(args.request.headers.get("Cookie"));
-            return redirect("/login", {
-                headers: {
-                    "Set-Cookie": await destroySession(session),
-                },
-            });
+            const headers = new Headers();
+            headers.append("Set-Cookie", await destroySession(session));
+            headers.append("Set-Cookie", oauthReauthSetCookie());
+            return redirect("/login", { headers });
         }
         return guard(args);
     };
