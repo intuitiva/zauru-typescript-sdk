@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.18.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.17.0...@zauru-sdk/services@6.18.0) (2026-10-30)
+
+
+### Features
+
+* agregar escritura bulk de webapp rows ([9c980be](https://github.com/intuitiva/zauru-typescript-sdk/commit/9c980bee8447206d45597a015e5fdb21f43f5c74))
+
+
+
+
+
 # [6.17.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.15.1...@zauru-sdk/services@6.17.0) (2026-10-30)
 
 
