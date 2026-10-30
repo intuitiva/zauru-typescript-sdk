@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.17.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.15.1...@zauru-sdk/services@6.17.0) (2026-10-30)
+
+
+### Bug Fixes
+
+* alinear RedisLockClient con el tipo de set de Upstash ([1611512](https://github.com/intuitiva/zauru-typescript-sdk/commit/161151229ecdfb5c56f1870a3c025f35cf7385ad))
+
+
+### Features
+
+* renovar locks Redis con heartbeat para jobs largos ([dc9d540](https://github.com/intuitiva/zauru-typescript-sdk/commit/dc9d5401c61d33796b9aa1ba9b31891dfba88d8f))
+
+
+
+
+
 ## [6.15.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.15.0...@zauru-sdk/services@6.15.1) (2026-10-26)
 
 **Note:** Version bump only for package @zauru-sdk/services

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.14.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.13.0...@zauru-sdk/common@6.14.0) (2026-10-30)
+
+
+### Features
+
+* preservar estado local al reautenticar webapps ([e1f76e6](https://github.com/intuitiva/zauru-typescript-sdk/commit/e1f76e6fe06a76c9dc183b0d1af91439f4cadea7))
+
+
+
+
+
 # [6.13.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.12.0...@zauru-sdk/common@6.13.0) (2026-10-29)
 
 
