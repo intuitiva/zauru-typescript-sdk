@@ -997,6 +997,7 @@ export type CalculateItemPriceFromWeeklyMatrixInput = {
   date: string;
   region?: string;
   tipo?: string;
+  providerId?: number;
   providerCategoryId?: number;
   matrix?: WeeklyCostMatrix | null;
   specialItems?: Array<SpecialItem | WebAppRowGraphQL<SpecialItem>>;

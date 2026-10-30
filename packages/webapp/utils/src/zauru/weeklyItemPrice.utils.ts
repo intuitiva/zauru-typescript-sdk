@@ -162,17 +162,67 @@ export const filterActiveSpecialItems = (
     .filter((row) => !row.data?.fechaEliminacion)
     .sort((a, b) => a.id - b.id);
 
+const normalizeOptionalSpecialValue = (
+  value: string | number | undefined | null,
+): string => {
+  const normalized = normalizeComparableValue(value);
+  return normalized === "0" ? "" : normalized;
+};
+
+const optionalSpecialValueMatches = (
+  configured: string | number | undefined | null,
+  actual: string | number | undefined | null,
+): boolean => {
+  const expected = normalizeOptionalSpecialValue(configured);
+  return !expected || expected === normalizeOptionalSpecialValue(actual);
+};
+
+const specialItemSpecificity = (specialItem: SpecialItem): number =>
+  [
+    specialItem.provider,
+    specialItem.region,
+    specialItem.tipo,
+    specialItem.providerCategory,
+  ].filter((value) => normalizeOptionalSpecialValue(value)).length;
+
 export const matchSpecialItemForWeeklyPrice = (
   specialItems: Array<SpecialItem | WebAppRowGraphQL<SpecialItem>> | undefined,
-  params: { itemId: number; region?: string; tipo?: string },
-): WebAppRowGraphQL<SpecialItem> | undefined =>
-  filterActiveSpecialItems(specialItems).find(
-    (specialItem) =>
-      specialItem.data.item === params.itemId &&
-      specialItem.data.region === params.region &&
-      normalizeComparableValue(specialItem.data.tipo) ===
-        normalizeComparableValue(params.tipo),
-  );
+  params: {
+    itemId: number;
+    region?: string;
+    tipo?: string;
+    providerId?: number;
+    providerCategoryId?: number;
+  },
+): WebAppRowGraphQL<SpecialItem> | undefined => {
+  let bestMatch: WebAppRowGraphQL<SpecialItem> | undefined;
+  let bestSpecificity = -1;
+
+  for (const specialItem of filterActiveSpecialItems(specialItems)) {
+    const data = specialItem.data;
+    const matches =
+      Number(data.item) === Number(params.itemId) &&
+      optionalSpecialValueMatches(data.provider, params.providerId) &&
+      optionalSpecialValueMatches(data.region, params.region) &&
+      optionalSpecialValueMatches(data.tipo, params.tipo) &&
+      optionalSpecialValueMatches(
+        data.providerCategory,
+        params.providerCategoryId,
+      );
+
+    if (!matches) {
+      continue;
+    }
+
+    const specificity = specialItemSpecificity(data);
+    if (specificity > bestSpecificity) {
+      bestMatch = specialItem;
+      bestSpecificity = specificity;
+    }
+  }
+
+  return bestMatch;
+};
 
 export const pickLatestMassiveCostBitacora = (
   rows: WebAppRowGraphQL<BitacoraCostosItems>[] | undefined,
@@ -216,6 +266,8 @@ export const calculateItemPriceFromWeeklyMatrix = (
     itemId: input.itemId,
     region: input.region,
     tipo: input.tipo,
+    providerId: input.providerId,
+    providerCategoryId: input.providerCategoryId,
   });
 
   let source: CalculateItemPriceFromWeeklyMatrixResult["source"] = "fallback";
@@ -363,6 +415,7 @@ export const resolveItemPriceFromLatestWeeklyMatrix = (
       date: params.date,
       region: params.region,
       tipo: params.tipo,
+      providerId: params.payeeId,
       providerCategoryId,
       matrix: matrixResponse.data,
       specialItems: specialItemsResponse.data ?? [],
