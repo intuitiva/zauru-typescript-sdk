@@ -1,6 +1,9 @@
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { isOauthUserinfoUnauthorizedError } from "@zauru-sdk/common";
+import {
+  hasZauruOauthReauthCookie,
+  isOauthUserinfoUnauthorizedError,
+} from "@zauru-sdk/common";
 import { useValidateNotifications } from "@zauru-sdk/hooks";
 import {
   cleanLocalStorage,
@@ -71,9 +74,7 @@ export function ZauruLoginPage({
     }, []);
 
     useEffect(() => {
-      const alreadyReauthed = document.cookie
-        .split(";")
-        .some((part) => part.trim() === "zauru_oauth_reauth=1");
+      const alreadyReauthed = hasZauruOauthReauthCookie(document.cookie);
       if (
         fetcher.data?.error &&
         !alreadyReauthed &&
@@ -86,7 +87,12 @@ export function ZauruLoginPage({
     }, [fetcher.data]);
 
     useEffect(() => {
-      cleanLocalStorage(cleanLocalStorageArgs);
+      // A reauthentication refreshes the same user's expired server session.
+      // Keep every local draft/queue intact; normal logins still clean storage
+      // and honor the app-specific whitelist.
+      if (!hasZauruOauthReauthCookie(document.cookie)) {
+        cleanLocalStorage(cleanLocalStorageArgs);
+      }
       fetcher.submit({ action: "login" }, { method: "post" });
     }, []);
 

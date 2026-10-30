@@ -1,6 +1,10 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { isOauthUserinfoUnauthorizedError } from "@zauru-sdk/common";
+import {
+  ZAURU_OAUTH_REAUTH_COOKIE,
+  hasZauruOauthReauthCookie,
+  isOauthUserinfoUnauthorizedError,
+} from "@zauru-sdk/common";
 import { config } from "@zauru-sdk/config";
 import {
   commitSession,
@@ -81,8 +85,6 @@ const evaluateLoginAccess = async (
   }
 };
 
-const OAUTH_REAUTH_COOKIE = "zauru_oauth_reauth";
-
 const authorizeUrl = (request: Request): string => {
   const url = new URL(request.url);
   const hostname = `${url.port ? "http://" : "https://"}${url.hostname}${
@@ -91,13 +93,8 @@ const authorizeUrl = (request: Request): string => {
   return `${config.oauthBaseURL}/dialog/authorize?client_id=${config.oauthClientID}&response_type=code&redirect_uri=${hostname}/login`;
 };
 
-const hasOauthReauthCookie = (request: Request): boolean =>
-  (request.headers.get("Cookie") ?? "")
-    .split(";")
-    .some((part) => part.trim() === `${OAUTH_REAUTH_COOKIE}=1`);
-
 const oauthReauthSetCookie = (): string =>
-  `${OAUTH_REAUTH_COOKIE}=1; Path=/; Max-Age=120; SameSite=Lax`;
+  `${ZAURU_OAUTH_REAUTH_COOKIE}=1; Path=/; Max-Age=120; SameSite=Lax`;
 
 const redirectOauthReauth = async (
   session: AuthSession,
@@ -166,7 +163,7 @@ export function createLoginAction(
       const userMsg = loginResponse.userMsg?.toString() ?? "";
       if (
         isOauthUserinfoUnauthorizedError(userMsg) &&
-        !hasOauthReauthCookie(request)
+        !hasZauruOauthReauthCookie(request.headers.get("Cookie"))
       ) {
         return redirectOauthReauth(session);
       }
@@ -230,11 +227,10 @@ export function createLogoutLoader(
     const url = new URL(args.request.url);
     if (url.searchParams.get("reauth") === "1") {
       const session = await getSession(args.request.headers.get("Cookie"));
-      return redirect("/login", {
-        headers: {
-          "Set-Cookie": await destroySession(session),
-        },
-      });
+      const headers = new Headers();
+      headers.append("Set-Cookie", await destroySession(session));
+      headers.append("Set-Cookie", oauthReauthSetCookie());
+      return redirect("/login", { headers });
     }
     return guard(args);
   };
