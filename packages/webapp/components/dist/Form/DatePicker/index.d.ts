@@ -11,6 +11,8 @@ type Props = {
     disabled?: boolean;
     className?: string;
     required?: boolean;
+    isDateAllowed?: (value: string) => boolean;
+    onDateRejected?: (value: string) => void;
 };
 export declare const FormDatePicker: (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};
