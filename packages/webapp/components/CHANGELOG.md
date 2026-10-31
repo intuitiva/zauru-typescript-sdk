@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.19.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.18.1...@zauru-sdk/components@6.19.0) (2026-10-31)
+
+
+### Bug Fixes
+
+* **components:** adaptar SidePanel a teléfonos ([fb6efb8](https://github.com/intuitiva/zauru-typescript-sdk/commit/fb6efb833ba4713196d752766eb7b5f8d991006e))
+
+
+### Features
+
+* **components:** agregar matriz responsive con cards ([42c724c](https://github.com/intuitiva/zauru-typescript-sdk/commit/42c724c00f5bc30de62e9ecaf6acee97b43c3b7b))
+
+
+
+
+
 ## [6.18.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.18.0...@zauru-sdk/components@6.18.1) (2026-10-30)
 
 **Note:** Version bump only for package @zauru-sdk/components
