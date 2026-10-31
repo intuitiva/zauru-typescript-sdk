@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.19.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.19.0...@zauru-sdk/components@6.19.1) (2026-10-31)
+
+
+### Bug Fixes
+
+* **components:** conservar estado responsive accesible ([7ba1a9b](https://github.com/intuitiva/zauru-typescript-sdk/commit/7ba1a9be4f6a417e0162dab0999a6f244d965793))
+
+
+
+
+
 # [6.19.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.18.1...@zauru-sdk/components@6.19.0) (2026-10-31)
 
 
