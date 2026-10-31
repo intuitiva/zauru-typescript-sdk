@@ -11,11 +11,13 @@ import React, { ReactNode } from "react";
  *
  * @returns A toggleable side panel component.
  */
-interface SidePanelProps {
+export interface SidePanelProps {
     children: ReactNode;
     closeOnClickOutside?: boolean;
     widthPercentage?: number;
     buttonIcon?: "chevron" | "filter" | ReactNode;
+    ariaLabel?: string;
+    openButtonLabel?: string;
+    closeButtonLabel?: string;
 }
 export declare const SidePanel: React.FC<SidePanelProps>;
-export {};

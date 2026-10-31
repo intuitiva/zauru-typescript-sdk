@@ -3,6 +3,7 @@ export * from "./AccessControl/index.js";
 export * from "./BlockUI/index.js";
 export * from "./Buttons/index.js";
 export * from "./Card/index.js";
+export * from "./Matrix/index.js";
 export * from "./ConnectionState/index.js";
 export * from "./Chat/index.js";
 export * from "./Containers/index.js";
