@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.19.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.19.1...@zauru-sdk/components@6.19.2) (2026-10-31)
+
+
+### Bug Fixes
+
+* **components:** mostrar tooltips de fecha y hora por encima de otros campos ([f8647e8](https://github.com/intuitiva/zauru-typescript-sdk/commit/f8647e8da1eb7d81c5be13ec639338559d37721d))
+
+
+
+
+
 ## [6.19.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.19.0...@zauru-sdk/components@6.19.1) (2026-10-31)
 
 
