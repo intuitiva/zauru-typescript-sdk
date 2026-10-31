@@ -1,5 +1,11 @@
-import React, { useState, ReactNode, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, {
+  useState,
+  ReactNode,
+  useEffect,
+  useId,
+  useRef,
+} from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 /**
  * SidePanel Component
@@ -14,11 +20,14 @@ import { motion, AnimatePresence } from "framer-motion";
  * @returns A toggleable side panel component.
  */
 
-interface SidePanelProps {
+export interface SidePanelProps {
   children: ReactNode;
   closeOnClickOutside?: boolean;
   widthPercentage?: number;
   buttonIcon?: "chevron" | "filter" | ReactNode;
+  ariaLabel?: string;
+  openButtonLabel?: string;
+  closeButtonLabel?: string;
 }
 
 // SVG icon for the left-pointing chevron
@@ -28,6 +37,8 @@ const ChevronLeftIcon = () => (
     viewBox="0 0 24 24"
     fill="currentColor"
     className="h-6 w-6"
+    aria-hidden="true"
+    focusable="false"
   >
     <path
       fillRule="evenodd"
@@ -44,6 +55,8 @@ const ChevronRightIcon = () => (
     viewBox="0 0 24 24"
     fill="currentColor"
     className="h-6 w-6"
+    aria-hidden="true"
+    focusable="false"
   >
     <path
       fillRule="evenodd"
@@ -60,6 +73,8 @@ const FilterIcon = () => (
     viewBox="0 0 24 24"
     fill="currentColor"
     className="h-6 w-6"
+    aria-hidden="true"
+    focusable="false"
   >
     <path
       fillRule="evenodd"
@@ -74,17 +89,26 @@ export const SidePanel: React.FC<SidePanelProps> = ({
   closeOnClickOutside = true,
   widthPercentage = 25,
   buttonIcon = "chevron",
+  ariaLabel = "Panel lateral",
+  openButtonLabel = "Abrir panel",
+  closeButtonLabel = "Cerrar panel",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const triggerButtonRef = useRef<HTMLButtonElement>(null);
+  const wasOpenRef = useRef(false);
+  const panelId = useId();
+  const shouldReduceMotion = useReducedMotion();
 
   const togglePanel = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((open) => !open);
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
+        isOpen &&
         closeOnClickOutside &&
         panelRef.current &&
         !panelRef.current.contains(event.target as Node)
@@ -97,7 +121,34 @@ export const SidePanel: React.FC<SidePanelProps> = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [closeOnClickOutside]);
+  }, [closeOnClickOutside, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      wasOpenRef.current = true;
+      closeButtonRef.current?.focus();
+      const previousOverflow = document.body.style.overflow;
+      if (window.matchMedia("(max-width: 767px)").matches) {
+        document.body.style.overflow = "hidden";
+      }
+      return () => {
+        document.body.style.overflow = previousOverflow;
+      };
+    }
+    if (wasOpenRef.current) {
+      wasOpenRef.current = false;
+      triggerButtonRef.current?.focus();
+    }
+  }, [isOpen]);
 
   const renderIcon = () => {
     if (typeof buttonIcon === "string") {
@@ -117,30 +168,63 @@ export const SidePanel: React.FC<SidePanelProps> = ({
   return (
     <>
       <motion.div
+        id={panelId}
         ref={panelRef}
+        role="dialog"
+        aria-modal={isOpen ? "true" : undefined}
+        aria-label={ariaLabel}
+        aria-hidden={!isOpen}
         initial={{ x: "100%" }}
         animate={{ x: isOpen ? 0 : "100%" }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className={`fixed top-0 right-0 h-full bg-white shadow-lg z-[9999] overflow-y-auto`}
-        style={{ width: `${widthPercentage}%` }}
+        transition={
+          shouldReduceMotion
+            ? { duration: 0 }
+            : { type: "spring", stiffness: 300, damping: 30 }
+        }
+        className="fixed right-0 top-0 z-[9999] h-full w-[calc(100%-1rem)] overflow-y-auto bg-white shadow-lg sm:w-[min(28rem,calc(100%-2rem))] md:w-[var(--side-panel-width)]"
+        style={
+          {
+            "--side-panel-width": `${widthPercentage}%`,
+          } as React.CSSProperties
+        }
       >
         <button
+          ref={closeButtonRef}
+          type="button"
           onClick={togglePanel}
-          className="absolute top-4 left-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
+          aria-label={closeButtonLabel}
+          className="absolute left-4 top-4 min-h-11 min-w-11 cursor-pointer rounded-full bg-gray-200 p-2 transition-colors hover:bg-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 md:min-h-0 md:min-w-0"
         >
           <ChevronRightIcon />
         </button>
-        <div className="p-6 mt-16">{children}</div>
+        <div className="mt-16 p-4 sm:p-6">{children}</div>
       </motion.div>
       <AnimatePresence>
+        {isOpen && closeOnClickOutside ? (
+          <motion.button
+            type="button"
+            aria-label={closeButtonLabel}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.15 }}
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 z-[9998] cursor-default bg-black/30 md:hidden"
+          />
+        ) : null}
         {!isOpen && (
           <motion.button
+            ref={triggerButtonRef}
+            type="button"
+            aria-label={openButtonLabel}
+            aria-expanded={isOpen}
+            aria-controls={panelId}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
             onClick={togglePanel}
-            className={`fixed top-1/2 right-0 transform -translate-y-1/2 bg-indigo-600 text-white p-3 rounded-l-lg shadow-md hover:bg-indigo-700 transition-colors z-[10000]`}
+            className="fixed right-0 top-1/2 z-[10000] min-h-11 min-w-11 -translate-y-1/2 cursor-pointer rounded-l-lg bg-indigo-600 p-3 text-white shadow-md transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
           >
             {renderIcon()}
           </motion.button>
