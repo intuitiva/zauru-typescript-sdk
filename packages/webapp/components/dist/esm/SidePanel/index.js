@@ -43,6 +43,12 @@ export const SidePanel = ({ children, closeOnClickOutside = true, widthPercentag
         return () => document.removeEventListener("keydown", handleEscape);
     }, [isOpen]);
     useEffect(() => {
+        if (isOpen)
+            panelRef.current?.removeAttribute("inert");
+        else
+            panelRef.current?.setAttribute("inert", "");
+    }, [isOpen]);
+    useEffect(() => {
         if (isOpen) {
             wasOpenRef.current = true;
             closeButtonRef.current?.focus();
