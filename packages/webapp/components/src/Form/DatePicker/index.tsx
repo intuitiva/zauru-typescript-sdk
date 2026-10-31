@@ -15,6 +15,8 @@ type Props = {
   disabled?: boolean;
   className?: string;
   required?: boolean;
+  isDateAllowed?: (value: string) => boolean;
+  onDateRejected?: (value: string) => void;
 };
 
 export const FormDatePicker = (props: Props) => {
@@ -31,18 +33,22 @@ export const FormDatePicker = (props: Props) => {
     className = "",
     isClearable = false,
     required = false,
+    isDateAllowed,
+    onDateRejected,
   } = props;
 
+  const inputId = id ?? name;
   const [value, setValue] = useState<string | null>(defaultValue);
+  const [rejectNonce, setRejectNonce] = useState(0);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const {
     register: tempRegister,
     formState: { errors },
-  } = useFormContext() || { formState: {} }; // Obtener el contexto solo si existe
+  } = useFormContext() || { formState: {} };
   const error = errors ? errors[props.name ?? "-1"] : undefined;
   const register = tempRegister
     ? tempRegister(props.name ?? "-1", { required })
-    : undefined; // Solo usar register si está disponible
+    : undefined;
 
   const color = error ? "red" : "gray";
 
@@ -55,16 +61,26 @@ export const FormDatePicker = (props: Props) => {
     setValue(defaultValue);
   }, [defaultValue]);
 
+  const commitValue = (
+    next: string,
+    event?: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setValue(next);
+    onChange && onChange(next);
+    if (event && register) {
+      register.onChange(event);
+    }
+  };
+
   const clearValue = () => {
-    setValue("");
-    onChange && onChange("");
+    commitValue("");
   };
 
   return (
     <div className={showTooltip ? "relative z-50" : "relative"}>
       {title && (
         <label
-          htmlFor={error ? `${name}-error` : `${name}-success`}
+          htmlFor={inputId}
           className={`block text-sm font-medium ${textColor} ${className}`}
         >
           {title}
@@ -76,7 +92,8 @@ export const FormDatePicker = (props: Props) => {
           <CalendarIconSVG />
         </div>
         <input
-          id={id}
+          key={rejectNonce}
+          id={inputId}
           tabIndex={tabIndex}
           type="date"
           value={value ?? ""}
@@ -85,11 +102,14 @@ export const FormDatePicker = (props: Props) => {
           {...(register ?? {})}
           name={name}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setValue(e.target.value);
-            onChange && onChange(e.target.value);
-            if (register) {
-              register.onChange(e);
+            const next = e.target.value;
+            if (next && isDateAllowed && !isDateAllowed(next)) {
+              onDateRejected?.(next);
+              e.target.value = value ?? "";
+              setRejectNonce((nonce) => nonce + 1);
+              return;
             }
+            commitValue(next, e);
           }}
         ></input>
         {value && isClearable && (
