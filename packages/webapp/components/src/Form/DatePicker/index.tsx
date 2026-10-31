@@ -61,7 +61,7 @@ export const FormDatePicker = (props: Props) => {
   };
 
   return (
-    <div>
+    <div className={showTooltip ? "relative z-50" : "relative"}>
       {title && (
         <label
           htmlFor={error ? `${name}-error` : `${name}-success`}
@@ -110,7 +110,7 @@ export const FormDatePicker = (props: Props) => {
             >
               <IdeaIconSVG />
               {showTooltip && (
-                <div className="absolute -left-48 top-0 mt-8 p-2 bg-white border rounded shadow text-black">
+                <div className="absolute -left-48 top-0 z-50 mt-8 p-2 bg-white border rounded shadow text-black">
                   {helpText}
                 </div>
               )}

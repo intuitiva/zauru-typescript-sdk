@@ -65,7 +65,7 @@ export const FormTimePicker = (props: Props) => {
   };
 
   return (
-    <>
+    <div className={showTooltip ? "relative z-50" : "relative"}>
       {title && (
         <label
           htmlFor={error ? `${name}-error` : `${name}-success`}
@@ -108,7 +108,7 @@ export const FormTimePicker = (props: Props) => {
             >
               <IdeaIconSVG />
               {showTooltip && (
-                <div className="absolute -left-48 top-0 mt-8 p-2 bg-white border rounded shadow text-black">
+                <div className="absolute -left-48 top-0 z-50 mt-8 p-2 bg-white border rounded shadow text-black">
                   {helpText}
                 </div>
               )}
@@ -128,6 +128,6 @@ export const FormTimePicker = (props: Props) => {
           {hint}
         </p>
       )}
-    </>
+    </div>
   );
 };
