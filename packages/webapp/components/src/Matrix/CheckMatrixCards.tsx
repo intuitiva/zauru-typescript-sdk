@@ -46,10 +46,11 @@ export const CheckMatrixCards = ({
 }: CheckMatrixCardsProps) => {
   const safePageSize = Math.max(1, pageSize);
   const [visibleCount, setVisibleCount] = useState(safePageSize);
+  const rowKeys = rows.map((row) => row.key).join("\u0000");
 
   useEffect(() => {
     setVisibleCount(safePageSize);
-  }, [rows, safePageSize]);
+  }, [rowKeys, safePageSize]);
 
   if (rows.length === 0) {
     return <p className={`p-4 text-sm text-gray-600 ${className}`}>{emptyText}</p>;

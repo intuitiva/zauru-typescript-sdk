@@ -133,6 +133,11 @@ export const SidePanel: React.FC<SidePanelProps> = ({
   }, [isOpen]);
 
   useEffect(() => {
+    if (isOpen) panelRef.current?.removeAttribute("inert");
+    else panelRef.current?.setAttribute("inert", "");
+  }, [isOpen]);
+
+  useEffect(() => {
     if (isOpen) {
       wasOpenRef.current = true;
       closeButtonRef.current?.focus();
