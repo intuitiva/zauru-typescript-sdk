@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.20.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.19.2...@zauru-sdk/components@6.20.0) (2026-10-31)
+
+
+### Features
+
+* **components:** permitir rechazar fechas no permitidas en FormDatePicker ([29715e8](https://github.com/intuitiva/zauru-typescript-sdk/commit/29715e89aabaf3099dbc1e396b06baca25db2438))
+
+
+
+
+
 ## [6.19.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.19.1...@zauru-sdk/components@6.19.2) (2026-10-31)
 
 
