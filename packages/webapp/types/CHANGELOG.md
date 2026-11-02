@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.31.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.30.2...@zauru-sdk/types@6.31.0) (2026-11-02)
+
+
+### Features
+
+* allow associating webapp rows with payees ([929ef82](https://github.com/intuitiva/zauru-typescript-sdk/commit/929ef824bc9bf2cc65ebfd57e36f0d3afed33424))
+
+
+
+
+
 ## [6.30.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.30.1...@zauru-sdk/types@6.30.2) (2026-10-31)
 
 **Note:** Version bump only for package @zauru-sdk/types
