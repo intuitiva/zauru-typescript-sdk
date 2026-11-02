@@ -750,6 +750,7 @@ export type WebAppRowAssociateBody = {
   temp_shipment_id?: number | string;
   temp_employee_id?: number | string;
   temp_work_order_id?: number | string;
+  temp_payee_id?: number | string;
 };
 
 export type WebAppRowAssociateResponse = {
