@@ -547,6 +547,7 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
     const lots = config.withLots
         ? `lots (order_by: {id: desc}) {
               id
+              item_id
               name
               description
               ${lotStocksFragment}
@@ -586,6 +587,7 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
         ${whereClause}
       ) {
         id
+        lock_version
         zid
         created_at
         due

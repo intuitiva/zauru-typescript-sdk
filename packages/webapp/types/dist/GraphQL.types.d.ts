@@ -105,6 +105,7 @@ export type TaggingGraphQL = {
 };
 export type PurchaseOrderGraphQL = {
     id: number;
+    lock_version: number;
     zid: number;
     created_at: string;
     due: string;
