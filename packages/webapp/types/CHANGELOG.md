@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.32.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.32.0...@zauru-sdk/types@6.32.1) (2026-11-03)
+
+
+### Bug Fixes
+
+* no pedir lock_version en purchase_orders de GraphQL ([e135b25](https://github.com/intuitiva/zauru-typescript-sdk/commit/e135b2546fd07cfc6e2100ccbedb3a18d507f32f))
+
+
+
+
+
 # [6.32.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.31.0...@zauru-sdk/types@6.32.0) (2026-11-03)
 
 
