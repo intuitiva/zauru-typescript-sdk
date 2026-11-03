@@ -884,6 +884,19 @@ export type GetWebAppRowsByTableIdOptions = {
     lte?: string;
     lt?: string;
   };
+  /**
+   * Cursor for `order_by: { id: desc }`. Next page: `id: { _lt: lastSeenId }`.
+   */
+  idLt?: number;
+};
+
+export type GetInvoicesOptions = {
+  payeeIds?: number[];
+  voided?: boolean;
+  paid?: boolean;
+  issued?: boolean;
+  lastId?: number;
+  limit?: number;
 };
 
 const GRAPHQL_NAME_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
@@ -1000,16 +1013,28 @@ const buildCreatedAtClause = (
   return bounds.length ? `created_at: { ${bounds.join(", ")} }` : "";
 };
 
+const requirePositiveInt = (value: number, label: string): number => {
+  const n = Number(value);
+  if (!Number.isInteger(n) || n <= 0) {
+    throw new Error(`Invalid ${label}`);
+  }
+  return n;
+};
+
 export const getWebAppRowsByWebAppTableIdStringQuery = (
   webapp_table_id: number,
   options?: GetWebAppRowsByTableIdOptions,
 ) => {
-  const { limit, data, createdAt } = options ?? {};
+  const { limit, data, createdAt, idLt } = options ?? {};
   const tableId = Number(webapp_table_id);
   const conditions: string[] = [];
 
   if (tableId) {
     conditions.push(`webapp_table_id: {_eq: ${tableId}}`);
+  }
+
+  if (idLt != null) {
+    conditions.push(`id: {_lt: ${requirePositiveInt(idLt, "idLt")}}`);
   }
 
   const createdAtClause = buildCreatedAtClause(createdAt);
@@ -2088,6 +2113,53 @@ query getPaymentTermById {
   }
 }
 `;
+
+export const getInvoicesStringQuery = (options?: GetInvoicesOptions) => {
+  const conditions: string[] = [];
+  const rawLimit = options?.limit != null ? Number(options.limit) : 500;
+  const limit = Number.isInteger(rawLimit) && rawLimit > 0 ? rawLimit : 500;
+
+  if (options?.payeeIds?.length) {
+    const ids = options.payeeIds.map((id) =>
+      requirePositiveInt(id, "payee id"),
+    );
+    conditions.push(`payee_id: { _in: [${ids.join(", ")}] }`);
+  }
+  if (options?.voided !== undefined) {
+    conditions.push(`voided: { _eq: ${Boolean(options.voided)} }`);
+  }
+  if (options?.paid !== undefined) {
+    conditions.push(`paid: { _eq: ${Boolean(options.paid)} }`);
+  }
+  if (options?.issued !== undefined) {
+    conditions.push(`issued: { _eq: ${Boolean(options.issued)} }`);
+  }
+  if (options?.lastId != null) {
+    const lastId = Number(options.lastId);
+    if (!Number.isInteger(lastId) || lastId < 0) {
+      throw new Error("Invalid lastId");
+    }
+    conditions.push(`id: { _gt: ${lastId} }`);
+  }
+
+  const whereClause = conditions.length
+    ? `where: { ${conditions.join(", ")} }`
+    : "";
+
+  return `
+query getInvoices {
+  invoices(
+    ${[whereClause, "order_by: { id: asc }", `limit: ${limit}`]
+      .filter(Boolean)
+      .join(", ")}
+  ) {
+    id
+    payee_id
+    due
+  }
+}
+`;
+};
 
 export const getInvoicesByAgencyIdStringQuery = (
   id: number,

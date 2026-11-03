@@ -404,6 +404,7 @@ export type InvoiceGraphQL = {
   subtotal: number;
   currency_id: number;
   total: number;
+  due: number;
   payee_id: number;
   seller_id: number;
   memo: string;
