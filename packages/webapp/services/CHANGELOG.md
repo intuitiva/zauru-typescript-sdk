@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.19.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.18.4...@zauru-sdk/services@6.19.0) (2026-11-03)
+
+
+### Features
+
+* leer facturas impagas con due y paginar webapp rows ([6521bfd](https://github.com/intuitiva/zauru-typescript-sdk/commit/6521bfd9380b5839ab5120856e22093e8aab3256))
+
+
+
+
+
 ## [6.18.4](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.18.3...@zauru-sdk/services@6.18.4) (2026-11-03)
 
 **Note:** Version bump only for package @zauru-sdk/services
