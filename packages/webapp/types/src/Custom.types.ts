@@ -525,6 +525,7 @@ export type PurchasesDataTableListFormatedSchema = {
 
 export type UpdatePurchaseOrderBody = {
   purchase_order: {
+    lock_version?: number;
     issue_date?: string;
     shipment_reference?: string;
     id_number?: string;
@@ -533,12 +534,16 @@ export type UpdatePurchaseOrderBody = {
     memo?: string;
     payee_id?: number | string;
     reference?: string;
+    origin?: string;
     purchase_order_details_attributes?: {
       [key: string]: {
         id?: string | number;
         unit_cost?: string | number;
         item_id: string | number;
         cost?: string | number;
+        booked_quantity?: string | number;
+        reference?: string;
+        lot_delivered_quantity?: Array<string | number>;
       };
     };
   };
@@ -1288,6 +1293,9 @@ export type JsonMemoType = {
   elotinUnitsPerPound?: string;
   originalNetWeight?: number;
   originalNetWeightLines?: Array<{ weight: number }>;
+  /** Legacy typo written by older radicchio receptions. */
+  originalNetWeighLines?: Array<{ weight: number }>;
+  radicchioConversion?: RadicchioConversionMemo;
   confirmed?: boolean;
   rejectionPercentage?: number;
   rejectionLayers?: RejectionPercentageLayers;
@@ -1295,6 +1303,46 @@ export type JsonMemoType = {
   certificationPenaltyHistory?: CertificationPenaltyHistoryEntry[];
   unitCostPenaltyHistory?: UnitCostPenaltyHistoryEntry[];
   rejectionCalculations?: RejectionCalculationMemo;
+};
+
+export type RadicchioBoxes = {
+  9: number;
+  12: number;
+  15: number;
+};
+
+export type RadicchioConversionActor = {
+  employeeId: number;
+  name: string;
+};
+
+export type RadicchioConversionHistoryEntry = {
+  revision: number;
+  boxes: RadicchioBoxes;
+  packedUnits: number;
+  remainingUnits: number;
+  remainderReason?: string;
+  totalBoxes: number;
+  changedAt: string;
+  changedBy: RadicchioConversionActor;
+};
+
+export type RadicchioConversionMemo = {
+  schemaVersion: 1;
+  status: "pending" | "converted";
+  sourceItemId: number;
+  targetItemId: number;
+  receivedUnits: number;
+  boxes: RadicchioBoxes;
+  packedUnits: number;
+  remainingUnits: number;
+  remainderReason?: string;
+  totalBoxes: number;
+  revision: number;
+  pendingAt: string;
+  updatedAt?: string;
+  updatedBy?: RadicchioConversionActor;
+  history: RadicchioConversionHistoryEntry[];
 };
 
 export type CloseOpenWorkOrderDetailInput = {
