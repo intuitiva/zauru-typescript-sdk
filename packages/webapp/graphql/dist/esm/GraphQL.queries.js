@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPrintTemplatesStringQuery = exports.getCasesStringQuery = exports.getInvoicesByAgencyIdStringQuery = exports.getPaymentTermByIdStringQuery = exports.getPaymentMethodsStringQuery = exports.getPaymentTermsStringQuery = exports.getSuggestedPricesStringQuery = exports.getCurrenciesStringQuery = exports.getInvoiceFormSubmissionsByInvoiceIdStringQuery = exports.getCaseFormSubmissionsByCaseIdStringQuery = exports.getLastInvoiceFormSubmissionStringQuery = exports.getInvoiceFormSubmissionsByAgencyIdStringQuery = exports.getFormSubmissionByIdStringQuery = exports.getMyCaseFormSubmissionsStringQuery = exports.getFormsByDocumentTypeStringQuery = exports.getFormsStringQuery = exports.getFormByNameStringQuery = exports.getAllFormsStringQuery = exports.getItemByNameStringQuery = exports.getBundleByNameStringQuery = exports.getBundlesByItemCategoryIdStringQuery = exports.getEmployeesByAgencyIdStringQuery = exports.getEmployeesStringQuery = exports.getEmployeeProfileStringQuery = exports.getConsolidatesBetweenDatesStringQuery = exports.getItemsBySuperCategoryStringQuery = exports.getItemsStringQuery = exports.getItemsByCategoryStringQuery = exports.getItemCategoryByIdStringQuery = exports.getSuperCategoryByIdStringQuery = exports.getPayeeByIdStringQuery = exports.getClientCategoriesStringQuery = exports.getProviderCategoriesStringQuery = exports.getPayeeCategoriesStringQuery = exports.getPayeeCategoriesByNotesMatchStringQuery = exports.getPayeeCategoryByIdStringQuery = exports.getWebAppRowsByWebAppTableIdStringQuery = exports.getWebAppRowStringQuery = exports.getAgenciesStringQuery = exports.getProvidersStringQuery = exports.getPayeesStringQuery = exports.getPurchaseOrdersBetweenDatesStringQuery = exports.getSerialsStringQuery = exports.getLotStocksByAgencyIdStringQuery = exports.getLotsByNameStringQuery = exports.getBookingByPurchaseOrderAndReferenceStringQuery = exports.getShipmentsStringQuery = exports.getPurchaseOrderStringQuery = exports.getPurchaseOrderByIdNumberStringQuery = exports.getLast100ReceptionsStringQuery = void 0;
-exports.getProductionWorkOrderStringQuery = void 0;
+exports.getCasesStringQuery = exports.getInvoicesByAgencyIdStringQuery = exports.getInvoicesStringQuery = exports.getPaymentTermByIdStringQuery = exports.getPaymentMethodsStringQuery = exports.getPaymentTermsStringQuery = exports.getSuggestedPricesStringQuery = exports.getCurrenciesStringQuery = exports.getInvoiceFormSubmissionsByInvoiceIdStringQuery = exports.getCaseFormSubmissionsByCaseIdStringQuery = exports.getLastInvoiceFormSubmissionStringQuery = exports.getInvoiceFormSubmissionsByAgencyIdStringQuery = exports.getFormSubmissionByIdStringQuery = exports.getMyCaseFormSubmissionsStringQuery = exports.getFormsByDocumentTypeStringQuery = exports.getFormsStringQuery = exports.getFormByNameStringQuery = exports.getAllFormsStringQuery = exports.getItemByNameStringQuery = exports.getBundleByNameStringQuery = exports.getBundlesByItemCategoryIdStringQuery = exports.getEmployeesByAgencyIdStringQuery = exports.getEmployeesStringQuery = exports.getEmployeeProfileStringQuery = exports.getConsolidatesBetweenDatesStringQuery = exports.getItemsBySuperCategoryStringQuery = exports.getItemsStringQuery = exports.getItemsByCategoryStringQuery = exports.getItemCategoryByIdStringQuery = exports.getSuperCategoryByIdStringQuery = exports.getPayeeByIdStringQuery = exports.getClientCategoriesStringQuery = exports.getProviderCategoriesStringQuery = exports.getPayeeCategoriesStringQuery = exports.getPayeeCategoriesByNotesMatchStringQuery = exports.getPayeeCategoryByIdStringQuery = exports.getWebAppRowsByWebAppTableIdStringQuery = exports.getWebAppRowStringQuery = exports.getAgenciesStringQuery = exports.getProvidersStringQuery = exports.getPayeesStringQuery = exports.getPurchaseOrdersBetweenDatesStringQuery = exports.getSerialsStringQuery = exports.getLotStocksByAgencyIdStringQuery = exports.getLotsByNameStringQuery = exports.getBookingByPurchaseOrderAndReferenceStringQuery = exports.getShipmentsStringQuery = exports.getPurchaseOrderStringQuery = exports.getPurchaseOrderByIdNumberStringQuery = exports.getLast100ReceptionsStringQuery = void 0;
+exports.getProductionWorkOrderStringQuery = exports.getPrintTemplatesStringQuery = void 0;
 const getLast100ReceptionsStringQuery = (agency_id) => {
     const conditions = ["voided: {_eq: false}"];
     if (agency_id) {
@@ -770,12 +770,22 @@ const buildCreatedAtClause = (createdAt) => {
     }
     return bounds.length ? `created_at: { ${bounds.join(", ")} }` : "";
 };
+const requirePositiveInt = (value, label) => {
+    const n = Number(value);
+    if (!Number.isInteger(n) || n <= 0) {
+        throw new Error(`Invalid ${label}`);
+    }
+    return n;
+};
 const getWebAppRowsByWebAppTableIdStringQuery = (webapp_table_id, options) => {
-    const { limit, data, createdAt } = options ?? {};
+    const { limit, data, createdAt, idLt } = options ?? {};
     const tableId = Number(webapp_table_id);
     const conditions = [];
     if (tableId) {
         conditions.push(`webapp_table_id: {_eq: ${tableId}}`);
+    }
+    if (idLt != null) {
+        conditions.push(`id: {_lt: ${requirePositiveInt(idLt, "idLt")}}`);
     }
     const createdAtClause = buildCreatedAtClause(createdAt);
     if (createdAtClause) {
@@ -1755,6 +1765,48 @@ query getPaymentTermById {
 }
 `;
 exports.getPaymentTermByIdStringQuery = getPaymentTermByIdStringQuery;
+const getInvoicesStringQuery = (options) => {
+    const conditions = [];
+    const rawLimit = options?.limit != null ? Number(options.limit) : 500;
+    const limit = Number.isInteger(rawLimit) && rawLimit > 0 ? rawLimit : 500;
+    if (options?.payeeIds?.length) {
+        const ids = options.payeeIds.map((id) => requirePositiveInt(id, "payee id"));
+        conditions.push(`payee_id: { _in: [${ids.join(", ")}] }`);
+    }
+    if (options?.voided !== undefined) {
+        conditions.push(`voided: { _eq: ${Boolean(options.voided)} }`);
+    }
+    if (options?.paid !== undefined) {
+        conditions.push(`paid: { _eq: ${Boolean(options.paid)} }`);
+    }
+    if (options?.issued !== undefined) {
+        conditions.push(`issued: { _eq: ${Boolean(options.issued)} }`);
+    }
+    if (options?.lastId != null) {
+        const lastId = Number(options.lastId);
+        if (!Number.isInteger(lastId) || lastId < 0) {
+            throw new Error("Invalid lastId");
+        }
+        conditions.push(`id: { _gt: ${lastId} }`);
+    }
+    const whereClause = conditions.length
+        ? `where: { ${conditions.join(", ")} }`
+        : "";
+    return `
+query getInvoices {
+  invoices(
+    ${[whereClause, "order_by: { id: asc }", `limit: ${limit}`]
+        .filter(Boolean)
+        .join(", ")}
+  ) {
+    id
+    payee_id
+    due
+  }
+}
+`;
+};
+exports.getInvoicesStringQuery = getInvoicesStringQuery;
 const getInvoicesByAgencyIdStringQuery = (id, filters) => `
 query getInvoicesByAgencyId {
   invoices(

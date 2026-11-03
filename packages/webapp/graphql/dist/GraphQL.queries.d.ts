@@ -100,6 +100,18 @@ export type GetWebAppRowsByTableIdOptions = {
         lte?: string;
         lt?: string;
     };
+    /**
+     * Cursor for `order_by: { id: desc }`. Next page: `id: { _lt: lastSeenId }`.
+     */
+    idLt?: number;
+};
+export type GetInvoicesOptions = {
+    payeeIds?: number[];
+    voided?: boolean;
+    paid?: boolean;
+    issued?: boolean;
+    lastId?: number;
+    limit?: number;
 };
 export declare const getWebAppRowsByWebAppTableIdStringQuery: (webapp_table_id: number, options?: GetWebAppRowsByTableIdOptions) => string;
 export declare const getPayeeCategoryByIdStringQuery: (id: number) => string;
@@ -171,6 +183,7 @@ export declare const getPaymentMethodsStringQuery: (config: {
     onlyActives: boolean;
 }) => string;
 export declare const getPaymentTermByIdStringQuery: (id: number) => string;
+export declare const getInvoicesStringQuery: (options?: GetInvoicesOptions) => string;
 export declare const getInvoicesByAgencyIdStringQuery: (id: number, filters: {
     tag_id?: string;
     invoice_id?: string;

@@ -1,8 +1,24 @@
 import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getInvoicesByAgencyIdStringQuery } from "@zauru-sdk/graphql";
+import { getInvoicesByAgencyIdStringQuery, getInvoicesStringQuery, } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
+/**
+ * getInvoices
+ * Paginated GraphQL read. Pass `lastId` from the previous page's last `id`.
+ */
+export async function getInvoices(session, filters) {
+    return handlePossibleAxiosErrors(async () => {
+        const headers = await getGraphQLAPIHeaders(session);
+        const response = await httpGraphQLAPI.post("", {
+            query: getInvoicesStringQuery(filters),
+        }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
+        return response.data?.data?.invoices ?? [];
+    });
+}
 /**
  * getInvoicesByAgencyId
  */

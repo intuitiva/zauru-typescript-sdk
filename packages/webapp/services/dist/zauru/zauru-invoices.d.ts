@@ -1,5 +1,12 @@
 import type { Session } from "@remix-run/node";
 import { AxiosUtilsResponse, InvoiceGraphQL } from "@zauru-sdk/types";
+import { type GetInvoicesOptions } from "@zauru-sdk/graphql";
+export type { GetInvoicesOptions };
+/**
+ * getInvoices
+ * Paginated GraphQL read. Pass `lastId` from the previous page's last `id`.
+ */
+export declare function getInvoices(session: Session, filters?: GetInvoicesOptions): Promise<AxiosUtilsResponse<InvoiceGraphQL[]>>;
 /**
  * getInvoicesByAgencyId
  */
