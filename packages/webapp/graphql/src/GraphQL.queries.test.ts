@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   getPayeeByIdStringQuery,
+  getPurchaseOrdersBetweenDatesStringQuery,
   getShipmentsStringQuery,
 } from "./GraphQL.queries.js";
 
@@ -11,6 +12,22 @@ describe("getPayeeByIdStringQuery", () => {
     assert.match(query, /payees\s*\(where:\s*\{\s*id:\s*\{\s*_eq:\s*1689394/);
     assert.match(query, /payee_category_id/);
     assert.match(query, /payee_category\s*\{/);
+  });
+});
+
+describe("getPurchaseOrdersBetweenDatesStringQuery", () => {
+  it("does not request lock_version; Hasura purchase_orders has no such field", () => {
+    const query = getPurchaseOrdersBetweenDatesStringQuery(
+      "2026-11-01",
+      "2026-11-03",
+      {
+        excludeVoided: true,
+        betweenIssueDate: true,
+        withPODetails: true,
+      },
+    );
+    assert.equal(/lock_version/.test(query), false);
+    assert.match(query, /purchase_orders/);
   });
 });
 
