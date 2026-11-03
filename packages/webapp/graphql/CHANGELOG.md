@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.10.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.9.1...@zauru-sdk/graphql@6.10.0) (2026-11-03)
+
+
+### Features
+
+* agregar contrato de conversión de radicchio ([50d7efc](https://github.com/intuitiva/zauru-typescript-sdk/commit/50d7efca40cbf4b2b7789a5c4bf636fbd95c515c))
+
+
+
+
+
 ## [6.9.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.9.0...@zauru-sdk/graphql@6.9.1) (2026-10-26)
 
 
