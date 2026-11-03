@@ -587,7 +587,6 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
         ${whereClause}
       ) {
         id
-        lock_version
         zid
         created_at
         due
