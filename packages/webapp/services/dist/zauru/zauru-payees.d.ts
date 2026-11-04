@@ -10,6 +10,9 @@ export declare function getPayees(session: Session, filters?: {
     name?: string;
     vendor?: boolean;
     tin?: string;
+    active?: boolean;
+    id_number_not_empty?: boolean;
+    id_number_not_null?: boolean;
 }): Promise<AxiosUtilsResponse<PayeeGraphQL[]>>;
 /**
  * getProviders

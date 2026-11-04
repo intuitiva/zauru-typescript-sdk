@@ -614,8 +614,18 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
 exports.getPurchaseOrdersBetweenDatesStringQuery = getPurchaseOrdersBetweenDatesStringQuery;
 const getPayeesStringQuery = (filters) => {
     const conditions = [];
+    const idNumberConditions = [];
     if (filters?.id_number) {
-        conditions.push(`id_number: { _ilike: "%${filters.id_number}%" }`);
+        idNumberConditions.push(`_ilike: "%${filters.id_number}%"`);
+    }
+    if (filters?.id_number_not_empty) {
+        idNumberConditions.push(`_neq: ""`);
+    }
+    if (filters?.id_number_not_null) {
+        idNumberConditions.push(`_is_null: false`);
+    }
+    if (idNumberConditions.length) {
+        conditions.push(`id_number: { ${idNumberConditions.join(", ")} }`);
     }
     if (filters?.name) {
         conditions.push(`name: { _ilike: "%${filters.name}%" }`);
@@ -625,6 +635,9 @@ const getPayeesStringQuery = (filters) => {
     }
     if (filters?.tin) {
         conditions.push(`tin: { _eq: "${filters.tin}" }`);
+    }
+    if (filters?.active !== undefined) {
+        conditions.push(`active: { _eq: ${filters.active} }`);
     }
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} }`
@@ -639,6 +652,7 @@ const getPayeesStringQuery = (filters) => {
                 name
                 tin
                 vendor
+                active
                 address_line_1
                 payee_category_id
                 payee_category {

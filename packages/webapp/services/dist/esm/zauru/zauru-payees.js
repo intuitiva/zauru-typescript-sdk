@@ -16,6 +16,9 @@ export async function getPayees(session, filters) {
             name: undefined,
             vendor: undefined,
             tin: undefined,
+            active: undefined,
+            id_number_not_empty: undefined,
+            id_number_not_null: undefined,
         };
         const finalFilters = { ...defaultFilters, ...filters };
         const response = await httpGraphQLAPI.post(``, {
