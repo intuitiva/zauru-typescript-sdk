@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.34.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.33.0...@zauru-sdk/types@6.34.0) (2026-11-04)
+
+
+### Features
+
+* exponer ids y saldo en el tipo GraphQL de pagos ([f5afb87](https://github.com/intuitiva/zauru-typescript-sdk/commit/f5afb879f81ad4d7bc113129ed3c8bcf219e6355))
+
+
+
+
+
 # [6.33.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.32.1...@zauru-sdk/types@6.33.0) (2026-11-03)
 
 

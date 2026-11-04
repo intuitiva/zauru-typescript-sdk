@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.12.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.11.0...@zauru-sdk/graphql@6.12.0) (2026-11-04)
+
+
+### Features
+
+* leer un pago por id con GraphQL ([0ffc3b0](https://github.com/intuitiva/zauru-typescript-sdk/commit/0ffc3b0cf6af67b41aa7db4bc54b8eb641b6853b))
+
+
+
+
+
 # [6.11.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.10.1...@zauru-sdk/graphql@6.11.0) (2026-11-03)
 
 
