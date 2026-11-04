@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.20.8](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.20.7...@zauru-sdk/components@6.20.8) (2026-11-04)
+
+
+### Bug Fixes
+
+* no tronar SelectField si el índice resaltado queda viejo ([ac80a44](https://github.com/intuitiva/zauru-typescript-sdk/commit/ac80a44e8721a303a79601ca529a2f52f0dc02c4))
+
+
+
+
+
 ## [6.20.7](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/components@6.20.6...@zauru-sdk/components@6.20.7) (2026-11-04)
 
 **Note:** Version bump only for package @zauru-sdk/components
