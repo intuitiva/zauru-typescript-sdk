@@ -1,3 +1,4 @@
+import type { Session } from "@remix-run/node";
 import { AxiosUtilsResponse, PaymentGraphQL } from "@zauru-sdk/types";
 /**
  * createInvoice
@@ -24,12 +25,12 @@ export type PaymentRest = Omit<PaymentGraphQL, "payment_details"> & {
 };
 /**
  * getPayment
- * GET /sales/payments/:id.json (incluye payment_details con sus ids)
- * @param headers
+ * GraphQL `payments` + `payment_details` by id.
+ * @param session
  * @param id
  * @returns
  */
-export declare function getPayment(headers: any, id: string | number): Promise<AxiosUtilsResponse<PaymentRest>>;
+export declare function getPayment(session: Session, id: string | number): Promise<AxiosUtilsResponse<PaymentRest>>;
 /**
  * voidPayment
  * DELETE /sales/payments/:id.json (Zauru anula el pago y devuelve el saldo a las facturas)

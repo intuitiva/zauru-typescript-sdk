@@ -1,4 +1,7 @@
+import { getPaymentByIdStringQuery } from "@zauru-sdk/graphql";
 import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { getGraphQLAPIHeaders } from "../common.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { httpZauru } from "./httpZauru.js";
 /**
  * createInvoice
@@ -27,15 +30,23 @@ export async function createPayment(headers, body) {
 }
 /**
  * getPayment
- * GET /sales/payments/:id.json (incluye payment_details con sus ids)
- * @param headers
+ * GraphQL `payments` + `payment_details` by id.
+ * @param session
  * @param id
  * @returns
  */
-export async function getPayment(headers, id) {
+export async function getPayment(session, id) {
     return handlePossibleAxiosErrors(async () => {
-        const response = await httpZauru.get(`/sales/payments/${id}.json`, { headers });
-        return response.data;
+        const headers = await getGraphQLAPIHeaders(session);
+        const response = await httpGraphQLAPI.post("", { query: getPaymentByIdStringQuery(Number(id)) }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
+        const payment = response.data.data?.payments?.[0];
+        if (!payment) {
+            throw new Error("No se encontró ningún pago con este id: " + id);
+        }
+        return payment;
     });
 }
 /**

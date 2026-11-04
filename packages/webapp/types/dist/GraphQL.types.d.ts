@@ -463,12 +463,16 @@ export type TaggingPaymentGraphQL = {
     tag_id: number;
 };
 export type PaymentDetailsGraphQL = {
+    id?: number;
+    payment_id?: number;
     invoice_id: number;
     reference: string;
     amount: number;
+    credit_note_id?: number | null;
 };
 export type PaymentGraphQL = {
     id: number;
+    zid?: number;
     id_number: string;
     draft: boolean;
     payee_id: number;
@@ -478,6 +482,12 @@ export type PaymentGraphQL = {
     reference: string;
     charger_id: number;
     receipt: string;
+    amount?: number;
+    voided?: boolean;
+    memo?: string | null;
+    created_at?: string;
+    updated_at?: string;
+    payment_details_count?: number;
     payment_details: PaymentDetailsGraphQL[];
     tagging_payments: TaggingPaymentGraphQL[];
 };
