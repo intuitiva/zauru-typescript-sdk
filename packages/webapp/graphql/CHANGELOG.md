@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.13.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.12.0...@zauru-sdk/graphql@6.13.0) (2026-11-04)
+
+
+### Features
+
+* filtrar payees por activo y código en GraphQL ([e6cada1](https://github.com/intuitiva/zauru-typescript-sdk/commit/e6cada149e4308e7b5d40ecf0839b293ab47382c))
+
+
+
+
+
 # [6.12.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.11.0...@zauru-sdk/graphql@6.12.0) (2026-11-04)
 
 
