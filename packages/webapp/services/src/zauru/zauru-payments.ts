@@ -1,5 +1,9 @@
+import type { Session } from "@remix-run/node";
+import { getPaymentByIdStringQuery } from "@zauru-sdk/graphql";
 import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { AxiosUtilsResponse, PaymentGraphQL } from "@zauru-sdk/types";
+import { getGraphQLAPIHeaders } from "../common.js";
+import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { httpZauru } from "./httpZauru.js";
 
 /**
@@ -55,21 +59,36 @@ export type PaymentRest = Omit<PaymentGraphQL, "payment_details"> & {
 
 /**
  * getPayment
- * GET /sales/payments/:id.json (incluye payment_details con sus ids)
- * @param headers
+ * GraphQL `payments` + `payment_details` by id.
+ * @param session
  * @param id
  * @returns
  */
 export async function getPayment(
-  headers: any,
+  session: Session,
   id: string | number
 ): Promise<AxiosUtilsResponse<PaymentRest>> {
   return handlePossibleAxiosErrors(async () => {
-    const response = await httpZauru.get<PaymentRest>(
-      `/sales/payments/${id}.json`,
+    const headers = await getGraphQLAPIHeaders(session);
+    const response = await httpGraphQLAPI.post<{
+      data: { payments: PaymentRest[] };
+      errors?: { message: string }[];
+    }>(
+      "",
+      { query: getPaymentByIdStringQuery(Number(id)) },
       { headers }
     );
-    return response.data;
+
+    if (response.data.errors) {
+      throw new Error(response.data.errors.map((x) => x.message).join(";"));
+    }
+
+    const payment = response.data.data?.payments?.[0];
+    if (!payment) {
+      throw new Error("No se encontró ningún pago con este id: " + id);
+    }
+
+    return payment;
   });
 }
 
