@@ -614,6 +614,10 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     useProductionAgencyId?: boolean;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
+    lotStockAgencyId?: number | string;
+    lotStockAvailableGt?: number;
+    excludeAgencyId?: number | string;
+    skipDateFilter?: boolean;
     onlyWithShipmentToMyAgency?: boolean;
     onlyWithLotStocksToMyAgency?: boolean;
     itemId?: number | string; // Can be a single item or a comma-separated list of items
@@ -683,10 +687,10 @@ export const getGraphQLPurchaseOrderBetweenDates = (
       formatDateToUTC(dates.startDate),
       formatDateToUTC(dates.endDate),
       {
+        ...finalConfig,
         agencyId: finalConfig.agencyFilter
           ? (agency_id ?? session.get("agency_id"))
           : undefined,
-        ...finalConfig,
       },
     );
 
