@@ -31,6 +31,9 @@ export async function getPayees(
     name?: string;
     vendor?: boolean;
     tin?: string;
+    active?: boolean;
+    id_number_not_empty?: boolean;
+    id_number_not_null?: boolean;
   }
 ): Promise<AxiosUtilsResponse<PayeeGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
@@ -41,6 +44,9 @@ export async function getPayees(
       name: undefined,
       vendor: undefined,
       tin: undefined,
+      active: undefined,
+      id_number_not_empty: undefined,
+      id_number_not_null: undefined,
     };
 
     const finalFilters = { ...defaultFilters, ...filters };
