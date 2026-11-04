@@ -3,6 +3,7 @@ import { IdeaIconSVG } from "@zauru-sdk/icons";
 import { useEffect, useState, useRef, useId, useCallback, } from "react";
 import { LoadingInputSkeleton } from "../../Skeletons/index.js";
 import { useFormContext } from "react-hook-form";
+import { highlightedIndexAfterOptionsChange, isSelectableChoice, nextHighlightedIndex, resolveEnterSelection, resolveTabBlurSelection, } from "./selectFieldSelection.js";
 // Simple comparison helper to check if two SelectFieldOption arrays contain the
 // same values (order-insensitive). We only compare the `value` of each option
 // because it uniquely identifies a SelectFieldOption.
@@ -105,6 +106,7 @@ export const SelectField = (props) => {
     }, [defaultValueMultiKey, isMulti, name, setFormValue]);
     useEffect(() => {
         setFilteredOptions(options);
+        setHighlightedIndex((prev) => highlightedIndexAfterOptionsChange(prev, options.length));
     }, [options]);
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -175,10 +177,12 @@ export const SelectField = (props) => {
         setInputValue(newValue);
         onInputChangeRef.current && onInputChangeRef.current(newValue);
         setIsSearching(true);
-        setFilteredOptions(options.filter((option) => option.label.toLowerCase().includes(newValue.toLowerCase())));
+        const nextOptions = options.filter((option) => option.label.toLowerCase().includes(newValue.toLowerCase()));
+        setFilteredOptions(nextOptions);
+        setHighlightedIndex((prev) => highlightedIndexAfterOptionsChange(prev, nextOptions.length));
     }, [register, options]);
     const handleOptionClick = useCallback((option) => {
-        if (option.disabled) {
+        if (!isSelectableChoice(option)) {
             return;
         }
         if (isMulti) {
@@ -202,11 +206,12 @@ export const SelectField = (props) => {
     }, [isMulti, handleAddMultiValue, handleSetSingleValue]);
     const handleBlur = useCallback(() => {
         setTimeout(() => {
-            if (isTabPressed && highlightedIndex >= 0) {
-                handleOptionClick(filteredOptions[highlightedIndex]);
-            }
-            else if (isTabPressed && filteredOptions.length > 0 && isSearching) {
-                handleOptionClick(filteredOptions[0]);
+            if (isTabPressed) {
+                handleOptionClick(resolveTabBlurSelection({
+                    options: filteredOptions,
+                    highlightedIndex,
+                    isSearching,
+                }));
             }
             setHighlightedIndex(-1);
             setIsTabPressed(false);
@@ -236,17 +241,17 @@ export const SelectField = (props) => {
         }
         else if (e.key === "ArrowDown") {
             e.preventDefault();
-            setHighlightedIndex((prevIndex) => prevIndex < filteredOptions.length - 1 ? prevIndex + 1 : 0);
+            setHighlightedIndex((prevIndex) => nextHighlightedIndex(prevIndex, filteredOptions.length, "down"));
             scrollToHighlightedOption();
         }
         else if (e.key === "ArrowUp") {
             e.preventDefault();
-            setHighlightedIndex((prevIndex) => prevIndex > 0 ? prevIndex - 1 : filteredOptions.length - 1);
+            setHighlightedIndex((prevIndex) => nextHighlightedIndex(prevIndex, filteredOptions.length, "up"));
             scrollToHighlightedOption();
         }
         else if (e.key === "Enter" && highlightedIndex !== -1) {
             e.preventDefault();
-            handleOptionClick(filteredOptions[highlightedIndex]);
+            handleOptionClick(resolveEnterSelection(filteredOptions, highlightedIndex));
         }
         else if (e.key === "Backspace" &&
             inputValue === "" &&
@@ -288,6 +293,9 @@ export const SelectField = (props) => {
                                     : "Limpiar la opción seleccionada", className: "absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-gray-600 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2", children: _jsx("span", { "aria-hidden": "true", children: "\u00D7" }) })), helpText && (_jsx("div", { className: "flex items-center relative ml-3", children: _jsxs("div", { className: "relative cursor-pointer", onMouseEnter: () => setShowTooltip(true), onMouseLeave: () => setShowTooltip(false), children: [_jsx(IdeaIconSVG, {}), showTooltip && (_jsx("div", { className: "absolute -left-48 top-0 mt-8 p-2 bg-white border rounded shadow text-black z-50", children: helpText }))] }) }))] }), _jsx("input", { type: "hidden", ...(register ?? {}), name: name, value: isMulti
                             ? valueMulti.map((v) => v.value).join(",")
                             : value?.value || "" }), isOpen && !isReadOnly && (_jsx("ul", { ref: optionsRef, className: "absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm", children: filteredOptions.map((option, index) => {
+                            if (!option) {
+                                return null;
+                            }
                             const isDisabled = Boolean(option.disabled);
                             const disabledLabel = option.disabledLabel;
                             const isSelected = isMulti

@@ -1,4 +1,5 @@
 import { SelectFieldOption } from "@zauru-sdk/types";
+import { type SelectFieldChoice } from "./selectFieldSelection.js";
 type Props = {
     id?: string;
     name?: string;
@@ -6,10 +7,7 @@ type Props = {
     defaultValue?: SelectFieldOption;
     defaultValueMulti?: SelectFieldOption[];
     helpText?: string;
-    options: Array<SelectFieldOption & {
-        disabled?: boolean;
-        disabledLabel?: string;
-    }>;
+    options: Array<SelectFieldChoice>;
     onChange?: (value: SelectFieldOption | null) => void;
     onChangeMulti?: (value: SelectFieldOption[]) => void;
     onInputChange?: (newValue: string) => void;
