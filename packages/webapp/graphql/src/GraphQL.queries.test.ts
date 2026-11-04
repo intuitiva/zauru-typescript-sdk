@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   getInvoicesStringQuery,
   getPayeeByIdStringQuery,
+  getPayeesStringQuery,
   getPaymentByIdStringQuery,
   getPurchaseOrdersBetweenDatesStringQuery,
   getShipmentsStringQuery,
@@ -15,6 +16,24 @@ describe("getPayeeByIdStringQuery", () => {
     assert.match(query, /payees\s*\(where:\s*\{\s*id:\s*\{\s*_eq:\s*1689394/);
     assert.match(query, /payee_category_id/);
     assert.match(query, /payee_category\s*\{/);
+  });
+});
+
+describe("getPayeesStringQuery", () => {
+  it("selects active without filtering when no filters are passed", () => {
+    const query = getPayeesStringQuery();
+    assert.match(query, /\bactive\b/);
+    assert.equal(/where:/.test(query), false);
+  });
+
+  it("filters by active and a non-empty id_number", () => {
+    const query = getPayeesStringQuery({
+      active: true,
+      id_number_not_empty: true,
+      id_number_not_null: true,
+    });
+    assert.match(query, /active:\s*\{\s*_eq:\s*true\s*\}/);
+    assert.match(query, /id_number:\s*\{\s*_neq:\s*""\s*,\s*_is_null:\s*false\s*\}/);
   });
 });
 
