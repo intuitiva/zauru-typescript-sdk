@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.23.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.22.0...@zauru-sdk/services@6.23.0) (2026-11-04)
+
+
+### Features
+
+* filtrar OCs por stock de agencia y devolver estado de envíos ([b18f0c7](https://github.com/intuitiva/zauru-typescript-sdk/commit/b18f0c783698808695e373afb2fd294577bf73af))
+
+
+
+
+
 # [6.22.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.21.0...@zauru-sdk/services@6.22.0) (2026-11-04)
 
 
