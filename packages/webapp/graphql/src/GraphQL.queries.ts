@@ -2114,6 +2114,56 @@ query getPaymentTermById {
 }
 `;
 
+export const getPaymentByIdStringQuery = (id: number) => {
+  const paymentId = requirePositiveInt(id, "payment id");
+  return `
+query getPaymentById {
+  payments(where: { id: { _eq: ${paymentId} } }, limit: 1) {
+    id
+    zid
+    id_number
+    draft
+    payee_id
+    date
+    agency_id
+    payment_method_id
+    reference
+    charger_id
+    receipt
+    amount
+    voided
+    memo
+    created_at
+    updated_at
+    creator_id
+    entity_id
+    payment_details_count
+    confirmed_at
+    confirmer_id
+    pos
+    draft_number
+    voider_id
+    exchange_rate
+    currency_id
+    voided_at
+    payment_details {
+      id
+      payment_id
+      invoice_id
+      credit_note_id
+      amount
+      reference
+      created_at
+      updated_at
+      entity_id
+      contract_id
+      contract_recurrence
+    }
+  }
+}
+`;
+};
+
 export const getInvoicesStringQuery = (options?: GetInvoicesOptions) => {
   const conditions: string[] = [];
   const rawLimit = options?.limit != null ? Number(options.limit) : 500;
