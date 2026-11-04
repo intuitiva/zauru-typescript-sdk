@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.20.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.19.0...@zauru-sdk/services@6.20.0) (2026-11-04)
+
+
+### Features
+
+* leer y anular pagos de ventas por REST ([57606b9](https://github.com/intuitiva/zauru-typescript-sdk/commit/57606b9e41548f099722f4a5cf53666c153597c5))
+
+
+
+
+
 # [6.19.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.18.4...@zauru-sdk/services@6.19.0) (2026-11-03)
 
 
