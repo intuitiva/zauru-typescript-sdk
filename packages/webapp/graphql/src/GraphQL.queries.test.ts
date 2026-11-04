@@ -51,6 +51,45 @@ describe("getPurchaseOrdersBetweenDatesStringQuery", () => {
     assert.equal(/lock_version/.test(query), false);
     assert.match(query, /purchase_orders/);
   });
+
+  it("filters nested lot_stocks by agency and available quantity", () => {
+    const query = getPurchaseOrdersBetweenDatesStringQuery(
+      "2026-11-01",
+      "2026-11-03",
+      {
+        excludeAgencyId: 10,
+        lotStockAgencyId: 22,
+        lotStockAvailableGt: 0,
+        skipDateFilter: true,
+        excludeVoided: true,
+        lotItemIdExclusion: 99,
+      },
+    );
+    assert.match(query, /agency_id:\s*\{\s*_neq:\s*10\s*\}/);
+    assert.match(
+      query,
+      /lots:\s*\{\s*item_id:\s*\{\s*_neq:\s*99\s*\},\s*lot_stocks:\s*\{\s*agency_id:\s*\{\s*_eq:\s*22\s*\},\s*available:\s*\{\s*_gt:\s*0\s*\}\s*\}/,
+    );
+    assert.equal(/issue_date:/.test(query), false);
+    assert.equal(/created_at:\s*\{\s*_gte:/.test(query), false);
+  });
+
+  it("selects shipment movement fields when withShipmentPurchaseOrders is true", () => {
+    const query = getPurchaseOrdersBetweenDatesStringQuery(
+      "2026-11-01",
+      "2026-11-03",
+      {
+        withShipmentPurchaseOrders: true,
+      },
+    );
+    assert.match(query, /shipment_purchase_orders\s*\{/);
+    assert.match(query, /\bmemo\b/);
+    assert.match(query, /\bvoided\b/);
+    assert.match(query, /\bshipped\b/);
+    assert.match(query, /\bdelivered\b/);
+    assert.match(query, /\breturned\b/);
+    assert.match(query, /\bcreated_at\b/);
+  });
 });
 
 describe("getShipmentsStringQuery", () => {
