@@ -160,6 +160,10 @@ export declare const getGraphQLPurchaseOrderBetweenDates: (session: Session, dat
     useProductionAgencyId?: boolean;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
+    lotStockAgencyId?: number | string;
+    lotStockAvailableGt?: number;
+    excludeAgencyId?: number | string;
+    skipDateFilter?: boolean;
     onlyWithShipmentToMyAgency?: boolean;
     onlyWithLotStocksToMyAgency?: boolean;
     itemId?: number | string;

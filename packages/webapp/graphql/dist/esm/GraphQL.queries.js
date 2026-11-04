@@ -444,6 +444,9 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
     if (config.agencyId) {
         conditions.push(`agency_id: { _eq: ${config.agencyId} }`);
     }
+    if (config.excludeAgencyId) {
+        conditions.push(`agency_id: { _neq: ${config.excludeAgencyId} }`);
+    }
     if (config.consolidateIdFilter) {
         conditions.push("consolidate_id: { _is_null: true }");
     }
@@ -506,10 +509,24 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
             conditions.push(`reference: { _eq: "${config.reference}" }`);
         }
     }
+    const lotsWhereConditions = [];
     if (config.lotItemIdExclusion) {
-        conditions.push(`lots: { item_id: { _neq: ${config.lotItemIdExclusion} } }`);
+        lotsWhereConditions.push(`item_id: { _neq: ${config.lotItemIdExclusion} }`);
     }
-    if (!config.id_number && !config.ids?.length) {
+    const lotStockConditions = [];
+    if (config.lotStockAgencyId) {
+        lotStockConditions.push(`agency_id: { _eq: ${config.lotStockAgencyId} }`);
+    }
+    if (config.lotStockAvailableGt != null) {
+        lotStockConditions.push(`available: { _gt: ${config.lotStockAvailableGt} }`);
+    }
+    if (lotStockConditions.length > 0) {
+        lotsWhereConditions.push(`lot_stocks: { ${lotStockConditions.join(", ")} }`);
+    }
+    if (lotsWhereConditions.length > 0) {
+        conditions.push(`lots: { ${lotsWhereConditions.join(", ")} }`);
+    }
+    if (!config.id_number && !config.ids?.length && !config.skipDateFilter) {
         conditions.push(config.betweenIssueDate
             ? `issue_date: { _gte: "${startDate}", _lte: "${endDate}" }`
             : `created_at: { _gte: "${startDate}", _lte: "${endDate}"}`);
@@ -575,6 +592,12 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
       booker_id
       agency_from_id
       agency_to_id
+      memo
+      voided
+      shipped
+      delivered
+      returned
+      created_at
     }
   }`
         : "";

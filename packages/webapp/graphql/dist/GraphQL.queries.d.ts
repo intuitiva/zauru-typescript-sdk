@@ -54,6 +54,10 @@ export declare const getPurchaseOrdersBetweenDatesStringQuery: (startDate: strin
     payeeId?: number | string;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
+    lotStockAgencyId?: number | string;
+    lotStockAvailableGt?: number;
+    excludeAgencyId?: number | string;
+    skipDateFilter?: boolean;
     withLotStocks?: boolean;
     betweenIssueDate?: boolean;
     id_number?: string;
