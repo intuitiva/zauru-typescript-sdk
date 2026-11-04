@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   getInvoicesStringQuery,
   getPayeeByIdStringQuery,
+  getPaymentByIdStringQuery,
   getPurchaseOrdersBetweenDatesStringQuery,
   getShipmentsStringQuery,
   getWebAppRowsByWebAppTableIdStringQuery,
@@ -49,6 +50,21 @@ describe("getShipmentsStringQuery", () => {
     assert.equal(/movements\s*\{/.test(query), false);
     assert.match(query, /limit:\s*1/);
     assert.match(query, /id_number:\s*\{\s*_eq:\s*"TN0TEST-1"/);
+  });
+});
+
+describe("getPaymentByIdStringQuery", () => {
+  it("reads one payment with its detail ids", () => {
+    const query = getPaymentByIdStringQuery(9);
+    assert.match(query, /payments\s*\(/);
+    assert.match(query, /id:\s*\{\s*_eq:\s*9\s*\}/);
+    assert.match(query, /payment_details\s*\{/);
+    assert.match(query, /\binvoice_id\b/);
+    assert.match(query, /\bamount\b/);
+  });
+
+  it("rejects a non-numeric payment id", () => {
+    assert.throws(() => getPaymentByIdStringQuery(1.5), /Invalid payment id/);
   });
 });
 
