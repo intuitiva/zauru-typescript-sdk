@@ -25,3 +25,29 @@ export async function createPayment(headers, body) {
         return response.data;
     });
 }
+/**
+ * getPayment
+ * GET /sales/payments/:id.json (incluye payment_details con sus ids)
+ * @param headers
+ * @param id
+ * @returns
+ */
+export async function getPayment(headers, id) {
+    return handlePossibleAxiosErrors(async () => {
+        const response = await httpZauru.get(`/sales/payments/${id}.json`, { headers });
+        return response.data;
+    });
+}
+/**
+ * voidPayment
+ * DELETE /sales/payments/:id.json (Zauru anula el pago y devuelve el saldo a las facturas)
+ * @param headers
+ * @param id
+ * @returns
+ */
+export async function voidPayment(headers, id) {
+    return handlePossibleAxiosErrors(async () => {
+        await httpZauru.delete(`/sales/payments/${id}.json`, { headers });
+        return true;
+    });
+}
