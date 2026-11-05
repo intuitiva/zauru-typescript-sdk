@@ -1,7 +1,7 @@
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getWebAppRowStringQuery, getWebAppRowsByWebAppTableIdStringQuery, } from "@zauru-sdk/graphql";
+import { getWebAppRowStringQuery, getWebAppRowsByWebAppTableIdStringQuery, getWebAppTableByIdStringQuery, } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 /**
  * getWebAppRow
@@ -179,10 +179,40 @@ export async function createWebAppTable(headers, body) {
     }
 }
 /**
- * getWebappTable
- * @param headers
- * @param session
- * @returns
+ * getWebAppTable
+ * GraphQL read of a webapp table schema (structure, name, ids).
+ */
+export async function getWebAppTable(session, webapp_table_id) {
+    return handlePossibleAxiosErrors(async () => {
+        const headers = await getGraphQLAPIHeaders(session);
+        const response = await httpGraphQLAPI.post("", {
+            query: getWebAppTableByIdStringQuery(Number(webapp_table_id)),
+        }, { headers });
+        if (response.data.errors) {
+            throw new Error(response.data.errors.map((x) => x.message).join(";"));
+        }
+        const table = response.data?.data?.webapp_tables?.[0];
+        if (!table) {
+            throw new Error(`No se encontró la web app table ${webapp_table_id}`);
+        }
+        return table;
+    });
+}
+const rejectionLabelFromRow = (row) => {
+    const data = row.data ?? {};
+    if (typeof data.Nombre === "string" && data.Nombre) {
+        return data.Nombre;
+    }
+    const firstKey = Object.keys(data)[0];
+    if (!firstKey) {
+        return "";
+    }
+    const value = data[firstKey];
+    return value == null ? "" : String(value);
+};
+/**
+ * Rejection types catalog + schema of the receptions rejection table.
+ * Reads both from GraphQL (webapp_tables / webapp_rows), not Zauru REST.
  */
 export const getRejectionWebAppTable = async (headers, session) => {
     return handlePossibleAxiosErrors(async () => {
@@ -190,20 +220,24 @@ export const getRejectionWebAppTable = async (headers, session) => {
             "recepciones_rejections_webapp_table_id",
             "recepciones_rejection_types_webapp_table_id",
         ]);
-        const webappTableResponse = await httpZauru.get(`/apps/webapp_tables/${recepciones_rejections_webapp_table_id}.json`, { headers });
-        const webappTableRejectionsResponse = await httpZauru.get(`/apps/webapp_tables/${recepciones_rejection_types_webapp_table_id}/webapp_rows.json`, { headers });
+        const webappTableResponse = await getWebAppTable(session, recepciones_rejections_webapp_table_id);
+        if (webappTableResponse.error || !webappTableResponse.data) {
+            throw new Error(webappTableResponse.userMsg);
+        }
+        const webappTableRejectionsResponse = await getWebAppTableRegisters(session, recepciones_rejection_types_webapp_table_id);
+        if (webappTableRejectionsResponse.error ||
+            !webappTableRejectionsResponse.data) {
+            throw new Error(webappTableRejectionsResponse.userMsg);
+        }
         const rejections_select = [];
-        const rejections_complete = webappTableRejectionsResponse.data;
-        const keyName = Object.keys(rejections_complete[0].data)[0]; //get the first value
         const rejections_list = [];
-        rejections_complete.forEach((val) => {
-            rejections_list.push(val.data[keyName]);
-        });
-        rejections_complete.forEach((rc) => {
-            rejections_select.push({
-                value: rc.data[keyName],
-                label: rc.data[keyName],
-            });
+        webappTableRejectionsResponse.data.forEach((row) => {
+            const label = rejectionLabelFromRow(row);
+            if (!label) {
+                return;
+            }
+            rejections_list.push(label);
+            rejections_select.push({ value: label, label });
         });
         return {
             webapp_table: webappTableResponse.data.structure,

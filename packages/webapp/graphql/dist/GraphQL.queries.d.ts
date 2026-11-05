@@ -120,6 +120,7 @@ export type GetInvoicesOptions = {
     lastId?: number;
     limit?: number;
 };
+export declare const getWebAppTableByIdStringQuery: (id: number) => string;
 export declare const getWebAppRowsByWebAppTableIdStringQuery: (webapp_table_id: number, options?: GetWebAppRowsByTableIdOptions) => string;
 export declare const getPayeeCategoryByIdStringQuery: (id: number) => string;
 export declare const getPayeeCategoriesByNotesMatchStringQuery: (match: string) => string;

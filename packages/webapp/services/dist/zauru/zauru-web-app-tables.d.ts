@@ -72,9 +72,12 @@ export declare function dissociateWebAppTableRegister(headers: any, id_web_app_t
  */
 export declare function createWebAppTable(headers: any, body: WebAppTableCreateBody): Promise<AxiosUtilsResponse<WebAppTableGraphQL>>;
 /**
- * getWebappTable
- * @param headers
- * @param session
- * @returns
+ * getWebAppTable
+ * GraphQL read of a webapp table schema (structure, name, ids).
+ */
+export declare function getWebAppTable(session: Session, webapp_table_id: string | number): Promise<AxiosUtilsResponse<WebAppTableGraphQL>>;
+/**
+ * Rejection types catalog + schema of the receptions rejection table.
+ * Reads both from GraphQL (webapp_tables / webapp_rows), not Zauru REST.
  */
 export declare const getRejectionWebAppTable: (headers: any, session: Session) => Promise<AxiosUtilsResponse<RejectionWebAppTableObject>>;
