@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.24.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.23.0...@zauru-sdk/services@6.24.0) (2026-11-05)
+
+
+### Features
+
+* consultar webapp tables y motivos de rechazo por GraphQL ([606b76c](https://github.com/intuitiva/zauru-typescript-sdk/commit/606b76c30b6ef4c575fc69ffd52da89f43a0cbf5))
+
+
+
+
+
 # [6.23.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.22.0...@zauru-sdk/services@6.23.0) (2026-11-04)
 
 
