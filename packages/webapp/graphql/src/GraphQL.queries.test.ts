@@ -8,6 +8,7 @@ import {
   getPurchaseOrdersBetweenDatesStringQuery,
   getShipmentsStringQuery,
   getWebAppRowsByWebAppTableIdStringQuery,
+  getWebAppTableByIdStringQuery,
 } from "./GraphQL.queries.js";
 
 describe("getPayeeByIdStringQuery", () => {
@@ -152,6 +153,22 @@ describe("getInvoicesStringQuery", () => {
     assert.throws(
       () => getInvoicesStringQuery({ payeeIds: [1.5] }),
       /Invalid payee id/,
+    );
+  });
+});
+
+describe("getWebAppTableByIdStringQuery", () => {
+  it("selects structure for a webapp table by id", () => {
+    const query = getWebAppTableByIdStringQuery(4);
+    assert.match(query, /webapp_tables\s*\(/);
+    assert.match(query, /id:\s*\{\s*_eq:\s*4\s*\}/);
+    assert.match(query, /\bstructure\b/);
+  });
+
+  it("rejects a non-positive id", () => {
+    assert.throws(
+      () => getWebAppTableByIdStringQuery(0),
+      /Invalid webapp table id/,
     );
   });
 });
