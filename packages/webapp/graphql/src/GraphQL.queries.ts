@@ -1069,6 +1069,25 @@ const requirePositiveInt = (value: number, label: string): number => {
   return n;
 };
 
+export const getWebAppTableByIdStringQuery = (id: number) => {
+  const tableId = requirePositiveInt(id, "webapp table id");
+  return `
+query getWebAppTableById {
+  webapp_tables(where: {id: {_eq: ${tableId}}}) {
+    id
+    zid
+    entity_id
+    name
+    structure
+    creator_id
+    updater_id
+    created_at
+    updated_at
+  }
+}
+`;
+};
+
 export const getWebAppRowsByWebAppTableIdStringQuery = (
   webapp_table_id: number,
   options?: GetWebAppRowsByTableIdOptions,

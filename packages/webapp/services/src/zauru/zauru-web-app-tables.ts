@@ -22,6 +22,7 @@ import { httpGraphQLAPI } from "./httpGraphQL.js";
 import {
   getWebAppRowStringQuery,
   getWebAppRowsByWebAppTableIdStringQuery,
+  getWebAppTableByIdStringQuery,
   type GetWebAppRowsByTableIdOptions,
 } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
@@ -324,10 +325,61 @@ export async function createWebAppTable(
 }
 
 /**
- * getWebappTable
- * @param headers
- * @param session
- * @returns
+ * getWebAppTable
+ * GraphQL read of a webapp table schema (structure, name, ids).
+ */
+export async function getWebAppTable(
+  session: Session,
+  webapp_table_id: string | number,
+): Promise<AxiosUtilsResponse<WebAppTableGraphQL>> {
+  return handlePossibleAxiosErrors(async () => {
+    const headers = await getGraphQLAPIHeaders(session);
+
+    const response = await httpGraphQLAPI.post<{
+      data: { webapp_tables: WebAppTableGraphQL[] };
+      errors?: {
+        message: string;
+        extensions: { path: string; code: string };
+      }[];
+    }>(
+      "",
+      {
+        query: getWebAppTableByIdStringQuery(Number(webapp_table_id)),
+      },
+      { headers },
+    );
+
+    if (response.data.errors) {
+      throw new Error(response.data.errors.map((x) => x.message).join(";"));
+    }
+
+    const table = response.data?.data?.webapp_tables?.[0];
+    if (!table) {
+      throw new Error(`No se encontró la web app table ${webapp_table_id}`);
+    }
+
+    return table;
+  });
+}
+
+const rejectionLabelFromRow = (
+  row: WebAppRowGraphQL<MotivoRechazo>,
+): string => {
+  const data = row.data ?? ({} as MotivoRechazo);
+  if (typeof data.Nombre === "string" && data.Nombre) {
+    return data.Nombre;
+  }
+  const firstKey = Object.keys(data)[0];
+  if (!firstKey) {
+    return "";
+  }
+  const value = (data as Record<string, unknown>)[firstKey];
+  return value == null ? "" : String(value);
+};
+
+/**
+ * Rejection types catalog + schema of the receptions rejection table.
+ * Reads both from GraphQL (webapp_tables / webapp_rows), not Zauru REST.
  */
 export const getRejectionWebAppTable = async (
   headers: any,
@@ -342,31 +394,36 @@ export const getRejectionWebAppTable = async (
       "recepciones_rejection_types_webapp_table_id",
     ]);
 
-    const webappTableResponse = await httpZauru.get<WebAppTableGraphQL>(
-      `/apps/webapp_tables/${recepciones_rejections_webapp_table_id}.json`,
-      { headers },
+    const webappTableResponse = await getWebAppTable(
+      session,
+      recepciones_rejections_webapp_table_id,
     );
+    if (webappTableResponse.error || !webappTableResponse.data) {
+      throw new Error(webappTableResponse.userMsg);
+    }
 
-    const webappTableRejectionsResponse = await httpZauru.get<
-      WebAppRowGraphQL<MotivoRechazo>[]
-    >(
-      `/apps/webapp_tables/${recepciones_rejection_types_webapp_table_id}/webapp_rows.json`,
-      { headers },
-    );
+    const webappTableRejectionsResponse =
+      await getWebAppTableRegisters<MotivoRechazo>(
+        session,
+        recepciones_rejection_types_webapp_table_id,
+      );
+    if (
+      webappTableRejectionsResponse.error ||
+      !webappTableRejectionsResponse.data
+    ) {
+      throw new Error(webappTableRejectionsResponse.userMsg);
+    }
 
     const rejections_select: { value: string; label: string }[] = [];
-    const rejections_complete = webappTableRejectionsResponse.data;
-    const keyName: string = Object.keys(rejections_complete[0].data)[0]; //get the first value
     const rejections_list: string[] = [];
-    rejections_complete.forEach((val: any) => {
-      rejections_list.push(val.data[keyName]);
-    });
 
-    rejections_complete.forEach((rc: any) => {
-      rejections_select.push({
-        value: rc.data[keyName],
-        label: rc.data[keyName],
-      });
+    webappTableRejectionsResponse.data.forEach((row) => {
+      const label = rejectionLabelFromRow(row);
+      if (!label) {
+        return;
+      }
+      rejections_list.push(label);
+      rejections_select.push({ value: label, label });
     });
 
     return {
