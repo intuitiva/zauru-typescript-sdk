@@ -1,6 +1,8 @@
 import type { RejectionCalculationMemo, RejectionPercentageAdjustmentContext, RejectionPercentageAdjustmentResult, RejectionPercentageAdjustmentRule, RejectionPercentageAdjustmentStep, RejectionPercentageApplication, RejectionPercentageLayers, WebAppRowGraphQL } from "@zauru-sdk/types";
 export declare const REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = "rejection_percentage_adjustment_rules_web_app_table_id";
 export declare const REJECTION_PERCENTAGE_RULE_HISTORY_TYPE: "rechazo_regla_automatica";
+/** Digits stored for the effective rejection % (additive + successive remainder). */
+export declare const REJECTION_PERCENTAGE_DECIMALS = 3;
 export declare const filterActiveRejectionPercentageAdjustmentRules: (rules?: WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[]) => WebAppRowGraphQL<RejectionPercentageAdjustmentRule>[];
 export declare const rejectionPercentageAdjustmentRuleMatches: (rule: RejectionPercentageAdjustmentRule, ctx: RejectionPercentageAdjustmentContext) => boolean;
 export declare const normalizeRejectionPercentageLayers: (layers?: Partial<RejectionPercentageLayers> | null) => RejectionPercentageLayers;

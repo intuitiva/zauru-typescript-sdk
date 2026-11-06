@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.applyRejectionPercentageAdjustmentRules = exports.isAutomaticRejectionRuleHistoryType = exports.formatAutomaticRejectionRuleHistoryDescription = exports.getNewlyAppliedRejectionRuleSteps = exports.rejectionRuleStepKey = exports.resolveRejectionPercentageOrigin = exports.formatRejectionPercentageAdjustmentDescription = exports.hasSuccessiveRejectionLayers = exports.computeEffectiveRejectionPercentage = exports.applyRejectionPercentageLayers = exports.normalizeRejectionPercentageLayers = exports.rejectionPercentageAdjustmentRuleMatches = exports.filterActiveRejectionPercentageAdjustmentRules = exports.REJECTION_PERCENTAGE_RULE_HISTORY_TYPE = exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = void 0;
+exports.applyRejectionPercentageAdjustmentRules = exports.isAutomaticRejectionRuleHistoryType = exports.formatAutomaticRejectionRuleHistoryDescription = exports.getNewlyAppliedRejectionRuleSteps = exports.rejectionRuleStepKey = exports.resolveRejectionPercentageOrigin = exports.formatRejectionPercentageAdjustmentDescription = exports.hasSuccessiveRejectionLayers = exports.computeEffectiveRejectionPercentage = exports.applyRejectionPercentageLayers = exports.normalizeRejectionPercentageLayers = exports.rejectionPercentageAdjustmentRuleMatches = exports.filterActiveRejectionPercentageAdjustmentRules = exports.REJECTION_PERCENTAGE_DECIMALS = exports.REJECTION_PERCENTAGE_RULE_HISTORY_TYPE = exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = void 0;
 exports.REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR = "rejection_percentage_adjustment_rules_web_app_table_id";
 exports.REJECTION_PERCENTAGE_RULE_HISTORY_TYPE = "rechazo_regla_automatica";
+/** Digits stored for the effective rejection % (additive + successive remainder). */
+exports.REJECTION_PERCENTAGE_DECIMALS = 3;
 const defaultFilters = () => ({
     itemMode: "all",
     itemIds: [],
@@ -98,7 +100,7 @@ exports.applyRejectionPercentageLayers = applyRejectionPercentageLayers;
  * Effective rejection % after additive then each successive rate on the remainder.
  * 10% then 10% successive → 19, not 20.
  */
-const computeEffectiveRejectionPercentage = (layers, digits = 2) => {
+const computeEffectiveRejectionPercentage = (layers, digits = exports.REJECTION_PERCENTAGE_DECIMALS) => {
     const normalized = (0, exports.normalizeRejectionPercentageLayers)(layers);
     let remainingFactor = 1 - normalized.additive / 100;
     for (const rate of normalized.successive) {
@@ -110,7 +112,7 @@ exports.computeEffectiveRejectionPercentage = computeEffectiveRejectionPercentag
 const hasSuccessiveRejectionLayers = (layers) => Array.isArray(layers?.successive) && layers.successive.length > 0;
 exports.hasSuccessiveRejectionLayers = hasSuccessiveRejectionLayers;
 const formatPercentage = (value) => Number.isInteger(value) ? String(value) : String(roundPercentage(value));
-const formatFinalPercentage = (value) => roundPercentage(value, 2).toFixed(2);
+const formatFinalPercentage = (value) => roundPercentage(value, exports.REJECTION_PERCENTAGE_DECIMALS).toFixed(exports.REJECTION_PERCENTAGE_DECIMALS);
 const formatRuleEffect = (step) => {
     const sign = step.operation === "subtract" ? "-" : "+";
     return `${sign} ${formatPercentage(step.value)}% (${step.ruleName})`;
@@ -133,12 +135,12 @@ const resolveRejectionPercentageOrigin = (passedPercentage, previousCalculations
     if (!calc || !Number.isFinite(Number(calc.finalPercentage))) {
         return passed;
     }
-    const previousFinal = roundPercentage(Number(calc.finalPercentage), 2);
+    const previousFinal = roundPercentage(Number(calc.finalPercentage), exports.REJECTION_PERCENTAGE_DECIMALS);
     const previousBase = Number(calc.basePercentage);
     const safePreviousBase = Number.isFinite(previousBase)
         ? clampPercentage(previousBase)
         : passed;
-    if (roundPercentage(passed, 2) === previousFinal) {
+    if (roundPercentage(passed, exports.REJECTION_PERCENTAGE_DECIMALS) === previousFinal) {
         return safePreviousBase;
     }
     return clampPercentage(safePreviousBase + (passed - previousFinal));
@@ -194,7 +196,7 @@ const applyRejectionPercentageAdjustmentRules = (basePercentage, rules, ctx) => 
     }
     const result = {
         basePercentage: roundPercentage(safeBase),
-        finalPercentage: roundPercentage(runningTotal, 2),
+        finalPercentage: roundPercentage(runningTotal, exports.REJECTION_PERCENTAGE_DECIMALS),
         description: "",
         steps,
     };
