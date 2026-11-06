@@ -192,7 +192,7 @@ export const calculateItemPriceFromWeeklyMatrix = (input) => {
         itemId: input.itemId,
         tipo: input.tipo,
         providerCategoryId: input.providerCategoryId,
-    });
+    }, { skipRuleIds: input.skipRuleIds });
     return {
         ...adjusted,
         description: formatPriceAdjustmentDescription(adjusted, sourceLabel(source)),
@@ -257,6 +257,7 @@ export const resolveItemPriceFromLatestWeeklyMatrix = (headers, session, params)
             matrix: matrixResponse.data,
             specialItems: specialItemsResponse.data ?? [],
             rules: filterActivePriceAdjustmentRules(rulesResponse.data),
+            skipRuleIds: params.skipRuleIds,
         });
     });
 };

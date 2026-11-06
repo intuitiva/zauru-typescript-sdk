@@ -29,4 +29,5 @@ export declare const resolveItemPriceFromLatestWeeklyMatrix: (headers: any, sess
     region?: string;
     tipo?: string;
     payeeId?: number;
+    skipRuleIds?: Iterable<number>;
 }) => Promise<AxiosUtilsResponse<CalculateItemPriceFromWeeklyMatrixResult>>;

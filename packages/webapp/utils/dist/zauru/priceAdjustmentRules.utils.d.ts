@@ -17,12 +17,24 @@ export declare const formatReceptionTypeValue: (type?: {
 } | null) => string;
 export declare const priceAdjustmentRuleMatches: (rule: PriceAdjustmentRule, ctx: PriceAdjustmentContext) => boolean;
 export declare const formatPriceAdjustmentDescription: (result: Pick<PriceAdjustmentResult, "basePrice" | "finalPrice" | "steps">, baseLabel?: string) => string;
-export declare const applyPriceAdjustmentRules: (basePrice: number, rules: Array<PriceAdjustmentRule | WebAppRowGraphQL<PriceAdjustmentRule>>, ctx: PriceAdjustmentContext) => PriceAdjustmentResult;
+export type ApplyPriceAdjustmentRulesOptions = {
+    skipRuleIds?: Iterable<number>;
+};
+export declare const skippedRuleIdsFromPenaltyHistory: (history: CertificationPenaltyHistoryEntry[] | undefined, detailId?: number) => number[];
+export declare const dedupeCertificationPenaltyHistory: (history?: CertificationPenaltyHistoryEntry[]) => CertificationPenaltyHistoryEntry[];
+export declare const priceAdjustmentBasePrice: (calculation: {
+    basePrice?: number;
+    finalPrice?: number;
+    steps?: PriceAdjustmentStep[];
+}) => number;
+export declare const applyPriceAdjustmentSteps: (basePrice: number, steps: PriceAdjustmentStep[], options?: ApplyPriceAdjustmentRulesOptions) => PriceAdjustmentResult;
+export declare const applyPriceAdjustmentRules: (basePrice: number, rules: Array<PriceAdjustmentRule | WebAppRowGraphQL<PriceAdjustmentRule>>, ctx: PriceAdjustmentContext, options?: ApplyPriceAdjustmentRulesOptions) => PriceAdjustmentResult;
 export declare const buildPriceAdjustmentReversalPlan: ({ calculation, currentPrice, reversalRules, history, }: {
     calculation: {
         calculationId?: string;
         detailId?: number;
         itemId: number;
+        basePrice?: number;
         finalPrice: number;
         steps: PriceAdjustmentStep[];
     };
