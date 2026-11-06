@@ -299,11 +299,16 @@ export const calculateItemPriceFromWeeklyMatrix = (
     }
   }
 
-  const adjusted = applyPriceAdjustmentRules(basePrice, input.rules ?? [], {
-    itemId: input.itemId,
-    tipo: input.tipo,
-    providerCategoryId: input.providerCategoryId,
-  });
+  const adjusted = applyPriceAdjustmentRules(
+    basePrice,
+    input.rules ?? [],
+    {
+      itemId: input.itemId,
+      tipo: input.tipo,
+      providerCategoryId: input.providerCategoryId,
+    },
+    { skipRuleIds: input.skipRuleIds },
+  );
 
   return {
     ...adjusted,
@@ -355,6 +360,7 @@ export const resolveItemPriceFromLatestWeeklyMatrix = (
     region?: string;
     tipo?: string;
     payeeId?: number;
+    skipRuleIds?: Iterable<number>;
   },
 ): Promise<AxiosUtilsResponse<CalculateItemPriceFromWeeklyMatrixResult>> => {
   return handlePossibleAxiosErrors(async () => {
@@ -420,6 +426,7 @@ export const resolveItemPriceFromLatestWeeklyMatrix = (
       matrix: matrixResponse.data,
       specialItems: specialItemsResponse.data ?? [],
       rules: filterActivePriceAdjustmentRules(rulesResponse.data),
+      skipRuleIds: params.skipRuleIds,
     });
   });
 };

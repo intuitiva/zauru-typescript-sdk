@@ -263,15 +263,135 @@ export const formatPriceAdjustmentDescription = (
   return `${base} ${result.steps.map(formatRuleEffect).join(" ")} = ${formatFinalPrice(result.finalPrice)}`;
 };
 
+export type ApplyPriceAdjustmentRulesOptions = {
+  skipRuleIds?: Iterable<number>;
+};
+
+const skipRuleIdSet = (skipRuleIds?: Iterable<number>) =>
+  new Set(
+    [...(skipRuleIds ?? [])]
+      .map((id) => Number(id))
+      .filter((id) => Number.isFinite(id)),
+  );
+
+const applyDelta = (
+  previous: number,
+  operation: PriceAdjustmentRule["operacion"],
+  valueType: PriceAdjustmentRule["tipoValor"],
+  value: number,
+) => {
+  if (valueType === "percentage") {
+    const delta = previous * (value / 100);
+    return operation === "subtract" ? previous - delta : previous + delta;
+  }
+  return operation === "subtract" ? previous - value : previous + value;
+};
+
+const toPriceAdjustmentResult = (
+  basePrice: number,
+  runningTotal: number,
+  steps: PriceAdjustmentStep[],
+): PriceAdjustmentResult => {
+  const result: PriceAdjustmentResult = {
+    basePrice: roundMoney(basePrice),
+    finalPrice: roundMoney(runningTotal, 2),
+    description: "",
+    steps,
+  };
+  result.description = formatPriceAdjustmentDescription(result);
+  return result;
+};
+
+export const skippedRuleIdsFromPenaltyHistory = (
+  history: CertificationPenaltyHistoryEntry[] | undefined,
+  detailId?: number,
+): number[] => {
+  const ids = new Set<number>();
+  for (const entry of history ?? []) {
+    if (detailId != null && entry.detailId !== detailId) continue;
+    const sourceRuleId = Number(entry.sourceRuleId);
+    if (Number.isFinite(sourceRuleId)) ids.add(sourceRuleId);
+  }
+  return [...ids];
+};
+
+export const dedupeCertificationPenaltyHistory = (
+  history?: CertificationPenaltyHistoryEntry[],
+): CertificationPenaltyHistoryEntry[] => {
+  const kept = new Map<string, CertificationPenaltyHistoryEntry>();
+  for (const entry of history ?? []) {
+    const key = `${entry.detailId}|${entry.sourceRuleId}`;
+    const current = kept.get(key);
+    if (!current) {
+      kept.set(key, entry);
+      continue;
+    }
+    const currentTime = Date.parse(current.createdAt);
+    const nextTime = Date.parse(entry.createdAt);
+    const currentOk = Number.isFinite(currentTime);
+    const nextOk = Number.isFinite(nextTime);
+    if (nextOk && (!currentOk || nextTime < currentTime)) {
+      kept.set(key, entry);
+    }
+  }
+  return [...kept.values()].sort(
+    (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt),
+  );
+};
+
+export const priceAdjustmentBasePrice = (calculation: {
+  basePrice?: number;
+  finalPrice?: number;
+  steps?: PriceAdjustmentStep[];
+}): number => {
+  const explicit = Number(calculation.basePrice);
+  if (Number.isFinite(explicit)) return explicit;
+  const first = calculation.steps?.[0];
+  if (first) {
+    return roundMoney(Number(first.runningTotal) - Number(first.appliedAmount));
+  }
+  const finalPrice = Number(calculation.finalPrice);
+  return Number.isFinite(finalPrice) ? finalPrice : 0;
+};
+
+export const applyPriceAdjustmentSteps = (
+  basePrice: number,
+  steps: PriceAdjustmentStep[],
+  options?: ApplyPriceAdjustmentRulesOptions,
+): PriceAdjustmentResult => {
+  const start = Number(basePrice);
+  const safeBase = Number.isFinite(start) ? start : 0;
+  const skip = skipRuleIdSet(options?.skipRuleIds);
+  let runningTotal = safeBase;
+  const nextSteps: PriceAdjustmentStep[] = [];
+
+  for (const step of steps ?? []) {
+    if (step.ruleId != null && skip.has(Number(step.ruleId))) continue;
+    const previous = runningTotal;
+    runningTotal = roundMoney(
+      applyDelta(previous, step.operation, step.valueType, Number(step.value) || 0),
+    );
+    nextSteps.push({
+      ...step,
+      appliedAmount: roundMoney(runningTotal - previous),
+      runningTotal,
+    });
+  }
+
+  return toPriceAdjustmentResult(safeBase, runningTotal, nextSteps);
+};
+
 export const applyPriceAdjustmentRules = (
   basePrice: number,
   rules: Array<PriceAdjustmentRule | WebAppRowGraphQL<PriceAdjustmentRule>>,
   ctx: PriceAdjustmentContext,
+  options?: ApplyPriceAdjustmentRulesOptions,
 ): PriceAdjustmentResult => {
   const start = Number(basePrice);
   const safeBase = Number.isFinite(start) ? start : 0;
   let runningTotal = safeBase;
   const steps: PriceAdjustmentStep[] = [];
+  const skip = skipRuleIdSet(options?.skipRuleIds);
 
   const normalized = rules
     .map((rule) => ({
@@ -292,22 +412,18 @@ export const applyPriceAdjustmentRules = (
     );
 
   for (const { rule, ruleId } of activeRules) {
+    if (ruleId != null && skip.has(Number(ruleId))) {
+      continue;
+    }
     if (!priceAdjustmentRuleMatches(rule, ctx)) {
       continue;
     }
 
     const value = Number(rule.valor) || 0;
     const previous = runningTotal;
-    if (rule.tipoValor === "percentage") {
-      const delta = previous * (value / 100);
-      runningTotal =
-        rule.operacion === "subtract" ? previous - delta : previous + delta;
-    } else {
-      runningTotal =
-        rule.operacion === "subtract" ? previous - value : previous + value;
-    }
-
-    runningTotal = roundMoney(runningTotal);
+    runningTotal = roundMoney(
+      applyDelta(previous, rule.operacion, rule.tipoValor, value),
+    );
     steps.push({
       ...(ruleId !== undefined ? { ruleId } : {}),
       ruleName: rule.nombre,
@@ -319,14 +435,7 @@ export const applyPriceAdjustmentRules = (
     });
   }
 
-  const result: PriceAdjustmentResult = {
-    basePrice: roundMoney(safeBase),
-    finalPrice: roundMoney(runningTotal, 2),
-    description: "",
-    steps,
-  };
-  result.description = formatPriceAdjustmentDescription(result);
-  return result;
+  return toPriceAdjustmentResult(safeBase, runningTotal, steps);
 };
 
 const sameMoney = (left: number, right: number) =>
@@ -342,6 +451,7 @@ export const buildPriceAdjustmentReversalPlan = ({
     calculationId?: string;
     detailId?: number;
     itemId: number;
+    basePrice?: number;
     finalPrice: number;
     steps: PriceAdjustmentStep[];
   };
@@ -392,7 +502,21 @@ export const buildPriceAdjustmentReversalPlan = ({
     ];
   });
 
+  const alreadyAppliedSourceIds = new Set(
+    skippedRuleIdsFromPenaltyHistory(history, calculation.detailId),
+  );
+  const historyMatchesActiveReversal = [...alreadyAppliedSourceIds].some(
+    (sourceRuleId) => reversalBySource.has(sourceRuleId),
+  );
+
   if (applicable.length === 0) {
+    if (historyMatchesActiveReversal) {
+      return {
+        ...base,
+        status: "already_applied",
+        reason: "Todas las reglas vinculadas ya fueron penalizadas.",
+      };
+    }
     return {
       ...base,
       status: "ineligible",
@@ -400,14 +524,6 @@ export const buildPriceAdjustmentReversalPlan = ({
     };
   }
 
-  const calculationHistory = (history ?? []).filter(
-    (entry) =>
-      entry.calculationId === calculation.calculationId &&
-      entry.detailId === calculation.detailId,
-  );
-  const alreadyAppliedSourceIds = new Set(
-    calculationHistory.map((entry) => entry.sourceRuleId),
-  );
   const pending = applicable.filter(
     (match) => !alreadyAppliedSourceIds.has(match.sourceRuleId),
   );
@@ -420,11 +536,12 @@ export const buildPriceAdjustmentReversalPlan = ({
     };
   }
 
-  const expectedCurrentPrice = roundMoney(
-    Number(calculation.finalPrice) +
-      calculationHistory.reduce((sum, entry) => sum + entry.amount, 0),
-    2,
-  );
+  const startPrice = priceAdjustmentBasePrice(calculation);
+  const expectedCurrentPrice = applyPriceAdjustmentSteps(
+    startPrice,
+    calculation.steps,
+    { skipRuleIds: alreadyAppliedSourceIds },
+  ).finalPrice;
   if (!sameMoney(currentPrice, expectedCurrentPrice)) {
     return {
       ...base,
@@ -433,13 +550,15 @@ export const buildPriceAdjustmentReversalPlan = ({
     };
   }
 
-  const penaltyAmount = roundMoney(
-    -pending.reduce((sum, match) => sum + match.appliedAmount, 0),
-  );
+  const pendingIds = pending.map((match) => match.sourceRuleId);
+  const reversed = applyPriceAdjustmentSteps(startPrice, calculation.steps, {
+    skipRuleIds: [...alreadyAppliedSourceIds, ...pendingIds],
+  });
+  const penaltyAmount = roundMoney(reversed.finalPrice - currentPrice, 2);
   return {
     ...base,
     status: "eligible",
-    finalPrice: roundMoney(currentPrice + penaltyAmount, 2),
+    finalPrice: reversed.finalPrice,
     penaltyAmount,
     matches: pending,
   };

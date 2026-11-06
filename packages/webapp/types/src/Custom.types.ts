@@ -1008,6 +1008,7 @@ export type CalculateItemPriceFromWeeklyMatrixInput = {
   matrix?: WeeklyCostMatrix | null;
   specialItems?: Array<SpecialItem | WebAppRowGraphQL<SpecialItem>>;
   rules?: Array<PriceAdjustmentRule | WebAppRowGraphQL<PriceAdjustmentRule>>;
+  skipRuleIds?: Iterable<number>;
 };
 
 export type CalculateItemPriceFromWeeklyMatrixResult = PriceAdjustmentResult & {
