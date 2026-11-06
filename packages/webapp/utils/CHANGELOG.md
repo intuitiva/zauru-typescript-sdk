@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.31.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.30.12...@zauru-sdk/utils@6.31.0) (2026-11-06)
+
+
+### Features
+
+* guardar el % de rechazo efectivo a 3 decimales ([429bdd4](https://github.com/intuitiva/zauru-typescript-sdk/commit/429bdd40ded5797f6b5e1c184c65d56124bc96b1))
+
+
+
+
+
 ## [6.30.12](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.30.11...@zauru-sdk/utils@6.30.12) (2026-11-05)
 
 **Note:** Version bump only for package @zauru-sdk/utils
