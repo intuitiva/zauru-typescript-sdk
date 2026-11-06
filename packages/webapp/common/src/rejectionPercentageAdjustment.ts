@@ -17,6 +17,9 @@ export const REJECTION_PERCENTAGE_ADJUSTMENT_RULES_TABLE_VAR =
 export const REJECTION_PERCENTAGE_RULE_HISTORY_TYPE =
   "rechazo_regla_automatica" as const;
 
+/** Digits stored for the effective rejection % (additive + successive remainder). */
+export const REJECTION_PERCENTAGE_DECIMALS = 3;
+
 const defaultFilters = (): PriceAdjustmentFilters => ({
   itemMode: "all",
   itemIds: [],
@@ -163,7 +166,7 @@ export const applyRejectionPercentageLayers = (
  */
 export const computeEffectiveRejectionPercentage = (
   layers: RejectionPercentageLayers,
-  digits = 2,
+  digits = REJECTION_PERCENTAGE_DECIMALS,
 ): number => {
   const normalized = normalizeRejectionPercentageLayers(layers);
   let remainingFactor = 1 - normalized.additive / 100;
@@ -182,7 +185,9 @@ const formatPercentage = (value: number) =>
   Number.isInteger(value) ? String(value) : String(roundPercentage(value));
 
 const formatFinalPercentage = (value: number) =>
-  roundPercentage(value, 2).toFixed(2);
+  roundPercentage(value, REJECTION_PERCENTAGE_DECIMALS).toFixed(
+    REJECTION_PERCENTAGE_DECIMALS,
+  );
 
 const formatRuleEffect = (step: RejectionPercentageAdjustmentStep) => {
   const sign = step.operation === "subtract" ? "-" : "+";
@@ -219,13 +224,18 @@ export const resolveRejectionPercentageOrigin = (
     return passed;
   }
 
-  const previousFinal = roundPercentage(Number(calc.finalPercentage), 2);
+  const previousFinal = roundPercentage(
+    Number(calc.finalPercentage),
+    REJECTION_PERCENTAGE_DECIMALS,
+  );
   const previousBase = Number(calc.basePercentage);
   const safePreviousBase = Number.isFinite(previousBase)
     ? clampPercentage(previousBase)
     : passed;
 
-  if (roundPercentage(passed, 2) === previousFinal) {
+  if (
+    roundPercentage(passed, REJECTION_PERCENTAGE_DECIMALS) === previousFinal
+  ) {
     return safePreviousBase;
   }
 
@@ -309,7 +319,10 @@ export const applyRejectionPercentageAdjustmentRules = (
 
   const result: RejectionPercentageAdjustmentResult = {
     basePercentage: roundPercentage(safeBase),
-    finalPercentage: roundPercentage(runningTotal, 2),
+    finalPercentage: roundPercentage(
+      runningTotal,
+      REJECTION_PERCENTAGE_DECIMALS,
+    ),
     description: "",
     steps,
   };
