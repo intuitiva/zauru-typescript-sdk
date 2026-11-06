@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.32.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.31.0...@zauru-sdk/utils@6.32.0) (2026-11-06)
+
+
+### Features
+
+* reaplicar ajustes de precio saltando sanciones ya aplicadas ([58869f2](https://github.com/intuitiva/zauru-typescript-sdk/commit/58869f2d9b8475184f15e5c1ee254e8035d66a03))
+
+
+
+
+
 # [6.31.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.30.12...@zauru-sdk/utils@6.31.0) (2026-11-06)
 
 
