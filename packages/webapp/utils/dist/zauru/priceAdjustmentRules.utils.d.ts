@@ -21,7 +21,6 @@ export type ApplyPriceAdjustmentRulesOptions = {
     skipRuleIds?: Iterable<number>;
 };
 export declare const skippedRuleIdsFromPenaltyHistory: (history: CertificationPenaltyHistoryEntry[] | undefined, detailId?: number) => number[];
-export declare const dedupeCertificationPenaltyHistory: (history?: CertificationPenaltyHistoryEntry[]) => CertificationPenaltyHistoryEntry[];
 export declare const priceAdjustmentBasePrice: (calculation: {
     basePrice?: number;
     finalPrice?: number;

@@ -153,25 +153,6 @@ export const skippedRuleIdsFromPenaltyHistory = (history, detailId) => {
     }
     return [...ids];
 };
-export const dedupeCertificationPenaltyHistory = (history) => {
-    const kept = new Map();
-    for (const entry of history ?? []) {
-        const key = `${entry.detailId}|${entry.sourceRuleId}`;
-        const current = kept.get(key);
-        if (!current) {
-            kept.set(key, entry);
-            continue;
-        }
-        const currentTime = Date.parse(current.createdAt);
-        const nextTime = Date.parse(entry.createdAt);
-        const currentOk = Number.isFinite(currentTime);
-        const nextOk = Number.isFinite(nextTime);
-        if (nextOk && (!currentOk || nextTime < currentTime)) {
-            kept.set(key, entry);
-        }
-    }
-    return [...kept.values()].sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt));
-};
 export const priceAdjustmentBasePrice = (calculation) => {
     const explicit = Number(calculation.basePrice);
     if (Number.isFinite(explicit))
