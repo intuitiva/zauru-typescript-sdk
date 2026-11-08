@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.32.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.32.0...@zauru-sdk/utils@6.32.1) (2026-11-08)
+
+
+### Bug Fixes
+
+* quitar dedupeCertificationPenaltyHistory del motor de precios ([40eedde](https://github.com/intuitiva/zauru-typescript-sdk/commit/40eedde92edd130ad2cc3d1bfa35c9b0d80b6009))
+
+
+
+
+
 # [6.32.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.31.0...@zauru-sdk/utils@6.32.0) (2026-11-06)
 
 
