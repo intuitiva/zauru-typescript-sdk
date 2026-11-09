@@ -101,7 +101,7 @@ export const updateBitacorasPOMassive = (
       headers,
       bitacora_ediciones_masivas_web_app_table_id,
       id_registro,
-      { ...body, modificadoPor: session.get("name") }
+      { ...body, modificadoPor: body.modificadoPor ?? session.get("name") }
     );
 
     return response;
