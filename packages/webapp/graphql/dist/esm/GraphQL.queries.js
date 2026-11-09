@@ -168,6 +168,7 @@ query getPurchaseOrder($id: bigint) @cached {
     delivery_date
     other_charges
     shipment_reference
+    consolidate_id
     ${payee}
     ${receptions}
     webapp_table_rowables {
