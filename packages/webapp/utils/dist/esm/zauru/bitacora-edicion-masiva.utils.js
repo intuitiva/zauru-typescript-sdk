@@ -50,7 +50,7 @@ export const updateBitacorasPOMassive = (headers, session, body, id_registro) =>
         const { bitacora_ediciones_masivas_web_app_table_id } = await getVariablesByName(headers, session, [
             "bitacora_ediciones_masivas_web_app_table_id",
         ]);
-        const response = await updateWebAppTableRegister(headers, bitacora_ediciones_masivas_web_app_table_id, id_registro, { ...body, modificadoPor: session.get("name") });
+        const response = await updateWebAppTableRegister(headers, bitacora_ediciones_masivas_web_app_table_id, id_registro, { ...body, modificadoPor: body.modificadoPor ?? session.get("name") });
         return response;
     });
 };
