@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.36.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.35.0...@zauru-sdk/types@6.36.0) (2026-11-09)
+
+
+### Features
+
+* exponer consolidate_id en PurchaseOrderGraphQL y getPurchaseOrder ([66ff113](https://github.com/intuitiva/zauru-typescript-sdk/commit/66ff113244c742ac28af8d1d49037d74e4469622))
+
+
+
+
+
 # [6.35.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.34.0...@zauru-sdk/types@6.35.0) (2026-11-06)
 
 
