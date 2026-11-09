@@ -198,6 +198,7 @@ export type PurchaseOrderGraphQL = {
   total: number;
   delivery_date: string;
   shipment_reference: string;
+  consolidate_id?: number | null;
   webapp_table_rowables?: {
     webapp_rows?: {
       id: number;
