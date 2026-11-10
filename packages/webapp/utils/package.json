@@ -21,6 +21,11 @@
       "types": "./dist/zauru/remix-entry.server.d.ts",
       "import": "./dist/esm/zauru/remix-entry.server.js",
       "default": "./dist/esm/zauru/remix-entry.server.js"
+    },
+    "./chatwoot.server": {
+      "types": "./dist/zauru/chatwoot.server.d.ts",
+      "import": "./dist/esm/zauru/chatwoot.server.js",
+      "default": "./dist/esm/zauru/chatwoot.server.js"
     }
   },
   "typesVersions": {
@@ -30,6 +35,9 @@
       ],
       "remix-entry.server": [
         "./dist/zauru/remix-entry.server.d.ts"
+      ],
+      "chatwoot.server": [
+        "./dist/zauru/chatwoot.server.d.ts"
       ]
     }
   },
