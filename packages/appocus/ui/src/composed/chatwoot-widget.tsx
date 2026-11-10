@@ -12,7 +12,12 @@ export type ChatwootUser = {
   name?: string;
   companyName?: string;
   avatarUrl?: string;
+  description?: string;
   customAttributes?: Record<
+    string,
+    string | number | boolean | null | undefined
+  >;
+  conversationAttributes?: Record<
     string,
     string | number | boolean | null | undefined
   >;
@@ -35,6 +40,7 @@ type ChatwootSdk = {
 type ChatwootApi = {
   setUser: (identifier: string, user: Record<string, unknown>) => void;
   setCustomAttributes: (attrs: Record<string, unknown>) => void;
+  setConversationCustomAttributes?: (attrs: Record<string, unknown>) => void;
   setLocale?: (locale: string) => void;
   reset: () => void;
 };
@@ -74,6 +80,7 @@ function identifyUser(
   if (user.email) payload.email = user.email;
   if (user.name) payload.name = user.name;
   if (user.companyName) payload.company_name = user.companyName;
+  if (user.description) payload.description = user.description;
   if (user.avatarUrl?.startsWith("http")) payload.avatar_url = user.avatarUrl;
   if (identifierHash) payload.identifier_hash = identifierHash;
 
@@ -82,6 +89,11 @@ function identifyUser(
   const custom = compactAttributes(user.customAttributes);
   if (Object.keys(custom).length > 0) {
     $chatwoot.setCustomAttributes(custom);
+  }
+
+  const conversation = compactAttributes(user.conversationAttributes);
+  if (Object.keys(conversation).length > 0) {
+    $chatwoot.setConversationCustomAttributes?.(conversation);
   }
 
   $chatwoot.setLocale?.(locale);
@@ -111,8 +123,12 @@ export function ChatwootWidget({
   const name = user.name;
   const companyName = user.companyName;
   const avatarUrl = user.avatarUrl;
+  const description = user.description;
   const customAttributesKey = JSON.stringify(
     compactAttributes(user.customAttributes),
+  );
+  const conversationAttributesKey = JSON.stringify(
+    compactAttributes(user.conversationAttributes),
   );
 
   useEffect(() => {
@@ -136,9 +152,13 @@ export function ChatwootWidget({
           name,
           companyName,
           avatarUrl,
+          description,
           customAttributes: JSON.parse(
             customAttributesKey,
           ) as ChatwootUser["customAttributes"],
+          conversationAttributes: JSON.parse(
+            conversationAttributesKey,
+          ) as ChatwootUser["conversationAttributes"],
         },
         identifierHash,
         locale,
@@ -177,7 +197,9 @@ export function ChatwootWidget({
     name,
     companyName,
     avatarUrl,
+    description,
     customAttributesKey,
+    conversationAttributesKey,
     locale,
     position,
     darkMode,
