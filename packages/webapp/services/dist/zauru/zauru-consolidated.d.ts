@@ -9,6 +9,14 @@ export declare const createConsolidated: (headers: any, body: NewConsolidatedBod
     id: number;
 }>>;
 /**
+ * updateConsolidate
+ * PUT /purchases/consolidates/:id.json
+ */
+export declare const updateConsolidate: (headers: any, id: string | number, body: {
+    name?: string;
+    description?: string | null;
+}) => Promise<AxiosUtilsResponse<boolean>>;
+/**
  * generateConsolidatePDF
  * @param headers
  * @param body
