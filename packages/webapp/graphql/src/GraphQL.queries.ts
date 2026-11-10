@@ -527,7 +527,7 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
     agencyId?: number | string;
     itemId?: number | string;
     reference?: string;
-    payeeCategoryId?: number | string;
+    payeeCategoryId?: number | string; // Single id or comma-separated list
     payeeId?: number | string;
     consolidateIdFilter?: boolean;
     lotItemIdExclusion?: number;
@@ -613,12 +613,26 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
       }
     }
     const payeeCategoryIdConditions: string[] = [];
-    if (config.payeeCategoryId) {
-      payeeCategoryIdConditions.push(`_eq: ${config.payeeCategoryId}`);
-    }
-    if (config.payeeCategoryIds && config.payeeCategoryIds.length > 0) {
+    const includePayeeCategoryIds = [
+      ...(config.payeeCategoryId
+        ? config.payeeCategoryId
+            .toString()
+            .split(",")
+            .map((id) => id.trim())
+            .filter(Boolean)
+        : []),
+      ...(config.payeeCategoryIds ?? []).map((id) => `${id}`),
+    ];
+    const uniqueIncludePayeeCategoryIds = [
+      ...new Set(includePayeeCategoryIds),
+    ];
+    if (uniqueIncludePayeeCategoryIds.length === 1) {
       payeeCategoryIdConditions.push(
-        `_in: [${config.payeeCategoryIds.join(",")}]`,
+        `_eq: ${uniqueIncludePayeeCategoryIds[0]}`,
+      );
+    } else if (uniqueIncludePayeeCategoryIds.length > 1) {
+      payeeCategoryIdConditions.push(
+        `_in: [${uniqueIncludePayeeCategoryIds.join(",")}]`,
       );
     }
     if (

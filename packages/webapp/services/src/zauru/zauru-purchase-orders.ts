@@ -622,7 +622,7 @@ export const getGraphQLPurchaseOrderBetweenDates = (
     onlyWithLotStocksToMyAgency?: boolean;
     itemId?: number | string; // Can be a single item or a comma-separated list of items
     reference?: string; // Can be a single reference or a comma-separated list of references
-    payeeCategoryId?: number | string;
+    payeeCategoryId?: number | string; // Single category or comma-separated list
     payeeId?: number | string; // Can be a single payee or a comma-separated list of payees
     betweenIssueDate?: boolean;
     withPODetails?: boolean;
