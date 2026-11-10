@@ -472,11 +472,24 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
             }
         }
         const payeeCategoryIdConditions = [];
-        if (config.payeeCategoryId) {
-            payeeCategoryIdConditions.push(`_eq: ${config.payeeCategoryId}`);
+        const includePayeeCategoryIds = [
+            ...(config.payeeCategoryId
+                ? config.payeeCategoryId
+                    .toString()
+                    .split(",")
+                    .map((id) => id.trim())
+                    .filter(Boolean)
+                : []),
+            ...(config.payeeCategoryIds ?? []).map((id) => `${id}`),
+        ];
+        const uniqueIncludePayeeCategoryIds = [
+            ...new Set(includePayeeCategoryIds),
+        ];
+        if (uniqueIncludePayeeCategoryIds.length === 1) {
+            payeeCategoryIdConditions.push(`_eq: ${uniqueIncludePayeeCategoryIds[0]}`);
         }
-        if (config.payeeCategoryIds && config.payeeCategoryIds.length > 0) {
-            payeeCategoryIdConditions.push(`_in: [${config.payeeCategoryIds.join(",")}]`);
+        else if (uniqueIncludePayeeCategoryIds.length > 1) {
+            payeeCategoryIdConditions.push(`_in: [${uniqueIncludePayeeCategoryIds.join(",")}]`);
         }
         if (config.excludePayeeCategoryIds &&
             config.excludePayeeCategoryIds.length > 0) {
