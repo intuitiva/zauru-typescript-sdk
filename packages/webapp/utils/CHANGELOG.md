@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.33.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.33.0...@zauru-sdk/utils@6.33.1) (2026-11-10)
+
+
+### Bug Fixes
+
+* preferir la excepción de verdura más específica y más nueva ([d10eedc](https://github.com/intuitiva/zauru-typescript-sdk/commit/d10eedc613aa610f48f63d9c31c36c55da5687db))
+
+
+
+
+
 # [6.33.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.32.5...@zauru-sdk/utils@6.33.0) (2026-11-10)
 
 
