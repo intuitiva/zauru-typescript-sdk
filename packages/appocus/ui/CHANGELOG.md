@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@appocus/ui@0.3.0...@appocus/ui@0.4.0) (2026-11-10)
+
+
+### Bug Fixes
+
+* require Chatwoot HMAC hash before identifying the visitor ([cd1f7fb](https://github.com/intuitiva/zauru-typescript-sdk/commit/cd1f7fbb6f4f7cade64aeec4f91b9b186a1fb492))
+
+
+### Features
+
+* enviar description y atributos de conversación a Chatwoot ([2420e66](https://github.com/intuitiva/zauru-typescript-sdk/commit/2420e66572323a8c841855448f67c6099b4c7c7c))
+
+
+
+
+
 # [0.3.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@appocus/ui@0.2.0...@appocus/ui@0.3.0) (2026-11-10)
 
 

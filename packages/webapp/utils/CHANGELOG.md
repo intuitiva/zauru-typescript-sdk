@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.34.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.33.2...@zauru-sdk/utils@6.34.0) (2026-11-10)
+
+
+### Features
+
+* aplicar sanciones de costo antes de las reglas porcentuales ([f37ef82](https://github.com/intuitiva/zauru-typescript-sdk/commit/f37ef825a93ed2be268abce15086c1d3e81b2d70))
+
+
+
+
+
 ## [6.33.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.33.1...@zauru-sdk/utils@6.33.2) (2026-11-10)
 
 
