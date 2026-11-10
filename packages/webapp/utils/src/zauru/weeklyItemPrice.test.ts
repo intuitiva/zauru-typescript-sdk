@@ -86,6 +86,32 @@ describe("matchSpecialItemForWeeklyPrice", () => {
 
     assert.equal(match?.id, 20);
   });
+
+  it("prefers a provider exception over a category exception with the same filter count", () => {
+    const categoryOnly = specialItem(552531, { providerCategory: 2955 });
+    const providerOnly = specialItem(583863, { provider: 872338 });
+
+    const match = matchSpecialItemForWeeklyPrice([categoryOnly, providerOnly], {
+      itemId: 490550,
+      providerId: 872338,
+      providerCategoryId: 2955,
+    });
+
+    assert.equal(match?.id, 583863);
+  });
+
+  it("prefers the newest duplicate of the same provider exception", () => {
+    const older = specialItem(580533, { provider: 872338 });
+    const newer = specialItem(583863, { provider: 872338 });
+
+    const match = matchSpecialItemForWeeklyPrice([newer, older], {
+      itemId: 490550,
+      providerId: 872338,
+      providerCategoryId: 2955,
+    });
+
+    assert.equal(match?.id, 583863);
+  });
 });
 
 describe("calculateItemPriceFromWeeklyMatrix", () => {
