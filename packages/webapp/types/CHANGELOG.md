@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.37.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.36.0...@zauru-sdk/types@6.37.0) (2026-11-10)
+
+
+### Features
+
+* agregar createEntry, getEntry y updateConsolidate ([04f1b31](https://github.com/intuitiva/zauru-typescript-sdk/commit/04f1b3134f5a864e1c413f9a8b86be8859717e6d))
+
+
+
+
+
 # [6.36.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.35.0...@zauru-sdk/types@6.36.0) (2026-11-09)
 
 
