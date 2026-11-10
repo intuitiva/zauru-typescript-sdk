@@ -198,6 +198,14 @@ export const specialItemMatchKey = (
     normalizeOptionalSpecialValue(data.providerCategory),
   ].join("|");
 
+const filledSpecialItemFilters = (specialItem: SpecialItem): number =>
+  [
+    specialItem.provider,
+    specialItem.region,
+    specialItem.tipo,
+    specialItem.providerCategory,
+  ].filter((value) => normalizeOptionalSpecialValue(value)).length;
+
 const specialItemSpecificity = (specialItem: SpecialItem): number => {
   let score = 0;
   if (normalizeOptionalSpecialValue(specialItem.provider)) {
@@ -217,15 +225,20 @@ const specialItemSpecificity = (specialItem: SpecialItem): number => {
 
 const isBetterSpecialItemMatch = (
   candidate: WebAppRowGraphQL<SpecialItem>,
+  candidateFilters: number,
   candidateScore: number,
   current: WebAppRowGraphQL<SpecialItem> | undefined,
+  currentFilters: number,
   currentScore: number,
 ): boolean => {
-  if (!current || candidateScore > currentScore) {
+  if (!current) {
     return true;
   }
-  if (candidateScore < currentScore) {
-    return false;
+  if (candidateFilters !== currentFilters) {
+    return candidateFilters > currentFilters;
+  }
+  if (candidateScore !== currentScore) {
+    return candidateScore > currentScore;
   }
   return candidate.id > current.id;
 };
@@ -241,6 +254,7 @@ export const matchSpecialItemForWeeklyPrice = (
   },
 ): WebAppRowGraphQL<SpecialItem> | undefined => {
   let bestMatch: WebAppRowGraphQL<SpecialItem> | undefined;
+  let bestFilterCount = -1;
   let bestSpecificity = -1;
 
   for (const specialItem of filterActiveSpecialItems(specialItems)) {
@@ -259,16 +273,20 @@ export const matchSpecialItemForWeeklyPrice = (
       continue;
     }
 
+    const filterCount = filledSpecialItemFilters(data);
     const specificity = specialItemSpecificity(data);
     if (
       isBetterSpecialItemMatch(
         specialItem,
+        filterCount,
         specificity,
         bestMatch,
+        bestFilterCount,
         bestSpecificity,
       )
     ) {
       bestMatch = specialItem;
+      bestFilterCount = filterCount;
       bestSpecificity = specificity;
     }
   }
