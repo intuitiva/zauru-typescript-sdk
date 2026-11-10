@@ -124,6 +124,12 @@ export const specialItemMatchKey = (data) => [
     normalizeOptionalSpecialValue(data.tipo),
     normalizeOptionalSpecialValue(data.providerCategory),
 ].join("|");
+const filledSpecialItemFilters = (specialItem) => [
+    specialItem.provider,
+    specialItem.region,
+    specialItem.tipo,
+    specialItem.providerCategory,
+].filter((value) => normalizeOptionalSpecialValue(value)).length;
 const specialItemSpecificity = (specialItem) => {
     let score = 0;
     if (normalizeOptionalSpecialValue(specialItem.provider)) {
@@ -140,17 +146,21 @@ const specialItemSpecificity = (specialItem) => {
     }
     return score;
 };
-const isBetterSpecialItemMatch = (candidate, candidateScore, current, currentScore) => {
-    if (!current || candidateScore > currentScore) {
+const isBetterSpecialItemMatch = (candidate, candidateFilters, candidateScore, current, currentFilters, currentScore) => {
+    if (!current) {
         return true;
     }
-    if (candidateScore < currentScore) {
-        return false;
+    if (candidateFilters !== currentFilters) {
+        return candidateFilters > currentFilters;
+    }
+    if (candidateScore !== currentScore) {
+        return candidateScore > currentScore;
     }
     return candidate.id > current.id;
 };
 export const matchSpecialItemForWeeklyPrice = (specialItems, params) => {
     let bestMatch;
+    let bestFilterCount = -1;
     let bestSpecificity = -1;
     for (const specialItem of filterActiveSpecialItems(specialItems)) {
         const data = specialItem.data;
@@ -162,9 +172,11 @@ export const matchSpecialItemForWeeklyPrice = (specialItems, params) => {
         if (!matches) {
             continue;
         }
+        const filterCount = filledSpecialItemFilters(data);
         const specificity = specialItemSpecificity(data);
-        if (isBetterSpecialItemMatch(specialItem, specificity, bestMatch, bestSpecificity)) {
+        if (isBetterSpecialItemMatch(specialItem, filterCount, specificity, bestMatch, bestFilterCount, bestSpecificity)) {
             bestMatch = specialItem;
+            bestFilterCount = filterCount;
             bestSpecificity = specificity;
         }
     }
