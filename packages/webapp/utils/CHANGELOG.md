@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.33.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.32.5...@zauru-sdk/utils@6.33.0) (2026-11-10)
+
+
+### Features
+
+* add Chatwoot HMAC identity helper ([2d698a5](https://github.com/intuitiva/zauru-typescript-sdk/commit/2d698a51a731c983a4f58b0a9dc9b2b840f67a2e))
+
+
+
+
+
 ## [6.32.5](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.32.4...@zauru-sdk/utils@6.32.5) (2026-11-10)
 
 **Note:** Version bump only for package @zauru-sdk/utils
