@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, PriceAdjustmentContext, PriceAdjustmentFilters, PriceAdjustmentResult, PriceAdjustmentRule, PriceAdjustmentReversalPlan, PriceAdjustmentReversalRule, PriceAdjustmentStep, CertificationPenaltyHistoryEntry, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, PriceAdjustmentContext, PriceAdjustmentFilters, PriceAdjustmentResult, PriceAdjustmentRule, PriceAdjustmentReversalPlan, PriceAdjustmentReversalRule, PriceAdjustmentStep, CertificationPenaltyHistoryEntry, UnitCostPenaltyHistoryEntry, WebAppRowGraphQL, WebAppTableUpdateResponse } from "@zauru-sdk/types";
 export declare const PRICE_ADJUSTMENT_REVERSAL_RULES_TABLE_VAR = "price_adjustment_reversal_rules_web_app_table_id";
 export declare const defaultPriceAdjustmentFilters: () => PriceAdjustmentFilters;
 export declare const filterActivePriceAdjustmentRules: (rules?: WebAppRowGraphQL<PriceAdjustmentRule>[]) => WebAppRowGraphQL<PriceAdjustmentRule>[];
@@ -27,6 +27,14 @@ export declare const priceAdjustmentBasePrice: (calculation: {
     steps?: PriceAdjustmentStep[];
 }) => number;
 export declare const applyPriceAdjustmentSteps: (basePrice: number, steps: PriceAdjustmentStep[], options?: ApplyPriceAdjustmentRulesOptions) => PriceAdjustmentResult;
+export declare const priceAdjustmentRulesToSteps: (rules: Array<PriceAdjustmentRule | WebAppRowGraphQL<PriceAdjustmentRule>>, ctx: PriceAdjustmentContext) => PriceAdjustmentStep[];
+export declare const insertPenaltyStepsBeforePercentageSteps: (steps: PriceAdjustmentStep[], penaltySteps: PriceAdjustmentStep[]) => PriceAdjustmentStep[];
+export declare const buildUnitCostPenaltySteps: (history: UnitCostPenaltyHistoryEntry[] | undefined, detailId: number) => PriceAdjustmentStep[];
+/**
+ * Aplica reglas de precio con las sanciones de costo antes de los porcentajes
+ * (IVA al final), que es el orden que espera el negocio.
+ */
+export declare const applyPriceAdjustmentRulesWithUnitCostPenalties: (basePrice: number, rules: Array<PriceAdjustmentRule | WebAppRowGraphQL<PriceAdjustmentRule>>, ctx: PriceAdjustmentContext, penaltyHistory: UnitCostPenaltyHistoryEntry[] | undefined, detailId: number, options?: ApplyPriceAdjustmentRulesOptions) => PriceAdjustmentResult;
 export declare const applyPriceAdjustmentRules: (basePrice: number, rules: Array<PriceAdjustmentRule | WebAppRowGraphQL<PriceAdjustmentRule>>, ctx: PriceAdjustmentContext, options?: ApplyPriceAdjustmentRulesOptions) => PriceAdjustmentResult;
 export declare const buildPriceAdjustmentReversalPlan: ({ calculation, currentPrice, reversalRules, history, }: {
     calculation: {

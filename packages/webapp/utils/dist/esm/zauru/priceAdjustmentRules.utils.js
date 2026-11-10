@@ -183,6 +183,61 @@ export const applyPriceAdjustmentSteps = (basePrice, steps, options) => {
     }
     return toPriceAdjustmentResult(safeBase, runningTotal, nextSteps);
 };
+export const priceAdjustmentRulesToSteps = (rules, ctx) => {
+    const normalized = rules
+        .map((rule) => ({
+        rule: "data" in rule ? rule.data : rule,
+        ruleId: "data" in rule ? rule.id : undefined,
+    }))
+        .filter((entry) => Boolean(entry.rule));
+    return normalized
+        .filter(({ rule }) => !rule.fechaEliminacion && rule.activa !== false)
+        .sort((a, b) => (a.rule.prioridad ?? 0) - (b.rule.prioridad ?? 0))
+        .filter(({ rule }) => priceAdjustmentRuleMatches(rule, ctx))
+        .map(({ rule, ruleId }) => ({
+        ...(ruleId !== undefined ? { ruleId } : {}),
+        ruleName: rule.nombre,
+        operation: rule.operacion,
+        valueType: rule.tipoValor,
+        value: Number(rule.valor) || 0,
+        appliedAmount: 0,
+        runningTotal: 0,
+    }));
+};
+export const insertPenaltyStepsBeforePercentageSteps = (steps, penaltySteps) => {
+    if (penaltySteps.length === 0)
+        return steps;
+    const firstPercentage = steps.findIndex((step) => step.valueType === "percentage");
+    if (firstPercentage < 0) {
+        return [...steps, ...penaltySteps];
+    }
+    return [
+        ...steps.slice(0, firstPercentage),
+        ...penaltySteps,
+        ...steps.slice(firstPercentage),
+    ];
+};
+export const buildUnitCostPenaltySteps = (history, detailId) => (history ?? [])
+    .filter((entry) => entry.detailId === detailId)
+    .map((entry) => {
+    const amount = Number(entry.amount) || 0;
+    return {
+        ruleName: entry.reason || "Penalización de costo",
+        operation: amount < 0 ? "subtract" : "add",
+        valueType: "amount",
+        value: Math.abs(amount),
+        appliedAmount: amount,
+        runningTotal: 0,
+    };
+});
+/**
+ * Aplica reglas de precio con las sanciones de costo antes de los porcentajes
+ * (IVA al final), que es el orden que espera el negocio.
+ */
+export const applyPriceAdjustmentRulesWithUnitCostPenalties = (basePrice, rules, ctx, penaltyHistory, detailId, options) => {
+    const steps = insertPenaltyStepsBeforePercentageSteps(priceAdjustmentRulesToSteps(rules, ctx), buildUnitCostPenaltySteps(penaltyHistory, detailId));
+    return applyPriceAdjustmentSteps(basePrice, steps, options);
+};
 export const applyPriceAdjustmentRules = (basePrice, rules, ctx, options) => {
     const start = Number(basePrice);
     const safeBase = Number.isFinite(start) ? start : 0;
