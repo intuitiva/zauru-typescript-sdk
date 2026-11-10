@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.18.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.17.1...@zauru-sdk/graphql@6.18.0) (2026-11-10)
+
+
+### Features
+
+* filtrar órdenes de compra por varias categorías de socio ([2b711fa](https://github.com/intuitiva/zauru-typescript-sdk/commit/2b711fa8d493aad82d00f94d56ac7887e27eb593))
+
+
+
+
+
 ## [6.17.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.17.0...@zauru-sdk/graphql@6.17.1) (2026-11-10)
 
 

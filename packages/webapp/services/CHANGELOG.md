@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.26.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.25.1...@zauru-sdk/services@6.26.0) (2026-11-10)
+
+
+### Features
+
+* filtrar órdenes de compra por varias categorías de socio ([2b711fa](https://github.com/intuitiva/zauru-typescript-sdk/commit/2b711fa8d493aad82d00f94d56ac7887e27eb593))
+
+
+
+
+
 ## [6.25.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.25.0...@zauru-sdk/services@6.25.1) (2026-11-10)
 
 
