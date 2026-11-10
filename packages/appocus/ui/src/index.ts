@@ -36,3 +36,4 @@ export * from "./theme/themed-toaster.js";
 
 export * from "./composed/login-form.js";
 export * from "./composed/not-found-page.js";
+export * from "./composed/chatwoot-widget.js";
