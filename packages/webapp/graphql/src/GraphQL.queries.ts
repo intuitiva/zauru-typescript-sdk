@@ -2182,6 +2182,49 @@ query getPaymentTermById {
 }
 `;
 
+export const getEntryByIdStringQuery = (id: number) => {
+  const entryId = requirePositiveInt(id, "entry id");
+  return `
+query getEntryById {
+  entries(where: { id: { _eq: ${entryId} } }, limit: 1) {
+    id
+    zid
+    id_number
+    reference
+    date
+    account_id
+    amount
+    payee_id
+    memo
+    entity_id
+    created_at
+    updated_at
+    splits {
+      id
+      entry_id
+      account_id
+      amount
+      exchange_amount
+      reference
+      entity_id
+    }
+    entry_consolidates {
+      id
+      entry_id
+      consolidate_id
+      entity_id
+    }
+    entry_payments {
+      id
+      entry_id
+      payment_id
+      entity_id
+    }
+  }
+}
+`;
+};
+
 export const getPaymentByIdStringQuery = (id: number) => {
   const paymentId = requirePositiveInt(id, "payment id");
   return `

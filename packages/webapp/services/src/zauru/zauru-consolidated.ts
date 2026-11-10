@@ -35,6 +35,25 @@ export const createConsolidated = async (
 };
 
 /**
+ * updateConsolidate
+ * PUT /purchases/consolidates/:id.json
+ */
+export const updateConsolidate = async (
+  headers: any,
+  id: string | number,
+  body: { name?: string; description?: string | null }
+): Promise<AxiosUtilsResponse<boolean>> => {
+  return handlePossibleAxiosErrors(async () => {
+    await httpZauru.put(
+      `/purchases/consolidates/${id}.json`,
+      { consolidate: body },
+      { headers }
+    );
+    return true;
+  });
+};
+
+/**
  * generateConsolidatePDF
  * @param headers
  * @param body
