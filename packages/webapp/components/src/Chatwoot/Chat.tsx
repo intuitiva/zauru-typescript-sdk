@@ -4,8 +4,7 @@ const SCRIPT_ID = "chatwoot-sdk";
 const DEFAULT_BASE_URL = "https://soporte.zauru.com";
 
 const canUseDOM = (): boolean =>
-  typeof window !== "undefined" &&
-  Boolean(window.document?.createElement);
+  typeof window !== "undefined" && Boolean(window.document?.createElement);
 
 export type ChatwootUser = {
   identifier: string;
@@ -75,7 +74,7 @@ function identifyUser(
   if (user.email) payload.email = user.email;
   if (user.name) payload.name = user.name;
   if (user.companyName) payload.company_name = user.companyName;
-  if (user.avatarUrl) payload.avatar_url = user.avatarUrl;
+  if (user.avatarUrl?.startsWith("http")) payload.avatar_url = user.avatarUrl;
   if (identifierHash) payload.identifier_hash = identifierHash;
 
   $chatwoot.setUser(user.identifier, payload);
@@ -86,18 +85,6 @@ function identifyUser(
   }
 
   $chatwoot.setLocale?.(locale);
-}
-
-function removeWidgetDom(baseUrl: string): void {
-  const doc = getChatwootWindow()?.document;
-  if (!doc) return;
-
-  doc.getElementById(SCRIPT_ID)?.remove();
-  doc
-    .querySelectorAll(
-      `script[src*="${baseUrl}/packs/js/sdk.js"], iframe#chatwoot_live_chat_widget, .woot-widget-holder, .woot-widget-bubble`,
-    )
-    .forEach((el) => el.remove());
 }
 
 export function resetChatwoot(): void {
@@ -130,7 +117,7 @@ export function ChatwootWidget({
 
   useEffect(() => {
     const w = getChatwootWindow();
-    if (!w || !websiteToken || !identifier) return;
+    if (!w || !websiteToken || !identifier || !identifierHash) return;
 
     w.chatwootSettings = {
       hideMessageBubble: false,
@@ -160,12 +147,12 @@ export function ChatwootWidget({
 
     w.addEventListener("chatwoot:ready", onReady);
 
-    const existing = w.document.getElementById(SCRIPT_ID) as
-      | HTMLScriptElement
-      | null;
+    const existing = w.document.getElementById(SCRIPT_ID);
 
     if (w.$chatwoot) {
       onReady();
+    } else if (w.chatwootSDK) {
+      w.chatwootSDK.run({ websiteToken, baseUrl });
     } else if (!existing) {
       const script = w.document.createElement("script");
       script.id = SCRIPT_ID;
@@ -195,18 +182,6 @@ export function ChatwootWidget({
     position,
     darkMode,
   ]);
-
-  useEffect(() => {
-    return () => {
-      resetChatwoot();
-      removeWidgetDom(baseUrl);
-      const w = getChatwootWindow();
-      if (w) {
-        delete w.chatwootSDK;
-        delete w.$chatwoot;
-      }
-    };
-  }, [baseUrl]);
 
   return null;
 }
