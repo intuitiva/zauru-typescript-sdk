@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.25.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.25.0...@zauru-sdk/services@6.25.1) (2026-11-10)
+
+
+### Reverts
+
+* Revert "feat: agregar createEntry, getEntry y updateConsolidate" ([583904b](https://github.com/intuitiva/zauru-typescript-sdk/commit/583904b3a99fc686ac4f91a2ba7a963f3c8c11c0))
+* Revert "chore: generar dist de @zauru-sdk/types, graphql y services" ([b431719](https://github.com/intuitiva/zauru-typescript-sdk/commit/b431719c4f53c4e439b428d89a1a30f3066d3c41))
+
+
+
+
+
 # [6.25.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.24.3...@zauru-sdk/services@6.25.0) (2026-11-10)
 
 
