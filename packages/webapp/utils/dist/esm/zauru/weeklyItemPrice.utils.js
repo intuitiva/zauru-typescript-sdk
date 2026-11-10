@@ -111,12 +111,44 @@ const optionalSpecialValueMatches = (configured, actual) => {
     const expected = normalizeOptionalSpecialValue(configured);
     return !expected || expected === normalizeOptionalSpecialValue(actual);
 };
-const specialItemSpecificity = (specialItem) => [
-    specialItem.provider,
-    specialItem.region,
-    specialItem.tipo,
-    specialItem.providerCategory,
-].filter((value) => normalizeOptionalSpecialValue(value)).length;
+const SPECIAL_ITEM_SPECIFICITY_WEIGHTS = {
+    provider: 8,
+    region: 4,
+    tipo: 2,
+    providerCategory: 1,
+};
+export const specialItemMatchKey = (data) => [
+    Number(data.item),
+    normalizeOptionalSpecialValue(data.provider),
+    normalizeOptionalSpecialValue(data.region),
+    normalizeOptionalSpecialValue(data.tipo),
+    normalizeOptionalSpecialValue(data.providerCategory),
+].join("|");
+const specialItemSpecificity = (specialItem) => {
+    let score = 0;
+    if (normalizeOptionalSpecialValue(specialItem.provider)) {
+        score += SPECIAL_ITEM_SPECIFICITY_WEIGHTS.provider;
+    }
+    if (normalizeOptionalSpecialValue(specialItem.region)) {
+        score += SPECIAL_ITEM_SPECIFICITY_WEIGHTS.region;
+    }
+    if (normalizeOptionalSpecialValue(specialItem.tipo)) {
+        score += SPECIAL_ITEM_SPECIFICITY_WEIGHTS.tipo;
+    }
+    if (normalizeOptionalSpecialValue(specialItem.providerCategory)) {
+        score += SPECIAL_ITEM_SPECIFICITY_WEIGHTS.providerCategory;
+    }
+    return score;
+};
+const isBetterSpecialItemMatch = (candidate, candidateScore, current, currentScore) => {
+    if (!current || candidateScore > currentScore) {
+        return true;
+    }
+    if (candidateScore < currentScore) {
+        return false;
+    }
+    return candidate.id > current.id;
+};
 export const matchSpecialItemForWeeklyPrice = (specialItems, params) => {
     let bestMatch;
     let bestSpecificity = -1;
@@ -131,7 +163,7 @@ export const matchSpecialItemForWeeklyPrice = (specialItems, params) => {
             continue;
         }
         const specificity = specialItemSpecificity(data);
-        if (specificity > bestSpecificity) {
+        if (isBetterSpecialItemMatch(specialItem, specificity, bestMatch, bestSpecificity)) {
             bestMatch = specialItem;
             bestSpecificity = specificity;
         }
@@ -174,7 +206,7 @@ export const calculateItemPriceFromWeeklyMatrix = (input) => {
     let basePrice = FALLBACK_UNIT_COST;
     let specialItemId;
     if (matchedSpecial) {
-        const specialPrice = getWeeklyCostPeriodPrice(matrix?.costosEspeciales?.find((costo) => costo.specialItemId === matchedSpecial.id), period);
+        const specialPrice = getWeeklyCostPeriodPrice(matrix?.costosEspeciales?.find((costo) => Number(costo.specialItemId) === Number(matchedSpecial.id)), period);
         if (specialPrice != null) {
             source = "especial";
             basePrice = specialPrice;

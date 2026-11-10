@@ -13,6 +13,7 @@ export declare const getWeeklyCostPeriod: (date: string) => WeeklyCostPeriod;
 export declare const getWeeklyCostPeriodPrice: (costo: Pick<CostoSemanal, WeeklyCostPeriod> | undefined, period: WeeklyCostPeriod) => number | null;
 export declare const getPriceByDate: (date: string, _fechas: WeeklyCostMatrix["fechas"] | undefined, costo?: CostoSemanal | CostoSemanalSpecialItem) => number;
 export declare const filterActiveSpecialItems: (specialItems?: Array<SpecialItem | WebAppRowGraphQL<SpecialItem>>) => WebAppRowGraphQL<SpecialItem>[];
+export declare const specialItemMatchKey: (data: Pick<SpecialItem, "item" | "provider" | "region" | "tipo" | "providerCategory">) => string;
 export declare const matchSpecialItemForWeeklyPrice: (specialItems: Array<SpecialItem | WebAppRowGraphQL<SpecialItem>> | undefined, params: {
     itemId: number;
     region?: string;
