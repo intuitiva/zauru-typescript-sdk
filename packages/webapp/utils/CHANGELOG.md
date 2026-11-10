@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.33.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.33.1...@zauru-sdk/utils@6.33.2) (2026-11-10)
+
+
+### Bug Fixes
+
+* ganar la excepción de verdura con más filtros ([70e0b58](https://github.com/intuitiva/zauru-typescript-sdk/commit/70e0b58778db7a10e4aba88a0bea6e92fde08598))
+
+
+
+
+
 ## [6.33.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/utils@6.33.0...@zauru-sdk/utils@6.33.1) (2026-11-10)
 
 
