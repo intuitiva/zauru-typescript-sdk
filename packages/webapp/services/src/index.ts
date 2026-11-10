@@ -27,7 +27,6 @@ export * from "./zauru/zauru-consolidated.js";
 export * from "./zauru/zauru-deliveries.js";
 export * from "./zauru/zauru-discharges.js";
 export * from "./zauru/zauru-employees.js";
-export * from "./zauru/zauru-entries.js";
 export * from "./zauru/zauru-forms.js";
 export * from "./zauru/zauru-invoices.js";
 export * from "./zauru/zauru-items.js";
