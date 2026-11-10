@@ -257,44 +257,7 @@ export type ConsolidateGraphQL = {
     id_number: string;
     created_at: string;
     name: string;
-    description?: string | null;
     purchase_orders: PurchaseOrderGraphQL[];
-};
-export type SplitGraphQL = {
-    id: number;
-    entry_id: number;
-    account_id: number;
-    amount: number;
-    exchange_amount?: number | null;
-    reference?: string | null;
-    entity_id?: number | null;
-};
-export type EntryConsolidateGraphQL = {
-    id: number;
-    entry_id: number;
-    consolidate_id: number;
-    entity_id?: number | null;
-};
-export type EntryPaymentGraphQL = {
-    id: number;
-    entry_id: number;
-    payment_id: number;
-    entity_id?: number | null;
-};
-export type EntryGraphQL = {
-    id: number;
-    zid?: number;
-    id_number?: string | null;
-    reference?: string | null;
-    date: string;
-    account_id: number;
-    amount: number;
-    payee_id?: number | null;
-    memo?: string | null;
-    entity_id?: number;
-    splits?: SplitGraphQL[];
-    entry_consolidates?: EntryConsolidateGraphQL[];
-    entry_payments?: EntryPaymentGraphQL[];
 };
 export type EmployeeGraphQL = {
     id: number;

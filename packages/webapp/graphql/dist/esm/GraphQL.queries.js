@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPaymentByIdStringQuery = exports.getEntryByIdStringQuery = exports.getPaymentTermByIdStringQuery = exports.getPaymentMethodsStringQuery = exports.getPaymentTermsStringQuery = exports.getSuggestedPricesStringQuery = exports.getCurrenciesStringQuery = exports.getInvoiceFormSubmissionsByInvoiceIdStringQuery = exports.getCaseFormSubmissionsByCaseIdStringQuery = exports.getLastInvoiceFormSubmissionStringQuery = exports.getInvoiceFormSubmissionsByAgencyIdStringQuery = exports.getFormSubmissionByIdStringQuery = exports.getMyCaseFormSubmissionsStringQuery = exports.getFormsByDocumentTypeStringQuery = exports.getFormsStringQuery = exports.getFormByNameStringQuery = exports.getAllFormsStringQuery = exports.getItemByNameStringQuery = exports.getBundleByNameStringQuery = exports.getBundlesByItemCategoryIdStringQuery = exports.getEmployeesByAgencyIdStringQuery = exports.getEmployeesStringQuery = exports.getEmployeeProfileStringQuery = exports.getConsolidatesBetweenDatesStringQuery = exports.getItemsBySuperCategoryStringQuery = exports.getItemsStringQuery = exports.getItemsByCategoryStringQuery = exports.getItemCategoryByIdStringQuery = exports.getSuperCategoryByIdStringQuery = exports.getPayeeByIdStringQuery = exports.getClientCategoriesStringQuery = exports.getProviderCategoriesStringQuery = exports.getPayeeCategoriesStringQuery = exports.getPayeeCategoriesByNotesMatchStringQuery = exports.getPayeeCategoryByIdStringQuery = exports.getWebAppRowsByWebAppTableIdStringQuery = exports.getWebAppTableByIdStringQuery = exports.getWebAppRowStringQuery = exports.getAgenciesStringQuery = exports.getProvidersStringQuery = exports.getPayeesStringQuery = exports.getPurchaseOrdersBetweenDatesStringQuery = exports.getSerialsStringQuery = exports.getLotStocksByAgencyIdStringQuery = exports.getLotsByNameStringQuery = exports.getBookingByPurchaseOrderAndReferenceStringQuery = exports.getShipmentsStringQuery = exports.getPurchaseOrderStringQuery = exports.getPurchaseOrderByIdNumberStringQuery = exports.getLast100ReceptionsStringQuery = void 0;
-exports.getProductionWorkOrderStringQuery = exports.getPrintTemplatesStringQuery = exports.getCasesStringQuery = exports.getInvoicesByAgencyIdStringQuery = exports.getInvoicesStringQuery = void 0;
+exports.getInvoicesStringQuery = exports.getPaymentByIdStringQuery = exports.getPaymentTermByIdStringQuery = exports.getPaymentMethodsStringQuery = exports.getPaymentTermsStringQuery = exports.getSuggestedPricesStringQuery = exports.getCurrenciesStringQuery = exports.getInvoiceFormSubmissionsByInvoiceIdStringQuery = exports.getCaseFormSubmissionsByCaseIdStringQuery = exports.getLastInvoiceFormSubmissionStringQuery = exports.getInvoiceFormSubmissionsByAgencyIdStringQuery = exports.getFormSubmissionByIdStringQuery = exports.getMyCaseFormSubmissionsStringQuery = exports.getFormsByDocumentTypeStringQuery = exports.getFormsStringQuery = exports.getFormByNameStringQuery = exports.getAllFormsStringQuery = exports.getItemByNameStringQuery = exports.getBundleByNameStringQuery = exports.getBundlesByItemCategoryIdStringQuery = exports.getEmployeesByAgencyIdStringQuery = exports.getEmployeesStringQuery = exports.getEmployeeProfileStringQuery = exports.getConsolidatesBetweenDatesStringQuery = exports.getItemsBySuperCategoryStringQuery = exports.getItemsStringQuery = exports.getItemsByCategoryStringQuery = exports.getItemCategoryByIdStringQuery = exports.getSuperCategoryByIdStringQuery = exports.getPayeeByIdStringQuery = exports.getClientCategoriesStringQuery = exports.getProviderCategoriesStringQuery = exports.getPayeeCategoriesStringQuery = exports.getPayeeCategoriesByNotesMatchStringQuery = exports.getPayeeCategoryByIdStringQuery = exports.getWebAppRowsByWebAppTableIdStringQuery = exports.getWebAppTableByIdStringQuery = exports.getWebAppRowStringQuery = exports.getAgenciesStringQuery = exports.getProvidersStringQuery = exports.getPayeesStringQuery = exports.getPurchaseOrdersBetweenDatesStringQuery = exports.getSerialsStringQuery = exports.getLotStocksByAgencyIdStringQuery = exports.getLotsByNameStringQuery = exports.getBookingByPurchaseOrderAndReferenceStringQuery = exports.getShipmentsStringQuery = exports.getPurchaseOrderStringQuery = exports.getPurchaseOrderByIdNumberStringQuery = exports.getLast100ReceptionsStringQuery = void 0;
+exports.getProductionWorkOrderStringQuery = exports.getPrintTemplatesStringQuery = exports.getCasesStringQuery = exports.getInvoicesByAgencyIdStringQuery = void 0;
 const getLast100ReceptionsStringQuery = (agency_id) => {
     const conditions = ["voided: {_eq: false}"];
     if (agency_id) {
@@ -1822,49 +1822,6 @@ query getPaymentTermById {
 }
 `;
 exports.getPaymentTermByIdStringQuery = getPaymentTermByIdStringQuery;
-const getEntryByIdStringQuery = (id) => {
-    const entryId = requirePositiveInt(id, "entry id");
-    return `
-query getEntryById {
-  entries(where: { id: { _eq: ${entryId} } }, limit: 1) {
-    id
-    zid
-    id_number
-    reference
-    date
-    account_id
-    amount
-    payee_id
-    memo
-    entity_id
-    created_at
-    updated_at
-    splits {
-      id
-      entry_id
-      account_id
-      amount
-      exchange_amount
-      reference
-      entity_id
-    }
-    entry_consolidates {
-      id
-      entry_id
-      consolidate_id
-      entity_id
-    }
-    entry_payments {
-      id
-      entry_id
-      payment_id
-      entity_id
-    }
-  }
-}
-`;
-};
-exports.getEntryByIdStringQuery = getEntryByIdStringQuery;
 const getPaymentByIdStringQuery = (id) => {
     const paymentId = requirePositiveInt(id, "payment id");
     return `

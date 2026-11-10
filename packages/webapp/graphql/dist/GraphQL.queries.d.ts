@@ -191,7 +191,6 @@ export declare const getPaymentMethodsStringQuery: (config: {
     onlyActives: boolean;
 }) => string;
 export declare const getPaymentTermByIdStringQuery: (id: number) => string;
-export declare const getEntryByIdStringQuery: (id: number) => string;
 export declare const getPaymentByIdStringQuery: (id: number) => string;
 export declare const getInvoicesStringQuery: (options?: GetInvoicesOptions) => string;
 export declare const getInvoicesByAgencyIdStringQuery: (id: number, filters: {
