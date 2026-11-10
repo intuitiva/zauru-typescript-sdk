@@ -177,13 +177,58 @@ const optionalSpecialValueMatches = (
   return !expected || expected === normalizeOptionalSpecialValue(actual);
 };
 
-const specialItemSpecificity = (specialItem: SpecialItem): number =>
+const SPECIAL_ITEM_SPECIFICITY_WEIGHTS = {
+  provider: 8,
+  region: 4,
+  tipo: 2,
+  providerCategory: 1,
+} as const;
+
+export const specialItemMatchKey = (
+  data: Pick<
+    SpecialItem,
+    "item" | "provider" | "region" | "tipo" | "providerCategory"
+  >,
+): string =>
   [
-    specialItem.provider,
-    specialItem.region,
-    specialItem.tipo,
-    specialItem.providerCategory,
-  ].filter((value) => normalizeOptionalSpecialValue(value)).length;
+    Number(data.item),
+    normalizeOptionalSpecialValue(data.provider),
+    normalizeOptionalSpecialValue(data.region),
+    normalizeOptionalSpecialValue(data.tipo),
+    normalizeOptionalSpecialValue(data.providerCategory),
+  ].join("|");
+
+const specialItemSpecificity = (specialItem: SpecialItem): number => {
+  let score = 0;
+  if (normalizeOptionalSpecialValue(specialItem.provider)) {
+    score += SPECIAL_ITEM_SPECIFICITY_WEIGHTS.provider;
+  }
+  if (normalizeOptionalSpecialValue(specialItem.region)) {
+    score += SPECIAL_ITEM_SPECIFICITY_WEIGHTS.region;
+  }
+  if (normalizeOptionalSpecialValue(specialItem.tipo)) {
+    score += SPECIAL_ITEM_SPECIFICITY_WEIGHTS.tipo;
+  }
+  if (normalizeOptionalSpecialValue(specialItem.providerCategory)) {
+    score += SPECIAL_ITEM_SPECIFICITY_WEIGHTS.providerCategory;
+  }
+  return score;
+};
+
+const isBetterSpecialItemMatch = (
+  candidate: WebAppRowGraphQL<SpecialItem>,
+  candidateScore: number,
+  current: WebAppRowGraphQL<SpecialItem> | undefined,
+  currentScore: number,
+): boolean => {
+  if (!current || candidateScore > currentScore) {
+    return true;
+  }
+  if (candidateScore < currentScore) {
+    return false;
+  }
+  return candidate.id > current.id;
+};
 
 export const matchSpecialItemForWeeklyPrice = (
   specialItems: Array<SpecialItem | WebAppRowGraphQL<SpecialItem>> | undefined,
@@ -215,7 +260,14 @@ export const matchSpecialItemForWeeklyPrice = (
     }
 
     const specificity = specialItemSpecificity(data);
-    if (specificity > bestSpecificity) {
+    if (
+      isBetterSpecialItemMatch(
+        specialItem,
+        specificity,
+        bestMatch,
+        bestSpecificity,
+      )
+    ) {
       bestMatch = specialItem;
       bestSpecificity = specificity;
     }
@@ -277,7 +329,7 @@ export const calculateItemPriceFromWeeklyMatrix = (
   if (matchedSpecial) {
     const specialPrice = getWeeklyCostPeriodPrice(
       matrix?.costosEspeciales?.find(
-        (costo) => costo.specialItemId === matchedSpecial.id,
+        (costo) => Number(costo.specialItemId) === Number(matchedSpecial.id),
       ),
       period,
     );
