@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.39.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.38.0...@zauru-sdk/types@6.39.0) (2026-11-11)
+
+
+### Features
+
+* enviar memo como objeto y serializarlo en el servicio ([a7eb0ca](https://github.com/intuitiva/zauru-typescript-sdk/commit/a7eb0ca6822424f4cc2014b6f83568f3a1154ae6))
+
+
+
+
+
 # [6.38.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.37.1...@zauru-sdk/types@6.38.0) (2026-11-11)
 
 
