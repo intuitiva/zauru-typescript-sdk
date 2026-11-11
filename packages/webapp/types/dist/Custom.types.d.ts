@@ -167,22 +167,13 @@ export type ConsolidatePurchaseOrderAttributes = {
         id: string;
     };
 };
-/**
- * Datos extra del consolidado. Viajan como JSON serializado en un campo de
- * texto (`consolidates.memo`), por eso el body los manda como string.
- * Para agregar más datos basta con sumar claves a este objeto.
- */
-export type ConsolidateMemo = {
-    purchase_order_numbers?: string[];
-    [key: string]: unknown;
-};
 export type NewConsolidatedBody = {
     consolidate: {
         name: string;
         description: string;
         purchase_orders_attributes: ConsolidatePurchaseOrderAttributes;
-        /** Datos extra. El SDK los serializa; Baculo los guarda como texto. */
-        memo?: ConsolidateMemo | string;
+        /** Texto libre. La webapp envía ahí el JSON serializado que necesite. */
+        memo?: string;
     };
 };
 export type HTMLDataTableDeliveries = {
