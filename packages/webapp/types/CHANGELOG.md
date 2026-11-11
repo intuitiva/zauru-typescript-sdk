@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.41.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.40.0...@zauru-sdk/types@6.41.0) (2026-11-11)
+
+
+### Features
+
+* exponer memo en ConsolidateGraphQL ([834c420](https://github.com/intuitiva/zauru-typescript-sdk/commit/834c420f5ba60f93ebd07575e7299783b36aafbf))
+
+
+
+
+
 # [6.40.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.39.0...@zauru-sdk/types@6.40.0) (2026-11-11)
 
 
