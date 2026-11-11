@@ -22,9 +22,17 @@ export const createConsolidated = async (
   body: NewConsolidatedBody
 ): Promise<AxiosUtilsResponse<{ id: number }>> => {
   return handlePossibleAxiosErrors(async () => {
+    const { memo } = body.consolidate;
+    // Baculo guarda el memo en un campo de texto: se serializa el objeto aquí
+    // para que la app no dependa de ese detalle de almacenamiento.
+    const payload: NewConsolidatedBody =
+      memo && typeof memo !== "string"
+        ? { consolidate: { ...body.consolidate, memo: JSON.stringify(memo) } }
+        : body;
+
     const response = await httpZauru.post<{ id: number }>(
       `/purchases/consolidates/create_for_special_invoice.json`,
-      body,
+      payload,
       {
         headers,
       }
