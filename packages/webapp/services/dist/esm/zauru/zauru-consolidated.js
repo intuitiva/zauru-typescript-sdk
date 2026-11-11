@@ -10,7 +10,13 @@ import { getConsolidatesBetweenDatesStringQuery } from "@zauru-sdk/graphql";
  */
 export const createConsolidated = async (headers, body) => {
     return handlePossibleAxiosErrors(async () => {
-        const response = await httpZauru.post(`/purchases/consolidates/create_for_special_invoice.json`, body, {
+        const { memo } = body.consolidate;
+        // Baculo guarda el memo en un campo de texto: se serializa el objeto aquí
+        // para que la app no dependa de ese detalle de almacenamiento.
+        const payload = memo && typeof memo !== "string"
+            ? { consolidate: { ...body.consolidate, memo: JSON.stringify(memo) } }
+            : body;
+        const response = await httpZauru.post(`/purchases/consolidates/create_for_special_invoice.json`, payload, {
             headers,
         });
         return response.data;
