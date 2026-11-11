@@ -167,11 +167,20 @@ export type ConsolidatePurchaseOrderAttributes = {
         id: string;
     };
 };
+/**
+ * Free-form JSON stored on the consolidate. Baculo persists it as `jsonb`,
+ * so future keys can be added without a schema change.
+ */
+export type ConsolidateMemo = {
+    purchase_order_numbers?: string[];
+    [key: string]: unknown;
+};
 export type NewConsolidatedBody = {
     consolidate: {
         name: string;
         description: string;
         purchase_orders_attributes: ConsolidatePurchaseOrderAttributes;
+        memo?: ConsolidateMemo;
     };
 };
 export type HTMLDataTableDeliveries = {
@@ -758,6 +767,12 @@ export type ConsolidatedHistory = {
 };
 export type ConsolidateGroup = {
     purchaseOrderIds: number[];
+    /**
+     * Números de orden (PO id_number). Se envían en `memo` al consolidar y
+     * Baculo los usa para la referencia del asiento, que es varchar(255).
+     * Opcional: los historiales anteriores no los tienen.
+     */
+    purchaseOrderNumbers?: string[];
     payeeId: number;
     finalizado: boolean;
     msgError: string;
