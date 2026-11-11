@@ -257,6 +257,8 @@ export type ConsolidateGraphQL = {
     id_number: string;
     created_at: string;
     name: string;
+    /** Texto libre con los datos extra del consolidado (JSON serializado). */
+    memo: string | null;
     purchase_orders: PurchaseOrderGraphQL[];
 };
 export type EmployeeGraphQL = {
