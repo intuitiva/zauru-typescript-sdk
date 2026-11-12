@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [6.30.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.30.0...@zauru-sdk/services@6.30.1) (2026-11-12)
+## [6.30.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.30.0...@zauru-sdk/services@6.30.2) (2026-11-12)
 
 
 ### Bug Fixes
