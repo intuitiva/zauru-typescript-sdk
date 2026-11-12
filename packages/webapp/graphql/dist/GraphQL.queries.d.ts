@@ -84,6 +84,7 @@ export declare const getPayeesStringQuery: (filters?: {
     active?: boolean;
     id_number_not_empty?: boolean;
     id_number_not_null?: boolean;
+    ids?: Array<number | string>;
 }) => string;
 export declare const getProvidersStringQuery = "\nquery getProviders {\n    payees (where: {vendor: {_eq: true}}) {\n        id\n        id_number\n        name\n        tin\n        address_line_1\n    }\n}\n";
 export declare const getAgenciesStringQuery = "\nquery getAgencies {\n  agencies {\n    id\n    name\n    address_line_2\n  }\n}\n";
@@ -216,4 +217,5 @@ export declare const getProductionWorkOrderStringQuery: (config: {
     voided?: boolean;
 }) => string;
 export declare const getPurchaseOrdersByReferenceStringQuery: (reference: string) => string;
+export declare const getPurchaseOrdersByIdsStringQuery: (purchaseOrderIds: Array<number | string>) => string;
 export declare const getDischargeDetailsByPurchaseOrderIdsStringQuery: (purchaseOrderIds: Array<number | string>) => string;

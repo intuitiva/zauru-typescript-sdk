@@ -24,6 +24,7 @@ export type CreateNewPurchaseOrderType = Partial<Omit<PurchaseOrderGraphQL, "tag
 };
 export declare const createNewPurchaseOrder: (headers: any, body: CreateNewPurchaseOrderType) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
 export declare const getPurchaseOrdersByReference: (graphqlHeaders: Record<string, string>, reference: string) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
+export declare const getPurchaseOrdersByIds: (session: Session, purchaseOrderIds: Array<number | string>) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
 /**
  *
  * @param headers

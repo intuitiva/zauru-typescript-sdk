@@ -66,13 +66,19 @@ export const getDischargeDetailsByPurchaseOrderIds = (session, restHeaders, purc
         }
         try {
             const graphqlHeaders = await getGraphQLAPIHeaders(session);
-            const response = await httpGraphQLAPI.post("", {
-                query: getDischargeDetailsByPurchaseOrderIdsStringQuery(ids),
-            }, { headers: graphqlHeaders });
-            if (response.data?.errors?.length) {
-                throw new Error(response.data.errors.map((error) => error.message).join(";"));
+            const collected = [];
+            const chunkSize = 200;
+            for (let index = 0; index < ids.length; index += chunkSize) {
+                const chunk = ids.slice(index, index + chunkSize);
+                const response = await httpGraphQLAPI.post("", {
+                    query: getDischargeDetailsByPurchaseOrderIdsStringQuery(chunk),
+                }, { headers: graphqlHeaders });
+                if (response.data?.errors?.length) {
+                    throw new Error(response.data.errors.map((error) => error.message).join(";"));
+                }
+                collected.push(...(response.data?.data?.discharge_details ?? []));
             }
-            return response.data?.data?.discharge_details ?? [];
+            return collected;
         }
         catch {
             const collected = [];

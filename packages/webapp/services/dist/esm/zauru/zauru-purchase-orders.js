@@ -2,7 +2,7 @@ import { arrayToObject, convertToFormData, formatDateToUTC, getBasketsSchema, ha
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, getPurchaseOrdersByReferenceStringQuery, } from "@zauru-sdk/graphql";
+import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, getPurchaseOrdersByIdsStringQuery, getPurchaseOrdersByReferenceStringQuery, } from "@zauru-sdk/graphql";
 /**
  * markAsReceivePurchaseOrder
  * Esta función sólo se utiliza cuando se van a marcar como recibida toda la órden de compra, se recibe todo lo que se envío
@@ -57,6 +57,30 @@ export const getPurchaseOrdersByReference = (graphqlHeaders, reference) => {
             throw new Error(response.data.errors.map((error) => error.message).join(";"));
         }
         return response.data?.data?.purchase_orders ?? [];
+    });
+};
+const GRAPHQL_ID_CHUNK = 200;
+export const getPurchaseOrdersByIds = (session, purchaseOrderIds) => {
+    return handlePossibleAxiosErrors(async () => {
+        const ids = [
+            ...new Set(purchaseOrderIds
+                .map((id) => Number(id))
+                .filter((id) => Number.isFinite(id) && id > 0)),
+        ];
+        if (ids.length === 0) {
+            return [];
+        }
+        const headers = await getGraphQLAPIHeaders(session);
+        const collected = [];
+        for (let index = 0; index < ids.length; index += GRAPHQL_ID_CHUNK) {
+            const chunk = ids.slice(index, index + GRAPHQL_ID_CHUNK);
+            const response = await httpGraphQLAPI.post("", { query: getPurchaseOrdersByIdsStringQuery(chunk) }, { headers });
+            if (response.data?.errors?.length) {
+                throw new Error(response.data.errors.map((error) => error.message).join(";"));
+            }
+            collected.push(...(response.data?.data?.purchase_orders ?? []));
+        }
+        return collected;
     });
 };
 /**

@@ -13,6 +13,7 @@ export declare function getPayees(session: Session, filters?: {
     active?: boolean;
     id_number_not_empty?: boolean;
     id_number_not_null?: boolean;
+    ids?: Array<number | string>;
 }): Promise<AxiosUtilsResponse<PayeeGraphQL[]>>;
 export declare function getPayeesWithGraphQLHeaders(graphqlHeaders: Record<string, string>, filters?: {
     id_number?: string;
@@ -22,6 +23,7 @@ export declare function getPayeesWithGraphQLHeaders(graphqlHeaders: Record<strin
     active?: boolean;
     id_number_not_empty?: boolean;
     id_number_not_null?: boolean;
+    ids?: Array<number | string>;
 }): Promise<AxiosUtilsResponse<PayeeGraphQL[]>>;
 /**
  * getProviders

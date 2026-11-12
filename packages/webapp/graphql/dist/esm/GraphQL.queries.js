@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getInvoicesStringQuery = exports.getPaymentByIdStringQuery = exports.getPaymentTermByIdStringQuery = exports.getPaymentMethodsStringQuery = exports.getPaymentTermsStringQuery = exports.getSuggestedPricesStringQuery = exports.getCurrenciesStringQuery = exports.getInvoiceFormSubmissionsByInvoiceIdStringQuery = exports.getCaseFormSubmissionsByCaseIdStringQuery = exports.getLastInvoiceFormSubmissionStringQuery = exports.getInvoiceFormSubmissionsByAgencyIdStringQuery = exports.getFormSubmissionByIdStringQuery = exports.getMyCaseFormSubmissionsStringQuery = exports.getFormsByDocumentTypeStringQuery = exports.getFormsStringQuery = exports.getFormByNameStringQuery = exports.getAllFormsStringQuery = exports.getItemByNameStringQuery = exports.getBundleByNameStringQuery = exports.getBundlesByItemCategoryIdStringQuery = exports.getEmployeesByAgencyIdStringQuery = exports.getEmployeesStringQuery = exports.getEmployeeProfileStringQuery = exports.getConsolidatesBetweenDatesStringQuery = exports.getItemsBySuperCategoryStringQuery = exports.getItemsStringQuery = exports.getItemsByCategoryStringQuery = exports.getItemCategoryByIdStringQuery = exports.getSuperCategoryByIdStringQuery = exports.getPayeeByIdStringQuery = exports.getClientCategoriesStringQuery = exports.getProviderCategoriesStringQuery = exports.getPayeeCategoriesStringQuery = exports.getPayeeCategoriesByNotesMatchStringQuery = exports.getPayeeCategoryByIdStringQuery = exports.getWebAppRowsByWebAppTableIdStringQuery = exports.getWebAppTableByIdStringQuery = exports.getWebAppRowStringQuery = exports.getAgenciesStringQuery = exports.getProvidersStringQuery = exports.getPayeesStringQuery = exports.getPurchaseOrdersBetweenDatesStringQuery = exports.getSerialsStringQuery = exports.getLotStocksByAgencyIdStringQuery = exports.getLotsByNameStringQuery = exports.getBookingByPurchaseOrderAndReferenceStringQuery = exports.getShipmentsStringQuery = exports.getPurchaseOrderStringQuery = exports.getPurchaseOrderByIdNumberStringQuery = exports.getLast100ReceptionsStringQuery = void 0;
-exports.getDischargeDetailsByPurchaseOrderIdsStringQuery = exports.getPurchaseOrdersByReferenceStringQuery = exports.getProductionWorkOrderStringQuery = exports.getPrintTemplatesStringQuery = exports.getCasesStringQuery = exports.getInvoicesByAgencyIdStringQuery = void 0;
+exports.getDischargeDetailsByPurchaseOrderIdsStringQuery = exports.getPurchaseOrdersByIdsStringQuery = exports.getPurchaseOrdersByReferenceStringQuery = exports.getProductionWorkOrderStringQuery = exports.getPrintTemplatesStringQuery = exports.getCasesStringQuery = exports.getInvoicesByAgencyIdStringQuery = void 0;
 const getLast100ReceptionsStringQuery = (agency_id) => {
     const conditions = ["voided: {_eq: false}"];
     if (agency_id) {
@@ -165,6 +165,7 @@ query getPurchaseOrder($id: bigint) @cached {
     voided
     received
     discount
+    total
     delivery_date
     other_charges
     shipment_reference
@@ -651,6 +652,14 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
 exports.getPurchaseOrdersBetweenDatesStringQuery = getPurchaseOrdersBetweenDatesStringQuery;
 const getPayeesStringQuery = (filters) => {
     const conditions = [];
+    const payeeIds = [
+        ...new Set((filters?.ids ?? [])
+            .map((id) => Number(id))
+            .filter((id) => Number.isFinite(id) && id > 0)),
+    ];
+    if (payeeIds.length) {
+        conditions.push(`id: { _in: [${payeeIds.join(",")}] }`);
+    }
     const idNumberConditions = [];
     if (filters?.id_number) {
         idNumberConditions.push(`_ilike: "%${filters.id_number}%"`);
@@ -679,8 +688,10 @@ const getPayeesStringQuery = (filters) => {
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} }`
         : "";
+    const limitClause = payeeIds.length ? `limit: ${payeeIds.length},` : "";
     return `query getPayees {
             payees (
+              ${limitClause}
               order_by: { id: desc },
               ${whereClause}
             ) {
@@ -2160,14 +2171,56 @@ query getPurchaseOrdersByReference {
 `;
 };
 exports.getPurchaseOrdersByReferenceStringQuery = getPurchaseOrdersByReferenceStringQuery;
+const getPurchaseOrdersByIdsStringQuery = (purchaseOrderIds) => {
+    const ids = [
+        ...new Set(purchaseOrderIds
+            .map((id) => Number(id))
+            .filter((id) => Number.isFinite(id) && id > 0)),
+    ];
+    const inList = ids.length ? ids.join(",") : "0";
+    const limit = Math.max(ids.length, 1);
+    return `
+query getPurchaseOrdersByIds {
+  purchase_orders(
+    where: { id: { _in: [${inList}] } }
+    limit: ${limit}
+  ) {
+    id
+    id_number
+    total
+    discount
+    memo
+    agency_id
+    issue_date
+    transport_type
+    payee_id
+    purchase_order_details {
+      item_id
+      booked_quantity
+      delivered_quantity
+      unit_cost
+      item {
+        name
+        stocks_only_integer
+      }
+    }
+  }
+}
+`;
+};
+exports.getPurchaseOrdersByIdsStringQuery = getPurchaseOrdersByIdsStringQuery;
 const getDischargeDetailsByPurchaseOrderIdsStringQuery = (purchaseOrderIds) => {
     const ids = purchaseOrderIds
         .map((id) => Number(id))
         .filter((id) => Number.isFinite(id) && id > 0);
     const inList = ids.length ? ids.join(",") : "0";
+    const limit = Math.max(ids.length * 50, 100);
     return `
 query getDischargeDetailsByPurchaseOrderIds {
-  discharge_details(where: { purchase_order_id: { _in: [${inList}] } }) {
+  discharge_details(
+    where: { purchase_order_id: { _in: [${inList}] } }
+    limit: ${limit}
+  ) {
     id
     amount
     exchange_amount
