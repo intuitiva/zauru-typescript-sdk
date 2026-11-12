@@ -1,7 +1,6 @@
 import { httpZauru } from "./httpZauru.js";
 import { httpOauth } from "./httpOauth.js";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { config } from "@zauru-sdk/config";
 /**
  * getOauthUserInfo
  * @param codeValue
@@ -43,7 +42,7 @@ export const getProfileInformation = async (headers) => {
     });
 };
 export const changeEntity = async (headers, entityId) => {
-    const changeEntityFetch = await httpZauru.patch(`${config.zauruBaseURL}/company.json`, JSON.stringify({
+    const changeEntityFetch = await httpZauru.patch(`/company.json`, JSON.stringify({
         selected_entity_id: entityId,
     }), {
         headers,

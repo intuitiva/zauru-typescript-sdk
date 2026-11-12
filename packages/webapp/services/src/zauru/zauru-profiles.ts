@@ -10,7 +10,6 @@ import {
   AxiosUtilsResponse,
 } from "@zauru-sdk/types";
 import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { config } from "@zauru-sdk/config";
 
 /**
  * getOauthUserInfo
@@ -68,7 +67,7 @@ export const getProfileInformation = async (
 
 export const changeEntity = async (headers: any, entityId: string) => {
   const changeEntityFetch = await httpZauru.patch<any>(
-    `${config.zauruBaseURL}/company.json`,
+    `/company.json`,
     JSON.stringify({
       selected_entity_id: entityId,
     }),
