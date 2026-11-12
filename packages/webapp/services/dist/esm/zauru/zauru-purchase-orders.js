@@ -2,7 +2,7 @@ import { arrayToObject, convertToFormData, formatDateToUTC, getBasketsSchema, ha
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, } from "@zauru-sdk/graphql";
+import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, getPurchaseOrdersByReferenceStringQuery, } from "@zauru-sdk/graphql";
 /**
  * markAsReceivePurchaseOrder
  * Esta función sólo se utiliza cuando se van a marcar como recibida toda la órden de compra, se recibe todo lo que se envío
@@ -48,6 +48,15 @@ export const createNewPurchaseOrder = (headers, body) => {
         }
         const response = await httpZauru.post(`/purchases/purchase_orders.json`, sendBody, { headers });
         return response.data;
+    });
+};
+export const getPurchaseOrdersByReference = (graphqlHeaders, reference) => {
+    return handlePossibleAxiosErrors(async () => {
+        const response = await httpGraphQLAPI.post("", { query: getPurchaseOrdersByReferenceStringQuery(reference) }, { headers: graphqlHeaders });
+        if (response.data?.errors?.length) {
+            throw new Error(response.data.errors.map((error) => error.message).join(";"));
+        }
+        return response.data?.data?.purchase_orders ?? [];
     });
 };
 /**

@@ -14,6 +14,15 @@ export declare function getPayees(session: Session, filters?: {
     id_number_not_empty?: boolean;
     id_number_not_null?: boolean;
 }): Promise<AxiosUtilsResponse<PayeeGraphQL[]>>;
+export declare function getPayeesWithGraphQLHeaders(graphqlHeaders: Record<string, string>, filters?: {
+    id_number?: string;
+    name?: string;
+    vendor?: boolean;
+    tin?: string;
+    active?: boolean;
+    id_number_not_empty?: boolean;
+    id_number_not_null?: boolean;
+}): Promise<AxiosUtilsResponse<PayeeGraphQL[]>>;
 /**
  * getProviders
  * @param headers

@@ -101,12 +101,12 @@ export const loginWebApp = async (session, codeValue, cookie) => {
         };
     });
 };
-/**
- * Obtiene los headers que se usan en todos los endpoints de zauru
- * @param cookie
- * @param _session La session es opcional, se envía sólo si ya se tiene a la mano, para ya no volverla a consultar.
- * @returns
- */
+export const createCredentialHeaders = (email, token) => ({
+    "X-User-Email": email,
+    "X-User-Token": token,
+    "Content-type": "application/json",
+    Accept: "application/json",
+});
 export const getHeaders = async (cookie, _session, config, extraConfig) => {
     // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Session and Header Info<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     const session = _session ?? (await getSession(cookie));
@@ -182,6 +182,18 @@ async function getGraphQLToken(session) {
  * @param session
  * @returns
  */
+export const getGraphQLAPIHeadersFromCredentials = async (headers) => {
+    const responseToken = await httpZauru.get("/apps/graphql.json", {
+        headers,
+    });
+    if (!responseToken.data?.token) {
+        throw new Error("No viene información en la solicitud de getGraphQLToken a Zauru");
+    }
+    return {
+        Authorization: `Bearer ${responseToken.data.token}`,
+        "Content-Type": "application/json",
+    };
+};
 export const getGraphQLAPIHeaders = async (session) => {
     const { data: token, error, userMsg } = await getGraphQLToken(session);
     if (error) {

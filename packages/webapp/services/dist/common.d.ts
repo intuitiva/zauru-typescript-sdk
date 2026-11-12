@@ -29,6 +29,13 @@ export declare const loginWebApp: (session: Session, codeValue: string, cookie: 
  * @param _session La session es opcional, se envía sólo si ya se tiene a la mano, para ya no volverla a consultar.
  * @returns
  */
+export type ZauruCredentialHeaders = {
+    "X-User-Email": string;
+    "X-User-Token": string;
+    "Content-type": string;
+    Accept: string;
+};
+export declare const createCredentialHeaders: (email: string, token: string) => ZauruCredentialHeaders;
 export declare const getHeaders: (cookie: string | null, _session?: Session | null, config?: {
     token: string;
     username: string;
@@ -43,6 +50,7 @@ export declare const getCMSHeaders: () => Promise<AxiosRequestHeaders>;
  * @param session
  * @returns
  */
+export declare const getGraphQLAPIHeadersFromCredentials: (headers: Record<string, string>) => Promise<AxiosRequestHeaders>;
 export declare const getGraphQLAPIHeaders: (session: Session) => Promise<AxiosRequestHeaders>;
 export type SessionMessage = {
     id: string;

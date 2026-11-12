@@ -149,6 +149,24 @@ export type PurchaseOrderGraphQL = {
     shipment_purchase_orders: ShipmentPurchaseOrderGraphQL[];
     taggings: TaggingGraphQL[];
     payee: PayeeGraphQL;
+    discharge_details?: DischargeDetailGraphQL[];
+};
+export type DischargeGraphQL = {
+    id: number;
+    date?: string;
+    memo?: string | null;
+    reference?: string | null;
+    voided?: boolean;
+    draft?: boolean;
+    amount?: number;
+};
+export type DischargeDetailGraphQL = {
+    id: number;
+    amount: number;
+    exchange_amount?: number | null;
+    purchase_order_id: number;
+    discharge_id: number;
+    discharge?: DischargeGraphQL;
 };
 export type TagGraphQL = {
     id: number;

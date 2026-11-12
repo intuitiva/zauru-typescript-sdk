@@ -20,6 +20,10 @@ export declare const getEmployeeInfo: (id: number, headers: any) => Promise<Axio
  */
 export declare const getProfileInformation: (headers: any) => Promise<AxiosUtilsResponse<ProfileResponse>>;
 export declare const changeEntity: (headers: any, entityId: string) => Promise<any>;
+export declare const withSelectedEntity: <T>(headers: any, entityId: string | number, fn: (ctx: {
+    restHeaders: any;
+    graphqlHeaders: Record<string, string>;
+}) => Promise<T>) => Promise<T>;
 /**
  *
  * @param headers

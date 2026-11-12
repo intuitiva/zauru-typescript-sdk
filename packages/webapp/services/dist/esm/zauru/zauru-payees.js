@@ -29,6 +29,26 @@ export async function getPayees(session, filters) {
         return response.data?.data.payees;
     });
 }
+export async function getPayeesWithGraphQLHeaders(graphqlHeaders, filters) {
+    return handlePossibleAxiosErrors(async () => {
+        const defaultFilters = {
+            id_number: undefined,
+            name: undefined,
+            vendor: undefined,
+            tin: undefined,
+            active: undefined,
+            id_number_not_empty: undefined,
+            id_number_not_null: undefined,
+        };
+        const finalFilters = { ...defaultFilters, ...filters };
+        const response = await httpGraphQLAPI.post(``, {
+            query: getPayeesStringQuery(finalFilters),
+        }, {
+            headers: graphqlHeaders,
+        });
+        return response.data?.data.payees;
+    });
+}
 /**
  * getProviders
  * @param headers

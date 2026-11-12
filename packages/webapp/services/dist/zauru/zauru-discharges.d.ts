@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, GeneratePDFBody, NewDischargeBody, PDFResult } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, DischargeDetailGraphQL, GeneratePDFBody, NewDischargeBody, PDFResult } from "@zauru-sdk/types";
 /**
  *
  * @param headers
@@ -24,3 +24,4 @@ export declare const generateDischargePDF: (headers: any, session: Session, body
  * @returns
  */
 export declare const getDischargePDFResult: (headers: any, zid: number | string) => Promise<AxiosUtilsResponse<PDFResult>>;
+export declare const getDischargeDetailsByPurchaseOrderIds: (session: Session, restHeaders: Record<string, string>, purchaseOrderIds: Array<number | string>) => Promise<AxiosUtilsResponse<DischargeDetailGraphQL[]>>;

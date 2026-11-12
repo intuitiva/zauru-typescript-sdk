@@ -50,6 +50,20 @@ export const changeEntity = async (headers, entityId) => {
     });
     return changeEntityFetch.data;
 };
+export const withSelectedEntity = async (headers, entityId, fn) => {
+    await changeEntity(headers, String(entityId));
+    const responseToken = await httpZauru.get("/apps/graphql.json", {
+        headers,
+    });
+    if (!responseToken.data?.token) {
+        throw new Error("No viene información en la solicitud de getGraphQLToken a Zauru");
+    }
+    const graphqlHeaders = {
+        Authorization: `Bearer ${responseToken.data.token}`,
+        "Content-Type": "application/json",
+    };
+    return fn({ restHeaders: headers, graphqlHeaders });
+};
 /**
  *
  * @param headers

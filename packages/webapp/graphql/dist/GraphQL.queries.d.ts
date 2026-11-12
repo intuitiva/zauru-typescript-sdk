@@ -215,3 +215,5 @@ export declare const getProductionWorkOrderStringQuery: (config: {
     closed?: boolean;
     voided?: boolean;
 }) => string;
+export declare const getPurchaseOrdersByReferenceStringQuery: (reference: string) => string;
+export declare const getDischargeDetailsByPurchaseOrderIdsStringQuery: (purchaseOrderIds: Array<number | string>) => string;
