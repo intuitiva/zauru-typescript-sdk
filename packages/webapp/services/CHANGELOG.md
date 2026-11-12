@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.30.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.28.1...@zauru-sdk/services@6.30.0) (2026-11-12)
+
+
+### Features
+
+* consultar OCs y egresos por ids en lote ([7a661ed](https://github.com/intuitiva/zauru-typescript-sdk/commit/7a661ed70f26f52a0bd75d6af2df0753e65463e2))
+* contexto por credenciales, cambio de entidad y egresos por OC ([519c73f](https://github.com/intuitiva/zauru-typescript-sdk/commit/519c73fddc1560c086e979509a47f0f3c74a2617))
+
+
+
+
+
 ## [6.28.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.28.0...@zauru-sdk/services@6.28.1) (2026-11-11)
 
 **Note:** Version bump only for package @zauru-sdk/services

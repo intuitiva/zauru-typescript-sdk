@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.43.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.41.0...@zauru-sdk/types@6.43.0) (2026-11-12)
+
+
+### Features
+
+* contexto por credenciales, cambio de entidad y egresos por OC ([519c73f](https://github.com/intuitiva/zauru-typescript-sdk/commit/519c73fddc1560c086e979509a47f0f3c74a2617))
+
+
+
+
+
 # [6.41.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.40.0...@zauru-sdk/types@6.41.0) (2026-11-11)
 
 

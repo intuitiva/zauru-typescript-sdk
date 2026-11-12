@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.20.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.18.0...@zauru-sdk/graphql@6.20.0) (2026-11-12)
+
+
+### Features
+
+* contexto por credenciales, cambio de entidad y egresos por OC ([519c73f](https://github.com/intuitiva/zauru-typescript-sdk/commit/519c73fddc1560c086e979509a47f0f3c74a2617))
+* leer total y OCs/proveedores por ids en GraphQL ([3b0e674](https://github.com/intuitiva/zauru-typescript-sdk/commit/3b0e67406c3709eae8713db7addb08697b251841))
+
+
+
+
+
 # [6.18.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.17.1...@zauru-sdk/graphql@6.18.0) (2026-11-10)
 
 
