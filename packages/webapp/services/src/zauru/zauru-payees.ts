@@ -67,6 +67,44 @@ export async function getPayees(
   });
 }
 
+export async function getPayeesWithGraphQLHeaders(
+  graphqlHeaders: Record<string, string>,
+  filters?: {
+    id_number?: string;
+    name?: string;
+    vendor?: boolean;
+    tin?: string;
+    active?: boolean;
+    id_number_not_empty?: boolean;
+    id_number_not_null?: boolean;
+  },
+): Promise<AxiosUtilsResponse<PayeeGraphQL[]>> {
+  return handlePossibleAxiosErrors(async () => {
+    const defaultFilters = {
+      id_number: undefined,
+      name: undefined,
+      vendor: undefined,
+      tin: undefined,
+      active: undefined,
+      id_number_not_empty: undefined,
+      id_number_not_null: undefined,
+    };
+    const finalFilters = { ...defaultFilters, ...filters };
+    const response = await httpGraphQLAPI.post<{
+      data: { payees: PayeeGraphQL[] };
+    }>(
+      ``,
+      {
+        query: getPayeesStringQuery(finalFilters),
+      },
+      {
+        headers: graphqlHeaders,
+      },
+    );
+    return response.data?.data.payees;
+  });
+}
+
 /**
  * getProviders
  * @param headers

@@ -28,6 +28,7 @@ import {
   getPurchaseOrderByIdNumberStringQuery,
   getPurchaseOrderStringQuery,
   getPurchaseOrdersBetweenDatesStringQuery,
+  getPurchaseOrdersByReferenceStringQuery,
 } from "@zauru-sdk/graphql";
 
 /**
@@ -107,6 +108,26 @@ export const createNewPurchaseOrder = (
     );
 
     return response.data;
+  });
+};
+
+export const getPurchaseOrdersByReference = (
+  graphqlHeaders: Record<string, string>,
+  reference: string,
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
+  return handlePossibleAxiosErrors(async () => {
+    const response = await httpGraphQLAPI.post<{
+      data?: { purchase_orders?: PurchaseOrderGraphQL[] };
+      errors?: { message: string }[];
+    }>(
+      "",
+      { query: getPurchaseOrdersByReferenceStringQuery(reference) },
+      { headers: graphqlHeaders },
+    );
+    if (response.data?.errors?.length) {
+      throw new Error(response.data.errors.map((error) => error.message).join(";"));
+    }
+    return response.data?.data?.purchase_orders ?? [];
   });
 };
 

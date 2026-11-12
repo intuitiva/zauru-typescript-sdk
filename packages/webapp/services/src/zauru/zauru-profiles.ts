@@ -4,6 +4,7 @@ import { httpOauth } from "./httpOauth.js";
 import {
   AgencyGraphQL,
   EmployeeGraphQL,
+  GraphQLToken,
   OauthProfile,
   ProfileResponse,
   AxiosUtilsResponse,
@@ -76,6 +77,30 @@ export const changeEntity = async (headers: any, entityId: string) => {
     }
   );
   return changeEntityFetch.data;
+};
+
+export const withSelectedEntity = async <T>(
+  headers: any,
+  entityId: string | number,
+  fn: (ctx: {
+    restHeaders: any;
+    graphqlHeaders: Record<string, string>;
+  }) => Promise<T>,
+): Promise<T> => {
+  await changeEntity(headers, String(entityId));
+  const responseToken = await httpZauru.get<GraphQLToken>("/apps/graphql.json", {
+    headers,
+  });
+  if (!responseToken.data?.token) {
+    throw new Error(
+      "No viene información en la solicitud de getGraphQLToken a Zauru",
+    );
+  }
+  const graphqlHeaders = {
+    Authorization: `Bearer ${responseToken.data.token}`,
+    "Content-Type": "application/json",
+  };
+  return fn({ restHeaders: headers, graphqlHeaders });
 };
 
 /**

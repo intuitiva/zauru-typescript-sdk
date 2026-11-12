@@ -2554,3 +2554,45 @@ export const getProductionWorkOrderStringQuery = (config: {
   }
 }`;
 };
+
+export const getPurchaseOrdersByReferenceStringQuery = (reference: string) => {
+  const safe = String(reference).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  return `
+query getPurchaseOrdersByReference {
+  purchase_orders(where: { reference: { _eq: "${safe}" } }) {
+    id
+    id_number
+    reference
+  }
+}
+`;
+};
+
+export const getDischargeDetailsByPurchaseOrderIdsStringQuery = (
+  purchaseOrderIds: Array<number | string>,
+) => {
+  const ids = purchaseOrderIds
+    .map((id) => Number(id))
+    .filter((id) => Number.isFinite(id) && id > 0);
+  const inList = ids.length ? ids.join(",") : "0";
+  return `
+query getDischargeDetailsByPurchaseOrderIds {
+  discharge_details(where: { purchase_order_id: { _in: [${inList}] } }) {
+    id
+    amount
+    exchange_amount
+    purchase_order_id
+    discharge_id
+    discharge {
+      id
+      date
+      memo
+      reference
+      voided
+      draft
+      amount
+    }
+  }
+}
+`;
+};
