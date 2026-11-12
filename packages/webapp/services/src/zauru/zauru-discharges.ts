@@ -126,20 +126,28 @@ export const getDischargeDetailsByPurchaseOrderIds = (
 
     try {
       const graphqlHeaders = await getGraphQLAPIHeaders(session);
-      const response = await httpGraphQLAPI.post<{
-        data?: { discharge_details?: DischargeDetailGraphQL[] };
-        errors?: { message: string }[];
-      }>(
-        "",
-        {
-          query: getDischargeDetailsByPurchaseOrderIdsStringQuery(ids),
-        },
-        { headers: graphqlHeaders },
-      );
-      if (response.data?.errors?.length) {
-        throw new Error(response.data.errors.map((error) => error.message).join(";"));
+      const collected: DischargeDetailGraphQL[] = [];
+      const chunkSize = 200;
+      for (let index = 0; index < ids.length; index += chunkSize) {
+        const chunk = ids.slice(index, index + chunkSize);
+        const response = await httpGraphQLAPI.post<{
+          data?: { discharge_details?: DischargeDetailGraphQL[] };
+          errors?: { message: string }[];
+        }>(
+          "",
+          {
+            query: getDischargeDetailsByPurchaseOrderIdsStringQuery(chunk),
+          },
+          { headers: graphqlHeaders },
+        );
+        if (response.data?.errors?.length) {
+          throw new Error(
+            response.data.errors.map((error) => error.message).join(";"),
+          );
+        }
+        collected.push(...(response.data?.data?.discharge_details ?? []));
       }
-      return response.data?.data?.discharge_details ?? [];
+      return collected;
     } catch {
       const collected: DischargeDetailGraphQL[] = [];
       for (const id of ids) {

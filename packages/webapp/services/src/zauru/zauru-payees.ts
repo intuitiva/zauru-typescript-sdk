@@ -34,6 +34,7 @@ export async function getPayees(
     active?: boolean;
     id_number_not_empty?: boolean;
     id_number_not_null?: boolean;
+    ids?: Array<number | string>;
   }
 ): Promise<AxiosUtilsResponse<PayeeGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
@@ -77,6 +78,7 @@ export async function getPayeesWithGraphQLHeaders(
     active?: boolean;
     id_number_not_empty?: boolean;
     id_number_not_null?: boolean;
+    ids?: Array<number | string>;
   },
 ): Promise<AxiosUtilsResponse<PayeeGraphQL[]>> {
   return handlePossibleAxiosErrors(async () => {
