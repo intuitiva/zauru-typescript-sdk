@@ -42,9 +42,7 @@ export const getProfileInformation = async (headers) => {
     });
 };
 export const changeEntity = async (headers, entityId) => {
-    const changeEntityFetch = await httpZauru.patch(`/company.json`, JSON.stringify({
-        selected_entity_id: entityId,
-    }), {
+    const changeEntityFetch = await httpZauru.patch(`/company.json`, { selected_entity_id: String(entityId) }, {
         headers,
     });
     return changeEntityFetch.data;

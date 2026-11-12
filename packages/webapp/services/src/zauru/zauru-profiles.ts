@@ -68,9 +68,7 @@ export const getProfileInformation = async (
 export const changeEntity = async (headers: any, entityId: string) => {
   const changeEntityFetch = await httpZauru.patch<any>(
     `/company.json`,
-    JSON.stringify({
-      selected_entity_id: entityId,
-    }),
+    { selected_entity_id: String(entityId) },
     {
       headers,
     }
