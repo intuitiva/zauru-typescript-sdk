@@ -175,6 +175,7 @@ query getPurchaseOrder($id: bigint) @cached {
     voided
     received
     discount
+    total
     delivery_date
     other_charges
     shipment_reference
@@ -833,8 +834,19 @@ export const getPayeesStringQuery = (filters?: {
   active?: boolean;
   id_number_not_empty?: boolean;
   id_number_not_null?: boolean;
+  ids?: Array<number | string>;
 }) => {
   const conditions = [];
+  const payeeIds = [
+    ...new Set(
+      (filters?.ids ?? [])
+        .map((id) => Number(id))
+        .filter((id) => Number.isFinite(id) && id > 0),
+    ),
+  ];
+  if (payeeIds.length) {
+    conditions.push(`id: { _in: [${payeeIds.join(",")}] }`);
+  }
 
   const idNumberConditions: string[] = [];
   if (filters?.id_number) {
@@ -869,9 +881,11 @@ export const getPayeesStringQuery = (filters?: {
   const whereClause = conditions.length
     ? `where: { ${conditions.join(", ")} }`
     : "";
+  const limitClause = payeeIds.length ? `limit: ${payeeIds.length},` : "";
 
   return `query getPayees {
             payees (
+              ${limitClause}
               order_by: { id: desc },
               ${whereClause}
             ) {
@@ -2568,6 +2582,48 @@ query getPurchaseOrdersByReference {
 `;
 };
 
+export const getPurchaseOrdersByIdsStringQuery = (
+  purchaseOrderIds: Array<number | string>,
+) => {
+  const ids = [
+    ...new Set(
+      purchaseOrderIds
+        .map((id) => Number(id))
+        .filter((id) => Number.isFinite(id) && id > 0),
+    ),
+  ];
+  const inList = ids.length ? ids.join(",") : "0";
+  const limit = Math.max(ids.length, 1);
+  return `
+query getPurchaseOrdersByIds {
+  purchase_orders(
+    where: { id: { _in: [${inList}] } }
+    limit: ${limit}
+  ) {
+    id
+    id_number
+    total
+    discount
+    memo
+    agency_id
+    issue_date
+    transport_type
+    payee_id
+    purchase_order_details {
+      item_id
+      booked_quantity
+      delivered_quantity
+      unit_cost
+      item {
+        name
+        stocks_only_integer
+      }
+    }
+  }
+}
+`;
+};
+
 export const getDischargeDetailsByPurchaseOrderIdsStringQuery = (
   purchaseOrderIds: Array<number | string>,
 ) => {
@@ -2575,9 +2631,13 @@ export const getDischargeDetailsByPurchaseOrderIdsStringQuery = (
     .map((id) => Number(id))
     .filter((id) => Number.isFinite(id) && id > 0);
   const inList = ids.length ? ids.join(",") : "0";
+  const limit = Math.max(ids.length * 50, 100);
   return `
 query getDischargeDetailsByPurchaseOrderIds {
-  discharge_details(where: { purchase_order_id: { _in: [${inList}] } }) {
+  discharge_details(
+    where: { purchase_order_id: { _in: [${inList}] } }
+    limit: ${limit}
+  ) {
     id
     amount
     exchange_amount
