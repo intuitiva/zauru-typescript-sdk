@@ -261,11 +261,44 @@ export type DischargeDetailsAttributes = {
 
 export type NewDischargeBody = {
   discharge: {
-    id_number: string;
+    id_number?: string;
     payee_id: number | string;
     date: string;
     discharge_method_id: number | string;
+    reference?: string;
+    memo?: string;
     discharge_details_attributes: DischargeDetailsAttributes;
+  };
+};
+
+export type CreateDischargeDetailsBody = {
+  payee_id: number;
+  date: string;
+  discharge_method_id: number;
+  reference?: string;
+  memo?: string;
+  details: { purchase_order_id: number; amount: number }[];
+};
+
+export type CreateEntryBody = {
+  date: string;
+  reference?: string;
+  memo?: string;
+  amount: number;
+  credit_account_id: number;
+  debit_account_id: number;
+};
+
+export type NewEntryBody = {
+  entry: {
+    date: string;
+    reference?: string;
+    memo?: string;
+    account_id: number | string;
+    amount: string;
+    splits_attributes: {
+      [index: number]: { account_id: number | string; amount: string };
+    };
   };
 };
 
