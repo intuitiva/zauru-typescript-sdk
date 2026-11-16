@@ -8,10 +8,6 @@ import { AxiosUtilsResponse, ConsolidateGraphQL, GeneratePDFBody, NewConsolidate
 export declare const createConsolidated: (headers: any, body: NewConsolidatedBody) => Promise<AxiosUtilsResponse<{
     id: number;
 }>>;
-/**
- * DELETE /purchases/consolidates/:id.json — unlinks POs and deletes the consolidate.
- * A 404 is treated as success (already gone).
- */
 export declare const deleteConsolidated: (headers: any, id: number | string) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * generateConsolidatePDF
