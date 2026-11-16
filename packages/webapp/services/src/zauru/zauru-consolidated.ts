@@ -1,4 +1,5 @@
 import type { Session } from "@remix-run/node";
+import { isAxiosError } from "axios";
 import { formatDateToUTC, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import {
   AxiosUtilsResponse,
@@ -31,6 +32,27 @@ export const createConsolidated = async (
     );
 
     return response.data;
+  });
+};
+
+/**
+ * DELETE /purchases/consolidates/:id.json — unlinks POs and deletes the consolidate.
+ * A 404 is treated as success (already gone).
+ */
+export const deleteConsolidated = async (
+  headers: any,
+  id: number | string,
+): Promise<AxiosUtilsResponse<boolean>> => {
+  return handlePossibleAxiosErrors(async () => {
+    try {
+      await httpZauru.delete(`/purchases/consolidates/${id}.json`, { headers });
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 404) {
+        return true;
+      }
+      throw error;
+    }
+    return true;
   });
 };
 
