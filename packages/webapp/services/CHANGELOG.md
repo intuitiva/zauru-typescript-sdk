@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.31.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.30.2...@zauru-sdk/services@6.31.0) (2026-11-16)
+
+
+### Features
+
+* exponer delete de consolidado, egreso y partidas ([98fa159](https://github.com/intuitiva/zauru-typescript-sdk/commit/98fa1591f03d1195ba7276f387427980cc8d7b73))
+
+
+
+
+
 ## [6.30.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.30.0...@zauru-sdk/services@6.30.2) (2026-11-12)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.44.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.43.0...@zauru-sdk/types@6.44.0) (2026-11-16)
+
+
+### Features
+
+* tipar cuerpos de egreso y partida contable ([c8d8fb5](https://github.com/intuitiva/zauru-typescript-sdk/commit/c8d8fb56228e5ba4016d7647d903a61a7b08852e))
+
+
+
+
+
 # [6.43.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.41.0...@zauru-sdk/types@6.43.0) (2026-11-12)
 
 
