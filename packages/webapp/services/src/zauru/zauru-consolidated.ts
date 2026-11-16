@@ -39,6 +39,12 @@ export const createConsolidated = async (
  * DELETE /purchases/consolidates/:id.json — unlinks POs and deletes the consolidate.
  * A 404 is treated as success (already gone).
  */
+function isNotFoundError(error: unknown): boolean {
+  if (isAxiosError(error) && error.response?.status === 404) return true;
+  const message = error instanceof Error ? error.message : String(error);
+  return /\bHTTP 404\b/.test(message);
+}
+
 export const deleteConsolidated = async (
   headers: any,
   id: number | string,
@@ -47,7 +53,7 @@ export const deleteConsolidated = async (
     try {
       await httpZauru.delete(`/purchases/consolidates/${id}.json`, { headers });
     } catch (error) {
-      if (isAxiosError(error) && error.response?.status === 404) {
+      if (isNotFoundError(error)) {
         return true;
       }
       throw error;
