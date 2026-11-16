@@ -1,3 +1,4 @@
+import { isAxiosError } from "axios";
 import { formatDateToUTC, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
@@ -14,6 +15,24 @@ export const createConsolidated = async (headers, body) => {
             headers,
         });
         return response.data;
+    });
+};
+/**
+ * DELETE /purchases/consolidates/:id.json — unlinks POs and deletes the consolidate.
+ * A 404 is treated as success (already gone).
+ */
+export const deleteConsolidated = async (headers, id) => {
+    return handlePossibleAxiosErrors(async () => {
+        try {
+            await httpZauru.delete(`/purchases/consolidates/${id}.json`, { headers });
+        }
+        catch (error) {
+            if (isAxiosError(error) && error.response?.status === 404) {
+                return true;
+            }
+            throw error;
+        }
+        return true;
     });
 };
 /**

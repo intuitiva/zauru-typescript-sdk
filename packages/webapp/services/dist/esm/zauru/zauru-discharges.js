@@ -1,5 +1,5 @@
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
-import { handlePossibleAxiosErrors } from "@zauru-sdk/common";
+import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
 import { getDischargeDetailsByPurchaseOrderIdsStringQuery } from "@zauru-sdk/graphql";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { httpZauru } from "./httpZauru.js";
@@ -16,6 +16,37 @@ export const createDischarge = async (session, headers, body) => {
             headers,
         });
         return response.data;
+    });
+};
+/**
+ * POST /purchases/discharges.json
+ * Generic Baculo create. Does not overwrite discharge_method_id from webapp vars.
+ */
+export const createDischargeFromDetails = async (headers, body) => {
+    return handlePossibleAxiosErrors(async () => {
+        const response = await httpZauru.post(`/purchases/discharges.json`, {
+            discharge: {
+                payee_id: body.payee_id,
+                date: body.date,
+                discharge_method_id: body.discharge_method_id,
+                reference: body.reference,
+                memo: body.memo,
+                discharge_details_attributes: arrayToObject(body.details.map((detail) => ({
+                    purchase_order_id: detail.purchase_order_id,
+                    amount: detail.amount.toFixed(2),
+                }))),
+            },
+        }, { headers });
+        return response.data;
+    });
+};
+/**
+ * DELETE /purchases/discharges/:id.json — voids the discharge and restores PO dues.
+ */
+export const deleteDischarge = async (headers, id) => {
+    return handlePossibleAxiosErrors(async () => {
+        await httpZauru.delete(`/purchases/discharges/${id}.json`, { headers });
+        return true;
     });
 };
 /**
