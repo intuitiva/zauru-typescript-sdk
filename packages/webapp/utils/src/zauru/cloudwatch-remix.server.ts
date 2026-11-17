@@ -45,7 +45,7 @@ export async function handleError(
   if (request.signal.aborted) return;
   if (isRouteErrorResponse(error) && error.status < 500) return;
 
-  const message =
+  const rawMessage =
     error instanceof Error
       ? error.message
       : isRouteErrorResponse(error)
@@ -54,12 +54,17 @@ export async function handleError(
           ? String((error as { message: unknown }).message)
           : String(error);
 
+  // Los timeouts de `handlePossibleAxiosErrors` llegan como `TIMEOUT:25s`.
+  // Se marcan aparte para poder filtrarlos y alertar sobre ellos sin ruido.
+  const isTimeout = rawMessage.startsWith("TIMEOUT:");
+
   await logError("server", {
-    message,
+    message: rawMessage,
     stack: error instanceof Error ? error.stack : undefined,
     url: request.url,
     method: request.method,
     source: request.method.toUpperCase() === "GET" ? "loader" : "action",
+    ...(isTimeout ? { category: "timeout" } : {}),
   });
 }
 

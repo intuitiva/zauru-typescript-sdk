@@ -823,6 +823,8 @@ export type AxiosUtilsResponse<T> = {
   msg?: string;
   userMsg?: string;
   data?: T;
+  /** `true` cuando la llamada no terminó dentro del timeout permitido. */
+  timeout?: boolean;
 };
 
 export type MonthsType = {
