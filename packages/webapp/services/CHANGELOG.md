@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.32.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.31.0...@zauru-sdk/services@6.32.0) (2026-11-17)
+
+
+### Bug Fixes
+
+* reconocer 404 de consolidado cuando httpZauru envuelve el error ([48f9163](https://github.com/intuitiva/zauru-typescript-sdk/commit/48f9163499a141f33f51fb01cc827d84e1df15a9))
+
+
+### Features
+
+* consultar tagging_purchase_orders y tagging_cases en lugar de taggings ([da849b7](https://github.com/intuitiva/zauru-typescript-sdk/commit/da849b7587c13b5328c067f3a27f009036f434dc))
+
+
+
+
+
 # [6.31.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.30.2...@zauru-sdk/services@6.31.0) (2026-11-16)
 
 

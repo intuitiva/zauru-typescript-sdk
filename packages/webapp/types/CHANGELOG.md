@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.45.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.44.0...@zauru-sdk/types@6.45.0) (2026-11-17)
+
+
+### Features
+
+* consultar tagging_purchase_orders y tagging_cases en lugar de taggings ([da849b7](https://github.com/intuitiva/zauru-typescript-sdk/commit/da849b7587c13b5328c067f3a27f009036f434dc))
+
+
+
+
+
 # [6.44.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/types@6.43.0...@zauru-sdk/types@6.44.0) (2026-11-16)
 
 
