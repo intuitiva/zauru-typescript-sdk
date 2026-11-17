@@ -757,7 +757,12 @@ async function handlePossibleAxiosErrors(action, timeout) {
             const result = await Promise.race([
                 action(),
                 new Promise((_, reject) => {
-                    timer = setTimeout(() => reject(new Error(`Timeout skipped after ${seconds} seconds`)), seconds * 1000);
+                    timer = setTimeout(() => {
+                        reject(Object.assign(new Error(`TIMEOUT:${seconds}s`), {
+                            isTimeout: true,
+                            timeoutSeconds: seconds,
+                        }));
+                    }, seconds * 1000);
                 }),
             ]);
             return { error: false, data: result };
@@ -768,9 +773,14 @@ async function handlePossibleAxiosErrors(action, timeout) {
         }
     }
     catch (error) {
+        const isTimeout = error instanceof Error &&
+            error.isTimeout === true;
         return {
             error: true,
-            userMsg: `Error message: ${error?.toString()}`,
+            userMsg: isTimeout
+                ? `${error.message} (la consulta no terminó a tiempo)`
+                : `Error message: ${error?.toString()}`,
+            timeout: isTimeout,
         };
     }
 }
