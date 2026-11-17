@@ -717,7 +717,9 @@ export const getPurchaseOrdersBetweenDatesStringQuery = (
   }
 
   if (config.tagId) {
-    conditions.push(`taggings: { tag_id: { _eq: ${config.tagId} } }`);
+    conditions.push(
+      `tagging_purchase_orders: { tag_id: { _eq: ${config.tagId} } }`,
+    );
   }
 
   const whereClause = conditions.length
@@ -2405,7 +2407,7 @@ export const getCasesStringQuery = (
 
   if (filters?.tag_id) {
     conditions.push(
-      `taggings: {tag_id: {_eq: ${filters.tag_id}}, taggeable_type: {_eq: "Case"}}`,
+      `tagging_cases: {tag_id: {_eq: ${filters.tag_id}}}`,
     );
   }
 

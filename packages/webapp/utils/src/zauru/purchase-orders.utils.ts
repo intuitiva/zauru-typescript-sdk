@@ -885,7 +885,9 @@ export const createNewLabItemRequest = (
           tag_id: Number(laboratory_proyect_id),
         };
       }),
-      taggings: [{ tag_id: Number(laboratory_proyect_id) }],
+      tagging_purchase_orders: [
+        { tag_id: Number(laboratory_proyect_id) },
+      ],
     } as Partial<PurchaseOrderGraphQL>;
 
     const response = await createNewPurchaseOrder(headers, sendBody);

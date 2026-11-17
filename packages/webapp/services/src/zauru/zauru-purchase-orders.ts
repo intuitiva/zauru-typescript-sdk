@@ -17,7 +17,7 @@ import {
   PurchaseOrderGraphQL,
   PurchasesListResponseSchema,
   SelectFieldOption,
-  TaggingGraphQL,
+  TaggingPurchaseOrderGraphQL,
   UpdatePurchaseOrderBody,
 } from "@zauru-sdk/types";
 import { httpZauru } from "./httpZauru.js";
@@ -63,10 +63,10 @@ export const markAsReceivePurchaseOrder = (
  * @returns
  */
 export type CreateNewPurchaseOrderType = Partial<
-  Omit<PurchaseOrderGraphQL, "taggings" | "purchase_order_details">
+  Omit<PurchaseOrderGraphQL, "tagging_purchase_orders" | "purchase_order_details">
 > & {
   purchase_order_details?: Partial<PurchaseOrderDetailsGraphQL>[];
-  taggings?: Partial<TaggingGraphQL>[];
+  tagging_purchase_orders?: Partial<TaggingPurchaseOrderGraphQL>[];
   force_preauthorized?: boolean;
 };
 export const createNewPurchaseOrder = (
@@ -81,12 +81,13 @@ export const createNewPurchaseOrder = (
       ),
       tag_ids: [
         "",
-        ...(body?.taggings?.map((x) => x?.tag_id?.toString()) ?? []),
+        ...(body?.tagging_purchase_orders?.map((x) => x?.tag_id?.toString()) ??
+          []),
       ],
     } as any;
 
     delete sendBody.__rvfInternalFormId;
-    delete sendBody.taggings;
+    delete sendBody.tagging_purchase_orders;
     delete sendBody.purchase_order_details;
 
     sendBody = {

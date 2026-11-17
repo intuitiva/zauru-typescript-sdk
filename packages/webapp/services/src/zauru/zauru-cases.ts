@@ -76,13 +76,13 @@ export async function createCase(
     const sendBody = {
       ...body,
       case_supplies_attributes: arrayToObject(body.case_supplies),
-      tag_ids: ["", ...(body.taggings?.map((x) => x.tag_id) ?? [])],
+      tag_ids: ["", ...(body.tagging_cases?.map((x) => x.tag_id) ?? [])],
     } as any;
 
     if (sendBody.deleted_case_supplies) delete sendBody.deleted_case_supplies;
     if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
     if (sendBody.case_supplies) delete sendBody.case_supplies;
-    if (sendBody.taggings) delete sendBody.taggings;
+    if (sendBody.tagging_cases) delete sendBody.tagging_cases;
 
     const response = await httpZauru.post<CaseGraphQL>(
       `/support/cases.json`,
@@ -192,13 +192,13 @@ export async function createPOSCase(
     const sendBody = {
       ...body,
       case_supplies_attributes: arrayToObject(body.case_supplies),
-      tag_ids: ["", ...(body.taggings?.map((x) => x.tag_id) ?? [])],
+      tag_ids: ["", ...(body.tagging_cases?.map((x) => x.tag_id) ?? [])],
     } as any;
 
     if (sendBody.deleted_case_supplies) delete sendBody.deleted_case_supplies;
     if (sendBody.__rvfInternalFormId) delete sendBody.__rvfInternalFormId;
     if (sendBody.case_supplies) delete sendBody.case_supplies;
-    if (sendBody.taggings) delete sendBody.taggings;
+    if (sendBody.tagging_cases) delete sendBody.tagging_cases;
 
     const response = await httpZauru.post<CaseGraphQL>(
       `/pos/cases.json`,
