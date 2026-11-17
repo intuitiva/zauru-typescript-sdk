@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.17.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.16.11...@zauru-sdk/common@6.17.0) (2026-11-17)
+
+
+### Features
+
+* marcar los timeouts como TIMEOUT y registrarlos en CloudWatch ([493d0b4](https://github.com/intuitiva/zauru-typescript-sdk/commit/493d0b4b71fc8d872461dfe5b069d41b859fa334))
+
+
+
+
+
 ## [6.16.11](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/common@6.16.10...@zauru-sdk/common@6.16.11) (2026-11-17)
 
 **Note:** Version bump only for package @zauru-sdk/common
