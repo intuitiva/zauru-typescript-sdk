@@ -550,7 +550,7 @@ const getPurchaseOrdersBetweenDatesStringQuery = (startDate, endDate, config) =>
         conditions.push(`discount: { ${config.discountComparisonOperator}: ${config.discount} }`);
     }
     if (config.tagId) {
-        conditions.push(`taggings: { tag_id: { _eq: ${config.tagId} } }`);
+        conditions.push(`tagging_purchase_orders: { tag_id: { _eq: ${config.tagId} } }`);
     }
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} }`
@@ -2011,7 +2011,7 @@ const getCasesStringQuery = (filters, includes) => {
         conditions.push(`closed: {_eq: ${filters.closed}}`);
     }
     if (filters?.tag_id) {
-        conditions.push(`taggings: {tag_id: {_eq: ${filters.tag_id}}, taggeable_type: {_eq: "Case"}}`);
+        conditions.push(`tagging_cases: {tag_id: {_eq: ${filters.tag_id}}}`);
     }
     const whereClause = conditions.length
         ? `where: { ${conditions.join(", ")} },`

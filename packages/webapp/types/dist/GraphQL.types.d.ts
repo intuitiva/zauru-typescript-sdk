@@ -103,6 +103,55 @@ export type TaggingGraphQL = {
     taggeable_id: number;
     taggeable_type: "Case" | "CreditNote" | "PurchaseOrder" | "Discharge" | "Payee" | "Charge" | "Item" | "Bundle";
 };
+/** Fila de `tagging_purchase_orders`: relación N:M entre una OC y un tag. */
+export type TaggingPurchaseOrderGraphQL = {
+    id: number;
+    purchase_order_id: number;
+    tag_id: number;
+    entity_id: number;
+};
+/** Fila de `tagging_cases`: relación N:M entre un caso y un tag. */
+export type TaggingCaseGraphQL = {
+    id: number;
+    case_id: number;
+    tag_id: number;
+    entity_id: number;
+};
+/** Fila de `tagging_payees`: relación N:M entre un beneficiario y un tag. */
+export type TaggingPayeeGraphQL = {
+    id: number;
+    payee_id: number;
+    tag_id: number;
+    entity_id: number;
+};
+/** Fila de `tagging_bundles`: relación N:M entre un paquete y un tag. */
+export type TaggingBundleGraphQL = {
+    id: number;
+    bundle_id: number;
+    tag_id: number;
+    entity_id: number;
+};
+/** Fila de `tagging_charges`: relación N:M entre un cargo y un tag. */
+export type TaggingChargeGraphQL = {
+    id: number;
+    charge_id: number;
+    tag_id: number;
+    entity_id: number;
+};
+/** Fila de `tagging_credit_notes`: relación N:M entre una nota de crédito y un tag. */
+export type TaggingCreditNoteGraphQL = {
+    id: number;
+    credit_note_id: number;
+    tag_id: number;
+    entity_id: number;
+};
+/** Fila de `tagging_discharges`: relación N:M entre una descarga y un tag. */
+export type TaggingDischargeGraphQL = {
+    id: number;
+    discharge_id: number;
+    tag_id: number;
+    entity_id: number;
+};
 export type PurchaseOrderGraphQL = {
     id: number;
     zid: number;
@@ -147,7 +196,7 @@ export type PurchaseOrderGraphQL = {
     lots: LotGraphQL[];
     receptions: ReceptionGraphQL[];
     shipment_purchase_orders: ShipmentPurchaseOrderGraphQL[];
-    taggings: TaggingGraphQL[];
+    tagging_purchase_orders: TaggingPurchaseOrderGraphQL[];
     payee: PayeeGraphQL;
     discharge_details?: DischargeDetailGraphQL[];
 };
@@ -570,7 +619,7 @@ export type CaseGraphQL = {
     case_supplies: CaseSupplyGraphQL[];
     case_invoices: CaseInvoiceGraphQL[];
     submission_cases: SubmissionCasesGraphQL[];
-    taggings: TaggingGraphQL[];
+    tagging_cases: TaggingCaseGraphQL[];
     serial: SerialGraphQL;
     responsible: EmployeeGraphQL;
     client: PayeeGraphQL;

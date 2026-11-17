@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, BasketSchema, DataTablesFilterBody, HTMLPurchasesListSchema, NewPurchaseOrderResponse, PurchaseOrderDetailsGraphQL, PurchaseOrderGraphQL, PurchasesListResponseSchema, TaggingGraphQL, UpdatePurchaseOrderBody } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, BasketSchema, DataTablesFilterBody, HTMLPurchasesListSchema, NewPurchaseOrderResponse, PurchaseOrderDetailsGraphQL, PurchaseOrderGraphQL, PurchasesListResponseSchema, TaggingPurchaseOrderGraphQL, UpdatePurchaseOrderBody } from "@zauru-sdk/types";
 /**
  * markAsReceivePurchaseOrder
  * Esta función sólo se utiliza cuando se van a marcar como recibida toda la órden de compra, se recibe todo lo que se envío
@@ -17,9 +17,9 @@ export declare const markAsReceivePurchaseOrder: (headers: any, body: Partial<Pu
  * @param body
  * @returns
  */
-export type CreateNewPurchaseOrderType = Partial<Omit<PurchaseOrderGraphQL, "taggings" | "purchase_order_details">> & {
+export type CreateNewPurchaseOrderType = Partial<Omit<PurchaseOrderGraphQL, "tagging_purchase_orders" | "purchase_order_details">> & {
     purchase_order_details?: Partial<PurchaseOrderDetailsGraphQL>[];
-    taggings?: Partial<TaggingGraphQL>[];
+    tagging_purchase_orders?: Partial<TaggingPurchaseOrderGraphQL>[];
     force_preauthorized?: boolean;
 };
 export declare const createNewPurchaseOrder: (headers: any, body: CreateNewPurchaseOrderType) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;

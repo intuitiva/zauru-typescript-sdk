@@ -30,11 +30,12 @@ export const createNewPurchaseOrder = (headers, body) => {
             purchase_order_details_attributes: arrayToObject(body?.purchase_order_details),
             tag_ids: [
                 "",
-                ...(body?.taggings?.map((x) => x?.tag_id?.toString()) ?? []),
+                ...(body?.tagging_purchase_orders?.map((x) => x?.tag_id?.toString()) ??
+                    []),
             ],
         };
         delete sendBody.__rvfInternalFormId;
-        delete sendBody.taggings;
+        delete sendBody.tagging_purchase_orders;
         delete sendBody.purchase_order_details;
         sendBody = {
             purchase_order: sendBody,

@@ -38,7 +38,7 @@ export async function createCase(headers, body) {
         const sendBody = {
             ...body,
             case_supplies_attributes: arrayToObject(body.case_supplies),
-            tag_ids: ["", ...(body.taggings?.map((x) => x.tag_id) ?? [])],
+            tag_ids: ["", ...(body.tagging_cases?.map((x) => x.tag_id) ?? [])],
         };
         if (sendBody.deleted_case_supplies)
             delete sendBody.deleted_case_supplies;
@@ -46,8 +46,8 @@ export async function createCase(headers, body) {
             delete sendBody.__rvfInternalFormId;
         if (sendBody.case_supplies)
             delete sendBody.case_supplies;
-        if (sendBody.taggings)
-            delete sendBody.taggings;
+        if (sendBody.tagging_cases)
+            delete sendBody.tagging_cases;
         const response = await httpZauru.post(`/support/cases.json`, { case: sendBody }, { headers });
         return response.data;
     });
@@ -127,7 +127,7 @@ export async function createPOSCase(headers, body) {
         const sendBody = {
             ...body,
             case_supplies_attributes: arrayToObject(body.case_supplies),
-            tag_ids: ["", ...(body.taggings?.map((x) => x.tag_id) ?? [])],
+            tag_ids: ["", ...(body.tagging_cases?.map((x) => x.tag_id) ?? [])],
         };
         if (sendBody.deleted_case_supplies)
             delete sendBody.deleted_case_supplies;
@@ -135,8 +135,8 @@ export async function createPOSCase(headers, body) {
             delete sendBody.__rvfInternalFormId;
         if (sendBody.case_supplies)
             delete sendBody.case_supplies;
-        if (sendBody.taggings)
-            delete sendBody.taggings;
+        if (sendBody.tagging_cases)
+            delete sendBody.tagging_cases;
         const response = await httpZauru.post(`/pos/cases.json`, { case: sendBody }, { headers });
         return response.data;
     });
