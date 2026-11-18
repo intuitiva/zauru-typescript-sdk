@@ -10,7 +10,11 @@ import {
 } from "@zauru-sdk/types";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { getDischargeDetailsByPurchaseOrderIdsStringQuery } from "@zauru-sdk/graphql";
+import {
+  getDischargeDetailsByPurchaseOrderIdsStringQuery,
+  getDischargeMethodsStringQuery,
+  getDischargesByReferenceStringQuery,
+} from "@zauru-sdk/graphql";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { httpZauru } from "./httpZauru.js";
 
@@ -207,5 +211,63 @@ export const getDischargeDetailsByPurchaseOrderIds = (
       }
       return collected;
     }
+  });
+};
+
+/**
+ * Métodos de egreso activos de la entidad seleccionada.
+ * @param graphqlHeaders headers GraphQL de la entidad (ver `withSelectedEntity`).
+ */
+export const getDischargeMethodsWithGraphQLHeaders = (
+  graphqlHeaders: Record<string, string>
+): Promise<
+  AxiosUtilsResponse<{ id: number; name: string; account_id: number; active: boolean }[]>
+> => {
+  return handlePossibleAxiosErrors(async () => {
+    const response = await httpGraphQLAPI.post<{
+      data?: {
+        discharge_methods?: {
+          id: number;
+          name: string;
+          account_id: number;
+          active: boolean;
+        }[];
+      };
+      errors?: { message: string }[];
+    }>("", { query: getDischargeMethodsStringQuery }, { headers: graphqlHeaders });
+
+    if (response.data?.errors?.length) {
+      throw new Error(
+        response.data.errors.map((error) => error.message).join(";")
+      );
+    }
+    return response.data?.data?.discharge_methods ?? [];
+  });
+};
+
+/**
+ * Primer descargo no anulado con esa referencia; sirve para no duplicarlo.
+ * @param graphqlHeaders headers GraphQL de la entidad destino.
+ */
+export const getDischargeByReferenceWithGraphQLHeaders = (
+  graphqlHeaders: Record<string, string>,
+  reference: string
+): Promise<AxiosUtilsResponse<{ id: number; reference: string; amount: number } | null>> => {
+  return handlePossibleAxiosErrors(async () => {
+    const response = await httpGraphQLAPI.post<{
+      data?: { discharges?: { id: number; reference: string; amount: number }[] };
+      errors?: { message: string }[];
+    }>(
+      "",
+      { query: getDischargesByReferenceStringQuery(reference) },
+      { headers: graphqlHeaders }
+    );
+
+    if (response.data?.errors?.length) {
+      throw new Error(
+        response.data.errors.map((error) => error.message).join(";")
+      );
+    }
+    return response.data?.data?.discharges?.[0] ?? null;
   });
 };

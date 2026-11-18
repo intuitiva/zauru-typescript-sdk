@@ -2658,3 +2658,76 @@ query getDischargeDetailsByPurchaseOrderIds {
 }
 `;
 };
+
+/**
+ * Métodos de egreso de la entidad seleccionada. `purchases/discharges` usa
+ * uno por descargo, y el nombre lo elige cada app.
+ */
+export const getDischargeMethodsStringQuery = `
+query getDischargeMethods {
+  discharge_methods(where: { active: { _eq: true } }, order_by: { id: asc }) {
+    id
+    name
+    account_id
+    active
+  }
+}
+`;
+
+/** Un descargo por su referencia, para detectar duplicados antes de crear. */
+export const getDischargesByReferenceStringQuery = (reference: string) => `
+query getDischargesByReference {
+  discharges(
+    where: { reference: { _eq: ${JSON.stringify(reference)} }, voided: { _eq: false } }
+    limit: 1
+  ) {
+    id
+    reference
+    amount
+  }
+}
+`;
+
+/** Items de la entidad seleccionada por código exacto. */
+export const getItemByCodeStringQuery = (code: string) => `
+query getItemByCode {
+  items(where: { code: { _eq: ${JSON.stringify(code)} } }, limit: 1) {
+    id
+    code
+    name
+  }
+}
+`;
+
+/**
+ * OCs de uno o más consolidados, con el item facturado en cada línea.
+ * Una OC de 4 Pinos lleva un solo producto repetido en sus pesadas.
+ */
+export const getPurchaseOrdersByConsolidateIdsStringQuery = (
+  consolidateIds: Array<number | string>,
+) => {
+  const ids = consolidateIds
+    .map((id) => Number(id))
+    .filter((id) => Number.isFinite(id) && id > 0);
+  const inList = ids.length ? ids.join(",") : "0";
+  return `
+query getPurchaseOrdersByConsolidateIds {
+  purchase_orders(
+    where: { consolidate_id: { _in: [${inList}] } }
+    order_by: { id: asc }
+  ) {
+    id
+    id_number
+    total
+    due
+    issue_date
+    payee_id
+    voided
+    consolidate_id
+    purchase_order_details {
+      item_id
+    }
+  }
+}
+`;
+};

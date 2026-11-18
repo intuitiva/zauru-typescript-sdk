@@ -29,6 +29,7 @@ import {
   getPurchaseOrderStringQuery,
   getPurchaseOrdersBetweenDatesStringQuery,
   getPurchaseOrdersByIdsStringQuery,
+  getPurchaseOrdersByConsolidateIdsStringQuery,
   getPurchaseOrdersByReferenceStringQuery,
 } from "@zauru-sdk/graphql";
 
@@ -878,5 +879,46 @@ export const getPurchasesOrderByIdNumber = (
     }
 
     return response.data?.data?.purchase_orders;
+  });
+};
+
+/**
+ * OCs de uno o más consolidados con el item facturado en cada línea.
+ * La entidad es la de `session`; para otra entidad usar `withSelectedEntity`.
+ */
+export const getPurchaseOrdersByConsolidateIds = (
+  session: Session,
+  consolidateIds: Array<number | string>,
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
+  return handlePossibleAxiosErrors(async () => {
+    const ids = [
+      ...new Set(
+        consolidateIds
+          .map((id) => Number(id))
+          .filter((id) => Number.isFinite(id) && id > 0),
+      ),
+    ];
+    if (ids.length === 0) return [];
+
+    const headers = await getGraphQLAPIHeaders(session);
+    const collected: PurchaseOrderGraphQL[] = [];
+    for (let index = 0; index < ids.length; index += GRAPHQL_ID_CHUNK) {
+      const chunk = ids.slice(index, index + GRAPHQL_ID_CHUNK);
+      const response = await httpGraphQLAPI.post<{
+        data?: { purchase_orders?: PurchaseOrderGraphQL[] };
+        errors?: { message: string }[];
+      }>(
+        "",
+        { query: getPurchaseOrdersByConsolidateIdsStringQuery(chunk) },
+        { headers },
+      );
+      if (response.data?.errors?.length) {
+        throw new Error(
+          response.data.errors.map((error) => error.message).join(";"),
+        );
+      }
+      collected.push(...(response.data?.data?.purchase_orders ?? []));
+    }
+    return collected;
   });
 };

@@ -16,6 +16,7 @@ import {
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import {
+  getItemByCodeStringQuery,
   getItemByNameStringQuery,
   getItemCategoryByIdStringQuery,
   getItemsByCategoryStringQuery,
@@ -469,5 +470,28 @@ export async function deleteItem(
       headers,
     });
     return true;
+  });
+}
+
+/**
+ * Item por código exacto en la entidad de `graphqlHeaders`.
+ * El código es único por entidad, así que sirve para reutilizar antes de crear.
+ */
+export async function getItemByCodeWithGraphQLHeaders(
+  graphqlHeaders: Record<string, string>,
+  code: string
+): Promise<AxiosUtilsResponse<{ id: number; code: string; name: string } | null>> {
+  return handlePossibleAxiosErrors(async () => {
+    const response = await httpGraphQLAPI.post<{
+      data?: { items?: { id: number; code: string; name: string }[] };
+      errors?: { message: string }[];
+    }>("", { query: getItemByCodeStringQuery(code) }, { headers: graphqlHeaders });
+
+    if (response.data?.errors?.length) {
+      throw new Error(
+        response.data.errors.map((error) => error.message).join(";")
+      );
+    }
+    return response.data?.data?.items?.[0] ?? null;
   });
 }
