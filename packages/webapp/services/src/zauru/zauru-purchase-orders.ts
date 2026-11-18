@@ -44,6 +44,7 @@ import {
 export const markAsReceivePurchaseOrder = (
   headers: any,
   body: Partial<PurchaseOrderGraphQL> & { fechaVencimiento?: string },
+  entityId: number | string,
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = { ...body };
@@ -51,7 +52,11 @@ export const markAsReceivePurchaseOrder = (
     if (sendBody.fechaVencimiento) {
       await receiveLotPurchaseOrder(headers, sendBody as any);
     } else {
-      await receivePurchaseOrder(headers, sendBody as any);
+      await receivePurchaseOrder(
+        headers,
+        body as PurchaseOrderGraphQL,
+        entityId,
+      );
     }
     return true;
   });
@@ -185,6 +190,7 @@ export const createNewAuthorizedPurchaseOrder = (
   headers: any,
   body: CreateNewPurchaseOrderType,
   withReceive: boolean = true,
+  entityId?: number | string,
 ): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>> => {
   return handlePossibleAxiosErrors(async () => {
     const sendBody = {
@@ -192,8 +198,14 @@ export const createNewAuthorizedPurchaseOrder = (
       purchase_order_details_attributes: arrayToObject(
         body?.purchase_order_details,
       ),
+      tag_ids: [
+        "",
+        ...(body?.tagging_purchase_orders?.map((x) => x?.tag_id?.toString()) ??
+          []),
+      ],
     } as any;
-
+    delete sendBody.tagging_purchase_orders;
+    delete sendBody.purchase_order_details;
     const response = await httpZauru.post<PurchaseOrderGraphQL>(
       `/purchases/purchase_orders.json`,
       { purchase_order: sendBody },
@@ -206,10 +218,15 @@ export const createNewAuthorizedPurchaseOrder = (
     );
 
     if (withReceive) {
+      if (!entityId) {
+        throw new Error(
+          "createNewAuthorizedPurchaseOrder: falta entityId para marcar la OC como recibida",
+        );
+      }
       if (sendBody.fechaVencimiento) {
         await receiveLotPurchaseOrder(headers, response.data as any);
       } else {
-        await receivePurchaseOrder(headers, response.data);
+        await receivePurchaseOrder(headers, response.data, entityId);
       }
     }
 
@@ -277,35 +294,43 @@ export const receiveLotPurchaseOrder = (
 
 /**
  * receivePurchaseOrder
+ *
+ * Marca una OC como recibida por completo. Crea la recepción en
+ * `POST /purchases/purchase_orders/:id/receptions.json`.
+ *
+ * Requiere `entity_id` en el cuerpo: sin él Zauru responde 500 (el modelo
+ * `Reception` no puede resolver la entidad).
+ *
+ * `entityId` es la entidad dueña de la OC (la misma de `headers`).
+ *
  * @param headers
- * @param body
- * @returns
+ * @param body OC creada; debe traer `id`, `agency_id` y sus detalles.
+ * @param entityId entidad de la OC.
  */
 export const receivePurchaseOrder = (
   headers: any,
   body: PurchaseOrderGraphQL,
+  entityId: number | string,
 ): Promise<AxiosUtilsResponse<boolean>> => {
   return handlePossibleAxiosErrors(async () => {
+    const details = (body.purchase_order_details ?? []).filter(
+      (detail) => Number(detail?.id) > 0,
+    );
     const sendBody = {
       agency_id: body.agency_id,
-      delivery_date: body.issue_date,
-      id: body.id,
-      needs_transit: false,
-      purchase_order_details_attributes: arrayToObject(
-        body.purchase_order_details?.map((x: any) => {
-          const newDetail = {
-            id: x.id,
-            delivered_quantity: x.delivered_quantity,
-            booked_quantity: x.booked_quantity,
-            item_id: x.item_id,
-          } as any;
-          return newDetail;
-        }),
-      ),
+      entity_id: Number(entityId),
+      purchase_order_id: body.id,
+      // La fecha de recepción es la de la OC: el evento contable es el mismo.
+      received_at: body.issue_date,
+      reception_details_attributes: details.map((detail) => ({
+        purchase_order_detail_id: detail.id,
+        item_id: detail.item_id,
+        quantity: detail.booked_quantity ?? detail.delivered_quantity ?? 1,
+      })),
     };
-    await httpZauru.patch<any>(
-      `/purchases/purchase_orders/${body.id}/receive_action`,
-      { purchase_order: sendBody },
+    await httpZauru.post<any>(
+      `/purchases/purchase_orders/${body.id}/receptions.json`,
+      { reception: sendBody },
       { headers },
     );
     return true;
