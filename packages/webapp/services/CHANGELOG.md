@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.34.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.34.0...@zauru-sdk/services@6.34.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* recibir la OC por el endpoint de recepciones ([40edae1](https://github.com/intuitiva/zauru-typescript-sdk/commit/40edae154837a25a8806dde61b03f7b7e2bc0224))
+
+
+
+
+
 # [6.34.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.33.0...@zauru-sdk/services@6.34.0) (2026-11-18)
 
 
