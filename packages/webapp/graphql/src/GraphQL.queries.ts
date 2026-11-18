@@ -2731,3 +2731,15 @@ query getPurchaseOrdersByConsolidateIds {
 }
 `;
 };
+
+/** Tags de la entidad seleccionada, por nombre exacto. */
+export const getTagByNameStringQuery = (name: string) => `
+query getTagByName {
+  tags(where: { name: { _eq: ${JSON.stringify(name)} } }, limit: 1) {
+    id
+    name
+    description
+    active
+  }
+}
+`;
