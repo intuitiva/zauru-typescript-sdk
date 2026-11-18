@@ -233,3 +233,5 @@ export declare const getItemByCodeStringQuery: (code: string) => string;
  * Una OC de 4 Pinos lleva un solo producto repetido en sus pesadas.
  */
 export declare const getPurchaseOrdersByConsolidateIdsStringQuery: (consolidateIds: Array<number | string>) => string;
+/** Tags de la entidad seleccionada, por nombre exacto. */
+export declare const getTagByNameStringQuery: (name: string) => string;
