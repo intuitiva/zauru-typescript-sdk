@@ -6,11 +6,12 @@ import { AxiosUtilsResponse, BasketSchema, DataTablesFilterBody, HTMLPurchasesLi
  * si se quiere recibir parcialmente, utilizar el endpoint de /receptions
  * @param headers
  * @param body
+ * @param entityId opcional; si no viene, se usa `body.entity_id` o headers
  * @returns
  */
 export declare const markAsReceivePurchaseOrder: (headers: any, body: Partial<PurchaseOrderGraphQL> & {
     fechaVencimiento?: string;
-}, entityId: number | string) => Promise<AxiosUtilsResponse<boolean>>;
+}, entityId?: number | string) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * createNewPurchaseOrder
  * @param headers
@@ -54,16 +55,17 @@ export declare const receiveLotPurchaseOrder: (headers: any, body: PurchaseOrder
  * Marca una OC como recibida por completo. Crea la recepción en
  * `POST /purchases/purchase_orders/:id/receptions.json`.
  *
- * Requiere `entity_id` en el cuerpo: sin él Zauru responde 500 (el modelo
- * `Reception` no puede resolver la entidad).
+ * Baculo espera `entity_id` en el body de la recepción (el form HTML lo
+ * manda como hidden desde la OC). Si no lo envías, el after_create falla.
  *
- * `entityId` es la entidad dueña de la OC (la misma de `headers`).
+ * `entityId` es opcional para no romper callers legacy: se resuelve como
+ * `entityId ?? body.entity_id ?? headers.selected_entity_id`.
  *
  * @param headers
  * @param body OC creada; debe traer `id`, `agency_id` y sus detalles.
- * @param entityId entidad de la OC.
+ * @param entityId entidad de la OC (opcional).
  */
-export declare const receivePurchaseOrder: (headers: any, body: PurchaseOrderGraphQL, entityId: number | string) => Promise<AxiosUtilsResponse<boolean>>;
+export declare const receivePurchaseOrder: (headers: any, body: PurchaseOrderGraphQL, entityId?: number | string) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  *
  * @param headers

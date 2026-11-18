@@ -4,11 +4,27 @@ import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, getPurchaseOrdersByIdsStringQuery, getPurchaseOrdersByConsolidateIdsStringQuery, getPurchaseOrdersByReferenceStringQuery, } from "@zauru-sdk/graphql";
 /**
+ * Resuelve la entidad para crear una recepción.
+ * Opcional: callers legacy no la pasan; se toma de la OC o de headers.
+ */
+const resolveReceptionEntityId = (body, entityId, headers) => {
+    const fromHeaders = headers?.selected_entity_id ??
+        headers?.selectedEntity ??
+        headers?.["selected-entity-id"];
+    const raw = entityId ?? body.entity_id ?? fromHeaders;
+    const parsed = Number(raw);
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+        throw new Error("receivePurchaseOrder: falta entity_id (pásalo, o asegúrate de que la OC traiga entity_id)");
+    }
+    return parsed;
+};
+/**
  * markAsReceivePurchaseOrder
  * Esta función sólo se utiliza cuando se van a marcar como recibida toda la órden de compra, se recibe todo lo que se envío
  * si se quiere recibir parcialmente, utilizar el endpoint de /receptions
  * @param headers
  * @param body
+ * @param entityId opcional; si no viene, se usa `body.entity_id` o headers
  * @returns
  */
 export const markAsReceivePurchaseOrder = (headers, body, entityId) => {
@@ -106,14 +122,15 @@ export const createNewAuthorizedPurchaseOrder = (headers, body, withReceive = tr
         const response = await httpZauru.post(`/purchases/purchase_orders.json`, { purchase_order: sendBody }, { headers });
         await httpZauru.get(`/purchases/purchase_orders/${response.data.id}/authorize.json`, { headers });
         if (withReceive) {
-            if (!entityId) {
-                throw new Error("createNewAuthorizedPurchaseOrder: falta entityId para marcar la OC como recibida");
-            }
+            const poForReceive = {
+                ...response.data,
+                entity_id: response.data.entity_id ?? body.entity_id ?? entityId,
+            };
             if (sendBody.fechaVencimiento) {
-                await receiveLotPurchaseOrder(headers, response.data);
+                await receiveLotPurchaseOrder(headers, poForReceive);
             }
             else {
-                await receivePurchaseOrder(headers, response.data, entityId);
+                await receivePurchaseOrder(headers, poForReceive, entityId);
             }
         }
         return response.data;
@@ -166,21 +183,22 @@ export const receiveLotPurchaseOrder = (headers, body) => {
  * Marca una OC como recibida por completo. Crea la recepción en
  * `POST /purchases/purchase_orders/:id/receptions.json`.
  *
- * Requiere `entity_id` en el cuerpo: sin él Zauru responde 500 (el modelo
- * `Reception` no puede resolver la entidad).
+ * Baculo espera `entity_id` en el body de la recepción (el form HTML lo
+ * manda como hidden desde la OC). Si no lo envías, el after_create falla.
  *
- * `entityId` es la entidad dueña de la OC (la misma de `headers`).
+ * `entityId` es opcional para no romper callers legacy: se resuelve como
+ * `entityId ?? body.entity_id ?? headers.selected_entity_id`.
  *
  * @param headers
  * @param body OC creada; debe traer `id`, `agency_id` y sus detalles.
- * @param entityId entidad de la OC.
+ * @param entityId entidad de la OC (opcional).
  */
 export const receivePurchaseOrder = (headers, body, entityId) => {
     return handlePossibleAxiosErrors(async () => {
         const details = (body.purchase_order_details ?? []).filter((detail) => Number(detail?.id) > 0);
         const sendBody = {
             agency_id: body.agency_id,
-            entity_id: Number(entityId),
+            entity_id: resolveReceptionEntityId(body, entityId, headers),
             purchase_order_id: body.id,
             // La fecha de recepción es la de la OC: el evento contable es el mismo.
             received_at: body.issue_date,
