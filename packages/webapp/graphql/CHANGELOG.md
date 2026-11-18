@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.23.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.22.0...@zauru-sdk/graphql@6.23.0) (2026-11-18)
+
+
+### Features
+
+* agregar busqueda de tag por nombre ([531c57f](https://github.com/intuitiva/zauru-typescript-sdk/commit/531c57f766380c1baf03af84c8e8f1de57a83443))
+
+
+
+
+
 # [6.22.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.21.0...@zauru-sdk/graphql@6.22.0) (2026-11-18)
 
 
