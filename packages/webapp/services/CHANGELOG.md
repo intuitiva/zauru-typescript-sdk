@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.33.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.32.1...@zauru-sdk/services@6.33.0) (2026-11-18)
+
+
+### Features
+
+* agregar lecturas GraphQL de egresos, items y OCs por consolidado ([daa3906](https://github.com/intuitiva/zauru-typescript-sdk/commit/daa3906dbbfbeae34f5db68a92bbaa4144550b0f))
+
+
+
+
+
 ## [6.32.1](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.32.0...@zauru-sdk/services@6.32.1) (2026-11-17)
 
 **Note:** Version bump only for package @zauru-sdk/services
