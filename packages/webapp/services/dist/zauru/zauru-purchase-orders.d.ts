@@ -10,7 +10,7 @@ import { AxiosUtilsResponse, BasketSchema, DataTablesFilterBody, HTMLPurchasesLi
  */
 export declare const markAsReceivePurchaseOrder: (headers: any, body: Partial<PurchaseOrderGraphQL> & {
     fechaVencimiento?: string;
-}) => Promise<AxiosUtilsResponse<boolean>>;
+}, entityId: number | string) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * createNewPurchaseOrder
  * @param headers
@@ -31,7 +31,7 @@ export declare const getPurchaseOrdersByIds: (session: Session, purchaseOrderIds
  * @param body
  * @returns
  */
-export declare const createNewAuthorizedPurchaseOrder: (headers: any, body: CreateNewPurchaseOrderType, withReceive?: boolean) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
+export declare const createNewAuthorizedPurchaseOrder: (headers: any, body: CreateNewPurchaseOrderType, withReceive?: boolean, entityId?: number | string) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL>>;
 /**
  * authorizePurchaseOrder
  * @param headers
@@ -50,11 +50,20 @@ export declare const receiveLotPurchaseOrder: (headers: any, body: PurchaseOrder
 }) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  * receivePurchaseOrder
+ *
+ * Marca una OC como recibida por completo. Crea la recepción en
+ * `POST /purchases/purchase_orders/:id/receptions.json`.
+ *
+ * Requiere `entity_id` en el cuerpo: sin él Zauru responde 500 (el modelo
+ * `Reception` no puede resolver la entidad).
+ *
+ * `entityId` es la entidad dueña de la OC (la misma de `headers`).
+ *
  * @param headers
- * @param body
- * @returns
+ * @param body OC creada; debe traer `id`, `agency_id` y sus detalles.
+ * @param entityId entidad de la OC.
  */
-export declare const receivePurchaseOrder: (headers: any, body: PurchaseOrderGraphQL) => Promise<AxiosUtilsResponse<boolean>>;
+export declare const receivePurchaseOrder: (headers: any, body: PurchaseOrderGraphQL, entityId: number | string) => Promise<AxiosUtilsResponse<boolean>>;
 /**
  *
  * @param headers
