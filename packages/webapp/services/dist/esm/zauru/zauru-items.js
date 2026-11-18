@@ -1,7 +1,7 @@
 import { extractValueBetweenTags, handlePossibleAxiosErrors, } from "@zauru-sdk/common";
 import { getGraphQLAPIHeaders } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getItemByNameStringQuery, getItemCategoryByIdStringQuery, getItemsByCategoryStringQuery, getItemsBySuperCategoryStringQuery, getItemsStringQuery, getSuperCategoryByIdStringQuery, } from "@zauru-sdk/graphql";
+import { getItemByCodeStringQuery, getItemByNameStringQuery, getItemCategoryByIdStringQuery, getItemsByCategoryStringQuery, getItemsBySuperCategoryStringQuery, getItemsStringQuery, getSuperCategoryByIdStringQuery, } from "@zauru-sdk/graphql";
 import { httpZauru } from "./httpZauru.js";
 //============================ FORMATEADO DE ITEMS
 function extractIdFromURL(input) {
@@ -257,5 +257,18 @@ export async function deleteItem(headers, id) {
             headers,
         });
         return true;
+    });
+}
+/**
+ * Item por código exacto en la entidad de `graphqlHeaders`.
+ * El código es único por entidad, así que sirve para reutilizar antes de crear.
+ */
+export async function getItemByCodeWithGraphQLHeaders(graphqlHeaders, code) {
+    return handlePossibleAxiosErrors(async () => {
+        const response = await httpGraphQLAPI.post("", { query: getItemByCodeStringQuery(code) }, { headers: graphqlHeaders });
+        if (response.data?.errors?.length) {
+            throw new Error(response.data.errors.map((error) => error.message).join(";"));
+        }
+        return response.data?.data?.items?.[0] ?? null;
     });
 }

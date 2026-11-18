@@ -2,7 +2,7 @@ import { arrayToObject, convertToFormData, formatDateToUTC, getBasketsSchema, ha
 import { httpZauru } from "./httpZauru.js";
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
-import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, getPurchaseOrdersByIdsStringQuery, getPurchaseOrdersByReferenceStringQuery, } from "@zauru-sdk/graphql";
+import { getLast100ReceptionsStringQuery, getPurchaseOrderByIdNumberStringQuery, getPurchaseOrderStringQuery, getPurchaseOrdersBetweenDatesStringQuery, getPurchaseOrdersByIdsStringQuery, getPurchaseOrdersByConsolidateIdsStringQuery, getPurchaseOrdersByReferenceStringQuery, } from "@zauru-sdk/graphql";
 /**
  * markAsReceivePurchaseOrder
  * Esta función sólo se utiliza cuando se van a marcar como recibida toda la órden de compra, se recibe todo lo que se envío
@@ -477,5 +477,31 @@ export const getPurchasesOrderByIdNumber = (session, id_number) => {
             return [];
         }
         return response.data?.data?.purchase_orders;
+    });
+};
+/**
+ * OCs de uno o más consolidados con el item facturado en cada línea.
+ * La entidad es la de `session`; para otra entidad usar `withSelectedEntity`.
+ */
+export const getPurchaseOrdersByConsolidateIds = (session, consolidateIds) => {
+    return handlePossibleAxiosErrors(async () => {
+        const ids = [
+            ...new Set(consolidateIds
+                .map((id) => Number(id))
+                .filter((id) => Number.isFinite(id) && id > 0)),
+        ];
+        if (ids.length === 0)
+            return [];
+        const headers = await getGraphQLAPIHeaders(session);
+        const collected = [];
+        for (let index = 0; index < ids.length; index += GRAPHQL_ID_CHUNK) {
+            const chunk = ids.slice(index, index + GRAPHQL_ID_CHUNK);
+            const response = await httpGraphQLAPI.post("", { query: getPurchaseOrdersByConsolidateIdsStringQuery(chunk) }, { headers });
+            if (response.data?.errors?.length) {
+                throw new Error(response.data.errors.map((error) => error.message).join(";"));
+            }
+            collected.push(...(response.data?.data?.purchase_orders ?? []));
+        }
+        return collected;
     });
 };

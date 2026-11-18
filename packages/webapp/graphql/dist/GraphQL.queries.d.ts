@@ -219,3 +219,17 @@ export declare const getProductionWorkOrderStringQuery: (config: {
 export declare const getPurchaseOrdersByReferenceStringQuery: (reference: string) => string;
 export declare const getPurchaseOrdersByIdsStringQuery: (purchaseOrderIds: Array<number | string>) => string;
 export declare const getDischargeDetailsByPurchaseOrderIdsStringQuery: (purchaseOrderIds: Array<number | string>) => string;
+/**
+ * Métodos de egreso de la entidad seleccionada. `purchases/discharges` usa
+ * uno por descargo, y el nombre lo elige cada app.
+ */
+export declare const getDischargeMethodsStringQuery = "\nquery getDischargeMethods {\n  discharge_methods(where: { active: { _eq: true } }, order_by: { id: asc }) {\n    id\n    name\n    account_id\n    active\n  }\n}\n";
+/** Un descargo por su referencia, para detectar duplicados antes de crear. */
+export declare const getDischargesByReferenceStringQuery: (reference: string) => string;
+/** Items de la entidad seleccionada por código exacto. */
+export declare const getItemByCodeStringQuery: (code: string) => string;
+/**
+ * OCs de uno o más consolidados, con el item facturado en cada línea.
+ * Una OC de 4 Pinos lleva un solo producto repetido en sus pesadas.
+ */
+export declare const getPurchaseOrdersByConsolidateIdsStringQuery: (consolidateIds: Array<number | string>) => string;

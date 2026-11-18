@@ -36,3 +36,22 @@ export declare const generateDischargePDF: (headers: any, session: Session, body
  */
 export declare const getDischargePDFResult: (headers: any, zid: number | string) => Promise<AxiosUtilsResponse<PDFResult>>;
 export declare const getDischargeDetailsByPurchaseOrderIds: (session: Session, restHeaders: Record<string, string>, purchaseOrderIds: Array<number | string>) => Promise<AxiosUtilsResponse<DischargeDetailGraphQL[]>>;
+/**
+ * Métodos de egreso activos de la entidad seleccionada.
+ * @param graphqlHeaders headers GraphQL de la entidad (ver `withSelectedEntity`).
+ */
+export declare const getDischargeMethodsWithGraphQLHeaders: (graphqlHeaders: Record<string, string>) => Promise<AxiosUtilsResponse<{
+    id: number;
+    name: string;
+    account_id: number;
+    active: boolean;
+}[]>>;
+/**
+ * Primer descargo no anulado con esa referencia; sirve para no duplicarlo.
+ * @param graphqlHeaders headers GraphQL de la entidad destino.
+ */
+export declare const getDischargeByReferenceWithGraphQLHeaders: (graphqlHeaders: Record<string, string>, reference: string) => Promise<AxiosUtilsResponse<{
+    id: number;
+    reference: string;
+    amount: number;
+} | null>>;

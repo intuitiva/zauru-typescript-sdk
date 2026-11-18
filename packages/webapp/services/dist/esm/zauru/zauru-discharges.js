@@ -1,6 +1,6 @@
 import { getGraphQLAPIHeaders, getVariablesByName } from "../common.js";
 import { arrayToObject, handlePossibleAxiosErrors } from "@zauru-sdk/common";
-import { getDischargeDetailsByPurchaseOrderIdsStringQuery } from "@zauru-sdk/graphql";
+import { getDischargeDetailsByPurchaseOrderIdsStringQuery, getDischargeMethodsStringQuery, getDischargesByReferenceStringQuery, } from "@zauru-sdk/graphql";
 import { httpGraphQLAPI } from "./httpGraphQL.js";
 import { httpZauru } from "./httpZauru.js";
 /**
@@ -119,5 +119,31 @@ export const getDischargeDetailsByPurchaseOrderIds = (session, restHeaders, purc
             }
             return collected;
         }
+    });
+};
+/**
+ * Métodos de egreso activos de la entidad seleccionada.
+ * @param graphqlHeaders headers GraphQL de la entidad (ver `withSelectedEntity`).
+ */
+export const getDischargeMethodsWithGraphQLHeaders = (graphqlHeaders) => {
+    return handlePossibleAxiosErrors(async () => {
+        const response = await httpGraphQLAPI.post("", { query: getDischargeMethodsStringQuery }, { headers: graphqlHeaders });
+        if (response.data?.errors?.length) {
+            throw new Error(response.data.errors.map((error) => error.message).join(";"));
+        }
+        return response.data?.data?.discharge_methods ?? [];
+    });
+};
+/**
+ * Primer descargo no anulado con esa referencia; sirve para no duplicarlo.
+ * @param graphqlHeaders headers GraphQL de la entidad destino.
+ */
+export const getDischargeByReferenceWithGraphQLHeaders = (graphqlHeaders, reference) => {
+    return handlePossibleAxiosErrors(async () => {
+        const response = await httpGraphQLAPI.post("", { query: getDischargesByReferenceStringQuery(reference) }, { headers: graphqlHeaders });
+        if (response.data?.errors?.length) {
+            throw new Error(response.data.errors.map((error) => error.message).join(";"));
+        }
+        return response.data?.data?.discharges?.[0] ?? null;
     });
 };

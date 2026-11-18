@@ -95,3 +95,12 @@ export declare function updateItem(headers: any, body: Partial<ItemGraphQL>): Pr
  * @returns
  */
 export declare function deleteItem(headers: any, id: string | number): Promise<AxiosUtilsResponse<boolean>>;
+/**
+ * Item por código exacto en la entidad de `graphqlHeaders`.
+ * El código es único por entidad, así que sirve para reutilizar antes de crear.
+ */
+export declare function getItemByCodeWithGraphQLHeaders(graphqlHeaders: Record<string, string>, code: string): Promise<AxiosUtilsResponse<{
+    id: number;
+    code: string;
+    name: string;
+} | null>>;

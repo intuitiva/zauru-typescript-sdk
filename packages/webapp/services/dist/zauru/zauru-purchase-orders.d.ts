@@ -202,3 +202,8 @@ export declare const deletePurchaseOrder: (headers: any, id: string | number) =>
  * @returns
  */
 export declare const getPurchasesOrderByIdNumber: (session: Session, id_number: string) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
+/**
+ * OCs de uno o más consolidados con el item facturado en cada línea.
+ * La entidad es la de `session`; para otra entidad usar `withSelectedEntity`.
+ */
+export declare const getPurchaseOrdersByConsolidateIds: (session: Session, consolidateIds: Array<number | string>) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
