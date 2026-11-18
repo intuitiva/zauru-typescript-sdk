@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.34.3](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.34.2...@zauru-sdk/services@6.34.3) (2026-11-18)
+
+
+### Bug Fixes
+
+* dejar de enviar entity_id al recibir OCs ([a83d0de](https://github.com/intuitiva/zauru-typescript-sdk/commit/a83d0dee79b74bb34d091fa91483d42fcbc268b0))
+
+
+
+
+
 ## [6.34.2](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/services@6.34.1...@zauru-sdk/services@6.34.2) (2026-11-18)
 
 
