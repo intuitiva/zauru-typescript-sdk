@@ -2726,6 +2726,7 @@ query getPurchaseOrdersByConsolidateIds {
     voided
     consolidate_id
     discount
+    memo
     purchase_order_details {
       item_id
       booked_quantity
