@@ -1,5 +1,5 @@
 import type { Session } from "@remix-run/node";
-import { AxiosUtilsResponse, CreateDischargeDetailsBody, DischargeDetailGraphQL, GeneratePDFBody, NewDischargeBody, PDFResult } from "@zauru-sdk/types";
+import { AxiosUtilsResponse, CreateDischargeDetailsBody, DischargeDetailGraphQL, GeneratePDFBody, GenerateSelectedDischargesPDFBody, NewDischargeBody, PDFResult } from "@zauru-sdk/types";
 /**
  *
  * @param headers
@@ -25,6 +25,14 @@ export declare const deleteDischarge: (headers: any, id: number | string) => Pro
  * @param body
  */
 export declare const generateDischargePDF: (headers: any, session: Session, body: GeneratePDFBody) => Promise<AxiosUtilsResponse<{
+    status: number;
+    zid: number;
+}>>;
+/**
+ * POST /purchases/discharges/gen_print_selected.json
+ * Mass-print the given discharge ids, preserving order.
+ */
+export declare const generateDischargesPDFByIds: (headers: any, session: Session, body: GenerateSelectedDischargesPDFBody) => Promise<AxiosUtilsResponse<{
     status: number;
     zid: number;
 }>>;

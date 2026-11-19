@@ -85,6 +85,32 @@ export const getPurchaseOrdersByIds = (session, purchaseOrderIds) => {
     });
 };
 /**
+ * Igual que `getPurchaseOrdersByIds`, con headers GraphQL de la entidad
+ * seleccionada (ver `withSelectedEntity`).
+ */
+export const getPurchaseOrdersByIdsWithGraphQLHeaders = (graphqlHeaders, purchaseOrderIds) => {
+    return handlePossibleAxiosErrors(async () => {
+        const ids = [
+            ...new Set(purchaseOrderIds
+                .map((id) => Number(id))
+                .filter((id) => Number.isFinite(id) && id > 0)),
+        ];
+        if (ids.length === 0) {
+            return [];
+        }
+        const collected = [];
+        for (let index = 0; index < ids.length; index += GRAPHQL_ID_CHUNK) {
+            const chunk = ids.slice(index, index + GRAPHQL_ID_CHUNK);
+            const response = await httpGraphQLAPI.post("", { query: getPurchaseOrdersByIdsStringQuery(chunk) }, { headers: graphqlHeaders });
+            if (response.data?.errors?.length) {
+                throw new Error(response.data.errors.map((error) => error.message).join(";"));
+            }
+            collected.push(...(response.data?.data?.purchase_orders ?? []));
+        }
+        return collected;
+    });
+};
+/**
  *
  * @param headers
  * @param body

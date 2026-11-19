@@ -26,6 +26,11 @@ export declare const createNewPurchaseOrder: (headers: any, body: CreateNewPurch
 export declare const getPurchaseOrdersByReference: (graphqlHeaders: Record<string, string>, reference: string) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
 export declare const getPurchaseOrdersByIds: (session: Session, purchaseOrderIds: Array<number | string>) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
 /**
+ * Igual que `getPurchaseOrdersByIds`, con headers GraphQL de la entidad
+ * seleccionada (ver `withSelectedEntity`).
+ */
+export declare const getPurchaseOrdersByIdsWithGraphQLHeaders: (graphqlHeaders: Record<string, string>, purchaseOrderIds: Array<number | string>) => Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>>;
+/**
  *
  * @param headers
  * @param body
