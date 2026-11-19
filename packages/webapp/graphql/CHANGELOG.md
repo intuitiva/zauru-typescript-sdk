@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.25.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.24.0...@zauru-sdk/graphql@6.25.0) (2026-11-19)
+
+
+### Features
+
+* incluir memo en OCs por consolidado ([e55c3ef](https://github.com/intuitiva/zauru-typescript-sdk/commit/e55c3efba90dd9a58d59ccc1b5345c68e16a4395))
+
+
+
+
+
 # [6.24.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.23.0...@zauru-sdk/graphql@6.24.0) (2026-11-19)
 
 
