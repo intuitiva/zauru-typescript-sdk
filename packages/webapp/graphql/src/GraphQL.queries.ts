@@ -2605,6 +2605,7 @@ query getPurchaseOrdersByIds {
     id
     id_number
     total
+    due
     discount
     memo
     agency_id
@@ -2724,8 +2725,16 @@ query getPurchaseOrdersByConsolidateIds {
     payee_id
     voided
     consolidate_id
+    discount
     purchase_order_details {
       item_id
+      booked_quantity
+      unit_cost
+      reference
+      item {
+        id
+        name
+      }
     }
   }
 }

@@ -176,6 +176,48 @@ export const getPurchaseOrdersByIds = (
 };
 
 /**
+ * Igual que `getPurchaseOrdersByIds`, con headers GraphQL de la entidad
+ * seleccionada (ver `withSelectedEntity`).
+ */
+export const getPurchaseOrdersByIdsWithGraphQLHeaders = (
+  graphqlHeaders: Record<string, string>,
+  purchaseOrderIds: Array<number | string>,
+): Promise<AxiosUtilsResponse<PurchaseOrderGraphQL[]>> => {
+  return handlePossibleAxiosErrors(async () => {
+    const ids = [
+      ...new Set(
+        purchaseOrderIds
+          .map((id) => Number(id))
+          .filter((id) => Number.isFinite(id) && id > 0),
+      ),
+    ];
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const collected: PurchaseOrderGraphQL[] = [];
+    for (let index = 0; index < ids.length; index += GRAPHQL_ID_CHUNK) {
+      const chunk = ids.slice(index, index + GRAPHQL_ID_CHUNK);
+      const response = await httpGraphQLAPI.post<{
+        data?: { purchase_orders?: PurchaseOrderGraphQL[] };
+        errors?: { message: string }[];
+      }>(
+        "",
+        { query: getPurchaseOrdersByIdsStringQuery(chunk) },
+        { headers: graphqlHeaders },
+      );
+      if (response.data?.errors?.length) {
+        throw new Error(
+          response.data.errors.map((error) => error.message).join(";"),
+        );
+      }
+      collected.push(...(response.data?.data?.purchase_orders ?? []));
+    }
+    return collected;
+  });
+};
+
+/**
  *
  * @param headers
  * @param body

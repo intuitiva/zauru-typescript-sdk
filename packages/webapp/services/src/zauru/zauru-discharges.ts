@@ -4,6 +4,7 @@ import {
   CreateDischargeDetailsBody,
   DischargeDetailGraphQL,
   GeneratePDFBody,
+  GenerateSelectedDischargesPDFBody,
   NewDischargeBody,
   PDFResult,
   PurchaseOrderGraphQL,
@@ -66,6 +67,7 @@ export const createDischargeFromDetails = async (
           date: body.date,
           discharge_method_id: body.discharge_method_id,
           reference: body.reference,
+          receipt: body.receipt,
           memo: body.memo,
           discharge_details_attributes: arrayToObject(
             body.details.map((detail) => ({
@@ -117,6 +119,41 @@ export const generateDischargePDF = async (
       { headers }
     );
 
+    return response.data;
+  });
+};
+
+/**
+ * POST /purchases/discharges/gen_print_selected.json
+ * Mass-print the given discharge ids, preserving order.
+ */
+export const generateDischargesPDFByIds = async (
+  headers: any,
+  session: Session,
+  body: GenerateSelectedDischargesPDFBody
+): Promise<AxiosUtilsResponse<{ status: number; zid: number }>> => {
+  return handlePossibleAxiosErrors(async () => {
+    let printTemplate = body.print_template;
+    if (printTemplate == null || printTemplate === "") {
+      const { discharge_template_id } = await getVariablesByName(
+        headers,
+        session,
+        ["discharge_template_id"]
+      );
+      printTemplate = discharge_template_id;
+    }
+    const ids = [
+      ...new Set(
+        (body.ids ?? [])
+          .map((id) => Number(id))
+          .filter((id) => Number.isFinite(id) && id > 0)
+      ),
+    ];
+    const response = await httpZauru.post<{ status: number; zid: number }>(
+      "/purchases/discharges/gen_print_selected.json",
+      { ids, print_template: printTemplate },
+      { headers }
+    );
     return response.data;
   });
 };

@@ -276,6 +276,7 @@ export type CreateDischargeDetailsBody = {
   date: string;
   discharge_method_id: number;
   reference?: string;
+  receipt?: string;
   memo?: string;
   details: { purchase_order_id: number; amount: number }[];
 };
@@ -652,6 +653,11 @@ export type GeneratePDFBody = {
   s_date: string;
   e_date: string;
   print_template: number | string;
+};
+
+export type GenerateSelectedDischargesPDFBody = {
+  ids: Array<number | string>;
+  print_template?: number | string;
 };
 
 export type PrintTemplateRow = {
