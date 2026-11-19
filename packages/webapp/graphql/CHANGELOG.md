@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.24.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.23.0...@zauru-sdk/graphql@6.24.0) (2026-11-19)
+
+
+### Features
+
+* impresión de egresos por IDs y datos de OC para cheques ([5a2e8d9](https://github.com/intuitiva/zauru-typescript-sdk/commit/5a2e8d9e95d550150e8e86133757d6218cd66647))
+
+
+
+
+
 # [6.23.0](https://github.com/intuitiva/zauru-typescript-sdk/compare/@zauru-sdk/graphql@6.22.0...@zauru-sdk/graphql@6.23.0) (2026-11-18)
 
 
